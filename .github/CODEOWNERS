@@ -1,3 +1,4 @@
-# Add a team or username to this file
-# Example:
-# *   @ministryofjustice/operations-engineering
+
+# The data-tech-archs are the codeowners for content within
+# the architecture folder.
+/architecture/ @ministryofjustice/data-tech-archs
