@@ -1,0 +1,30 @@
+name: Python package
+
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+    paths:
+      - 'services/example/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./services/example/
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10"]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: python -mpip install -r requirements.txt
+      - name: Run app
+        run: pytest app.py
