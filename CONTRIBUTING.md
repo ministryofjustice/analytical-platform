@@ -13,7 +13,7 @@
 
 ## Code of Conduct
 
-The Ministry of Justice [Code of Conduct](https://github.com/ministryofjustice/.github/blob/main/CODE_OF_CONDUCT.md) is used to govern the project and those participating].
+The Ministry of Justice [Code of Conduct](https://github.com/ministryofjustice/.github/blob/main/CODE_OF_CONDUCT.md) is used to govern the project and those participating.
 Please report unacceptable behavior to the maintainers or administrators.
 
 
@@ -39,6 +39,9 @@ the data platform also requires that all git commits are signed.
 This will enable the project to improve project integrity,
 begin to secure the supply chain,
 and [provide assurances about security practices](https://slsa.dev/).
+
+In order to sign commits please [follow the github docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
+as they are very good.
 
 ## External contributions
 
