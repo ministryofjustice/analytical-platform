@@ -28,3 +28,9 @@ jobs:
         run: python -mpip install -r requirements.txt
       - name: Run app
         run: pytest app.py
+      - uses: anchore/sbom-action@v0
+        with:
+          artifact-name: data-platform-svc-example.spdx
+      - uses: anchore/sbom-action/publish-sbom@v0
+        with:
+          sbom-artifact-match: ".*\\.spdx$"
