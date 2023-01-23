@@ -70,4 +70,9 @@ jobs:
       - name: "Testing ${{ matrix.feature }} on ${{ matrix.platform }}"
         id: test_feature
         run: |
-          devcontainer features test --skip-scenarios --project-folder .devcontainer/features --features ${{ matrix.feature }} --base-image devcontainer
+          devcontainer features test \
+            --log-level debug \
+            --skip-scenarios \
+            --project-folder .devcontainer/features \
+            --features ${{ matrix.feature }} \
+            --base-image devcontainer
