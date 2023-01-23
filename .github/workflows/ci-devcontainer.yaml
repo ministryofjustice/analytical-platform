@@ -7,8 +7,8 @@ on:
       - main
     paths:
       - .devcontainer/**
-      - .github/workflows/ci-devcontainer.yaml
-      - .github/workflows/path-filter/devcontainer.yaml
+      # - .github/workflows/ci-devcontainer.yaml
+      # - .github/workflows/path-filter/devcontainer.yaml
 
 jobs:
   detect-changes:
@@ -59,9 +59,14 @@ jobs:
           context: .devcontainer/src
           platforms: linux/${{ matrix.platform }}
           load: true
-          tags: data-platform-devcontainer:${{ matrix.platform }}            
+          tags: devcontainer:${{ matrix.platform }}    
+
+      - name: "DEBUG"
+        id: debug
+        run: |
+          docker images
 
       - name: "Testing ${{ matrix.feature }} on ${{ matrix.platform }}"
         id: test_feature
         run: |
-          devcontainer features test --skip-scenarios --project-folder .devcontainer/features --features ${{ matrix.feature }} --base-image data-platform-devcontainer:${{ matrix.platform }}
+          devcontainer features test --skip-scenarios --project-folder .devcontainer/features --features ${{ matrix.feature }} --base-image devcontainer:${{ matrix.platform }}
