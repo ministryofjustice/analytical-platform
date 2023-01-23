@@ -11,5 +11,5 @@
       "default": "latest"
     }
   },
-  "installsAfter": ["./features/src/aws-cli"]
+  "installsAfter": ["./features/src/aws"]
 }

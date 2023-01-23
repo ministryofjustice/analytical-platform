@@ -1,7 +1,7 @@
-aws-cli: ./.devcontainer/features/**/aws-cli/**
+aws: ./.devcontainer/features/**/aws/**
 aws-vault: ./.devcontainer/features/**/aws-vault/**
 direnv: ./.devcontainer/features/**/direnv/**
 flux: ./.devcontainer/features/**/flux/**
 git-crypt: ./.devcontainer/features/**/git-crypt/**
 kubent: ./.devcontainer/features/**/kubent/**
-kubernetes-cli: ./.devcontainer/features/**/kubernetes-cli/**
+kubectl: ./.devcontainer/features/**/kubectl/**

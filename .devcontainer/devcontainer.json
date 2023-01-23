@@ -12,12 +12,12 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/terraform:1": { "tflint": "none", "terragrunt": "none", "installTerraformDocs": true  },
     // local features
-    "./features/src/aws-cli": {},
+    "./features/src/aws": {},
     "./features/src/aws-vault": {},
     "./features/src/direnv": {},
     "./features/src/flux": {},
     "./features/src/kubent": {},
-    "./features/src/kubernetes-cli": {}
+    "./features/src/kubectl": {}
   },
   "remoteUser": "vscode",
   "runArgs": [ "--name=ministryofjustice-data-platform-devcontainer" ],

@@ -1,12 +1,12 @@
 {
-  "id": "kubernetes-cli",
+  "id": "aws",
   "version": "1.0.0",
-  "name": "Kubernetes CLI",
-  "description": "Installs Kubernetes CLI",
+  "name": "AWS CLI",
+  "description": "Installs AWS CLI",
   "options": {
     "version": {
       "type": "string",
-      "description": "Select or enter an Kubernetes CLI version.",
+      "description": "Select or enter an AWS CLI version.",
       "proposals": ["latest"],
       "default": "latest"
     }

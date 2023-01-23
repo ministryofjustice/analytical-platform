@@ -11,5 +11,5 @@
       "default": "latest"
       }
   },
-  "installsAfter": ["./features/src/kubernetes-cli"]
+  "installsAfter": ["./features/src/kubectl"]
 }
