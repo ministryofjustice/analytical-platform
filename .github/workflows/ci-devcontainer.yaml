@@ -65,6 +65,7 @@ jobs:
         id: debug
         run: |
           docker images
+          docker run --rm devcontainer:${{ matrix.platform }} whoami
 
       - name: "Testing ${{ matrix.feature }} on ${{ matrix.platform }}"
         id: test_feature

@@ -4,8 +4,8 @@ TMPDIR=$( mktemp -d ${HOME}/.tmp-XXXXX )
 
 FEATURE="${1}"
 
-docker build --file .devcontainer/src/Dockerfile --tag moj-devcontainer-test .devcontainer/src
+docker build --file .devcontainer/src/Dockerfile --tag devcontainer .devcontainer/src
 
-devcontainer features test --skip-scenarios --project-folder .devcontainer/features --features ${FEATURE} --base-image moj-devcontainer-test
+devcontainer features test --skip-scenarios --project-folder .devcontainer/features --features ${FEATURE} --base-image devcontainer
 
 rm -rf ${TMPDIR}
