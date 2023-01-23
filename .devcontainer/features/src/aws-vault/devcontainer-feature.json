@@ -7,13 +7,9 @@
     "version": {
       "type": "string",
       "description": "Select or enter an AWS Vault version.",
-      "default": "latest",
-      "proposals": [
-        "latest"
-      ]
+      "proposals": ["latest"],
+      "default": "latest"
     }
   },
-  "installsAfter": [
-    "ghcr.io/devcontainers/features/common-utils"
-  ]
+  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
 }

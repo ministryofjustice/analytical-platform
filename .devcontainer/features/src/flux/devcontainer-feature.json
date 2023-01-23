@@ -6,14 +6,10 @@
   "options": {
     "version": {
       "type": "string",
-      "proposals": [
-        "latest"
-      ],
-      "default": "latest",
-      "description": "Select or enter a flux version."
+      "description": "Select or enter a flux version.",
+      "proposals": ["latest"],
+      "default": "latest"
       }
   },
-  "installsAfter": [
-    "ghcr.io/devcontainers/features/common-utils"
-  ]
+  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
 }

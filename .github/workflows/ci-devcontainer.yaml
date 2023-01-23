@@ -7,8 +7,6 @@ on:
       - main
     paths:
       - .devcontainer/**
-      # - .github/workflows/ci-devcontainer.yaml
-      # - .github/workflows/path-filter/devcontainer.yaml
 
 jobs:
   detect-changes:

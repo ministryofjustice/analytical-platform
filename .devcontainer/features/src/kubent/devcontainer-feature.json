@@ -6,15 +6,10 @@
   "options": {
     "version": {
       "type": "string",
-      "proposals": [
-        "latest",
-        "0.7.0"
-      ],
-      "default": "latest",
-      "description": "Select or enter a kubent version."
+      "description": "Select or enter a kubent version.",
+      "proposals": ["latest"],
+      "default": "latest"
       }
   },
-  "installsAfter": [
-    "ghcr.io/devcontainers/features/common-utils"
-  ]
+  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
 }
