@@ -4,3 +4,4 @@ direnv: ./.devcontainer/features/**/direnv/**
 flux: ./.devcontainer/features/**/flux/**
 git-crypt: ./.devcontainer/features/**/git-crypt/**
 kubent: ./.devcontainer/features/**/kubent/**
+kubernetes-cli: ./.devcontainer/features/**/kubernetes-cli/**

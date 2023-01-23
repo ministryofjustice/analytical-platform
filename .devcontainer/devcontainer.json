@@ -10,14 +10,14 @@
     // devcontainer features, see https://github.com/devcontainers/features/tree/main/src/<feature>
     "ghcr.io/devcontainers/features/common-utils:2": { "configureZshAsDefaultShell": true },
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
     "ghcr.io/devcontainers/features/terraform:1": { "tflint": "none", "terragrunt": "none", "installTerraformDocs": true  },
     // local features
     "./features/src/aws-cli": {},
     "./features/src/aws-vault": {},
     "./features/src/direnv": {},
     "./features/src/flux": {},
-    "./features/src/kubent": {}
+    "./features/src/kubent": {},
+    "./features/src/kubernetes-cli": {}
   },
   "remoteUser": "vscode",
   "runArgs": [ "--name=ministryofjustice-data-platform-devcontainer" ],

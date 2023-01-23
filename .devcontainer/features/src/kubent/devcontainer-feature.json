@@ -11,5 +11,5 @@
       "default": "latest"
       }
   },
-  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
+  "installsAfter": ["./features/src/kubernetes-cli"]
 }
