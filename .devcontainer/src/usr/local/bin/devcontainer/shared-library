@@ -27,7 +27,7 @@ get_github_latest_tag() {
   local tag_strip_v=$( echo "${tag}" | sed "s|v||" )
   
   export GITHUB_LATEST_TAG="${tag}"
-  export GITHUB_LATEST_TAG_STRIP_V="${tag_no_version_prefix}"
+  export GITHUB_LATEST_TAG_STRIP_V="${tag_strip_v}"
 }
 
 apt_install() {

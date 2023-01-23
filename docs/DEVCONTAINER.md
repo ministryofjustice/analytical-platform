@@ -30,14 +30,31 @@
 
 ### Testing
 
-1. Build Base Image
+1. Build base image
 
     ```bash
     docker build --file .devcontainer/src/Dockerfile --tag moj-devcontainer-test .devcontainer/src
     ```
 
-1. Test Feature
+1. Test feature
 
     ```bash
     devcontainer features test --features aws-vault --base-image moj-devcontainer-test
+    ```
+
+### Debug Locally
+
+1. Run base image
+
+    ```bash
+    docker run -it --rm \
+        --volume $( pwd ):/workspace \
+        --volume $( pwd )/.devcontainer/src/usr/local/bin/devcontainer/shared-library:/usr/local/bin/devcontainer/shared-library \
+        mcr.microsoft.com/devcontainers/base:ubuntu
+    ```
+
+1. Test feature
+
+    ```bash
+    bash /workspace/.devcontainer/features/src/${FEATURE}/install.sh
     ```
