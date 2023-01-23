@@ -16,7 +16,9 @@
     "./features/src/aws-vault": {},
     "./features/src/direnv": {},
     "./features/src/flux": {},
+    "./features/src/helm": {},
     "./features/src/kubectl": {},
+    "./features/src/kubelint": {},
     "./features/src/kubent": {}
   },
   "remoteUser": "vscode",

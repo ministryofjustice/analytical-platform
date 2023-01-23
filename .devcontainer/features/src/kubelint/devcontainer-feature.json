@@ -1,0 +1,15 @@
+{
+  "id": "kubelint",
+  "version": "1.0.0",
+  "name": "Kubelint",
+  "description": "Installs kubelint",
+  "options": {
+    "version": {
+      "type": "string",
+      "description": "Select or enter a kubelint version.",
+      "proposals": ["latest"],
+      "default": "latest"
+      }
+  },
+  "installsAfter": ["./features/src/kubectl"]
+}
