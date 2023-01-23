@@ -16,8 +16,8 @@
     "./features/src/aws-vault": {},
     "./features/src/direnv": {},
     "./features/src/flux": {},
-    "./features/src/kubent": {},
-    "./features/src/kubectl": {}
+    "./features/src/kubectl": {},
+    "./features/src/kubent": {}
   },
   "remoteUser": "vscode",
   "runArgs": [ "--name=ministryofjustice-data-platform-devcontainer" ],
