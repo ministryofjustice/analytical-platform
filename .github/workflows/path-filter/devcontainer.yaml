@@ -1,0 +1,2 @@
+aws-vault: ./.devcontainer/features/**/aws-vault/**
+direnv: ./.devcontainer/features/**/direnv/**

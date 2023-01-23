@@ -2,22 +2,34 @@
 name: Development Container CI
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
+    paths:
+      - .devcontainer/**
+      - .github/workflows/ci-devcontainer.yaml
+      - .github/workflows/path-filter/devcontainer.yaml
 
 jobs:
-  test:
+  detect-changes:
     runs-on: ubuntu-latest
+    outputs:
+      features: ${{ steps.changes.outputs.changes }}
+    steps:
+      - name: "Detect changes"
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: .github/workflows/path-filter/devcontainer.yaml
+
+  test:
+    needs: [detect-changes]
+    runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       matrix:
-        feature: [
-          "aws-vault",
-          "direnv"
-        ]
+        feature: ${{ fromJson(needs.detect-changes.outputs.features) }}
+        platform: [ "amd64", "arm64" ]
     steps:
       - name: "Checkout"
         id: checkout
@@ -27,9 +39,25 @@ jobs:
         id: install_devcontainer_cli
         run: npm install -g @devcontainers/cli
 
-      - name: "Testing ${{ matrix.feature }}"
+      - name: "Set up Docker QEMU"
+        id: setup_docker_qemu
+        uses: docker/setup-qemu-action@v2
+
+      - name: "Set up Docker Buildx"
+        id: setup_docker_buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: "Build Image"
+        id: build_image
+        uses: docker/build-push-action@v3
+        with:
+          file: .devcontainer/src/Dockerfile
+          context: .devcontainer/src
+          platforms: linux/${{ matrix.platform }}
+          load: true
+          tags: data-platform-devcontainer:${{ matrix.platform }}            
+
+      - name: "Testing ${{ matrix.feature }} on ${{ matrix.platform }}"
         id: test_feature
         run: |
-          docker build --file .devcontainer/src/Dockerfile --tag data-platform-devcontainer:${{ matrix.feature }} .devcontainer/src
-
-          devcontainer features test --skip-scenarios --project-folder .devcontainer/features --features ${{ matrix.feature }} --base-image data-platform-devcontainer:${{ matrix.feature }}
+          devcontainer features test --skip-scenarios --project-folder .devcontainer/features --features ${{ matrix.feature }} --base-image data-platform-devcontainer:${{ matrix.platform }}
