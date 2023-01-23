@@ -1,3 +1,4 @@
+aws: ./.devcontainer/features/**/aws/**
 aws-vault: ./.devcontainer/features/**/aws-vault/**
 direnv: ./.devcontainer/features/**/direnv/**
 flux: ./.devcontainer/features/**/flux/**
