@@ -9,8 +9,7 @@
       "description": "Select or enter an AWS Vault version.",
       "default": "latest",
       "proposals": [
-        "latest",
-        "v6.6.2"
+        "latest"
       ]
     }
   },

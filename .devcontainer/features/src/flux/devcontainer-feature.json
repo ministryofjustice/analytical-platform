@@ -7,8 +7,7 @@
     "version": {
       "type": "string",
       "proposals": [
-        "latest",
-        "v0.38.3"
+        "latest"
       ],
       "default": "latest",
       "description": "Select or enter a flux version."

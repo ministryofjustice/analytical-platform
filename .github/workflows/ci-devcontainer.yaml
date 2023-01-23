@@ -15,7 +15,8 @@ jobs:
     strategy:
       matrix:
         feature: [
-          "aws-vault"
+          "aws-vault",
+          "direnv"
         ]
     steps:
       - name: "Checkout"

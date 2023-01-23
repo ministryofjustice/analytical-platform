@@ -1,5 +1,5 @@
 {
-  "name": "moj-devcontainer",
+  "name": "ministryofjustice-data-platform-devcontainer",
   "build": { 
     "dockerfile": "src/Dockerfile",
     "args": {
@@ -7,22 +7,24 @@
     }
   },
   "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": { "configureZshAsDefaultShell": true }, // https://github.com/devcontainers/features/tree/main/src/common-utils
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}, // https://github.com/devcontainers/features/tree/main/src/docker-in-docker
-    "ghcr.io/devcontainers/features/aws-cli:1": {}, // https://github.com/devcontainers/features/tree/main/src/aws-cli
-    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {}, // https://github.com/devcontainers/features/tree/main/src/kubectl-helm-minikube
-    "ghcr.io/devcontainers/features/terraform:1": { "tflint": "none", "terragrunt": "none", "installTerraformDocs": true  }, // https://github.com/devcontainers/features/tree/main/src/terraform
+    // devcontainer features, see https://github.com/devcontainers/features/tree/main/src/<feature>
+    "ghcr.io/devcontainers/features/common-utils:2": { "configureZshAsDefaultShell": true },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+    "ghcr.io/devcontainers/features/terraform:1": { "tflint": "none", "terragrunt": "none", "installTerraformDocs": true  },
+    // local features
     "./features/src/aws-vault": {},
     "./features/src/direnv": {},
     "./features/src/flux": {},
     "./features/src/kubent": {}
   },
   "remoteUser": "vscode",
-  "runArgs": [ "--name=moj-devcontainer" ],
+  "runArgs": [ "--name=ministryofjustice-data-platform-devcontainer" ],
   "mounts": [
-    { "source": "moj-devcontainer-workspace", "target": "/home/vscode/workspace", "type": "volume" },
-    { "source": "moj-devcontainer-commandhistory", "target": "/home/vscode/.commandhistory", "type": "volume" },
-    { "source": "moj-devcontainer-awsvault", "target": "/home/vscode/.awsvault", "type": "volume" }
+    { "source": "ministryofjustice-data-platform-devcontainer-workspace", "target": "/home/vscode/workspace", "type": "volume" },
+    { "source": "ministryofjustice-data-platform-devcontainer-commandhistory", "target": "/home/vscode/.commandhistory", "type": "volume" },
+    { "source": "ministryofjustice-data-platform-devcontainer-awsvault", "target": "/home/vscode/.awsvault", "type": "volume" }
   ],
   "workspaceFolder": "/home/vscode/workspace",
   "customizations": {
