@@ -1,0 +1,41 @@
+{
+  "name": "moj-devcontainer",
+  "build": { 
+    "dockerfile": "src/Dockerfile",
+    "args": {
+      "MOJ_DP_AWS_IAM_EMAIL": "${localEnv:MOJ_DP_AWS_IAM_EMAIL}"
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": { "configureZshAsDefaultShell": true }, // https://github.com/devcontainers/features/tree/main/src/common-utils
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}, // https://github.com/devcontainers/features/tree/main/src/docker-in-docker
+    "ghcr.io/devcontainers/features/aws-cli:1": {}, // https://github.com/devcontainers/features/tree/main/src/aws-cli
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {}, // https://github.com/devcontainers/features/tree/main/src/kubectl-helm-minikube
+    "ghcr.io/devcontainers/features/terraform:1": { "tflint": "none", "terragrunt": "none", "installTerraformDocs": true  }, // https://github.com/devcontainers/features/tree/main/src/terraform
+    "./features/src/aws-vault": {},
+    "./features/src/direnv": {},
+    "./features/src/flux": {},
+    "./features/src/kubent": {}
+  },
+  "remoteUser": "vscode",
+  "runArgs": [ "--name=moj-devcontainer" ],
+  "mounts": [
+    { "source": "moj-devcontainer-workspace", "target": "/home/vscode/workspace", "type": "volume" },
+    { "source": "moj-devcontainer-commandhistory", "target": "/home/vscode/.commandhistory", "type": "volume" },
+    { "source": "moj-devcontainer-awsvault", "target": "/home/vscode/.awsvault", "type": "volume" }
+  ],
+  "workspaceFolder": "/home/vscode/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "GitHub.copilot",
+        "GitHub.vscode-pull-request-github",
+        "hashicorp.terraform",
+        "ms-azuretools.vscode-docker",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "redhat.vscode-yaml"
+      ]
+    }
+  }
+}

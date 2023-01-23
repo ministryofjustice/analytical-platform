@@ -1,0 +1,20 @@
+{
+  "id": "flux",
+  "version": "1.0.0",
+  "name": "Flux",
+  "description": "Installs flux",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": [
+        "latest",
+        "v0.38.3"
+      ],
+      "default": "latest",
+      "description": "Select or enter a flux version."
+      }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

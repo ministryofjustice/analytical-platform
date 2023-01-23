@@ -1,0 +1,34 @@
+---
+name: Development Container CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        feature: [
+          "aws-vault"
+        ]
+    steps:
+      - name: "Checkout"
+        id: checkout
+        uses: actions/checkout@v3
+
+      - name: "Install devcontainer CLI"
+        id: install_devcontainer_cli
+        run: npm install -g @devcontainers/cli
+
+      - name: "Testing ${{ matrix.feature }}"
+        id: test_feature
+        run: |
+          docker build --file .devcontainer/src/Dockerfile --tag data-platform-devcontainer:${{ matrix.feature }} .devcontainer/src
+
+          devcontainer features test --skip-scenarios --project-folder .devcontainer/features --features ${{ matrix.feature }} --base-image data-platform-devcontainer:${{ matrix.feature }}

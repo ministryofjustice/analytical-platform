@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+#####
+# Functions
+#####
+
+get_architecture() {
+  case "$( uname -m )" in
+    x86_64) 
+      export ARCHITECTURE="amd64" ;;
+    aarch64 | armv8*) 
+      export ARCHITECTURE="arm64";;
+    aarch32 | armv7* | armvhf*) 
+      export ARCHITECTURE="arm";;
+    i?86)
+      export ARCHITECTURE="386";;
+    *) 
+      echo "(!) Architecture $( uname -m ) unsupported"; exit 1 ;;
+  esac
+}
+
+get_github_latest_tag() {
+  local repository="${1}"
+  local strip_v_prefix="${2}"
+  local tag=$( curl --silent "https://api.github.com/repos/${repository}/releases/latest" | jq -r '.tag_name' )
+  local tag_no_version_prefix=$( echo "${tag}" | sed "s|v||" )
+  
+  export GITHUB_LATEST_TAG="${tag}"
+  export GITHUB_LATEST_TAG_NO_VERSION_PREFIX="${tag_no_version_prefix}"
+}
+
+#####
+# Default
+#####
+
+get_architecture
