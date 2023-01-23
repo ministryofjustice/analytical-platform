@@ -59,15 +59,15 @@ jobs:
           context: .devcontainer/src
           platforms: linux/${{ matrix.platform }}
           load: true
-          tags: devcontainer:${{ matrix.platform }}    
+          tags: devcontainer
 
       - name: "DEBUG"
         id: debug
         run: |
           docker images
-          docker run --rm devcontainer:${{ matrix.platform }} whoami
+          docker run --rm devcontainer whoami
 
       - name: "Testing ${{ matrix.feature }} on ${{ matrix.platform }}"
         id: test_feature
         run: |
-          devcontainer features test --skip-scenarios --project-folder .devcontainer/features --features ${{ matrix.feature }} --base-image devcontainer:${{ matrix.platform }}
+          devcontainer features test --skip-scenarios --project-folder .devcontainer/features --features ${{ matrix.feature }} --base-image devcontainer
