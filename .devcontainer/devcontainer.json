@@ -1,0 +1,43 @@
+{
+  "name": "ministryofjustice-data-platform-devcontainer",
+  "build": { 
+    "dockerfile": "src/Dockerfile",
+    "args": {
+      "MOJ_DP_AWS_IAM_EMAIL": "${localEnv:MOJ_DP_AWS_IAM_EMAIL}"
+    }
+  },
+  "features": {
+    // devcontainer features, see https://github.com/devcontainers/features/tree/main/src/<feature>
+    "ghcr.io/devcontainers/features/common-utils:2": { "configureZshAsDefaultShell": true },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+    "ghcr.io/devcontainers/features/terraform:1": { "tflint": "none", "terragrunt": "none", "installTerraformDocs": true  },
+    // local features
+    "./features/src/aws-vault": {},
+    "./features/src/direnv": {},
+    "./features/src/flux": {},
+    "./features/src/kubent": {}
+  },
+  "remoteUser": "vscode",
+  "runArgs": [ "--name=ministryofjustice-data-platform-devcontainer" ],
+  "mounts": [
+    { "source": "ministryofjustice-data-platform-devcontainer-workspace", "target": "/home/vscode/workspace", "type": "volume" },
+    { "source": "ministryofjustice-data-platform-devcontainer-commandhistory", "target": "/home/vscode/.commandhistory", "type": "volume" },
+    { "source": "ministryofjustice-data-platform-devcontainer-awsvault", "target": "/home/vscode/.awsvault", "type": "volume" }
+  ],
+  "workspaceFolder": "/home/vscode/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "GitHub.copilot",
+        "GitHub.vscode-pull-request-github",
+        "hashicorp.terraform",
+        "ms-azuretools.vscode-docker",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "redhat.vscode-yaml"
+      ]
+    }
+  }
+}

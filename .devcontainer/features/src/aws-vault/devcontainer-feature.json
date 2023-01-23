@@ -1,0 +1,19 @@
+{
+  "id": "aws-vault",
+  "version": "1.0.0",
+  "name": "AWS Vault",
+  "description": "Installs AWS Vault",
+  "options": {
+    "version": {
+      "type": "string",
+      "description": "Select or enter an AWS Vault version.",
+      "default": "latest",
+      "proposals": [
+        "latest"
+      ]
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+export AWS_REGION="eu-west-1"
+
+if [[ -z "${AWS_VAULT}" ]]; then
+  aws-vault exec ${AWS_VAULT_PROFILE} -- \
+    aws eks get-token \
+      --cluster-name ${AWS_EKS_CLUSTER_NAME}
+else
+  aws eks get-token \
+    --cluster-name ${AWS_EKS_CLUSTER_NAME}
+fi

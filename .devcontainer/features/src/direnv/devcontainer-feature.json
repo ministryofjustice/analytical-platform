@@ -1,0 +1,9 @@
+{
+  "id": "direnv",
+  "version": "1.0.0",
+  "name": "direnv",
+  "description": "Installs direnv",
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

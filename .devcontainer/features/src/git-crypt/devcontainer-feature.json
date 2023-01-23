@@ -1,0 +1,9 @@
+{
+  "id": "git-crypt",
+  "version": "1.0.0",
+  "name": "git-crypt",
+  "description": "Installs git-crypt",
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

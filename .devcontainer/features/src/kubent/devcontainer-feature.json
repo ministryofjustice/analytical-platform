@@ -1,0 +1,20 @@
+{
+  "id": "kubent",
+  "version": "1.0.0",
+  "name": "Kube No Trouble",
+  "description": "Installs kubent",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": [
+        "latest",
+        "0.7.0"
+      ],
+      "default": "latest",
+      "description": "Select or enter a kubent version."
+      }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
