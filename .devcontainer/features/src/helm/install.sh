@@ -29,6 +29,6 @@ mv linux-${ARCHITECTURE}/helm /usr/local/bin/helm
 
 chmod +x /usr/local/bin/helm
 
-rm -rf linux-${ARCHITECTURE} helm-${VERSION}-linux-${ARCHITECTURE}.tar.gz
+rm --force --recursive linux-${ARCHITECTURE} helm-${VERSION}-linux-${ARCHITECTURE}.tar.gz
 
 echo "source <(helm completion zsh)" > /home/vscode/.dotfiles/helm.sh

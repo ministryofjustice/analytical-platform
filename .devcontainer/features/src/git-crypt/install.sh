@@ -10,4 +10,4 @@ apt update --yes
 
 apt-get install --yes --no-install-recommends git-crypt
 
-rm -rf /var/lib/apt/lists/*
+rm --force --recursive /var/lib/apt/lists/*

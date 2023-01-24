@@ -37,7 +37,7 @@ apt_install() {
 
   apt-get install --yes --no-install-recommends ${packages}
 
-  rm -rf /var/lib/apt/lists/*
+  rm --force --recursive /var/lib/apt/lists/*
 }
 
 ##################################################
