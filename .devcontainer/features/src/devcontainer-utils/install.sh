@@ -18,6 +18,4 @@ chown vscode:vscode /home/vscode/.zshrc
 mkdir --parents /home/vscode/workspace && chown vscode:vscode /home/vscode/workspace
 mkdir --parents /home/vscode/.commandhistory && chown vscode:vscode /home/vscode/.commandhistory
 mkdir --parents /home/vscode/.dotfiles && chown vscode:vscode /home/vscode/.dotfiles
-
-# Code
 mkdir --parents /opt/vscode-dev-containers && chown vscode:vscode /opt/vscode-dev-containers
