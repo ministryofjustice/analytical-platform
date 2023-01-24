@@ -1,6 +1,7 @@
 aws: ./.devcontainer/features/**/aws/**
 aws-vault: ./.devcontainer/features/**/aws-vault/**
 cosign: ./.devcontainer/features/**/cosign/**
+devcontainer-utils: ./.devcontainer/features/**/devcontainer-utils/**
 direnv: ./.devcontainer/features/**/direnv/**
 flux: ./.devcontainer/features/**/flux/**
 gh: ./.devcontainer/features/**/gh/**

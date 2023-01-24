@@ -2,7 +2,7 @@
 
 set -e
 
-source /usr/local/bin/devcontainer/shared-library
+source /usr/local/bin/devcontainer-utils
 
 VERSION=${VERSION:-"latest"}
 AWS_IAM_EMAIL="${AWSIAMEMAIL}"

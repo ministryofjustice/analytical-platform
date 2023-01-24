@@ -1,0 +1,10 @@
+{
+  "id": "devcontainer-utils",
+  "version": "1.0.0",
+  "name": "devcontainer-utils",
+  "description": "Installs Dev Container Utilities",
+  "mounts": [
+    { "source": "ministryofjustice-data-platform-devcontainer-persisted", "target": "/opt/vscode-dev-containers", "type": "volume" }
+  ],
+  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
+}

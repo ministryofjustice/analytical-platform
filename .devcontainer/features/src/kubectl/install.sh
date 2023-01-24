@@ -2,7 +2,7 @@
 
 set -e
 
-source /usr/local/bin/devcontainer/shared-library
+source /usr/local/bin/devcontainer-utils
 
 VERSION=${VERSION:-"latest"}
 
@@ -13,7 +13,12 @@ fi
 # Install
 
 curl --location https://dl.k8s.io/release/${VERSION}/bin/linux/${ARCHITECTURE}/kubectl --output /usr/local/bin/kubectl
-  chmod +x /usr/local/bin/kubectl
+
+chmod +x /usr/local/bin/kubectl
+
+cp $( dirname $0 )/aws-eks-auth /usr/local/bin/aws-eks-auth
+
+chmod +x /usr/local/bin/aws-eks-auth
 
 # Completion
 

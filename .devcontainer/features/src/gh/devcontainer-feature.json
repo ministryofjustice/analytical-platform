@@ -14,5 +14,5 @@
   "mounts": [
     { "source": "ministryofjustice-data-platform-devcontainer-gh", "target": "/home/vscode/.config/gh", "type": "volume" }
   ],
-  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
+  "installsAfter": ["./features/src/devcontainer-utils"]
 }

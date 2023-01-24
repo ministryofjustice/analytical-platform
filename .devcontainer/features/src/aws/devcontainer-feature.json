@@ -16,5 +16,5 @@
       "required": true
     }
   },
-  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
+  "installsAfter": ["./features/src/devcontainer-utils"]
 }

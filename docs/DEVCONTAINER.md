@@ -77,7 +77,7 @@
     ```bash
     docker run -it --rm \
         --volume $( pwd ):/workspace \
-        --volume $( pwd )/.devcontainer/src/usr/local/bin/devcontainer/shared-library:/usr/local/bin/devcontainer/shared-library \
+        --volume $( pwd )/.devcontainer/features/src/devcontainer-utils/devcontainer-utils:/usr/local/bin/devcontainer-utils \
         mcr.microsoft.com/devcontainers/base:ubuntu
     ```
 

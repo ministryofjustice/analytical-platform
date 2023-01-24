@@ -2,6 +2,6 @@
 
 set -e
 
-source /usr/local/bin/devcontainer/shared-library
+source /usr/local/bin/devcontainer-utils
 
 apt_install "direnv"
