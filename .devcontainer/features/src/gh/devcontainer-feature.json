@@ -1,0 +1,18 @@
+{
+  "id": "gh",
+  "version": "1.0.0",
+  "name": "gh",
+  "description": "Installs GitHub CLI",
+  "options": {
+    "version": {
+      "type": "string",
+      "description": "Select or enter a cli version.",
+      "proposals": ["latest"],
+      "default": "latest"
+    }
+  },
+  "mounts": [
+    { "source": "ministryofjustice-data-platform-devcontainer-gh", "target": "/home/vscode/.config/gh", "type": "volume" }
+  ],
+  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
+}

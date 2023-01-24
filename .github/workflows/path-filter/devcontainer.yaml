@@ -3,6 +3,7 @@ aws-vault: ./.devcontainer/features/**/aws-vault/**
 cosign: ./.devcontainer/features/**/cosign/**
 direnv: ./.devcontainer/features/**/direnv/**
 flux: ./.devcontainer/features/**/flux/**
+gh: ./.devcontainer/features/**/gh/**
 git-crypt: ./.devcontainer/features/**/git-crypt/**
 helm: ./.devcontainer/features/**/helm/**
 kubectl: ./.devcontainer/features/**/kubectl/**
