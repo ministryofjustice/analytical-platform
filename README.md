@@ -16,6 +16,9 @@ This is the Ministry of Justice mono-repo for work on the Data Platform.
 
 Infrastructure (Terraform) code will be found in our [Modernisation Platform environments repo](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/data-platform).
 
+Please read the [contributing guide](CONTRIBUTING.md) before sending pull requests,
+or creating issues.
+
 ## Contents
 
 This repository currently holds the Data Platform's:
@@ -60,4 +63,3 @@ As above - preferably our Slack channel: `#data-platform` (or email `data-platfo
 ### Last review date
 
 5th December 2022
-
