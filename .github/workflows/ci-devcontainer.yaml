@@ -40,6 +40,14 @@ jobs:
         id: install_devcontainer_cli
         run: npm install -g @devcontainers/cli
 
+      - name: "Build Image"
+        id: build_image
+        uses: docker/build-push-action@v3
+        with:
+          file: .devcontainer/features/test/Dockerfile
+          load: true
+          tags: devcontainer
+
       - name: "Testing ${{ matrix.feature }}"
         id: test_feature
         run: |
@@ -47,4 +55,4 @@ jobs:
             --skip-scenarios \
             --project-folder .devcontainer/features \
             --features ${{ matrix.feature }} \
-            --base-image mcr.microsoft.com/devcontainers/base:ubuntu
+            --base-image devcontainer
