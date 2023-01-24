@@ -15,7 +15,7 @@ chown vscode:vscode /usr/local/etc/vscode-dev-containers/first-run-notice.txt
 chown vscode:vscode /home/vscode/.zshrc
 
 # Persistent Mounts
+mkdir --parents /opt/vscode-dev-containers && chown vscode:vscode /opt/vscode-dev-containers
 mkdir --parents /home/vscode/workspace && chown vscode:vscode /home/vscode/workspace
 mkdir --parents /home/vscode/.commandhistory && chown vscode:vscode /home/vscode/.commandhistory
 mkdir --parents /home/vscode/.dotfiles && chown vscode:vscode /home/vscode/.dotfiles
-mkdir --parents /opt/vscode-dev-containers && chown vscode:vscode /opt/vscode-dev-containers
