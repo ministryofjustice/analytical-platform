@@ -7,3 +7,4 @@ helm: ./.devcontainer/features/**/helm/**
 kubectl: ./.devcontainer/features/**/kubectl/**
 kubelint: ./.devcontainer/features/**/kubelint/**
 kubent: ./.devcontainer/features/**/kubent/**
+terraform: ./.devcontainer/features/**/terraform/**
