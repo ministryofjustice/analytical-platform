@@ -9,6 +9,11 @@
       "description": "Select or enter an AWS CLI version.",
       "proposals": ["latest"],
       "default": "latest"
+    },
+    "awsIamEmail": {
+      "type": "string",
+      "description": "Enter your AWS IAM email address.",
+      "required": true
     }
   },
   "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]

@@ -1,0 +1,15 @@
+{
+  "id": "cosign",
+  "version": "1.0.0",
+  "name": "cosign",
+  "description": "Installs Sigstore cosign",
+  "options": {
+    "version": {
+      "type": "string",
+      "description": "Select or enter a cosign version.",
+      "proposals": ["latest"],
+      "default": "latest"
+    }
+  },
+  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
+}

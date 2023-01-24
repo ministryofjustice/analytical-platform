@@ -1,17 +1,14 @@
 {
   "name": "ministryofjustice-data-platform-devcontainer",
   "build": { 
-    "dockerfile": "src/Dockerfile",
-    "args": {
-      "MOJ_DATA_PLATFORM_AWS_IAM_EMAIL": "${localEnv:MOJ_DATA_PLATFORM_AWS_IAM_EMAIL}"
-    }
+    "dockerfile": "src/Dockerfile"
   },
   "features": {
     // devcontainer features, see https://github.com/devcontainers/features/tree/main/src/<feature>
     "ghcr.io/devcontainers/features/common-utils:2": { "configureZshAsDefaultShell": true },
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     // local features
-    "./features/src/aws": {},
+    "./features/src/aws": { "awsIamEmail": "${localEnv:MOJ_DATA_PLATFORM_AWS_IAM_EMAIL}" },
     "./features/src/aws-vault": {},
     "./features/src/direnv": {},
     "./features/src/flux": {},
@@ -25,8 +22,7 @@
   "runArgs": [ "--name=ministryofjustice-data-platform-devcontainer" ],
   "mounts": [
     { "source": "ministryofjustice-data-platform-devcontainer-workspace", "target": "/home/vscode/workspace", "type": "volume" },
-    { "source": "ministryofjustice-data-platform-devcontainer-commandhistory", "target": "/home/vscode/.commandhistory", "type": "volume" },
-    { "source": "ministryofjustice-data-platform-devcontainer-awsvault", "target": "/home/vscode/.awsvault", "type": "volume" }
+    { "source": "ministryofjustice-data-platform-devcontainer-commandhistory", "target": "/home/vscode/.commandhistory", "type": "volume" }
   ],
   "workspaceFolder": "/home/vscode/workspace",
   "customizations": {
