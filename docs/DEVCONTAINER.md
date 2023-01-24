@@ -4,22 +4,50 @@
 
 * macOS
 
+* Homebrew
+
+    ```bash
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
+
 * Docker for Mac or Rancher Desktop
+
+    ```bash
+    brew install --cask rancher
+    ```
 
 * Node / NPM
 
+    ```bash
+    brew install node
+    ```
+
 * devcontainer CLI
+
+    ```bash
+    npm install --global @devcontainers/cli@latest
+    ```
 
 * Visual Studio Code
 
+    ```bash
+    brew install --cask visual-studio-code
+    ```
+
   * Dev Containers Extension
+
+    This command could fail as `code` might not be in your `${PATH}` yet, if that is the case, install it via Visual Studio Code's UI
+
+    ```bash
+    /usr/local/bin/code --install-extension ms-vscode-remote.remote-containers
+    ```
 
 ## Using
 
 1. Update your `~/.bashrc` or `~/.zshrc` to export your AWS IAM email address (Temporary until we all use AWS SSO)
 
     ```bash
-    export MOJ_DP_AWS_IAM_EMAIL="firstname.lastname@digital.justice.gov.uk"
+    export MOJ_DATA_PLATFORM_AWS_IAM_EMAIL="firstname.lastname@digital.justice.gov.uk"
     ```
 
 1. Launch Visual Studio Code
@@ -56,5 +84,5 @@
 1. Test feature
 
     ```bash
-    bash /workspace/.devcontainer/features/src/${FEATURE}/install.sh
+    bash -x /workspace/.devcontainer/features/src/${FEATURE}/install.sh
     ```

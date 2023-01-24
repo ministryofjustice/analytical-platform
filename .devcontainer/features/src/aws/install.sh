@@ -19,3 +19,5 @@ unzip ${ARTEFACT}
 bash ./aws/install
 
 rm --force --recursive aws ${ARTEFACT}
+
+echo "complete -C '/usr/local/bin/aws_completer' aws" > /home/vscode/.dotfiles/aws.sh

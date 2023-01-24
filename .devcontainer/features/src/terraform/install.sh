@@ -23,3 +23,5 @@ unzip -q terraform_${VERSION_STRIP_V}_linux_${ARCHITECTURE}.zip
 mv terraform /usr/local/bin/terraform
 
 rm --force --recursive terraform_${VERSION_STRIP_V}_linux_${ARCHITECTURE}.zip
+
+echo "complete -o nospace -C /usr/local/bin/terraform terraform" > /home/vscode/.dotfiles/terraform.sh

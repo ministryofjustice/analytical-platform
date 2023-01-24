@@ -24,23 +24,9 @@ export HISTFILE="${HOME}/.commandhistory/.zsh_history"
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
 
-# AWS
-complete -C '/usr/local/bin/aws_completer' aws
-
-# Helm
-source <(helm completion zsh)
-
-# Flux
-source <(flux completion zsh)
-
-# Kubernetes
-source <(kubectl completion zsh)
-
-# Terraform
-complete -o nospace -C /usr/local/bin/terraform terraform
-
 ####################
-# AWS Vault
+# Dotfiles
 ####################
-export AWS_VAULT_BACKEND="file"
-export AWS_VAULT_FILE_PASSPHRASE=""
+for file in ${HOME}/.dotfiles/*.sh; do
+  source ${file}
+done

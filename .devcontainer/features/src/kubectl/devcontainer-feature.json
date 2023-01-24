@@ -11,5 +11,13 @@
       "default": "latest"
     }
   },
+  "customizations": {
+    "vscode": {
+        "extensions": [
+          "ms-kubernetes-tools.vscode-kubernetes-tools",
+          "redhat.vscode-yaml"
+        ]
+    }
+  },
   "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
 }

@@ -19,3 +19,6 @@ curl --location https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERS
   --output /usr/local/bin/aws-vault
   
 chmod +x /usr/local/bin/aws-vault
+
+echo "export AWS_VAULT_BACKEND=\"file\"" > /home/vscode/.dotfiles/aws-vault.sh
+echo "export AWS_VAULT_FILE_PASSPHRASE=\"\"" >> /home/vscode/.dotfiles/aws-vault.sh

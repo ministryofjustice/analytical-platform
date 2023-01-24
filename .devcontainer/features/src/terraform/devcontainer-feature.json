@@ -11,5 +11,12 @@
       "default": "latest"
       }
   },
+  "customizations": {
+    "vscode": {
+        "extensions": [
+          "hashicorp.terraform"
+        ]
+    }
+  },
   "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
 }

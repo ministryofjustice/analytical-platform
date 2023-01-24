@@ -12,3 +12,5 @@ fi
 
 curl --location https://dl.k8s.io/release/${VERSION}/bin/linux/${ARCHITECTURE}/kubectl --output /usr/local/bin/kubectl
   chmod +x /usr/local/bin/kubectl
+
+echo "source <(kubectl completion zsh)" > /home/vscode/.dotfiles/kubectl.sh

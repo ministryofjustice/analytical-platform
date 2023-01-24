@@ -25,3 +25,5 @@ mv flux /usr/local/bin/flux
 chmod +x /usr/local/bin/flux
 
 rm flux_${VERSION_STRIP_V}_linux_${ARCHITECTURE}.tar.gz
+
+echo "source <(flux completion zsh)" > /home/vscode/.dotfiles/flux.sh
