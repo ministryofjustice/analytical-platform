@@ -1,0 +1,61 @@
+{
+  "id": "kubernetes-tools",
+  "version": "1.0.0",
+  "name": "kubernetes-tools",
+  "description": "Kubernetes Tools",
+  "options": {
+    "installKubectl": {
+      "type": "boolean",
+      "description": "Install Kubernetes CLI (https://kubernetes.io/docs/reference/kubectl/)",
+      "default": true
+    },
+    "kubectlVersion": {
+      "type": "string",
+      "description": "Kubernetes CLI version",
+      "proposals": ["latest"],
+      "default": "latest"
+    },
+    "installHelm": {
+      "type": "boolean",
+      "description": "Install Helm CLI (https://helm.sh/)",
+      "default": true
+    },
+    "helmVersion": {
+      "type": "string",
+      "description": "Helm CLI version",
+      "proposals": ["latest"],
+      "default": "latest"
+    },
+    "installFlux": {
+      "type": "boolean",
+      "description": "Install Flux CLI (https://fluxcd.io/)",
+      "default": true
+    },
+    "fluxVersion": {
+      "type": "string",
+      "description": "Flux CLI version",
+      "proposals": ["latest"],
+      "default": "latest"
+    },
+    "installKubent": {
+      "type": "boolean",
+      "description": "Install Kubent (https://github.com/doitintl/kube-no-trouble)",
+      "default": true
+    },
+    "kubentVersion": {
+      "type": "string",
+      "description": "Kubent version",
+      "proposals": ["latest"],
+      "default": "latest"
+    }
+  },
+  "customizations": {
+    "vscode": {
+        "extensions": [
+          "ms-kubernetes-tools.vscode-kubernetes-tools",
+          "redhat.vscode-yaml"
+        ]
+    }
+  },
+  "installsAfter": ["./features/src/base"]
+}

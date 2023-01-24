@@ -1,0 +1,20 @@
+{
+  "id": "container-tools",
+  "version": "1.0.0",
+  "name": "container-tools",
+  "description": "Container Tools",
+  "options": {
+    "installCosign": {
+      "type": "boolean",
+      "description": "Install Sigstore Cosign (https://github.com/sigstore/cosign)",
+      "default": true
+    },
+    "cosignVersion": {
+      "type": "string",
+      "description": "Sigstore Cosign version",
+      "proposals": ["latest"],
+      "default": "latest"
+    }
+  },
+  "installsAfter": ["./features/src/base"]
+}

@@ -1,7 +1,0 @@
-{
-  "id": "direnv",
-  "version": "1.0.0",
-  "name": "direnv",
-  "description": "Installs direnv",
-  "installsAfter": ["./features/src/devcontainer-utils"]
-}

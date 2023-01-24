@@ -77,12 +77,12 @@
     ```bash
     docker run -it --rm \
         --volume $( pwd ):/workspace \
-        --volume $( pwd )/.devcontainer/features/src/devcontainer-utils/devcontainer-utils:/usr/local/bin/devcontainer-utils \
+        --volume $( pwd )/.devcontainer/features/src/base/devcontainer-utils:/usr/local/bin/devcontainer-utils \
         mcr.microsoft.com/devcontainers/base:ubuntu
     ```
 
 1. Test feature
 
     ```bash
-    bash -x /workspace/.devcontainer/features/src/${FEATURE}/install.sh
+    bash -x /workspace/.devcontainer/features/src/<feature>/install-<tool>.sh
     ```

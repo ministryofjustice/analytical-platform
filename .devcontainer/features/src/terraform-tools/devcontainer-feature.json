@@ -1,0 +1,20 @@
+{
+  "id": "terraform-tools",
+  "version": "1.0.0",
+  "name": "terraform-tools",
+  "description": "Terraform Tools",
+  "options": {
+    "installTerraform": {
+      "type": "boolean",
+      "description": "Install Terraform Switcher (https://github.com/hashicorp/terraform)",
+      "default": true
+    },
+    "terraformVersion": {
+      "type": "string",
+      "description": "Terraform version",
+      "proposals": ["latest"],
+      "default": "latest"
+    }
+  },
+  "installsAfter": ["./features/src/base"]
+}
