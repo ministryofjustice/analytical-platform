@@ -1,21 +1,21 @@
 ---
-name: Modernisation Platform Story
-about: Create new Modernisation Platform story
+name: Data Platform Story
+about: Create new Data Platform story
 ---
 
 ## User Story
 
 <!--
-As a… [who is the user?] 
+As a… [who is the user?]
 I need/want/expect to… [what does the user want to do?]
-So that… [why does the user want to do this?] 
+So that… [why does the user want to do this?]
 -->
 
 ## User Type(s)
 
 <!--
 Does this impact specific user types?
-Can it link to a persona? 
+Can it link to a persona?
 -->
 
 ## Value
@@ -25,12 +25,12 @@ Can it link to a persona?
 ## Questions / Assumptions / Hypothesis
 
 <!-- Additional information to explain approach taken
-### Hypothesis 
+### Hypothesis
 If we... [do a thing]
 Then... [this will happ]
 
 ### Proposal
-A proposal that is something testable, don't worry whether it works or not, it's a place for ideas. 
+A proposal that is something testable, don't worry whether it works or not, it's a place for ideas.
 -->
 
 

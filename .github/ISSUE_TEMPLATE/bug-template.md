@@ -1,6 +1,6 @@
 ---
-name: Modernisation Platform Bug
-about: Create new Modernisation Platform bug
+name: Data Platform Bug
+about: Create new Data Platform bug
 labels: bug
 ---
 
