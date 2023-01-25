@@ -1,0 +1,35 @@
+name: Generate dependabot file
+
+on:
+  schedule:
+    - cron: "40 22 * * 6"
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/generate-dependabot-file.yml'
+      - 'scripts/generate-dependabot-file.sh'
+  workflow_dispatch:
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  create-and-commit-dependabot-file:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+      - name: Generate file
+        run: bash ./scripts/generate-dependabot-file.sh
+      - name: Commit changes to GitHub
+        run: bash ./scripts/git-setup.sh
+      - run: bash ./scripts/git-commit.sh .github
+      - run: bash ./scripts/git-pull-request.sh dependabot
+        env:
+          SECRET: ${{ secrets.GITHUB_TOKEN }}
