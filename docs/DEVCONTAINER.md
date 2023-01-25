@@ -1,6 +1,6 @@
 # Data Platform Development Container
 
-This implementation of the development container is meant to have all repositories cloned into it under the persistent workspace `/home/vscode/workspace`. Once we begin our journey to the multi-repo, this should become redundant. That means that right now, it is not intended to use this with GitHub Codespaces.
+This implementation of the development container is meant to have all repositories cloned into it under the persistent workspace `/home/vscode/workspace`. Once we begin our journey to the monorepo, this should become redundant. That means that right now, it is not intended to use this with GitHub Codespaces.
 
 # Prerequisites
 
