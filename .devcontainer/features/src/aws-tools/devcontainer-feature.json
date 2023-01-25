@@ -32,8 +32,6 @@
       "default": "latest"
     }
   },
-  "mounts": [
-    { "source": "ministryofjustice-data-platform-devcontainer-awsvault", "target": "/home/vscode/.awsvault", "type": "volume" }
-  ],
+  "mounts": [{ "source": "ministryofjustice-data-platform-devcontainer-awsvault", "target": "/home/vscode/.awsvault", "type": "volume" }],
   "installsAfter": ["./features/src/base"]
 }
