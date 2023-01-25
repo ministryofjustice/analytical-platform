@@ -19,6 +19,7 @@
       "type": "boolean",
       "description": "Install Git Crypt (https://github.com/AGWA/git-crypt)",
       "default": true
+    }
   },
   "mounts": [
     { "source": "ministryofjustice-data-platform-devcontainer-gh", "target": "/home/vscode/.config/gh", "type": "volume" }
