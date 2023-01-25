@@ -21,6 +21,7 @@ if [ "$(git rev-parse main)" = "$(git rev-parse $pull_request_branch)" ]; then
   echo "No difference in branches to create PR, exiting."
   exit 0
 fi
+echo "Creating Payload"
 
 payload=$(echo "${pull_request_body}" | jq --arg branch "$pull_request_branch" --arg pr_title "$pull_request_title" -R --slurp '{ body: ., base: "main", head: $branch, title: $pr_title }')
 
