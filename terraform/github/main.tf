@@ -14,13 +14,6 @@ module "core" {
     "kubernetes",
     "terraform"
   ]
-  secrets = {
-    # Repository GitHub token for the CI/CD user
-    REPOSITORY_GITHUB_TOKEN = "This needs to be manually set in GitHub."
-    # Teams GitHub token for the CI/CD user
-    TEAMS_GITHUB_TOKEN = "This needs to be manually set in GitHub."
-  }
-
   providers = {
     github = github.repository-github
   }
@@ -38,6 +31,15 @@ module "data-platform" {
     "aws",
     "documentation"
   ]
+
+  secrets = {
+    # Repository GitHub token for the CI/CD user
+    REPOSITORY_GITHUB_TOKEN = "This needs to be manually set in GitHub."
+    # Teams GitHub token for the CI/CD user
+    TEAMS_GITHUB_TOKEN = "This needs to be manually set in GitHub."
+    # Slack Webhook
+    SLACK_WEBHOOK_URL = "This needs to be manually set in GitHub."
+  }
   providers = {
     github = github.repository-github
   }
