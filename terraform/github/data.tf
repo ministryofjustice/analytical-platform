@@ -3,6 +3,4 @@ data "github_repositories" "analytical-platform-repositories" {
   sort  = "stars"
 }
 
-data "aws_caller_identity" "current" {
-
-}
+data "aws_caller_identity" "current" {}
