@@ -1,5 +1,7 @@
 # Data Platform Development Container
 
+This implementation of the development container is meant to have all repositories cloned into it under the persistent workspace `/home/vscode/workspace`. Once we begin our journey to the multi-repo, this should become redundant. That means that right now, it is not intended to use this with GitHub Codespaces.
+
 # Prerequisites
 
 * macOS
@@ -59,6 +61,26 @@
 1. Reopen in Container
 
     ![image info](./img/vscode-devcontainer-ui.png)
+
+---
+
+# Tools
+
+## AWS Vault
+
+1. Configure Landing Account
+
+    ```bash
+    $ aws-vault add analytical-platform-landing
+    ```
+
+## Kubernetes CLI
+
+The supplied `~/.kube/config`:
+
+  1. Invokes a wrapper for authenticating to EKS using AWS Vault. If you're in an AWS Vault sub-shell, it will not call AWS Vault
+
+  1. Has the default context to the development EKS cluster
 
 ---
 
