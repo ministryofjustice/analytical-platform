@@ -33,10 +33,10 @@ gh api --method PUT /repos/:owner/:repo/contents/$file_to_commit \
 
 # Define: repository URL, branch, title, and PR body
 repository_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls"
-pull_request_title="New files for $1"
+pull_request_title="New files for dependabot"
 pull_request_body="> This PR was automatically created via a GitHub action workflow 🤖
 
-This PR commits new files under $1."
+This PR commits new files under dependabot."
 
 # Check if changes to create PR
 if [ "$(git rev-parse main)" = "$(git rev-parse $branch)" ]; then
@@ -50,7 +50,7 @@ payload=$(echo "${pull_request_body}" | jq --arg branch "$branch" --arg pr_title
 echo "${payload}" | curl \
   -s -X POST \
   -H "Accept: application/vnd.github.v3+json" \
-  -H "Authorization: token ${SECRET}" \
+  -H "Authorization: token ${GH_TOKEN}" \
   -d @- $repository_url > /dev/null
 ERRORCODE="${?}"
 if [ ${ERRORCODE} -ne 0 ]
