@@ -51,10 +51,7 @@
   },
   "customizations": {
     "vscode": {
-        "extensions": [
-          "ms-kubernetes-tools.vscode-kubernetes-tools",
-          "redhat.vscode-yaml"
-        ]
+      "extensions": ["ms-kubernetes-tools.vscode-kubernetes-tools", "redhat.vscode-yaml"]
     }
   },
   "installsAfter": ["./features/src/base"]

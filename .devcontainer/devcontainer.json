@@ -12,7 +12,7 @@
     "./features/src/terraform-tools": {}
   },
   "remoteUser": "vscode",
-  "runArgs": [ "--name=ministryofjustice-data-platform-devcontainer" ],
+  "runArgs": ["--name=ministryofjustice-data-platform-devcontainer"],
   "mounts": [
     { "source": "ministryofjustice-data-platform-devcontainer-persisted", "target": "/opt/vscode-dev-containers", "type": "volume" },
     { "source": "ministryofjustice-data-platform-devcontainer-workspace", "target": "/home/vscode/workspace", "type": "volume" },
@@ -21,11 +21,7 @@
   "workspaceFolder": "/home/vscode/workspace",
   "customizations": {
     "vscode": {
-      "extensions": [
-        "EditorConfig.EditorConfig",
-        "GitHub.copilot",
-        "GitHub.vscode-pull-request-github"
-      ]
+      "extensions": ["EditorConfig.EditorConfig", "GitHub.copilot", "GitHub.vscode-pull-request-github"]
     }
   }
 }
