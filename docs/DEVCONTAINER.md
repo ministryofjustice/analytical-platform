@@ -1,6 +1,6 @@
 # Data Platform Development Container
 
-## Prerequisites
+# Prerequisites
 
 * macOS
 
@@ -13,6 +13,8 @@
 * Docker for Mac or Rancher Desktop
 
     ```bash
+    brew install --cask docker
+    # or
     brew install --cask rancher
     ```
 
@@ -42,7 +44,9 @@
     /usr/local/bin/code --install-extension ms-vscode-remote.remote-containers
     ```
 
-## Using
+---
+
+# Using
 
 1. Update your `~/.bashrc` or `~/.zshrc` to export your AWS IAM email address (Temporary until we all use AWS SSO)
 
@@ -54,30 +58,28 @@
 
 1. Reopen in Container
 
-## Developing
+    ![image info](./img/vscode-devcontainer-ui.png)
 
-### Testing
+---
 
-1. Build base image
+# Developing
 
-    ```bash
-    docker build --file .devcontainer/src/Dockerfile --tag moj-devcontainer-test .devcontainer/src
-    ```
+## Testing a feature
 
-1. Test feature
+1. Run script
 
     ```bash
-    devcontainer features test --features aws-vault --base-image moj-devcontainer-test
+    bash .devcontainer/hack/feature-test.sh ${FEATURE_NAME}
     ```
 
-### Debug Locally
+### Debugging a feature
 
 1. Run base image
 
     ```bash
     docker run -it --rm \
-        --volume $( pwd ):/workspace \
-        --volume $( pwd )/.devcontainer/features/src/base/devcontainer-utils:/usr/local/bin/devcontainer-utils \
+      --volume $( pwd ):/workspace \
+      --volume $( pwd )/.devcontainer/features/src/base/devcontainer-utils:/usr/local/bin/devcontainer-utils \
         mcr.microsoft.com/devcontainers/base:ubuntu
     ```
 
