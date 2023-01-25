@@ -14,6 +14,7 @@ branch="date-$(date +%s)"
 commit_message="Workflow: created files in ${1}"
 content=$( base64 -i $file_to_commit )
 sha=$( git rev-parse $branch:$file_to_commit )
+gh api --method POST /repos/:owner/:repo/git/refs \
 gh api --method PUT /repos/:owner/:repo/contents/$file_to_commit \
   --field message="$commit_message" \
   --field content="$content" \
