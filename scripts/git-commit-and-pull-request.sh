@@ -36,7 +36,7 @@ repository_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls"
 pull_request_title="New files for dependabot"
 pull_request_body="> This PR was automatically created via a GitHub action workflow 🤖
 
-This PR commits new files under dependabot."
+This PR commits new files under ${1}."
 
 # Check if changes to create PR
 if [ "$(git rev-parse main)" = "$(git rev-parse $branch)" ]; then
