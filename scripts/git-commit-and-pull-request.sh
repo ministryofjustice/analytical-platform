@@ -19,13 +19,12 @@ main_branch_sha=$(git rev-parse HEAD)
 
 git checkout -b "$branch"
 git add "$1"
-git commit -m "$commit_message"
 
 
 echo "Computing sha"
 sha=$( git rev-parse $branch:$file_to_commit)
 
-
+echo "Create branch on remote"
 
 # Create branch on remote
 gh api --method POST /repos/:owner/:repo/git/refs \
