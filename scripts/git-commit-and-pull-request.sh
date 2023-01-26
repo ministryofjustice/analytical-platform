@@ -15,10 +15,20 @@ file_to_commit="${1}/dependabot.yml"
 branch="date-$(date +%s)"
 commit_message="Workflow: created files in ${1}"
 content=$( base64 -i $file_to_commit )
-main_branch_sha=$(git rev-parse HEAD)
-sha=$( git rev-parse $branch:$file_to_commit )
+main_branch_sha=$(git rev-parse origin/main)
 
-# Create branch
+git checkout -b "$branch"
+git add "$1"
+git commit -m "$commit_message"
+
+git branch -a
+
+echo "Computing sha"
+sha=$( git rev-parse $branch:$file_to_commit)
+
+echo "Create branch on remote"
+
+# Create branch on remote
 gh api --method POST /repos/:owner/:repo/git/refs \
   --field ref="refs/heads/$branch" \
   --field sha="$main_branch_sha"
@@ -39,7 +49,7 @@ pull_request_body="> This PR was automatically created via a GitHub action workf
 This PR commits new files under ${1}."
 
 # Check if changes to create PR
-if [ "$(git rev-parse main)" = "$(git rev-parse $branch)" ]; then
+if [ "$(git rev-parse origin/main)" = "$(git rev-parse $branch)" ]; then
   echo "No difference in branches to create PR, exiting."
   exit 0
 fi
