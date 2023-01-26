@@ -17,8 +17,8 @@ commit_message="Workflow: created files in ${1}"
 content=$( base64 -i $file_to_commit )
 main_branch_sha=$(git rev-parse main)
 
-git checkout -b $branch
-git add $1
+git checkout -b "$branch"
+git add "$1"
 
 sha=$( git rev-parse $branch:$file_to_commit )
 
