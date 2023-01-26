@@ -15,7 +15,7 @@ file_to_commit="${1}/dependabot.yml"
 branch="date-$(date +%s)"
 commit_message="Workflow: created files in ${1}"
 content=$( base64 -i $file_to_commit )
-main_branch_sha=$(git rev-parse origin/main)
+main_branch_sha=$(git rev-parse HEAD)
 
 git checkout -b "$branch"
 git add "$1"
