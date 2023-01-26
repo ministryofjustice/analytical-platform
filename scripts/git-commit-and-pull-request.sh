@@ -17,10 +17,11 @@ commit_message="Workflow: created files in ${1}"
 content=$( base64 -i $file_to_commit )
 main_branch_sha=$(git rev-parse main)
 
+echo "Computing sha"
+sha=$( git rev-parse $branch:$file_to_commit)
+
 git checkout -b "$branch"
 git add "$1"
-echo "Computing sha"
-sha=$( git rev-parse $branch)
 
 
 # Create branch on remote
