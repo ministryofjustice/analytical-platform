@@ -19,8 +19,8 @@ main_branch_sha=$(git rev-parse main)
 
 git checkout -b "$branch"
 git add "$1"
-
-sha=$( git rev-parse $branch:$file_to_commit )
+echo "Computing sha"
+sha=$( git rev-parse $branch)
 
 
 # Create branch on remote
