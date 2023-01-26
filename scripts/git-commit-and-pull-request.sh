@@ -15,10 +15,13 @@ file_to_commit="${1}/dependabot.yml"
 branch="date-$(date +%s)"
 commit_message="Workflow: created files in ${1}"
 content=$( base64 -i $file_to_commit )
-main_branch_sha=$(git rev-parse HEAD)
+main_branch_sha=$(git rev-parse origin/main)
 sha=$( git rev-parse $branch:$file_to_commit )
 
-# Create branch
+git checkout -b $branch
+git add $1
+
+# Create branch on remote
 gh api --method POST /repos/:owner/:repo/git/refs \
   --field ref="refs/heads/$branch" \
   --field sha="$main_branch_sha"
