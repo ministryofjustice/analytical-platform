@@ -5,7 +5,6 @@ locals {
   # and will attempt to change them from `maintainer` to `member`, so owners should go in here.
   maintainers = [
     "julialawrence",
-    "rossjones",
     "jhackett-ap", # John Hackett
     "bagg3rs"      # Richard Baguley
   ]
@@ -41,7 +40,6 @@ locals {
   ]
 
   tech_archs_maintainers = [
-    "rossjones",
     "jemnery", # Jeremy Collins
     "bagg3rs", # Richard Baguley
     "julialawrence"
