@@ -20,6 +20,7 @@ main_branch_sha=$(git rev-parse HEAD)
 git checkout -b "$branch"
 git add "$1"
 
+git branch -a
 
 echo "Computing sha"
 sha=$( git rev-parse $branch:$file_to_commit)
