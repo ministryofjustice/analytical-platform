@@ -28,8 +28,7 @@ jobs:
       - name: Generate file
         run: bash ./scripts/generate-dependabot-file.sh
       - name: Commit changes to GitHub
-        run: bash ./scripts/git-setup.sh
-      - run: bash ./scripts/git-commit-and-pull-request.sh .github
+        run: bash ./scripts/git-commit-and-pull-request.sh .github
     env:
       GH_TOKEN: ${{ github.token }}
 
