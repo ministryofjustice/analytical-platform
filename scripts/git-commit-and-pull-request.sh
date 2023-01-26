@@ -15,13 +15,16 @@ file_to_commit="${1}/dependabot.yml"
 branch="date-$(date +%s)"
 commit_message="Workflow: created files in ${1}"
 content=$( base64 -i $file_to_commit )
-main_branch_sha=$(git rev-parse main)
+main_branch_sha=$(git rev-parse origin/main)
+
+git checkout -b "$branch"
+git add "$1"
+git commit -m "$commit_message"
+
 
 echo "Computing sha"
 sha=$( git rev-parse $branch:$file_to_commit)
 
-git checkout -b "$branch"
-git add "$1"
 
 
 # Create branch on remote
