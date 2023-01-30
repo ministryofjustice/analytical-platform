@@ -50,6 +50,10 @@ This implementation of the development container is meant to have all repositori
 
 # Using
 
+Your GPG and SSH agents are mounted from macOS, so GPG and SSH commands inside the container will work without any configurations updates.
+
+1. Clone this repository
+
 1. Update your `~/.bashrc` or `~/.zshrc` to export your AWS IAM email address (Temporary until we all use AWS SSO)
 
    ```bash
@@ -61,6 +65,8 @@ This implementation of the development container is meant to have all repositori
 1. Reopen in Container
 
    ![image info](./img/vscode-devcontainer-ui.png)
+
+1. Clone Analytical and Data Platform repositories straight into `~/workspace`
 
 ---
 
