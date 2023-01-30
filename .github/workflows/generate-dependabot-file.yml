@@ -25,11 +25,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+        with:
+          fetch-depth: 0
       - name: Generate file
         run: bash ./scripts/generate-dependabot-file.sh
       - name: Commit changes to GitHub
         run: bash ./scripts/git-setup.sh
-      - run: bash ./scripts/git-commit.sh .github
-      - run: bash ./scripts/git-pull-request.sh dependabot
-        env:
-          SECRET: ${{ secrets.GITHUB_TOKEN }}
+      - run: bash ./scripts/git-commit-and-pull-request.sh .github
+    env:
+      GH_TOKEN: ${{ github.token }}
+
