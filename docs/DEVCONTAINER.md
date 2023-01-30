@@ -50,7 +50,7 @@ This implementation of the development container is meant to have all repositori
 
 # Using
 
-Your GPG and SSH agents are mounted from macOS, so GPG and SSH commands inside the container will work without any configurations updates.
+Your GPG and SSH agents are mounted from macOS, so GPG and SSH commands inside the container will work without any configuration updates.
 
 1. Clone this repository
 
