@@ -16,6 +16,7 @@ locals {
 }
 
 resource "github_team" "default" {
+  provider                  = github.teams
   name                      = var.name
   privacy                   = "closed"
   description               = join(" • ", [var.description, "This team is defined and managed in Terraform"])
@@ -25,6 +26,7 @@ resource "github_team" "default" {
 
 # CI users need to be a maintainer to edit team memberships through Terraform
 resource "github_team_membership" "ci" {
+  provider = github.teams
   for_each = var.ci
   team_id  = github_team.default.id
   username = each.value
@@ -33,6 +35,7 @@ resource "github_team_membership" "ci" {
 
 # Team memberships (as "maintainers")
 resource "github_team_membership" "maintainers" {
+  provider = github.teams
   for_each = local.maintainers
   team_id  = github_team.default.id
   username = each.value
@@ -43,6 +46,7 @@ resource "github_team_membership" "maintainers" {
 
 # Team memberships (as "members")
 resource "github_team_membership" "members" {
+  provider = github.teams
   for_each = local.members
   team_id  = github_team.default.id
   username = each.value
@@ -53,6 +57,7 @@ resource "github_team_membership" "members" {
 
 # Repositories to give access to
 resource "github_team_repository" "default" {
+  provider   = github.repositories
   for_each   = var.repositories
   team_id    = github_team.default.id
   repository = each.value
