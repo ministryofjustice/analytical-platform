@@ -11,6 +11,10 @@ locals {
     {
       name        = "analytics-platform-infrastructure",
       description = "Core Infrastructure Repo for Data Platform"
+    },
+    {
+      name        = "ap-test-github-workflow",
+      description = "Test repository for github docker workflow"
   }]
   maintainers = [ # maintainers of analytics-hq and analytical-platform gh teams
     "julialawrence",
