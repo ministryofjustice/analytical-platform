@@ -55,6 +55,10 @@ module "core-team" {
   maintainers = local.maintainers
   members     = local.all_members
   ci          = local.ci_users
+  providers = {
+    github.repositories = github.repository-github
+    github.teams        = github
+  }
 }
 
 module "data-platform-tech-archs-team" {
@@ -68,6 +72,10 @@ module "data-platform-tech-archs-team" {
   maintainers = local.tech_archs_maintainers
   members     = local.tech_archs
   ci          = local.ci_users
+  providers = {
+    github.repositories = github.repository-github
+    github.teams        = github
+  }
 }
 
 # People who need full AWS access
@@ -81,4 +89,24 @@ module "aws-team" {
   ci          = local.ci_users
 
   parent_team_id = module.core-team.team_id
+  providers = {
+    github.repositories = github.repository-github
+    github.teams        = github
+  }
+}
+
+# Data Engineering Team
+
+module "data-engineering-team" {
+  source      = "./modules/team"
+  name        = "data-engineering"
+  description = "Data Engineering team"
+
+  maintainers = local.data_engineering_maintainers
+  members     = local.all_members_data_engineers
+  ci          = local.ci_users
+  providers = {
+    github.repositories = github.repository-github
+    github.teams        = github
+  }
 }
