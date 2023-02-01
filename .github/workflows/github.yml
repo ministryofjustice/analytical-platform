@@ -56,7 +56,8 @@ jobs:
 
       - name: terraform init
         run: |
-          terraform init -chdir="terraform/github" -backend-config=role_arn=arn:aws:iam::${{ env.MANAGEMENT_ACCOUNT_ID }}:role/GlobalGitHubActionAdmin -reconfigure
+          terraform init -backend-config=role_arn=arn:aws:iam::${{ env.MANAGEMENT_ACCOUNT_ID }}:role/GlobalGitHubActionAdmin -reconfigure
+        working-directory: "terraform/github"
       - name: terraform plan
         run: terraform -chdir="terraform/github" plan -input=false -no-color
       - name: terraform apply
