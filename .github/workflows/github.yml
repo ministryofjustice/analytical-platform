@@ -1,0 +1,64 @@
+name: "Terraform: GitHub resources"
+
+on:
+  push:
+    paths:
+      - 'terraform/github/**'
+      - '.github/workflows/github.yml'
+    branches:
+      - main
+  pull_request:
+    paths:
+      - 'terraform/github/**'
+      - '.github/workflows/github.yml'
+    branches:
+      - main
+    types: [opened, edited, reopened, synchronize]
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # trigger every Saturday at 12:00am
+    - cron: '0 04 * * 6'
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
+jobs:
+  github-plan-and-apply:
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_repository_github_token: ${{ secrets.REPOSITORY_GITHUB_TOKEN }}
+      TF_VAR_team_github_token: ${{ secrets.TEAMS_GITHUB_TOKEN }}
+      MANAGEMENT_ACCOUNT_ID: ${{ secrets.MANAGEMENT_ACCOUNT_ID }}
+      TF_IN_AUTOMATION: true
+      AWS_REGION: "eu-west-2"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
+        with:
+          role-to-assume: "arn:aws:iam::${{ env.MANAGEMENT_ACCOUNT_ID }}:role/GlobalGitHubActionAccess"
+          role-session-name: githubactionsrolesession
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+        with:
+          terraform_version: "~1"
+          terraform_wrapper: false
+
+      - name: terraform init
+        run: |
+          terraform init -chdir="terraform/github" -backend-config=role_arn=arn:aws:iam::${{ env.MANAGEMENT_ACCOUNT_ID }}:role/GlobalGitHubActionAdmin -reconfigure
+      - name: terraform plan
+        run: terraform -chdir="terraform/github" plan -input=false -no-color
+      - name: terraform apply
+        if: github.event.ref == 'refs/heads/main'
+        run: terraform -chdir="terraform/github" apply -input=false -no-color -auto-approve

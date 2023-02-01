@@ -38,6 +38,8 @@ module "data-platform" {
     REPOSITORY_GITHUB_TOKEN = "This needs to be manually set in GitHub."
     # Teams GitHub token for the CI/CD user
     TEAMS_GITHUB_TOKEN = "This needs to be manually set in GitHub."
+    # Management Account ID
+    MANAGEMENT_ACCOUNT_ID = data.aws_caller_identity.current.account_id
   }
   providers = {
     github = github.repository-github
