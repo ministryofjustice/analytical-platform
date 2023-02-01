@@ -42,10 +42,12 @@ module "data-platform" {
 
 # Everyone, with access to the above repositories
 module "core-team" {
-  source       = "./modules/team"
-  name         = "analytics-hq"
-  description  = "Analytical Platform team"
-  repositories = [for repo in module.core : repo.repository.name]
+  source      = "./modules/team"
+  name        = "analytics-hq"
+  description = "Analytical Platform team"
+  repositories = concat(
+    [for repo in module.core : repo.repository.name],
+  [module.data-platform.repository.name])
 
   maintainers = local.maintainers
   members     = local.all_members
