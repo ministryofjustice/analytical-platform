@@ -4,6 +4,18 @@ locals {
   # NB: Terraform shows a perputal difference in roles if someone is an organisation owner
   # and will attempt to change them from `maintainer` to `member`, so owners should go in here.
 
+  core_repos = [{ # Legacy Analytical Platform Internal Infrastructure Repos in the MOJ org
+    name        = "ap-terraform-bootstrap",
+    description = "Bootstrap for setting up analytical platform and data engineering accounts"
+    },
+    {
+      name        = "analytics-platform-infrastructure",
+      description = "Core Infrastructure Repo for Data Platform"
+    },
+    {
+      name        = "ap-test-github-workflow",
+      description = "Test repository for github docker workflow"
+  }]
   maintainers = [ # maintainers of analytics-hq and analytical-platform gh teams
     "julialawrence",
     "rossjones",
