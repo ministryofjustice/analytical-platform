@@ -4,9 +4,6 @@ terraform {
     github = {
       version = "~> 5.2"
       source  = "integrations/github"
-      configuration_aliases = [
-        github.repositories, github.teams
-      ]
 
     }
   }

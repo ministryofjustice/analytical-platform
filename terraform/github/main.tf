@@ -15,9 +15,6 @@ module "core" {
     "kubernetes",
     "terraform"
   ]
-  providers = {
-    github = github.repository-github
-  }
 }
 
 module "data-platform" {
@@ -41,25 +38,20 @@ module "data-platform" {
     # Management Account ID
     MANAGEMENT_ACCOUNT_ID = data.aws_caller_identity.current.account_id
   }
-  providers = {
-    github = github.repository-github
-  }
 }
 
 # Everyone, with access to the above repositories
 module "core-team" {
-  source       = "./modules/team"
-  name         = "analytics-hq"
-  description  = "Analytical Platform team"
-  repositories = [for repo in module.core : repo.repository.name]
+  source      = "./modules/team"
+  name        = "analytics-hq"
+  description = "Analytical Platform team"
+  repositories = concat(
+    [for repo in module.core : repo.repository.name],
+  [module.data-platform.repository.name])
 
   maintainers = local.maintainers
   members     = local.all_members
   ci          = local.ci_users
-  providers = {
-    github.repositories = github.repository-github
-    github.teams        = github
-  }
 }
 
 module "data-platform-tech-archs-team" {
@@ -73,10 +65,6 @@ module "data-platform-tech-archs-team" {
   maintainers = local.tech_archs_maintainers
   members     = local.tech_archs
   ci          = local.ci_users
-  providers = {
-    github.repositories = github.repository-github
-    github.teams        = github
-  }
 }
 
 # People who need full AWS access
@@ -90,10 +78,6 @@ module "aws-team" {
   ci          = local.ci_users
 
   parent_team_id = module.core-team.team_id
-  providers = {
-    github.repositories = github.repository-github
-    github.teams        = github
-  }
 }
 
 # Data Engineering Team
@@ -106,8 +90,4 @@ module "data-engineering-team" {
   maintainers = local.data_engineering_maintainers
   members     = local.all_members_data_engineers
   ci          = local.ci_users
-  providers = {
-    github.repositories = github.repository-github
-    github.teams        = github
-  }
 }
