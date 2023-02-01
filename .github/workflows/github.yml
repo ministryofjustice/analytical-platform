@@ -32,8 +32,7 @@ jobs:
   github-plan-and-apply:
     runs-on: ubuntu-latest
     env:
-      TF_VAR_repository_github_token: ${{ secrets.REPOSITORY_GITHUB_TOKEN }}
-      TF_VAR_team_github_token: ${{ secrets.TEAMS_GITHUB_TOKEN }}
+      TF_VAR_team_github_token: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}
       MANAGEMENT_ACCOUNT_ID: ${{ secrets.MANAGEMENT_ACCOUNT_ID }}
       TF_IN_AUTOMATION: true
       AWS_REGION: "eu-west-2"

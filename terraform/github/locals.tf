@@ -102,9 +102,4 @@ locals {
 
   # Everyone
   everyone = concat(local.all_maintainers, local.all_members)
-
-  # Create a list of repositories that we want our customers to be able to contribute to
-  analytical_platform_repositories = [
-    for s in data.github_repositories.analytical-platform-repositories.names : s if startswith(s, "analytics-platform-")
-  ]
 }
