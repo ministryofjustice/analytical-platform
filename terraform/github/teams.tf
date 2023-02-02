@@ -22,6 +22,7 @@ locals {
     "Bhkol",             # Bharti Kolhe - BA Cognizant
     "charlesvictor1107", # Charles Victor - Cognizant
     "dominqs",           # Dominic Simpson - Cognizant
+    "SimonsMOJ"          # Simon Heron
   ]
 
   # GitHub usernames for engineers who need full AWS access
@@ -33,7 +34,6 @@ locals {
     "BrianEllwood",
     "tom-webber",
     "bogdan-mania-moj",
-    "dominqs",      # Dominic Simpson - Cognizant
     "sreekanthmoj", # Sreekanth Kote - Cognizant
     "karthikmoj",   # Karthik Pelluru - Cognizant
     "Emterry"       # Emma Terry
