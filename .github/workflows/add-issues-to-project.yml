@@ -1,9 +1,11 @@
 name: Add issues to project
 on:
+  push:
+    branches:
+      - token-permission-fixes
   issues:
     types:
       - opened
-   push:
 
 permissions: {}
 
