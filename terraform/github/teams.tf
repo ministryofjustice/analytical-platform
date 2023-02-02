@@ -1,7 +1,6 @@
 locals {
   maintainers = [ # maintainers of analytics-hq and analytical-platform gh teams
     "julialawrence",
-    "rossjones",
     "jhackett-ap", # John Hackett
     "bagg3rs"      # Richard Baguley
   ]
@@ -40,9 +39,8 @@ locals {
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
-    "rossjones",
-    "jemnery", # Jeremy Collins
-    "bagg3rs", # Richard Baguley
+    "jemnery",               # Jeremy Collins
+    "bagg3rs",               # Richard Baguley
     "julialawrence"
   ]
 
