@@ -4,8 +4,12 @@ on:
     types:
       - opened
 
+permissions: {}
+
 jobs:
   add-to-project:
+    permissions:
+      issues: write
     name: Add issue to project
     runs-on: ubuntu-latest
     steps:
