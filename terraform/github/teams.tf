@@ -21,6 +21,7 @@ locals {
     "ahbensiali",        # Abdel Bensiali
     "Bhkol",             # Bharti Kolhe - BA Cognizant
     "charlesvictor1107", # Charles Victor - Cognizant
+    "dominqs",           # Dominic Simpson - Cognizant
   ]
 
   # GitHub usernames for engineers who need full AWS access
