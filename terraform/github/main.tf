@@ -8,12 +8,12 @@ module "core" {
   visibility   = "internal"
   homepage_url = "https://ministryofjustice.github.io/ap-tech-docs"
   topics = [
-"architecture-decisions",
-"aws",
-"documentation",
-"kops",
-"kubernetes",
-"terraform"
+    "architecture-decisions",
+    "aws",
+    "documentation",
+    "kops",
+    "kubernetes",
+    "terraform"
   ]
 }
 
@@ -83,11 +83,11 @@ module "aws-team" {
 # Data Engineering Team
 
 module "data-engineering-team" {
-source      = "./modules/team"
-name        = "data-engineering"
-description = "Data Engineering team"
+  source      = "./modules/team"
+  name        = "data-engineering"
+  description = "Data Engineering team"
 
-maintainers = local.data_engineering_maintainers
-members     = local.all_members_data_engineers
-ci          = local.ci_users
+  maintainers = local.data_engineering_maintainers
+  members     = local.all_members_data_engineers
+  ci          = local.ci_users
 }
