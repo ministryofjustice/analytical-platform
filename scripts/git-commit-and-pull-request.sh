@@ -14,6 +14,11 @@ main_branch_sha=$(git rev-parse origin/main)
 
 git checkout -b "$branch"
 git add "$1"
+
+if git diff-index --quiet HEAD; then
+  echo "No difference in files, exiting."
+  exit 0
+fi
 git commit -m "$commit_message"
 
 git branch -a
