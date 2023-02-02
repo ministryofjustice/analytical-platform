@@ -60,10 +60,10 @@ locals {
   # DATA-ENGINEERING GITHUB GROUP
 
   data_engineering_members = [
-    "Mamonu",   # Theodoros Manassis
-    "mratford", # Mike Ratford
-    "Danjiv",   # Danjiv Ramkhalawon
-    "K1Br",     # Kimberley Brett
+    "Mamonu",        # Theodoros Manassis
+    "mratford",      # Mike Ratford
+    "Danjiv",        # Danjiv Ramkhalawon
+    "K1Br",          # Kimberley Brett
     "vonbraunbates", # Francessca von Braun-Bates
     "AnthonyCody",
     "tamsinforbes", # Tamsin Forbes
@@ -74,7 +74,7 @@ locals {
     "williamorrie", # William Orr
     "gustavmoller",
     "jhpyke", # Jake H Pyke
-    "makl3",  
+    "makl3",
     "oliver-critchfield",
     "AlexVilela"
   ]
