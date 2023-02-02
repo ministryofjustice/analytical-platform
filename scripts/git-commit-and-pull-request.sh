@@ -2,15 +2,8 @@
 
 set -euo pipefail
 
-if [ ! -z "$2" ]; then
-  GIT_DIR=$2
-  cd $GIT_DIR
-  GITHUB_REPOSITORY=$(basename `git rev-parse --show-toplevel`)
-  GITHUB_REPOSITORY="ministryofjustice/$GITHUB_REPOSITORY"
-  TOKEN=$TERRAFORM_GITHUB_TOKEN
-else
   TOKEN=$GITHUB_TOKEN
-fi
+
 
 # Define commit information
 file_to_commit="${1}/dependabot.yml"
