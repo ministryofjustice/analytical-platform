@@ -18,7 +18,7 @@ module "core" {
 }
 
 module "data-platform" {
-  for_each     = { for repo in local.data_platform_repos : repo.name => repo }
+  for_each               = { for repo in local.data_platform_repos : repo.name => repo }
   source                 = "./modules/repository"
   name                   = each.key
   type                   = "core"
@@ -52,9 +52,9 @@ module "core-team" {
 }
 
 module "data-platform-tech-archs-team" {
-  source      = "./modules/team"
-  name        = "data-tech-archs"
-  description = "Data Platform Technical Architects"
+  source       = "./modules/team"
+  name         = "data-tech-archs"
+  description  = "Data Platform Technical Architects"
   repositories = [for repo in module.data-platform : repo.repository.name]
 
   maintainers = local.tech_archs_maintainers

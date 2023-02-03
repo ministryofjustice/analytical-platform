@@ -13,8 +13,8 @@ locals {
   }]
 
   data_platform_repos = [{ # Repos to Support the Buildout of the Data Platform
-      name        = "data-platform",
-      description = "Core Repo for Data Platform"
+    name        = "data-platform",
+    description = "Core Repo for Data Platform"
     },
     {
       name        = "data-platform-products",
