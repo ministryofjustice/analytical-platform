@@ -28,7 +28,7 @@ locals {
 
   engineers = [ # analytical-platform and analytics-hq gh teams
     "LouiseABowler",
-    "ymao2", # Yeking Mao
+    "ymao2", # Yikang Mao
     "andyrogers1973",
     "BrianEllwood",
     "tom-webber",
@@ -59,10 +59,10 @@ locals {
   # DATA-ENGINEERING GITHUB GROUP
 
   data_engineering_members = [
-    "Mamonu",   #Danjiv Ramkhalawon
-    "mratford", # Mike Ratford
-    "Danjiv",   # theodoros.manassis
-    "K1Br",
+    "Mamonu",        # Theodoros Manassis
+    "mratford",      # Mike Ratford
+    "Danjiv",        # Danjiv Ramkhalawon
+    "K1Br",          # Kimberley Brett
     "vonbraunbates", # Francessca von Braun-Bates
     "AnthonyCody",
     "tamsinforbes", # Tamsin Forbes
