@@ -1,15 +1,13 @@
 name: Add issues to project
 on:
-  push:
-    branches:
-      - token-permission-fixes
   issues:
     types:
       - opened
-      
+
+permissions: read-all
+
 jobs:
   add-to-project:
-    permissions: read-all
     name: Add issue to project
     runs-on: ubuntu-latest
     steps:
