@@ -2,7 +2,7 @@
   "id": "kubernetes-tools",
   "version": "1.0.0",
   "name": "kubernetes-tools",
-  "description": "Kubernetes Tools",
+  "description": "Kubernetes Tools - kubectl, helm, flux, kubent",
   "options": {
     "installKubectl": {
       "type": "boolean",

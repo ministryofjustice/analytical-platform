@@ -2,7 +2,7 @@
   "id": "git-tools",
   "version": "1.0.0",
   "name": "git-tools",
-  "description": "Git Tools",
+  "description": "Git Tools - GitHub CLI, Git Crypt",
   "options": {
     "installGithubCli": {
       "type": "boolean",

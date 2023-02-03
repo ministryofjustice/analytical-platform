@@ -2,7 +2,7 @@
   "id": "aws-tools",
   "version": "1.0.0",
   "name": "aws-tools",
-  "description": "AWS Tools",
+  "description": "AWS Tools - AWS CLI, AWS Vault",
   "options": {
     "installAwsCli": {
       "type": "boolean",
@@ -18,7 +18,7 @@
     "awsIamEmail": {
       "type": "string",
       "description": "AWS IAM email",
-      "required": true
+      "default": ""
     },
     "installAwsVault": {
       "type": "boolean",

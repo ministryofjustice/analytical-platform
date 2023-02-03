@@ -1,18 +1,14 @@
 {
-  "name": "ministryofjustice-data-platform-devcontainer",
+  "name": "data-engineering",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": { "configureZshAsDefaultShell": true },
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "./features/src/base": {},
-    "./features/src/aws-tools": { "awsIamEmail": "${localEnv:MOJ_DATA_PLATFORM_AWS_IAM_EMAIL}" },
-    "./features/src/container-tools": {},
-    "./features/src/git-tools": {},
-    "./features/src/kubernetes-tools": {},
-    "./features/src/terraform-tools": {}
+    "../features/src/base": {},
+    "../features/src/aws-tools": { "awsIamEmail": "${localEnv:MOJ_DATA_PLATFORM_AWS_IAM_EMAIL}" }
   },
   "remoteUser": "vscode",
-  "runArgs": ["--name=ministryofjustice-data-platform-devcontainer"],
+  "runArgs": ["--name=data-engineering-devcontainer"],
   "mounts": [
     { "source": "ministryofjustice-data-platform-devcontainer-persisted", "target": "/opt/vscode-dev-containers", "type": "volume" },
     { "source": "ministryofjustice-data-platform-devcontainer-workspace", "target": "/home/vscode/workspace", "type": "volume" },

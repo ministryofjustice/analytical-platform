@@ -2,7 +2,7 @@
   "id": "terraform-tools",
   "version": "1.0.0",
   "name": "terraform-tools",
-  "description": "Terraform Tools",
+  "description": "Terraform Tools - Terraform",
   "options": {
     "installTerraform": {
       "type": "boolean",

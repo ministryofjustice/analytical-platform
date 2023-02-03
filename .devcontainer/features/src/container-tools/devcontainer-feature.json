@@ -2,7 +2,7 @@
   "id": "container-tools",
   "version": "1.0.0",
   "name": "container-tools",
-  "description": "Container Tools",
+  "description": "Container Tools - Sigstore Cosign",
   "options": {
     "installCosign": {
       "type": "boolean",
