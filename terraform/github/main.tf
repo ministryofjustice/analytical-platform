@@ -18,10 +18,11 @@ module "core" {
 }
 
 module "data-platform" {
+  for_each     = { for repo in local.data_platform_repos : repo.name => repo }
   source                 = "./modules/repository"
-  name                   = "data-platform"
+  name                   = each.key
   type                   = "core"
-  description            = "Core Infrastructure Repo for Data Platform"
+  description            = each.value.description
   homepage_url           = "https://github.com/ministryofjustice/data-platform/blob/main/architecture/decision/README.md"
   require_signed_commits = true
   topics = [
@@ -31,10 +32,6 @@ module "data-platform" {
   ]
 
   secrets = {
-    # Repository GitHub token for the CI/CD user
-    REPOSITORY_GITHUB_TOKEN = "This needs to be manually set in GitHub."
-    # Teams GitHub token for the CI/CD user
-    TEAMS_GITHUB_TOKEN = "This needs to be manually set in GitHub."
     # Management Account ID
     MANAGEMENT_ACCOUNT_ID = data.aws_caller_identity.current.account_id
   }
@@ -47,7 +44,7 @@ module "core-team" {
   description = "Analytical Platform team"
   repositories = concat(
     [for repo in module.core : repo.repository.name],
-  [module.data-platform.repository.name])
+  [for repo in module.data-platform : repo.repository.name])
 
   maintainers = local.maintainers
   members     = local.all_members
@@ -58,9 +55,7 @@ module "data-platform-tech-archs-team" {
   source      = "./modules/team"
   name        = "data-tech-archs"
   description = "Data Platform Technical Architects"
-  repositories = [
-    module.data-platform.repository.name
-  ]
+  repositories = [for repo in module.data-platform : repo.repository.name]
 
   maintainers = local.tech_archs_maintainers
   members     = local.tech_archs
