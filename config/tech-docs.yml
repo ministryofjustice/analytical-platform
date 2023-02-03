@@ -1,0 +1,35 @@
+# See the available options: https://tdt-documentation.london.cloudapps.digital/configure_project/global_configuration/#configure-your-documentation-site
+
+# Host to use for canonical URL generation (without trailing slash)
+host: https://ministryofjustice.github.io/data-platform
+
+# Header-related options
+show_govuk_logo: false
+service_name: Data Platform
+service_link: /data-platform
+phase: Alpha
+
+# Links to show on right-hand-side of header
+header_links:
+  GitHub: https://github.com/ministryofjustice/data-platform
+
+# Enables search functionality. This indexes pages only and is not recommended for single-page sites.
+enable_search: true
+
+# Tracking ID from Google Analytics (e.g. UA-XXXX-Y)
+ga_tracking_id:
+
+# Enable collapsible navigation in the sidebar
+collapsible_nav: false
+
+# Table of contents depth – how many levels to include in the table of contents.
+# If your ToC is too long, reduce this number and we'll only show higher-level
+# headings.
+max_toc_heading_level: 3
+
+# Prevent robots from indexing (e.g. whilst in development)
+prevent_indexing: true
+
+show_contribution_banner: true
+github_repo: ministryofjustice/data-platform
+github_branch: main

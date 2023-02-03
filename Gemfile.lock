@@ -1,0 +1,16 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+
+PLATFORMS
+  x64-mingw32
+  x86_64-darwin-20
+  x86_64-linux
+
+DEPENDENCIES
+
+RUBY VERSION
+   ruby 3.1.0
+
+BUNDLED WITH
+   2.3.12
