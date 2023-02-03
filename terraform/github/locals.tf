@@ -11,6 +11,15 @@ locals {
       name        = "ap-test-github-workflow",
       description = "Test repository for github docker workflow"
   }]
+
+  data_platform_repos = [{ # Repos to Support the Buildout of the Data Platform
+    name        = "data-platform",
+    description = "Core Repo for Data Platform"
+    },
+    {
+      name        = "data-platform-products",
+      description = "Core Repository for Data Platform Data Products"
+  }]
   # All Tech Archs
   tech_archs = concat(local.tech_archs_members, local.tech_archs_maintainers)
   # All data engineers
