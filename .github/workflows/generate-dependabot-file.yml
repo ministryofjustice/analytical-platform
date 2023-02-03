@@ -9,6 +9,8 @@ on:
     paths:
       - '.github/workflows/generate-dependabot-file.yml'
       - 'scripts/generate-dependabot-file.sh'
+      - 'scripts/git-commit-and-pull-request.sh'
+      - 'scripts/git-setup.sh'
   workflow_dispatch:
 
 permissions: {}
