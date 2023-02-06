@@ -73,6 +73,7 @@ locals {
     "jhpyke", # Jake H Pyke
     "makl3",
     "oliver-critchfield",
-    "AlexVilela"
+    "AlexVilela",
+    "lalithanagarur"
   ]
 }
