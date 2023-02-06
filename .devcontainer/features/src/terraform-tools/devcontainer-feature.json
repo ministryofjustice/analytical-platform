@@ -16,5 +16,10 @@
       "default": "latest"
     }
   },
+  "customizations": {
+    "vscode": {
+      "extensions": ["hashicorp.terraform"]
+    }
+  },
   "installsAfter": ["./features/src/base"]
 }
