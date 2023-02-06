@@ -5,3 +5,6 @@
 
 # Service ownership
 /services/example/ @ministryofjustice/data-tech-archs
+
+# AWS Infrastructure
+/terraform/aws/ @ministryofjustice/data-platform-core-infra
