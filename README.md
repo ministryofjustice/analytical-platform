@@ -4,11 +4,11 @@
 
 The Data Platform will be a centralised, in-house platform to provide hosting and tools for data
 
-* storage;
-* discovery;
-* analysis;
-* dissemination; and
-* governance.
+* storage
+* discovery
+* analysis
+* dissemination
+* governance
 
 ## About this repository
 
