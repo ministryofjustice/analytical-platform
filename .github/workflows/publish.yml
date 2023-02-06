@@ -5,8 +5,10 @@ on:
   push:
     branches:
       - "main"
-    paths-ignore:
-      - "docs/**"
+    paths:
+      - "source/**"
+      - "config/**"
+      - ".github/workflows/publish.yml"
 
 # GITHUB_TOKEN permissions to allow deployment to GitHub Pages
 permissions:
