@@ -86,3 +86,11 @@ module "data-engineering-team" {
   members     = local.all_members_data_engineers
   ci          = local.ci_users
 }
+
+# Allow data engineering to raise PRs in Data Platform repos
+module "contributor-access" {
+  for_each          = toset([for repo in module.data-platform : repo.repository.name])
+  source            = "./modules/contributor"
+  application_teams = ["data-engineering"]
+  repository_id     = each.key
+}
