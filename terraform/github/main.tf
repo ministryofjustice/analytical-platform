@@ -89,7 +89,7 @@ module "data-engineering-team" {
 
 # Allow data engineering to raise PRs in Data Platform repos
 module "contributor-access" {
-  for_each          = [for repo in module.data-platform : repo.repository.name]
+  for_each          = toset([for repo in module.data-platform : repo.repository.name])
   source            = "./modules/contributor"
   application_teams = ["data-engineering"]
   repository_id     = each.key
