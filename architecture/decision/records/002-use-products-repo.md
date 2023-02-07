@@ -23,5 +23,5 @@ Consistent with other MOJ platforms, use a dedicated [GitHub repository](https:/
 
 ## Consequences
 
-* All architecture decision records (ADRs) should continue to be recorded in this, the main platform repository (including ADRs related to data products).
-* We will have to manage an additional repository
+- All architecture decision records (ADRs) should continue to be recorded in this, the main platform repository (including ADRs related to data products).
+- We will have to manage an additional repository
