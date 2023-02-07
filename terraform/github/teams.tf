@@ -34,7 +34,7 @@ locals {
     "sreekanthmoj", # Sreekanth Kote - Cognizant
     "karthikmoj",   # Karthik Pelluru - Cognizant
     "Emterry",      # Emma Terry
-    "ahbensiali",   # Abdel Bensiali
+    "ahbensiali"    # Abdel Bensiali
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
