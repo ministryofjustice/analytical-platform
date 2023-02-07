@@ -1,0 +1,26 @@
+{
+  "id": "git-tools",
+  "version": "1.0.0",
+  "name": "git-tools",
+  "description": "Git Tools - GitHub CLI, Git Crypt",
+  "options": {
+    "installGithubCli": {
+      "type": "boolean",
+      "description": "Install Sigstore Cosign (https://github.com/cli/cli)",
+      "default": true
+    },
+    "githubCliVersion": {
+      "type": "string",
+      "description": "GitHub CLI version",
+      "proposals": ["latest"],
+      "default": "latest"
+    },
+    "installGitCrypt": {
+      "type": "boolean",
+      "description": "Install Git Crypt (https://github.com/AGWA/git-crypt)",
+      "default": true
+    }
+  },
+  "mounts": [{ "source": "ministryofjustice-data-platform-devcontainer-gh", "target": "/home/vscode/.config/gh", "type": "volume" }],
+  "installsAfter": ["./features/src/base"]
+}

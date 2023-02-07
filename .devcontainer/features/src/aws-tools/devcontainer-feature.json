@@ -1,0 +1,37 @@
+{
+  "id": "aws-tools",
+  "version": "1.0.0",
+  "name": "aws-tools",
+  "description": "AWS Tools - AWS CLI, AWS Vault",
+  "options": {
+    "installAwsCli": {
+      "type": "boolean",
+      "description": "Install AWS CLI (https://aws.amazon.com/cli/)",
+      "default": true
+    },
+    "awsCliVersion": {
+      "type": "string",
+      "description": "AWS CLI version",
+      "proposals": ["latest"],
+      "default": "latest"
+    },
+    "awsIamEmail": {
+      "type": "string",
+      "description": "AWS IAM email",
+      "default": ""
+    },
+    "installAwsVault": {
+      "type": "boolean",
+      "description": "Install AWS Vault (https://github.com/99designs/aws-vault)",
+      "default": true
+    },
+    "awsVaultVersion": {
+      "type": "string",
+      "description": "AWS Vault version",
+      "proposals": ["latest"],
+      "default": "latest"
+    }
+  },
+  "mounts": [{ "source": "ministryofjustice-data-platform-devcontainer-awsvault", "target": "/home/vscode/.awsvault", "type": "volume" }],
+  "installsAfter": ["./features/src/base"]
+}

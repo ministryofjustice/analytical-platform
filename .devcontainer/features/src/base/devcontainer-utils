@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+##################################################
+# Environment
+##################################################
+
+export DEBIAN_FRONTEND=noninteractive
+
+##################################################
+# Functions
+##################################################
+
+get_architecture() {
+  case "$( uname -m )" in
+    x86_64) 
+      export ARCHITECTURE="amd64" ;;
+    aarch64 | armv8*) 
+      export ARCHITECTURE="arm64" ;;
+    *) 
+      echo "(!) Architecture $( uname -m ) unsupported"; exit 1 ;;
+  esac
+}
+
+get_github_latest_tag() {
+  local repository="${1}"
+  local tag=$( curl --silent "https://api.github.com/repos/${repository}/releases/latest" | jq -r '.tag_name' )
+  local tag_strip_v=$( echo "${tag}" | sed "s|v||" )
+  
+  export GITHUB_LATEST_TAG="${tag}"
+  export GITHUB_LATEST_TAG_STRIP_V="${tag_strip_v}"
+}
+
+apt_install() {
+  local packages="${1}"
+
+  apt update --yes
+
+  apt-get install --yes --no-install-recommends ${packages}
+
+  rm --force --recursive /var/lib/apt/lists/*
+}
+
+##################################################
+# Default
+##################################################
+
+get_architecture

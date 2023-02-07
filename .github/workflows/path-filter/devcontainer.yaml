@@ -1,0 +1,6 @@
+aws-tools: ./.devcontainer/features/**/aws-tools/**
+base: ./.devcontainer/features/**/base/**
+container-tools: ./.devcontainer/features/**/container-tools/**
+git-tools: ./.devcontainer/features/**/git-tools/**
+kubernetes-tools: ./.devcontainer/features/**/kubernetes-tools/**
+terraform-tools: ./.devcontainer/features/**/terraform-tools/**

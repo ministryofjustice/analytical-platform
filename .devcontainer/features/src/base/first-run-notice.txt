@@ -1,0 +1,5 @@
+👋 Welcome! You are using the Ministry of Justice Data Platform devcontainer image.
+
+🆘 If you need help or assistance, please raise an issue on https://github.com/ministryofjustice/data-platform/issues
+
+🔍 To explore VS Code to its fullest, search using the Command Palette (Cmd/Ctrl + Shift + P or F1)
