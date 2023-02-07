@@ -12,10 +12,10 @@ In the context of the Data Platform, the current hypothesis is that the services
 
 This allows for:
 
-* Separation of repository access controls between platform maintainers and platform users, if required
-* Clean separation of infrastructure code
-* Separation of code validation (for example schema validation)
-* Clear separation of pull requests between platform maintenance and platform usage
+- Separation of repository access controls between platform maintainers and platform users, if required
+- Clean separation of infrastructure code
+- Separation of code validation (for example schema validation)
+- Clear separation of pull requests between platform maintenance and platform usage
 
 ## Decision
 
