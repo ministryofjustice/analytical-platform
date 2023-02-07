@@ -18,9 +18,8 @@ locals {
   general_members = [ # members of analytics-hq gh team
     "jacobwoffenden",
     "calumabarnett",
-    "ahbensiali", # Abdel Bensiali
-    "Bhkol",      # Bharti Kolhe - BA Cognizant
-    "SimonsMOJ"   # Simon Heron
+    "Bhkol",    # Bharti Kolhe - BA Cognizant
+    "SimonsMOJ" # Simon Heron
   ]
 
   # GitHub usernames for engineers who need full AWS access
@@ -34,7 +33,8 @@ locals {
     "bogdan-mania-moj",
     "sreekanthmoj", # Sreekanth Kote - Cognizant
     "karthikmoj",   # Karthik Pelluru - Cognizant
-    "Emterry"       # Emma Terry
+    "Emterry",      # Emma Terry
+    "ahbensiali"    # Abdel Bensiali
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
