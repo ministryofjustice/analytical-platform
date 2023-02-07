@@ -51,12 +51,24 @@ locals {
   data_engineering_maintainers = [
     "calumabarnett",
     "SoumayaMauthoorMOJ",
-    "PriyaBasker23"
+    "PriyaBasker23",
+    "julialawrence"
   ]
 
-  # DATA-ENGINEERING GITHUB GROUP
+  # DATA-ENGINEERING GITHUB GROUP WITH SANDBOX-ONLY ACCESS
 
   data_engineering_members = [
+    "lalithanagarur",
+    "Bharat-Dhiman",
+    "mdowniecog",
+    "pjxcog",
+    "sivabathina2",
+    "hemeshpatel-moj"
+  ]
+
+  # DATA-ENGINEERING-AWS GITHUB GROUP WITH FULL AWS ACCESS
+
+  data_engineering_aws_members = [
     "Mamonu",        # Theodoros Manassis
     "mratford",      # Mike Ratford
     "Danjiv",        # Danjiv Ramkhalawon
@@ -73,7 +85,6 @@ locals {
     "jhpyke", # Jake H Pyke
     "makl3",
     "oliver-critchfield",
-    "AlexVilela",
-    "lalithanagarur"
+    "AlexVilela"
   ]
 }
