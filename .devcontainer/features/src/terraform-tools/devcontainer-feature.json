@@ -2,18 +2,29 @@
   "id": "terraform-tools",
   "version": "1.0.0",
   "name": "terraform-tools",
-  "description": "Terraform Tools - Terraform",
+  "description": "Terraform Tools - Terraform Switcher, Terraform Docs",
   "options": {
-    "installTerraform": {
+    "installTerraformSwitcher": {
       "type": "boolean",
-      "description": "Install Terraform Switcher (https://github.com/hashicorp/terraform)",
+      "description": "Install Terraform Switcher (https://github.com/warrensbox/terraform-switcher)",
       "default": true
+    },
+    "terraformSwitcherVersion": {
+      "type": "string",
+      "description": "Terraform Switcher version",
+      "proposals": ["latest"],
+      "default": "latest"
     },
     "terraformVersion": {
       "type": "string",
       "description": "Terraform version",
       "proposals": ["latest"],
       "default": "latest"
+    },
+    "installTerraformDocs": {
+      "type": "boolean",
+      "description": "Install terraform-docs (https://github.com/terraform-docs/terraform-docs)",
+      "default": true
     }
   },
   "customizations": {

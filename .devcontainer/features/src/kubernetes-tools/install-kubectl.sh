@@ -25,7 +25,7 @@ echo "source <(kubectl completion zsh)" > /home/vscode/.dotfiles/kubectl.sh
 
 mkdir --parents /home/vscode/.kube
 
-cp  $( dirname $0 )/src/home/vscode/.kube/config  /home/vscode/.kube/config
+cp $( dirname $0 )/src/home/vscode/.kube/config  /home/vscode/.kube/config
 cp $( dirname $0 )/src/usr/local/bin/aws-eks-auth /usr/local/bin/aws-eks-auth
 
 chown --recursive vscode:vscode /home/vscode/.kube
