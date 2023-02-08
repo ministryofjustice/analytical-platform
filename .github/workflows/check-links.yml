@@ -6,6 +6,8 @@ on:
     paths:
       - "source/**"
 
+permissions: read-all
+  
 jobs:
   check_links:
     runs-on: ubuntu-latest
