@@ -8,6 +8,8 @@ on:
     paths:
       - .devcontainer/**
 
+permissions: read-all
+
 jobs:
   detect-changes:
     runs-on: ubuntu-latest
