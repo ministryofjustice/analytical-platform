@@ -1,6 +1,7 @@
 # Data Platform
 
-[![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=for-the-badge&logo=github&label=MoJ%20Compliant&query=%24.result&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fdata-platform)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-github-repositories.html#data-platform "Link to report")
+[![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=for-the-badge&logo=github&label=MoJ%20Compliant&query=%24.result&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fdata-platform)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-github-repositories.html#data-platform "Link to report") [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/ministryofjustice/data-platform/badge)](https://api.securityscorecards.dev/projects/github.com/ministryofjustice/data-platform)
+
 
 The Data Platform will be a centralised, in-house platform to provide hosting and tools for data
 
