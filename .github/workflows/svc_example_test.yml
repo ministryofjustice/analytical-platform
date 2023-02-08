@@ -6,6 +6,8 @@ on:
     paths:
       - 'services/example/**'
 
+permissions: read-all
+
 jobs:
   build:
 
