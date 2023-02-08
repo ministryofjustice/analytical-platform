@@ -80,11 +80,23 @@ module "aws-team" {
 module "data-engineering-team" {
   source      = "./modules/team"
   name        = "data-engineering"
-  description = "Data Engineering team"
+  description = "Data Engineering team with Sandbox Access"
 
   maintainers = local.data_engineering_maintainers
   members     = local.all_members_data_engineers
   ci          = local.ci_users
+}
+
+# Data Engineering AWS Team
+module "data-engineering-aws-team" {
+  source      = "./modules/team"
+  name        = "data-engineering-aws"
+  description = "Data Engineering team with Environment Access"
+
+  maintainers    = local.data_engineering_maintainers
+  members        = concat(local.data_engineering_aws_members, local.data_engineering_maintainers)
+  ci             = local.ci_users
+  parent_team_id = module.data-engineering-team.team_id
 }
 
 # Allow data engineering to raise PRs in Data Platform repos

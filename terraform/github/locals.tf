@@ -24,7 +24,7 @@ locals {
   tech_archs = concat(local.tech_archs_members, local.tech_archs_maintainers)
   # All data engineers
 
-  all_members_data_engineers = concat(local.data_engineering_maintainers, local.data_engineering_members)
+  all_members_data_engineers = concat(local.data_engineering_maintainers, local.data_engineering_members, local.data_engineering_aws_members)
 
   # All members
   all_members = concat(local.general_members, local.engineers)
