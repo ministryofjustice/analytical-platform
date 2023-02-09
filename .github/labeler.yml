@@ -1,0 +1,10 @@
+documentation:
+  - "architecture/**"
+  - "diagrams/**"
+  - "docs/**"
+  - "README.md"
+  - "source/**"
+
+github-workflow:
+  - "github/workflows/**"
+
