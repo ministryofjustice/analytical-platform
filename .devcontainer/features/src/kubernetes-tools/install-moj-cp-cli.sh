@@ -28,4 +28,6 @@ chmod +x /usr/local/bin/cloud-platform
 
 mv completions/cloud-platform.zsh /usr/local/share/zsh/site-functions/_cloud-platform
 
+chown root:root /usr/local/share/zsh/site-functions/_cloud-platform
+
 rm --recursive --force LICENSE README.md completions cloud-platform-cli_${VERSION}_linux_${ARCHITECTURE}.tar.gz
