@@ -4,7 +4,7 @@ set -e
 
 source /usr/local/bin/devcontainer-utils
 
-VERSION=${VERSION:-"latest"}
+VERSION=${TERRAFORMSWITCHERVERSION:-"latest"}
 GITHUB_REPOSITORY="warrensbox/terraform-switcher"
 
 TERRAFORM_VERSION=${TERRAFORMVERSION:-"latest"}

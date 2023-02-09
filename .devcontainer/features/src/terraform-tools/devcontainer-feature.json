@@ -25,6 +25,12 @@
       "type": "boolean",
       "description": "Install terraform-docs (https://github.com/terraform-docs/terraform-docs)",
       "default": true
+    },
+    "terraformDocsVersion": {
+      "type": "string",
+      "description": "Terraform Docs version",
+      "proposals": ["latest"],
+      "default": "latest"
     }
   },
   "customizations": {

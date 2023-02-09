@@ -4,7 +4,7 @@ set -e
 
 source /usr/local/bin/devcontainer-utils
 
-VERSION=${VERSION:-"latest"}
+VERSION=${COSIGNVERSION:-"latest"}
 GITHUB_REPOSITORY="sigstore/cosign"
 
 if [ "${VERSION}" == "latest" ]; then
