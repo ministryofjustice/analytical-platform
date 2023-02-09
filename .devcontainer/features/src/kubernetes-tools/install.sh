@@ -15,3 +15,7 @@ fi
 if [[ "${INSTALLKUBENT}" == "true" ]]; then
   bash $( dirname $0 )/install-kubent.sh
 fi
+
+if [[ "${INSTALLMOJCPCLI}" == "true" ]]; then
+  bash $( dirname $0 )/install-moj-cp-cli.sh
+fi
