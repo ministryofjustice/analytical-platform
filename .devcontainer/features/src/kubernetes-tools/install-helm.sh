@@ -28,6 +28,12 @@ chmod +x /usr/local/bin/helm
 
 rm --force --recursive linux-${ARCHITECTURE} helm-${VERSION}-linux-${ARCHITECTURE}.tar.gz
 
+### Config
+
+mkdir --parents /home/vscode/.config/helm
+
+chown --recursive vscode:vscode /home/vscode/.config/helm
+
 ### Completion
 
 echo "source <(helm completion zsh)" > /home/vscode/.dotfiles/helm.sh
