@@ -2,7 +2,7 @@
   "id": "kubernetes-tools",
   "version": "1.0.0",
   "name": "kubernetes-tools",
-  "description": "Kubernetes Tools - kubectl, helm, flux, kubent",
+  "description": "Kubernetes Tools - kubectl, helm, flux, kubent, MoJ Cloud Platform CLI",
   "options": {
     "installKubectl": {
       "type": "boolean",
@@ -45,6 +45,17 @@
     "kubentVersion": {
       "type": "string",
       "description": "Kubent version",
+      "proposals": ["latest"],
+      "default": "latest"
+    },
+    "installMojCpCli": {
+      "type": "boolean",
+      "description": "Install MoJ Cloud Platform CLI (https://github.com/ministryofjustice/cloud-platform-cli)",
+      "default": true
+    },
+    "mojCpCliVersion": {
+      "type": "string",
+      "description": "MoJ Cloud Platform CLI version",
       "proposals": ["latest"],
       "default": "latest"
     }
