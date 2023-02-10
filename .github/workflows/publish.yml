@@ -6,8 +6,7 @@ on:
     branches:
       - "main"
     paths:
-      - "source/**"
-      - "config/**"
+      - "docs/**"
       - ".github/workflows/publish.yml"
 
 # GITHUB_TOKEN permissions to allow deployment to GitHub Pages
@@ -26,6 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ministryofjustice/tech-docs-github-pages-publisher:v3
+    defaults:
+      run:
+        working-directory: docs
     steps:
       - name: Checkout
         uses: actions/checkout@v3
