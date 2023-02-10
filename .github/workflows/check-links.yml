@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-      - "source/**"
+      - "docs/**"
 
 jobs:
   check_links:
