@@ -19,7 +19,8 @@ locals {
     "jacobwoffenden",
     "calumabarnett",
     "Bhkol",    # Bharti Kolhe - BA Cognizant
-    "SimonsMOJ" # Simon Heron
+    "SimonsMOJ", # Simon Heron
+    "mshodge" # Michael Hodges
   ]
 
   # GitHub usernames for engineers who need full AWS access
