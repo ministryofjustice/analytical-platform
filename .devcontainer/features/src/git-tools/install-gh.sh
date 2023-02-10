@@ -4,7 +4,7 @@ set -e
 
 source /usr/local/bin/devcontainer-utils
 
-VERSION=${VERSION:-"latest"}
+VERSION=${GITHUBCLIVERSION:-"latest"}
 GITHUB_REPOSITORY="cli/cli"
 
 if [ "${VERSION}" == "latest" ]; then

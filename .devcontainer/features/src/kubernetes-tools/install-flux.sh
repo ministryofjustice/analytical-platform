@@ -4,7 +4,7 @@ set -e
 
 source /usr/local/bin/devcontainer-utils
 
-VERSION=${VERSION:-"latest"}
+VERSION=${FLUXVERSION:-"latest"}
 GITHUB_REPOSITORY="fluxcd/flux2"
 
 if [ "${VERSION}" == "latest" ]; then

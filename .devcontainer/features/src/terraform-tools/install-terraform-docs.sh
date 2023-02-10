@@ -4,7 +4,7 @@ set -e
 
 source /usr/local/bin/devcontainer-utils
 
-VERSION=${KUBENTVERSION:-"latest"}
+VERSION=${TERRAFORMDOCSVERSION:-"latest"}
 GITHUB_REPOSITORY="terraform-docs/terraform-docs"
 
 if [ "${VERSION}" == "latest" ]; then

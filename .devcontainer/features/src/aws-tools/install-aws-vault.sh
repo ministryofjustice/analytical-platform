@@ -4,7 +4,7 @@ set -e
 
 source /usr/local/bin/devcontainer-utils
 
-VERSION=${VERSION:-"latest"}
+VERSION=${AWSVAULTVERSION:-"latest"}
 GITHUB_REPOSITORY="99designs/aws-vault"
 
 if [ "${VERSION}" == "latest" ]; then

@@ -4,7 +4,7 @@ set -e
 
 source /usr/local/bin/devcontainer-utils
 
-VERSION=${VERSION:-"latest"}
+VERSION=${MOJCPCLIVERSION:-"latest"}
 GITHUB_REPOSITORY="ministryofjustice/cloud-platform-cli"
 
 if [ "${VERSION}" == "latest" ]; then

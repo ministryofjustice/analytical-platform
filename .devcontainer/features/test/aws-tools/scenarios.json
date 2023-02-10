@@ -1,0 +1,10 @@
+{
+  "install_version": {
+    "image": "devcontainer",
+    "features": {
+      "aws-tools": {
+        "awsCliVersion": "2.9.21"
+      }
+    }
+  }
+}
