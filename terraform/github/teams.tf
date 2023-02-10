@@ -18,9 +18,9 @@ locals {
   general_members = [ # members of analytics-hq gh team
     "jacobwoffenden",
     "calumabarnett",
-    "Bhkol",    # Bharti Kolhe - BA Cognizant
+    "Bhkol",     # Bharti Kolhe - BA Cognizant
     "SimonsMOJ", # Simon Heron
-    "mshodge" # Michael Hodges
+    "mshodge"    # Michael Hodges
   ]
 
   # GitHub usernames for engineers who need full AWS access
