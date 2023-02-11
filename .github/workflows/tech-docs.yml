@@ -34,11 +34,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'npm'
-          node-version: '14'
-
       - uses: ruby/setup-ruby@v1
 
       - name: Compile Markdown to HTML and create artifact
