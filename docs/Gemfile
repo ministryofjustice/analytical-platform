@@ -1,2 +1,6 @@
 source "https://rubygems.org"
 ruby "3.1.0"
+
+source "https://rubygems.pkg.github.com/ministryofjustice" do
+  gem "govuk_tech_docs", "3.3.1"
+end
