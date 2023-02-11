@@ -38,6 +38,11 @@ jobs:
         with:
           ruby-version: 2.7.7
 
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install
+
       - name: Compile Markdown to HTML and create artifact
         run: |
           bash ${GITHUB_WORKSPACE}/scripts/tech-docs/build.sh
