@@ -1,7 +1,10 @@
-name: Publish gh-pages
+name: tech-docs
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - "main"
   push:
     branches:
       - "main"
@@ -12,6 +15,7 @@ on:
 # GITHUB_TOKEN permissions to allow deployment to GitHub Pages
 permissions:
   contents: read
+  packages: read
   pages: write
   id-token: write
 
@@ -23,17 +27,24 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ministryofjustice/tech-docs-github-pages-publisher:v3
     defaults:
       run:
         working-directory: docs
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'npm'
+          node-version: '14'
+
+      - uses: ruby/setup-ruby@v1
+
       - name: Compile Markdown to HTML and create artifact
         run: |
-          /scripts/deploy.sh
+          ${GITHUB_WORKSPACE}/scripts/tech-docs/deploy.sh
+          
       - name: Upload artifact to be published
         uses: actions/upload-artifact@v3
         with:
@@ -42,6 +53,7 @@ jobs:
           retention-days: 1
 
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: build
     environment:
       name: github-pages
@@ -55,6 +67,7 @@ jobs:
         uses: actions/deploy-pages@v1
 
   url-check:
+    if: github.ref == 'refs/heads/main'
     needs: deploy
     runs-on: ubuntu-latest
     steps:
@@ -69,5 +82,5 @@ jobs:
           tar -xvf artifact.tar
           npm install linkinator
           npx linkinator . --recurse --markdown \
-            --skip https://ministryofjustice.github.io/template-documentation-site/images/govuk-large.png \
+            --skip https://ministryofjustice.github.io/data-platform/images/govuk-large.png \
           # "URL Check will fail on private and internal GitHub repositories"

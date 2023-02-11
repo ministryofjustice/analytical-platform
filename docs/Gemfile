@@ -4,3 +4,7 @@ ruby "2.7.6"
 source "https://rubygems.pkg.github.com/ministryofjustice" do
   gem "govuk_tech_docs", "3.3.1"
 end
+
+# From https://github.com/ministryofjustice/tech-docs-github-pages-publisher/blob/main/Gemfile
+gem "html-proofer", "=4.4.3"
+gem "haml", "=5.2.2"
