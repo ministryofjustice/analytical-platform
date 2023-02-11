@@ -40,7 +40,7 @@ jobs:
 
       - name: Compile Markdown to HTML and create artifact
         run: |
-          ${GITHUB_WORKSPACE}/scripts/tech-docs/deploy.sh
+          bash ${GITHUB_WORKSPACE}/scripts/tech-docs/build.sh
           
       - name: Upload artifact to be published
         uses: actions/upload-artifact@v3

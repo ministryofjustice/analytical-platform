@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Compile source markdown files into HTML in the `/docs` directory
 bundle exec middleman build --build-dir docs --relative-links --verbose
