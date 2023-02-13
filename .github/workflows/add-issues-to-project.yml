@@ -12,4 +12,4 @@ jobs:
       - uses: actions/add-to-project@960fbad431afda394cfcf8743445e741acd19e85 # v0.4.0
         with:
           project-url: https://github.com/orgs/ministryofjustice/projects/27
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.ORG_PROJECT_TOKEN }}
