@@ -1,14 +1,8 @@
 name: Add issues to project
 on:
-  push:
-    branches:
-      - token-permission-fixes
   issues:
     types:
       - opened
-
-permissions:
-  repository-projects: write
 
 jobs:
   add-to-project:
@@ -19,6 +13,3 @@ jobs:
         with:
           project-url: https://github.com/orgs/ministryofjustice/projects/27
           github-token: ${{ secrets.ORG_PROJECT_TOKEN }}
-
-
-
