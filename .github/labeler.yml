@@ -1,12 +1,10 @@
 documentation:
-  - "architecture/**"
-  - "diagrams/**"
   - "docs/**"
   - "README.md"
   - "source/**"
 
 github-workflow:
-  - "github/workflows/**"
+  - ".github/workflows/**"
 
 identity-access-management:
   - "data-platform/terraform/github/teams.tf"
