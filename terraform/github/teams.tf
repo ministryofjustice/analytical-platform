@@ -18,9 +18,9 @@ locals {
   general_members = [ # members of analytics-hq gh team
     "jacobwoffenden",
     "calumabarnett",
-    "Bhkol",     # Bharti Kolhe - BA Cognizant
-    "SimonsMOJ", # Simon Heron
-    "mshodge",    # Michael Hodges
+    "Bhkol",         # Bharti Kolhe - BA Cognizant
+    "SimonsMOJ",     # Simon Heron
+    "mshodge",       # Michael Hodges
     "YvanMOJdigital" # Yvan Smith
   ]
 
