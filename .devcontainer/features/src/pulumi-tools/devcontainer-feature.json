@@ -1,0 +1,20 @@
+{
+  "id": "pulumi-tools",
+  "version": "1.0.0",
+  "name": "pulumi-tools",
+  "description": "Pulumi Tools - Pulumi",
+  "options": {
+    "installPulumi": {
+      "type": "boolean",
+      "description": "Install Pulumi (https://github.com/pulumi/pulumi)",
+      "default": true
+    },
+    "pulumiVersion": {
+      "type": "string",
+      "description": "Pulumi version",
+      "proposals": ["latest"],
+      "default": "latest"
+    }
+  },
+  "installsAfter": ["./features/src/base"]
+}
