@@ -30,12 +30,12 @@ jobs:
         working-directory: docs
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c #v3
       - name: Compile Markdown to HTML and create artifact
         run: |
           /scripts/deploy.sh
       - name: Upload artifact to be published
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@b7f8abb1508181956e8e162db84b466c27e18ce #v3
         with:
           name: github-pages
           path: docs/artifact.tar
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@37538b280cbfab35da9dcd936a2b95f1f522d927 #v3
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download a Build Artifact from build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a #v3
         with:
           name: github-pages
           path: github-pages
