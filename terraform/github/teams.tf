@@ -20,7 +20,8 @@ locals {
     "calumabarnett",
     "Bhkol",     # Bharti Kolhe - BA Cognizant
     "SimonsMOJ", # Simon Heron
-    "mshodge"    # Michael Hodges
+    "mshodge",    # Michael Hodges
+    "YvanMOJdigital" # Yvan Smith
   ]
 
   # GitHub usernames for engineers who need full AWS access
