@@ -7,4 +7,4 @@ github-workflow:
   - ".github/workflows/**"
 
 identity-access-management:
-  - "data-platform/terraform/github/teams.tf"
+  - "terraform/github/teams.tf"
