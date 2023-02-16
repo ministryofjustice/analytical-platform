@@ -17,7 +17,7 @@ fi
 
 ### Install
 
-curl --location https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}/pulumi-${VERSION}-linux-${ARCHITECTURE}.tar.gz \
+curl --location https://get.pulumi.com/releases/sdk/pulumi-${VERSION}-linux-${ARCHITECTURE}.tar.gz \
   --output pulumi-${VERSION}-linux-${ARCHITECTURE}.tar.gz
 
 tar -zxvf pulumi-${VERSION}-linux-${ARCHITECTURE}.tar.gz
