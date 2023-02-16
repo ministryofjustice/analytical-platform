@@ -53,7 +53,7 @@ jobs:
       - name: DEBUG
         id: debug
         run: |
-          docker run -it --rm \
+          docker run --rm \
             --volume $( pwd ):/workspace \
             --volume $( pwd )/.devcontainer/features/src/base/devcontainer-utils:/usr/local/bin/devcontainer-utils \
             mcr.microsoft.com/devcontainers/base:ubuntu \
