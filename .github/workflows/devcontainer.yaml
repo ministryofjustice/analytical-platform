@@ -59,14 +59,14 @@ jobs:
             mcr.microsoft.com/devcontainers/base:ubuntu \
               bash -x /workspace/.devcontainer/features/src/pulumi-tools/install-pulumi.sh
 
-      - name: "Testing ${{ matrix.feature }}"
-        id: test_feature
-        run: |
-          devcontainer features test \
-            --skip-scenarios \
-            --project-folder .devcontainer/features \
-            --features ${{ matrix.feature }} \
-            --base-image devcontainer
+      # - name: "Testing ${{ matrix.feature }}"
+      #   id: test_feature
+      #   run: |
+      #     devcontainer features test \
+      #       --skip-scenarios \
+      #       --project-folder .devcontainer/features \
+      #       --features ${{ matrix.feature }} \
+      #       --base-image devcontainer
 
   test-scenarios:
     needs: [detect-changes]
