@@ -15,6 +15,11 @@ else
   VERSION="${VERSION}"
 fi
 
+# Pulumi binary for amd64 is x64
+if [[ "${ARCHITECTURE}" == "amd64" ]]; then
+  ARCHITECTURE="x64"
+fi
+
 ### Install
 
 curl --location https://get.pulumi.com/releases/sdk/pulumi-${VERSION}-linux-${ARCHITECTURE}.tar.gz \
