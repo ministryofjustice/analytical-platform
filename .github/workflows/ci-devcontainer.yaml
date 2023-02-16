@@ -40,7 +40,7 @@ jobs:
 
       - name: "Install devcontainer CLI"
         id: install_devcontainer_cli
-        run: npm install -g @devcontainers/cli@0.268.0
+        run: npm install -g @devcontainers/cli@0.30.0
 
       - name: "Build Image"
         id: build_image
@@ -73,7 +73,7 @@ jobs:
 
       - name: "Install devcontainer CLI"
         id: install_devcontainer_cli
-        run: npm install -g @devcontainers/cli@0.268.0
+        run: npm install -g @devcontainers/cli@0.30.0
 
       - name: "Build Image"
         id: build_image
