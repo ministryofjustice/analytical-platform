@@ -50,6 +50,15 @@ jobs:
           load: true
           tags: devcontainer
 
+      - name: DEBUG
+        id: debug
+        run: |
+          docker run -it --rm \
+            --volume $( pwd ):/workspace \
+            --volume $( pwd )/.devcontainer/features/src/base/devcontainer-utils:/usr/local/bin/devcontainer-utils \
+            mcr.microsoft.com/devcontainers/base:ubuntu \
+              bash -x /workspace/.devcontainer/features/src/pulumi-tools/install-pulumi.sh
+
       - name: "Testing ${{ matrix.feature }}"
         id: test_feature
         run: |
