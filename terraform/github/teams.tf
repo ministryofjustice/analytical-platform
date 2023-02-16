@@ -88,6 +88,7 @@ locals {
     "makl3",
     "oliver-critchfield",
     "AlexVilela",
-    "davidbridgwood"
+    "davidbridgwood",
+    "mshodge"       # Michael Hodge
   ]
 }
