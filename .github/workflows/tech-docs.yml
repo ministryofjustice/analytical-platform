@@ -10,12 +10,11 @@ on:
       - "main"
     paths:
       - "docs/**"
-      - ".github/workflows/publish.yml"
+      - ".github/workflows/tech-docs.yml"
 
 # GITHUB_TOKEN permissions to allow deployment to GitHub Pages
 permissions:
   contents: read
-  packages: read
   pages: write
   id-token: write
 
@@ -27,27 +26,18 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: ministryofjustice/tech-docs-github-pages-publisher:data-platform
     defaults:
       run:
         working-directory: docs
-    env:
-      BUNDLE_RUBYGEMS__PKG__GITHUB__COM: ${{ secrets.GITHUB_TOKEN }} # THIS IS A TEST
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.7.7
-
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install
-
       - name: Compile Markdown to HTML and create artifact
         run: |
-          bash ${GITHUB_WORKSPACE}/scripts/tech-docs/build.sh
+          /scripts/deploy.sh
           
       - name: Upload artifact to be published
         uses: actions/upload-artifact@v3
