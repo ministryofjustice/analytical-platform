@@ -8,3 +8,4 @@ env/
 *.code-workspace
 *.sha256
 **/terraform.tfstate
+**/terraform.lock.hcl
