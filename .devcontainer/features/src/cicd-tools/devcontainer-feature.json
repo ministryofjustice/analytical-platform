@@ -1,0 +1,20 @@
+{
+  "id": "cicd-tools",
+  "version": "1.0.0",
+  "name": "cicd-tools",
+  "description": "CI/CD - ACT",
+  "options": {
+    "installAct": {
+      "type": "boolean",
+      "description": "Install ACT (https://github.com/nektos/act)",
+      "default": true
+    },
+    "actVersion": {
+      "type": "string",
+      "description": "ACT version",
+      "proposals": ["latest"],
+      "default": "latest"
+    }
+  },
+  "installsAfter": ["./features/src/base"]
+}
