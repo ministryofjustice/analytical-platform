@@ -6,6 +6,7 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "../features/src/base": {},
     "../features/src/aws-tools": { "awsIamEmail": "${localEnv:MOJ_DATA_PLATFORM_AWS_IAM_EMAIL}" },
+    "../features/src/cicd-tools": {},
     "../features/src/container-tools": {},
     "../features/src/git-tools": {},
     "../features/src/kubernetes-tools": {},

@@ -15,6 +15,10 @@ else
   VERSION="${VERSION}"
 fi
 
+if [[ "${ARCHITECTURE}" == "amd64" ]]; then
+  ARCHITECTURE="x86_64"
+fi
+
 ### Install
 
 curl --location https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}/act_Linux_${ARCHITECTURE}.tar.gz \
