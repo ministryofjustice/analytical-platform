@@ -7,7 +7,8 @@ locals {
 
   # GitHub usernames for CI users
   ci_users = [
-    "mojanalytics"
+    "mojanalytics",
+    "moj-data-platform-robot"
   ]
 
   # All GitHub team maintainers
