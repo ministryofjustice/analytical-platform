@@ -8,9 +8,7 @@ on:
       - main
     paths:
       - '.github/workflows/generate-dependabot-file.yml'
-      - 'scripts/generate-dependabot-file.sh'
-      - 'scripts/git-commit-and-pull-request.sh'
-      - 'scripts/git-setup.sh'
+      - 'scripts/dependabot/**'
   workflow_dispatch:
 
 permissions: {}
@@ -37,6 +35,6 @@ jobs:
 
       - name: Commit changes to GitHub
         run: |
-          bash scripts/dependabot/submit-configuration.sh
+          bash scripts/dependabot/commit-configuration.sh
 
 

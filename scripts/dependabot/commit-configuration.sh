@@ -32,6 +32,6 @@ gh api --method PUT /repos/${GITHUB_REPOSITORY}/contents/${FILE_TO_COMMIT} \
 echo "Creating PR"
 gh api --method POST /repos/${GITHUB_REPOSITORY}/pulls \
  --field title="👨‍🔧 Updated Dependabot configuration" \
- --field body="." \
+ --field body="An updated Dependabot configuration has been generated" \
  --field head="${BRANCH_NAME}" \
  --field base="main"
