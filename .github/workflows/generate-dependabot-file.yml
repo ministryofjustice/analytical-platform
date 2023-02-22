@@ -37,7 +37,6 @@ jobs:
 
       - name: Commit changes to GitHub
         run: |
-          bash scripts/git-setup.sh
           bash scripts/dependabot/submit-configuration.sh
 
 
