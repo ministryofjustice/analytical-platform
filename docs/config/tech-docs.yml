@@ -6,7 +6,7 @@ host: https://ministryofjustice.github.io/data-platform
 # Header-related options
 show_govuk_logo: false
 service_name: Data Platform
-service_link: /
+service_link: /data-platform
 phase: Alpha
 
 # Links to show on right-hand-side of header
