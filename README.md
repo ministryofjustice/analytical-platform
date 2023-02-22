@@ -18,12 +18,6 @@ This is the Ministry of Justice mono-repo for work on the Data Platform.
 Please read the [contributing guide](CONTRIBUTING.md) before sending pull requests,
 or creating issues.
 
-### Contents
-
-This repository currently holds the Data Platform's:
-
-- [Architecture Decision Records (ADR)](architecture/decision/README.md)
-
 ## Data Platform repositories
 
 We have a series of repositories for our work. We have adopted the naming convention of naming each repository starting with `data-platform-*`. 
