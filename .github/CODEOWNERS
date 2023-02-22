@@ -1,7 +1,2 @@
-
-# The data-tech-archs are the codeowners for content within
-# the architecture folder.
-/architecture/ @ministryofjustice/data-tech-archs
-
-# Service ownership
-/services/example/ @ministryofjustice/data-tech-archs
+/.devcontainer/ @ministryofjustice/data-platform-core-infra
+/.github/ @ministryofjustice/data-platform-core-infra
