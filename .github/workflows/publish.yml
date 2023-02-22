@@ -73,7 +73,7 @@ jobs:
         run: |
           cd github-pages
           tar -xvf artifact.tar
-          npm install JustinBeckwith/linkinator@e3d929bbda79d28fb46d20c04a2a6f9a9bce6f5c 
+          npm install JustinBeckwith/linkinator#e3d929bbda79d28fb46d20c04a2a6f9a9bce6f5c 
           npx linkinator . --recurse --markdown \
             --skip https://ministryofjustice.github.io/data-platform/images/govuk-large.png \
           # "URL Check will fail on private and internal GitHub repositories"
