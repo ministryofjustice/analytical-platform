@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c #v3
 
       - name: "Detect changes"
-        uses: dorny/paths-filter@v2
+        uses: dorny/paths-filter@affb29871ab1f927ecad0ee68c0989584101408f #v2
         id: changes
         with:
           filters: .github/workflows/path-filter/devcontainer.yaml
@@ -40,7 +40,7 @@ jobs:
 
       - name: "Install devcontainer CLI"
         id: install_devcontainer_cli
-        run: npm install -g @devcontainers/cli
+        run: npm install -g @devcontainers/cli@0.30.0
 
       - name: "Build Image"
         id: build_image
@@ -73,7 +73,7 @@ jobs:
 
       - name: "Install devcontainer CLI"
         id: install_devcontainer_cli
-        run: npm install -g @devcontainers/cli
+        run: npm install -g @devcontainers/cli@0.30.0
 
       - name: "Build Image"
         id: build_image
