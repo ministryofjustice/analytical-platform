@@ -13,14 +13,14 @@ review_in: 3 months
 
 ## Context
 
-The Data Platform will need to provide a way to verify users and provide access to resources. 
+The Data Platform will need to provide a way to verify users and provide access to resources.
 We do not want to run an identity service and want to reduce the number of identies our users have to manage.
 
 ## Decision
 
 We will use AzureAD for Identity and Access Manangment (IDAM).
 There are mulitple identity services in the MoJ, the majority of our users are already using a `@justice.gov.uk` account.
-This will allow our users to Single Sign On (SSO) onto their devices and gain access to our services without the need to 
+This will allow our users to Single Sign On (SSO) onto their devices and gain access to our services without the need to
 enter another username and password.
 
 ## Consequences
@@ -29,5 +29,3 @@ enter another username and password.
 - Guest accounts are possible but not managed currently which means we will need an alternative solution.
 - x-government federation is a possibility
 - Devices can be challenged for additonal verification if accessing restricted data.
-
-
