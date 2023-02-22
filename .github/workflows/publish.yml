@@ -56,7 +56,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@0243b6c10d06cb8e95ed8ee471231877621202c0 #v1
 
   url-check:
     if: github.ref == 'refs/heads/main'
@@ -69,11 +69,11 @@ jobs:
           name: github-pages
           path: github-pages
 
-      - name: Unpack files and check URL links
+      - name: Unpack files and check URL links # linkinator - v4.1.2
         run: |
           cd github-pages
           tar -xvf artifact.tar
-          npm install linkinator
+          npm install linkinator@e3d929bbda79d28fb46d20c04a2a6f9a9bce6f5c 
           npx linkinator . --recurse --markdown \
             --skip https://ministryofjustice.github.io/data-platform/images/govuk-large.png \
           # "URL Check will fail on private and internal GitHub repositories"
