@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-TOKEN="${GITHUB_TOKEN}"
 FILE_TO_COMMIT=".github/dependabot.yml"
 BRANCH_NAME="updated-dependabot-configuration-$( date +'%s' )"
 MAIN_BRANCH_SHA=$( git rev-parse origin/main )
