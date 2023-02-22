@@ -1,7 +1,6 @@
 documentation:
   - "docs/**"
   - "README.md"
-  - "source/**"
 
 github-workflow:
   - ".github/workflows/**"
