@@ -21,19 +21,23 @@ defaults:
 
 jobs:
   create-and-commit-dependabot-file:
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
-    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
         with:
           fetch-depth: 0
+
       - name: Generate file
-        run: bash ./scripts/generate-dependabot-file.sh
+        run: bash scripts/dependabot/generate-configuration.sh
+
       - name: Commit changes to GitHub
-        run: bash ./scripts/git-setup.sh
-      - run: bash ./scripts/git-commit-and-pull-request.sh .github
-    env:
-      GH_TOKEN: ${{ github.token }}
+        run: |
+          bash scripts/git-setup.sh
+          bash scripts/dependabot/submit-configuration.sh
+
 
