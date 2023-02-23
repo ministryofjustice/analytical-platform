@@ -32,8 +32,8 @@ jobs:
       run:
         working-directory: terraform/github
     env:
-      AWS_REGION: ${{ var.AWS_REGION } }}
-      AWS_ROLE: ${{ var.AWS_ROLE }}
+      AWS_REGION: ${{ vars.AWS_REGION } }}
+      AWS_ROLE: ${{ vars.AWS_ROLE }}
       MANAGEMENT_ACCOUNT_ID: ${{ secrets.MANAGEMENT_ACCOUNT_ID }}
       TF_IN_AUTOMATION: true
       TF_VAR_team_github_token: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}

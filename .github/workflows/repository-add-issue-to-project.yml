@@ -16,5 +16,5 @@ jobs:
         id: add_issue_to_project
         uses: actions/add-to-project@960fbad431afda394cfcf8743445e741acd19e85 # v0.4.0
         with:
-          project-url: ${{ var.DATA_PLATFORM_GITHUB_PROJECT_URL }}
+          project-url: ${{ vars.DATA_PLATFORM_GITHUB_PROJECT_URL }}
           github-token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
