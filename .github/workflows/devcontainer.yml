@@ -30,6 +30,7 @@ jobs:
           filters: .github/workflows/path-filter/devcontainer.yml
 
   test:
+    if: ${{ needs.detect-changes.outputs.features != '[]' }}
     needs: [detect-changes]
     name: Test
     runs-on: ubuntu-latest
@@ -64,6 +65,7 @@ jobs:
             --base-image devcontainer
 
   test-scenarios:
+    if: ${{ needs.detect-changes.outputs.features != '[]' }}
     needs: [detect-changes]
     name: Test Scenarios
     runs-on: ubuntu-latest
