@@ -54,8 +54,8 @@ jobs:
         with:
           sbom-artifact-match: ".*\\.spdx$"
 
-  analyze:
-    name: Analyze
+  analyse:
+    name: Analyse
     runs-on: ubuntu-latest
     defaults:
       run:
