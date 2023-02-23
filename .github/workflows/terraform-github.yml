@@ -33,7 +33,6 @@ jobs:
         working-directory: terraform/github
     env:
       AWS_REGION: ${{ vars.AWS_REGION }}
-      AWS_ROLE: ${{ vars.AWS_ROLE }}
       MANAGEMENT_ACCOUNT_ID: ${{ secrets.MANAGEMENT_ACCOUNT_ID }}
       TF_IN_AUTOMATION: true
       TF_VAR_team_github_token: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}
@@ -49,7 +48,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
         with:
           aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: arn:aws:iam::${{ env.MANAGEMENT_ACCOUNT_ID }}:role/${{ env.AWS_ROLE }}
+          role-to-assume: arn:aws:iam::${{ env.MANAGEMENT_ACCOUNT_ID }}:role/GlobalGitHubActionAccess
           role-session-name: githubactionsrolesession
 
       - name: Set up Terraform
@@ -63,7 +62,7 @@ jobs:
         id: terraform_init
         run: |
           terraform init \
-            -backend-config=role_arn=arn:aws:iam::${{ env.MANAGEMENT_ACCOUNT_ID }}:role/${{ env.AWS_ROLE }} \
+            -backend-config=role_arn=arn:aws:iam::${{ env.MANAGEMENT_ACCOUNT_ID }}:role/GlobalGitHubActionAdmin \
             -reconfigure \
             -no-color
 
