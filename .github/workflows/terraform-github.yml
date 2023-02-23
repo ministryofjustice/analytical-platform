@@ -35,7 +35,7 @@ jobs:
       AWS_REGION: ${{ vars.AWS_REGION }}
       MANAGEMENT_ACCOUNT_ID: ${{ secrets.MANAGEMENT_ACCOUNT_ID }}
       TF_IN_AUTOMATION: true
-      TF_VAR_team_github_token: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}
+      TF_VAR_team_github_token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
     permissions:
       id-token: write
     steps:
