@@ -1,0 +1,21 @@
+name: Pull request labeler
+
+on:
+  - pull_request_target
+
+permissions: read-all
+
+jobs:
+  pull-request-labeler:
+    name: Pull request labeler
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Pull request labeler
+        id: pull_request_labeler
+        uses: actions/labeler@5c7539237e04b714afd8ad9b4aed733815b9fab4 # v4.0.2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          sync-labels: true
