@@ -27,7 +27,7 @@ variable "topics" {
 
 variable "type" {
   type        = string
-  description = "Type of repository: `core`, `module`, `template`. Defaults to `core`"
+  description = "Type of repository: `core`, `module`, `template`, `migration`. Defaults to `core`"
   default     = "core"
 }
 
@@ -48,4 +48,10 @@ variable "require_signed_commits" {
   type        = bool
   default     = false
 
+}
+
+variable "environments" {
+  description = "Julia will write something here"
+  type        = set(string)
+  default     = []
 }

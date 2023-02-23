@@ -37,6 +37,28 @@ module "data-platform" {
   }
 }
 
+module "data-platform-apps" {
+  for_each               = { for repo in local.migration_repos : repo.name => repo }
+  source                 = "./modules/repository"
+  name                   = each.key
+  type                   = "migration"
+  description            = each.value.description
+  homepage_url           = "https://github.com/ministryofjustice/data-platform/blob/main/architecture/decision/README.md"
+  require_signed_commits = true
+  environments           = ["prod", "dev"]
+  topics = [
+    "data-platform-apps-and-tools",
+    "aws",
+    "helm",
+    "documentation"
+  ]
+
+  secrets = {
+    # Management Account ID
+    MANAGEMENT_ACCOUNT_ID = data.aws_caller_identity.current.account_id
+  }
+}
+
 # Everyone, with access to the above repositories
 module "core-team" {
   source      = "./modules/team"
