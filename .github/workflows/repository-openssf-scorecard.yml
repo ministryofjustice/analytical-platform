@@ -27,7 +27,7 @@ jobs:
         id: run_analysis
         uses: ossf/scorecard-action@e38b1902ae4f44df626f11ba0734b14fb91f8f86 # v2.1.2
         with:
-          repo-token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
+          repo_token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
           results_file: results.sarif
           results_format: sarif
           publish_results: true
