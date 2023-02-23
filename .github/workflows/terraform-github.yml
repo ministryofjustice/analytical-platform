@@ -1,0 +1,79 @@
+name: Terraform - GitHub
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/terraform-github.yml
+      - terraform/github/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/github.yml
+      - terraform/github/**
+    types:
+      - edited
+      - opened
+      - reopened
+      - synchronize
+  schedule:
+    - cron: "0 04 * * 6"
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  terraform-github:
+    name: Terraform - GitHub
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/github
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      MANAGEMENT_ACCOUNT_ID: ${{ secrets.MANAGEMENT_ACCOUNT_ID }}
+      TF_IN_AUTOMATION: true
+      TF_VAR_team_github_token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
+    permissions:
+      id-token: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+
+      - name: Configure AWS Credentials
+        id: configure_aws_credentials
+        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ env.MANAGEMENT_ACCOUNT_ID }}:role/GlobalGitHubActionAccess
+          role-session-name: githubactionsrolesession
+
+      - name: Set up Terraform
+        id: setup_terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+        with:
+          terraform_version: "~1"
+          terraform_wrapper: false
+
+      - name: Terraform init
+        id: terraform_init
+        run: |
+          terraform init \
+            -backend-config=role_arn=arn:aws:iam::${{ env.MANAGEMENT_ACCOUNT_ID }}:role/GlobalGitHubActionAdmin \
+            -reconfigure \
+            -no-color
+
+      - name: Terraform validate
+        id: terraform_validate
+        run: terraform validate -no-color
+
+      - name: Terraform plan
+        id: terraform_plan
+        run: terraform plan -input=false -no-color
+
+      - name: Terraform apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -input=false -auto-approve -no-color

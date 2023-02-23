@@ -1,0 +1,36 @@
+name: Generate Dependabot configuration
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/repository-generate-dependabot-configuration.yml
+      - 'scripts/dependabot/**'
+  schedule:
+    - cron: "30 6 * * 1"
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  generate-dependabot-configuration:
+    name: Generate Dependabot configuration
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+
+      - name: Generate configuration
+        id: generate_configuration
+        run: bash scripts/dependabot/generate-configuration.sh
+
+      - name: Commit configuration
+        id: commit_configuration
+        run: bash scripts/dependabot/commit-configuration.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
