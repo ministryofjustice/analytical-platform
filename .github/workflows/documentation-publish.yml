@@ -1,0 +1,83 @@
+name: Publish documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/documentation-publish.yml
+      - docs/**
+  workflow_dispatch:
+
+permissions: read-all
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    container:
+      image: ministryofjustice/tech-docs-github-pages-publisher:data-platform
+    defaults:
+      run:
+        working-directory: docs
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+
+      - name: Compile Markdown to HTML
+        id: compile
+        run: /scripts/deploy.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+          name: github-pages
+          path: docs/artifact.tar
+          retention-days: 1
+
+  url-check:
+    if: github.ref == 'refs/heads/main'
+    needs: [build]
+    name: URL Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        id: download_artifact
+        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
+        with:
+          name: github-pages
+          path: github-pages
+
+      - name: Check URLs
+        id: check_urls
+        run: |
+          cd github-pages
+          tar -zxvf artifact.tar
+          npm install JustinBeckwith/linkinator#e3d929bbda79d28fb46d20c04a2a6f9a9bce6f5c # v4.1.2
+          npx linkinator . --recurse --markdown \
+            --skip https://ministryofjustice.github.io/data-platform/images/govuk-large.png \
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: [build]
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Configure GitHub Pages
+        id: configure_github_pages
+        uses: actions/configure-pages@fc89b04e7d263ef510d9e77d3a1d088fb2688522 # v3.0.4
+
+      - name: Deploy to GitHub Pages
+        id: deploy_github_pages
+        uses: actions/deploy-pages@0243b6c10d06cb8e95ed8ee471231877621202c0 # v1.2.4
