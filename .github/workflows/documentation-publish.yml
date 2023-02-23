@@ -41,7 +41,6 @@ jobs:
           retention-days: 1
 
   url-check:
-    if: github.ref == 'refs/heads/main'
     needs: [build]
     name: URL Check
     runs-on: ubuntu-latest
@@ -57,7 +56,8 @@ jobs:
         id: check_urls
         run: |
           cd github-pages
-          tar -zxvf artifact.tar
+          ls -lrt
+          tar -xvf artifact.tar
           npm install JustinBeckwith/linkinator#e3d929bbda79d28fb46d20c04a2a6f9a9bce6f5c # v4.1.2
           npx linkinator . --recurse --markdown \
             --skip https://ministryofjustice.github.io/data-platform/images/govuk-large.png \
