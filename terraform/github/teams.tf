@@ -50,7 +50,6 @@ locals {
     "AlexVilela"
   ]
 
-
   data_engineering_maintainers = [
     "calumabarnett",
     "SoumayaMauthoorMOJ",
@@ -91,5 +90,19 @@ locals {
     "AlexVilela",
     "davidbridgwood",
     "mshodge" # Michael Hodge
+  ]
+
+  data_platform_core_infrastructure_maintainers = [
+    "bagg3rs", # Richard Baguley
+    "julialawrence",
+    "jacobwoffenden"
+  ]
+
+  data_platform_core_infrastructure_members = [
+    "jhackett-ap",  # John Hackett
+    "Bhkol",        # Bharti Kolhe - BA Cognizant
+    "sreekanthmoj", # Sreekanth Kote - Cognizant
+    "karthikmoj",   # Karthik Pelluru - Cognizant
+    "Emterry",      # Emma Terry
   ]
 }
