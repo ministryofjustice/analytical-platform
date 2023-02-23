@@ -140,3 +140,15 @@ module "contributor-access" {
   application_teams = ["data-engineering"]
   repository_id     = each.key
 }
+
+# Data Platform Core Infrastructure Team
+module "data_platform_core_infrastructure_team" {
+  source       = "./modules/team"
+  name         = "data-platform-core-infra"
+  description  = "Data Platform Core Infrastructure team"
+  repositories = [for repo in module.data-platform : repo.repository.name]
+
+  maintainers = local.data_platform_core_infrastructure_maintainers
+  members     = local.all_members_data_platform_core_infrastructure
+  ci          = local.ci_users
+}
