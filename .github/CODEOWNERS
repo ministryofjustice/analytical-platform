@@ -1,2 +1,4 @@
 /.devcontainer/ @ministryofjustice/data-platform-core-infra
 /.github/ @ministryofjustice/data-platform-core-infra
+/services/ @ministryofjustice/data-tech-archs
+/terraform/ @ministryofjustice/data-platform-core-infra
