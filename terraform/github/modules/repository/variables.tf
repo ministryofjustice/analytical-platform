@@ -51,7 +51,7 @@ variable "require_signed_commits" {
 }
 
 variable "environments" {
-  description = "Julia will write something here"
+  description = "Set of environment names"
   type        = set(string)
   default     = []
 }
