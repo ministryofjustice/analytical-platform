@@ -1,7 +1,7 @@
 ---
 owner_slack: "#data-platform-notifications"
 title: ADR-002 Use AzureAD for Identity and Access Management
-last_reviewed_on: 2023-02-12
+last_reviewed_on: 2023-02-23
 review_in: 3 months
 ---
 
@@ -13,19 +13,21 @@ review_in: 3 months
 
 ## Context
 
-The Data Platform will need to provide a way to verify users and provide access to resources.
-We do not want to run an identity service and want to reduce the number of identies our users have to manage.
+The Data Platform will need a way to verify users and provide access to resources.
+We want to simplify user access by reducing the number of identities our users need to manage. 
+We do not want to run an identity service.
 
 ## Decision
 
 We will use AzureAD for Identity and Access Manangment (IDAM).
-There are mulitple identity services in the MoJ, the majority of our users are already using a `@justice.gov.uk` account.
-This will allow our users to Single Sign On (SSO) onto their devices and gain access to our services without the need to
-enter another username and password.
+Our users are already using a `@justice.gov.uk` account as their primary login.
+Our users can take advantage of Single Sign On (SSO) to gain access to the Data Platform without the need to 
+for an additional username and password.
 
 ## Consequences
 
-- We will not have to run an identity service along with managing multi factor authentication, logging and security of that system.
-- Guest accounts are possible but not managed currently which means we will need an alternative solution.
-- x-government federation is a possibility
-- Devices can be challenged for additonal verification if accessing restricted data.
+- We will not have to run an identity service and managing logging and security of that system.
+- Reduce our support requirement for joiners, movers and leavers(JML), issues with multi factor authentication and password resets.
+- Guest accounts are possible, but not managed which means we will need an alternative solution or existing Auth0 method.
+- Cross government federation is not yet formalised.
+
