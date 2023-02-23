@@ -1,0 +1,47 @@
+name: OpenSSF Scorecard
+
+on:
+  branch_protection_rule:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "30 6 * * 1"
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  scorecard-analysis:
+    name: Scorecard analysis
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      security-events: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+
+      - name: Run analysis
+        id: run_analysis
+        uses: ossf/scorecard-action@e38b1902ae4f44df626f11ba0734b14fb91f8f86 # v2.1.2
+        with:
+          repo-token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
+          results_file: results.sarif
+          results_format: sarif
+          publish_results: true
+
+      - name: Upload SARIF results
+        id: upload_sarif_results
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.0
+        with:
+          name: SARIF results
+          path: results.sarif
+          retention-days: 5
+
+      - name: Upload to CodeQL
+        id: upload_to_codeql
+        uses: github/codeql-action/upload-sarif@17573ee1cc1b9d061760f3a006fc4aac4f944fd5 # v2.2.4
+        with:
+          sarif_file: results.sarif
