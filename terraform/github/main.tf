@@ -23,7 +23,7 @@ module "data-platform" {
   name                   = each.key
   type                   = "core"
   description            = each.value.description
-  homepage_url           = "https://github.com/ministryofjustice/data-platform/blob/main/architecture/decision/README.md"
+  homepage_url           = "https://technical-documentation.data-platform.service.justice.gov.uk/"
   require_signed_commits = false # disabling until we amend code-formatter to use signed commits
   topics = [
     "architecture-decisions",
