@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Add issue to project
         id: add_issue_to_project
-        uses: actions/add-to-project@960fbad431afda394cfcf8743445e741acd19e85 # v0.4.0
+        uses: actions/add-to-project@4756e6330fe1e0a736690d3cfd9f11c9399c2ed4 # v0.4.1
         with:
           project-url: ${{ vars.DATA_PLATFORM_GITHUB_PROJECT_URL }}
           github-token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
