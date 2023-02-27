@@ -1,7 +1,7 @@
 ---
 name: Data Platform Feature Request
 about: Create new Data Platform Feature Request
-labels: bug
+labels: feature-request
 ---
 
 ## Background and context
