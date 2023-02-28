@@ -1,10 +1,6 @@
 {
   "absolute": true,
-  "ignore": [
-    ".github/workflows/devcontainer.yml"
-  ],
-  "reporters": [
-    "console"
-  ],
+  "ignore": [".github/workflows/devcontainer.yml"],
+  "reporters": ["console"],
   "threshold": 0
 }
