@@ -34,6 +34,8 @@ jobs:
   super-linter:
     name: Super-Linter
     runs-on: ubuntu-latest
+    permissions:
+      statuses: write
     steps:
       - name: Checkout
         id: checkout
