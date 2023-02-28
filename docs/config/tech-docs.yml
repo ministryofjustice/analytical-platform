@@ -1,4 +1,7 @@
+---
+# yamllint disable rule:line-length
 # See the available options: https://tdt-documentation.london.cloudapps.digital/configure_project/global_configuration/#configure-your-documentation-site
+# yamllint enable rule:line-length
 
 # Host to use for canonical URL generation (without trailing slash)
 host: https://ministryofjustice.github.io/data-platform
