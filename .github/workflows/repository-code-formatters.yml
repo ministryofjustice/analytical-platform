@@ -1,4 +1,5 @@
-name: Format code
+---
+name: Code formatters
 
 on:
   pull_request:
@@ -13,8 +14,8 @@ on:
 permissions: read-all
 
 jobs:
-  format-code:
-    name: Format code
+  moj-code-formatter:
+    name: MoJ Code Formatter
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -23,16 +24,16 @@ jobs:
         id: checkout
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
 
-      - name: Format code
+      - name: MoJ Code Formatter
         uses: ministryofjustice/github-actions/code-formatter@15729e214b8e626847cf4b4596c7635ddb6b1b0a # v10
-        id: format_code
+        id: code_formatter
         with:
           ignore-files: README.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   super-linter:
-    name: Super-Linter
+    name: GitHub Super-Linter
     runs-on: ubuntu-latest
     permissions:
       statuses: write
@@ -43,7 +44,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Super-Linter
+      - name: GitHub Super-Linter
         id: super_linter
         uses: github/super-linter/slim@454ba4482ce2cd0c505bc592e83c06e1e37ade61 # v4.10.1
         env:
