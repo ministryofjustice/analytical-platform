@@ -48,6 +48,7 @@ jobs:
         id: super_linter
         uses: github/super-linter/slim@454ba4482ce2cd0c505bc592e83c06e1e37ade61 # v4.10.1
         env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BRANCH: main
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_GITHUB_ACTIONS: false # This is disabled until Super-Linter supports the new `var` context
