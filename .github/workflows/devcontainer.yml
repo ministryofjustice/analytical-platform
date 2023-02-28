@@ -10,7 +10,7 @@ on:
       - .github/workflows/path-filter/devcontainer.yml
       - .devcontainer/**
 
-permissions: read-all      
+permissions: read-all
 
 jobs:
   detect-changes:
@@ -24,8 +24,8 @@ jobs:
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
 
       - name: Detect changes
-        uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         id: detect_changes
+        uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         with:
           filters: .github/workflows/path-filter/devcontainer.yml
 
