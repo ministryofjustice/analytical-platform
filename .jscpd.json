@@ -1,6 +1,9 @@
 {
   "absolute": true,
-  "ignore": ["/github/workspace/.github/workflows/devcontainer.yml"],
+  "ignore": [
+    "**/.github/workflows/devcontainer.yml",
+    "**/.devcontainer/**/devcontainer.json"
+  ],
   "reporters": ["console"],
   "threshold": 0
 }
