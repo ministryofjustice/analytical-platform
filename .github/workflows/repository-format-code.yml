@@ -2,6 +2,8 @@ name: Format code
 
 on:
   pull_request:
+    branches:
+      - main
     types:
       - edited
       - opened
@@ -21,8 +23,28 @@ jobs:
         id: checkout
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
 
-      - uses: ministryofjustice/github-actions/code-formatter@15729e214b8e626847cf4b4596c7635ddb6b1b0a # v10
+      - name: Format code
+        uses: ministryofjustice/github-actions/code-formatter@15729e214b8e626847cf4b4596c7635ddb6b1b0a # v10
+        id: format_code
         with:
-            ignore-files: README.md
+          ignore-files: README.md
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  super-linter:
+    name: Super-Linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+        with:
+          fetch-depth: 0
+
+      - name: Super-Linter
+        id: super_linter
+        uses: github/super-linter/slim@454ba4482ce2cd0c505bc592e83c06e1e37ade61 # v4.10.1
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
