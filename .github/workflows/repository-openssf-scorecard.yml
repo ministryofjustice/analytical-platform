@@ -1,7 +1,7 @@
 ---
 name: OpenSSF Scorecard
 
-on:
+on: # yamllint disable-line rule:truthy
   branch_protection_rule:
   push:
     branches:
