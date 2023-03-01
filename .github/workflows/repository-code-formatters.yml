@@ -25,8 +25,8 @@ jobs:
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
 
       - name: MoJ Code Formatter
-        uses: ministryofjustice/github-actions/code-formatter@15729e214b8e626847cf4b4596c7635ddb6b1b0a # v10
         id: code_formatter
+        uses: ministryofjustice/github-actions/code-formatter@15729e214b8e626847cf4b4596c7635ddb6b1b0a # v10
         with:
           ignore-files: README.md
         env:
@@ -51,4 +51,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: main
           VALIDATE_ALL_CODEBASE: false
-          VALIDATE_GITHUB_ACTIONS: false # This is disabled until Super-Linter supports the new `var` context
+          # yamllint disable rule:line-length
+          VALIDATE_GITHUB_ACTIONS: false # yaml This is disabled until Super-Linter ships with a newer version of actionlint supports the new `var` context
+          # yamllint enable rule:line-length
+          # Commenting out as we have a lot of shell scripts that are not formatted correctly and we don't want to fix them all at once
+          VALIDATE_BASH: false
+          VALIDATE_BASH_EXEC: false
+          VALIDATE_SHELL_SHFMT: false
