@@ -49,7 +49,7 @@ jobs:
         id: scan_image
         uses: anchore/scan-action@dafbc97d7259af88b61bd260f2fde565d0668a72 # v3.3.4
         with:
-          image: ${{ steps.prepare.outputs.name }}-${{ steps.prepare.outputs.version }}-amd64
+          image: ${{ steps.prepare.outputs.name }}:${{ steps.prepare.outputs.version }}-amd64
 
       - name: Upload scan SARIF
         id: upload_scan_sarif
