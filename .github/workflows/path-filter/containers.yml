@@ -1,3 +1,4 @@
 ---
-base: ./images/base/**
-nodejs: ./images/nodejs/**
+base: ./images/base/apko.yml
+nodejs: ./images/nodejs/apko.yml
+nodejs-dev: ./images/nodejs/dev.apko.yml
