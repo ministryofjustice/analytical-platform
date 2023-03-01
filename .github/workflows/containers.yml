@@ -1,0 +1,47 @@
+---
+name: Container images
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/containers.yml
+      - .github/workflows/path-filter/containers.yml
+      - images/**
+
+permissions: read-all
+
+jobs:
+  build:
+    name: Build images
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    strategy:
+      matrix:
+        image:
+          - base
+          - nodejs
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+
+      - name: Prepare build paramerters
+        id: prepare
+        run: |
+          echo "name=$(jq -r '.name' images/${{ matrix.image }}/config.json)" >> ${GITHUB_OUTPUT}
+          echo "version=$(jq -r '.version' images/${{ matrix.image }}/config.json)" >> ${GITHUB_OUTPUT}
+
+      - name: Build image with apko
+        id: build
+        uses: docker://cgr.dev/chainguard/apko:0.7.1
+        with:
+          args: build images/${{ matrix.image }}/apko.yml ${{ steps.prepare.outputs.name }}:${{ steps.prepare.outputs.version }} ${{ steps.prepare.outputs.name }}-${{ steps.prepare.outputs.version }}.tar
+
+      - name: Publish SBOM
+        id: publish_sbom
+        uses: anchore/sbom-action/publish-sbom@07978da4bdb4faa726e52dfc6b1bed63d4b56479 # v0.13.3
+        with:
+          sbom-artifact-match: ".*\\.spdx$"

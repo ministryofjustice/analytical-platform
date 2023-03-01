@@ -1,0 +1,3 @@
+---
+base: ./images/base/**
+nodejs: ./images/nodejs/**

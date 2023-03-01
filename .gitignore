@@ -9,3 +9,5 @@ env/
 *.sha256
 **/terraform.tfstate
 **/.terraform.lock.hcl
+**/*.tar
+**/sbom**
