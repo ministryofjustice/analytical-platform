@@ -36,12 +36,35 @@ jobs:
 
       - name: Build image with apko
         id: build
-        uses: docker://cgr.dev/chainguard/apko:0.7.1
+        uses: docker://cgr.dev/chainguard/apko@sha256:a2438e282d6a5ca7de8b6e5343b452f003ac148def536bbd4bacc357ee41c58a # 0.7.1
         with:
           args: build images/${{ matrix.image }}/apko.yml ${{ steps.prepare.outputs.name }}:${{ steps.prepare.outputs.version }} ${{ steps.prepare.outputs.name }}-${{ steps.prepare.outputs.version }}.tar
+
+      - name: Load image
+        id: load_image
+        run: |
+          docker load -i ${{ steps.prepare.outputs.name }}-${{ steps.prepare.outputs.version }}.tar
+
+      - name: Scan image
+        id: scan_image
+        uses: anchore/scan-action@dafbc97d7259af88b61bd260f2fde565d0668a72 # v3.3.4
+        with:
+          image: ${{ steps.prepare.outputs.name }}-${{ steps.prepare.outputs.version }}-amd64
+
+      - name: Upload scan SARIF
+        id: upload_scan_sarif
+        uses: github/codeql-action/upload-sarif@32dc499307d133bb5085bae78498c0ac2cf762d5 # v2.2.5
+        with:
+          sarif_file: ${{ steps.scan_image.outputs.sarif }}
+
+      - name: Scan SBOM
+        id: scan_sbom
+        uses: anchore/scan-action@dafbc97d7259af88b61bd260f2fde565d0668a72 # v3.3.4
+        with:
+          sbom: sbom-x86_64.spdx.json
 
       - name: Publish SBOM
         id: publish_sbom
         uses: anchore/sbom-action/publish-sbom@07978da4bdb4faa726e52dfc6b1bed63d4b56479 # v0.13.3
         with:
-          sbom-artifact-match: ".*\\.spdx$"
+          sbom-artifact-match: sbom-x86_64.spdx.json
