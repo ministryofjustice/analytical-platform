@@ -4,7 +4,7 @@
   "variants": [
     {
       "name": "nodejs-runtime",
-      "config": "runtime.apko.yaml"
+      "config": "runtime.apko.yml"
     }
   ]
 }
