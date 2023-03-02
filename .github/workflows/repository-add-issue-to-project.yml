@@ -1,6 +1,7 @@
+---
 name: Add issue to project
 
-on:
+on: # yamllint disable-line rule:truthy
   issues:
     types:
       - opened

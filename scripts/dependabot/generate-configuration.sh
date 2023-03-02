@@ -12,7 +12,8 @@ echo "${terraformFolders}"
 
 echo "Generating ${DEPENDABOT_FILE}"
 cat > ${DEPENDABOT_FILE} << EOL
-# This file is auto-generated here, do not manually amend. 
+---
+# This file is auto-generated here, do not manually amend.
 # https://github.com/ministryofjustice/data-platform/blob/main/scripts/dependabot/generate-configuration.sh
 
 version: 2
