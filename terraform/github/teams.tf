@@ -90,7 +90,6 @@ locals {
     "williamorrie", # William Orr
     "gustavmoller",
     "jhpyke", # Jake H Pyke
-    "makl3",
     "oliver-critchfield",
     "AlexVilela",
     "davidbridgwood",
