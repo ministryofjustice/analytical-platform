@@ -1,5 +1,5 @@
 ---
-include: images/base/apko.yml
+include: images/base/base.apko.yml
 
 contents:
   packages:

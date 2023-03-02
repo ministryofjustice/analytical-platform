@@ -1,4 +1,3 @@
 ---
-base: ./images/base/apko.yml
-nodejs: ./images/nodejs/apko.yml
-nodejs-dev: ./images/nodejs/dev.apko.yml
+base: ./images/base/base.apko.yml
+nodejs-runtime: ./images/nodejs/runtime.apko.yaml
