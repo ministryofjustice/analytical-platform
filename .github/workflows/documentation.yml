@@ -68,7 +68,7 @@ jobs:
 
   linkinator:
     needs: [build]
-    name: URL Check
+    name: linkinator
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
@@ -84,7 +84,8 @@ jobs:
           cd github-pages
           tar -xvf artifact.tar
           npm install JustinBeckwith/linkinator#e3d929bbda79d28fb46d20c04a2a6f9a9bce6f5c # v4.1.2
-          npx linkinator . --recurse --markdown
+          npx linkinator . --recurse --markdown \
+            --skip "https://technical-documentation.data-platform.service.justice.gov.uk/images/govuk-large.png"
 
   deploy:
     if: github.ref == 'refs/heads/main'
