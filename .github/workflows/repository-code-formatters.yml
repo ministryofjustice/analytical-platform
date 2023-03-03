@@ -54,7 +54,7 @@ jobs:
           # yamllint disable rule:line-length
           VALIDATE_GITHUB_ACTIONS: false # yaml This is disabled until Super-Linter ships with a newer version of actionlint supports the new `var` context
           # yamllint enable rule:line-length
-          # Commenting out as we have a lot of shell scripts that are not formatted correctly and we don't want to fix them all at once
+          # TODO: Fix all the shell scripts and re-enable these
           VALIDATE_BASH: false
           VALIDATE_BASH_EXEC: false
           VALIDATE_SHELL_SHFMT: false
