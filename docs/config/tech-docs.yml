@@ -7,7 +7,7 @@
 host: https://technical-documentation.data-platform.service.justice.gov.uk
 
 # Header-related options
-show_govuk_logo: true
+show_govuk_logo: false
 service_name: Data Platform
 service_link: /
 phase: Alpha

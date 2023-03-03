@@ -1,12 +1,18 @@
 ---
-name: Publish documentation
+name: Documentation
 
 on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/documentation.yml
+      - docs/**
   push:
     branches:
       - main
     paths:
-      - .github/workflows/documentation-publish.yml
+      - .github/workflows/documentation.yml
       - docs/**
   workflow_dispatch:
 
@@ -42,9 +48,27 @@ jobs:
           path: docs/artifact.tar
           retention-days: 1
 
-  url-check:
+  htmlproofer:
     needs: [build]
-    name: URL Check
+    name: htmlproofer
+    runs-on: ubuntu-latest
+    container:
+      image: ministryofjustice/tech-docs-github-pages-publisher:data-platform
+    defaults:
+      run:
+        working-directory: docs
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+
+      - name: Compile Markdown to HTML
+        id: compile
+        run: /scripts/check-url-links.sh
+
+  linkinator:
+    needs: [build]
+    name: linkinator
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
@@ -61,11 +85,11 @@ jobs:
           tar -xvf artifact.tar
           npm install JustinBeckwith/linkinator#e3d929bbda79d28fb46d20c04a2a6f9a9bce6f5c # v4.1.2
           npx linkinator . --recurse --markdown \
-            --skip https://ministryofjustice.github.io/data-platform/images/govuk-large.png \
+            --skip "https://technical-documentation.data-platform.service.justice.gov.uk/images/govuk-large.png"
 
   deploy:
     if: github.ref == 'refs/heads/main'
-    needs: [build]
+    needs: [build, htmlproofer, linkinator]
     name: Deploy
     runs-on: ubuntu-latest
     environment:
