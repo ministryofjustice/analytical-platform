@@ -5,6 +5,7 @@ IMAGE := docker.io/ministryofjustice/tech-docs-github-pages-publisher:data-platf
 
 preview:
 	docker run -it --rm \
+		--name tech-docs-preview \
 		--publish 4567:4567 \
 		--volume $$( pwd )/config:/app/config \
 		--volume $$( pwd )/source:/app/source \
@@ -12,6 +13,7 @@ preview:
 
 deploy:
 	docker run -it --rm \
+		--name tech-docs-deploy \
 		--publish 4567:4567 \
 		--volume $$( pwd )/config:/app/config \
 		--volume $$( pwd )/source:/app/source \
@@ -19,6 +21,7 @@ deploy:
 
 check:
 	docker run -it --rm \
+		--name tech-docs-check \
 		--publish 4567:4567 \
 		--volume $$( pwd )/config:/app/config \
 		--volume $$( pwd )/source:/app/source \
