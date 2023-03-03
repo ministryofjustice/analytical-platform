@@ -27,7 +27,7 @@ variable "topics" {
 
 variable "type" {
   type        = string
-  description = "Type of repository: `core`, `module`, `template`, `migration`. Defaults to `core`"
+  description = "Type of repository: `core`, `module`, `template`, `app`. Defaults to `core`"
   default     = "core"
 }
 

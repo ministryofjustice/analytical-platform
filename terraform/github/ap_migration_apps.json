@@ -1,0 +1,371 @@
+[
+    {
+        "name": "adjudicatons-webapp"
+    },
+    {
+        "name": "anvil-access-tool"
+    },
+    {
+        "name": "app-exploration"
+    },
+    {
+        "name": "aqa-website"
+    },
+    {
+        "name": "automation-app"
+    },
+    {
+        "name": "bentham-app"
+    },
+    {
+        "name": "ccma-gold-scorecards-app"
+    },
+    {
+        "name": "ccmbpt-app-directory"
+    },
+    {
+        "name": "ccmbpt-analytics-app"
+    },
+    {
+        "name": "ccmbpt-guidance"
+    },
+    {
+        "name": "ccpt"
+    },
+    {
+        "name": "cfo-activity-hubs-lot-allocation"
+    },
+    {
+        "name": "cjsm-email-traffic-app"
+    },
+    {
+        "name": "cjsm-monitoring"
+    },
+    {
+        "name": "cjsm-networkanalysis"
+    },
+    {
+        "name": "commuter-event-timeline"
+    },
+    {
+        "name": "commuter-webapp-contracts"
+    },
+    {
+        "name": "commuter-webapp-familyman"
+    },
+    {
+        "name": "commuter-webapp-sandbox"
+    },
+    {
+        "name": "commuter-webapp-xhibit"
+    },
+    {
+        "name": "companieshouseapitool"
+    },
+    {
+        "name": "coroner-stat-tool-ext"
+    },
+    {
+        "name": "cost-to-serve"
+    },
+    {
+        "name": "criminal-scenario-tool"
+    },
+    {
+        "name": "criminal-scenario-tool-testing"
+    },
+    {
+        "name": "crown-flow-explorer"
+    },
+    {
+        "name": "crown-sitting-days"
+    },
+    {
+        "name": "ctsc-call-data-explorer"
+    },
+    {
+        "name": "ctsc-shiny-fte-forecast"
+    },
+    {
+        "name": "dash-website"
+    },
+    {
+        "name": "data-discovery"
+    },
+    {
+        "name": "data-discovery-tool-dev"
+    },
+    {
+        "name": "defcalc"
+    },
+    {
+        "name": "defcalc-xgov"
+    },
+    {
+        "name": "df-bid-shiny"
+    },
+    {
+        "name": "df-bid-shiny-acc"
+    },
+    {
+        "name": "df-bid-shiny-pwb"
+    },
+    {
+        "name": "df-bid-shiny-ws"
+    },
+    {
+        "name": "dmiu-image-matching"
+    },
+    {
+        "name": "drug-conveyancing-app"
+    },
+    {
+        "name": "environ-surveillance-hub"
+    },
+    {
+        "name": "eu-transition-model-food"
+    },
+    {
+        "name": "eu-transition-model-pecs"
+    },
+    {
+        "name": "eu-transition-model-retail"
+    },
+    {
+        "name": "evidence-evaluation-team"
+    },
+    {
+        "name": "evidence-repository-app"
+    },
+    {
+        "name": "exit-survey-app"
+    },
+    {
+        "name": "gifts-app"
+    },
+    {
+        "name": "gifts-auth-app"
+    },
+    {
+        "name": "gifts-reporting-app"
+    },
+    {
+        "name": "gold-scorecard-form"
+    },
+    {
+        "name": "gold-scorecard-form-dev"
+    },
+    {
+        "name": "gpc-anomalies"
+    },
+    {
+        "name": "hlt-portal"
+    },
+    {
+        "name": "hmcts-ccpt"
+    },
+    {
+        "name": "hmpps-exec-stats"
+    },
+    {
+        "name": "hmpps-hr-dashboard"
+    },
+    {
+        "name": "hr-policy-search-tool"
+    },
+    {
+        "name": "hr-policy-document-manager"
+    },
+    {
+        "name": "innovation-partner-lot-allocation"
+    },
+    {
+        "name": "intel-app-homepage"
+    },
+    {
+        "name": "interventions-deploy"
+    },
+    {
+        "name": "invoice-nlp-app"
+    },
+    {
+        "name": "jdl-visulizer"
+    },
+    {
+        "name": "judicial-reviews-app"
+    },
+    {
+        "name": "judicial-wm"
+    },
+    {
+        "name": "judicial-wm2"
+    },
+    {
+        "name": "kpi-s3-proxy"
+    },
+    {
+        "name": "laa-recovery-services-dashboard"
+    },
+    {
+        "name": "laa-cm-dashboard"
+    },
+    {
+        "name": "legal-needs-report-deploy"
+    },
+    {
+        "name": "legal-aid-data-tool"
+    },
+    {
+        "name": "legal-aid-tools"
+    },
+    {
+        "name": "ltc-capabilites-app"
+    },
+    {
+        "name": "mags-returners-sankey-s3"
+    },
+    {
+        "name": "matrix-booking"
+    },
+    {
+        "name": "mlp-app"
+    },
+    {
+        "name": "mmp-web-app"
+    },
+    {
+        "name": "model-redevelopment-website"
+    },
+    {
+        "name": "moj-officehub-locator-webapp"
+    },
+    {
+        "name": "msp-monitoring-dashboard"
+    },
+    {
+        "name": "novel-drug-words-app"
+    },
+    {
+        "name": "occupeye-shiny-app"
+    },
+    {
+        "name": "offender-risks-needs-tool"
+    },
+    {
+        "name": "opg-lpa-dashboard"
+    },
+    {
+        "name": "opg-mi-dashdemo"
+    },
+    {
+        "name": "pay-gap-app"
+    },
+    {
+        "name": "people-survey-dashboard"
+    },
+    {
+        "name": "people-data-self-serve"
+    },
+    {
+        "name": "people-survey-engagement-prediction-app"
+    },
+    {
+        "name": "people-survey-prediction-tool"
+    },
+    {
+        "name": "pfg-dash-moj"
+    },
+    {
+        "name": "pi-form"
+    },
+    {
+        "name": "pq-tool"
+    },
+    {
+        "name": "pqip"
+    },
+    {
+        "name": "prison-estate-digital-map"
+    },
+    {
+        "name": "prison-network-app"
+    },
+    {
+        "name": "prison-visitor-app"
+    },
+    {
+        "name": "probation-recruitment-app"
+    },
+    {
+        "name": "probation-mi-dashboard"
+    },
+    {
+        "name": "probation-staffing-model-dash-app"
+    },
+    {
+        "name": "ps-demographic-tables"
+    },
+    {
+        "name": "psst-upload"
+    },
+    {
+        "name": "regime-dashboard"
+    },
+    {
+        "name": "remuneration-tool-app"
+    },
+    {
+        "name": "reoffending-evidence-repository-app"
+    },
+    {
+        "name": "rr-strategy"
+    },
+    {
+        "name": "rshiny-template"
+    },
+    {
+        "name": "s3-proxy"
+    },
+    {
+        "name": "safety-diagnostic-tool"
+    },
+    {
+        "name": "sat"
+    },
+    {
+        "name": "segmentation-tool-draft"
+    },
+    {
+        "name": "segmentation-tool"
+    },
+    {
+        "name": "sentencing-remarks-nlp"
+    },
+    {
+        "name": "statistics-explorer"
+    },
+    {
+        "name": "stats-web-analytics"
+    },
+    {
+        "name": "temperature-check"
+    },
+    {
+        "name": "traveltimes-dashboard"
+    },
+    {
+        "name": "victims-bill-consultation"
+    },
+    {
+        "name": "wellbeing-comments-dashboard"
+    },
+    {
+        "name": "wellbeing-pulse"
+    },
+    {
+        "name": "workforce-planning-app"
+    },
+    {
+        "name": "yjb-nir020"
+    }
+]
