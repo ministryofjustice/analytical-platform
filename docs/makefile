@@ -25,4 +25,4 @@ check:
 		--publish 4567:4567 \
 		--volume $$( pwd )/config:/app/config \
 		--volume $$( pwd )/source:/app/source \
-		$(IMAGE) /scripts/check.sh
+		$(IMAGE) /scripts/check-url-links.sh
