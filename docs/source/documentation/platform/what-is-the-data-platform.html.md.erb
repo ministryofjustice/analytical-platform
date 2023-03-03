@@ -36,3 +36,21 @@ The purpose of the Data Platform is to enable consumers of data to connect direc
 - From an **analytical** point of view, this data may be available for processing and analysis on the Analytical Platform.
 
     This means enabling data processing, without doing the data processing itself. In other words, teams should be able to <span style="color: rgb(54,179,126);">use the data platform on a self service way</span> and use it to process data available in the platform, in order to make it available for other services and for data visualisation.
+
+From a high level point of view, this is what the Data Platform would look like:
+
+![Data platform general diagram](images/what-is-the-data-platform.png "Data platform general diagram")
+
+### Conclusions
+
+Given the goal to offer means for data sharing between services, it must be possible for data to be registered in the data platform and also discovered. In other words, a person responsible for an independent system must be able to search for available data on the platform, and must be able to easily add their data to the platform, making it available for others to find and use.
+
+<span style="color: #4C9AFF">Data has to be intentionally shared.</span> The platform is not a backup for databases, nor a target for a database dump, where everything available from a system is made available. Instead, data must be curated before being made available to the platform. Because it needs to be shared intentionally, the person that makes the data available in the platform would usually have <span style="color: #4C9AFF">domain knowledge about that data</span>.
+
+## Analytical Platform
+
+The Analytical Platform is part of the Data Platform.
+
+The Data Platform contains a data mesh. The Analytical Platform isn’t part of the data mesh.
+
+![Data platform overview](images/data-platform-overview.png "Data platform overview")
