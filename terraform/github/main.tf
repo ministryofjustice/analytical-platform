@@ -41,16 +41,16 @@ module "data-platform-apps" {
   for_each               = { for repo in local.migration_repos : repo.name => repo }
   source                 = "./modules/repository"
   name                   = each.key
-  type                   = "migration"
+  type                   = "app"
   description            = each.value.description
   homepage_url           = "https://github.com/ministryofjustice/data-platform/blob/main/architecture/decision/README.md"
-  require_signed_commits = true
   environments           = ["prod", "dev"]
   topics = [
+    "data-platform-apps",
     "data-platform-apps-and-tools",
     "aws",
     "helm",
-    "documentation"
+    "cloud-platform"
   ]
 
   secrets = {

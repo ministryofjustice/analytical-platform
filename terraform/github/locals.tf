@@ -20,6 +20,9 @@ locals {
       name        = "data-platform-products",
       description = "Core Repository for Data Platform Data Products"
   }]
+
+  ap_migration_apps = jsondecode(file("./ap_migration_apps.json"))
+
   # All Tech Archs
   tech_archs = concat(local.tech_archs_members, local.tech_archs_maintainers)
   # All data engineers
