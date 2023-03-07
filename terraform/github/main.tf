@@ -78,7 +78,7 @@ module "core-team" {
   description = "Analytical Platform team"
   repositories = concat(
     [for repo in module.core : repo.repository.name],
-  [for repo in module.data-platform : repo.repository.name]
+  [for repo in module.data-platform : repo.repository.name],
   [for repo in module.data-platform-apps : repo.repository.name])
 
   maintainers = local.maintainers
