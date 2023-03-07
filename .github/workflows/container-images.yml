@@ -103,4 +103,4 @@ jobs:
             ghcr.io/ministryofjustice/data-platform-${{ steps.prepare.outputs.name }}:${{ steps.prepare.outputs.version }}
           docker tag \
             ${{ steps.prepare.outputs.name }}:${{ steps.prepare.outputs.version }}-amd64 \
-            ghcr.io/ministryofjustice/data-platform-${{ steps.prepare.outputs.name }}::latest
+            ghcr.io/ministryofjustice/data-platform-${{ steps.prepare.outputs.name }}:latest
