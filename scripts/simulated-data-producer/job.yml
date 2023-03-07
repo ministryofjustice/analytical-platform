@@ -18,7 +18,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: cloud-platform-simulated-data-producer-rds
-                  key: rds_instance_endpoint
+                  key: rds_instance_address
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
