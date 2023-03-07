@@ -66,10 +66,6 @@ module "data-platform-apps" {
     "cloud-platform"
   ]
 
-  secrets = {
-    # Management Account ID
-    MANAGEMENT_ACCOUNT_ID = data.aws_caller_identity.current.account_id
-  }
 }
 
 # Everyone, with access to the above repositories
