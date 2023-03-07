@@ -35,6 +35,7 @@ jobs:
     name: Build image
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       packages: write
     strategy:
       matrix:
@@ -43,6 +44,10 @@ jobs:
       - name: Checkout
         id: checkout
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+
+      - name: Install cosign
+        id: install_cosign
+        uses: sigstore/cosign-installer@c3667d99424e7e6047999fb6246c0da843953c65 # v3.0.1
 
       - name: Prepare build paramerters
         id: prepare
@@ -86,7 +91,7 @@ jobs:
           sbom-artifact-match: sbom-x86_64.spdx.json
 
       - name: Login to GitHub Container Registry
-        # if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         id: docker_login
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # v2.1.0
         with:
@@ -95,7 +100,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Tag image
-        # if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         id: tag_image
         run: |
           docker tag \
@@ -104,3 +109,17 @@ jobs:
           docker tag \
             ${{ steps.prepare.outputs.name }}:${{ steps.prepare.outputs.version }}-amd64 \
             ghcr.io/ministryofjustice/data-platform-${{ steps.prepare.outputs.name }}:latest
+
+      - name: Push image
+        if: github.ref == 'refs/heads/main'
+        id: push_image
+        run: |
+          docker push ghcr.io/ministryofjustice/data-platform-${{ steps.prepare.outputs.name }}:${{ steps.prepare.outputs.version }}
+          docker push ghcr.io/ministryofjustice/data-platform-${{ steps.prepare.outputs.name }}:latest
+
+      - name: Sign image
+        if: github.ref == 'refs/heads/main'
+        id: sign_image
+        run: |
+          cosign sign --yes ghcr.io/ministryofjustice/data-platform-${{ steps.prepare.outputs.name }}:${{ steps.prepare.outputs.version }}
+          cosign sign --yes ghcr.io/ministryofjustice/data-platform-${{ steps.prepare.outputs.name }}:latest
