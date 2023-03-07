@@ -6,6 +6,7 @@ locals {
 
 # Repository basics
 resource "github_repository" "default" {
+  #ts:skip=AC_GITHUB_0002 Disabling privateRepoEnabled check as we have a valid use case for public repos
   name                   = var.name
   description            = join(" • ", [var.description, "This repository is defined and managed in Terraform"])
   homepage_url           = var.homepage_url
