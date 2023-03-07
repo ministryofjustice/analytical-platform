@@ -29,6 +29,11 @@ spec:
                 secretKeyRef:
                   name: cloud-platform-simulated-data-producer-rds
                   key: database_password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-platform-simulated-data-producer-rds
+                  key: database_name
           resources:
             limits:
               cpu: 500m
