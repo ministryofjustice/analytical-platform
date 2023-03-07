@@ -3,4 +3,4 @@ include: container-images/base/apko.yml
 
 contents:
   packages:
-    - python3.10
+    - python3
