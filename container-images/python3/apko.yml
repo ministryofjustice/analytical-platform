@@ -2,6 +2,8 @@
 include: container-images/base/apko.yml
 
 contents:
+  repositories:
+    - https://dl-cdn.alpinelinux.org/alpine/v3.17/community
   packages:
     - python3
     - py3-pip
