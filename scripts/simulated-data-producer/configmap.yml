@@ -50,4 +50,4 @@ data:
 
     engine = create_engine(f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_ENDPOINT}:5432/{DB_NAME}')
     df = pd.read_csv(os.path.join("data", adjudications_file))
-    df.to_sql('adjudications', engine)
+    df.to_sql('adjudications', engine, if_exists='replace')
