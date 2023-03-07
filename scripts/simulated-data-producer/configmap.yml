@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: simulated-data-producer
+data:
+  entrypoint.sh: |
+    #!/bin/sh
+
+    pip install --requirement requirements.txt
+
+    python main.py
+
+  requirements.txt: |
+    something==1.0.0
+
+  main.py: |
+    import something

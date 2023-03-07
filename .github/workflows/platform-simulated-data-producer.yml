@@ -1,0 +1,50 @@
+---
+name: Platform - Simulated Data Producer
+
+on: # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/platform-simulated-data-producer.yml
+      - scripts/simulated-data-producer/**
+  workflow_dispatch:
+
+permissions: read-all
+
+concurrency: platform-simulated-data-producer
+
+jobs:
+  simulated-data-producer:
+    name: Simulated Data Producer
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: scripts/simulated-data-producer
+    env:
+      KUBE_CLUSTER: ${{ secrets.CLOUD_PLATFORM_DATA_PLATFORM_DEVELOPMENT_KUBE_CLUSTER }}
+      KUBE_NAMESPACE: ${{ secrets.CLOUD_PLATFORM_DATA_PLATFORM_DEVELOPMENT_KUBE_NAMESPACE }}
+      KUBE_CERT: ${{ secrets.CLOUD_PLATFORM_DATA_PLATFORM_DEVELOPMENT_KUBE_CERT }}
+      KUBE_TOKEN: ${{ secrets.CLOUD_PLATFORM_DATA_PLATFORM_DEVELOPMENT_KUBE_TOKEN }}
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+
+      - name: Configure Kubernetes CLI
+        id: configure_kubectl
+        run: |
+          kubectl config set-cluster cloud-platform --server=${KUBE_CLUSTER} --certificate-authority=<(echo "${KUBE_CERT}")
+          kubectl config set-context cloud-platform --cluster=cloud-platform --namespace=${KUBE_NAMESPACE}
+          kubectl config set-credentials cloud-platform --token="${KUBE_TOKEN}"
+
+      - name: Create Kubernetes configmap
+        id: create_manifests
+        run: |
+          kubectl --context cloud-platform apply --filename configmap.yaml
+
+      - name: Run migration
+        id: run_migration
+        run: |
+          kubectl --context cloud-platform apply --filename job.yml
+          kubectl --context cloud-platform wait --for=condition=complete --timeout=300s job/simulated-data-producer

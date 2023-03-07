@@ -1,0 +1,43 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: simulated-data-producer
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: simulated-data-producer
+          image: docker.io/python@sha256:9c9d259470051ac81edf924655af7aedc812ada4c31da3144c30996db10a16db # docker.io/python:3.11-alpine3.17
+          command:
+            - /bin/sh
+            - entrypoint.sh
+          env:
+            - name: DB_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-platform-simulated-data-producer-rds
+                  key: rds_instance_endpoint
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-platform-simulated-data-producer-rds
+                  key: database_username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-platform-simulated-data-producer-rds
+                  key: database_password
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+          volumeMounts:
+            - name: config
+              mountPath: /app
+          workingDir: /app
+      volumes:
+        - name: config
+          configMap:
+            name: simulated-data-producer
