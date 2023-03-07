@@ -37,8 +37,20 @@ module "data-platform" {
   }
 }
 
+module "data-platform-app-template" {
+    source = "./modules/repository"
+    name = "data-platform-app-template"
+    description = "Template repository for data-platform apps"
+    type = "template"
+    topics = [
+    "data-platform-apps",
+    "data-platform-apps-and-tools",
+    "template",
+  ]
+}
+
 module "data-platform-apps" {
-  for_each               = { for repo in local.migration_repos : repo.name => repo }
+  for_each               = { for repo in local.ap_migration_apps : repo.name => repo }
   source                 = "./modules/repository"
   name                   = each.key
   type                   = "app"
