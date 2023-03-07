@@ -17,7 +17,7 @@ jobs:
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
-      features: ${{ steps.detect_changes.outputs.changes }}
+      images: ${{ steps.detect_changes.outputs.changes }}
     steps:
       - name: Checkout
         id: checkout
@@ -30,16 +30,14 @@ jobs:
           filters: .github/workflows/path-filter/container-images.yml
 
   build:
-    if: ${{ needs.detect-changes.outputs.features != '[]' }}
+    if: ${{ needs.detect-changes.outputs.images != '[]' }}
     needs: [detect-changes]
     name: Build image
     runs-on: ubuntu-latest
     permissions:
       packages: write
     strategy:
-      matrix:
-        image:
-          - base
+      matrix: ${{ fromJson(needs.detect-changes.outputs.images) }}
     steps:
       - name: Checkout
         id: checkout
