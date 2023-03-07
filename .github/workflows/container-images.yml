@@ -55,7 +55,7 @@ jobs:
         id: build
         uses: docker://cgr.dev/chainguard/apko@sha256:a2438e282d6a5ca7de8b6e5343b452f003ac148def536bbd4bacc357ee41c58a # 0.7.1
         with:
-          args: build images/${{ matrix.image }}/apko.yml ${{ steps.prepare.outputs.name }}:${{ steps.prepare.outputs.version }} ${{ steps.prepare.outputs.name }}-${{ steps.prepare.outputs.version }}.tar
+          args: build container-images/${{ matrix.image }}/apko.yml ${{ steps.prepare.outputs.name }}:${{ steps.prepare.outputs.version }} ${{ steps.prepare.outputs.name }}-${{ steps.prepare.outputs.version }}.tar
 
       # - name: Load image
       #   id: load_image
