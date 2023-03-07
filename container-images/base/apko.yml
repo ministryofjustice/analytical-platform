@@ -1,0 +1,31 @@
+---
+archs:
+  - amd64
+
+contents:
+  repositories:
+    - https://dl-cdn.alpinelinux.org/alpine/v3.17/main
+  packages:
+    - alpine-base
+    - alpine-baselayout
+    - ca-certificates-bundle
+
+accounts:
+  groups:
+    - groupname: nonroot
+      gid: 10000
+  users:
+    - username: nonroot
+      uid: 10000
+  run-as: nonroot
+
+paths:
+  - path: /app
+    type: directory
+    uid: 10000
+    gid: 10000
+    permissions: 0o755
+
+work-dir: /app
+
+cmd: /bin/sh -l
