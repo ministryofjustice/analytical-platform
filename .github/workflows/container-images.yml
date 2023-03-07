@@ -48,8 +48,8 @@ jobs:
       - name: Prepare build paramerters
         id: prepare
         run: |
-          echo "name=$(jq -r '.name' images/${{ matrix.image }}/config.json)" >> ${GITHUB_OUTPUT}
-          echo "version=$(jq -r '.version' images/${{ matrix.image }}/config.json)" >> ${GITHUB_OUTPUT}
+          echo "name=$(jq -r '.name' container-images/${{ matrix.image }}/config.json)" >> ${GITHUB_OUTPUT}
+          echo "version=$(jq -r '.version' container-images/${{ matrix.image }}/config.json)" >> ${GITHUB_OUTPUT}
 
       - name: Build image with apko
         id: build
