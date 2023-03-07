@@ -41,7 +41,7 @@ jobs:
       - name: Create Kubernetes configmap
         id: create_manifests
         run: |
-          kubectl --context cloud-platform apply --filename configmap.yaml
+          kubectl --context cloud-platform apply --filename configmap.yml
 
       - name: Run migration
         id: run_migration
