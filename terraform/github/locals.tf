@@ -35,5 +35,6 @@ locals {
   all_members = concat(local.general_members, local.engineers)
 
   # Everyone
-  everyone = concat(local.all_maintainers, local.all_members)
+  # commented out to satisfy tflint
+  # everyone = concat(local.all_maintainers, local.all_members)
 }

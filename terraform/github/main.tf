@@ -41,6 +41,7 @@ module "data-platform-app-template" {
   source      = "./modules/repository"
   name        = "data-platform-app-template"
   description = "Template repository for data-platform apps"
+  visibility  = "internal"
   type        = "template"
   topics = [
     "data-platform-apps",
