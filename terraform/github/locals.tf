@@ -20,6 +20,9 @@ locals {
       name        = "data-platform-products",
       description = "Core Repository for Data Platform Data Products"
   }]
+
+  ap_migration_apps = slice(jsondecode(file("./ap_migration_apps.json")), 0, 10)
+
   # All Tech Archs
   tech_archs = concat(local.tech_archs_members, local.tech_archs_maintainers)
   # All data engineers
@@ -32,5 +35,6 @@ locals {
   all_members = concat(local.general_members, local.engineers)
 
   # Everyone
-  everyone = concat(local.all_maintainers, local.all_members)
+  # commented out to satisfy tflint
+  # everyone = concat(local.all_maintainers, local.all_members)
 }

@@ -19,10 +19,14 @@ locals {
   general_members = [ # members of analytics-hq gh team
     "jacobwoffenden",
     "calumabarnett",
-    "Bhkol",         # Bharti Kolhe - BA Cognizant
-    "SimonsMOJ",     # Simon Heron
-    "mshodge",       # Michael Hodges
-    "YvanMOJdigital" # Yvan Smith
+    "Bhkol",          # Bharti Kolhe - BA Cognizant
+    "SimonsMOJ",      # Simon Heron
+    "mshodge",        # Michael Hodges
+    "YvanMOJdigital", # Yvan Smith
+    "amycufflin",
+    "ChikC", # Chike Chinukwue
+    "EO510"  # Eki Osehenye
+
   ]
 
   # GitHub usernames for engineers who need full AWS access
@@ -65,7 +69,8 @@ locals {
     "mdowniecog",
     "pjxcog",
     "sivabathina2",
-    "hemeshpatel-moj"
+    "hemeshpatel-moj",
+    "ChikC" # Chike Chinukwue
   ]
 
   # DATA-ENGINEERING-AWS GITHUB GROUP WITH FULL AWS ACCESS
@@ -85,7 +90,6 @@ locals {
     "williamorrie", # William Orr
     "gustavmoller",
     "jhpyke", # Jake H Pyke
-    "makl3",
     "oliver-critchfield",
     "AlexVilela",
     "davidbridgwood",

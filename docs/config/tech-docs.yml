@@ -1,7 +1,10 @@
+---
+# yamllint disable rule:line-length
 # See the available options: https://tdt-documentation.london.cloudapps.digital/configure_project/global_configuration/#configure-your-documentation-site
+# yamllint enable rule:line-length
 
 # Host to use for canonical URL generation (without trailing slash)
-host: https://ministryofjustice.github.io/data-platform
+host: https://technical-documentation.data-platform.service.justice.gov.uk
 
 # Header-related options
 show_govuk_logo: false
@@ -20,7 +23,7 @@ enable_search: true
 ga_tracking_id:
 
 # Enable collapsible navigation in the sidebar
-collapsible_nav: false
+collapsible_nav: true
 
 # Table of contents depth – how many levels to include in the table of contents.
 # If your ToC is too long, reduce this number and we'll only show higher-level
