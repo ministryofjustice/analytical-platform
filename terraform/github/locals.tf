@@ -28,6 +28,7 @@ locals {
 
   all_members_data_platform_core_infrastructure = concat(local.data_platform_core_infrastructure_maintainers, local.data_platform_core_infrastructure_members)
 
+  all_members_data_platform_labs = concat(local.data_platform_labs_maintainers, local.data_platform_labs_members)
   # All members
   all_members = concat(local.general_members, local.engineers)
 
