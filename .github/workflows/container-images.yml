@@ -36,7 +36,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      packages: write
     strategy:
       matrix:
         images: ${{ fromJson(needs.detect-changes.outputs.images) }}
@@ -104,14 +103,13 @@ jobs:
         with:
           sbom-artifact-match: sbom-x86_64.spdx.json
 
-      - name: Login to GitHub Container Registry
+      - name: Login to Docker Hub
         if: github.ref == 'refs/heads/main'
         id: docker_login
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # v2.1.0
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Tag image
         if: github.ref == 'refs/heads/main'
@@ -119,21 +117,21 @@ jobs:
         run: |
           docker tag \
             ${{ env.name }}:${{ env.version }}-amd64 \
-            ghcr.io/ministryofjustice/data-platform-${{ env.name }}:${{ env.version }}
+            ministryofjustice/data-platform-${{ env.name }}:${{ env.version }}
           docker tag \
             ${{ env.name }}:${{ env.version }}-amd64 \
-            ghcr.io/ministryofjustice/data-platform-${{ env.name }}:latest
+            ministryofjustice/data-platform-${{ env.name }}:latest
 
       - name: Push image
         if: github.ref == 'refs/heads/main'
         id: push_image
         run: |
-          docker push ghcr.io/ministryofjustice/data-platform-${{ env.name }}:${{ env.version }}
-          docker push ghcr.io/ministryofjustice/data-platform-${{ env.name }}:latest
+          docker push ministryofjustice/data-platform-${{ env.name }}:${{ env.version }}
+          docker push ministryofjustice/data-platform-${{ env.name }}:latest
 
       - name: Sign image
         if: github.ref == 'refs/heads/main'
         id: sign_image
         run: |
-          cosign sign --yes ghcr.io/ministryofjustice/data-platform-${{ env.name }}:${{ env.version }}
-          cosign sign --yes ghcr.io/ministryofjustice/data-platform-${{ env.name }}:latest
+          cosign sign --yes ministryofjustice/data-platform-${{ env.name }}:${{ env.version }}
+          cosign sign --yes ministryofjustice/data-platform-${{ env.name }}:latest
