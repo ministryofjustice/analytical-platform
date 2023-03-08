@@ -34,8 +34,6 @@ jobs:
     needs: [detect-changes]
     name: Build image
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
     strategy:
       matrix:
         images: ${{ fromJson(needs.detect-changes.outputs.images) }}
