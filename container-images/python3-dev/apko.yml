@@ -1,0 +1,7 @@
+---
+include: container-images/python3/apko.yml
+
+contents:
+  packages:
+    - build-base
+    - python3-dev
