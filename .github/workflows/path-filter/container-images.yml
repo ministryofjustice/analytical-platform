@@ -1,3 +1,4 @@
 ---
 base: ./container-images/base/**
 python3: ./container-images/python3/**
+python3-dev: ./container-images/python3-dev/**
