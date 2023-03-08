@@ -25,7 +25,9 @@ locals {
     "YvanMOJdigital", # Yvan Smith
     "amycufflin",
     "ChikC", # Chike Chinukwue
-    "EO510"  # Eki Osehenye
+    "EO510",  # Eki Osehenye
+    "sreekanthmoj", # Sreekanth Kote - Cognizant
+    "karthikmoj"   # Karthik Pelluru - Cognizant
 
   ]
 
@@ -38,8 +40,6 @@ locals {
     "BrianEllwood",
     "tom-webber",
     "bogdan-mania-moj",
-    "sreekanthmoj", # Sreekanth Kote - Cognizant
-    "karthikmoj",   # Karthik Pelluru - Cognizant
     "Emterry",      # Emma Terry
     "ahbensiali"    # Abdel Bensiali
   ]
