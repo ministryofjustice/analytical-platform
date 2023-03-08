@@ -152,3 +152,15 @@ module "data_platform_core_infrastructure_team" {
   members     = local.all_members_data_platform_core_infrastructure
   ci          = local.ci_users
 }
+
+# Data Platform Labs Team
+module "data_platform_labs_team" {
+  source       = "./modules/team"
+  name         = "data-platform-labs"
+  description  = "Data Platform Labs team"
+  repositories = [for repo in module.data-platform : repo.repository.name]
+
+  maintainers = local.data_platform_labs_maintainers
+  members     = local.all_members_data_platform_labs
+  ci          = local.ci_users
+}

@@ -12,7 +12,8 @@ locals {
   ]
 
   # All GitHub team maintainers
-  all_maintainers = concat(local.maintainers, local.ci_users)
+  # TFLINT has this variable as unused
+  # all_maintainers = concat(local.maintainers, local.ci_users)
 
   # GitHub usernames for team members who don't need or are not cleared for full AWS access
 
@@ -80,7 +81,7 @@ locals {
     "mratford",      # Mike Ratford
     "Danjiv",        # Danjiv Ramkhalawon
     "K1Br",          # Kimberley Brett
-    "vonbraunbates", # Francessca von Braun-Bates
+    "vonbraunbates", # Francesca von Braun-Bates
     "AnthonyCody",
     "tamsinforbes", # Tamsin Forbes
     "gwionap",
@@ -108,5 +109,15 @@ locals {
     "sreekanthmoj", # Sreekanth Kote - Cognizant
     "karthikmoj",   # Karthik Pelluru - Cognizant
     "Emterry",      # Emma Terry
+  ]
+
+  data_platform_labs_maintainers = [
+    "PriyaBasker23",
+  ]
+
+  data_platform_labs_members = [
+    "hemeshpatel-moj",
+    "georgeschena",
+    "murdo-moj"
   ]
 }
