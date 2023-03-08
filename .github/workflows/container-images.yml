@@ -9,6 +9,13 @@ on:
       - .github/workflows/container-images.yml
       - .github/workflows/path-filter/container-images.yml
       - container-images/**
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/container-images.yml
+      - .github/workflows/path-filter/container-images.yml
+      - container-images/**
 
 permissions: read-all
 
