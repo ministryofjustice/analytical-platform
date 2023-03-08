@@ -24,10 +24,10 @@ locals {
     "mshodge",        # Michael Hodges
     "YvanMOJdigital", # Yvan Smith
     "amycufflin",
-    "ChikC", # Chike Chinukwue
-    "EO510",  # Eki Osehenye
+    "ChikC",        # Chike Chinukwue
+    "EO510",        # Eki Osehenye
     "sreekanthmoj", # Sreekanth Kote - Cognizant
-    "karthikmoj"   # Karthik Pelluru - Cognizant
+    "karthikmoj"    # Karthik Pelluru - Cognizant
 
   ]
 
@@ -40,8 +40,8 @@ locals {
     "BrianEllwood",
     "tom-webber",
     "bogdan-mania-moj",
-    "Emterry",      # Emma Terry
-    "ahbensiali"    # Abdel Bensiali
+    "Emterry",   # Emma Terry
+    "ahbensiali" # Abdel Bensiali
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
