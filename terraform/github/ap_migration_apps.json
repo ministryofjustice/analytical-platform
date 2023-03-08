@@ -1,0 +1,494 @@
+[
+  {
+    "name": "adjudicatons-webapp",
+    "description": ""
+  },
+  {
+    "name": "anvil-access-tool",
+    "description": ""
+  },
+  {
+    "name": "app-exploration",
+    "description": ""
+  },
+  {
+    "name": "aqa-website",
+    "description": ""
+  },
+  {
+    "name": "automation-app",
+    "description": ""
+  },
+  {
+    "name": "bentham-app",
+    "description": ""
+  },
+  {
+    "name": "ccma-gold-scorecards-app",
+    "description": ""
+  },
+  {
+    "name": "ccmbpt-app-directory",
+    "description": ""
+  },
+  {
+    "name": "ccmbpt-analytics-app",
+    "description": ""
+  },
+  {
+    "name": "ccmbpt-guidance",
+    "description": ""
+  },
+  {
+    "name": "ccpt",
+    "description": ""
+  },
+  {
+    "name": "cfo-activity-hubs-lot-allocation",
+    "description": ""
+  },
+  {
+    "name": "cjsm-email-traffic-app",
+    "description": ""
+  },
+  {
+    "name": "cjsm-monitoring",
+    "description": ""
+  },
+  {
+    "name": "cjsm-networkanalysis",
+    "description": ""
+  },
+  {
+    "name": "commuter-event-timeline",
+    "description": ""
+  },
+  {
+    "name": "commuter-webapp-contracts",
+    "description": ""
+  },
+  {
+    "name": "commuter-webapp-familyman",
+    "description": ""
+  },
+  {
+    "name": "commuter-webapp-sandbox",
+    "description": ""
+  },
+  {
+    "name": "commuter-webapp-xhibit",
+    "description": ""
+  },
+  {
+    "name": "companieshouseapitool",
+    "description": ""
+  },
+  {
+    "name": "coroner-stat-tool-ext",
+    "description": ""
+  },
+  {
+    "name": "cost-to-serve",
+    "description": ""
+  },
+  {
+    "name": "criminal-scenario-tool",
+    "description": ""
+  },
+  {
+    "name": "criminal-scenario-tool-testing",
+    "description": ""
+  },
+  {
+    "name": "crown-flow-explorer",
+    "description": ""
+  },
+  {
+    "name": "crown-sitting-days",
+    "description": ""
+  },
+  {
+    "name": "ctsc-call-data-explorer",
+    "description": ""
+  },
+  {
+    "name": "ctsc-shiny-fte-forecast",
+    "description": ""
+  },
+  {
+    "name": "dash-website",
+    "description": ""
+  },
+  {
+    "name": "data-discovery",
+    "description": ""
+  },
+  {
+    "name": "data-discovery-tool-dev",
+    "description": ""
+  },
+  {
+    "name": "defcalc",
+    "description": ""
+  },
+  {
+    "name": "defcalc-xgov",
+    "description": ""
+  },
+  {
+    "name": "df-bid-shiny",
+    "description": ""
+  },
+  {
+    "name": "df-bid-shiny-acc",
+    "description": ""
+  },
+  {
+    "name": "df-bid-shiny-pwb",
+    "description": ""
+  },
+  {
+    "name": "df-bid-shiny-ws",
+    "description": ""
+  },
+  {
+    "name": "dmiu-image-matching",
+    "description": ""
+  },
+  {
+    "name": "drug-conveyancing-app",
+    "description": ""
+  },
+  {
+    "name": "environ-surveillance-hub",
+    "description": ""
+  },
+  {
+    "name": "eu-transition-model-food",
+    "description": ""
+  },
+  {
+    "name": "eu-transition-model-pecs",
+    "description": ""
+  },
+  {
+    "name": "eu-transition-model-retail",
+    "description": ""
+  },
+  {
+    "name": "evidence-evaluation-team",
+    "description": ""
+  },
+  {
+    "name": "evidence-repository-app",
+    "description": ""
+  },
+  {
+    "name": "exit-survey-app",
+    "description": ""
+  },
+  {
+    "name": "gifts-app",
+    "description": ""
+  },
+  {
+    "name": "gifts-auth-app",
+    "description": ""
+  },
+  {
+    "name": "gifts-reporting-app",
+    "description": ""
+  },
+  {
+    "name": "gold-scorecard-form",
+    "description": ""
+  },
+  {
+    "name": "gold-scorecard-form-dev",
+    "description": ""
+  },
+  {
+    "name": "gpc-anomalies",
+    "description": ""
+  },
+  {
+    "name": "hlt-portal",
+    "description": ""
+  },
+  {
+    "name": "hmcts-ccpt",
+    "description": ""
+  },
+  {
+    "name": "hmpps-exec-stats",
+    "description": ""
+  },
+  {
+    "name": "hmpps-hr-dashboard",
+    "description": ""
+  },
+  {
+    "name": "hr-policy-search-tool",
+    "description": ""
+  },
+  {
+    "name": "hr-policy-document-manager",
+    "description": ""
+  },
+  {
+    "name": "innovation-partner-lot-allocation",
+    "description": ""
+  },
+  {
+    "name": "intel-app-homepage",
+    "description": ""
+  },
+  {
+    "name": "interventions-deploy",
+    "description": ""
+  },
+  {
+    "name": "invoice-nlp-app",
+    "description": ""
+  },
+  {
+    "name": "jdl-visulizer",
+    "description": ""
+  },
+  {
+    "name": "judicial-reviews-app",
+    "description": ""
+  },
+  {
+    "name": "judicial-wm",
+    "description": ""
+  },
+  {
+    "name": "judicial-wm2",
+    "description": ""
+  },
+  {
+    "name": "kpi-s3-proxy",
+    "description": ""
+  },
+  {
+    "name": "laa-recovery-services-dashboard",
+    "description": ""
+  },
+  {
+    "name": "laa-cm-dashboard",
+    "description": ""
+  },
+  {
+    "name": "legal-needs-report-deploy",
+    "description": ""
+  },
+  {
+    "name": "legal-aid-data-tool",
+    "description": ""
+  },
+  {
+    "name": "legal-aid-tools",
+    "description": ""
+  },
+  {
+    "name": "ltc-capabilites-app",
+    "description": ""
+  },
+  {
+    "name": "mags-returners-sankey-s3",
+    "description": ""
+  },
+  {
+    "name": "matrix-booking",
+    "description": ""
+  },
+  {
+    "name": "mlp-app",
+    "description": ""
+  },
+  {
+    "name": "mmp-web-app",
+    "description": ""
+  },
+  {
+    "name": "model-redevelopment-website",
+    "description": ""
+  },
+  {
+    "name": "moj-officehub-locator-webapp",
+    "description": ""
+  },
+  {
+    "name": "msp-monitoring-dashboard",
+    "description": ""
+  },
+  {
+    "name": "novel-drug-words-app",
+    "description": ""
+  },
+  {
+    "name": "occupeye-shiny-app",
+    "description": ""
+  },
+  {
+    "name": "offender-risks-needs-tool",
+    "description": ""
+  },
+  {
+    "name": "opg-lpa-dashboard",
+    "description": ""
+  },
+  {
+    "name": "opg-mi-dashdemo",
+    "description": ""
+  },
+  {
+    "name": "pay-gap-app",
+    "description": ""
+  },
+  {
+    "name": "people-survey-dashboard",
+    "description": ""
+  },
+  {
+    "name": "people-data-self-serve",
+    "description": ""
+  },
+  {
+    "name": "people-survey-engagement-prediction-app",
+    "description": ""
+  },
+  {
+    "name": "people-survey-prediction-tool",
+    "description": ""
+  },
+  {
+    "name": "pfg-dash-moj",
+    "description": ""
+  },
+  {
+    "name": "pi-form",
+    "description": ""
+  },
+  {
+    "name": "pq-tool",
+    "description": ""
+  },
+  {
+    "name": "pqip",
+    "description": ""
+  },
+  {
+    "name": "prison-estate-digital-map",
+    "description": ""
+  },
+  {
+    "name": "prison-network-app",
+    "description": ""
+  },
+  {
+    "name": "prison-visitor-app",
+    "description": ""
+  },
+  {
+    "name": "probation-recruitment-app",
+    "description": ""
+  },
+  {
+    "name": "probation-mi-dashboard",
+    "description": ""
+  },
+  {
+    "name": "probation-staffing-model-dash-app",
+    "description": ""
+  },
+  {
+    "name": "ps-demographic-tables",
+    "description": ""
+  },
+  {
+    "name": "psst-upload",
+    "description": ""
+  },
+  {
+    "name": "regime-dashboard",
+    "description": ""
+  },
+  {
+    "name": "remuneration-tool-app",
+    "description": ""
+  },
+  {
+    "name": "reoffending-evidence-repository-app",
+    "description": ""
+  },
+  {
+    "name": "rr-strategy",
+    "description": ""
+  },
+  {
+    "name": "rshiny-template",
+    "description": ""
+  },
+  {
+    "name": "s3-proxy",
+    "description": ""
+  },
+  {
+    "name": "safety-diagnostic-tool",
+    "description": ""
+  },
+  {
+    "name": "sat",
+    "description": ""
+  },
+  {
+    "name": "segmentation-tool-draft",
+    "description": ""
+  },
+  {
+    "name": "segmentation-tool",
+    "description": ""
+  },
+  {
+    "name": "sentencing-remarks-nlp",
+    "description": ""
+  },
+  {
+    "name": "statistics-explorer",
+    "description": ""
+  },
+  {
+    "name": "stats-web-analytics",
+    "description": ""
+  },
+  {
+    "name": "temperature-check",
+    "description": ""
+  },
+  {
+    "name": "traveltimes-dashboard",
+    "description": ""
+  },
+  {
+    "name": "victims-bill-consultation",
+    "description": ""
+  },
+  {
+    "name": "wellbeing-comments-dashboard",
+    "description": ""
+  },
+  {
+    "name": "wellbeing-pulse",
+    "description": ""
+  },
+  {
+    "name": "workforce-planning-app",
+    "description": ""
+  },
+  {
+    "name": "yjb-nir020",
+    "description": ""
+  }
+]
