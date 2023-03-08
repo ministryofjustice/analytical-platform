@@ -55,3 +55,9 @@ variable "environments" {
   type        = set(string)
   default     = []
 }
+
+variable "template_repo" {
+  description = "Template repository to create repo from"
+  type        = string
+  default     = "template-repository"
+}
