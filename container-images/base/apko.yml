@@ -5,6 +5,7 @@ archs:
 contents:
   repositories:
     - https://dl-cdn.alpinelinux.org/alpine/v3.17/main
+    - https://dl-cdn.alpinelinux.org/alpine/v3.17/community
   packages:
     - alpine-base
     - alpine-baselayout
