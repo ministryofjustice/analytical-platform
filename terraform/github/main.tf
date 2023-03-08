@@ -51,14 +51,14 @@ module "data-platform-app-template" {
 }
 
 module "data-platform-apps" {
-  for_each     = { for repo in local.ap_migration_apps : repo.name => repo }
-  source       = "./modules/repository"
-  name         = each.key
-  type         = "app"
-  description  = each.value.description
-  homepage_url = "https://github.com/ministryofjustice/data-platform/blob/main/architecture/decision/README.md"
+  for_each      = { for repo in local.ap_migration_apps : repo.name => repo }
+  source        = "./modules/repository"
+  name          = each.key
+  type          = "app"
+  description   = each.value.description
+  homepage_url  = "https://github.com/ministryofjustice/data-platform/blob/main/architecture/decision/README.md"
   template_repo = "data-platform-app-template"
-  environments = ["prod", "dev"]
+  environments  = ["prod", "dev"]
   topics = [
     "data-platform-apps",
     "data-platform-apps-and-tools",
