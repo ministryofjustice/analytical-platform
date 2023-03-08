@@ -12,7 +12,8 @@ locals {
   ]
 
   # All GitHub team maintainers
-  all_maintainers = concat(local.maintainers, local.ci_users)
+  # TFLINT has this variable as unused
+  # all_maintainers = concat(local.maintainers, local.ci_users)
 
   # GitHub usernames for team members who don't need or are not cleared for full AWS access
 
