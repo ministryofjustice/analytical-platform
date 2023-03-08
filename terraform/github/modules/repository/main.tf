@@ -28,7 +28,7 @@ resource "github_repository" "default" {
 
   template {
     owner      = "ministryofjustice"
-    repository = "template-repository"
+    repository = var.template_repo
   }
 
   # The `pages.source` block doesn't support dynamic blocks in GitHub provider version 4.3.2,
@@ -81,6 +81,6 @@ resource "github_repository_environment" "default" {
   repository  = github_repository.default.name
   deployment_branch_policy {
     protected_branches     = each.value == "prod" ? true : false
-    custom_branch_policies = false
+    custom_branch_policies = each.value == "prod" ? false : true
   }
 }
