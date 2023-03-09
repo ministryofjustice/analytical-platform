@@ -54,9 +54,11 @@ From <https://user-guide.cloud-platform.service.justice.gov.uk/documentation/oth
    ```bash
    export DB_ENDPOINT="127.0.0.1"
    export DB_PORT="${PORT_FORWARD_LOCAL_PORT}"
-   export DB_USERNAME=$( cloud-platform decode-secret --namespace ${KUBERNETES_NAMESPACE} \
+   export DB_USERNAME=$( cloud-platform decode-secret \
+     --namespace ${KUBERNETES_NAMESPACE} \
      --secret ${KUBERNETES_SECRET} | jq -r '.data.database_username' )
-   export DB_PASSWORD=$( cloud-platform decode-secret --namespace ${KUBERNETES_NAMESPACE} \
+   export DB_PASSWORD=$( cloud-platform decode-secret \
+     --namespace ${KUBERNETES_NAMESPACE} \
      --secret ${KUBERNETES_SECRET} | jq -r '.data.database_password' )
 
    python main.py
