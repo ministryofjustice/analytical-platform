@@ -53,7 +53,7 @@ module "data-platform-app-template" {
 module "data-platform-apps" {
   for_each      = { for repo in local.ap_migration_apps : repo.name => repo }
   source        = "./modules/repository"
-  name          = "data-platfrom-app-${each.key}"
+  name          = each.key
   type          = "app"
   description   = each.value.description
   homepage_url  = "https://github.com/ministryofjustice/data-platform/blob/main/architecture/decision/README.md"
