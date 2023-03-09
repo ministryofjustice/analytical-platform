@@ -28,8 +28,8 @@ locals {
     "ChikC",        # Chike Chinukwue
     "EO510",        # Eki Osehenye
     "sreekanthmoj", # Sreekanth Kote - Cognizant
-    "karthikmoj"    # Karthik Pelluru - Cognizant
-
+    "karthikmoj",   # Karthik Pelluru - Cognizant
+    "Braimah-L"     # Braimah Lat
   ]
 
   # GitHub usernames for engineers who need full AWS access
