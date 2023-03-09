@@ -37,6 +37,38 @@ module "data-platform" {
   }
 }
 
+module "data-platform-app-template" {
+  source      = "./modules/repository"
+  name        = "data-platform-app-template"
+  description = "Template repository for data-platform apps"
+  visibility  = "internal"
+  type        = "template"
+  topics = [
+    "data-platform-apps",
+    "data-platform-apps-and-tools",
+    "template",
+  ]
+}
+
+module "data-platform-apps" {
+  for_each      = { for repo in local.ap_migration_apps : repo.name => repo }
+  source        = "./modules/repository"
+  name          = "data-platfrom-app-${each.key}"
+  type          = "app"
+  description   = each.value.description
+  homepage_url  = "https://github.com/ministryofjustice/data-platform/blob/main/architecture/decision/README.md"
+  template_repo = "data-platform-app-template"
+  environments  = ["prod", "dev"]
+  topics = [
+    "data-platform-apps",
+    "data-platform-apps-and-tools",
+    "aws",
+    "helm",
+    "cloud-platform"
+  ]
+
+}
+
 # Everyone, with access to the above repositories
 module "core-team" {
   source      = "./modules/team"
@@ -44,7 +76,9 @@ module "core-team" {
   description = "Analytical Platform team"
   repositories = concat(
     [for repo in module.core : repo.repository.name],
-  [for repo in module.data-platform : repo.repository.name])
+    [for repo in module.data-platform : repo.repository.name],
+    [for repo in module.data-platform-apps : repo.repository.name]
+  )
 
   maintainers = local.maintainers
   members     = local.all_members
@@ -116,5 +150,17 @@ module "data_platform_core_infrastructure_team" {
 
   maintainers = local.data_platform_core_infrastructure_maintainers
   members     = local.all_members_data_platform_core_infrastructure
+  ci          = local.ci_users
+}
+
+# Data Platform Labs Team
+module "data_platform_labs_team" {
+  source       = "./modules/team"
+  name         = "data-platform-labs"
+  description  = "Data Platform Labs team"
+  repositories = [for repo in module.data-platform : repo.repository.name]
+
+  maintainers = local.data_platform_labs_maintainers
+  members     = local.all_members_data_platform_labs
   ci          = local.ci_users
 }

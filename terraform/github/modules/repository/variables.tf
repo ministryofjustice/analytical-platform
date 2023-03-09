@@ -27,7 +27,7 @@ variable "topics" {
 
 variable "type" {
   type        = string
-  description = "Type of repository: `core`, `module`, `template`. Defaults to `core`"
+  description = "Type of repository: `core`, `module`, `template`, `app`. Defaults to `core`"
   default     = "core"
 }
 
@@ -48,4 +48,16 @@ variable "require_signed_commits" {
   type        = bool
   default     = false
 
+}
+
+variable "environments" {
+  description = "Set of environment names"
+  type        = set(string)
+  default     = []
+}
+
+variable "template_repo" {
+  description = "Template repository to create repo from"
+  type        = string
+  default     = "template-repository"
 }

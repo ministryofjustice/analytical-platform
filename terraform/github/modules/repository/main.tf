@@ -6,6 +6,7 @@ locals {
 
 # Repository basics
 resource "github_repository" "default" {
+  #ts:skip=AC_GITHUB_0002 Disabling privateRepoEnabled check as we have a valid use case for public repos
   name                   = var.name
   description            = join(" • ", [var.description, "This repository is defined and managed in Terraform"])
   homepage_url           = var.homepage_url
@@ -27,7 +28,7 @@ resource "github_repository" "default" {
 
   template {
     owner      = "ministryofjustice"
-    repository = "template-repository"
+    repository = var.template_repo
   }
 
   # The `pages.source` block doesn't support dynamic blocks in GitHub provider version 4.3.2,
@@ -66,14 +67,20 @@ resource "github_repository_tag_protection" "default" {
 }
 
 # Secrets
-data "github_actions_public_key" "default" {
-  repository = github_repository.default.id
-}
-
 resource "github_actions_secret" "default" {
   #checkov:skip=CKV_GIT_4:Although secrets are provided in plaintext, they are encrypted at rest
   for_each        = var.secrets
   repository      = github_repository.default.id
   secret_name     = each.key
   plaintext_value = each.value
+}
+
+resource "github_repository_environment" "default" {
+  for_each    = var.environments
+  environment = each.value
+  repository  = github_repository.default.name
+  deployment_branch_policy {
+    protected_branches     = each.value == "prod" ? true : false
+    custom_branch_policies = each.value == "prod" ? false : true
+  }
 }
