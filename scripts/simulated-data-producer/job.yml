@@ -4,6 +4,7 @@ kind: Job
 metadata:
   name: simulated-data-producer
 spec:
+  backoffLimit: 0
   template:
     spec:
       restartPolicy: Never
