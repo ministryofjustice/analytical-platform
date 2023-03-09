@@ -1,9 +1,9 @@
-import requests
-from zipfile import ZipFile
-from sqlalchemy import create_engine
-import pandas as pd
-from io import BytesIO
 import os
+from io import BytesIO
+from zipfile import ZipFile
+import pandas as pd
+import requests
+from sqlalchemy import create_engine
 
 # get data
 offender_management_stats_urls = [
