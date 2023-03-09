@@ -16,7 +16,7 @@ offender_management_stats_requests = [
 ]
 
 # unzip data and find relevant file
-data_directory = os.path.join(os.getcwd(), "data")
+data_directory = "/tmp/data" #os.path.join(os.getcwd(), "data")
 if os.path.exists(data_directory) is False:
     os.mkdir(data_directory)
 
@@ -39,5 +39,5 @@ engine = create_engine(
 
 for csv_file in all_csv_filenames:
     tablename = csv_file.split("Q")[0].split("/")[1]
-    df = pd.read_csv(os.path.join("data", csv_file))
+    df = pd.read_csv(os.path.join("/tmp", "data", csv_file))
     df.to_sql(tablename, engine, if_exists="append")
