@@ -29,10 +29,10 @@ for quarterly_report in offender_management_stats_requests:
         ]
 
 # push to postgres
-DB_ENDPOINT = "localhost"  # os.environ.get("DB_ENDPOINT")
-DB_USERNAME = "postgres"  # os.environ.get("DB_USERNAME")
-DB_PASSWORD = "4y7sV96vA9wv46VR"  # os.environ.get("DB_PASSWORD")
-DB_NAME = "my_database"  # os.environ.get("DB_NAME")
+DB_ENDPOINT = os.environ.get("DB_ENDPOINT")
+DB_USERNAME = os.environ.get("DB_USERNAME")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
+DB_NAME = os.environ.get("DB_NAME")
 engine = create_engine(
     f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_ENDPOINT}:5432/{DB_NAME}"
 )
