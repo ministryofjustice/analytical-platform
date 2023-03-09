@@ -23,7 +23,8 @@ From <https://user-guide.cloud-platform.service.justice.gov.uk/documentation/oth
    export PORT_FORWARD_LOCAL_PORT="5432"
    export PORT_FORWARD_REMOTE_HOST=$( cloud-platform decode-secret \
     --namespace ${KUBERNETES_NAMESPACE} \
-    --secret ${KUBERNETES_SECRET} | jq -r '.data.rds_instance_address' )
+    --secret ${KUBERNETES_SECRET} | jq -r '.data.rds_instance_address'
+   )
    export PORT_FORWARD_REMOTE_PORT="5432"
 
    kubectl \
@@ -56,10 +57,12 @@ From <https://user-guide.cloud-platform.service.justice.gov.uk/documentation/oth
    export DB_PORT="${PORT_FORWARD_LOCAL_PORT}"
    export DB_USERNAME=$( cloud-platform decode-secret \
      --namespace ${KUBERNETES_NAMESPACE} \
-     --secret ${KUBERNETES_SECRET} | jq -r '.data.database_username' )
+     --secret ${KUBERNETES_SECRET} | jq -r '.data.database_username'
+   )
    export DB_PASSWORD=$( cloud-platform decode-secret \
      --namespace ${KUBERNETES_NAMESPACE} \
-     --secret ${KUBERNETES_SECRET} | jq -r '.data.database_password' )
+     --secret ${KUBERNETES_SECRET} | jq -r '.data.database_password'
+   )
 
    python main.py
    ```

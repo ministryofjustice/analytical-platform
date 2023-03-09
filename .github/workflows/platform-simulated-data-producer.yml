@@ -41,12 +41,19 @@ jobs:
       - name: Create Kubernetes configmap
         id: create_manifests
         run: |
-          kubectl --namespace ${KUBE_NAMESPACE} create configmap \
-            configmap.yml \
+          kubectl \
+            --context cloud-platform \
+            delete \
+            configmap \
+            simulated-data-producer || true
+
+          kubectl \
+            --context cloud-platform \
+            create \
+            configmap \
+            simulated-data-producer \
             --from-file=entrypoint.sh \
-            --from-file=main.py \
-            --from-file=requirements.txt
-          kubectl --context cloud-platform apply --filename configmap.yml
+            --from-file=main.py
 
       - name: Run migration
         id: run_migration

@@ -9,7 +9,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: simulated-data-producer
-          image: docker.io/python@sha256:9c9d259470051ac81edf924655af7aedc812ada4c31da3144c30996db10a16db # docker.io/python:3.11-alpine3.17
+          image: docker.io/ministryofjustice/data-platform-simulated-data-producer@sha256:c095edfe07c9dd09734d7b639a16d7f6b0dd63fc8563a5abeb93cf0bebdcec79 # docker.io/ministryofjustice/data-platform-simulated-data-producer:0.0.1
           command:
             - /bin/sh
             - entrypoint.sh
