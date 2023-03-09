@@ -16,7 +16,7 @@ offender_management_stats_requests = [
 ]
 
 # unzip data and find relevant file
-data_directory = "/tmp/data" #os.path.join(os.getcwd(), "data")
+data_directory = "/tmp/data"  # os.path.join(os.getcwd(), "data")
 if os.path.exists(data_directory) is False:
     os.mkdir(data_directory)
 
