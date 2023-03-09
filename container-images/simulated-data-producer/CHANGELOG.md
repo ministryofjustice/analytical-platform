@@ -7,24 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.4] - 2023-03-09
-
-### Added
-
-- Adding `id-token: write` to GitHub Actions workflow
-
-## [0.0.3] - 2023-03-08
-
-### Added
-
-- Adding `security-events: write` to GitHub Actions workflow
-
-## [0.0.2] - 2023-03-08
-
-### Added
-
-- Pushing to Docker Hub
-
 ## [0.0.1] - 2023-03-07
 
 ### Added
