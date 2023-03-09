@@ -41,6 +41,11 @@ jobs:
       - name: Create Kubernetes configmap
         id: create_manifests
         run: |
+          kubectl --namespace ${KUBE_NAMESPACE} create configmap \
+            configmap.yml \
+            --from-file=entrypoint.sh \
+            --from-file=main.py \
+            --from-file=requirements.txt
           kubectl --context cloud-platform apply --filename configmap.yml
 
       - name: Run migration
