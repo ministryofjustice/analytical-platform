@@ -1,0 +1,9 @@
+---
+include: container-images/python3/apko.yml
+
+contents:
+  packages:
+    - py3-pandas
+    - py3-psycopg2
+    - py3-requests
+    - py3-sqlalchemy
