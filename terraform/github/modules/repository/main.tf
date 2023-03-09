@@ -16,7 +16,7 @@ resource "github_repository" "default" {
   has_wiki               = var.type == "core" ? true : false
   has_downloads          = true
   is_template            = var.type == "template" ? true : false
-  allow_merge_commit     = false
+  allow_merge_commit     = var.type == "app" ? true : false # Temp fix for app-migration setup
   allow_squash_merge     = true
   allow_rebase_merge     = true
   delete_branch_on_merge = true
@@ -43,7 +43,7 @@ resource "github_branch_protection" "default" {
   #checkov:skip=CKV_GIT_6:"Following discussions with other teams we will not be enforcing signed commits currently"
   repository_id  = github_repository.default.id
   pattern        = "main"
-  enforce_admins = true
+  enforce_admins = var.type == "app" ? false : true # Temp fix for app-migration setup
   #tfsec:ignore:github-branch_protections-require_signed_commits
   require_signed_commits = var.require_signed_commits
 
@@ -57,7 +57,7 @@ resource "github_branch_protection" "default" {
     dismiss_stale_reviews           = true
     require_code_owner_reviews      = true
     required_approving_review_count = 1
-    require_last_push_approval      = true
+    require_last_push_approval      = var.type == "app" ? false : true # Temp fix for app-migration setup
   }
 }
 
