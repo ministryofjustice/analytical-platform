@@ -1,0 +1,5 @@
+---
+ignore:
+  - fix-state: not-fixed
+  - fix-state: unkwown
+  - fix-state: wont-fix

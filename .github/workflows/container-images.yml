@@ -79,7 +79,7 @@ jobs:
         uses: anchore/scan-action@dafbc97d7259af88b61bd260f2fde565d0668a72 # v3.3.4
         with:
           image: ${{ env.name }}:${{ env.version }}-amd64
-          # severity-cutoff: critical
+          severity-cutoff: critical
 
       - name: Upload SARIF (anchore)
         if: always()
@@ -87,7 +87,6 @@ jobs:
         uses: github/codeql-action/upload-sarif@32dc499307d133bb5085bae78498c0ac2cf762d5 # v2.2.5
         with:
           sarif_file: ${{ steps.scan_image_anchore.outputs.sarif }}
-          category: ${{ env.name }}
 
       - name: Scan SBOM
         id: scan_sbom
