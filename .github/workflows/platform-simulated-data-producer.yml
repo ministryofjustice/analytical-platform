@@ -35,7 +35,7 @@ jobs:
         id: configure_kubectl
         run: |
           kubectl config set-cluster cloud-platform --server=https://${KUBE_CLUSTER}
-          kubectl config set clusters.cloud-platform.certificate-authority-data "$( echo ${KUBE_CERT} | base64 )"
+          kubectl config set clusters.cloud-platform.certificate-authority-data="$( echo ${KUBE_CERT} | base64 )"
           kubectl config set-credentials cloud-platform --token="${KUBE_TOKEN}"
           kubectl config set-context cloud-platform --cluster=cloud-platform --namespace=${KUBE_NAMESPACE} --user=cloud-platform
           kubectl config use-context cloud-platform
