@@ -34,22 +34,21 @@ jobs:
       - name: Configure Kubernetes CLI
         id: configure_kubectl
         run: |
-          kubectl config set-cluster cloud-platform --server=${KUBE_CLUSTER}
-          kubectl config set clusters.cloud-platform.certificate-authority-data "$( echo ${KUBE_CERT} | base64 )"
-          kubectl config set-context cloud-platform --cluster=cloud-platform --namespace=${KUBE_NAMESPACE}
+          echo "${KUBE_CERT}" > ca.crt
+          kubectl config set-cluster cloud-platform --server=https://${KUBE_CLUSTER} --certificate-authority=ca.crt
           kubectl config set-credentials cloud-platform --token="${KUBE_TOKEN}"
+          kubectl config set-context cloud-platform --cluster=cloud-platform --namespace=${KUBE_NAMESPACE} --user=cloud-platform
+          kubectl config use-context cloud-platform
 
       - name: Create Kubernetes configmap
         id: create_manifests
         run: |
           kubectl \
-            --context cloud-platform \
             delete \
             configmap \
             simulated-data-producer || true
 
           kubectl \
-            --context cloud-platform \
             create \
             configmap \
             simulated-data-producer \
@@ -59,5 +58,5 @@ jobs:
       - name: Run migration
         id: run_migration
         run: |
-          kubectl --context cloud-platform apply --filename job.yml
-          kubectl --context cloud-platform wait --for=condition=complete --timeout=300s job/simulated-data-producer
+          kubectl apply --filename job.yml
+          kubectl wait --for=condition=complete --timeout=300s job/simulated-data-producer
