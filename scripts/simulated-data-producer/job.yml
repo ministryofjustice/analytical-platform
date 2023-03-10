@@ -1,0 +1,49 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: simulated-data-producer
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: simulated-data-producer
+          image: docker.io/ministryofjustice/data-platform-simulated-data-producer@sha256:c095edfe07c9dd09734d7b639a16d7f6b0dd63fc8563a5abeb93cf0bebdcec79 # docker.io/ministryofjustice/data-platform-simulated-data-producer:0.0.1
+          command:
+            - /bin/sh
+            - entrypoint.sh
+          env:
+            - name: DB_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-platform-simulated-data-producer-rds
+                  key: rds_instance_address
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-platform-simulated-data-producer-rds
+                  key: database_username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-platform-simulated-data-producer-rds
+                  key: database_password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-platform-simulated-data-producer-rds
+                  key: database_name
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: config
+              mountPath: /app
+          workingDir: /app
+      volumes:
+        - name: config
+          configMap:
+            name: simulated-data-producer

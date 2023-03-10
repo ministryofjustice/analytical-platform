@@ -1,4 +1,5 @@
 /.devcontainer/ @ministryofjustice/data-platform-core-infra
 /.github/ @ministryofjustice/data-platform-core-infra
 /container-images/ @ministryofjustice/data-platform-core-infra
+/scripts/simulated-data-producer/ @ministryofjustice/data-platform-labs
 /terraform/ @ministryofjustice/data-platform-core-infra
