@@ -40,10 +40,11 @@ resource "github_repository" "default" {
 }
 
 resource "github_branch_protection" "default" {
+  count = var.type == "app" ? 0 : 1 # Temp fix for app-migration setup
   #checkov:skip=CKV_GIT_6:"Following discussions with other teams we will not be enforcing signed commits currently"
   repository_id  = github_repository.default.id
   pattern        = "main"
-  enforce_admins = var.type == "app" ? false : true # Temp fix for app-migration setup
+  enforce_admins = true
   #tfsec:ignore:github-branch_protections-require_signed_commits
   require_signed_commits = var.require_signed_commits
 
@@ -57,7 +58,7 @@ resource "github_branch_protection" "default" {
     dismiss_stale_reviews           = true
     require_code_owner_reviews      = true
     required_approving_review_count = 1
-    require_last_push_approval      = var.type == "app" ? false : true # Temp fix for app-migration setup
+    require_last_push_approval      = true
   }
 }
 
