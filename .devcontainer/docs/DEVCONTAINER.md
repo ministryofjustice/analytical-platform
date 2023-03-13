@@ -98,17 +98,17 @@ The supplied `~/.kube/config`:
 
 1. Replace your Auth0 email with the generic string
 
-    kubectl config set-credentials "auth0" \
-      --auth-provider=oidc \
-      --auth-provider-arg=client-id="..." \
-      --auth-provider-arg=client-secret="..." \
-      --auth-provider-arg=id-token="..." \
-      --auth-provider-arg=refresh-token="..." \
-      --auth-provider-arg=idp-issuer-url="https://justice-cloud-platform.eu.auth0.com/"
+   kubectl config set-credentials "auth0" \
+    --auth-provider=oidc \
+    --auth-provider-arg=client-id="..." \
+    --auth-provider-arg=client-secret="..." \
+    --auth-provider-arg=id-token="..." \
+    --auth-provider-arg=refresh-token="..." \
+    --auth-provider-arg=idp-issuer-url="https://justice-cloud-platform.eu.auth0.com/"
 
 1. Set Cloud Platform to the current context
 
-    kubectl config use-context live.cloud-platform.service.justice.gov.uk
+   kubectl config use-context live.cloud-platform.service.justice.gov.uk
 
 ---
 
