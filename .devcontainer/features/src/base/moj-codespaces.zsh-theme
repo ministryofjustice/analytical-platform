@@ -3,7 +3,7 @@
 
 __zsh_prompt() {
     local prompt_username
-    if [ ! -z "${GITHUB_USER}" ]; then 
+    if [ ! -z "${GITHUB_USER}" ]; then
         prompt_username="@${GITHUB_USER}"
     else
         prompt_username="%n"
@@ -46,6 +46,8 @@ __zsh_prompt() {
             echo -n "[ k8s: %{$fg[blue]%}github-actions-moj%{$reset_color%} ] "; \
           elif [[ "$( kubectl config get-contexts | grep "*" | awk "{ print $2 }" | cut -d"/" -f2 )" == *"production"* ]]; then \
             echo -n "[ k8s: %{$fg[red]%}production%{$reset_color%} ] "; \
+          elif [[ "$( kubectl config get-contexts | grep "*" | awk "{ print $2 }" | cut -d"/" -f2 )" == *"live.cloud-platform.service.justice.gov.uk"* ]]; then \
+            echo -n "[ k8s: %{$fg[red]%}cloud-platform%{$reset_color%} ] "; \
           fi`'
     fi
 
