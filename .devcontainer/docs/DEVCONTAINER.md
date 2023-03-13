@@ -84,9 +84,31 @@ Your GPG and SSH agents are mounted from macOS, so GPG and SSH commands inside t
 
 The supplied `~/.kube/config`:
 
-1. Invokes a wrapper for authenticating to EKS using AWS Vault. If you're in an AWS Vault sub-shell, it will not call AWS Vault
+1. Invokes a wrapper for authenticating with Analytical Platform's EKS clusters using AWS Vault, if you're in an AWS Vault sub-shell, it will not call AWS Vault
 
-1. Has the default context to the development EKS cluster
+1. Has no default context set, you can view with `kubectl config get-contexts` and set with `kubectl config use-context ${CONTEXT_NAME}`
+
+### Cloud Platform Authentication
+
+> Rebuilding will remove your Cloud Platform credentials
+
+1. Login to Cloud Platform Kuberos (https://login.cloud-platform.service.justice.gov.uk/)
+
+1. Obtain the command from "Authenticate Manually"
+
+1. Replace your Auth0 email with the generic string
+
+    kubectl config set-credentials "auth0" \
+      --auth-provider=oidc \
+      --auth-provider-arg=client-id="..." \
+      --auth-provider-arg=client-secret="..." \
+      --auth-provider-arg=id-token="..." \
+      --auth-provider-arg=refresh-token="..." \
+      --auth-provider-arg=idp-issuer-url="https://justice-cloud-platform.eu.auth0.com/"
+
+1. Set Cloud Platform to the current context
+
+    kubectl config use-context live.cloud-platform.service.justice.gov.uk
 
 ---
 
