@@ -1,3 +1,4 @@
+ <!-- markdownlint-disable -->
 # Data Platform Development Container
 
 This implementation of the development container is meant to have all repositories cloned into it under the persistent workspace `/home/vscode/workspace`. Once we begin our journey to the monorepo, this should become redundant. That means that right now, it is not intended to use this with GitHub Codespaces.
@@ -20,7 +21,7 @@ This implementation of the development container is meant to have all repositori
   brew install --cask rancher
   ```
 
-- Node / NPM
+- Node / `npm`
 
   ```bash
   brew install node
@@ -98,18 +99,21 @@ The supplied `~/.kube/config`:
 
 1. Replace your Auth0 email with the generic string
 
-   kubectl config set-credentials "auth0" \
-    --auth-provider=oidc \
-    --auth-provider-arg=client-id="..." \
-    --auth-provider-arg=client-secret="..." \
-    --auth-provider-arg=id-token="..." \
-    --auth-provider-arg=refresh-token="..." \
-    --auth-provider-arg=idp-issuer-url="https://justice-cloud-platform.eu.auth0.com/"
+    ```bash
+    kubectl config set-credentials "auth0" \
+      --auth-provider=oidc \
+      --auth-provider-arg=client-id="..." \
+      --auth-provider-arg=client-secret="..." \
+      --auth-provider-arg=id-token="..." \
+      --auth-provider-arg=refresh-token="..." \
+      --auth-provider-arg=idp-issuer-url="https://justice-cloud-platform.eu.auth0.com/"
+    ```
 
 1. Set Cloud Platform to the current context
 
-   kubectl config use-context live.cloud-platform.service.justice.gov.uk
-
+    ```bash
+    kubectl config use-context live.cloud-platform.service.justice.gov.uk
+    ```
 ---
 
 # Developing
