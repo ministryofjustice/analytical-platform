@@ -32,6 +32,54 @@ We also [name things](https://technical-guidance.service.justice.gov.uk/document
 | [Modernisation Platform environments repo](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/data-platform) | Hosting environment for the data platform |
 <!--| [Data Platform user guide](https://github.com/ministryofjustice/data-platform)             | User-focussed documentation for how to get started and use the Cloud Platform             | -->
 
+### OpenSSF Best Practices
+
+These are the requirements currently met by this repository in line with the FLOSS Best Practices Criteria (Passing Badge)
+
+Basic project website content: 
+
+  - The project website describes what the software does 
+  - Provides information on how to interact with the project
+  - explains contribution process
+
+FLOSS license: 
+
+  - Uses MIT licence
+
+Documentation:
+
+  - The project provides basic documentation
+
+Public version-controlled source repository
+
+  - GIT version control
+
+Bug-reporting process:
+
+  - The project provides a process for users to submit bug reports 
+  - The project uses Github issues/ zen hub to track issues
+
+Other security issues:
+
+  - secured private credentials via Kuberentes secrets and Github secrets
+
+Secured delivery against man-in-the-middle (MITM) attacks:
+
+  - Delivered via terraform secured by https and spcific IAM roles useable only by the github action
+  - No Cryptographic hases transported over HTTP
+
+Static code analysis:
+
+  - Use of CodeQL
+
+Other: 
+
+  - The project site supports HTTPS using TLS
+  - The project is maintained
+
+  For more information please see [Criteria](https://bestpractices.coreinfrastructure.org/en/criteria/0#0.repo_track)
+
+
 ### Useful links
 
 It may be also useful to look at:
