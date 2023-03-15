@@ -100,7 +100,7 @@ jobs:
     steps:
       - name: Configure GitHub Pages
         id: configure_github_pages
-        uses: actions/configure-pages@fc89b04e7d263ef510d9e77d3a1d088fb2688522 # v3.0.4
+        uses: actions/configure-pages@7110e9e03ffb4a421945e5d0607007b8e9f1f52b # v3.0.5
 
       - name: Deploy to GitHub Pages
         id: deploy_github_pages
