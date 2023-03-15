@@ -1,5 +1,5 @@
 ---
-name: Code formatters
+name: GitHub Super-Linter
 
 on: # yamllint disable-line rule:truthy
   pull_request:
@@ -14,24 +14,6 @@ on: # yamllint disable-line rule:truthy
 permissions: read-all
 
 jobs:
-  moj-code-formatter:
-    name: MoJ Code Formatter
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f # v3.4.0
-
-      - name: MoJ Code Formatter
-        id: code_formatter
-        uses: ministryofjustice/github-actions/code-formatter@d9a5f75c10cd50abd5f312ab9f4bab5826e4fedf # v11
-        with:
-          ignore-files: README.md
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   super-linter:
     name: GitHub Super-Linter
     runs-on: ubuntu-latest
