@@ -21,7 +21,7 @@ locals {
       description = "Core Repository for Data Platform Data Products"
   }]
 
-  ap_migration_apps = slice(jsondecode(file("./ap_migration_apps.json")), 0, 10)
+  ap_migration_apps = slice(jsondecode(file("./ap_migration_apps.json")), 11, 15)
 
   # All Tech Archs
   tech_archs = concat(local.tech_archs_members, local.tech_archs_maintainers)
