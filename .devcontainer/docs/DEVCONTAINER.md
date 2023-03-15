@@ -56,12 +56,6 @@ Your GPG and SSH agents are mounted from macOS, so GPG and SSH commands inside t
 
 1. Clone this repository
 
-1. Update your `~/.bashrc` or `~/.zshrc` to export your AWS IAM email address (Temporary until we all use AWS SSO)
-
-   ```bash
-   export MOJ_DATA_PLATFORM_AWS_IAM_EMAIL="firstname.lastname@digital.justice.gov.uk"
-   ```
-
 1. Launch Visual Studio Code
 
 1. Reopen in Container

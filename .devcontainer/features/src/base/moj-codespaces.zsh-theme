@@ -26,14 +26,14 @@ __zsh_prompt() {
     # AWS Vault Profile
     if command -v aws-vault &> /dev/null; then
       PROMPT+='`\
-          if [[ ${AWS_VAULT} == *"dev"* ]]; then \
+          if [[ ${AWS_VAULT} == *"development"* || ${AWS_VAULT} == *"sandbox"* ]]; then \
             echo -n "[ aws: %{$fg[green]%}${AWS_VAULT}%{$reset_color%} ] "; \
           elif [[ ${AWS_VAULT} == *"management"* ]]; then \
-            echo -n "[ aws: %{$fg[blue]%}${AWS_VAULT}%{$reset_color%} ] "; \
-          elif [[ ${AWS_VAULT} == *"prod"* ]]; then \
+            echo -n "[ aws: %{$fg[yellow]%}${AWS_VAULT}%{$reset_color%} ] "; \
+          elif [[ ${AWS_VAULT} == *"production"* ]]; then \
             echo -n "[ aws: %{$fg[red]%}${AWS_VAULT}%{$reset_color%} ] "; \
           elif [[ ! -z ${AWS_VAULT} ]]; then \
-            echo -n "[ aws: %{$fg[yellow]%}${AWS_VAULT}%{$reset_color%} ] "; \
+            echo -n "[ aws: %{$fg[blue]%}${AWS_VAULT}%{$reset_color%} ] "; \
           fi`'
     fi
 

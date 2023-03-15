@@ -5,7 +5,6 @@ set -e
 source /usr/local/bin/devcontainer-utils
 
 VERSION=${AWSCLIVERSION:-"latest"}
-AWS_IAM_EMAIL="${AWSIAMEMAIL}"
 
 if [[ "${VERSION}" == "latest" ]]; then
   ARTEFACT="awscli-exe-linux-$( uname -m ).zip"
@@ -33,7 +32,5 @@ echo "complete -C '/usr/local/bin/aws_completer' aws" > /home/vscode/.dotfiles/a
 mkdir --parents /home/vscode/.aws
 
 cp  $( dirname $0 )/src/home/vscode/.aws/config /home/vscode/.aws/config
-
-sed -i "s|AWS_IAM_EMAIL|${AWS_IAM_EMAIL}|g" /home/vscode/.aws/config
 
 chown --recursive vscode:vscode /home/vscode/.aws
