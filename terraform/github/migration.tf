@@ -10,7 +10,7 @@ resource "null_resource" "migrate_repo_content" {
     interpreter = ["bash", "-c"]
     command     = <<EOF
   mkdir ${path.module}/tmp_migration \
-   && cd ${path.module}/tmp_migration
+   && cd ${path.module}/tmp_migration \
    && chmod +x "${path.module}/scripts/repo-content-migration/repo-migration.sh" \
    && "${path.module}/scripts/repo-content-migration/repo-migration.sh" \
    -s ${each.value.source_repo_name} \
