@@ -165,5 +165,5 @@ module "data_platform_labs_team" {
   maintainers = local.data_platform_labs_maintainers
   members     = local.all_members_data_platform_labs
   ci          = local.ci_users
-  depends_on[module.data-platform]
+  depends_on  = [module.data-platform]
 }
