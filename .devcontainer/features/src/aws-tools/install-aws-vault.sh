@@ -19,10 +19,18 @@ fi
 
 curl --location https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}/aws-vault-linux-${ARCHITECTURE} \
   --output /usr/local/bin/aws-vault
-  
+
 chmod +x /usr/local/bin/aws-vault
 
+mkdir --parents /home/vscode/.awsvault
+
+chown --recursive vscode:vscode /home/vscode/.awsvault
+
 ### Config
+
+mkdir --parents /home/vscode/.awsvault
+
+chown --recursive vscode:vscode /home/vscode/.awsvault
 
 echo "export AWS_VAULT_BACKEND=\"file\"" > /home/vscode/.dotfiles/aws-vault.sh
 echo "export AWS_VAULT_FILE_PASSPHRASE=\"\"" >> /home/vscode/.dotfiles/aws-vault.sh
