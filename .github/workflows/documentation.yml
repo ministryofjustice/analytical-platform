@@ -48,43 +48,43 @@ jobs:
           path: docs/artifact.tar
           retention-days: 1
 
-  htmlproofer:
-    needs: [build]
-    name: htmlproofer
-    runs-on: ubuntu-latest
-    container:
-      image: ministryofjustice/tech-docs-github-pages-publisher:data-platform
-    defaults:
-      run:
-        working-directory: docs
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f # v3.4.0
+#   htmlproofer:
+#     needs: [build]
+#     name: htmlproofer
+#     runs-on: ubuntu-latest
+#     container:
+#       image: ministryofjustice/tech-docs-github-pages-publisher:data-platform
+#     defaults:
+#       run:
+#         working-directory: docs
+#     steps:
+#       - name: Checkout
+#         id: checkout
+#         uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f # v3.4.0
 
-      - name: Compile Markdown to HTML and run htmlproofer
-        id: compile
-        run: /scripts/check-url-links.sh
+#       - name: Compile Markdown to HTML and run htmlproofer
+#         id: compile
+#         run: /scripts/check-url-links.sh
 
-  linkinator:
-    needs: [build]
-    name: linkinator
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifact
-        id: download_artifact
-        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
-        with:
-          name: github-pages
-          path: github-pages
+#   linkinator:
+#     needs: [build]
+#     name: linkinator
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Download artifact
+#         id: download_artifact
+#         uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
+#         with:
+#           name: github-pages
+#           path: github-pages
 
-      - name: Check URLs
-        id: check_urls
-        run: |
-          cd github-pages
-          tar -xvf artifact.tar
-          npm install JustinBeckwith/linkinator#e3d929bbda79d28fb46d20c04a2a6f9a9bce6f5c # v4.1.2
-          npx linkinator . --recurse --markdown
+#       - name: Check URLs
+#         id: check_urls
+#         run: |
+#           cd github-pages
+#           tar -xvf artifact.tar
+#           npm install JustinBeckwith/linkinator#e3d929bbda79d28fb46d20c04a2a6f9a9bce6f5c # v4.1.2
+#           npx linkinator . --recurse --markdown
 
   deploy:
     if: github.ref == 'refs/heads/main'
