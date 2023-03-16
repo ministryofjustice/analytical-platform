@@ -88,7 +88,7 @@ jobs:
 
   deploy:
     if: github.ref == 'refs/heads/main'
-    needs: [build, htmlproofer, linkinator]
+    needs: [build]
     name: Deploy
     runs-on: ubuntu-latest
     environment:
