@@ -51,15 +51,16 @@ module "data-platform-app-template" {
 }
 
 module "data-platform-apps" {
-  for_each      = { for repo in local.ap_migration_apps : repo.name => repo }
-  source        = "./modules/repository"
-  name          = each.key
-  type          = "app"
-  description   = each.value.description
-  homepage_url  = "https://github.com/ministryofjustice/data-platform/blob/main/architecture/decision/README.md"
-  template_repo = "data-platform-app-template"
-  visibility    = "internal"
-  environments  = ["prod", "dev"]
+  for_each           = { for repo in local.ap_migration_apps : repo.name => repo }
+  source             = "./modules/repository"
+  name               = each.key
+  type               = "app"
+  description        = each.value.description
+  homepage_url       = "https://github.com/ministryofjustice/data-platform/blob/main/architecture/decision/README.md"
+  template_repo      = "data-platform-app-template"
+  visibility         = "internal"
+  archive_on_destroy = false
+  environments       = ["prod", "dev"]
   topics = [
     "data-platform-apps",
     "data-platform-apps-and-tools",
@@ -85,6 +86,7 @@ module "core-team" {
   maintainers = local.maintainers
   members     = local.all_members
   ci          = local.ci_users
+  depends_on  = [module.data-platform-apps]
 }
 
 module "data-platform-tech-archs-team" {

@@ -61,3 +61,9 @@ variable "template_repo" {
   type        = string
   default     = "template-repository"
 }
+
+variable "archive_on_destroy" {
+  description = "Should repository be archived when destroyed rather than deleted?"
+  type        = bool
+  default     = true
+}
