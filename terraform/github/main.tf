@@ -86,6 +86,7 @@ module "core-team" {
   maintainers = local.maintainers
   members     = local.all_members
   ci          = local.ci_users
+  depends_on  = [module.data-platform-apps]
 }
 
 module "data-platform-tech-archs-team" {
@@ -166,5 +167,4 @@ module "data_platform_labs_team" {
   maintainers = local.data_platform_labs_maintainers
   members     = local.all_members_data_platform_labs
   ci          = local.ci_users
-  depends_on  = [module.data-platform]
 }
