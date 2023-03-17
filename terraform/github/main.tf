@@ -61,7 +61,7 @@ module "data-platform-apps" {
   visibility        = "internal"
   archive_on_delete = false
   environments      = ["prod", "dev"]
-  topics            = [
+  topics = [
     "data-platform-apps",
     "data-platform-apps-and-tools",
     "aws",
