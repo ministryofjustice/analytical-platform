@@ -22,7 +22,7 @@ resource "github_repository" "default" {
   delete_branch_on_merge = true
   auto_init              = false
   archived               = false
-  archive_on_destroy     = var.archive_on_delete
+  archive_on_destroy     = var.archive_on_destroy
   vulnerability_alerts   = true
   topics                 = concat(local.topics, var.topics)
 

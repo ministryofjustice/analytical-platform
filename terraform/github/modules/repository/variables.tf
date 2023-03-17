@@ -62,8 +62,8 @@ variable "template_repo" {
   default     = "template-repository"
 }
 
-variable "archive_on_delete" {
-  description = "Should repository be archived on deletion rather than deleted?"
+variable "archive_on_destroy" {
+  description = "Should repository be archived when destroyed rather than deleted?"
   type        = bool
   default     = true
 }
