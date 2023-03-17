@@ -58,7 +58,7 @@ module "data-platform-apps" {
   description       = each.value.description
   homepage_url      = "https://github.com/ministryofjustice/data-platform/blob/main/architecture/decision/README.md"
   template_repo     = "data-platform-app-template"
-  visibility        = "internal",
+  visibility        = "internal"
   archive_on_delete = false
   environments      = ["prod", "dev"]
   topics            = [
