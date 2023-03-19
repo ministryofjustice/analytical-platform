@@ -59,7 +59,3 @@ resource "aws_iam_role_policy" "updated_trust" {
 
   policy = data.aws_iam_policy_document.updated_trust[each.key].json
 }
-
-output "updated_trust" {
-  value = aws_iam_role_policy.updated_trust
-}
