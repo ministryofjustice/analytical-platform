@@ -12,6 +12,15 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias  = "data"
+  region = "eu-west-1"
+  assume_role {
+    role_arn = "arn:aws:iam::593291632749:role/GlobalGitHubActionAdmin"
+  }
+
+}
+
+provider "aws" {
   alias  = "session-info"
   region = "eu-west-2"
 }
