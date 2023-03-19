@@ -68,6 +68,16 @@ module "data-platform-apps" {
     "helm",
     "cloud-platform"
   ]
+  secrets = {
+    # Management Account ID
+    MANAGEMENT_ACCOUNT_ID = data.aws_caller_identity.current.account_id
+
+    # Data Account ID
+    DATA_ACCOUNT_ID = data.aws_caller_identity.data.account_id
+
+    # Existing App Role ARN
+    APP_ROLE_ARN = data.aws_iam_role.app_role_details[each.key].arn
+  }
 
 }
 
