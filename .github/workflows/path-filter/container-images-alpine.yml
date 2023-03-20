@@ -1,0 +1,5 @@
+---
+base: ./container-images/alpine/base/**
+python3: ./container-images/alpine/python3/**
+python3-dev: ./container-images/alpine/python3-dev/**
+simulated-data-producer: ./container-images/alpine/simulated-data-producer/**

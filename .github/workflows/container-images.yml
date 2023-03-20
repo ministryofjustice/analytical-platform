@@ -1,5 +1,5 @@
 ---
-name: Container images
+name: Container images - Alpine
 
 on:
   pull_request:
@@ -7,15 +7,15 @@ on:
       - main
     paths:
       - .github/workflows/container-images.yml
-      - .github/workflows/path-filter/container-images.yml
-      - container-images/**
+      - .github/workflows/path-filter/container-images-alpine.yml
+      - container-images/alpine/**
   push:
     branches:
       - main
     paths:
       - .github/workflows/container-images.yml
-      - .github/workflows/path-filter/container-images.yml
-      - container-images/**
+      - .github/workflows/path-filter/container-images-alpine.yml
+      - container-images/alpine/**
 
 permissions: read-all
 
@@ -34,7 +34,7 @@ jobs:
         id: detect_changes
         uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         with:
-          filters: .github/workflows/path-filter/container-images.yml
+          filters: .github/workflows/path-filter/container-images-alpine.yml
 
   build:
     if: ${{ needs.detect-changes.outputs.images != '[]' }}
@@ -60,14 +60,14 @@ jobs:
       - name: Prepare build paramerters
         id: prepare
         run: |
-          echo "name=$(jq -r '.name' container-images/${{ matrix.images }}/config.json)" >> ${GITHUB_ENV}
-          echo "version=$(jq -r '.version' container-images/${{ matrix.images }}/config.json)" >> ${GITHUB_ENV}
+          echo "name=$(jq -r '.name' container-images/alpine/${{ matrix.images }}/config.json)" >> ${GITHUB_ENV}
+          echo "version=$(jq -r '.version' container-images/alpine/${{ matrix.images }}/config.json)" >> ${GITHUB_ENV}
 
       - name: Build image
         id: build
         uses: docker://cgr.dev/chainguard/apko@sha256:a2438e282d6a5ca7de8b6e5343b452f003ac148def536bbd4bacc357ee41c58a # 0.7.1
         with:
-          args: build container-images/${{ matrix.images }}/apko.yml ${{ env.name }}:${{ env.version }} ${{ env.name }}-${{ env.version }}.tar
+          args: build container-images/alpine/${{ matrix.images }}/apko.yml ${{ env.name }}:${{ env.version }} ${{ env.name }}-${{ env.version }}.tar
 
       - name: Load image
         id: load_image

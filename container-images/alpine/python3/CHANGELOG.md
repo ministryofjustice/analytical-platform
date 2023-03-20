@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.5] - 2023-03-20
+
+###
+
+- Updated Alpine image names and paths to account for Ubuntu images
+
 ## [0.0.4] - 2023-03-09
 
 ### Added
