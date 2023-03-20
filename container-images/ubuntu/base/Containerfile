@@ -1,0 +1,22 @@
+FROM public.ecr.aws/lts/ubuntu:22.04
+
+LABEL org.opencontainers.image.vendor="Ministry of Justice" \
+      org.opencontainers.image.authors="Data Platform Core Infrastructure" \
+      org.opencontainers.image.title="Data Platform Base Image" \
+      org.opencontainers.image.description="Container base image for Data Platform" \
+      org.opencontainers.image.url="https://github.com/ministryofjustice/data-platform/tree/main/container-images/ubuntu/base"
+
+ENV CONTAINER_USER="nonroot" \
+    CONTAINER_UID="10000" \
+    CONTAINER_GROUP="nonroot" \
+    CONTAINER_GID="10000" \
+    CONTAINER_HOME="/app"
+
+RUN groupadd --gid ${CONTAINER_GID} ${CONTAINER_GROUP}
+RUN useradd --uid ${CONTAINER_UID} --gid ${CONTAINER_GROUP} --shell /bin/bash --create-home ${CONTAINER_USER}
+RUN mkdir --parents ${CONTAINER_HOME}
+RUN chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} ${CONTAINER_HOME}
+RUN apt update && apt upgrade --assume-yes
+
+USER ${CONTAINER_USER}
+WORKDIR ${CONTAINER_HOME}
