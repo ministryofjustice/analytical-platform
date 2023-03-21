@@ -1,0 +1,370 @@
+---
+- name: gold-scorecard-form
+  source_repo_name: gold-scorecard-form
+  description: ""
+# - name: judicial-reviews-app
+#   source_repo_name: judicial-reviews-app
+#   description: ""
+- name: hmpps-hr-dashboard
+  source_repo_name: hmpps-hr-dashboard
+  description: ""
+- name: ltc-capabilites-app
+  source_repo_name: ltc-capabilites-app
+  description: ""
+- name: mlp-app
+  source_repo_name: mlp-app
+  description: ""
+- name: moj-officehub-locator-webapp
+  source_repo_name: moj-officehub-locator-webapp
+  description: ""
+- name: pfg-dash-moj
+  source_repo_name: PfG-dash-MoJ
+  description: ""
+- name: regime-dashboard
+  source_repo_name: regime_dashboard
+  description: ""
+# - name: adjudicatons-webapp
+#   source_repo_name: adjudicatons-webapp
+#   description: ""
+# - name: anvil-access-tool
+#   source_repo_name: anvil-access-tool
+#   description: ""
+# - name: app-exploration
+#   source_repo_name: app-exploration
+#   description: ""
+# - name: aqa-website
+#   source_repo_name: aqa_website
+#   description: ""
+# - name: automation-app
+#   source_repo_name: automation-app
+#   description: ""
+# - name: bentham-app
+#   source_repo_name: bentham-app
+#   description: ""
+# - name: ccma-gold-scorecards-app
+#   source_repo_name: CCMA-Gold-Scorecards-App
+#   description: ""
+# - name: ccmbpt-app-directory
+#   source_repo_name: ccmbpt_app_directory
+#   description: ""
+# - name: ccmbpt-analytics-app
+#   source_repo_name: CCMBPT-Analytics-App
+#   description: ""
+# - name: ccmbpt-guidance
+#   source_repo_name: ccmbpt-guidance
+#   description: ""
+# - name: ccpt
+#   source_repo_name: CCPT
+#   description: ""
+# - name: cfo-activity-hubs-lot-allocation
+#   source_repo_name: CFO_Activity_Hubs_Lot_Allocation
+#   description: ""
+# - name: cjsm-email-traffic-app
+#   source_repo_name: cjsm-email-traffic-app
+#   description: ""
+# - name: cjsm-monitoring
+#   source_repo_name: cjsm-monitoring
+#   description: ""
+# - name: cjsm-networkanalysis
+#   source_repo_name: cjsm-networkanalysis
+#   description: ""
+# - name: commuter-event-timeline
+#   source_repo_name: commuter-event-timeline
+#   description: ""
+# - name: commuter-webapp-contracts
+#   source_repo_name: commuter-webapp-contracts
+#   description: ""
+# - name: commuter-webapp-familyman
+#   source_repo_name: commuter-webapp-familyman
+#   description: ""
+# - name: commuter-webapp-sandbox
+#   source_repo_name: commuter-webapp-sandbox
+#   description: ""
+# - name: commuter-webapp-xhibit
+#   source_repo_name: commuter-webapp-xhibit
+#   description: ""
+# - name: companieshouseapitool
+#   source_repo_name: companiesHouseAPITool
+#   description: ""
+# - name: coroner-stat-tool-ext
+#   source_repo_name: Coroner-Stat-Tool-Ext
+#   description: ""
+# - name: cost-to-serve
+#   source_repo_name: cost_to_serve
+#   description: ""
+# - name: criminal-scenario-tool
+#   source_repo_name: criminal-scenario-tool
+#   description: ""
+# - name: criminal-scenario-tool-testing
+#   source_repo_name: criminal-scenario-tool-testing
+#   description: ""
+# - name: crown-flow-explorer
+#   source_repo_name: crown-flow-explorer
+#   description: ""
+# - name: crown-sitting-days
+#   source_repo_name: crown-sitting-days
+#   description: ""
+# - name: ctsc-call-data-explorer
+#   source_repo_name: CTSC_Call_Data_Explorer
+#   description: ""
+# - name: ctsc-shiny-fte-forecast
+#   source_repo_name: CTSC_shiny_FTE_forecast
+#   description: ""
+# - name: dash-website
+#   source_repo_name: dash-website
+#   description: ""
+# - name: data-discovery
+#   source_repo_name: data-discovery
+#   description: ""
+# - name: data-discovery-tool-dev
+#   source_repo_name: data-discovery-tool-dev
+#   description: ""
+# - name: defcalc
+#   source_repo_name: DefCalc
+#   description: ""
+# - name: defcalc-xgov
+#   source_repo_name: DefCalc-XGov
+#   description: ""
+# - name: df-bid-shiny
+#   source_repo_name: df_bid_shiny
+#   description: ""
+# - name: df-bid-shiny-acc
+#   source_repo_name: df_bid_shiny_acc
+#   description: ""
+# - name: df-bid-shiny-pwb
+#   source_repo_name: df_bid_shiny_pwb
+#   description: ""
+# - name: df-bid-shiny-ws
+#   source_repo_name: df_bid_shiny_ws
+#   description: ""
+# - name: dmiu-image-matching
+#   source_repo_name: dmiu-image-matching
+#   description: ""
+# - name: drug-conveyancing-app
+#   source_repo_name: drug-conveyancing-app
+#   description: ""
+# - name: environ-surveillance-hub
+#   source_repo_name: environ-surveillance-hub
+#   description: ""
+# - name: eu-transition-model-food
+#   source_repo_name: eu-transition-model-food
+#   description: ""
+# - name: eu-transition-model-pecs
+#   source_repo_name: eu-transition-model-pecs
+#   description: ""
+# - name: eu-transition-model-retail
+#   source_repo_name: eu-transition-model-retail
+#   description: ""
+# - name: evidence-evaluation-team
+#   source_repo_name: evidence-evaluation-team
+#   description: ""
+# - name: evidence-repository-app
+#   source_repo_name: evidence-repository-app
+#   description: ""
+# - name: exit-survey-app
+#   source_repo_name: exit_survey_app
+#   description: ""
+# - name: gifts-app
+#   source_repo_name: gifts-app
+#   description: ""
+# - name: gifts-auth-app
+#   source_repo_name: gifts-auth-app
+#   description: ""
+# - name: gifts-reporting-app
+#   source_repo_name: gifts-reporting-app
+#   description: ""
+# - name: gold-scorecard-form-dev
+#   source_repo_name: gold-scorecard-form-dev
+#   description: ""
+# - name: gpc-anomalies
+#   source_repo_name: GPC-anomalies
+#   description: ""
+# - name: hlt-portal
+#   source_repo_name: hlt-portal
+#   description: ""
+# - name: hmcts-ccpt
+#   source_repo_name: HMCTS_CCPT
+#   description: ""
+# - name: hmpps-exec-stats
+#   source_repo_name: hmpps-exec-stats
+#   description: ""
+# - name: hr-policy-search-tool
+#   source_repo_name: hr_policy_search_tool
+#   description: ""
+# - name: hr-policy-document-manager
+#   source_repo_name: hr-policy-document-manager
+#   description: ""
+# - name: innovation-partner-lot-allocation
+#   source_repo_name: Innovation-Partner-Lot-Allocation
+#   description: ""
+# - name: intel-app-homepage
+#   source_repo_name: intel-app-homepage
+#   description: ""
+# - name: interventions-deploy
+#   source_repo_name: interventions-deploy
+#   description: ""
+# - name: invoice-nlp-app
+#   source_repo_name: Invoice_NLP_App
+#   description: ""
+# - name: jdl-visulizer
+#   source_repo_name: jdl-visulizer
+#   description: ""
+# - name: judicial-wm
+#   source_repo_name: judicial-wm
+#   description: ""
+# - name: judicial-wm2
+#   source_repo_name: judicial-wm2
+#   description: ""
+# - name: kpi-s3-proxy
+#   source_repo_name: kpi-s3-proxy
+#   description: ""
+# - name: laa-recovery-services-dashboard
+#   source_repo_name: LAA_RecoveryServices_Dashboard
+#   description: ""
+# - name: laa-cm-dashboard
+#   source_repo_name: laa-cm-dashboard
+#   description: ""
+# - name: legal-needs-report-deploy
+#   source_repo_name: legal-needs-report-deploy
+#   description: ""
+# - name: legal-aid-data-tool
+#   source_repo_name: legalaiddatatool
+#   description: ""
+# - name: legal-aid-tools
+#   source_repo_name: legalaidtools
+#   description: ""
+# - name: mags-returners-sankey-s3
+#   source_repo_name: mags-returners-sankey-s3
+#   description: ""
+# - name: matrix-booking
+#   source_repo_name: matrixbooking
+#   description: ""
+# - name: mmp-web-app
+#   source_repo_name: mmp-web-app
+#   description: ""
+# - name: model-redevelopment-website
+#   source_repo_name: model-redevelopment-website
+#   description: ""
+# - name: msp-monitoring-dashboard
+#   source_repo_name: msp-monitoring-dashboard
+#   description: ""
+# - name: novel-drug-words-app
+#   source_repo_name: novel-drug-words-app
+#   description: ""
+# - name: occupeye-shiny-app
+#   source_repo_name: occupeye_shiny_app
+#   description: ""
+# - name: offender-risks-needs-tool
+#   source_repo_name: offender-risks-needs-tool
+#   description: ""
+# - name: opg-lpa-dashboard
+#   source_repo_name: OPG-LPA-Dashboard
+#   description: ""
+# - name: opg-mi-dashdemo
+#   source_repo_name: opg-mi-dashdemo
+#   description: ""
+# - name: pay-gap-app
+#   source_repo_name: Pay-gap-app
+#   description: ""
+# - name: people-survey-dashboard
+#   source_repo_name: People_Survey_Dashboard
+#   description: ""
+# - name: people-data-self-serve
+#   source_repo_name: people-data-self-serve
+#   description: ""
+# - name: people-survey-engagement-prediction-app
+#   source_repo_name: people-survey-engagement-prediction-app
+#   description: ""
+# - name: people-survey-prediction-tool
+#   source_repo_name: people-survey-prediction-tool
+#   description: ""
+# - name: pi-form
+#   source_repo_name: pi_form
+#   description: ""
+# - name: pq-tool
+#   source_repo_name: pq-tool
+#   description: ""
+# - name: pqip
+#   source_repo_name: pqip
+#   description: ""
+# - name: prison-estate-digital-map
+#   source_repo_name: prison-estate-digital-map
+#   description: ""
+# - name: prison-network-app
+#   source_repo_name: prison-network-app
+#   description: ""
+# - name: prison-visitor-app
+#   source_repo_name: prison-visitor-app
+#   description: ""
+# - name: probation-recruitment-app
+#   source_repo_name: probation_recruitment_app
+#   description: ""
+# - name: probation-mi-dashboard
+#   source_repo_name: Probation-MI-dashboard
+#   description: ""
+# - name: probation-staffing-model-dash-app
+#   source_repo_name: probation-staffing-model-dash-app
+#   description: ""
+# - name: ps-demographic-tables
+#   source_repo_name: ps-demographic-tables
+#   description: ""
+# - name: psst-upload
+#   source_repo_name: psst-upload
+#   description: ""
+# - name: remuneration-tool-app
+#   source_repo_name: remuneration-tool-app
+#   description: ""
+# - name: reoffending-evidence-repository-app
+#   source_repo_name: reoffending-evidence-repository-app
+#   description: ""
+# - name: rr-strategy
+#   source_repo_name: RR_strategy
+#   description: ""
+# - name: rshiny-template
+#   source_repo_name: rshiny-template
+#   description: ""
+# - name: s3-proxy
+#   source_repo_name: s3-proxy
+#   description: ""
+# - name: safety-diagnostic-tool
+#   source_repo_name: safety-diagnostic-tool
+#   description: ""
+# - name: sat
+#   source_repo_name: SAT
+#   description: ""
+# - name: segmentation-tool-draft
+#   source_repo_name: segmentation_tool_draft
+#   description: ""
+# - name: segmentation-tool
+#   source_repo_name: segmentation-tool
+#   description: ""
+# - name: sentencing-remarks-nlp
+#   source_repo_name: sentencing-remarks-nlp
+#   description: ""
+# - name: statistics-explorer
+#   source_repo_name: statistics-explorer
+#   description: ""
+# - name: stats-web-analytics
+#   source_repo_name: stats-web-analytics
+#   description: ""
+# - name: temperature-check
+#   source_repo_name: temperature-check
+#   description: ""
+# - name: traveltimes-dashboard
+#   source_repo_name: traveltimes-dashboard
+#   description: ""
+# - name: victims-bill-consultation
+#   source_repo_name: victims-bill-consultation
+#   description: ""
+# - name: wellbeing-comments-dashboard
+#   source_repo_name: wellbeing-comments-dashboard
+#   description: ""
+# - name: wellbeing-pulse
+#   source_repo_name: wellbeing-pulse
+#   description: ""
+# - name: workforce-planning-app
+#   source_repo_name: workforce-planning-app
+#   description: ""
+# - name: yjb-nir020
+#   source_repo_name: YJB_nir020
+#   description: ""

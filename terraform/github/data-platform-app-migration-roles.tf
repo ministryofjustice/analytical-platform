@@ -12,7 +12,7 @@ data "aws_iam_role" "app_role_details" {
 }
 
 # The policy is derived using the following naming convention:
-# namespace: "data-platforms-app-<new repo name>-(prod|dev)
+# namespace: "data-platform-app-<new repo name>-(prod|dev)
 # serviceaccount: <namespace>
 
 data "aws_iam_policy_document" "additional_statement" {
@@ -30,7 +30,8 @@ data "aws_iam_policy_document" "additional_statement" {
       variable = "${local.cloud_platform_eks_oidc_provider_id}:sub"
       values = [
         "system:serviceaccount:data-platform-app-${each.key}-dev:data-platform-app-${each.key}-dev",
-      "system:serviceaccount:data-platform-app-${each.key}-prod:data-platform-app-${each.key}-prod"]
+        "system:serviceaccount:data-platform-app-${each.key}-prod:data-platform-app-${each.key}-prod"
+      ]
     }
 
     condition {
