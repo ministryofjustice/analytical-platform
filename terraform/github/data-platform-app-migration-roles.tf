@@ -52,11 +52,31 @@ data "aws_iam_policy_document" "updated_trust" {
 
 // Creating policy so that it can be attached to the existing roles
 
-resource "aws_iam_role_policy" "updated_trust" {
-  for_each = data.aws_iam_role.app_role_details
-  provider = aws.data
-  name     = each.key
-  role     = each.value.name
+# resource "aws_iam_role_policy" "updated_trust" {
+#   for_each = data.aws_iam_role.app_role_details
+#   provider = aws.data
+#   name     = each.key
+#   role     = each.value.name
 
-  policy = data.aws_iam_policy_document.updated_trust[each.key].json
+#   policy = data.aws_iam_policy_document.updated_trust[each.key].json
+# }
+
+// Use local-exec to update trust policies as not doable with terraform
+
+resource "null_resource" "update_iam_role_trust_policy" {
+  for_each = data.aws_iam_role.app_role_details
+  triggers = {
+    trust_policy = data.aws_iam_policy_document.updated_trust[each.key].json
+  }
+
+  provisioner "local-exec" {
+    command = <<EOF
+      TEMP_CREDS=$(aws sts assume-role --role-arn ${data.aws_iam_session_context.data.arn} --role-session-name your-session-name)
+      export AWS_ACCESS_KEY_ID=$(echo $TEMP_CREDS | jq -r '.Credentials.AccessKeyId')
+      export AWS_SECRET_ACCESS_KEY=$(echo $TEMP_CREDS | jq -r '.Credentials.SecretAccessKey')
+      export AWS_SESSION_TOKEN=$(echo $TEMP_CREDS | jq -r '.Credentials.SessionToken')
+      aws iam update-assume-role-policy --role-name ${each.value.name} --policy-document '${data.aws_iam_policy_document.updated_trust[each.key].json}'
+    EOF
+  }
 }
+
