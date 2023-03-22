@@ -10,3 +10,8 @@ data "aws_iam_session_context" "whoami" {
 data "aws_caller_identity" "data" {
   provider = aws.data
 }
+
+data "aws_iam_session_context" "data" {
+  provider = aws.data
+  arn      = data.aws_caller_identity.data.arn
+}
