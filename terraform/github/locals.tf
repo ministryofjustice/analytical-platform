@@ -21,7 +21,7 @@ locals {
       description = "Core Repository for Data Platform Data Products"
   }]
 
-  ap_migration_apps = slice(jsondecode(file("./ap_migration_apps.json")), 11, 15)
+  ap_migration_apps = slice(jsondecode(file("./ap_migration_apps.json")), 11, 12)
 
   migration_apps_map = { for app in local.ap_migration_apps : app.name => app } // so can be used in for_each
 
