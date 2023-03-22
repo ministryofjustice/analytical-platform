@@ -30,7 +30,8 @@ data "aws_iam_policy_document" "additional_statement" {
       variable = "${local.cloud_platform_eks_oidc_provider_id}:sub"
       values = [
         "system:serviceaccount:data-platform-app-${each.key}-dev:data-platform-app-${each.key}-dev",
-      "system:serviceaccount:data-platform-app-${each.key}-prod:data-platform-app-${each.key}-prod"]
+        "system:serviceaccount:data-platform-app-${each.key}-prod:data-platform-app-${each.key}-prod"
+      ]
     }
 
     condition {
@@ -70,7 +71,7 @@ resource "null_resource" "update_iam_role_trust_policy" {
 
   provisioner "local-exec" {
     command = <<EOF
-      TEMP_CREDS=$(aws sts assume-role --role-arn ${data.aws_caller_identity.data.arn} --role-session-name your-session-name)
+      TEMP_CREDS=$(aws sts assume-role --role-arn ${data.aws_iam_session_context.data.arn} --role-session-name your-session-name)
       export AWS_ACCESS_KEY_ID=$(echo $TEMP_CREDS | jq -r '.Credentials.AccessKeyId')
       export AWS_SECRET_ACCESS_KEY=$(echo $TEMP_CREDS | jq -r '.Credentials.SecretAccessKey')
       export AWS_SESSION_TOKEN=$(echo $TEMP_CREDS | jq -r '.Credentials.SessionToken')
