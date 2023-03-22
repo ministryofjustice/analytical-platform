@@ -71,12 +71,16 @@ resource "null_resource" "update_iam_role_trust_policy" {
 
   provisioner "local-exec" {
     command = <<EOF
-      TEMP_CREDS=$(aws sts assume-role --role-arn ${data.aws_iam_session_context.data.arn} --role-session-name your-session-name)
-      export AWS_ACCESS_KEY_ID=$(echo $TEMP_CREDS | jq -r '.Credentials.AccessKeyId')
-      export AWS_SECRET_ACCESS_KEY=$(echo $TEMP_CREDS | jq -r '.Credentials.SecretAccessKey')
-      export AWS_SESSION_TOKEN=$(echo $TEMP_CREDS | jq -r '.Credentials.SessionToken')
-      aws iam update-assume-role-policy --role-name ${each.value.name} --policy-document '${data.aws_iam_policy_document.updated_trust[each.key].json}'
-    EOF
+    if grep -q "SSO" <<< $(aws sts get-caller-identity); then # Needed when running locally using aws-vault https://github.com/hashicorp/terraform-provider-aws/issues/8242#issuecomment-696828321
+        unset AWS_SECURITY_TOKEN
+    fi
+    TEMP_CREDS=$(aws sts assume-role --role-arn ${data.aws_iam_session_context.data.issuer_arn} --role-session-name localexecupdatetrust)
+    export AWS_ACCESS_KEY_ID=$(echo $TEMP_CREDS | jq -r '.Credentials.AccessKeyId')
+    export AWS_SECRET_ACCESS_KEY=$(echo $TEMP_CREDS | jq -r '.Credentials.SecretAccessKey')
+    export AWS_SESSION_TOKEN=$(echo $TEMP_CREDS | jq -r '.Credentials.SessionToken')
+    aws sts get-caller-identity
+    aws iam update-assume-role-policy --role-name ${each.value.name} --policy-document '${data.aws_iam_policy_document.updated_trust[each.key].json}'
+  EOF
   }
 }
 
