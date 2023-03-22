@@ -2,7 +2,7 @@
 data "aws_iam_roles" "data_app_roles" {
   provider   = aws.data
   for_each   = local.migration_apps_map
-  name_regex = format("alpha_app_%s", each.key)
+  name_regex = format("alpha_app_%s$", each.key)
 }
 
 data "aws_iam_role" "app_role_details" {
@@ -12,7 +12,7 @@ data "aws_iam_role" "app_role_details" {
 }
 
 # The policy is derived using the following naming convention:
-# namespace: "data-platforms-app-<new repo name>-(prod|dev)
+# namespace: "data-platform-app-<new repo name>-(prod|dev)
 # serviceaccount: <namespace>
 
 data "aws_iam_policy_document" "additional_statement" {

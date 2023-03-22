@@ -51,7 +51,7 @@ module "data-platform-app-template" {
 }
 
 module "data-platform-apps" {
-  for_each           = { for repo in local.ap_migration_apps : repo.name => repo }
+  for_each           = local.migration_apps_map
   source             = "./modules/repository"
   name               = each.key
   type               = "app"
