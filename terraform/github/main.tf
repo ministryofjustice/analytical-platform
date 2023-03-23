@@ -178,3 +178,13 @@ module "data_platform_labs_team" {
   members     = local.all_members_data_platform_labs
   ci          = local.ci_users
 }
+
+# Data Platform Labs Team
+module "data_platform_security_auditor_team" {
+  source      = "./modules/team"
+  name        = "data-platform-security-and-auditors"
+  description = "Data Platform Security and Auditor Team"
+  maintainers = local.data_platform_security_auditor_members
+  members     = local.data_platform_security_auditor_members
+  ci          = local.ci_users
+}

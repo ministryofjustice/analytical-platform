@@ -119,4 +119,10 @@ locals {
     "hemeshpatel-moj",
     "murdo-moj"
   ]
+
+  data_platform_security_auditor_members = [
+    "simonMOJ",
+    "julialawrence",
+    "jacobwoffenden"
+  ]
 }
