@@ -121,6 +121,9 @@ locals {
   ]
 
   data_platform_security_analytics_members = [
-    "simonMOJ"
+    "simonMOJ",
+    "julialawrence",
+    "jacobwoffenden"
+
   ]
 }
