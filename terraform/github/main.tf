@@ -182,7 +182,7 @@ module "data_platform_labs_team" {
 # Data Platform Labs Team
 module "data_platform_security_analytics" {
   source      = "./modules/team"
-  name        = "data_platform_security_analytics"
+  name        = "data-platform-security-and-auditors"
   description = "Data Platform Security and Auditor Team"
   maintainers = local.data_platform_security_auditor_members
   members     = local.data_platform_security_auditor_members
