@@ -124,6 +124,5 @@ locals {
     "simonMOJ",
     "julialawrence",
     "jacobwoffenden"
-
   ]
 }
