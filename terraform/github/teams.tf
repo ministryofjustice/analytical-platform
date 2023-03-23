@@ -120,7 +120,7 @@ locals {
     "murdo-moj"
   ]
 
-  data-platform_security_analytics_members = [
+  data_platform_security_analytics_members = [
     "simonMOJ"
   ]
 }

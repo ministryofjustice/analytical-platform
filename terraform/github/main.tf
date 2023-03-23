@@ -184,7 +184,7 @@ module "data_platform_security_analytics" {
   source      = "./modules/team"
   name        = "data_platform_security_analytics"
   description = "Data Platform Security and Auditor Team"
-  maintainers = local.data-platform_security_analytics_members
-  members     = local.data-platform_security_analytics_members
+  maintainers = local.data_platform_security_analytics_members
+  members     = local.data_platform_security_analytics_members
   ci          = local.ci_users
 }
