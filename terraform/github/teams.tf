@@ -119,8 +119,8 @@ locals {
     "hemeshpatel-moj",
     "murdo-moj"
   ]
-}
 
-data-platform_security_analytics_members = [
-  "simonMOJ"
-]
+  data-platform_security_analytics_members = [
+    "simonMOJ"
+  ]
+}
