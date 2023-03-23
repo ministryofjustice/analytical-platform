@@ -180,7 +180,7 @@ module "data_platform_labs_team" {
 }
 
 # Data Platform Labs Team
-module "data_platform_security_analytics" {
+module "data_platform_security_auditor_team" {
   source      = "./modules/team"
   name        = "data-platform-security-and-auditors"
   description = "Data Platform Security and Auditor Team"
