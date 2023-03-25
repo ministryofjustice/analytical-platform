@@ -121,7 +121,7 @@ locals {
   ]
 
   data_platform_security_auditor_members = [
-    "simonMOJ",
+    "simonsMOJ",
     "julialawrence",
     "jacobwoffenden"
   ]
