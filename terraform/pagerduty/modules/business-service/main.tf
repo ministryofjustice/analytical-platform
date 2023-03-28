@@ -11,7 +11,7 @@ resource "pagerduty_service_dependency" "supporting_services" {
   dependency {
     dependent_service {
       id   = pagerduty_business_service.this.id
-      type = pagerduty_business_service.this.type
+      type = "business_service"
     }
     supporting_service {
       id   = each.value.id
