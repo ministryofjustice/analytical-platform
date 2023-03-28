@@ -30,11 +30,19 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/terraform/pagerduty/modules/business-service"
+    directory: "/terraform/pagerduty/modules/escalation-policy"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
     directory: "/terraform/pagerduty/modules/schedule"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/service/business"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/service/technical"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
