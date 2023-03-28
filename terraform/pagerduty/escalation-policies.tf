@@ -1,6 +1,18 @@
 locals {
   escalation_policies = [
     {
+      name                        = "Analytical Platform"
+      team                        = module.teams["Analytical Platform"].id
+      num_loops                   = 2
+      escalation_delay_in_minutes = 10
+      targets = [
+        {
+          type = "schedule_reference"
+          id   = module.schedules["Analytical Platform"].id
+        }
+      ]
+    },
+    {
       name                        = "Data Platform"
       team                        = module.teams["Data Platform"].id
       num_loops                   = 2

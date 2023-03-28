@@ -1,6 +1,14 @@
 locals {
   technical_services = [
     {
+      name              = "Analytical Platform High Priority"
+      escalation_policy = module.escalation_policies["Analytical Platform"].id
+    },
+    {
+      name              = "Analytical Platform Low Priority"
+      escalation_policy = module.escalation_policies["Analytical Platform"].id
+    },
+    {
       name              = "Data Platform High Priority"
       escalation_policy = module.escalation_policies["Data Platform"].id
     },
