@@ -29,7 +29,7 @@ module "business_services" {
   description         = each.value.description
   point_of_contact    = each.value.point_of_contact
   team                = each.value.team
-  supporting_services = each.value.supporting_services
+  supporting_services = try(each.value.supporting_services, [])
 
   depends_on = [module.teams]
 }

@@ -10,7 +10,6 @@ resource "pagerduty_team_membership" "managers" {
   role    = "manager"
 }
 
-
 resource "pagerduty_team_membership" "responders" {
   for_each = var.responders
 
