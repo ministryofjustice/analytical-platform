@@ -2,7 +2,7 @@
   "id": "terraform-tools",
   "version": "1.0.0",
   "name": "terraform-tools",
-  "description": "Terraform Tools - Terraform Switcher, Terraform Docs, hclq",
+  "description": "Terraform Tools - Terraform Switcher, Terraform Docs, hcl2json",
   "options": {
     "installTerraformSwitcher": {
       "type": "boolean",
@@ -32,14 +32,14 @@
       "proposals": ["latest"],
       "default": "latest"
     },
-    "installHclq": {
+    "installHcl2json": {
       "type": "boolean",
-      "description": "Install hclq (https://github.com/mattolenik/hclq)",
+      "description": "Install hcl2json (https://github.com/tmccombs/hcl2json)",
       "default": true
     },
-    "hclqVersion": {
+    "hcl2jsonVersion": {
       "type": "string",
-      "description": "hclq version",
+      "description": "hcl2json version",
       "proposals": ["latest"],
       "default": "latest"
     }
