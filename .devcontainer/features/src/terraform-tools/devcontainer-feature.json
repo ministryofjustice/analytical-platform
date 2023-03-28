@@ -2,7 +2,7 @@
   "id": "terraform-tools",
   "version": "1.0.0",
   "name": "terraform-tools",
-  "description": "Terraform Tools - Terraform Switcher, Terraform Docs",
+  "description": "Terraform Tools - Terraform Switcher, Terraform Docs, hclq",
   "options": {
     "installTerraformSwitcher": {
       "type": "boolean",
@@ -29,6 +29,17 @@
     "terraformDocsVersion": {
       "type": "string",
       "description": "Terraform Docs version",
+      "proposals": ["latest"],
+      "default": "latest"
+    },
+    "installHclq": {
+      "type": "boolean",
+      "description": "Install hclq (https://github.com/mattolenik/hclq)",
+      "default": true
+    },
+    "hclqVersion": {
+      "type": "string",
+      "description": "hclq version",
       "proposals": ["latest"],
       "default": "latest"
     }
