@@ -19,6 +19,7 @@ permissions: read-all
 
 jobs:
   terraform:
+    name: Terraform
     permissions:
       contents: read
       id-token: write

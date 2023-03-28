@@ -21,7 +21,7 @@ variable "layers" {
     rotation_virtual_start       = string
     rotation_turn_length_seconds = number
     users                        = list(string)
-    restrictions                 = optional(list(object({
+    restrictions = optional(list(object({
       type              = string
       start_time_of_day = string
       duration_seconds  = number
