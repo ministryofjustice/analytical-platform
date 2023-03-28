@@ -24,7 +24,7 @@ locals {
 module "business_services" {
   for_each = { for business_service in local.business_services : business_service.name => business_service }
 
-  source              = "./modules/business-service"
+  source              = "./modules/service/business"
   name                = each.key
   description         = each.value.description
   point_of_contact    = each.value.point_of_contact
