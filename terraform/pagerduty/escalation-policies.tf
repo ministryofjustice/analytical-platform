@@ -4,11 +4,24 @@ locals {
       name                        = "Analytical Platform"
       team                        = module.teams["Analytical Platform"].id
       num_loops                   = 2
-      escalation_delay_in_minutes = 10
-      targets = [
+      rules = [
         {
-          type = "schedule_reference"
-          id   = module.schedules["Analytical Platform"].id
+          escalation_delay_in_minutes = 15
+          targets = [
+            {
+              type = "schedule_reference"
+              id   = module.schedules["Analytical Platform"].id
+            }
+          ]
+        },
+        {
+          escalation_delay_in_minutes = 15
+          targets = [
+            {
+              type = "user_reference"
+              id   = module.users["jacob.woffenden@digital.justice.gov.uk"].id
+            }
+          ]
         }
       ]
     },
@@ -16,11 +29,24 @@ locals {
       name                        = "Data Platform"
       team                        = module.teams["Data Platform"].id
       num_loops                   = 2
-      escalation_delay_in_minutes = 10
-      targets = [
+      rules = [
         {
-          type = "schedule_reference"
-          id   = module.schedules["Data Platform"].id
+          escalation_delay_in_minutes = 15
+          targets = [
+            {
+              type = "schedule_reference"
+              id   = module.schedules["Data Platform"].id
+            }
+          ]
+        },
+        {
+          escalation_delay_in_minutes = 15
+          targets = [
+            {
+              type = "user_reference"
+              id   = module.users["jacob.woffenden@digital.justice.gov.uk"].id
+            }
+          ]
         }
       ]
     }
@@ -34,8 +60,7 @@ module "escalation_policies" {
   name                        = each.key
   team                        = each.value.team
   num_loops                   = each.value.num_loops
-  escalation_delay_in_minutes = each.value.escalation_delay_in_minutes
-  targets                     = each.value.targets
+  rules                       = each.value.rules
 
   depends_on = [
     module.schedules,

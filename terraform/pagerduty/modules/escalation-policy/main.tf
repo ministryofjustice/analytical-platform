@@ -3,13 +3,16 @@ resource "pagerduty_escalation_policy" "this" {
   num_loops = var.num_loops
   teams     = [var.team]
 
-  rule {
-    escalation_delay_in_minutes = var.escalation_delay_in_minutes
-    dynamic "target" {
-      for_each = var.targets
-      content {
-        type = target.value.type
-        id   = target.value.id
+  dynamic "rule" {
+    for_each = var.rules
+    content {
+      escalation_delay_in_minutes = rule.value.escalation_delay_in_minutes
+      dynamic "target" {
+        for_each = rule.value.targets
+        content {
+          type = target.value.type
+          id   = target.value.id
+        }
       }
     }
   }

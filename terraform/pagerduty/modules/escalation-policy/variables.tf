@@ -13,12 +13,13 @@ variable "num_loops" {
   description = "Number of times to loop through the escalation targets"
 }
 
-variable "escalation_delay_in_minutes" {
-  type        = number
-  description = "Number of minutes to wait before escalating to the next target"
-}
-
-variable "targets" {
-  type        = list(object({ type = string, id = string }))
-  description = "List of targets to escalate to"
+variable "rules" {
+  type        = list(object({
+    escalation_delay_in_minutes = number,
+    targets = list(object({
+      type = string,
+      id = string
+    }))
+  }))
+  description = "List of rules to escalate to"
 }
