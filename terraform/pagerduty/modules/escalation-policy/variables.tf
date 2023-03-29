@@ -3,6 +3,11 @@ variable "name" {
   description = "Name of the escalation policy"
 }
 
+variable "description" {
+  type        = string
+  description = "Description of the escalation policy"
+}
+
 variable "team" {
   type        = string
   description = "ID of the team to assign to this escalation policy"
@@ -14,11 +19,11 @@ variable "num_loops" {
 }
 
 variable "rules" {
-  type        = list(object({
+  type = list(object({
     escalation_delay_in_minutes = number,
     targets = list(object({
       type = string,
-      id = string
+      id   = string
     }))
   }))
   description = "List of rules to escalate to"

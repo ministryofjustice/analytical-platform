@@ -1,7 +1,8 @@
 resource "pagerduty_escalation_policy" "this" {
-  name      = var.name
-  num_loops = var.num_loops
-  teams     = [var.team]
+  name        = var.name
+  description = var.description
+  num_loops   = var.num_loops
+  teams       = [var.team]
 
   dynamic "rule" {
     for_each = var.rules
