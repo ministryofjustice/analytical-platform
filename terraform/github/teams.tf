@@ -42,7 +42,8 @@ locals {
     "tom-webber",
     "bogdan-mania-moj",
     "Emterry",   # Emma Terry
-    "ahbensiali" # Abdel Bensiali
+    "ahbensiali",  # Abdel Bensiali
+    "michaeljcollinsuk"
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
