@@ -1,9 +1,10 @@
 resource "pagerduty_service" "this" {
-  name                 = var.name
-  description          = var.description
-  escalation_policy    = var.escalation_policy
-  alert_creation       = var.alert_creation
-  auto_resolve_timeout = var.auto_resolve_timeout
+  name                    = var.name
+  description             = var.description
+  escalation_policy       = var.escalation_policy
+  alert_creation          = var.alert_creation
+  auto_resolve_timeout    = var.auto_resolve_timeout
+  acknowledgement_timeout = var.acknowledgement_timeout
 
   dynamic "auto_pause_notifications_parameters" {
     for_each = var.auto_pause_notifications_parameters
