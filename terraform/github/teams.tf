@@ -41,7 +41,7 @@ locals {
     "BrianEllwood",
     "tom-webber",
     "bogdan-mania-moj",
-    "Emterry",   # Emma Terry
+    "Emterry",     # Emma Terry
     "ahbensiali",  # Abdel Bensiali
     "michaeljcollinsuk"
   ]
