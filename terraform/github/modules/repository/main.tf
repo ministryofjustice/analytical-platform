@@ -40,7 +40,8 @@ resource "github_repository" "default" {
 }
 
 resource "github_branch_protection" "default" {
-  count          = var.type == "app" ? 0 : 1 # Temp fix for app-migration setup
+  count = var.type == "app" ? 0 : 1 # Temp fix for app-migration setup
+
   repository_id  = github_repository.default.id
   pattern        = "main"
   enforce_admins = true
@@ -64,6 +65,7 @@ resource "github_branch_protection" "default" {
 
 resource "github_repository_tag_protection" "default" {
   count = var.type == "app" ? 0 : 1 # apps will not have tag protection
+
   repository = github_repository.default.id
   pattern    = "*"
 }
