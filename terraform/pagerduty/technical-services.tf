@@ -1,9 +1,9 @@
 locals {
   technical_services = [
     {
-      name                    = "Analytical Platform High Priority"
-      description             = "High priority incidents for the Analytical Platform team"
-      escalation_policy       = module.escalation_policies["Analytical Platform"].id
+      name              = "Analytical Platform High Priority"
+      description       = "High priority incidents for the Analytical Platform team"
+      escalation_policy = module.escalation_policies["Analytical Platform"].id
       auto_pause_notifications_parameters = [
         {
           enabled = true
@@ -21,7 +21,7 @@ locals {
       ]
       incident_urgency_rules = [
         {
-          type    = "use_support_hours"
+          type = "use_support_hours"
           during_support_hours = [
             {
               type    = "constant"
@@ -40,9 +40,9 @@ locals {
       enable_github_integration     = true
     },
     {
-      name                    = "Analytical Platform Low Priority"
-      description             = "Low priority incidents for the Analytical Platform team"
-      escalation_policy       = module.escalation_policies["Analytical Platform"].id
+      name              = "Analytical Platform Low Priority"
+      description       = "Low priority incidents for the Analytical Platform team"
+      escalation_policy = module.escalation_policies["Analytical Platform"].id
       auto_pause_notifications_parameters = [
         {
           enabled = true
@@ -60,7 +60,7 @@ locals {
       ]
       incident_urgency_rules = [
         {
-          type    = "use_support_hours"
+          type = "use_support_hours"
           during_support_hours = [
             {
               type    = "constant"
@@ -79,9 +79,9 @@ locals {
       enable_github_integration     = true
     },
     {
-      name                    = "Data Platform High Priority"
-      description             = "High priority incidents for the Data Platform team"
-      escalation_policy       = module.escalation_policies["Data Platform"].id
+      name              = "Data Platform High Priority"
+      description       = "High priority incidents for the Data Platform team"
+      escalation_policy = module.escalation_policies["Data Platform"].id
       auto_pause_notifications_parameters = [
         {
           enabled = true
@@ -99,7 +99,7 @@ locals {
       ]
       incident_urgency_rules = [
         {
-          type    = "use_support_hours"
+          type = "use_support_hours"
           during_support_hours = [
             {
               type    = "constant"
@@ -118,9 +118,9 @@ locals {
       enable_github_integration     = true
     },
     {
-      name                    = "Data Platform Low Priority"
-      description             = "Low priority incidents for the Data Platform team"
-      escalation_policy       = module.escalation_policies["Data Platform"].id
+      name              = "Data Platform Low Priority"
+      description       = "Low priority incidents for the Data Platform team"
+      escalation_policy = module.escalation_policies["Data Platform"].id
       auto_pause_notifications_parameters = [
         {
           enabled = true
@@ -138,7 +138,7 @@ locals {
       ]
       incident_urgency_rules = [
         {
-          type    = "use_support_hours"
+          type = "use_support_hours"
           during_support_hours = [
             {
               type    = "constant"
@@ -169,7 +169,7 @@ module "technical_services" {
   alert_creation                      = try(each.value.alert_creation, "create_alerts_and_incidents")
   auto_resolve_timeout                = try(each.value.auto_resolve_timeout, 14400)
   acknowledgement_timeout             = try(each.value.acknowledgement_timeout, 600)
-  incident_urgency_rules               = try(each.value.incident_urgency_rules, [])
+  incident_urgency_rules              = try(each.value.incident_urgency_rules, [])
   auto_pause_notifications_parameters = try(each.value.auto_pause_notifications_parameters, [])
   support_hours                       = try(each.value.support_hours, [])
   enable_cloudwatch_integration       = try(each.value.enable_cloudwatch_integration, false)
