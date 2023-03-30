@@ -63,6 +63,7 @@ resource "github_branch_protection" "default" {
 }
 
 resource "github_repository_tag_protection" "default" {
+  count = var.type == "app" ? 0 : 1 # apps will not have tag protection
   repository = github_repository.default.id
   pattern    = "*"
 }
