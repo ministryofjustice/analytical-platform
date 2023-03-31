@@ -17,7 +17,8 @@ RUN groupadd --gid ${CONTAINER_GID} ${CONTAINER_GROUP} \
     && useradd --uid ${CONTAINER_UID} --gid ${CONTAINER_GROUP} --shell /bin/bash --create-home ${CONTAINER_USER} \
     && mkdir --parents ${CONTAINER_HOME} \
     && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} ${CONTAINER_HOME} \
-    && apt-get update && apt-get upgrade --assume-yes \
+    && apt-get update \
+    && apt-get upgrade --assume-yes \
     && rm -rf /var/lib/apt/lists/*
 
 USER ${CONTAINER_USER}
