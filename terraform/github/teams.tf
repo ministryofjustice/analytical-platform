@@ -41,8 +41,9 @@ locals {
     "BrianEllwood",
     "tom-webber",
     "bogdan-mania-moj",
-    "Emterry",   # Emma Terry
-    "ahbensiali" # Abdel Bensiali
+    "Emterry",    # Emma Terry
+    "ahbensiali", # Abdel Bensiali
+    "michaeljcollinsuk"
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
@@ -118,5 +119,11 @@ locals {
   data_platform_labs_members = [
     "hemeshpatel-moj",
     "murdo-moj"
+  ]
+
+  data_platform_security_auditor_members = [
+    "simonsMOJ",
+    "julialawrence",
+    "jacobwoffenden"
   ]
 }

@@ -20,23 +20,32 @@ locals {
       name        = "data-platform-products",
       description = "Core Repository for Data Platform Data Products"
   }]
-
-  ap_migration_apps = slice(jsondecode(file("./ap_migration_apps.json")), 11, 15)
-
-  migration_apps_map = { for app in local.ap_migration_apps : app.name => app } // so can be used in for_each
+  ap_migration_apps  = jsondecode(file("./ap_migration_apps.json"))
+  migration_apps_map = { for app in local.ap_migration_apps : app.name => app } # so can be used in for_each
 
   cloud_platform_eks_oidc_provider_arn = "arn:aws:iam::593291632749:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/DF366E49809688A3B16EEC29707D8C09"
   cloud_platform_eks_oidc_provider_id  = "oidc.eks.eu-west-2.amazonaws.com/id/DF366E49809688A3B16EEC29707D8C09"
 
   # All Tech Archs
   tech_archs = concat(local.tech_archs_members, local.tech_archs_maintainers)
-  # All data engineers
 
-  all_members_data_engineers = concat(local.data_engineering_maintainers, local.data_engineering_members, local.data_engineering_aws_members)
+  # All Data Engineers
+  all_members_data_engineers = concat(
+    local.data_engineering_maintainers,
+    local.data_engineering_members,
+    local.data_engineering_aws_members
+  )
 
-  all_members_data_platform_core_infrastructure = concat(local.data_platform_core_infrastructure_maintainers, local.data_platform_core_infrastructure_members)
+  all_members_data_platform_core_infrastructure = concat(
+    local.data_platform_core_infrastructure_maintainers,
+    local.data_platform_core_infrastructure_members
+  )
 
-  all_members_data_platform_labs = concat(local.data_platform_labs_maintainers, local.data_platform_labs_members)
+  all_members_data_platform_labs = concat(
+    local.data_platform_labs_maintainers,
+    local.data_platform_labs_members
+  )
+
   # All members
   all_members = concat(local.general_members, local.engineers)
 

@@ -41,10 +41,11 @@ resource "github_repository" "default" {
 
 resource "github_branch_protection" "default" {
   count = var.type == "app" ? 0 : 1 # Temp fix for app-migration setup
-  #checkov:skip=CKV_GIT_6:"Following discussions with other teams we will not be enforcing signed commits currently"
+
   repository_id  = github_repository.default.id
   pattern        = "main"
   enforce_admins = true
+  #checkov:skip=CKV_GIT_6:"Following discussions with other teams we will not be enforcing signed commits currently"
   #tfsec:ignore:github-branch_protections-require_signed_commits
   require_signed_commits = var.require_signed_commits
 
@@ -63,6 +64,8 @@ resource "github_branch_protection" "default" {
 }
 
 resource "github_repository_tag_protection" "default" {
+  count = var.type == "app" ? 0 : 1 # apps will not have tag protection
+
   repository = github_repository.default.id
   pattern    = "*"
 }
