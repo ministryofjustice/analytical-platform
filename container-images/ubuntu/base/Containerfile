@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lts/ubuntu:22.04
+FROM public.ecr.aws/lts/ubuntu@sha256:5f6d7e4dad348dbbae3c1e960dcaba98c2e262902c67c9bc41d5f2417cebaeb8 # 22.04
 
 LABEL org.opencontainers.image.vendor="Ministry of Justice" \
       org.opencontainers.image.authors="Data Platform Core Infrastructure" \
@@ -21,4 +21,5 @@ RUN groupadd --gid ${CONTAINER_GID} ${CONTAINER_GROUP} \
     && rm -rf /var/lib/apt/lists/*
 
 USER ${CONTAINER_USER}
+
 WORKDIR ${CONTAINER_HOME}
