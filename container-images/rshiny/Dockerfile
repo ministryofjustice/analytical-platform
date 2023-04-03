@@ -31,4 +31,4 @@ RUN apt-get update \
          --output shiny-server.deb \
     && npm install --global ./analytics-platform-shiny-server.tar.gz \
     && apt-get install --assume-yes ./r.deb \
-    && apt-get install --assume-yes ./shiny-server.deb \
+    && apt-get install --assume-yes ./shiny-server.deb

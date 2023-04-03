@@ -6,14 +6,14 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/container-images.yml
+      - .github/workflows/container-images-alpine.yml
       - .github/workflows/path-filter/container-images-alpine.yml
       - container-images/alpine/**
   push:
     branches:
       - main
     paths:
-      - .github/workflows/container-images.yml
+      - .github/workflows/container-images-alpine.yml
       - .github/workflows/path-filter/container-images-alpine.yml
       - container-images/alpine/**
 

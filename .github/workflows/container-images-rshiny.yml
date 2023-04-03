@@ -1,44 +1,24 @@
 ---
-name: Container images - Ubuntu
+name: Container images - R Shiny
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - .github/workflows/container-images-ubuntu.yml
-      - .github/workflows/path-filter/container-images-ubuntu.yml
-      - container-images/ubuntu/**
+      - .github/workflows/container-images-rshiny.yml
+      - container-images/rshiny/**
   push:
     branches:
       - main
     paths:
-      - .github/workflows/container-images-ubuntu.yml
-      - .github/workflows/path-filter/container-images-ubuntu.yml
-      - container-images/ubuntu/**
+      - .github/workflows/container-images-rshiny.yml
+      - container-images/rshiny/**
 
 permissions: read-all
 
 jobs:
-  detect-changes:
-    name: Detect changes
-    runs-on: ubuntu-latest
-    outputs:
-      images: ${{ steps.detect_changes.outputs.changes }}
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f # v3.4.0
-
-      - name: Detect changes
-        id: detect_changes
-        uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
-        with:
-          filters: .github/workflows/path-filter/container-images-ubuntu.yml
-
   build:
-    if: ${{ needs.detect-changes.outputs.images != '[]' }}
-    needs: [detect-changes]
     name: Build image
     runs-on: ubuntu-latest
     permissions:
@@ -47,7 +27,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        images: ${{ fromJson(needs.detect-changes.outputs.images) }}
+        r: ["3.5.3", "3.6.3", "4.0.5", "4.1.3", "4.2.2"]
+        shinyserver: ["0.0.4", "0.0.5", "0.0.6"]
     steps:
       - name: Checkout
         id: checkout
@@ -57,31 +38,23 @@ jobs:
         id: install_cosign
         uses: sigstore/cosign-installer@c3667d99424e7e6047999fb6246c0da843953c65 # v3.0.1
 
-      - name: Prepare build paramerters
-        id: prepare
-        run: |
-          echo "name=$(jq -r '.name' container-images/ubuntu/${{ matrix.images }}/config.json)" >> ${GITHUB_ENV}
-          echo "version=$(jq -r '.version' container-images/ubuntu/${{ matrix.images }}/config.json)" >> ${GITHUB_ENV}
-
       - name: Build image
         id: build
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671 # v4.0.0
         with:
-          context: container-images/ubuntu/${{ matrix.images }}
-          file: container-images/ubuntu/${{ matrix.images }}/Dockerfile
+          context: container-images/rshiny
+          file: container-images/ubuntu/rshiny/Dockerfile
           push: false
-          tags: ${{ env.name }}:${{ env.version }}
-
-      # - name: Load image
-      #   id: load_image
-      #   run: |
-      #     docker load -i ${{ env.name }}-${{ env.version }}.tar
+          tags: rshiny:${{ matrix.r }}-${{ matrix.shinyserver }}
+          build-args: |
+            R_VERSION=${{ matrix.r }}
+            AP_SHINY_SERVER_VERSION=${{ matrix.shinyserver }}
 
       # - name: Scan image (anchore)
       #   id: scan_image_anchore
       #   uses: anchore/scan-action@dafbc97d7259af88b61bd260f2fde565d0668a72 # v3.3.4
       #   with:
-      #     image: ${{ env.name }}:${{ env.version }}-amd64
+      #     image: rshiny:${{ matrix.r }}-${{ matrix.shinyserver }}
       #     severity-cutoff: critical
 
       # - name: Upload SARIF (anchore)
