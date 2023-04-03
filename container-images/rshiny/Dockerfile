@@ -12,8 +12,10 @@ ARG R_VERSION="4.1.3" \
     AP_SHINY_SERVER_VERSION="0.0.6" \
     SHINY_SERVER_VERSION="1.5.20.1002"
 
-ENV DEBIAN_FRONTEND="noninteractive"
+ENV DEBIAN_FRONTEND="noninteractive" \
+    NODE_ENV="production"
 
+# Install Prerequisites, including R, Shiny Server and AP Shiny Server
 RUN apt-get update \
     && apt-get upgrade --assume-yes \
     && apt-get install --assume-yes --no-install-recommends \
@@ -33,4 +35,19 @@ RUN apt-get update \
          --output shiny-server.deb \
     && npm install --global ./analytics-platform-shiny-server.tar.gz \
     && apt-get install --assume-yes ./r.deb \
-    && apt-get install --assume-yes ./shiny-server.deb
+    && apt-get install --assume-yes ./shiny-server.deb \
+    && rm --force \
+        analytics-platform-shiny-server.tar.gz \
+        r.deb \
+        shiny-server.deb \
+     && apt-get clean \
+     && rm --recursive --force /var/lib/apt/lists/*
+
+# Install R packages
+RUN R -e "install.packages('shiny')"
+
+RUN mkdir --parents /app \
+    && mkdir --parents /var/log/shiny-server
+
+COPY src/etc/shiny-server/shiny-server.conf /etc/shiny-server/shiny-server.conf
+COPY src/usr/local/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
