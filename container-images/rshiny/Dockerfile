@@ -12,10 +12,20 @@ ARG R_VERSION="4.1.3" \
     AP_SHINY_SERVER_VERSION="0.0.6" \
     SHINY_SERVER_VERSION="1.5.20.1002"
 
-ENV DEBIAN_FRONTEND="noninteractive" \
-    NODE_ENV="production"
+ENV CONTAINER_USER="nonroot" \
+    CONTAINER_UID="10000" \
+    CONTAINER_GROUP="nonroot" \
+    CONTAINER_GID="10000" \
+    DEBIAN_FRONTEND="noninteractive" \
+    NODE_ENV="production" \
+    SHINY_APP_HOME="/app"
 
-# Install Prerequisites, including R, Shiny Server and AP Shiny Server
+COPY src/etc/shiny-server/shiny-server.conf /etc/shiny-server/shiny-server.conf
+COPY src/usr/local/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN groupadd --gid ${CONTAINER_GID} ${CONTAINER_GROUP} \
+    && useradd --uid ${CONTAINER_UID} --gid ${CONTAINER_GROUP} --shell /bin/bash --create-home ${CONTAINER_USER}
+
 RUN apt-get update \
     && apt-get upgrade --assume-yes \
     && apt-get install --assume-yes --no-install-recommends \
@@ -43,11 +53,17 @@ RUN apt-get update \
      && apt-get clean \
      && rm --recursive --force /var/lib/apt/lists/*
 
-# Install R packages
 RUN R -e "install.packages('shiny')"
 
-RUN mkdir --parents /app \
-    && mkdir --parents /var/log/shiny-server
+RUN mkdir --parents ${SHINY_APP_HOME} \
+    && mkdir --parents /var/log/shiny-server \
+    && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} ${SHINY_APP_HOME} \
+    && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} /var/log/shiny-server
 
-COPY src/etc/shiny-server/shiny-server.conf /etc/shiny-server/shiny-server.conf
-COPY src/usr/local/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
+USER ${CONTAINER_USER}
+
+WORKDIR ${SHINY_APP_HOME}
+
+EXPOSE 9999
+
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
