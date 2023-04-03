@@ -1,3 +1,5 @@
+# hadolint global ignore=DL3008
+
 FROM public.ecr.aws/lts/ubuntu@sha256:5f6d7e4dad348dbbae3c1e960dcaba98c2e262902c67c9bc41d5f2417cebaeb8
 
 LABEL org.opencontainers.image.vendor="Ministry of Justice" \
