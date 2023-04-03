@@ -23,7 +23,7 @@
   "workspaceFolder": "/home/vscode/workspace",
   "customizations": {
     "vscode": {
-      "extensions": ["EditorConfig.EditorConfig", "GitHub.copilot", "GitHub.vscode-pull-request-github"]
+      "extensions": ["EditorConfig.EditorConfig", "GitHub.copilot", "GitHub.vscode-pull-request-github", "GitHub.vscode-github-actions"]
     }
   }
 }
