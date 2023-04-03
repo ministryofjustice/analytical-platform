@@ -96,7 +96,7 @@ jobs:
 
       - name: Publish SBOM
         id: publish_sbom
-        uses: anchore/sbom-action/publish-sbom@448520c4f19577ffce70a8317e619089054687e3 # v0.13.4
+        uses: anchore/sbom-action/publish-sbom@422cb34a0f8b599678c41b21163ea6088edb2624 # v0.14.1
         with:
           sbom-artifact-match: sbom-x86_64.spdx.json
 
