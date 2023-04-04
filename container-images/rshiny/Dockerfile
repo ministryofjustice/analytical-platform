@@ -10,8 +10,7 @@ LABEL org.opencontainers.image.vendor="Ministry of Justice" \
 
 ARG R_VERSION="4.1.3" \
     R_ENV_VERSION="0.17.1" \
-    AP_SHINY_SERVER_VERSION="0.0.6" \
-    SHINY_SERVER_VERSION="1.5.20.1002"
+    AP_SHINY_SERVER_VERSION="0.0.6"
 
 ENV CONTAINER_USER="nonroot" \
     CONTAINER_UID="10000" \
@@ -42,8 +41,6 @@ RUN groupadd --gid ${CONTAINER_GID} ${CONTAINER_GROUP} \
          --output analytics-platform-shiny-server.tar.gz \
     && curl --location https://cdn.posit.co/r/ubuntu-2204/pkgs/r-${R_VERSION}_1_amd64.deb \
          --output r.deb \
-    && curl --location https://download3.rstudio.org/ubuntu-18.04/x86_64/shiny-server-${SHINY_SERVER_VERSION}-amd64.deb \
-         --output shiny-server.deb \
     && npm install --global ./analytics-platform-shiny-server.tar.gz \
     && apt-get install --assume-yes ./r.deb \
     && apt-get install --assume-yes ./shiny-server.deb \
