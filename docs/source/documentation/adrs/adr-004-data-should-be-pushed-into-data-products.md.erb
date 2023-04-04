@@ -33,7 +33,7 @@ Both approaches have advantages:
 | - Data product developers need to make sure that the system that extracts and pushes the data into a data product is kept in sync with the Data Product transformation code, so that modifications on the structure of the data are handled correctly. As these systems are deployed and managed independently, there's a higher risk of mismatch. | - Security - a compromised Data Platform role could potentially have access to several data sources. |
 
 
-# Decision
+## Decision
 The current choice is to support data ingestion through a push approach.
 
 While we have the infrastructure to allow for data to be sent into a data product, that is not to say that a pull model is forbidden. Data Product developers may chose to fetch their data from within the Data Product. That process however is not natively supported by the Data Platform, nor currently encouraged.
