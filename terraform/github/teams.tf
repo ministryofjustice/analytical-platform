@@ -25,11 +25,9 @@ locals {
     "mshodge",        # Michael Hodges
     "YvanMOJdigital", # Yvan Smith
     "amycufflin",
-    "ChikC",        # Chike Chinukwue
-    "EO510",        # Eki Osehenye
-    "sreekanthmoj", # Sreekanth Kote - Cognizant
-    "karthikmoj",   # Karthik Pelluru - Cognizant
-    "Braimah-L"     # Braimah Lat
+    "ChikC",    # Chike Chinukwue
+    "EO510",    # Eki Osehenye
+    "Braimah-L" # Braimah Lat
   ]
 
   # GitHub usernames for engineers who need full AWS access
@@ -41,8 +39,7 @@ locals {
     "BrianEllwood",
     "tom-webber",
     "bogdan-mania-moj",
-    "Emterry",    # Emma Terry
-    "ahbensiali", # Abdel Bensiali
+    "Emterry", # Emma Terry
     "michaeljcollinsuk"
   ]
 
