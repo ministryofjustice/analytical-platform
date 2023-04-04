@@ -43,11 +43,9 @@ RUN groupadd --gid ${CONTAINER_GID} ${CONTAINER_GROUP} \
          --output r.deb \
     && npm install --global ./analytics-platform-shiny-server.tar.gz \
     && apt-get install --assume-yes ./r.deb \
-    && apt-get install --assume-yes ./shiny-server.deb \
     && rm --force \
         analytics-platform-shiny-server.tar.gz \
         r.deb \
-        shiny-server.deb \
     && apt-get clean \
     && rm --recursive --force /var/lib/apt/lists/* \
     && R -e "install.packages(c('remotes', 'shiny'))" \
