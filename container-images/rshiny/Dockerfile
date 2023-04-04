@@ -9,6 +9,7 @@ LABEL org.opencontainers.image.vendor="Ministry of Justice" \
       org.opencontainers.image.url="https://github.com/ministryofjustice/data-platform/tree/main/container-images/ubuntu/rshiny"
 
 ARG R_VERSION="4.1.3" \
+    R_ENV_VERSION="0.17.1" \
     AP_SHINY_SERVER_VERSION="0.0.6" \
     SHINY_SERVER_VERSION="1.5.20.1002"
 
@@ -18,15 +19,14 @@ ENV CONTAINER_USER="nonroot" \
     CONTAINER_GID="10000" \
     DEBIAN_FRONTEND="noninteractive" \
     NODE_ENV="production" \
-    SHINY_APP_HOME="/app"
+    SHINY_APP="/srv/shiny-server"
 
 COPY src/etc/shiny-server/shiny-server.conf /etc/shiny-server/shiny-server.conf
 COPY src/usr/local/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN groupadd --gid ${CONTAINER_GID} ${CONTAINER_GROUP} \
-    && useradd --uid ${CONTAINER_UID} --gid ${CONTAINER_GROUP} --shell /bin/bash --create-home ${CONTAINER_USER}
-
-RUN apt-get update \
+    && useradd --uid ${CONTAINER_UID} --gid ${CONTAINER_GROUP} --shell /bin/bash --create-home ${CONTAINER_USER} \
+    && apt-get update \
     && apt-get upgrade --assume-yes \
     && apt-get install --assume-yes --no-install-recommends \
         ca-certificates \
@@ -37,6 +37,7 @@ RUN apt-get update \
         python3 \
         python3-pip \
         python3-boto3 \
+        python3-venv \
     && curl --location https://github.com/ministryofjustice/analytics-platform-shiny-server/archive/refs/tags/v${AP_SHINY_SERVER_VERSION}.tar.gz \
          --output analytics-platform-shiny-server.tar.gz \
     && curl --location https://cdn.posit.co/r/ubuntu-2204/pkgs/r-${R_VERSION}_1_amd64.deb \
@@ -50,19 +51,18 @@ RUN apt-get update \
         analytics-platform-shiny-server.tar.gz \
         r.deb \
         shiny-server.deb \
-     && apt-get clean \
-     && rm --recursive --force /var/lib/apt/lists/*
-
-RUN R -e "install.packages('shiny')"
-
-RUN mkdir --parents ${SHINY_APP_HOME} \
+    && apt-get clean \
+    && rm --recursive --force /var/lib/apt/lists/* \
+    && R -e "install.packages(c('remotes', 'shiny'))" \
+    && R -e "remotes::install_github('rstudio/renv@${R_ENV_VERSION}')" \
+    && mkdir --parents ${SHINY_APP} \
     && mkdir --parents /var/log/shiny-server \
-    && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} ${SHINY_APP_HOME} \
+    && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} ${SHINY_APP} \
     && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} /var/log/shiny-server
 
 USER ${CONTAINER_USER}
 
-WORKDIR ${SHINY_APP_HOME}
+WORKDIR ${SHINY_APP}
 
 EXPOSE 9999
 
