@@ -27,8 +27,6 @@ locals {
     "amycufflin",
     "ChikC",        # Chike Chinukwue
     "EO510",        # Eki Osehenye
-    "sreekanthmoj", # Sreekanth Kote - Cognizant
-    "karthikmoj",   # Karthik Pelluru - Cognizant
     "Braimah-L"     # Braimah Lat
   ]
 
@@ -42,7 +40,6 @@ locals {
     "tom-webber",
     "bogdan-mania-moj",
     "Emterry",    # Emma Terry
-    "ahbensiali", # Abdel Bensiali
     "michaeljcollinsuk"
   ]
 
