@@ -6,7 +6,7 @@ LABEL org.opencontainers.image.vendor="Ministry of Justice" \
       org.opencontainers.image.authors="Data Platform Core Infrastructure" \
       org.opencontainers.image.title="Data Platform R Shiny Image" \
       org.opencontainers.image.description="R Shiny image for Analytical Platform" \
-      org.opencontainers.image.url="https://github.com/ministryofjustice/data-platform/tree/main/container-images/ubuntu/rshiny"
+      org.opencontainers.image.url="https://github.com/ministryofjustice/data-platform/tree/main/container-images/rshiny"
 
 ARG R_VERSION="4.1.3" \
     R_ENV_VERSION="0.17.1" \
