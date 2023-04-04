@@ -79,7 +79,7 @@ jobs:
         id: scan_image_anchore
         uses: anchore/scan-action@dafbc97d7259af88b61bd260f2fde565d0668a72 # v3.3.4
         with:
-          image: ${{ env.name }}:${{ env.version }}-amd64
+          image: ${{ env.name }}:${{ env.version }}
           severity-cutoff: critical
 
       - name: Upload SARIF
@@ -119,10 +119,10 @@ jobs:
         id: tag_image
         run: |
           docker tag \
-            ${{ env.name }}:${{ env.version }}-amd64 \
+            ${{ env.name }}:${{ env.version }} \
             ministryofjustice/data-platform-${{ env.name }}:${{ env.version }}
           docker tag \
-            ${{ env.name }}:${{ env.version }}-amd64 \
+            ${{ env.name }}:${{ env.version }} \
             ministryofjustice/data-platform-${{ env.name }}:latest
 
       - name: Push image
