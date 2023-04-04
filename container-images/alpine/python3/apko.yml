@@ -1,5 +1,5 @@
 ---
-include: container-images/base/apko.yml
+include: container-images/alpine/base/apko.yml
 
 contents:
   packages:

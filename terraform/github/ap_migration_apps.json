@@ -10,6 +10,16 @@
       "description": ""
     },
     {
+      "name": "judicial-reviews-app",
+      "source_repo_name": "judicial-reviews-app",
+      "description": ""
+    },
+    {
+      "name": "judicial-wm2",
+      "source_repo_name": "judicial-wm2",
+      "description": ""
+    },
+    {
       "name": "ltc-capabilites-app",
       "source_repo_name": "ltc-capabilites-app",
       "description": ""

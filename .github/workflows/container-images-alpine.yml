@@ -1,21 +1,21 @@
 ---
-name: Container images
+name: Container images - Alpine
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - .github/workflows/container-images.yml
-      - .github/workflows/path-filter/container-images.yml
-      - container-images/**
+      - .github/workflows/container-images-alpine.yml
+      - .github/workflows/path-filter/container-images-alpine.yml
+      - container-images/alpine/**
   push:
     branches:
       - main
     paths:
-      - .github/workflows/container-images.yml
-      - .github/workflows/path-filter/container-images.yml
-      - container-images/**
+      - .github/workflows/container-images-alpine.yml
+      - .github/workflows/path-filter/container-images-alpine.yml
+      - container-images/alpine/**
 
 permissions: read-all
 
@@ -34,7 +34,7 @@ jobs:
         id: detect_changes
         uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         with:
-          filters: .github/workflows/path-filter/container-images.yml
+          filters: .github/workflows/path-filter/container-images-alpine.yml
 
   build:
     if: ${{ needs.detect-changes.outputs.images != '[]' }}
@@ -53,35 +53,31 @@ jobs:
         id: checkout
         uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
 
-      - name: Install cosign
-        id: install_cosign
-        uses: sigstore/cosign-installer@c3667d99424e7e6047999fb6246c0da843953c65 # v3.0.1
-
       - name: Prepare build paramerters
         id: prepare
         run: |
-          echo "name=$(jq -r '.name' container-images/${{ matrix.images }}/config.json)" >> ${GITHUB_ENV}
-          echo "version=$(jq -r '.version' container-images/${{ matrix.images }}/config.json)" >> ${GITHUB_ENV}
+          echo "name=$(jq -r '.name' container-images/alpine/${{ matrix.images }}/config.json)" >> ${GITHUB_ENV}
+          echo "version=$(jq -r '.version' container-images/alpine/${{ matrix.images }}/config.json)" >> ${GITHUB_ENV}
 
       - name: Build image
         id: build
         uses: docker://cgr.dev/chainguard/apko@sha256:a2438e282d6a5ca7de8b6e5343b452f003ac148def536bbd4bacc357ee41c58a # 0.7.1
         with:
-          args: build container-images/${{ matrix.images }}/apko.yml ${{ env.name }}:${{ env.version }} ${{ env.name }}-${{ env.version }}.tar
+          args: build container-images/alpine/${{ matrix.images }}/apko.yml ${{ env.name }}:${{ env.version }} ${{ env.name }}-${{ env.version }}.tar
 
       - name: Load image
         id: load_image
         run: |
           docker load -i ${{ env.name }}-${{ env.version }}.tar
 
-      - name: Scan image (anchore)
+      - name: Scan image
         id: scan_image_anchore
         uses: anchore/scan-action@4be3c24559b430723e51858969965e163b196957 # v3.3.5
         with:
           image: ${{ env.name }}:${{ env.version }}-amd64
           severity-cutoff: critical
 
-      - name: Upload SARIF (anchore)
+      - name: Upload SARIF
         if: always()
         id: upload_sarif_anchore
         uses: github/codeql-action/upload-sarif@04df1262e6247151b5ac09cd2c303ac36ad3f62b # v2.2.9
@@ -96,9 +92,14 @@ jobs:
 
       - name: Publish SBOM
         id: publish_sbom
-        uses: anchore/sbom-action/publish-sbom@448520c4f19577ffce70a8317e619089054687e3 # v0.13.4
+        uses: anchore/sbom-action/publish-sbom@422cb34a0f8b599678c41b21163ea6088edb2624 # v0.14.1
         with:
           sbom-artifact-match: sbom-x86_64.spdx.json
+
+      - name: Install cosign
+        if: github.ref == 'refs/heads/main'
+        id: install_cosign
+        uses: sigstore/cosign-installer@c3667d99424e7e6047999fb6246c0da843953c65 # v3.0.1
 
       - name: Login to Docker Hub
         if: github.ref == 'refs/heads/main'
