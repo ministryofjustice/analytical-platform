@@ -6,5 +6,4 @@ then
  exec xtail /var/log/shiny-server/ &
 fi
 
-# start shiny server
-exec /usr/bin/shiny-server 2>&1
+exec /usr/local/bin/analytics-platform-shiny-server 2>&1

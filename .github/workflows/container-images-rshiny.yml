@@ -34,6 +34,11 @@ jobs:
         id: checkout
         uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
 
+      - name: Prepare build paramerters
+        id: prepare
+        run: |
+          echo "version=$(jq -r '.version' container-images/rshiny/config.json)" >> ${GITHUB_ENV}
+
       - name: Build image
         id: build
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671 # v4.0.0
@@ -41,7 +46,7 @@ jobs:
           context: container-images/rshiny
           file: container-images/rshiny/Dockerfile
           push: false
-          tags: rshiny:${{ matrix.r }}-${{ matrix.shinyserver }}
+          tags: rshiny:${{ env.version }}-r${{ matrix.r }}-shiny${{ matrix.shinyserver }}
           build-args: |
             R_VERSION=${{ matrix.r }}
             AP_SHINY_SERVER_VERSION=${{ matrix.shinyserver }}
@@ -50,14 +55,14 @@ jobs:
         id: generate_sbom
         uses: anchore/sbom-action@422cb34a0f8b599678c41b21163ea6088edb2624 # v0.14.1
         with:
-          image: rshiny:${{ matrix.r }}-${{ matrix.shinyserver }}
+          image: rshiny:${{ env.version }}-r${{ matrix.r }}-shiny${{ matrix.shinyserver }}
           output-file: sbom.spdx.json
 
       - name: Scan image
         id: scan_image_anchore
         uses: anchore/scan-action@dafbc97d7259af88b61bd260f2fde565d0668a72 # v3.3.4
         with:
-          image: rshiny:${{ matrix.r }}-${{ matrix.shinyserver }}
+          image: rshiny:${{ env.version }}-r${{ matrix.r }}-shiny${{ matrix.shinyserver }}
           severity-cutoff: critical
           fail-build: false # 🙏 please forgive me, this is a temporary measure
 
@@ -100,17 +105,17 @@ jobs:
         id: tag_image
         run: |
           docker tag \
-            rshiny:${{ matrix.r }}-${{ matrix.shinyserver }} \
-            ministryofjustice/data-platform-rshiny:${{ matrix.r }}-${{ matrix.shinyserver }}
+            rshiny:${{ env.version }}-r${{ matrix.r }}-shiny${{ matrix.shinyserver }} \
+            ministryofjustice/data-platform-rshiny:${{ env.version }}-r${{ matrix.r }}-shiny${{ matrix.shinyserver }}
 
       - name: Push image
         if: github.ref == 'refs/heads/main'
         id: push_image
         run: |
-          docker push ministryofjustice/data-platform-rshiny:${{ matrix.r }}-${{ matrix.shinyserver }}
+          docker push ministryofjustice/data-platform-rshiny:${{ env.version }}-r${{ matrix.r }}-shiny${{ matrix.shinyserver }}
 
       - name: Sign image
         if: github.ref == 'refs/heads/main'
         id: sign_image
         run: |
-          cosign sign --yes ministryofjustice/data-platform-rshiny:${{ matrix.r }}-${{ matrix.shinyserver }}
+          cosign sign --yes ministryofjustice/data-platform-rshiny:${{ env.version }}-r${{ matrix.r }}-shiny${{ matrix.shinyserver }}
