@@ -1,7 +1,7 @@
 data "pagerduty_vendor" "cloudwatch" {
-  name = "Cloudwatch"
+  name = "Amazon CloudWatch"
 }
 
 data "pagerduty_vendor" "github" {
-  name = "Github"
+  name = "GitHub"
 }

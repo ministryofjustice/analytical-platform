@@ -162,6 +162,10 @@ locals {
 module "technical_services" {
   for_each = { for technical_service in local.technical_services : technical_service.name => technical_service }
 
+  providers = {
+    aws = aws.management
+  }
+
   source                              = "./modules/service/technical"
   name                                = each.key
   description                         = each.value.description

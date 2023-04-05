@@ -1,3 +1,7 @@
+locals {
+  name_machine_friendly = lower(replace(var.name, " ", "-"))
+}
+
 resource "pagerduty_service" "this" {
   name                    = var.name
   description             = var.description
@@ -62,10 +66,36 @@ resource "pagerduty_service_integration" "cloudwatch" {
   vendor  = data.pagerduty_vendor.cloudwatch.id
 }
 
+resource "aws_secretsmanager_secret" "pagerduty_cloudwatch_integration_key" {
+  count = var.enable_cloudwatch_integration ? 1 : 0
+
+  name = "pagerduty/${local.name_machine_friendly}/cloudwatch-integration-key"
+}
+
+resource "aws_secretsmanager_secret_version" "pagerduty_cloudwatch_integration_key" {
+  count = var.enable_cloudwatch_integration ? 1 : 0
+
+  secret_id     = aws_secretsmanager_secret.pagerduty_cloudwatch_integration_key[0].id
+  secret_string = pagerduty_service_integration.cloudwatch[0].integration_key
+}
+
 resource "pagerduty_service_integration" "github" {
   count = var.enable_github_integration ? 1 : 0
 
   name    = data.pagerduty_vendor.github.name
   service = pagerduty_service.this.id
   vendor  = data.pagerduty_vendor.github.id
+}
+
+resource "aws_secretsmanager_secret" "pagerduty_github_integration_key" {
+  count = var.enable_github_integration ? 1 : 0
+
+  name = "pagerduty/${local.name_machine_friendly}/github-integration-key"
+}
+
+resource "aws_secretsmanager_secret_version" "pagerduty_github_integration_key" {
+  count = var.enable_github_integration ? 1 : 0
+
+  secret_id     = aws_secretsmanager_secret.pagerduty_github_integration_key[0].id
+  secret_string = pagerduty_service_integration.github[0].integration_key
 }
