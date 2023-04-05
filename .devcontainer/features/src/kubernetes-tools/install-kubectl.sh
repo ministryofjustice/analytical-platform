@@ -31,4 +31,5 @@ cp $( dirname $0 )/src/usr/local/bin/aws-eks-auth /usr/local/bin/aws-eks-auth
 chown --recursive vscode:vscode /home/vscode/.kube
 chown --recursive vscode:vscode /usr/local/bin/aws-eks-auth
 
+chmod 600 /home/vscode/.kube/config
 chmod +x /usr/local/bin/aws-eks-auth

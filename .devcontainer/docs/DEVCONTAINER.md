@@ -14,12 +14,10 @@ This implementation of the development container is meant to have all repositori
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   ```
 
-- Docker for Mac or Rancher Desktop
+- Docker for Mac
 
   ```bash
   brew install --cask docker
-  # or
-  brew install --cask rancher
   ```
 
 - Node / `npm`
@@ -70,11 +68,7 @@ Your GPG and SSH agents are mounted from macOS, so GPG and SSH commands inside t
 
 ## AWS Vault
 
-1. Configure Landing Account
-
-   ```bash
-   $ aws-vault add analytical-platform-landing
-   ```
+Currently, the accounts used by Analytical and Data Platforms are provided, and accessed via SSO. If you wish to add an account or role, please raise a pull request
 
 ## Kubernetes CLI
 
@@ -92,7 +86,7 @@ The supplied `~/.kube/config`:
 
 1. Obtain the command from "Authenticate Manually"
 
-1. Replace your Auth0 email with the generic string
+1. Replace your Auth0 email with the generic `auth0` user
 
    ```bash
    kubectl config set-credentials "auth0" \
