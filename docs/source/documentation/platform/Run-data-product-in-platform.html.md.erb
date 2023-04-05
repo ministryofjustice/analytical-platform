@@ -8,44 +8,44 @@ review_in: 3 months
 # <%= current_page.data.title %>
 
 ## Context
-We want to a compute process that is scalable and event driven to run the data product. The data product will be sent to data platform for processing. After processing, the data should be available in a suitable format accessible to data consumers. The processing will include receiving raw data, applying transformations and cleansing and finally storing data in a correct location and format.
+We want a compute process that is scalable and event driven to run the data product. The data product will be sent to Data Platform for processing. After processing, the data should be available in a suitable format accessible to data consumers. The processing will include receiving raw data, applying transformations, cleansing and finally storing data in a correct location and format.
 
-<strong>The architecture will be built in data-platform-sandbox,an account on neither the cloud platform nor the modernization platform, which is deployed using the modernisation platform repo.</strong>
+<strong>The architecture will be built in the `data-platform-development`, a sandbox account within MoJ's Modernisation Platform, which is deployed using the [modernisation-platform-environments](https://github.com/ministryofjustice/modernisation-platform-environments) repository</strong>
 
 ## Data Producer Configuration Flow
 
 ![Data platform general diagram](images/data-platform-configuration-flow.png "Data platform configuration Flow")
 
-**For now** - Data product configuration will be sent to data-platform-bucket through GitHub action push.
+**For now** - Data product configuration will be sent to the Data Platform S3 bucket via [GitHub Actions](https://github.com/ministryofjustice/data-platform-products/blob/main/.github/workflows/data-product-example-2-poc.yaml).
 
-The data product configuration (Zip file) will be stored in the following structure: 
-> data-platform-bucket/code/data-product-name/Zipfile.zip
+The data product configuration (Zip file) will be stored in the following structure:
+> `${DATA_PLATFORM_PRODUCTS}/code/${DATA_PLATFORM_PRODUCT_NAME}/${ZIPFILE}.zip`
 
-Once the file lands the landing zone, S3 sends events to Amazon Event Bridge whenever certain events happen in the bucket. After Event Bridge is enabled, all events below are sent to Event Bridge. We will use Event Bridge rules to route events Object Created putObject event to Lambda.
+Event Bridge connection to bucket should be enabled. Once the file lands in the landing zone, S3 sends an event to Amazon Event Bridge whenever data events happen in the bucket. We will use Event Bridge rules to route events Object Created `PutObject` events to Lambda.
 
 Event bridge rule will trigger lambda. Lambda will be responsible to extract zip contents into
-> data-platform-bucket/code/data-product-name/output-code/
+> `${DATA_PLATFORM_PRODUCTS}/code/${DATA_PLATFORM_PRODUCT_NAME}/output-code
 
 ## Data Flow Architecture
 
 ![Data platform general diagram](images/data-platform-data-flow.png "Data platform data Flow")
 
 The data will be sent via an api, and will land into the data-platform-bucket
-> data-platform-bucket/data-product-name/rawdata/extraction_timestamp/Data.csv
+> `${DATA_PLATFORM_PRODUCTS}/${DATA_PLATFORM_PRODUCT_NAME}/rawdata/extraction_timestamp/${SOMEDATA}.csv
 
-Once the file lands the landing zone, S3 sends events to Amazon EventBridge whenever certain events happen in the bucket. After EventBridge is enabled, all events below are sent to EventBridge. 
+Once the file lands the landing zone, S3 sends events to Amazon EventBridge whenever certain events happen in the bucket. After EventBridge is enabled, all events below are sent to EventBridge.
 We will use EventBridge rules to route events Object Created putObject event to Lambda.
 
-Event bridge rule will trigger lambda. Lambda will start the glue job responsible to run the data producer provided script, which in turn will create a parquet file and data catalogue.
->data-platform-bucket/data-product-name/curateddata/extraction_timestamp/Data.parquet
+Event Bridge rule will trigger Lambda. Lambda will start the Glue job responsible to run the data producer provided script, which in turn will create a parquet file and data catalogue.
+>`${DATA_PLATFORM_PRODUCTS}/${DATA_PLATFORM_PRODUCT_NAME}/curateddata/extraction_timestamp/${SOMEDATA}.parquet
 
 The data catalogue entry will be updated, while transforming the data. Curated data will be accessible via Athena.
 
-Logging of errors will be setup in lambda and glue. In case of any error while running the code provided by the producers, notifications could be configured in the future (not currently in scope for this work).
+Logging of errors will be setup in Lambda and Glue. In case of any error while running the code provided by the producers, notifications could be configured in the future (not currently in scope for this work).
 
 ### Assumptions and Risks
 
-The following are the assumptions and risks. This will be mitigated eventually. 
+The following are the assumptions and risks. This will be mitigated eventually.
 
 1. The data product language will be python which will enable us to run it using Glue.
 
@@ -55,25 +55,25 @@ The following are the assumptions and risks. This will be mitigated eventually.
 
 ### Notes
 
-#####Bucket
+##### Bucket
 
-1. Users will be unaware that there is a bucket (Data platform bucket), this is internal to the Data Platform.
+1. Users will be unaware that there is a bucket (Data Platform bucket), this is internal to the Data Platform.
 
-2. There is only one bucket (Data platform bucket). Everything else will be sub folders of the same bucket
+2. There is only one bucket (Data Platform bucket). Everything else will be sub folders of the same bucket
 
-#####Reporting tool
+##### Reporting tool
 
-Athena is one example to provide route to access the data. Various reporting tools can be attached later. 
+Athena is one example to provide route to access the data. Various reporting tools can be attached later.
 
-#####Event Bridge
+##### Event Bridge
 
-We are not choosing event bridge to directly call lambda for for following reasons: 
+We are not choosing Event Bridge to directly call Lambda for for following reasons:
 
-1. Event bridge to Glue needs a workflow setup. We cannot extract the full event in Glue script, only the name can be extracted. With lambda, the whole event can be passed and we can extract the information needed to run the script.
+1. Event Bridge to Glue needs a workflow setup. We cannot extract the full event in Glue script, only the name can be extracted. With Lambda, the whole event can be passed and we can extract the information needed to run the script.
 
-2. We need lambda to unpack the zip file. 
+2. We need lambda to unpack the zip file.
 
-#####Script execution - Glue vs Lambda vs containers
+##### Script execution - Glue vs Lambda vs Containers
 
 1. We could use Lambda for computation but there are limitations in lambda. The maximum time a function can run is 15 minutes, and the default timeout is 3 seconds. This makes Lambda unsuitable for long-running workloads. The payload for each invocation of a Lambda function is limited to 6MB, and memory is limited to just under 3Gb.
 
