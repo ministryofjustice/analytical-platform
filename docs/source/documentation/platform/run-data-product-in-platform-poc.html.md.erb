@@ -75,6 +75,6 @@ We are not choosing Event Bridge to directly call Lambda for for following reaso
 
 ##### Script execution - Glue vs Lambda vs Containers
 
-1. We could use Lambda for computation but there are limitations in lambda. The maximum time a function can run is 15 minutes, and the default timeout is 3 seconds. This makes Lambda unsuitable for long-running workloads. The payload for each invocation of a Lambda function is limited to 6MB, and memory is limited to just under 3Gb.
+1. We could use Lambda for computation but there are limitations in Lambda. The maximum time a function can run is 15 minutes, and the default timeout is 3 seconds. This makes Lambda unsuitable for long-running workloads. The payload for each invocation of a Lambda function is limited to 6 MB, and memory is limited to just under 3 GB.
 
-2. Docker container can be deployed in ECR and run in Fargate Cluster. This would enable us to run data products in various languages that may be unsupported by Glue. Further investigations may be required in the future.
+2. Docker containers can be deployed in ECR and run in a Fargate Cluster. This would enable us to run data products in various languages that may be unsupported by Glue. Further investigations may be required in the future.
