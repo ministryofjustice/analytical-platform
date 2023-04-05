@@ -1,9 +1,9 @@
 # hadolint global ignore=DL3008
 
-FROM public.ecr.aws/lts/ubuntu@sha256:5f6d7e4dad348dbbae3c1e960dcaba98c2e262902c67c9bc41d5f2417cebaeb8
+FROM public.ecr.aws/lts/ubuntu@sha256:443e1135d27f060d57ec1b14117587b6ca53d6926a11ad0f1ffc142fd6b4b9a5
 
 LABEL org.opencontainers.image.vendor="Ministry of Justice" \
-      org.opencontainers.image.authors="Data Platform Core Infrastructure" \
+      org.opencontainers.image.authors="Data Platform" \
       org.opencontainers.image.title="Data Platform R Shiny Image" \
       org.opencontainers.image.description="R Shiny image for Analytical Platform" \
       org.opencontainers.image.url="https://github.com/ministryofjustice/data-platform/tree/main/container-images/rshiny"
@@ -40,7 +40,7 @@ RUN groupadd --gid ${CONTAINER_GID} ${CONTAINER_GROUP} \
         python3-venv \
     && curl --location https://github.com/ministryofjustice/analytics-platform-shiny-server/archive/refs/tags/v${AP_SHINY_SERVER_VERSION}.tar.gz \
          --output analytics-platform-shiny-server.tar.gz \
-    && curl --location https://cdn.posit.co/r/ubuntu-2204/pkgs/r-${R_VERSION}_1_amd64.deb \
+    && curl --location https://cdn.posit.co/r/ubuntu-2004/pkgs/r-${R_VERSION}_1_amd64.deb \
          --output r.deb \
     && curl --location https://download3.rstudio.org/ubuntu-18.04/x86_64/shiny-server-${SHINY_SERVER_VERSION}-amd64.deb \
          --output shiny-server.deb \
