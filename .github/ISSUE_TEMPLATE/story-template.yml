@@ -59,11 +59,11 @@ body:
   - type: textarea
     id: dod
     attributes:
-      description: Please clearly and concisely detail the DoD. (example optional checklist below)
+      description: Please clearly and concisely detail the DoD. (example optional checklist below) delete or add as needed.
       label: Definition of Done
       value:
-
         Example
+        
         - [ ] README has been updated
         
         - [ ] user docs have been updated
