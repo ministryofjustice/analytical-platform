@@ -13,10 +13,10 @@ ARG R_VERSION="4.1.3" \
     AP_SHINY_SERVER_VERSION="0.0.6" \
     SHINY_SERVER_VERSION="1.5.20.1002"
 
-ENV CONTAINER_USER="nonroot" \
-    CONTAINER_UID="10000" \
-    CONTAINER_GROUP="nonroot" \
-    CONTAINER_GID="10000" \
+ENV CONTAINER_USER="shiny" \
+    CONTAINER_UID="998" \
+    CONTAINER_GROUP="shiny" \
+    CONTAINER_GID="998" \
     DEBIAN_FRONTEND="noninteractive" \
     NODE_ENV="production" \
     SHINY_APP="/srv/shiny-server"
@@ -59,8 +59,6 @@ RUN groupadd --gid ${CONTAINER_GID} ${CONTAINER_GROUP} \
     && mkdir --parents /var/log/shiny-server \
     && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} ${SHINY_APP} \
     && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} /var/log/shiny-server
-
-USER ${CONTAINER_USER}
 
 WORKDIR ${SHINY_APP}
 
