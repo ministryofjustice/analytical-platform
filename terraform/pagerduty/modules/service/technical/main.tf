@@ -101,3 +101,25 @@ resource "aws_secretsmanager_secret_version" "pagerduty_github_integration_key" 
   secret_id     = aws_secretsmanager_secret.pagerduty_github_integration_key[0].id
   secret_string = pagerduty_service_integration.github[0].integration_key
 }
+
+resource "pagerduty_service_integration" "airflow" {
+  count = var.enable_airflow_integration ? 1 : 0
+
+  name    = data.pagerduty_vendor.airflow.name
+  service = pagerduty_service.this.id
+  vendor  = data.pagerduty_vendor.airflow.id
+}
+
+resource "aws_secretsmanager_secret" "pagerduty_airflow_integration_key" {
+  count = var.enable_airflow_integration ? 1 : 0
+
+  name       = "pagerduty/${local.name_machine_friendly}/airflow-integration-key"
+  kms_key_id = "alias/aws/secretsmanager"
+}
+
+resource "aws_secretsmanager_secret_version" "pagerduty_airflow_integration_key" {
+  count = var.enable_airflow_integration ? 1 : 0
+
+  secret_id     = aws_secretsmanager_secret.pagerduty_airflow_integration_key[0].id
+  secret_string = pagerduty_service_integration.airflow[0].integration_key
+}

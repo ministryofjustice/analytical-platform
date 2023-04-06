@@ -5,3 +5,7 @@ data "pagerduty_vendor" "cloudwatch" {
 data "pagerduty_vendor" "github" {
   name = "GitHub"
 }
+
+data "pagerduty_vendor" "airflow" {
+  name = "Airflow Integration"
+}
