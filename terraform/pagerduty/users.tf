@@ -19,6 +19,6 @@ module "users" {
   for_each = { for user in local.users : user.email => user }
 
   source = "./modules/user"
-  name   = each.key
+  name   = each.value.name
   email  = each.value.email
 }
