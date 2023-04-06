@@ -84,15 +84,15 @@ module "data-platform-apps" {
 # Data Platform Apps Teams
 
 module "migration_apps_teams" {
-  for_each = local.migration_apps_teams_map
+  for_each    = local.migration_apps_teams_map
   source      = "./modules/team"
   name        = each.key
   description = data.github_team.migration_app_owner[each.key].description
 
-  maintainers = data.github_team.migration_app_owner[each.key].members
-  members     = data.github_team.migration_app_owner[each.key].members
+  maintainers  = data.github_team.migration_app_owner[each.key].members
+  members      = data.github_team.migration_app_owner[each.key].members
   repositories = each.value
-  ci          = local.ci_users
+  ci           = local.ci_users
 }
 
 # Everyone, with access to the above repositories

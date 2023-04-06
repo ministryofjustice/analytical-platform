@@ -19,5 +19,5 @@ data "aws_iam_session_context" "data" {
 data "github_team" "migration_app_owner" {
   for_each = local.migration_apps_teams_map
   provider = github.moj-analytical-services
-  slug = each.key
+  slug     = each.key
 }
