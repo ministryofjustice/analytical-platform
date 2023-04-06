@@ -69,7 +69,8 @@ resource "pagerduty_service_integration" "cloudwatch" {
 resource "aws_secretsmanager_secret" "pagerduty_cloudwatch_integration_key" {
   count = var.enable_cloudwatch_integration ? 1 : 0
 
-  name = "pagerduty/${local.name_machine_friendly}/cloudwatch-integration-key"
+  name       = "pagerduty/${local.name_machine_friendly}/cloudwatch-integration-key"
+  kms_key_id = "alias/aws/secretsmanager"
 }
 
 resource "aws_secretsmanager_secret_version" "pagerduty_cloudwatch_integration_key" {
@@ -90,7 +91,8 @@ resource "pagerduty_service_integration" "github" {
 resource "aws_secretsmanager_secret" "pagerduty_github_integration_key" {
   count = var.enable_github_integration ? 1 : 0
 
-  name = "pagerduty/${local.name_machine_friendly}/github-integration-key"
+  name       = "pagerduty/${local.name_machine_friendly}/github-integration-key"
+  kms_key_id = "alias/aws/secretsmanager"
 }
 
 resource "aws_secretsmanager_secret_version" "pagerduty_github_integration_key" {
