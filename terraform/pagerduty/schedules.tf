@@ -8,14 +8,39 @@ locals {
           name                         = "Daily Support Rota"
           start                        = "2023-03-27T09:00:00Z"
           rotation_virtual_start       = "2023-03-28T09:00:00+01:00"
-          rotation_turn_length_seconds = 28800
+          rotation_turn_length_seconds = 86400
           users = [
             module.users["emma.terry@digital.justice.gov.uk"].id,
             module.users["jacob.woffenden@digital.justice.gov.uk"].id,
           ]
           restrictions = [
             {
-              type              = "daily_restriction"
+              type              = "weekly_restriction"
+              start_day_of_week = 1
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
+            },
+            {
+              type              = "weekly_restriction"
+              start_day_of_week = 2
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
+            },
+            {
+              type              = "weekly_restriction"
+              start_day_of_week = 3
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
+            },
+            {
+              type              = "weekly_restriction"
+              start_day_of_week = 4
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
+            },
+            {
+              type              = "weekly_restriction"
+              start_day_of_week = 5
               start_time_of_day = "09:00:00"
               duration_seconds  = 28800
             }
@@ -31,14 +56,39 @@ locals {
           name                         = "Daily Support Rota"
           start                        = "2023-03-27T09:00:00Z"
           rotation_virtual_start       = "2023-03-28T09:00:00+01:00"
-          rotation_turn_length_seconds = 28800
+          rotation_turn_length_seconds = 86400
           users = [
             module.users["emma.terry@digital.justice.gov.uk"].id,
             module.users["jacob.woffenden@digital.justice.gov.uk"].id,
           ]
           restrictions = [
             {
-              type              = "daily_restriction"
+              type              = "weekly_restriction"
+              start_day_of_week = 1
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
+            },
+            {
+              type              = "weekly_restriction"
+              start_day_of_week = 2
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
+            },
+            {
+              type              = "weekly_restriction"
+              start_day_of_week = 3
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
+            },
+            {
+              type              = "weekly_restriction"
+              start_day_of_week = 4
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
+            },
+            {
+              type              = "weekly_restriction"
+              start_day_of_week = 5
               start_time_of_day = "09:00:00"
               duration_seconds  = 28800
             }
