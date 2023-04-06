@@ -15,3 +15,9 @@ data "aws_iam_session_context" "data" {
   provider = aws.data
   arn      = data.aws_caller_identity.data.arn
 }
+
+data "github_team" "migration_app_owner" {
+  for_each = local.migration_apps_teams_map
+  provider = github.moj-analytical-services
+  slug     = each.key
+}
