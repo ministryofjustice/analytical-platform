@@ -29,8 +29,8 @@ data "aws_iam_policy_document" "additional_statement" {
       test     = "StringEquals"
       variable = "${local.cloud_platform_eks_oidc_provider_id}:sub"
       values = [
-        "system:serviceaccount:data-platform-app-${each.key}-dev:data-platform-app-${each.key}-dev",
-        "system:serviceaccount:data-platform-app-${each.key}-prod:data-platform-app-${each.key}-prod"
+        "system:serviceaccount:data-platform-app-${each.key}-dev:data-platform-app-${each.key}-dev-sa",
+        "system:serviceaccount:data-platform-app-${each.key}-prod:data-platform-app-${each.key}-prod-sa"
       ]
     }
 
@@ -52,15 +52,6 @@ data "aws_iam_policy_document" "updated_trust" {
 
 // Creating policy so that it can be attached to the existing roles
 
-# resource "aws_iam_role_policy" "updated_trust" {
-#   for_each = data.aws_iam_role.app_role_details
-#   provider = aws.data
-#   name     = each.key
-#   role     = each.value.name
-
-#   policy = data.aws_iam_policy_document.updated_trust[each.key].json
-# }
-
 // Use local-exec to update trust policies as not doable with terraform
 
 resource "null_resource" "update_iam_role_trust_policy" {
@@ -71,9 +62,10 @@ resource "null_resource" "update_iam_role_trust_policy" {
 
   provisioner "local-exec" {
     command = <<EOF
-    if grep -q "SSO" <<< $(aws sts get-caller-identity); then # Needed when running locally using aws-vault https://github.com/hashicorp/terraform-provider-aws/issues/8242#issuecomment-696828321
-        unset AWS_SECURITY_TOKEN
-    fi
+
+    # Do an inverted grep on the output of caller identity (return 0 if NOT found) and if the return code isn't 0 (meaning string was found or an error); assume running locally and unset the envvar.
+    if grep -zqv "SSO" <<< $(aws sts get-caller-identity) || unset AWS_SECURITY_TOKEN # Needed when running locally using aws-vault https://github.com/hashicorp/terraform-provider-aws/issues/8242#issuecomment-696828321
+
     TEMP_CREDS=$(aws sts assume-role --role-arn ${data.aws_iam_session_context.data.issuer_arn} --role-session-name localexecupdatetrust)
     export AWS_ACCESS_KEY_ID=$(echo $TEMP_CREDS | jq -r '.Credentials.AccessKeyId')
     export AWS_SECRET_ACCESS_KEY=$(echo $TEMP_CREDS | jq -r '.Credentials.SecretAccessKey')
