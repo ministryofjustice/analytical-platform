@@ -43,5 +43,10 @@
       "name": "regime-dashboard",
       "source_repo_name": "regime_dashboard",
       "description": ""
+    },
+    {
+      "name": "people-data-self-serve",
+      "source_repo_name": "people-data-self-serve",
+      "description": ""
     }
   ]
