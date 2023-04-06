@@ -59,6 +59,7 @@ RUN groupadd --gid ${CONTAINER_GID} ${CONTAINER_GROUP} \
     && mkdir --parents /var/log/shiny-server \
     && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} ${SHINY_APP} \
     && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} /var/log/shiny-server
+    && chown ${CONTAINER_USER}:${CONTAINER_GROUP} /usr/local/bin/entrypoint.sh
 
 USER ${CONTAINER_USER}
 
