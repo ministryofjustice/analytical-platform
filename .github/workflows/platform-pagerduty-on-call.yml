@@ -1,0 +1,46 @@
+---
+name: Platform - PagerDuty On-Call
+
+on:
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  pagerduty:
+    name: PagerDuty On-Call
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+
+      - name: Configure AWS Credentials
+        id: configure_aws_credentials
+        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # v2.0.0
+        with:
+          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
+
+      - name: Assume GlobalGitHubActionAdmin Role
+        id: assume_global_github_action_admin_role
+        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # v2.0.0
+        with:
+          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
+
+      - name: Get AWS Secrets
+        id: get_aws_secrets
+        uses: aws-actions/aws-secretsmanager-get-secrets@9223366dfe5ded12b883068adeb2297c4b81fb5b # v1.0.2
+        with:
+          secret-ids: |
+            PAGERDUTY_TOKEN, pagerduty-token
+
+      # - name: Run scripts/pagerduty/slack-on-call.sh
+      #   id: run_slack_on_call
+      #   run: |
+      #     bash scripts/pagerduty/slack-on-call.sh
+      #   env:
+      #     PAGERDUTY_TOKEN: ${{ env.PAGERDUTY_TOKEN }}
