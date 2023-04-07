@@ -2,6 +2,13 @@
 name: Platform - PagerDuty On-Call
 
 on:
+  # TEST
+  pull_request:
+    branches:
+      - main
+  # END TEST
+  schedule:
+    - cron: "5 9 * * 1-5" # Monday-Friday at 09:05 UTC
   workflow_dispatch:
 
 permissions: read-all
