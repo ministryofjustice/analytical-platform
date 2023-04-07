@@ -99,7 +99,7 @@ jobs:
       - name: Install cosign
         if: github.ref == 'refs/heads/main'
         id: install_cosign
-        uses: sigstore/cosign-installer@c3667d99424e7e6047999fb6246c0da843953c65 # v3.0.1
+        uses: sigstore/cosign-installer@9e9de2292db7abb3f51b7f4808d98f0d347a8919 # v3.0.2
 
       - name: Login to Docker Hub
         if: github.ref == 'refs/heads/main'
