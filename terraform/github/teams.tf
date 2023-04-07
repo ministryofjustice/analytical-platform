@@ -92,7 +92,8 @@ locals {
     "oliver-critchfield",
     "AlexVilela",
     "davidbridgwood",
-    "mshodge" # Michael Hodge
+    "mshodge", # Michael Hodge
+    "Andy-Cook"
   ]
 
   data_platform_core_infrastructure_maintainers = [
