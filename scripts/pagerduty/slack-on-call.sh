@@ -6,6 +6,14 @@ export PAGERDUTY_SCHEDULE_ID="${PAGERDUTY_SCHEDULE_ID:-"POE95CC"}" # Consume ${P
 export SLACK_WEBHOOK_URL="${SLACK_WEBHOOK_URL:-$( aws secretsmanager get-secret-value --secret-id slack-pagerduty-scheduling-webhook-url --query SecretString --output text )}" # Consume ${SLACK_WEBHOOK_URL} or default to the value in AWS Secrets Manager
 export SLACK_CHANNEL="${SLACK_CHANNEL:-"#data-platform-core-infrastructure-team"}" # Consume ${SLACK_CHANNEL} or default to #data-platform-core-infrastructure-team
 
+getScheduleName=$( curl \
+  --silent \
+  --request GET \
+  --url "https://api.pagerduty.com/schedules/${PAGERDUTY_SCHEDULE_ID}" \
+  --header "Accept: application/vnd.pagerduty+json;version=2" \
+  --header "Authorization: Token token=${PAGERDUTY_TOKEN}" \
+  --header 'Content-Type: application/json' | jq -r '.schedule.name' )
+
 getUser=$( curl \
   --silent \
   --request GET \
@@ -20,5 +28,5 @@ curl \
   --header "Content-type: application/json" \
   --data-raw "{
     \"channel\": \"${SLACK_CHANNEL}\",
-    \"text\": \"Today's on-call engineer is: ${getUser}\",
+    \"text\": \"Today's on-call engineer for ${getScheduleName} is ${getUser}\",
   }"

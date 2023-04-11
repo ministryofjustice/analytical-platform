@@ -2,11 +2,6 @@
 name: Platform - PagerDuty On-Call
 
 on:
-  # TEST
-  pull_request:
-    branches:
-      - main
-  # END TEST
   schedule:
     - cron: "0 9 * * 1-5" # Monday-Friday at 09:00 UTC
   workflow_dispatch:
@@ -22,10 +17,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - pagerduty-schedule: P2IZGH3 # Analytical Platform
-            slack-channel: C052G5VRRF0 # jacobwoffenden-dev
-          - pagerduty-schedule: POE95CC # Data Platform
-            slack-channel: C052G5VRRF0 # jacobwoffenden-dev
+          - pagerduty-schedule-id: POE95CC # Data Platform
+            slack-channel: C04BRGD7KFH # data-platform-core-infrastructure-team
     steps:
       - name: Checkout
         id: checkout
@@ -63,5 +56,5 @@ jobs:
           bash scripts/pagerduty/slack-on-call.sh
         env:
           PAGERDUTY_TOKEN: ${{ env.PAGERDUTY_TOKEN }}
-          PAGERDUTY_SCHEDULE_ID: ${{ matrix.pagerduty-schedule }}
+          PAGERDUTY_SCHEDULE_ID: ${{ matrix.pagerduty-schedule-id }}
           SLACK_CHANNEL: ${{ matrix.slack-channel }}

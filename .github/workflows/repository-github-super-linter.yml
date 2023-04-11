@@ -28,14 +28,11 @@ jobs:
 
       - name: GitHub Super-Linter
         id: super_linter
-        uses: github/super-linter/slim@454ba4482ce2cd0c505bc592e83c06e1e37ade61 # v4.10.1
+        uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: main
           VALIDATE_ALL_CODEBASE: false
-          # yamllint disable rule:line-length
-          VALIDATE_GITHUB_ACTIONS: false # yaml This is disabled until Super-Linter ships with a newer version of actionlint supports the new `var` context
-          # yamllint enable rule:line-length
           # TODO: Fix all the shell scripts and re-enable these
           VALIDATE_BASH: false
           VALIDATE_BASH_EXEC: false
