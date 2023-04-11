@@ -17,7 +17,7 @@ locals {
       email = "julia.lawrence@digital.justice.gov.uk"
     },
     {
-      name = "Richard Baguley"
+      name  = "Richard Baguley"
       email = "richard.baguley@digital.justice.gov.uk"
     }
   ]
