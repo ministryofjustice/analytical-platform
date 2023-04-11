@@ -19,6 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+    strategy:
+      matrix:
+        include:
+          - pagerduty-schedule: P2IZGH3 # Analytical Platform
+            slack-channel: C052G5VRRF0 # jacobwoffenden-dev
+          - pagerduty-schedule: POE95CC # Data Platform
+            slack-channel: C052G5VRRF0 # jacobwoffenden-dev
     steps:
       - name: Checkout
         id: checkout
@@ -55,3 +62,5 @@ jobs:
           bash scripts/pagerduty/slack-on-call.sh
         env:
           PAGERDUTY_TOKEN: ${{ env.PAGERDUTY_TOKEN }}
+          PAGERDUTY_SCHEDULE_ID: ${{ matrix.pagerduty-schedule }}
+          SLACK_CHANNEL: ${{ matrix.slack-channel }}
