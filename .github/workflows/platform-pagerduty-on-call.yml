@@ -17,6 +17,9 @@ jobs:
     strategy:
       matrix:
         include:
+          # Commenting out Analytical Platform for now as it's not being used
+          # - pagerduty-schedule-id: P2IZGH3 # Analytical Platform
+          #   slack-channel: C58G63XK5 # analytical-platform
           - pagerduty-schedule-id: POE95CC # Data Platform
             slack-channel: C04BRGD7KFH # data-platform-core-infrastructure-team
     steps:

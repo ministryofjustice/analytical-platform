@@ -19,6 +19,34 @@ locals {
     {
       name  = "Richard Baguley"
       email = "richard.baguley@digital.justice.gov.uk"
+    },
+    {
+      name  = "Tom Webber"
+      email = "thomas.webber@digital.justice.gov.uk"
+    },
+    {
+      name  = "Brian Ellwood"
+      email = "brian.ellwood@digital.justice.gov.uk"
+    },
+    {
+      name  = "Louise Bowler"
+      email = "louise.bowler@digital.justice.gov.uk"
+    },
+    {
+      name  = "Bogdan Mania"
+      email = "bogdan.mania@digital.justice.gov.uk"
+    },
+    {
+      name  = "John Hackett"
+      email = "john.hackett@digital.justice.gov.uk"
+    },
+    {
+      name  = "Michael Collins"
+      email = "michael.collins@digital.justice.gov.uk"
+    },
+    {
+      name  = "Yikang Mao"
+      email = "yikang.mao@justice.gov.uk"
     }
   ]
 }
