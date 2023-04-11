@@ -58,8 +58,8 @@ locals {
           rotation_virtual_start       = "2023-03-28T09:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users["emma.terry@digital.justice.gov.uk"].id,
             module.users["jacob.woffenden@digital.justice.gov.uk"].id,
+            module.users["emma.terry@digital.justice.gov.uk"].id
           ]
           restrictions = [
             {
