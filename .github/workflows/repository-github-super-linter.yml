@@ -33,6 +33,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: main
           VALIDATE_ALL_CODEBASE: false
+          # yamllint disable rule:line-length
+          VALIDATE_GITHUB_ACTIONS: false # yaml This is disabled until Super-Linter ships with a newer version of actionlint supports the new `var` context
+          # yamllint enable rule:line-length
           # TODO: Fix all the shell scripts and re-enable these
           VALIDATE_BASH: false
           VALIDATE_BASH_EXEC: false
