@@ -8,7 +8,7 @@ on:
       - main
   # END TEST
   schedule:
-    - cron: "5 9 * * 1-5" # Monday-Friday at 09:05 UTC
+    - cron: "0 9 * * 1-5" # Monday-Friday at 09:00 UTC
   workflow_dispatch:
 
 permissions: read-all
@@ -48,9 +48,9 @@ jobs:
           secret-ids: |
             PAGERDUTY_TOKEN, pagerduty-token
 
-      # - name: Run scripts/pagerduty/slack-on-call.sh
-      #   id: run_slack_on_call
-      #   run: |
-      #     bash scripts/pagerduty/slack-on-call.sh
-      #   env:
-      #     PAGERDUTY_TOKEN: ${{ env.PAGERDUTY_TOKEN }}
+      - name: Run scripts/pagerduty/slack-on-call.sh
+        id: run_slack_on_call
+        run: |
+          bash scripts/pagerduty/slack-on-call.sh
+        env:
+          PAGERDUTY_TOKEN: ${{ env.PAGERDUTY_TOKEN }}
