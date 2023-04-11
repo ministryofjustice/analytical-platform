@@ -47,6 +47,7 @@ jobs:
         with:
           secret-ids: |
             PAGERDUTY_TOKEN, pagerduty-token
+            SLACK_WEBHOOK_URL, slack-pagerduty-scheduling-webhook-url
 
       - name: Run scripts/pagerduty/slack-on-call.sh
         id: run_slack_on_call
