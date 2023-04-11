@@ -1,6 +1,10 @@
 locals {
   users = [
     {
+      name  = "Andy Rogers"
+      email = "andy.rogers@digital.justice.gov.uk"
+    },
+    {
       name  = "Emma Terry"
       email = "emma.terry@digital.justice.gov.uk"
     },
@@ -11,6 +15,10 @@ locals {
     {
       name  = "Julia Lawrence"
       email = "julia.lawrence@digital.justice.gov.uk"
+    },
+    {
+      name = "Richard Baguley"
+      email = "richard.baguley@digital.justice.gov.uk"
     }
   ]
 }
