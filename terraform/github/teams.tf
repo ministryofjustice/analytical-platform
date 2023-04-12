@@ -20,7 +20,6 @@ locals {
   general_members = [ # members of analytics-hq gh team
     "jacobwoffenden",
     "calumabarnett",
-    "Bhkol",          # Bharti Kolhe - BA Cognizant
     "SimonsMOJ",      # Simon Heron
     "mshodge",        # Michael Hodges
     "YvanMOJdigital", # Yvan Smith
@@ -103,11 +102,8 @@ locals {
   ]
 
   data_platform_core_infrastructure_members = [
-    "jhackett-ap",  # John Hackett
-    "Bhkol",        # Bharti Kolhe - BA Cognizant
-    "sreekanthmoj", # Sreekanth Kote - Cognizant
-    "karthikmoj",   # Karthik Pelluru - Cognizant
-    "Emterry",      # Emma Terry
+    "jhackett-ap", # John Hackett
+    "Emterry",     # Emma Terry
   ]
 
   data_platform_labs_maintainers = [

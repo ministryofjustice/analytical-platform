@@ -1,7 +1,7 @@
 ---
 name: Terraform
 
-on:
+on: # yamllint disable-line rule:truthy
   workflow_call:
     inputs:
       working-directory:
@@ -61,6 +61,7 @@ jobs:
           terraform init \
             -backend-config=role_arn=${{ inputs.terraform-backend-config-role }} \
             -reconfigure \
+            -upgrade \
             -no-color
         working-directory: ${{ inputs.working-directory }}
 
