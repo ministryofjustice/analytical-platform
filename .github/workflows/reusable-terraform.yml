@@ -25,6 +25,7 @@ on: # yamllint disable-line rule:truthy
 
 jobs:
   terraform:
+    name: Terraform
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
