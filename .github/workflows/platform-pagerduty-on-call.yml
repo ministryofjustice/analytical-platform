@@ -1,7 +1,7 @@
 ---
 name: Platform - PagerDuty On-Call
 
-on:
+on: # yamllint disable-line rule:truthy
   schedule:
     - cron: "0 9 * * 1-5" # Monday-Friday at 08:00 UTC
   workflow_dispatch:
