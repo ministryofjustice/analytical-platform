@@ -61,6 +61,7 @@ jobs:
           terraform init \
             -backend-config=role_arn=${{ inputs.terraform-backend-config-role }} \
             -reconfigure \
+            -upgrade \
             -no-color
         working-directory: ${{ inputs.working-directory }}
 

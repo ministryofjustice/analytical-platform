@@ -21,3 +21,13 @@ data "github_team" "migration_app_owner" {
   provider = github.moj-analytical-services
   slug     = each.key
 }
+
+data "aws_secretsmanager_secret" "github_token" {
+  provider = aws.management
+  name     = "github-token"
+}
+
+data "aws_secretsmanager_secret_version" "github_token" {
+  provider  = aws.management
+  secret_id = data.aws_secretsmanager_secret.github_token.id
+}
