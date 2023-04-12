@@ -1,32 +1,32 @@
 ---
-  name: Terraform - GitHub
+name: Terraform - GitHub
 
-  on: # yamllint disable-line rule:truthy
-    pull_request:
-      branches:
-        - main
-      paths:
-        - .github/workflows/terraform-github.yml
-        - terraform/github/**
-    push:
-      branches:
-        - main
-      paths:
-        - .github/workflows/terraform-github.yml
-        - terraform/github/**
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/terraform-github.yml
+      - terraform/github/**
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/terraform-github.yml
+      - terraform/github/**
 
-  permissions: read-all
+permissions: read-all
 
-  jobs:
-    terraform:
-      name: Terraform
-      permissions:
-        contents: read
-        id-token: write
-      uses: ./.github/workflows/reusable-terraform.yml
-      with:
-        working-directory: terraform/github
-        aws-role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
-        terraform-version: 1.4.4
-        terraform-backend-config-role: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
-      secrets: inherit
+jobs:
+  terraform:
+    name: Terraform
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/reusable-terraform.yml
+    with:
+      working-directory: terraform/github
+      aws-role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
+      terraform-version: 1.4.4
+      terraform-backend-config-role: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
+    secrets: inherit
