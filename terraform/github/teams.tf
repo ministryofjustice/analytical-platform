@@ -95,6 +95,11 @@ locals {
     "Andy-Cook"
   ]
 
+  data_engineering_aws_developer_members = [
+    "parminder-thindal-moj",
+    "moj-samuelweller"
+  ]
+
   data_platform_core_infrastructure_maintainers = [
     "bagg3rs", # Richard Baguley
     "julialawrence",
