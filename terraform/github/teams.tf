@@ -117,7 +117,8 @@ locals {
 
   data_platform_labs_members = [
     "hemeshpatel-moj",
-    "murdo-moj"
+    "murdo-moj",
+    "LavMatt"
   ]
 
   data_platform_security_auditor_members = [
