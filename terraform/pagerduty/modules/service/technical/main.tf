@@ -89,7 +89,7 @@ resource "pagerduty_service_integration" "github" {
   service = pagerduty_service.this.id
   # Commenting out because this is currently broken - https://github.com/PagerDuty/terraform-provider-pagerduty/issues/675
   # vendor  = data.pagerduty_vendor.github.id
-  vendor  = "PFZ9O9D"
+  vendor = "PFZ9O9D"
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_github_integration_key" {
