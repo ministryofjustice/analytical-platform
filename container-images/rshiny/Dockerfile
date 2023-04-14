@@ -1,71 +1,55 @@
-# hadolint global ignore=DL3008
+FROM ubuntu:focal
 
-FROM public.ecr.aws/lts/ubuntu@sha256:443e1135d27f060d57ec1b14117587b6ca53d6926a11ad0f1ffc142fd6b4b9a5
+ARG r=4.1.3 # must correspond with a rocker tag as per https://hub.docker.com/r/rocker/shiny/tags
+ARG shinyserver=0.0.6 # must correspond with an analytics-platform-shiny-server version from here: https://github.com/ministryofjustice/analytics-platform-shiny-server
 
-LABEL org.opencontainers.image.vendor="Ministry of Justice" \
-      org.opencontainers.image.authors="Data Platform" \
-      org.opencontainers.image.title="Data Platform R Shiny Image" \
-      org.opencontainers.image.description="R Shiny image for Analytical Platform" \
-      org.opencontainers.image.url="https://github.com/ministryofjustice/data-platform/tree/main/container-images/rshiny"
+ENV STRINGI_DISABLE_PKG_CONFIG=true \
+    AWS_DEFAULT_REGION=eu-west-1 \
+    PATH="/opt/R/${r}/bin:/opt/shiny-server/bin:/opt/shiny-server/ext/node/bin:${PATH}" \
+    SHINY_APP=/srv/shiny-server \
+    NODE_ENV=production \
+    TZ="Etc/UTC"
 
-ARG R_VERSION="4.1.3" \
-    R_ENV_VERSION="0.17.1" \
-    AP_SHINY_SERVER_VERSION="0.0.6" \
-    SHINY_SERVER_VERSION="1.5.20.1002"
+RUN sed -i 's,deb,deb [trusted=yes],g' /etc/apt/sources.list && \
+    sed -i s,http://security.ubuntu.com/ubuntu/,http://mirror.mythic-beasts.com/ubuntu/,g /etc/apt/sources.list && \
+    sed -i s,http://archive.ubuntu.com/ubuntu/,http://mirror.mythic-beasts.com/ubuntu/,g /etc/apt/sources.list && \
+    apt-get update -yq -y && \
+    apt-get install -yq --no-install-recommends ca-certificates python3 python3-boto libcurl4-openssl-dev libssl-dev libudunits2-dev libgdal-dev gdal-bin libgeos-dev libproj-dev libsqlite3-dev zlib1g-dev xtail && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    echo "dash dash/sh boolean false" | debconf-set-selections && \
+    DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash && \
+    sed -i s,http:,https:,g /etc/apt/sources.list && \ 
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -yq --no-install-recommends wget curl git gdebi tzdata && \
+    wget -O /tmp/r_amd64.deb https://cdn.posit.co/r/ubuntu-2004/pkgs/r-${r}_1_amd64.deb && \
+    wget -O /tmp/shiny-server.deb https://download3.rstudio.org/ubuntu-18.04/x86_64/shiny-server-1.5.20.1002-amd64.deb && \
+    wget -O /tmp/analytics-platform-shiny-server.tar.gz https://github.com/ministryofjustice/analytics-platform-shiny-server/archive/refs/tags/v${shinyserver}.tar.gz && \
+    gdebi -n /tmp/r_amd64.deb  && \
+    /opt/R/${r}/bin/R -e "install.packages('renv', repos='https://packagemanager.rstudio.com/cran/__focal__/focal/latest')" && \
+    /opt/R/${r}/bin/R -e "install.packages('remotes', repos='https://packagemanager.rstudio.com/cran/__focal__/focal/latest')" && \
+    /opt/R/${r}/bin/R -e "install.packages('shiny', repos='https://packagemanager.rstudio.com/cran/__focal__/focal/latest')" && \
+    gdebi -n /tmp/shiny-server.deb && \
+    mkdir -p /var/log/shiny-server && \
+    npm i -g /tmp/analytics-platform-shiny-server.tar.gz && \
+    chown -R shiny:shiny /srv/shiny-server && \
+    rm /tmp/r_amd64.deb /tmp/shiny-server.deb /tmp/analytics-platform-shiny-server.tar.gz && \
+    apt-get remove -y gdebi && \
+    apt-get autoremove -y && \
+    apt-get clean && \ 
+    apt-get autoclean && \
+    rm -rf /var/lib/apt/lists/* && \ 
+    sed -i 's;# options(repos = c(CRAN="@CRAN@"));options(repos = c(CRAN = "https://cloud.r-project.org"));g' /opt/R/4.1.3/lib/R/library/base/R/Rprofile 
 
-ENV CONTAINER_USER="nonroot" \
-    CONTAINER_UID="10000" \
-    CONTAINER_GROUP="nonroot" \
-    CONTAINER_GID="10000" \
-    DEBIAN_FRONTEND="noninteractive" \
-    NODE_ENV="production" \
-    SHINY_APP="/srv/shiny-server"
+WORKDIR /srv/shiny-server
 
-COPY src/etc/shiny-server/shiny-server.conf /etc/shiny-server/shiny-server.conf
-COPY src/usr/local/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
+#SHELL ["/bin/bash", "-c"]
 
-RUN groupadd --gid ${CONTAINER_GID} ${CONTAINER_GROUP} \
-    && useradd --uid ${CONTAINER_UID} --gid ${CONTAINER_GROUP} --shell /bin/bash --create-home ${CONTAINER_USER} \
-    && apt-get update \
-    && apt-get upgrade --assume-yes \
-    && apt-get install --assume-yes --no-install-recommends \
-        ca-certificates \
-        curl \
-        git \
-        nodejs \
-        npm \
-        python3 \
-        python3-pip \
-        python3-boto3 \
-        python3-venv \
-    && curl --location https://github.com/ministryofjustice/analytics-platform-shiny-server/archive/refs/tags/v${AP_SHINY_SERVER_VERSION}.tar.gz \
-         --output analytics-platform-shiny-server.tar.gz \
-    && curl --location https://cdn.posit.co/r/ubuntu-2004/pkgs/r-${R_VERSION}_1_amd64.deb \
-         --output r.deb \
-    && curl --location https://download3.rstudio.org/ubuntu-18.04/x86_64/shiny-server-${SHINY_SERVER_VERSION}-amd64.deb \
-         --output shiny-server.deb \
-    && npm install --global ./analytics-platform-shiny-server.tar.gz \
-    && apt-get install --assume-yes ./r.deb \
-    && apt-get install --assume-yes ./shiny-server.deb \
-    && rm --force \
-        analytics-platform-shiny-server.tar.gz \
-        r.deb \
-        shiny-server.deb \
-    && apt-get clean \
-    && rm --recursive --force /var/lib/apt/lists/* \
-    && R -e "install.packages(c('remotes', 'shiny'))" \
-    && R -e "remotes::install_github('rstudio/renv@${R_ENV_VERSION}')" \
-    && mkdir --parents ${SHINY_APP} \
-    && mkdir --parents /var/log/shiny-server \
-    && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} ${SHINY_APP} \
-    && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} /var/log/shiny-server \
-    && chown ${CONTAINER_USER}:${CONTAINER_GROUP} /usr/local/bin/entrypoint.sh \
-    && chown +x /usr/local/bin/entrypoint.sh
+# Cleanup shiny-server dir
+RUN rm -rf /srv/shiny-server
 
-USER ${CONTAINER_USER}
+# Shiny runs as 'shiny' user, adjust app directory permissions
+ADD shiny-server.conf /etc/shiny-server/shiny-server.conf
+ADD shiny-server.sh /usr/bin/shiny-server.sh
 
-WORKDIR ${SHINY_APP}
-
-EXPOSE 9999
-
-ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
+RUN groupmod -g 998 shiny && usermod -u 998 -u 998 -g 998 shiny && chown -R 998:998 /usr/bin/shiny-server.sh && chmod +x /usr/bin/shiny-server.sh && mkdir -p /srv/shiny/ && chown -R 998:998 /srv/shiny
