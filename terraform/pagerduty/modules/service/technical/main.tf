@@ -83,9 +83,13 @@ resource "aws_secretsmanager_secret_version" "pagerduty_cloudwatch_integration_k
 resource "pagerduty_service_integration" "github" {
   count = var.enable_github_integration ? 1 : 0
 
-  name    = data.pagerduty_vendor.github.name
+  # Commenting out because this is currently broken - https://github.com/PagerDuty/terraform-provider-pagerduty/issues/675
+  # name    = data.pagerduty_vendor.github.name
+  name    = "GitHub"
   service = pagerduty_service.this.id
-  vendor  = data.pagerduty_vendor.github.id
+  # Commenting out because this is currently broken - https://github.com/PagerDuty/terraform-provider-pagerduty/issues/675
+  # vendor  = data.pagerduty_vendor.github.id
+  vendor = "PFZ9O9D"
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_github_integration_key" {
