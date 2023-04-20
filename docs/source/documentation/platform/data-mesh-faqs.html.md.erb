@@ -1,0 +1,84 @@
+---
+owner_slack: "#data-platform-notifications"
+title: Data mesh FAQs
+last_reviewed_on: 2023-04-20
+review_in: 3 months
+---
+
+# <%= current_page.data.title %>
+
+## (How) Does Data Mesh work if we don't/can't own the data? e.g. HMCTS data
+
+Good question, this is my understanding so far:
+
+If HMCTS produces a Data Product A and we want to use it as part of our Data
+Product B, then we would connect DPA to DPB. So our DPB would access the data
+from DPA and do whatever it needs with it. That could potentially generate a
+copy of the data from DPA inside DPB, which I understand as not being
+problematic.
+
+## So DPB becomes the internal mirror of DPA? Or does everyone connect to DPA?
+
+DPA would be the source, and everyone that needs that specific Data Product
+should connect directly to it. DPB may enrich that data, or combine it with
+other data and have a different offering, a different output. It wouldn’t make
+ sense to offer a DPB that was a direct mirror of DPA
+
+## What if data producers don't want to support all people who want to use DPA data?
+
+They offer a product to the mesh. The mesh should deal with all the people
+wanting to consume that product, making it easy to integrate everything, so
+that DPA doesn’t even need to think much about how to share it - maybe being
+responsible only about “who should have access to this or not”. If there is
+any friction on sharing that data product, then we, the people that make the
+mesh viable, should work in making it smarter and remove that friction.
+
+## Is a dashboard part of a Data Mesh?
+
+A dashboard is in the periphery of the mesh, it's an application, an output, it
+doesn't mesh with anything, it consumes data from the mesh. It's not exactly
+part of the mesh as once information is on it, it can't be shared back to the
+mesh. After the dashboard there's a human. Dashboards are products for the
+user, of course. They are part of the digital experience. They are not a
+product from a data mesh point of view.
+
+## Does the Data Platform support integration with other existing MI systems?
+
+With regards to integration with other existing MI systems, it’s hard to have a
+complete statement that they will all work. Each system may need to be analysed.
+
+## Does the Data Platform support integration with other catalogues and other data mesh implementations?
+
+It’s difficult to state that all catalogues will integrate to each other. It is
+expected that the catalogue used for the Data Platform will follow an open
+standard for sharing information, and therefore other catalogues that follow
+similar standards should integrate without difficulty.
+
+## We have external sources that are very messy regular csv dumps - would that
+constitute a Data Product?
+
+No. A Data Product is something intentionally shared. It is a combination of
+code and data.
+
+The platform is not built to support ad-hoc uploads of manually generated CSVs, etc.
+That is by design because at scale, these processes cannot be maintained and
+kept up to date. Over time, this leads to data swamps, a deteriorated set of
+data that can’t be trusted.
+
+Instead of manually generating CSVs and then attempting to add them to the
+platform, make that process internal to a Data Product. That way the extraction
+of data, its transformation and potential combination with other sources
+becomes reproducible and with a smaller surface for errors.
+
+## Do we provide 'basic' data storage that allows holding data in non-data product format?
+
+No. Similar reason as a previous question: That is by design because at scale,
+these processes cannot be maintained and kept up to date. Over time, this leads
+to data swamps, a deteriorated set of data that can’t be trusted. There is the
+intention to make it easy to create temporary Data Products in order to have
+a lower barrier of adoption, and more details can be seen in the section
+about dealing with CSVs.
+
+## Can users discover non-data product data (data that's stored but not 'intentionally shared' but not private)?
+
+No. There shouldn’t exist data that is not in a data product.
