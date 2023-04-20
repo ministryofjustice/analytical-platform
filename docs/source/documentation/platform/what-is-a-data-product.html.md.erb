@@ -1,0 +1,198 @@
+---
+owner_slack: "#data-platform-notifications"
+title: What is a Data Product
+last_reviewed_on: 2023-04-20
+review_in: 3 months
+---
+
+There are several articles that introduce the concept of what a Data Product is and why it exists. We recommend the following as a base: https://towardsdatascience.com/an-architecture-for-the-data-mesh-32ff4a15f16f 
+
+### Purpose
+A data product exists to help with interoperability, to make that process simpler. The intention of data products and the resulting data mesh is to eliminate the struggle to get timely access to data, and a consequent loss of trust. The purpose of the data product is to serve the consumer's needs.
+
+![Data Product diagram](images/what-is-a-data-product-1.png "Data Product diagram")
+
+A Data Product is created and owned by a Data Product Owner, a person with comprehensive domain knowledge. **The Data Product Owner is not part of the Data Platform team**, they are people that operate on different teams and they have a system that contains data that they would like to share. This is because it is essential to know a domain before creating a Data Product, and it would be impossible for the Data Platform teams to have deep knowledge of every domain that uses the platform.
+
+### What forms a Data Product?
+In the Data Platform, a Data Product includes:
+
+* Code (data transformation, data sharing API, discovery/observability API etc)
+
+* Data and Metadata (data model, document, SLO, lineage, policy configs etc)
+
+* Platform dependencies (specific infrastructure, compute, storage etc )
+
+![Data Product diagram2](images/what-is-a-data-product-2.png "Data Product diagram2")
+
+It’s important to highlight that a Data Product is not only data, it’s not just an exported file with information. The following excerpt explains it:
+
+> This perspective results in the separation of code (compute) from data, in this case, separation of the code that maintains the data, creates it, and serves it. This separation creates orphaned datasets that decay over time. At scale, we experience this separation as data swamps — a deteriorated data lake.
+
+> Data mesh shifts from this dual mode of data versus code to data and code as one architectural unit, a single deployable unit that is structurally complete to do its job, providing the high-quality data of a particular domain. One doesn’t exist without the other.
+
+Excerpt from “Data Mesh Delivering Data-Driven Value at Scale”, Zhamal Dehgani, Chapter 3: Principle of Data as a Product, pp44.
+
+The platform doesn’t make restrictions about how a data product is produced. A data product may be the combination of other products, with transformations, machine learning, etc.
+
+<a name="dealcsv"></a>
+#### Dealing with simple data exports (loosely generated CSV files)
+
+> :warning: **The platform is not built to support ad-hoc uploads of manually generated CSVs, etc. That is by design because at scale, these processes cannot be maintained and kept up to date. Over time, this leads to data swamps, a deteriorated set of data that can’t be trusted.**
+
+Instead of manually generating CSVs and then attempting to add them to the platform, make that process internal to a Data Product. That way the extraction of data, its transformation and potential combination with other sources becomes reproducible and with a smaller surface for errors.
+
+**However**, realistically speaking it may be advantageous to support the easy creation of a data product from a CSV file, maybe to facilitate platform adoption until domains adapt to operate with data products from the get go. We could potentially have a facility to expire products after a certain period of time (30 days or so) and automatically remove them from the platform. Maybe clearly mark them as a “non-production” product.
+
+Can data products be valuable without ownership, governance and infra shift? Potentially, but less likely, as no clearly defined domain ownership tends to optimize for technology/data over use cases and user experience.
+
+## Storage
+When it comes to storage it’s good to keep in mind that there are several different stages in play. The Data Platform is not a place to store all data from a system. However, that is unlikely to be necessary, as systems usually have their own data storage solutions. In order to make data available on the platform, a Data Product needs to be created (please see [How to create a Data Product](how-to-create-a-data-product.html.md.erb)). The Data Platform offers a template for the creation of a Data Product, and a limited amount of storage for the filtered and transformed data to be offered by it.
+
+### Boundaries
+
+A Data Product is self contained.
+
+### Interfaces
+
+Every Data Product will have some standard interfaces, suggested by the platform. Some of these standard interfaces will be implemented by the platform, some will required customisation by each Data Product.
+
+This is a non exhaustive list of possible interfaces:
+
+* /metadata
+
+* /monitor
+
+* /schema
+
+* /subscribe
+
+* /extractRaw
+
+![Data Product diagram3](images/what-is-a-data-product-3.png "Data Product diagram3")
+
+These are some common needs towards a Data Product:
+
+* "What is in here?"
+
+* Query data
+
+* Pull or push - data updates
+
+* Connect a tool (PowerBI, etc)
+
+* Connect to another data product
+
+
+![Data Product diagram4](images/what-is-a-data-product-4.png "Data Product diagram4")
+
+
+A mesh of Data Products, built and operated by the platform
+
+### Initial steps
+
+The following requirements should be addressed earlier on:
+
+* Adding data
+
+* Data product definition as infra + code
+
+* Adding metadata
+
+* Publishing the product?
+
+* Audit
+
+* Notifications
+
+* What is the minimal process for creating and publishing a Data Product?
+
+* Interactions with Data Catalogue
+
+
+#### Further questions
+
+The following are needs that could be addressed in the future:
+
+* External / Public access
+
+* Compute over data
+
+
+**Data Product creation and update**
+
+* How do we get data into a Data Product? How would that work for an existing system? Who’s getting the data exported out of the live system/service and runs that process so it’s not crashing the live services? Explore complexities, connectivity, etc. How is it self service?
+
+* How is data actually stored? What options do we offer (S3, Postgres…) and how are we abstracting that storage from the user?
+
+* Pull or push - data updates (also: once a product is defined, how does it get updated? How are data changes / successes / fails captured in our observability and logging module?)
+
+* Should a domain have a single Data Product? Should it have multiple?
+
+* What about historical data that can't be transformed into a domain model?
+
+
+**Mesh**
+
+* What if dependent data product breaks?
+
+**Platform**
+
+* How much / what can we provide as templates?
+
+* How much of a “concierge service” can we offer?
+
+* What is the sidecar?
+
+* How is access to a data product granted & revoked?
+
+* Will data APIs be open to anyone on a MOJO IP, or will APIs require auth tokens?
+
+* Steps to add our own DP in the platform (a DP of all other DP)
+
+
+**Wider group**
+
+* Who else to talk to about this, higher up?
+
+* Meet with other TAs (LAA, HMPPS, OPG, CICA, etc) to show and discuss how we expect it to work.
+
+**Analytical**
+
+* Who is responsible for analytics
+
+* What FE services will be provided (R, python, PowerBI, QuickSight)?
+
+* Where are analytics stored?
+
+
+**Everything else**
+
+How to cater for experiments while also keeping trust on other existing data products?
+
+Do we integrate with systems that run off MS Power Apps (and competitors?)
+
+How to have a lightweight version of a DataProduct that is transient, short lived, that is based of a CSV?
+
+## FAQs
+
+### What is analytical data?
+
+Analytical data is data used for analysis, opposed to operational data, which is data used by the system to function. Operational data doesn’t necessarily need to be shared, and it normally has different requirements to analytical data (for instance, operational data usually can’t go offline, while it’s often acceptable for analytical data not to be available for a short period of time).
+
+There is operational reporting and there is analysis, but it’s all based on the same source data.
+
+### Does the approach of domain driven design & data mesh risk excluding some data producers?
+
+Yes. Adopting the Data Platform may require adaptations on how some data producers are organised from an organisational point of view. Teams that do not modernise may be unable to join the Data Platform.
+
+Please check also the answer to [Is a CSV a data product?](data-mesh-faqs.html.md.erb) and the section above about [dealing with CSVs](#dealcsv).
+
+### If I want to connect to an org's whole data universe, do I have to find and connect all data products?
+
+If you would like to create a new data product that needs to consume information from the whole data mesh, so that it can be curated and offered to be consumed by others, then yes, it would need to connect to all other data products, but this should be facilitated by the platform.
+
+If you are considering something for data analysis and reporting, maybe something like the Analytical Platform, then that is an application running on top of the mesh, consuming data from it*.  
+It would be responsibility of the application maintainer to make sure that that connection existed (again, facilitated by the platform).
+
+*AP is not a data product as it’s an output, it doesn't mesh with anything, it consumes data from the mesh. It's not exactly part of the mesh as once information is on it, it can't be shared back to the mesh. After the AP/dashboard there's a human. [Check this answer](data-mesh-faqs.html.md.erb).
