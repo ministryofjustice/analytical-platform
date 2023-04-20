@@ -1,0 +1,38 @@
+---
+owner_slack: "#data-platform-notifications"
+title: How does the Data Platform work?
+last_reviewed_on: 2023-04-20
+review_in: 3 months
+---
+
+# <%= current_page.data.title %>
+
+Here are some cross cutting concerns that are relevant to all steps in the platform:
+
+* Audit
+* Authentication and Authorisation
+* Data Access (who can view/access which data)
+* Data Retention
+* GDPR
+* Monitoring + Alerting
+* Observability
+* Security (in transit and at rest)
+* Support
+* Training (documentation and guidance on how to use the platform)
+* Vulnerability management
+
+From a different angle, these concerns are the platform.
+
+The data platform should be:
+
+* secure
+* self-service
+
+Storage
+
+When it comes to storage it’s good to keep in mind that there are several
+different stages in play. The Data Platform is not a place to store all data
+from a system. However, that is unlikely to be necessary, as systems usually
+have their own data storage solutions. In order to make data available on the
+platform, a Data Product needs to be created and a limited storage is
+available
