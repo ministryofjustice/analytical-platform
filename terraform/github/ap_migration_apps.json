@@ -3,60 +3,60 @@
       "name": "gold-scorecard-form",
       "source_repo_name": "gold-scorecard-form",
       "description": "",
-      "team": "gold-scorecard-form-admin-team"
+      "team": ["gold-scorecard-form-admin-team"]
     },
     {
       "name": "hmpps-hr-dashboard",
       "source_repo_name": "hmpps-hr-dashboard",
       "description": "",
-      "team": "hmpps-hr-dashboard-admin-team"
+      "team": ["hmpps-hr-dashboard-admin-team"]
     },
     {
       "name": "judicial-reviews-app",
       "source_repo_name": "judicial-reviews-app",
       "description": "",
-      "team": "CAJS"
+      "team": ["CAJS"]
     },
     {
       "name": "judicial-wm2",
       "source_repo_name": "judicial-wm2",
       "description": "",
-      "team": "judicial-wm2-admin-team"
+      "team": ["judicial-wm2-admin-team"]
     },
     {
       "name": "ltc-capabilites-app",
       "source_repo_name": "ltc-capabilites-app",
       "description": "",
-      "team": "ltc-capabilites-app-admin-team"
+      "team": ["ltc-capabilites-app-admin-team"]
     },
     {
       "name": "mlp-app",
       "source_repo_name": "mlp-app",
       "description": "",
-      "team": "CAJS"
+      "team": ["CAJS"]
     },
     {
       "name": "moj-officehub-locator-webapp",
       "source_repo_name": "moj-officehub-locator-webapp",
       "description": "",
-      "team": "moj-officehub-locator-webapp-admin-team"
+      "team": ["moj-officehub-locator-webapp-admin-team"]
     },
     {
       "name": "pfg-dash-moj",
       "source_repo_name": "PfG-dash-MoJ",
       "description": "",
-      "team": "pfg-dash-moj-admin-team"
+      "team": ["pfg-dash-moj-admin-team","pfg-dash-moj-write-team"]
     },
     {
       "name": "regime-dashboard",
       "source_repo_name": "regime_dashboard",
       "description": "",
-      "team": "regime-dashboard-write-team"
+      "team": ["regime-dashboard-write-team", "regime-dashboard-admin-team"]
     },
     {
       "name": "people-data-self-serve",
       "source_repo_name": "people-data-self-serve",
       "description": "",
-      "team": "people-data-self-serve-admin-team"
+      "team": ["people-data-self-serve-admin-team"]
     }
   ]
