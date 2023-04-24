@@ -80,32 +80,6 @@ resource "aws_secretsmanager_secret_version" "pagerduty_cloudwatch_integration_k
   secret_string = pagerduty_service_integration.cloudwatch[0].integration_key
 }
 
-resource "pagerduty_service_integration" "github" {
-  count = var.enable_github_integration ? 1 : 0
-
-  # Commenting out because this is currently broken - https://github.com/PagerDuty/terraform-provider-pagerduty/issues/675
-  # name    = data.pagerduty_vendor.github.name
-  name    = "GitHub"
-  service = pagerduty_service.this.id
-  # Commenting out because this is currently broken - https://github.com/PagerDuty/terraform-provider-pagerduty/issues/675
-  # vendor  = data.pagerduty_vendor.github.id
-  vendor = "PFZ9O9D"
-}
-
-resource "aws_secretsmanager_secret" "pagerduty_github_integration_key" {
-  count = var.enable_github_integration ? 1 : 0
-
-  name       = "pagerduty/${local.name_machine_friendly}/integration-keys/github"
-  kms_key_id = "alias/aws/secretsmanager"
-}
-
-resource "aws_secretsmanager_secret_version" "pagerduty_github_integration_key" {
-  count = var.enable_github_integration ? 1 : 0
-
-  secret_id     = aws_secretsmanager_secret.pagerduty_github_integration_key[0].id
-  secret_string = pagerduty_service_integration.github[0].integration_key
-}
-
 resource "pagerduty_service_integration" "airflow" {
   count = var.enable_airflow_integration ? 1 : 0
 

@@ -62,11 +62,6 @@ variable "enable_cloudwatch_integration" {
   description = "Enable CloudWatch integration for this service"
 }
 
-variable "enable_github_integration" {
-  type        = bool
-  description = "Enable Github integration for this service"
-}
-
 variable "enable_airflow_integration" {
   type        = bool
   description = "Enable Airflow integration for this service"

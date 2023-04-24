@@ -37,7 +37,6 @@ locals {
         }
       ]
       enable_cloudwatch_integration = true
-      enable_github_integration     = true
     },
     {
       name              = "Analytical Platform Low Priority"
@@ -76,7 +75,6 @@ locals {
         }
       ]
       enable_cloudwatch_integration = true
-      enable_github_integration     = true
     },
     {
       name              = "Data Platform High Priority"
@@ -115,7 +113,6 @@ locals {
         }
       ]
       enable_cloudwatch_integration = true
-      enable_github_integration     = true
     },
     {
       name              = "Data Platform Low Priority"
@@ -154,7 +151,6 @@ locals {
         }
       ]
       enable_cloudwatch_integration = true
-      enable_github_integration     = true
     }
   ]
 }
@@ -177,7 +173,6 @@ module "technical_services" {
   auto_pause_notifications_parameters = try(each.value.auto_pause_notifications_parameters, [])
   support_hours                       = try(each.value.support_hours, [])
   enable_cloudwatch_integration       = try(each.value.enable_cloudwatch_integration, false)
-  enable_github_integration           = try(each.value.enable_github_integration, false)
   enable_airflow_integration          = try(each.value.enable_airflow_integration, false)
 
   depends_on = [module.escalation_policies]
