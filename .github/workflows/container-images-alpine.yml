@@ -76,6 +76,7 @@ jobs:
         with:
           image: ${{ env.name }}:${{ env.version }}-amd64
           severity-cutoff: critical
+          add-cpes-if-none: true
 
       - name: Upload SARIF
         if: always()
