@@ -91,7 +91,7 @@ jobs:
         uses: anchore/scan-action@4be3c24559b430723e51858969965e163b196957 # v3.3.5
         with:
           sbom: sbom-x86_64.spdx.json
-          everity-cutoff: critical
+          severity-cutoff: critical
           fail-build: false # 🙏 please forgive me, this is a temporary measure
 
       - name: Publish SBOM
