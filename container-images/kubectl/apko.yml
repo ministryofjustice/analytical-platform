@@ -1,0 +1,6 @@
+---
+include: container-images/alpine/base/apko.yml
+
+contents:
+  packages:
+    - kubectl
