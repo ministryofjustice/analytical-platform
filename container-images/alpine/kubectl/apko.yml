@@ -1,0 +1,8 @@
+---
+include: container-images/alpine/base/apko.yml
+
+contents:
+  repositories:
+    - https://dl-cdn.alpinelinux.org/alpine/edge/testing
+  packages:
+    - kubectl
