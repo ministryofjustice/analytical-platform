@@ -5,7 +5,7 @@ last_reviewed_on: 2023-04-20
 review_in: 3 months
 ---
 
-There are several articles that introduce the concept of what a Data Product is and why it exists. We recommend the following as a base: https://towardsdatascience.com/an-architecture-for-the-data-mesh-32ff4a15f16f 
+There are several articles that introduce the concept of what a Data Product is and why it exists. We recommend the following as a base: https://towardsdatascience.com/an-architecture-for-the-data-mesh-32ff4a15f16f
 
 ### Purpose
 A data product exists to help with interoperability, to make that process simpler. The intention of data products and the resulting data mesh is to eliminate the struggle to get timely access to data, and a consequent loss of trust. The purpose of the data product is to serve the consumer's needs.
@@ -192,7 +192,7 @@ Please check also the answer to [Is a CSV a data product?](data-mesh-faqs.html.m
 
 If you would like to create a new data product that needs to consume information from the whole data mesh, so that it can be curated and offered to be consumed by others, then yes, it would need to connect to all other data products, but this should be facilitated by the platform.
 
-If you are considering something for data analysis and reporting, maybe something like the Analytical Platform, then that is an application running on top of the mesh, consuming data from it*.  
+If you are considering something for data analysis and reporting, maybe something like the Analytical Platform, then that is an application running on top of the mesh, consuming data from it*.
 It would be responsibility of the application maintainer to make sure that that connection existed (again, facilitated by the platform).
 
 *AP is not a data product as it’s an output, it doesn't mesh with anything, it consumes data from the mesh. It's not exactly part of the mesh as once information is on it, it can't be shared back to the mesh. After the AP/dashboard there's a human. [Check this answer](data-mesh-faqs.html.md.erb).
