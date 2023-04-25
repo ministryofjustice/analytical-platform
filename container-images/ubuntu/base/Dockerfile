@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lts/ubuntu@sha256:5f6d7e4dad348dbbae3c1e960dcaba98c2e262902c67c9bc41d5f2417cebaeb8
+FROM public.ecr.aws/lts/ubuntu@sha256:5fb5e64ee0d78fed9d65da71ed83dd61a8be37ffe01448c6d56cd61a98734302
 
 LABEL org.opencontainers.image.vendor="Ministry of Justice" \
       org.opencontainers.image.authors="Data Platform Core Infrastructure" \
