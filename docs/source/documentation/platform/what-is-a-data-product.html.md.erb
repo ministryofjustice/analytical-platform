@@ -49,7 +49,7 @@ Instead of manually generating CSVs and then attempting to add them to the platf
 Can data products be valuable without ownership, governance and infra shift? Potentially, but less likely, as no clearly defined domain ownership tends to optimize for technology/data over use cases and user experience.
 
 ## Storage
-When it comes to storage it’s good to keep in mind that there are several different stages in play. The Data Platform is not a place to store all data from a system. However, that is unlikely to be necessary, as systems usually have their own data storage solutions. In order to make data available on the platform, a Data Product needs to be created (please see [How to create a Data Product](how-to-create-a-data-product.html.md.erb)). The Data Platform offers a template for the creation of a Data Product, and a limited amount of storage for the filtered and transformed data to be offered by it.
+When it comes to storage it’s good to keep in mind that there are several different stages in play. The Data Platform is not a place to store all data from a system. However, that is unlikely to be necessary, as systems usually have their own data storage solutions. In order to make data available on the platform, a Data Product needs to be created (please see [How to create a Data Product](/documentation/platform/how-to-create-a-data-product.html.md.erb)). The Data Platform offers a template for the creation of a Data Product, and a limited amount of storage for the filtered and transformed data to be offered by it.
 
 ### Boundaries
 
@@ -188,7 +188,7 @@ There is operational reporting and there is analysis, but it’s all based on th
 
 Yes. Adopting the Data Platform may require adaptations on how some data producers are organised from an organisational point of view. Teams that do not modernise may be unable to join the Data Platform.
 
-Please check also the answer to [Is a CSV a data product?](data-mesh-faqs.html.md.erb) and the section above about [dealing with CSVs](#dealcsv).
+Please check also the answer to [Is a CSV a data product?](/documentation/platform/data-mesh-faqs.html.md.erb) and the section above about [dealing with CSVs](#dealcsv).
 
 ### If I want to connect to an org's whole data universe, do I have to find and connect all data products?
 
@@ -197,4 +197,4 @@ If you would like to create a new data product that needs to consume information
 If you are considering something for data analysis and reporting, maybe something like the Analytical Platform, then that is an application running on top of the mesh, consuming data from it*.
 It would be responsibility of the application maintainer to make sure that that connection existed (again, facilitated by the platform).
 
-*AP is not a data product as it’s an output, it doesn't mesh with anything, it consumes data from the mesh. It's not exactly part of the mesh as once information is on it, it can't be shared back to the mesh. After the AP/dashboard there's a human. [Check this answer](data-mesh-faqs.html.md.erb).
+*AP is not a data product as it’s an output, it doesn't mesh with anything, it consumes data from the mesh. It's not exactly part of the mesh as once information is on it, it can't be shared back to the mesh. After the AP/dashboard there's a human. [Check this answer](/documentation/platform/data-mesh-faqs.html.md.erb).
