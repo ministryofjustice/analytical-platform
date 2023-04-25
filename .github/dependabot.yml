@@ -22,6 +22,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/terraform/data-engineering"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/terraform/github"
     schedule:
       interval: "daily"
@@ -35,5 +39,33 @@ updates:
       interval: "daily"
   - package-ecosystem: "terraform"
     directory: "/terraform/github/modules/team"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/escalation-policy"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/schedule"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/service/business"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/service/technical"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/team"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/user"
     schedule:
       interval: "daily"

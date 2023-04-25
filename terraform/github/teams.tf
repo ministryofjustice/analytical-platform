@@ -20,7 +20,6 @@ locals {
   general_members = [ # members of analytics-hq gh team
     "jacobwoffenden",
     "calumabarnett",
-    "Bhkol",          # Bharti Kolhe - BA Cognizant
     "SimonsMOJ",      # Simon Heron
     "mshodge",        # Michael Hodges
     "YvanMOJdigital", # Yvan Smith
@@ -92,7 +91,13 @@ locals {
     "oliver-critchfield",
     "AlexVilela",
     "davidbridgwood",
-    "mshodge" # Michael Hodge
+    "mshodge", # Michael Hodge
+    "Andy-Cook"
+  ]
+
+  data_engineering_aws_developer_members = [
+    "parminder-thindal-moj",
+    "moj-samuelweller"
   ]
 
   data_platform_core_infrastructure_maintainers = [
@@ -102,11 +107,8 @@ locals {
   ]
 
   data_platform_core_infrastructure_members = [
-    "jhackett-ap",  # John Hackett
-    "Bhkol",        # Bharti Kolhe - BA Cognizant
-    "sreekanthmoj", # Sreekanth Kote - Cognizant
-    "karthikmoj",   # Karthik Pelluru - Cognizant
-    "Emterry",      # Emma Terry
+    "jhackett-ap", # John Hackett
+    "Emterry",     # Emma Terry
   ]
 
   data_platform_labs_maintainers = [
@@ -115,7 +117,8 @@ locals {
 
   data_platform_labs_members = [
     "hemeshpatel-moj",
-    "murdo-moj"
+    "murdo-moj",
+    "LavMatt"
   ]
 
   data_platform_security_auditor_members = [

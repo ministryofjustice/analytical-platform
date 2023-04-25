@@ -1,0 +1,83 @@
+---
+on: # yamllint disable-line rule:truthy
+  workflow_call:
+    inputs:
+      working-directory:
+        required: true
+        type: string
+      aws-region:
+        default: eu-west-1
+        required: false
+        type: string
+      aws-role-session-name:
+        default: githubactionsrolesession
+        required: false
+        type: string
+      aws-role-to-assume:
+        required: true
+        type: string
+      terraform-version:
+        required: true
+        type: string
+      terraform-backend-config-role:
+        required: true
+        type: string
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Configure AWS Credentials
+        id: configure_aws_credentials
+        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # v2.0.0
+        with:
+          aws-region: ${{ inputs.aws-region }}
+          role-to-assume: ${{ inputs.aws-role-to-assume }}
+          role-session-name: ${{ inputs.aws-role-session-name }}
+
+      - name: Set up Terraform
+        id: setup_terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+        with:
+          terraform_version: ${{ inputs.terraform-version }}
+
+      - name: Prepare Terraform
+        id: terraform_prepare
+        shell: bash
+        run: |
+          echo "TF_IN_AUTOMATION=true" >> ${GITHUB_ENV}
+
+      - name: Initialise
+        id: terraform_init
+        shell: bash
+        run: |
+          terraform init \
+            -backend-config=role_arn=${{ inputs.terraform-backend-config-role }} \
+            -reconfigure \
+            -upgrade \
+            -no-color
+        working-directory: ${{ inputs.working-directory }}
+
+      - name: Validate
+        id: terraform_validate
+        shell: bash
+        run: terraform validate -no-color
+        working-directory: ${{ inputs.working-directory }}
+
+      - name: Plan
+        id: terraform_plan
+        shell: bash
+        run: terraform plan -input=false -no-color
+        working-directory: ${{ inputs.working-directory }}
+
+      - name: Apply
+        if: github.ref == 'refs/heads/main'
+        id: terraform_apply
+        shell: bash
+        run: terraform apply -input=false -auto-approve -no-color
+        working-directory: ${{ inputs.working-directory }}

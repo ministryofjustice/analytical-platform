@@ -81,6 +81,20 @@ module "data-platform-apps" {
 
 }
 
+# Data Platform Apps Teams
+
+module "migration_apps_teams" {
+  for_each    = local.migration_apps_teams_map
+  source      = "./modules/team"
+  name        = each.key
+  description = data.github_team.migration_app_owner[each.key].description
+
+  maintainers  = data.github_team.migration_app_owner[each.key].members
+  members      = data.github_team.migration_app_owner[each.key].members
+  repositories = each.value
+  ci           = local.ci_users
+}
+
 # Everyone, with access to the above repositories
 module "core-team" {
   source      = "./modules/team"
@@ -179,12 +193,22 @@ module "data_platform_labs_team" {
   ci          = local.ci_users
 }
 
-# Data Platform Labs Team
+# Data Platform Security Auditor Team
 module "data_platform_security_auditor_team" {
   source      = "./modules/team"
   name        = "data-platform-security-and-auditors"
   description = "Data Platform Security and Auditor Team"
   maintainers = local.data_platform_security_auditor_members
   members     = local.data_platform_security_auditor_members
+  ci          = local.ci_users
+}
+
+# Data Platform Limited AWS Access Team
+module "data_platform_engineering_developer_team" {
+  source      = "./modules/team"
+  name        = "data-engineering-aws-developers"
+  description = "Data Engineering AWS (Developer Access)"
+  maintainers = local.maintainers
+  members     = distinct(concat(local.data_engineering_aws_developer_members, local.maintainers))
   ci          = local.ci_users
 }

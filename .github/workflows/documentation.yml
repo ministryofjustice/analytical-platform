@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
       - name: Compile Markdown to HTML
         id: compile
@@ -60,7 +60,7 @@ jobs:
 #     steps:
 #       - name: Checkout
 #         id: checkout
-#         uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+#         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
 #       - name: Compile Markdown to HTML and run htmlproofer
 #         id: compile
@@ -100,8 +100,8 @@ jobs:
     steps:
       - name: Configure GitHub Pages
         id: configure_github_pages
-        uses: actions/configure-pages@7110e9e03ffb4a421945e5d0607007b8e9f1f52b # v3.0.5
+        uses: actions/configure-pages@f156874f8191504dae5b037505266ed5dda6c382 # v3.0.6
 
       - name: Deploy to GitHub Pages
         id: deploy_github_pages
-        uses: actions/deploy-pages@73e62e651178eeba977de2dc9f4c7645b3d01015 # v2.0.0
+        uses: actions/deploy-pages@af48cf94a42f2c634308b1c9dc0151830b6f190a # v2.0.1

@@ -2,46 +2,61 @@
     {
       "name": "gold-scorecard-form",
       "source_repo_name": "gold-scorecard-form",
-      "description": ""
+      "description": "",
+      "team": ["gold-scorecard-form-admin-team"]
     },
     {
       "name": "hmpps-hr-dashboard",
       "source_repo_name": "hmpps-hr-dashboard",
-      "description": ""
+      "description": "",
+      "team": ["hmpps-hr-dashboard-admin-team"]
     },
     {
       "name": "judicial-reviews-app",
       "source_repo_name": "judicial-reviews-app",
-      "description": ""
+      "description": "",
+      "team": ["CAJS"]
     },
     {
       "name": "judicial-wm2",
       "source_repo_name": "judicial-wm2",
-      "description": ""
+      "description": "",
+      "team": ["judicial-wm2-admin-team"]
     },
     {
       "name": "ltc-capabilites-app",
       "source_repo_name": "ltc-capabilites-app",
-      "description": ""
+      "description": "",
+      "team": ["ltc-capabilites-app-admin-team"]
     },
     {
       "name": "mlp-app",
       "source_repo_name": "mlp-app",
-      "description": ""
+      "description": "",
+      "team": ["CAJS"]
     },
     {
       "name": "moj-officehub-locator-webapp",
       "source_repo_name": "moj-officehub-locator-webapp",
-      "description": ""
+      "description": "",
+      "team": ["moj-officehub-locator-webapp-admin-team"]
     },
     {
       "name": "pfg-dash-moj",
       "source_repo_name": "PfG-dash-MoJ",
-      "description": ""
+      "description": "",
+      "team": ["pfg-dash-moj-admin-team","pfg-dash-moj-write-team"]
     },
     {
       "name": "regime-dashboard",
       "source_repo_name": "regime_dashboard",
-      "description": ""
+      "description": "",
+      "team": ["regime-dashboard-write-team", "regime-dashboard-admin-team"]
+    },
+    {
+      "name": "people-data-self-serve",
+      "source_repo_name": "people-data-self-serve",
+      "description": "",
+      "team": ["people-data-self-serve-admin-team"]
     }
   ]
