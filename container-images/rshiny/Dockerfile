@@ -1,3 +1,4 @@
+# hadolint global ignore=DL3008
 FROM ubuntu:focal
 
 ARG r=4.1.3 # must correspond with a rocker tag as per https://hub.docker.com/r/rocker/shiny/tags
