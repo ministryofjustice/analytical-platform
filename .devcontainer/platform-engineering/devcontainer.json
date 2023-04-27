@@ -10,6 +10,7 @@
     "../features/src/container-tools": {},
     "../features/src/git-tools": {},
     "../features/src/kubernetes-tools": {},
+    "../features/src/policy-tools": {},
     "../features/src/pulumi-tools": {},
     "../features/src/terraform-tools": {}
   },
