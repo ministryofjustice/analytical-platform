@@ -1,0 +1,25 @@
+{
+  "id": "policy-tools",
+  "version": "1.0.0",
+  "name": "policy-tools",
+  "description": "Policy Tools - OPA",
+  "options": {
+    "installOpa": {
+      "type": "boolean",
+      "description": "OPA (https://github.com/open-policy-agent/opa)",
+      "default": true
+    },
+    "opaVersion": {
+      "type": "string",
+      "description": "OPA version",
+      "proposals": ["latest"],
+      "default": "latest"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["tsandall.opa"]
+    }
+  },
+  "installsAfter": ["./features/src/base"]
+}
