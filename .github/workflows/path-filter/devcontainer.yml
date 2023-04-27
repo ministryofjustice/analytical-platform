@@ -5,5 +5,6 @@ cicd-tools: ./.devcontainer/features/**/cicd-tools/**
 container-tools: ./.devcontainer/features/**/container-tools/**
 git-tools: ./.devcontainer/features/**/git-tools/**
 kubernetes-tools: ./.devcontainer/features/**/kubernetes-tools/**
+policy-tools: ./.devcontainer/features/**/policy-tools/**
 pulumi-tools: ./.devcontainer/features/**/pulumi-tools/**
 terraform-tools: ./.devcontainer/features/**/terraform-tools/**
