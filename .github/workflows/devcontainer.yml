@@ -1,5 +1,5 @@
 ---
-name: devcontainer
+name: Dev Container
 
 on: # yamllint disable-line rule:truthy
   pull_request:
@@ -11,6 +11,9 @@ on: # yamllint disable-line rule:truthy
       - .devcontainer/**
 
 permissions: read-all
+
+env:
+  DEVCONTAINER_CLI_VERSION: 0.40.0
 
 jobs:
   detect-changes:
@@ -45,7 +48,7 @@ jobs:
 
       - name: Install devcontainer CLI
         id: install_devcontainer_cli
-        run: npm install -g @devcontainers/cli@0.30.0
+        run: npm install -g @devcontainers/cli@${{ env.DEVCONTAINER_CLI_VERSION }}
 
       - name: Build Image
         id: build_image
@@ -80,7 +83,7 @@ jobs:
 
       - name: Install devcontainer CLI
         id: install_devcontainer_cli
-        run: npm install -g @devcontainers/cli@0.30.0
+        run: npm install -g @devcontainers/cli@${{ env.DEVCONTAINER_CLI_VERSION }}
 
       - name: Build Image
         id: build_image
