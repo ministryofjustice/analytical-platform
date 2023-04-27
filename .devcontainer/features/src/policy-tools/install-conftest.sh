@@ -4,7 +4,7 @@ set -e
 
 source /usr/local/bin/devcontainer-utils
 
-VERSION=${TERRAFORMDOCSVERSION:-"latest"}
+VERSION=${CONFTESTVERSION:-"latest"}
 GITHUB_REPOSITORY="open-policy-agent/conftest"
 
 if [ "${VERSION}" == "latest" ]; then
