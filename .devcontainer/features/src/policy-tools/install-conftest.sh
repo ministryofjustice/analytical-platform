@@ -30,4 +30,4 @@ mv conftest /usr/local/bin/conftest
 
 chmod +x /usr/local/bin/conftest
 
-# rm LICENSE README.md conftest_${VERSION_STRIP_V}_Linux_${ARCHITECTURE}.tar.gz
+rm LICENSE README.md conftest_${VERSION_STRIP_V}_Linux_${ARCHITECTURE}.tar.gz
