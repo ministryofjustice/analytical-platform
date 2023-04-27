@@ -2,7 +2,7 @@
   "id": "policy-tools",
   "version": "1.0.0",
   "name": "policy-tools",
-  "description": "Policy Tools - OPA",
+  "description": "Policy Tools - OPA, Conftest",
   "options": {
     "installOpa": {
       "type": "boolean",
@@ -12,6 +12,17 @@
     "opaVersion": {
       "type": "string",
       "description": "OPA version",
+      "proposals": ["latest"],
+      "default": "latest"
+    },
+    "installConftest": {
+      "type": "boolean",
+      "description": "Conftest (https://github.com/open-policy-agent/conftest)",
+      "default": true
+    },
+    "conftestVersion": {
+      "type": "string",
+      "description": "Conftest version",
       "proposals": ["latest"],
       "default": "latest"
     }
