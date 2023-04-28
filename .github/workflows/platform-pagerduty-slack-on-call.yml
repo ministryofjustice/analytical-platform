@@ -1,5 +1,5 @@
 ---
-name: Platform - PagerDuty On-Call
+name: Platform - PagerDuty Slack On-Call
 
 on: # yamllint disable-line rule:truthy
   schedule:
@@ -9,8 +9,8 @@ on: # yamllint disable-line rule:truthy
 permissions: read-all
 
 jobs:
-  pagerduty:
-    name: PagerDuty On-Call
+  pagerduty-slack-on-call:
+    name: PagerDuty Slack On-Call
     runs-on: ubuntu-latest
     permissions:
       id-token: write

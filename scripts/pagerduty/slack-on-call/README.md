@@ -10,6 +10,12 @@ This script:
 
 It is designed to be executed every morning by `.github/workflows/platform-pagerduty-on-call.yml`
 
+## Adding a Team
+
+1. Add `pagerduty-schedule-id` and `slack-channel` to `.github/workflows/platform-pagerduty-on-call.yml`
+
+1. Invite `@PagerDuty On-Call` to `slack-channel`
+
 ## Testing Locally
 <!-- markdownlint-disable MD013 -->
 ```bash
