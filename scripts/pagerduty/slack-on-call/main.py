@@ -23,8 +23,8 @@ def get_on_call_schedule_name():
 
 def get_on_call_user():
     response = pagerduty_client.get('/schedules/' + pagerduty_scedule_id + '/users?time_zone=Europe/London')
-    user = None
-    email = None
+    user_name = None
+    user_email = None
 
     if response.ok:
         user_name = response.json()['users'][0]['name']
