@@ -1,5 +1,5 @@
 ---
-name: Platform - PagerDuty On-Call
+name: Platform - PagerDuty Slack On-Call
 
 on: # yamllint disable-line rule:truthy
   schedule:
@@ -9,11 +9,14 @@ on: # yamllint disable-line rule:truthy
 permissions: read-all
 
 jobs:
-  pagerduty:
-    name: PagerDuty On-Call
+  pagerduty-slack-on-call:
+    name: PagerDuty Slack On-Call
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+    defaults:
+      run:
+        working-directory: scripts/pagerduty/slack-on-call
     strategy:
       matrix:
         include:
@@ -26,6 +29,17 @@ jobs:
       - name: Checkout
         id: checkout
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Setup Python
+        id: setup_python
+        uses: actions/setup-python@57ded4d7d5e986d7296eab16560982c6dd7c923b # v4.6.0
+        with:
+          python-version: 3.9
+
+      - name: Install requirements
+        id: install_requirements
+        run: |
+          pip install --requirements requirements.txt
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
@@ -51,13 +65,14 @@ jobs:
         with:
           secret-ids: |
             PAGERDUTY_TOKEN, pagerduty-token
-            SLACK_WEBHOOK_URL, slack-pagerduty-scheduling-webhook-url
+            SLACK_TOKEN, slack-pagerduty-on-call-token
 
       - name: Run scripts/pagerduty/slack-on-call.sh
         id: run_slack_on_call
         run: |
-          bash scripts/pagerduty/slack-on-call.sh
+          python main.py
         env:
-          PAGERDUTY_TOKEN: ${{ env.PAGERDUTY_TOKEN }}
           PAGERDUTY_SCHEDULE_ID: ${{ matrix.pagerduty-schedule-id }}
+          PAGERDUTY_TOKEN: ${{ env.PAGERDUTY_TOKEN }}
           SLACK_CHANNEL: ${{ matrix.slack-channel }}
+          SLACK_TOKEN: ${{ env.SLACK_TOKEN }}
