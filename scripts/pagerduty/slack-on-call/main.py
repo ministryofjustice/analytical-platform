@@ -23,7 +23,9 @@ def get_on_call_schedule_name():
 
 
 def get_on_call_user():
-    response = pagerduty_client.get("/schedules/" + pagerduty_scedule_id + "/users?time_zone=Europe/London")
+    response = pagerduty_client.get(
+        "/schedules/" + pagerduty_scedule_id + "/users?time_zone=Europe/London"
+    )
     user_name = None
     user_email = None
 
@@ -46,9 +48,9 @@ def get_slack_user_id():
 
 def main():
     if get_slack_user_id() is None:
-        message=f"The on-call engineer for {get_on_call_schedule_name()} is {get_on_call_user()[0]} (I can't match their email to a Slack user, sorry!)"
+        message = f"The on-call engineer for {get_on_call_schedule_name()} is {get_on_call_user()[0]} (I can't match their email to a Slack user, sorry!)"
     else:
-        message=f"The on-call engineer for {get_on_call_schedule_name()} is <@{get_slack_user_id()}>"
+        message = f"The on-call engineer for {get_on_call_schedule_name()} is <@{get_slack_user_id()}>"
 
     slack_client.chat_postMessage(
         channel=slack_channel,
