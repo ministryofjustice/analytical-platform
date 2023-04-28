@@ -1,0 +1,2 @@
+pdpyras==4.5.2
+slack-sdk==3.21.3
