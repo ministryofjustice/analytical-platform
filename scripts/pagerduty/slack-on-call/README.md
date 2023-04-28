@@ -1,11 +1,17 @@
 # PagerDuty Slack On-Call
 
-This script obtains the on-call user for the given schedule, gets their Slack handle, and posts a message to the given Slack channel.
+This script:
+
+1. obtains the on-call user for the given schedule
+
+1. gets the on-call user's Slack handle
+
+1. posts a message to the given Slack channel
 
 It is designed to be executed every morning by `.github/workflows/platform-pagerduty-on-call.yml`
 
 ## Testing Locally
-
+<!-- markdownlint-disable MD013 -->
 ```bash
 # Drop into AWS Vault
 aws-vault exec analytical-platform-management-production
@@ -31,3 +37,4 @@ pip install --requirement requirements.txt
 
 python main.py
 ```
+<!-- markdownlint-enable MD013 -->
