@@ -83,7 +83,7 @@ module "ec2" {
     aws = aws.data-engineering
   }
   source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "~> 4.0"
+  version = "~> 5.0"
 
   name = local.name
 
