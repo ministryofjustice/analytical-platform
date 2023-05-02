@@ -39,7 +39,7 @@ jobs:
       - name: Install requirements
         id: install_requirements
         run: |
-          pip install --requirements requirements.txt
+          pip install --requirement requirements.txt
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
