@@ -2,12 +2,15 @@ import os
 
 from pdpyras import APISession
 from slack_sdk import WebClient
+from time import strftime
+
+date = strftime("%Y-%m-%d")
 
 pagerduty_scedule_id = os.environ["PAGERDUTY_SCHEDULE_ID"]
 pagerduty_token = os.environ["PAGERDUTY_TOKEN"]
 
-slack_token = os.environ["SLACK_TOKEN"]
 slack_channel = os.environ["SLACK_CHANNEL"]
+slack_token = os.environ["SLACK_TOKEN"]
 
 pagerduty_client = APISession(pagerduty_token)
 slack_client = WebClient(token=slack_token)
@@ -24,7 +27,7 @@ def get_on_call_schedule_name():
 
 def get_on_call_user():
     response = pagerduty_client.get(
-        "/schedules/" + pagerduty_scedule_id + "/users?time_zone=Europe/London"
+        "/schedules/" + pagerduty_scedule_id + "/users?since=" + date + "T09%3A00Z&until=" + date + "T17%3A00Z"
     )
     user_name = None
     user_email = None
