@@ -12,6 +12,8 @@ locals {
     Name = local.name
     repo = "github.com/ministryofjustice/data-platform/tree/main/terraform/data-engineering"
   }
+
+  ami_id = "ami-0256f8c0fabe51702" # can't pass ignore_changes to module, so must statically code
 }
 
 ################################################################################
@@ -45,17 +47,6 @@ module "vpc" {
 # Additional Resources
 ################################################################################
 
-data "aws_ami" "amazon_linux" {
-  provider    = aws.data-engineering
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn-ami-hvm-*-x86_64-gp2"]
-  }
-}
-
 module "security_group" {
   providers = {
     aws = aws.data-engineering
@@ -87,7 +78,7 @@ module "ec2" {
 
   name = local.name
 
-  ami                         = data.aws_ami.amazon_linux.id
+  ami                         = local.ami_id
   instance_type               = "t3.medium"
   availability_zone           = local.azs[0]
   subnet_id                   = element(module.vpc.private_subnets, 0)
@@ -116,8 +107,4 @@ module "ec2" {
     SSMCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   }
   tags = local.tags
-
-  lifecycle {
-    ignore_changes = [ami]
-  }
 }
