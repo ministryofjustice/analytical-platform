@@ -116,4 +116,8 @@ module "ec2" {
     SSMCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   }
   tags = local.tags
+
+  lifecycle {
+    ignore_changes = [ami]
+  }
 }
