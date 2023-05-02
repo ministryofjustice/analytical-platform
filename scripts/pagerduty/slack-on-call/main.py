@@ -1,8 +1,8 @@
 import os
+from time import strftime
 
 from pdpyras import APISession
 from slack_sdk import WebClient
-from time import strftime
 
 date = strftime("%Y-%m-%d")
 
@@ -27,7 +27,13 @@ def get_on_call_schedule_name():
 
 def get_on_call_user():
     response = pagerduty_client.get(
-        "/schedules/" + pagerduty_scedule_id + "/users?since=" + date + "T09%3A00Z&until=" + date + "T17%3A00Z"
+        "/schedules/"
+        + pagerduty_scedule_id
+        + "/users?since="
+        + date
+        + "T09%3A00Z&until="
+        + date
+        + "T17%3A00Z"
     )
     user_name = None
     user_email = None
