@@ -1,13 +1,16 @@
 import os
+from time import strftime
 
 from pdpyras import APISession
 from slack_sdk import WebClient
 
+date = strftime("%Y-%m-%d")
+
 pagerduty_scedule_id = os.environ["PAGERDUTY_SCHEDULE_ID"]
 pagerduty_token = os.environ["PAGERDUTY_TOKEN"]
 
-slack_token = os.environ["SLACK_TOKEN"]
 slack_channel = os.environ["SLACK_CHANNEL"]
+slack_token = os.environ["SLACK_TOKEN"]
 
 pagerduty_client = APISession(pagerduty_token)
 slack_client = WebClient(token=slack_token)
@@ -24,7 +27,13 @@ def get_on_call_schedule_name():
 
 def get_on_call_user():
     response = pagerduty_client.get(
-        "/schedules/" + pagerduty_scedule_id + "/users?time_zone=Europe/London"
+        "/schedules/"
+        + pagerduty_scedule_id
+        + "/users?since="
+        + date
+        + "T09%3A00Z&until="
+        + date
+        + "T17%3A00Z"
     )
     user_name = None
     user_email = None
@@ -48,9 +57,9 @@ def get_slack_user_id():
 
 def main():
     if get_slack_user_id() is None:
-        message = f"The on-call engineer for {get_on_call_schedule_name()} is {get_on_call_user()[0]} (I can't match their email to a Slack user, sorry!)"  # noqa: E501
+        message = f"Today's on-call engineer for {get_on_call_schedule_name()} is {get_on_call_user()[0]} (I can't match their email to a Slack user, sorry!)"  # noqa: E501
     else:
-        message = f"The on-call engineer for {get_on_call_schedule_name()} is <@{get_slack_user_id()}>"
+        message = f"Today's on-call engineer for {get_on_call_schedule_name()} is <@{get_slack_user_id()}>"
 
     slack_client.chat_postMessage(
         channel=slack_channel,
