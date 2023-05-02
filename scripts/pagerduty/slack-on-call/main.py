@@ -57,9 +57,9 @@ def get_slack_user_id():
 
 def main():
     if get_slack_user_id() is None:
-        message = f"The on-call engineer for {get_on_call_schedule_name()} is {get_on_call_user()[0]} (I can't match their email to a Slack user, sorry!)"  # noqa: E501
+        message = f"Today's on-call engineer for {get_on_call_schedule_name()} is {get_on_call_user()[0]} (I can't match their email to a Slack user, sorry!)"  # noqa: E501
     else:
-        message = f"The on-call engineer for {get_on_call_schedule_name()} is <@{get_slack_user_id()}>"
+        message = f"Today's on-call engineer for {get_on_call_schedule_name()} is <@{get_slack_user_id()}>"
 
     slack_client.chat_postMessage(
         channel=slack_channel,
