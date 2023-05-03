@@ -18,12 +18,12 @@ A presigned URL can be used to grant temporary access to the AWS S3 API, on the 
 
 ### Steps
 ![Data platform general diagram](images/upload-mechanism.png "Data platform configuration Flow")
- 
+
 1. A user requests a presigned URL to upload to S3. This is verified with an API key.</li>
 2. User sends a post request to upload data to s3 using the presigned URL.</li>
 
 ### Authentication
-For user verification on methods in API gateway, multiple options are available: IAM users (Cognito), Lambda authorisers, and API keys. 
+For user verification on methods in API gateway, multiple options are available: IAM users (Cognito), Lambda authorisers, and API keys.
 
 `<strong>To demonstrate an authentication layer we will use API keys, later  we will implement Cognito user pool  connecting to Azure identity </strong>`
 
@@ -31,9 +31,9 @@ A REST API is necessary to use API keys rather than a HTTP API.
 
 ### Security Considerations
 
-The following measures will be implemented to ensure the api is secure 
+The following measures will be implemented to ensure the api is secure
 
-1. Encryption at Rest and Transit. 
+1. Encryption at Rest and Transit.
 
 2. Use a short expiration time: Set the expiration time of the presigned URL to a short interval, such as a few minutes, to minimize the time during which an attacker could exploit the URL.
 
@@ -49,43 +49,38 @@ The following measures will be implemented to ensure the api is secure
 
 8. Implement WAF in front of Api gateway
 
-9. Implement Cloudfront distribution to mask bucketname. 
+9. Implement Cloudfront distribution to mask bucketname.
 
-<strong>Note: The presigned url link will be rendered back to client (eg: User responsible for using the api, say uploading), which can be used by anyone to interact with the s3 bucket. 
+<strong>Note: The presigned url link will be rendered back to client (eg: User responsible for using the api, say uploading), which can be used by anyone to interact with the s3 bucket.
 But the applying the actions below we can ensure its secure</strong>
 
-1. Permissions will be restricted,  so only specific operation is permitted 
+1. Permissions will be restricted,  so only specific operation is permitted.
 
-2. User request  will be recorded, since API will have authentication layer like Cognito in front of it. 
+2. User request  will be recorded, since API will have authentication layer like Cognito in front of it.
 
-3. Trust, that this presigned url wont be shared to anyone by client or user 
+3. Trust, that this presigned url wont be shared to anyone by client or user
 
-4. Bucket name will be exposed as part of the URL. But the bucket name in a presigned URL can be masked. We can use a custom domain name (e.g., cdn.example.com) instead of the original bucket name in the URL. This can be done using implementing cloudfront distribution. 
+4. Bucket name will be exposed as part of the URL. But the bucket name in a presigned URL can be masked. We can use a custom domain name (e.g., cdn.example.com) instead of the original bucket name in the URL. This can be done using implementing cloudfront distribution.
 
-Some useful thoughts on securing presigned URLs below, which will be considered while implementing the soution. 
+Some useful thoughts on securing presigned URLs below, which will be considered while implementing the soution.
 (https://insecurity.blog/2021/03/06/securing-amazon-s3-presigned-urls/)
 
-### Assumptions 
+### Assumptions
 
 1. Some data in some form will be held by the data platform.
-	
+
 2. Certain extensions should be disallowed eg exe.
 
 3. A user of the API is properly validated by an authentication mechanism (this is part of user access) to receive an auth token for the API.
-	
+
 4. A basic GUI on top of this API can make it usable for non technical users.
-	
+
 5. Access to the S3 API is restricted to put and list only on areas which to which the user is permitted.
 
 6. We aren’t concerned with schema changes and how they might be handled yet.
 
-### Risks 
+### Risks
 
-1. In coming data validation would be necessary but out of scope this api work . 
+1. In coming data validation would be necessary but out of scope this api work .
 
 2. Doesn’t meet the needs of non technical users without a GUI on top of the API.
- 
-
-
-
-
