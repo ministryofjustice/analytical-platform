@@ -53,10 +53,7 @@ The following are the assumptions and risks. This will be mitigated eventually.
 
 3. Access control to various tools and users are out of scope for this work.
 
-4. Use case of allowing several users (100 or 1000) to register and send data simultaneously can be dealt later by applying stabilisation tactics to our solution
-EG: 1. Adding queue for all the request and process them  in parallel within limits
-    2. Concurrently kick starting the compute (say 100 concurrent job can started at a time and remaining ones can be in queue)
-We can improve our POC more by adding necessary components later to facilitate it.
+4. To enable concurrent registration and data submission for a large number of users (100 or 1000), we can implement stabilization tactics in our solution. For instance, we can add a queue to handle all the incoming requests and process them in parallel within predefined limits. Additionally, we can start the computation concurrently by allowing a fixed number of jobs (e.g., 100) to run simultaneously and queuing the remaining ones. These measures can be added as necessary components in our proof of concept (POC) to enhance its functionality
 
 ### Notes
 
