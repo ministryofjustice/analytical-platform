@@ -8,7 +8,7 @@ review_in: 3 months
 # <%= current_page.data.title %>
 
 ## Decision
-The data upload mechanism will be a POST request to S3 via a presigned URL which will be generated upon user request. User authorisation will be via API key.
+`The data upload mechanism will be a POST request to S3 via a presigned URL which will be generated upon user request. User authorisation will be via API key`.
 
 ### User story
 As a data provider, I want to upload my data product including data and code based transformations to the data platform, so that they are available for other data platform users.
@@ -25,7 +25,7 @@ A presigned URL can be used to grant temporary access to the AWS S3 API, on the 
 ### Authentication
 For user verification on methods in API gateway, multiple options are available: IAM users (Cognito), Lambda authorisers, and API keys. 
 
-<strong>To demonstrate an authentication layer we will use API keys, later  we will implement Cognito user pool  with connecting to Azure </strong>
+`<strong>To demonstrate an authentication layer we will use API keys, later  we will implement Cognito user pool  connecting to Azure identity </strong>`
 
 A REST API is necessary to use API keys rather than a HTTP API.
 
@@ -52,16 +52,15 @@ The following measures will be implemented to ensure the api is secure
 9. Implement Cloudfront distribution to mask bucketname. 
 
 <strong>Note: The presigned url link will be rendered back to client (eg: User responsible for using the api, say uploading), which can be used by anyone to interact with the s3 bucket. 
-But the following actions we can ensure its secure</strong>
+But the applying the actions below we can ensure its secure</strong>
 
-1. The permission is restricted so only specific operation is permitted 
+1. Permissions will be restricted,  so only specific operation is permitted 
 
-2. The record of user request will be recorded, Since Api will have authentication layer like Congiito in front of it. 
+2. User request  will be recorded, since API will have authentication layer like Cognito in front of it. 
 
-3. There is trust that this presigned url wont be shared to anyone by client or user 
+3. Trust, that this presigned url wont be shared to anyone by client or user 
 
-4. Bucket name will be exposed as part of the URL. But the bucket name in a presigned URL can be masked. We can use a custom domain name (e.g., cdn.example.com) instead of the original bucket name in the URL.
-This can be done using implementing cloudfront distribution. 
+4. Bucket name will be exposed as part of the URL. But the bucket name in a presigned URL can be masked. We can use a custom domain name (e.g., cdn.example.com) instead of the original bucket name in the URL. This can be done using implementing cloudfront distribution. 
 
 Some useful thoughts on securing presigned URLs below, which will be considered while implementing the soution. 
 (https://insecurity.blog/2021/03/06/securing-amazon-s3-presigned-urls/)

@@ -1,18 +1,18 @@
 ---
 owner_slack: "#data-platform-notifications"
-title: Uploading Mechanism
+title: Run data product in Data Platform (POC)
 last_reviewed_on: 2023-04-04
 review_in: 3 months
 ---
 
 # <%= current_page.data.title %>
 
-## Context
+### Context
 We want a compute process that is scalable and event driven to run the data product. The data product will be sent to Data Platform for processing. After processing, the data should be available in a suitable format accessible to data consumers. The processing will include receiving raw data, applying transformations, cleansing and finally storing data in a correct location and format.
 
 <strong>The architecture will be built in the `data-platform-development`, a sandbox account within MoJ's Modernisation Platform, which is deployed using the [modernisation-platform-environments](https://github.com/ministryofjustice/modernisation-platform-environments) repository</strong>
 
-## Data Producer Configuration Flow
+### Data Producer Configuration Flow
 
 ![Data platform general diagram](images/data-platform-configuration-flow.png "Data platform configuration Flow")
 
@@ -26,7 +26,7 @@ Event Bridge connection to bucket should be enabled. Once the file lands in the 
 Event bridge rule will trigger lambda. Lambda will be responsible to extract zip contents into
 > `${DATA_PLATFORM_PRODUCTS}/code/${DATA_PLATFORM_PRODUCT_NAME}/extracted
 
-## Data Flow Architecture
+### Data Flow Architecture
 
 ![Data platform general diagram](images/data-platform-data-flow.png "Data platform data Flow")
 
