@@ -32,6 +32,7 @@ so that users can understand what a repository does through its name.
 | -------------- | -------------- |
 | [Data Platform (this repository)](https://github.com/ministryofjustice/data-platform)          | Core infrastructure, public facing documentation, feature work, enhancements, and issues  |
 | [Data Platform products](https://github.com/ministryofjustice/data-platform-products)          | User-created services that are hosted on the Data Platform                                |
+| [Data Platform support](https://github.com/ministryofjustice/data-platform-support)            | This repository is used for support and provides templated forms for our users.           |
 | [Modernisation Platform environments repository](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/data-platform) | Hosting environment for the data platform |
 
 ### OpenSSF Best Practices
