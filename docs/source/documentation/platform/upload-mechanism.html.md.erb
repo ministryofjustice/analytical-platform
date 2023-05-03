@@ -1,0 +1,92 @@
+---
+owner_slack: "#data-platform-notifications"
+title: Upload Mechanism
+last_reviewed_on: 2023-05-03
+review_in: 3 months
+---
+
+# <%= current_page.data.title %>
+
+## Decision
+The data upload mechanism will be a POST request to S3 via a presigned URL which will be generated upon user request. User authorisation will be via API key.
+
+### User story
+As a data provider, I want to upload my data product including data and code based transformations to the data platform, so that they are available for other data platform users.
+
+### Solution
+A presigned URL can be used to grant temporary access to the AWS S3 API, on the object level. It can be generated upon request to an API with a Lambda. All requests for multi-part uploads have to be made before the link expires.
+
+### Steps
+![Data platform general diagram](images/upload-mechanism.png "Data platform configuration Flow")
+ 
+1. A user requests a presigned URL to upload to S3. This is verified with an API key.</li>
+2. User sends a post request to upload data to s3 using the presigned URL.</li>
+
+### Authentication
+For user verification on methods in API gateway, multiple options are available: IAM users (Cognito), Lambda authorisers, and API keys. 
+
+<strong>To demonstrate an authentication layer we will use API keys, later  we will implement Cognito user pool  with connecting to Azure </strong>
+
+A REST API is necessary to use API keys rather than a HTTP API.
+
+### Security Considerations
+
+The following measures will be implemented to ensure the api is secure 
+
+1. Encryption at Rest and Transit. 
+
+2. Use a short expiration time: Set the expiration time of the presigned URL to a short interval, such as a few minutes, to minimize the time during which an attacker could exploit the URL.
+
+3. Use restrictive permissions: When creating the presigned URL, use the most restrictive permissions possible to limit what actions the user can perform.
+
+4. Use unique keys: Use unique keys for each presigned URL to prevent attackers from guessing other valid URLs.
+
+5. Limit the scope of the URL: Limit the scope of the presigned URL to a specific object or action to prevent attackers from using it for unintended purposes.
+
+6. Limit the Content of the upload
+
+7. Implement Cross-Origin Resource Sharing (CORS)
+
+8. Implement WAF in front of Api gateway
+
+9. Implement Cloudfront distribution to mask bucketname. 
+
+<strong>Note: The presigned url link will be rendered back to client (eg: User responsible for using the api, say uploading), which can be used by anyone to interact with the s3 bucket. 
+But the following actions we can ensure its secure</strong>
+
+1. The permission is restricted so only specific operation is permitted 
+
+2. The record of user request will be recorded, Since Api will have authentication layer like Congiito in front of it. 
+
+3. There is trust that this presigned url wont be shared to anyone by client or user 
+
+4. Bucket name will be exposed as part of the URL. But the bucket name in a presigned URL can be masked. We can use a custom domain name (e.g., cdn.example.com) instead of the original bucket name in the URL.
+This can be done using implementing cloudfront distribution. 
+
+Some useful thoughts on securing presigned URLs below, which will be considered while implementing the soution. 
+(https://insecurity.blog/2021/03/06/securing-amazon-s3-presigned-urls/)
+
+### Assumptions 
+
+1. Some data in some form will be held by the data platform.
+	
+2. Certain extensions should be disallowed eg exe.
+
+3. A user of the API is properly validated by an authentication mechanism (this is part of user access) to receive an auth token for the API.
+	
+4. A basic GUI on top of this API can make it usable for non technical users.
+	
+5. Access to the S3 API is restricted to put and list only on areas which to which the user is permitted.
+
+6. We aren’t concerned with schema changes and how they might be handled yet.
+
+### Risks 
+
+1. In coming data validation would be necessary but out of scope this api work . 
+
+2. Doesn’t meet the needs of non technical users without a GUI on top of the API.
+ 
+
+
+
+
