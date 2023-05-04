@@ -39,7 +39,10 @@ locals {
     "tom-webber",
     "bogdan-mania-moj",
     "Emterry", # Emma Terry
-    "michaeljcollinsuk"
+    "michaeljcollinsuk",
+    "jhpyke",
+    "tamsinforbes",
+    "murad-ali-j"
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
@@ -109,6 +112,9 @@ locals {
   data_platform_core_infrastructure_members = [
     "jhackett-ap", # John Hackett
     "Emterry",     # Emma Terry
+    "jhpyke",
+    "tamsinforbes",
+    "murad-ali-j"
   ]
 
   data_platform_labs_maintainers = [
