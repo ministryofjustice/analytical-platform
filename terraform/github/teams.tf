@@ -91,6 +91,8 @@ locals {
     "williamorrie", # William Orr
     "gustavmoller",
     "jhpyke", # Jake H Pyke
+    "lalithanagarur",
+    "murad-ali-j",
     "oliver-critchfield",
     "AlexVilela",
     "davidbridgwood",
