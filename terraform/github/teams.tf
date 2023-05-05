@@ -90,9 +90,10 @@ locals {
     "LavMatt",
     "williamorrie", # William Orr
     "gustavmoller",
-    "jhpyke", # Jake H Pyke
-    "lalithanagarur",
-    "murad-ali-j",
+    "jhpyke",         # Jake Hamblin-Pyke
+    "lalithanagarur", # Lalitha Nagarur
+    "murad-ali-j",    # Murad Ali
+    "Bharat-Dhiman",  # Bharat Dhiman
     "oliver-critchfield",
     "AlexVilela",
     "davidbridgwood",
