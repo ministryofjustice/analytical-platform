@@ -13,8 +13,10 @@ service_link: /
 phase: Alpha
 
 # Links to show on right-hand-side of header
-header_links:
-  GitHub: https://github.com/ministryofjustice/data-platform
+header_links:  
+  🏠 Home: https://technical-documentation.data-platform.service.justice.gov.uk/
+  🔧 Our Main GitHub repo: https://github.com/ministryofjustice/data-platform
+  💬 Ask Slack Channel: https://mojdt.slack.com/archives/C04VBJTKY58
 
 # Enables search functionality. This indexes pages only and is not recommended for single-page sites.
 enable_search: true
