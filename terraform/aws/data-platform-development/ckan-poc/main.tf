@@ -2,8 +2,8 @@
 # Route53
 ##################################################
 
-resource "aws_route53_zone" "ckan_development_data_platform_service_justice_gov_uk" {
-  name = "ckan.development.data-platform.service.justice.gov.uk"
+resource "aws_route53_zone" "data_catalogue_dev_data_platform_service_justice_gov_uk" {
+  name = "data-catalogue.dev.data-platform.service.justice.gov.uk"
 }
 
 ##################################################
