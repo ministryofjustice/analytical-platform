@@ -2,7 +2,7 @@ locals {
   technical_services = [
     {
       name              = "Analytical Platform High Priority"
-      description       = "High priority incidents for the Analytical Platform team"
+      description       = "High priority alerts for the Analytical Platform team"
       escalation_policy = module.escalation_policies["Analytical Platform"].id
       auto_pause_notifications_parameters = [
         {
@@ -40,7 +40,7 @@ locals {
     },
     {
       name              = "Analytical Platform Low Priority"
-      description       = "Low priority incidents for the Analytical Platform team"
+      description       = "Low priority alerts for the Analytical Platform team"
       escalation_policy = module.escalation_policies["Analytical Platform"].id
       auto_pause_notifications_parameters = [
         {
@@ -63,7 +63,7 @@ locals {
           during_support_hours = [
             {
               type    = "constant"
-              urgency = "high"
+              urgency = "low"
             }
           ]
           outside_support_hours = [
@@ -78,7 +78,7 @@ locals {
     },
     {
       name              = "Data Platform High Priority"
-      description       = "High priority incidents for the Data Platform team"
+      description       = "High priority alerts for the Data Platform team"
       escalation_policy = module.escalation_policies["Data Platform"].id
       auto_pause_notifications_parameters = [
         {
@@ -116,7 +116,7 @@ locals {
     },
     {
       name              = "Data Platform Low Priority"
-      description       = "Low priority incidents for the Data Platform team"
+      description       = "Low priority alerts for the Data Platform team"
       escalation_policy = module.escalation_policies["Data Platform"].id
       auto_pause_notifications_parameters = [
         {
@@ -139,7 +139,7 @@ locals {
           during_support_hours = [
             {
               type    = "constant"
-              urgency = "high"
+              urgency = "low"
             }
           ]
           outside_support_hours = [

@@ -14,15 +14,6 @@ locals {
               id   = module.schedules["Analytical Platform"].id
             }
           ]
-        },
-        {
-          escalation_delay_in_minutes = 15
-          targets = [
-            {
-              type = "user_reference"
-              id   = module.users["jacob.woffenden@digital.justice.gov.uk"].id
-            }
-          ]
         }
       ]
     },
@@ -38,15 +29,6 @@ locals {
             {
               type = "schedule_reference"
               id   = module.schedules["Data Platform"].id
-            }
-          ]
-        },
-        {
-          escalation_delay_in_minutes = 15
-          targets = [
-            {
-              type = "user_reference"
-              id   = module.users["jacob.woffenden@digital.justice.gov.uk"].id
             }
           ]
         }
