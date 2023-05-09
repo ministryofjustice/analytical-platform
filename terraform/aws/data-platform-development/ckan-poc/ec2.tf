@@ -21,8 +21,8 @@ module "ckan_ec2_instance" {
   user_data_base64            = base64encode(file("${path.module}/src/user-data.sh"))
   user_data_replace_on_change = true
 
-  subnet_id                   = data.aws_subnets.mp_platforms_development_general_private.ids[0]
-  vpc_security_group_ids      = [module.ckan_ec2_security_group.security_group_id]
+  subnet_id              = data.aws_subnets.mp_platforms_development_general_private.ids[0]
+  vpc_security_group_ids = [module.ckan_ec2_security_group.security_group_id]
 
   create_iam_instance_profile = true
   iam_role_name               = "data-platform-development-ckan"

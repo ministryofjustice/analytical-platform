@@ -12,6 +12,7 @@ module "ckan_alb_security_group" {
 
   ingress_cidr_blocks = ["35.176.93.186/32"] # https://github.com/ministryofjustice/moj-ip-addresses/blob/main/moj-cidr-addresses.yml#L289
   ingress_rules = [
+    "http-80-tcp",
     "https-443-tcp"
   ]
 
