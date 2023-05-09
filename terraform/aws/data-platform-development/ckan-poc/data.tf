@@ -1,5 +1,5 @@
 ##################################################
-# VPC
+# Modernisation Platform VPC
 ##################################################
 
 data "aws_vpc" "mp_platforms_development" {
@@ -10,7 +10,7 @@ data "aws_vpc" "mp_platforms_development" {
 }
 
 ##################################################
-# Subnets
+# Modernisation Platform Subnets
 ##################################################
 
 data "aws_subnets" "mp_platforms_development_general_data" {
