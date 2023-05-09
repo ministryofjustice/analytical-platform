@@ -94,6 +94,7 @@ locals {
     "lalithanagarur", # Lalitha Nagarur (Cog)
     "murad-ali-j",    # Murad Ali
     "Bharat-Dhiman",  # Bharat Dhiman (Cog)
+    "mdowniecog"      # Michael Downie (Cog)
     "oliver-critchfield",
     "AlexVilela",
     "davidbridgwood",
