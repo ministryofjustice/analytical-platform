@@ -1,37 +1,32 @@
 ##################################################
-# Data Catalogue Development Zone
+# CKAN
 ##################################################
 
-module "ckan_route53_zone" {
-  source  = "terraform-aws-modules/route53/aws//modules/zones"
-  version = "2.10.2"
-
-  zones = {
-    "${local.route53_zone_name}" = {
-      comment = "Data Catalogue Development"
-      tags = {
-        Name = local.route53_zone_name
-      }
-    }
-  }
+resource "aws_route53_record" "ckan" {
+  zone_id = data.aws_route53_zone.data_platform_development.zone_id
+  name    = "catalogue.${data.aws_route53_zone.data_platform_development.name}"
+  type    = "CNAME"
+  ttl     = "300"
+  records = [module.ckan_alb.lb_dns_name]
 }
 
 ##################################################
-# Data Catalogue Development Records
+# CKAN ACM Validation
 ##################################################
 
-module "ckan_route53_records" {
-  source  = "terraform-aws-modules/route53/aws//modules/records"
-  version = "2.10.2"
-
-  zone_name = local.route53_zone_name
-
-  records = [
-    {
-      name    = ""
-      type    = "A"
-      ttl     = "300"
-      records = data.dns_a_record_set.ckan_alb.addrs
+resource "aws_route53_record" "ckan_acm" {
+  for_each = {
+    for dvo in aws_acm_certificate.ckan.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
     }
-  ]
+  }
+
+  zone_id         = data.aws_route53_zone.data_platform_development.zone_id
+  name            = each.value.name
+  type            = each.value.type
+  ttl             = 60
+  records         = [each.value.record]
+  allow_overwrite = true
 }

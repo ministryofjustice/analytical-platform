@@ -47,11 +47,9 @@ data "aws_subnets" "mp_platforms_development_general_public" {
 }
 
 ##################################################
-# CKAN ALB IPs
-# This is a workaround as we're not able to use
-# CNAMEs at the apex of a domain.
+# Data Platform Route 53 Zone
 ##################################################
 
-data "dns_a_record_set" "ckan_alb" {
-  host = module.ckan_alb.lb_dns_name
+data "aws_route53_zone" "data_platform_development" {
+  name = "development.data-platform.service.justice.gov.uk"
 }

@@ -10,7 +10,10 @@ module "ckan_alb_security_group" {
   description = "Security group for CKAN ALB allowing traffic from MoJ Digital GlobalProtect VPN"
   vpc_id      = data.aws_vpc.mp_platforms_development.id
 
-  ingress_cidr_blocks = ["35.176.93.186/32"] # https://github.com/ministryofjustice/moj-ip-addresses/blob/main/moj-cidr-addresses.yml#L289
+  ingress_cidr_blocks = [
+    "35.176.93.186/32",  # MoJ Digital GlobalProtect VPN - https://github.com/ministryofjustice/moj-ip-addresses/blob/main/moj-cidr-addresses.yml#L289
+    "213.121.161.112/28" # 102PF WiFi - https://github.com/ministryofjustice/moj-ip-addresses/blob/main/moj-cidr-addresses.yml#L67
+  ]
   ingress_rules = [
     "http-80-tcp",
     "https-443-tcp"
@@ -18,8 +21,8 @@ module "ckan_alb_security_group" {
 
   egress_with_source_security_group_id = [
     {
-      from_port                = 5000
-      to_port                  = 5000
+      from_port                = 8443
+      to_port                  = 8443
       protocol                 = "tcp"
       description              = "CKAN"
       source_security_group_id = module.ckan_ec2_security_group.security_group_id
@@ -41,8 +44,8 @@ module "ckan_ec2_security_group" {
 
   ingress_with_source_security_group_id = [
     {
-      from_port                = 5000
-      to_port                  = 5000
+      from_port                = 8443
+      to_port                  = 8443
       protocol                 = "tcp"
       description              = "CKAN"
       source_security_group_id = module.ckan_alb_security_group.security_group_id
