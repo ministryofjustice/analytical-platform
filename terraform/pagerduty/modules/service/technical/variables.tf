@@ -62,6 +62,31 @@ variable "enable_cloudwatch_integration" {
   description = "Enable CloudWatch integration for this service"
 }
 
+variable "enable_cloudtrail_integration" {
+  type        = bool
+  description = "Enable CloudTrail integration for this service"
+}
+
+variable "enable_guardduty_integration" {
+  type        = bool
+  description = "Enable GuardDuty integration for this service"
+}
+
+variable "enable_health_dashboard_integration" {
+  type        = bool
+  description = "Enable Health Dashboard integration for this service"
+}
+
+variable "enable_security_hub_integration" {
+  type        = bool
+  description = "Enable Security Hub integration for this service"
+}
+
+variable "enable_email_integration" {
+  type        = bool
+  description = "Enable Email integration for this service"
+}
+
 variable "enable_airflow_integration" {
   type        = bool
   description = "Enable Airflow integration for this service"

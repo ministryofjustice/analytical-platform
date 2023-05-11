@@ -36,7 +36,12 @@ locals {
           ]
         }
       ]
-      enable_cloudwatch_integration = true
+      enable_cloudwatch_integration       = true
+      enable_cloudtrail_integration       = true
+      enable_guardduty_integration        = true
+      enable_health_dashboard_integration = true
+      enable_security_hub_integration     = true
+      enable_email_integration            = true
     },
     {
       name              = "Analytical Platform Low Priority"
@@ -74,7 +79,12 @@ locals {
           ]
         }
       ]
-      enable_cloudwatch_integration = true
+      enable_cloudwatch_integration       = true
+      enable_cloudtrail_integration       = true
+      enable_guardduty_integration        = true
+      enable_health_dashboard_integration = true
+      enable_security_hub_integration     = true
+      enable_email_integration            = true
     },
     {
       name              = "Data Platform High Priority"
@@ -112,7 +122,12 @@ locals {
           ]
         }
       ]
-      enable_cloudwatch_integration = true
+      enable_cloudwatch_integration       = true
+      enable_cloudtrail_integration       = true
+      enable_guardduty_integration        = true
+      enable_health_dashboard_integration = true
+      enable_security_hub_integration     = true
+      enable_email_integration            = true
     },
     {
       name              = "Data Platform Low Priority"
@@ -150,7 +165,12 @@ locals {
           ]
         }
       ]
-      enable_cloudwatch_integration = true
+      enable_cloudwatch_integration       = true
+      enable_cloudtrail_integration       = true
+      enable_guardduty_integration        = true
+      enable_health_dashboard_integration = true
+      enable_security_hub_integration     = true
+      enable_email_integration            = true
     }
   ]
 }
@@ -173,6 +193,11 @@ module "technical_services" {
   auto_pause_notifications_parameters = try(each.value.auto_pause_notifications_parameters, [])
   support_hours                       = try(each.value.support_hours, [])
   enable_cloudwatch_integration       = try(each.value.enable_cloudwatch_integration, false)
+  enable_cloudtrail_integration       = try(each.value.enable_cloudtrail_integration, false)
+  enable_guardduty_integration        = try(each.value.enable_guardduty_integration, false)
+  enable_health_dashboard_integration = try(each.value.enable_health_dashboard_integration, false)
+  enable_security_hub_integration     = try(each.value.enable_security_hub_integration, false)
+  enable_email_integration            = try(each.value.enable_email_integration, false)
   enable_airflow_integration          = try(each.value.enable_airflow_integration, false)
 
   depends_on = [module.escalation_policies]
