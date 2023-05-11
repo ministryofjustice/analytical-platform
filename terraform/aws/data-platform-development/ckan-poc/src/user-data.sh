@@ -27,6 +27,25 @@ chmod +x /usr/local/bin/docker-compose
 
 export _CKAN_ROOT_DIRETORY="/srv/ckan"
 
+# NonProd MP workloads get shutdown between 20:00 and 05:00, so we need to start CKAN on boot
+
+cat >/etc/systemd/system/ckan-docker.service <<EOF
+[Unit]
+Description=CKAN Docker
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+WorkingDirectory=${_CKAN_ROOT_DIRETORY}/ckan-docker
+ExecStartPre=/usr/local/bin/docker-compose --file docker-compose.yml build
+ExecStart=/usr/local/bin/docker-compose --file docker-compose.yml up
+ExecStop=/usr/local/bin/docker-compose --file docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
 mkdir --parents ${_CKAN_ROOT_DIRETORY}
 
 cd ${_CKAN_ROOT_DIRETORY}
@@ -37,6 +56,4 @@ cd ckan-docker
 
 mv --force .env.example .env
 
-docker-compose build
-
-docker-compose up --detach
+systemctl --now enable ckan-docker
