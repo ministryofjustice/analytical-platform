@@ -99,7 +99,7 @@ locals {
     "davidbridgwood",
     "mshodge", # Michael Hodge
     "Andy-Cook",
-    "samnlindsey",
+    "samnlindsay",
     "ThomasHepworth"
   ]
 
