@@ -105,7 +105,8 @@ locals {
     "zslade",
     "ADBond",
     "aliceoleary0",
-    "RossKen"
+    "RossKen",
+    "afua-moj"
   ]
 
   data_engineering_aws_developer_members = [
