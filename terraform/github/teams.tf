@@ -99,7 +99,9 @@ locals {
     "AlexVilela",
     "davidbridgwood",
     "mshodge", # Michael Hodge
-    "Andy-Cook"
+    "Andy-Cook",
+    "samnlindsay",
+    "ThomasHepworth"
   ]
 
   data_engineering_aws_developer_members = [
