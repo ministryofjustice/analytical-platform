@@ -100,8 +100,7 @@ locals {
     "mshodge", # Michael Hodge
     "Andy-Cook",
     "samnlindsey",
-    "ThomasHepworth",
-    "Yjpmas"
+    "ThomasHepworth"
   ]
 
   data_engineering_aws_developer_members = [
