@@ -42,7 +42,7 @@ locals {
     "michaeljcollinsuk",
     "jhpyke",
     "tamsinforbes",
-    "murad-ali-j"
+    "murad-ali-MoJ"
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
@@ -92,7 +92,7 @@ locals {
     "gustavmoller",
     "jhpyke",         # Jake Hamblin-Pyke
     "lalithanagarur", # Lalitha Nagarur (Cog)
-    "murad-ali-j",    # Murad Ali
+    "murad-ali-MoJ",    # Murad Ali
     "Bharat-Dhiman",  # Bharat Dhiman (Cog)
     "mdowniecog",     # Michael Downie (Cog)
     "oliver-critchfield",
@@ -125,7 +125,7 @@ locals {
     "Emterry",     # Emma Terry
     "jhpyke",
     "tamsinforbes",
-    "murad-ali-j"
+    "murad-ali-MoJ"
   ]
 
   data_platform_labs_maintainers = [
