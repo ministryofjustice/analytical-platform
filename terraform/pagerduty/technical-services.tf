@@ -1,6 +1,6 @@
 locals {
   technical_services = [
-    /* Old Services */
+    /* Old Services - To be decommissioned */
     {
       name              = "Analytical Platform High Priority"
       description       = "High priority alerts for the Analytical Platform"
@@ -173,7 +173,7 @@ locals {
       enable_security_hub_integration     = true
       enable_email_integration            = true
     },
-    /* New Services */
+    /* New Services - Does not include Data Platform right now as it doesn't exist */
     {
       name              = "Analytical Platform Security"
       description       = "Security alerts for the Analytical Platform"
