@@ -92,7 +92,7 @@ locals {
     "gustavmoller",
     "jhpyke",         # Jake Hamblin-Pyke
     "lalithanagarur", # Lalitha Nagarur (Cog)
-    "murad-ali-MoJ",    # Murad Ali
+    "murad-ali-MoJ",  # Murad Ali
     "Bharat-Dhiman",  # Bharat Dhiman (Cog)
     "mdowniecog",     # Michael Downie (Cog)
     "oliver-critchfield",
