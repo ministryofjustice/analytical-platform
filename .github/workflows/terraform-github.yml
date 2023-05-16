@@ -75,7 +75,6 @@ jobs:
         shell: bash
         run: |
           terraform init \
-            -backend-config=role_arn="arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin" \
             -reconfigure \
             -upgrade \
             -no-color
