@@ -108,7 +108,8 @@ locals {
     "RossKen",
     "afua-moj",
     "murdo-moj",
-    "hemeshpatel-moj"
+    "hemeshpatel-moj",
+    "sivabathina2" #Siva Bathina #17-05-23
   ]
 
   data_engineering_aws_developer_members = [
