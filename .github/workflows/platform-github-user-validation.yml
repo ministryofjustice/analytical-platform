@@ -1,0 +1,81 @@
+---
+name: GitHub - User Validation
+
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/platform-github-user-validation.yml
+      - terraform/github/teams.tf
+
+permissions: read-all
+
+jobs:
+  user-validation:
+    name: User Validation
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/github
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Configure AWS Credentials
+        id: configure_aws_credentials
+        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # v2.0.0
+        with:
+          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
+          role-session-name: githubactionsrolesession
+
+      - name: Assume GlobalGitHubActionAdmin Role
+        id: assume_global_github_action_admin_role
+        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # v2.0.0
+        with:
+          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+          role-skip-session-tagging: true
+
+      - name: Get AWS Secrets
+        id: get_aws_secrets
+        uses: aws-actions/aws-secretsmanager-get-secrets@8b74ff84db6163db54c6c42ed90b0b9f2bc8a60a # v1.0.3
+        with:
+          secret-ids: |
+            GH_TOKEN, github-token
+
+      - name: Set up Terraform
+        id: setup_terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+        with:
+          terraform_version: 1.4.5
+          terraform_wrapper: false
+
+      - name: Prepare Terraform
+        id: terraform_prepare
+        shell: bash
+        run: |
+          echo "TF_IN_AUTOMATION=true" >> ${GITHUB_ENV}
+
+      - name: Initialise
+        id: terraform_init
+        shell: bash
+        run: |
+          terraform init \
+            -reconfigure \
+            -upgrade \
+            -no-color
+
+      - name: Validate Users
+        run: |
+          bash ../../scripts/github/user-validation/main.sh
+        env:
+          GH_TOKEN: ${{ env.GH_TOKEN }}
