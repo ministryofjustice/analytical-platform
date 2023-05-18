@@ -7,11 +7,6 @@ locals {
       team             = module.teams["Analytical Platform"].id
       supporting_services = [
         {
-          name = "Analytical Platform High Priority"
-          id   = module.technical_services["Analytical Platform High Priority"].id
-          type = module.technical_services["Analytical Platform High Priority"].type
-        },
-        {
           name = "Cloud Platform"
           id   = data.pagerduty_business_service.cloud_platform.id
           type = data.pagerduty_business_service.cloud_platform.type
@@ -29,11 +24,6 @@ locals {
       point_of_contact = "#ask-data-platform"
       team             = module.teams["Data Platform"].id
       supporting_services = [
-        {
-          name = "Data Platform High Priority"
-          id   = module.technical_services["Data Platform High Priority"].id
-          type = module.technical_services["Data Platform High Priority"].type
-        },
         {
           name = "Cloud Platform"
           id   = data.pagerduty_business_service.cloud_platform.id
