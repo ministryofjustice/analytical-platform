@@ -196,6 +196,44 @@ locals {
       ]
       enable_cloudwatch_integration = true
       enable_email_integration      = true
+    },
+    {
+      name              = "Data Platform"
+      description       = "Generic alerts for the Data Platform"
+      escalation_policy = module.escalation_policies["Data Platform"].id
+      auto_pause_notifications_parameters = [
+        {
+          enabled = true
+          timeout = 600
+        }
+      ]
+      support_hours = [
+        {
+          type         = "fixed_time_per_day"
+          start_time   = "09:00:00"
+          end_time     = "17:00:00"
+          time_zone    = "Europe/London"
+          days_of_week = [1, 2, 3, 4, 5]
+        }
+      ]
+      incident_urgency_rules = [
+        {
+          type = "use_support_hours"
+          during_support_hours = [
+            {
+              type    = "constant"
+              urgency = "high"
+            }
+          ]
+          outside_support_hours = [
+            {
+              type    = "constant"
+              urgency = "low"
+            }
+          ]
+        }
+      ]
+      enable_email_integration = true
     }
   ]
 }
