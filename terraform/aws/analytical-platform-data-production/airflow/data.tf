@@ -20,4 +20,3 @@ data "aws_caller_identity" "target_account" {}
 data "aws_caller_identity" "analytical_platform_management_production" {
   provider = aws.analytical-platform-management-production
 }
-
