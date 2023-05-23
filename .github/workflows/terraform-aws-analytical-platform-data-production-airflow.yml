@@ -1,0 +1,32 @@
+---
+  name: Terraform - AWS - Analytical Platform Data Production - Airflow
+
+  on: # yamllint disable-line rule:truthy
+    pull_request:
+      branches:
+        - main
+      paths:
+        - .github/workflows/terraform-aws-analytical-platform-data-production-airflow.yml
+        - terraform/aws/analytical-platform-data-production/airflow/**
+    push:
+      branches:
+        - main
+      paths:
+        - .github/workflows/terraform-aws-analytical-platform-data-production-airflow.yml
+        - terraform/aws/analytical-platform-data-production/airflow/**
+
+  permissions: read-all
+
+  jobs:
+    terraform:
+      name: Terraform
+      permissions:
+        contents: read
+        id-token: write
+      uses: ./.github/workflows/reusable-terraform.yml
+      with:
+        working-directory: terraform/aws/analytical-platform-data-production/airflow
+        aws-role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
+        terraform-version: 1.4.6
+        terraform-backend-config-role: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
+      secrets: inherit
