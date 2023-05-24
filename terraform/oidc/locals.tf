@@ -14,11 +14,10 @@ locals {
   }
   tags = {
     business-unit = "Platforms"
-    application   = "analytical-platform"
-    owner         = "analytical-platform"
+    project       = "data-platform-oidc"
+    owner         = "data-platform"
     is-production = "true"
-    owner         = "analytical-platform: analytics-platform-tech@digital.justice.gov.uk"
-    source-code   = "github.com/ministryofjustice/analytical-platform-iam"
+    source-code   = "github.com/ministryofjustice/data-platform/tree/main/terraform/oidc"
   }
   oidc-roles = jsondecode(file("${path.module}/github-oidc-assumable-roles-config.json"))
 

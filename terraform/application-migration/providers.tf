@@ -26,13 +26,3 @@ provider "aws" {
   region = "eu-west-2"
 }
 
-provider "github" {
-  owner = "ministryofjustice"
-  token = data.aws_secretsmanager_secret_version.github_token.secret_string
-}
-
-provider "github" {
-  alias = "moj-analytical-services"
-  owner = "moj-analytical-services"
-  token = data.aws_secretsmanager_secret_version.github_token.secret_string
-}
