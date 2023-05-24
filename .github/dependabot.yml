@@ -10,15 +10,15 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
+    directory: "/.devcontainer/features/test"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
     directory: "/container-images/rshiny"
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
     directory: "/container-images/ubuntu/base"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "docker"
-    directory: "/.devcontainer/features/test"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
