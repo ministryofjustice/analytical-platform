@@ -28,10 +28,13 @@ Both approaches have advantages:
 | **Advantages** |
 | - Reduced complexity around networking. Data sources are likely to be in networks that may not be accessible from the Data Platform, or that would require too many hops to make it reachable from the Platform. | - Fewer systems to manage. The Data Platform could offer a complete running environment for the Data Product to fetch the required data from a data source, eliminating the need of an extra hosting environment. |
 | - Standardised approach for all data producers. There will be no need for customisation to access each data source network, making the Data Platform more self service. | - Guarantee that the entire data transformation process is captured and hosted by the platform, avoiding ad hoc transformations that may happen in temporary systems created to push data into a data product only once. |
+| - Data producers will be more immediately aware of changes in their data model and can make corresponding changes to their data push for continuity of service | - The platform can queue a sequence of data pull events synchronously |
+| - Data producers can opt to transform, model, or limit data at source before pushing | - Failed data pull events can be automatically re-tried |
 | **Disadvantages** |
 | - Data product developers will need to manage another system that fetches data from data sources and then pushes it to the Data Platform | - Risk of developers accidentally publishing database credentials in the Data Platform |
 | - Data product developers need to make sure that the system that extracts and pushes the data into a data product is kept in sync with the Data Product transformation code, so that modifications on the structure of the data are handled correctly. As these systems are deployed and managed independently, there's a higher risk of mismatch. | - Security - a compromised Data Platform role could potentially have access to several data sources. |
-
+| - The platform will need to manage the volume of asychronous push requests | - Data producers may be unwilling to provide credentials |
+| - Data producers will need to handle failures and errors in data push events  | - Data producers may be unwilling to provide access to production environments in case it impacts performance, or unwilling to stand up database replicas which have to be managed and budgeted for |
 
 ## Decision
 The current choice is to support data ingestion through a push approach.
