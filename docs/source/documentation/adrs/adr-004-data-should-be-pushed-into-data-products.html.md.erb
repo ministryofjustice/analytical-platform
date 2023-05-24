@@ -33,7 +33,7 @@ Both approaches have advantages:
 | **Disadvantages** |
 | - Data product developers will need to manage another system that fetches data from data sources and then pushes it to the Data Platform | - Risk of developers accidentally publishing database credentials in the Data Platform |
 | - Data product developers need to make sure that the system that extracts and pushes the data into a data product is kept in sync with the Data Product transformation code, so that modifications on the structure of the data are handled correctly. As these systems are deployed and managed independently, there's a higher risk of mismatch. | - Security - a compromised Data Platform role could potentially have access to several data sources. |
-| - The platform will need to manage the volume of asychronous push requests | - Data producers may be unwilling to provide credentials |
+| - The platform will need to manage the volume of asynchronous push requests | - Data producers may be unwilling to provide credentials |
 | - Data producers will need to handle failures and errors in data push events  | - Data producers may be unwilling to provide access to production environments in case it impacts performance, or unwilling to stand up database replicas which have to be managed and budgeted for |
 
 ## Decision
