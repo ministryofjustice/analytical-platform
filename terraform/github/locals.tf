@@ -25,7 +25,7 @@ locals {
       description = "Core Repository for Data Platform Support"
     }
   ]
-  ap_migration_apps  = jsondecode(file("./ap_migration_apps.json"))
+  ap_migration_apps  = jsondecode(file("../../configuration/ap_migration_apps.json"))
   migration_apps_map = { for app in local.ap_migration_apps : app.name => app } # so can be used in for_each
 
   # migration_apps_teams = [for app in local.ap_migration_apps : app.team]
