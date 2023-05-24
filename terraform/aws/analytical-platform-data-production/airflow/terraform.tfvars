@@ -6,7 +6,6 @@ account_ids = {
   analytical-platform-data-production       = "593291632749"
   analytical-platform-management-production = "042130406152"
 }
-target_account = "analytical-platform-data-production"
 tags = {
   business-unit          = "Platforms"
   application            = "Data Platform"
