@@ -109,7 +109,8 @@ locals {
     "afua-moj",
     "murdo-moj",
     "hemeshpatel-moj",
-    "sivabathina2" #Siva Bathina #17-05-23
+    "sivabathina2", #Siva Bathina #17-05-23
+    "AntFMoJ" # Anthony Fitzroy
   ]
 
   data_engineering_aws_developer_members = [

@@ -3,6 +3,7 @@ locals {
     {
       name = "Analytical Platform"
       managers = [
+        module.users["jacob.woffenden@digital.justice.gov.uk"].id,
         module.users["julia.lawrence@digital.justice.gov.uk"].id,
         module.users["richard.baguley@digital.justice.gov.uk"].id
       ]
