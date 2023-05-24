@@ -24,7 +24,7 @@ variable "auto_resolve_timeout" {
 }
 
 variable "acknowledgement_timeout" {
-  type        = number
+  type        = string
   description = "see https://registry.terraform.io/providers/PagerDuty/pagerduty/latest/docs/resources/service#acknowledgement_timeout"
 }
 
