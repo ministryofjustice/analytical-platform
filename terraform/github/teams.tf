@@ -109,7 +109,7 @@ locals {
     "afua-moj",
     "murdo-moj",
     "hemeshpatel-moj",
-    "AntFMoJ"          # Anthony Fitzroy
+    "AntFMoJ" # Anthony Fitzroy
   ]
 
   data_engineering_aws_developer_members = [
