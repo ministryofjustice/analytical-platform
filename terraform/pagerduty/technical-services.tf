@@ -251,7 +251,7 @@ module "technical_services" {
   escalation_policy                   = each.value.escalation_policy
   alert_creation                      = try(each.value.alert_creation, "create_alerts_and_incidents")
   auto_resolve_timeout                = try(each.value.auto_resolve_timeout, 14400)
-  acknowledgement_timeout             = try(each.value.acknowledgement_timeout, 600)
+  acknowledgement_timeout             = try(each.value.acknowledgement_timeout, null)
   incident_urgency_rules              = try(each.value.incident_urgency_rules, [])
   auto_pause_notifications_parameters = try(each.value.auto_pause_notifications_parameters, [])
   support_hours                       = try(each.value.support_hours, [])
