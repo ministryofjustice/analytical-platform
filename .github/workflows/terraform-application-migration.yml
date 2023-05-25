@@ -29,6 +29,6 @@ jobs:
     with:
       working-directory: terraform/application-migration
       aws-role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
-      terraform-version: 1.4.5
+      terraform-version: 1.4.6
       terraform-backend-config-role: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
     secrets: inherit
