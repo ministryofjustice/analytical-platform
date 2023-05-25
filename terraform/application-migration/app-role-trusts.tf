@@ -61,7 +61,8 @@ resource "null_resource" "update_iam_role_trust_policy" {
   }
 
   provisioner "local-exec" {
-    command = <<EOF
+    interpreter = ["/bin/bash", "-c"]
+    command     = <<EOF
 
     # Do an inverted grep on the output of caller identity (return 0 if NOT found) and if the return code isn't 0 (meaning string was found or an error); assume running locally and unset the envvar.
     if grep -zqv "SSO" <<< $(aws sts get-caller-identity) || unset AWS_SECURITY_TOKEN # Needed when running locally using aws-vault https://github.com/hashicorp/terraform-provider-aws/issues/8242#issuecomment-696828321
