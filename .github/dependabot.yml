@@ -22,6 +22,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/terraform/application-migration"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/terraform/data-engineering"
     schedule:
       interval: "daily"
@@ -39,6 +43,10 @@ updates:
       interval: "daily"
   - package-ecosystem: "terraform"
     directory: "/terraform/github/modules/team"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/oidc"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
