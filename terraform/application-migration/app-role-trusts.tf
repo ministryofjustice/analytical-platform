@@ -61,11 +61,10 @@ resource "null_resource" "update_iam_role_trust_policy" {
   }
 
   provisioner "local-exec" {
-    interpreter = ["bash"]
-    command     = <<EOF
+    command = <<EOF
 
     # Do an inverted grep on the output of caller identity (return 0 if NOT found) and if the return code isn't 0 (meaning string was found or an error); assume running locally and unset the envvar.
-    if grep -zqv "SSO" <<< $(aws sts get-caller-identity) || unset AWS_SECURITY_TOKEN # Needed when running locally using aws-vault https://github.com/hashicorp/terraform-provider-aws/issues/8242#issuecomment-696828321
+    aws sts get-caller-identity | grep -zqv "SSO" || unset AWS_SECURITY_TOKEN # Needed when running locally using aws-vault https://github.com/hashicorp/terraform-provider-aws/issues/8242#issuecomment-696828321
 
     TEMP_CREDS=$(aws sts assume-role --role-arn ${data.aws_iam_session_context.data.issuer_arn} --role-session-name localexecupdatetrust)
     export AWS_ACCESS_KEY_ID=$(echo $TEMP_CREDS | jq -r '.Credentials.AccessKeyId')
@@ -73,7 +72,7 @@ resource "null_resource" "update_iam_role_trust_policy" {
     export AWS_SESSION_TOKEN=$(echo $TEMP_CREDS | jq -r '.Credentials.SessionToken')
     aws sts get-caller-identity
     aws iam update-assume-role-policy --role-name ${each.value.name} --policy-document '${data.aws_iam_policy_document.updated_trust[each.key].json}'
-  EOF
+EOF
   }
 }
 
