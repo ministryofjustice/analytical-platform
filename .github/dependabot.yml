@@ -1,4 +1,7 @@
 ---
+# This file is auto-generated here, do not manually amend.
+# https://github.com/ministryofjustice/data-platform/blob/main/scripts/dependabot/generate-configuration.sh
+
 version: 2
 
 updates:
@@ -7,10 +10,70 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/.devcontainer/features/test"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/container-images/rshiny"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/container-images/ubuntu/base"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/"
+    directory: "/terraform/application-migration"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/data-engineering"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/github"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/github/modules/contributor"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/github/modules/repository"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/github/modules/team"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/oidc"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/escalation-policy"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/schedule"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/service/business"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/service/technical"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/team"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/pagerduty/modules/user"
     schedule:
       interval: "daily"
