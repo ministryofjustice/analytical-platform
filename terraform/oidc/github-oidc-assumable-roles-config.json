@@ -1,0 +1,158 @@
+{
+  "moj-data-transfer-api-infra": {
+    "account": "data_engineering",
+    "stateConfig": [
+      {
+        "stateBucket": "moj-data-transfer-api-pulumi-backend/",
+        "stateBucketKey": ".pulumi/"
+      }
+    ],
+    "repositories": ["ministryofjustice/moj-data-transfer-api:*"],
+    "targets": ["data", "data_engineering", "sandbox"],
+    "stateLockingDetails": []
+  },
+  "data-engineering-pulumi-components": {
+    "account": "sandbox",
+    "stateConfig": [
+      {
+        "stateBucket": "sandbox-pulumi-backend/",
+        "stateBucketKey": ".pulumi/"
+      }
+    ],
+    "repositories": ["ministryofjustice/data-engineering-pulumi-components:*"],
+    "targets": ["sandbox"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": [
+      {
+        "ssmParameterArnPrefixes": ["data-eng-pulumi-component/dev/"],
+        "ssmParameterRegion": "eu-west-1"
+      }
+    ]
+  },
+  "register-my-data": {
+    "account": "data_engineering",
+    "stateConfig": [
+      {
+        "stateBucket": "register-my-data-pulumi-backend/",
+        "stateBucketKey": ".pulumi/"
+      }
+    ],
+    "repositories": ["ministryofjustice/register-my-data:*"],
+    "targets": ["data_engineering", "data"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": [
+      {
+        "ssmParameterArnPrefixes": ["register-my-data/env/"],
+        "ssmParameterRegion": "eu-west-1"
+      }
+    ]
+  },
+  "data-engineering-airflow": {
+    "account": "data_engineering",
+    "stateConfig": [
+      {
+        "stateBucket": "data-engineering-airflow-pulumi-backend/",
+        "stateBucketKey": ".pulumi/"
+      }
+    ],
+    "repositories": ["ministryofjustice/data-engineering-airflow:*"],
+    "targets": ["data_engineering", "data"],
+    "stateLockingDetails": []
+  },
+  "data-uploader": {
+    "account": "data_engineering",
+    "stateConfig": [
+      {
+        "stateBucket": "ap-uploader-pulumi-backend/",
+        "stateBucketKey": ".pulumi/"
+      }
+    ],
+    "repositories": ["ministryofjustice/analytical-platform-uploader:*"],
+    "targets": ["data_engineering", "data"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": [
+      {
+        "ssmParameterArnPrefixes": ["ap-uploader/env/", "ap-uploader/dev/", "ap-uploader/prod/"],
+        "ssmParameterRegion": "eu-west-1"
+      }
+    ]
+  },
+  "analytical-platform-data-engineering": {
+    "account": "data_engineering",
+    "stateConfig": [
+      {
+        "stateBucket": "analytical-platform-data-engineering-pulumi-backend/",
+        "stateBucketKey": ".pulumi/"
+      }
+    ],
+    "repositories": ["ministryofjustice/analytical-platform-data-engineering:*"],
+    "targets": ["data", "data_engineering"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  },
+  "analytical-platform-data-engineering-sandbox": {
+    "account": "sandbox",
+    "stateConfig": [
+      {
+        "stateBucket": "managed-pipelines-sandbox-pulumi-backend/",
+        "stateBucketKey": ".pulumi/"
+      }
+    ],
+    "repositories": ["ministryofjustice/analytical-platform-data-engineering:*"],
+    "targets": ["sandbox"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  },
+  "pulumi-oidc-test": {
+    "account": "sandbox",
+    "stateConfig": [
+      {
+        "stateBucket": "sandbox-pulumi-backend/",
+        "stateBucketKey": "pulumi-oidc-test/.pulumi/"
+      }
+    ],
+    "repositories": ["moj-analytical-services/pulumi-oidc-test:*"],
+    "targets": ["sandbox"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  },
+  "lookup-offence-sandbox": {
+    "account": "sandbox",
+    "stateConfig": [],
+    "repositories": ["ministryofjustice/lookup-offence-sandbox:*"],
+    "targets": ["sandbox"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  },
+  "create-a-derived-table": {
+    "account": "data",
+    "stateConfig": [],
+    "repositories": ["moj-analytical-services/create-a-derived-table:*"],
+    "targets": ["data"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  },
+  "lookup-offence": {
+    "account": "data",
+    "stateConfig": [],
+    "repositories": ["moj-analytical-services/lookup_offence:*"],
+    "targets": ["data"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  },
+  "data-platform-apps": {
+    "account": "data",
+    "stateConfig": [],
+    "repositories": [
+      "ministryofjustice/hmpps-hr-dashboard:*",
+      "ministryofjustice/ltc-capabilites-app:*",
+      "ministryofjustice/mlp-app:*",
+      "ministryofjustice/moj-officehub-locator-webapp:*",
+      "ministryofjustice/pfg-dash-moj:*",
+      "ministryofjustice/regime-dashboard:*"
+    ],
+    "targets": ["data"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  }
+}
