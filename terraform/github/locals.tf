@@ -27,7 +27,12 @@ locals {
   ]
   ap_migration_apps  = jsondecode(file("../../configuration/ap_migration_apps.json"))
   migration_apps_map = { for app in local.ap_migration_apps : app.name => app } # so can be used in for_each
-  # migration_apps_teams = [for app in local.ap_migration_apps : app.team]
+
+  # Team name => repo name generated from the json
+  migration_apps_teams_map = {
+    for team in toset(flatten([for app in local.ap_migration_apps : app.team])) : team => [for app in local.ap_migration_apps : app.name if contains(app.team, team)]
+  }
+
 
   team_repo_list = flatten([
     for repo, details in data.github_repository_teams.migration_apps_repo_owners : [
@@ -40,10 +45,10 @@ locals {
 
   unique_old_teams_names = distinct([for item in local.team_repo_list : item.team])
 
-  team_repo_map = {
+  team_repo_map = coalesce({
     for item in local.unique_old_teams_names :
     item => distinct([for i in local.team_repo_list : i.repo if i.team == item])
-  }
+  }, local.migration_apps_teams_map)
 
   # All Tech Archs
   tech_archs = concat(local.tech_archs_members, local.tech_archs_maintainers)
