@@ -54,6 +54,7 @@ data "aws_iam_policy_document" "updated_trust" {
 
 // Use local-exec to update trust policies as not doable with terraform
 
+
 resource "null_resource" "update_iam_role_trust_policy" {
   for_each = data.aws_iam_role.app_role_details
   triggers = {
@@ -75,4 +76,3 @@ resource "null_resource" "update_iam_role_trust_policy" {
 EOF
   }
 }
-

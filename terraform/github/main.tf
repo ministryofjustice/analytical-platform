@@ -84,7 +84,7 @@ module "data-platform-apps" {
 # Data Platform Apps Teams
 
 module "migration_apps_teams" {
-  for_each    = local.migration_apps_teams_map
+  for_each    = local.team_repo_map
   source      = "./modules/team"
   name        = each.key
   description = data.github_team.migration_app_owner[each.key].description
