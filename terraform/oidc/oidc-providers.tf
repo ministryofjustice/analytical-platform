@@ -151,7 +151,7 @@ module "github-oidc-provider-data-engineering" {
 
   source                 = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v2.1.0"
   github_repositories    = ["ministryofjustice/data-platform-terraform-oidc:*"]
-  additional_permissions = data.aws_iam_policy_document.github_actions_iam_permissions_data_engineeringjson
+  additional_permissions = data.aws_iam_policy_document.github_actions_iam_permissions_data_engineering.json
   role_name              = "github-actions-iam"
   tags_common            = local.tags
   tags_prefix            = "data-platform-terraform-oidc"
