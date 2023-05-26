@@ -1,11 +1,11 @@
 module "github-oidc-provider" {
 
   source                 = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v2.1.0"
-  github_repositories    = ["ministryofjustice/data-platform-terraform-oidc:*"]
+  github_repositories    = ["ministryofjustice/data-platform:*", "ministryofjustice/analytical-platform-iam:*"]
   additional_permissions = data.aws_iam_policy_document.github_actions_iam_permissions.json
   role_name              = "github-actions-iam"
   tags_common            = local.tags
-  tags_prefix            = "data-platform-terraform-oidc"
+  tags_prefix            = "data-platform"
   providers = {
     aws = aws.management
   }
@@ -60,7 +60,7 @@ module "github-oidc-provider-data-ecr" {
   additional_permissions = data.aws_iam_policy_document.github_actions_iam_permissions_data_ecr.json
   role_name              = "github-actions-ecr-oidc"
   tags_common            = local.tags
-  tags_prefix            = "data-platform-terraform-oidc"
+  tags_prefix            = "data-platform"
   providers = {
     aws = aws.data
   }
@@ -95,11 +95,11 @@ data "aws_iam_policy_document" "github_actions_iam_permissions_data_ecr" {
 module "github-oidc-provider-sandbox" {
 
   source                 = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v2.1.0"
-  github_repositories    = ["ministryofjustice/data-platform-terraform-oidc:*"]
+  github_repositories    = ["ministryofjustice/data-platform:*", "ministryofjustice/analytical-platform-iam:*"]
   additional_permissions = data.aws_iam_policy_document.github_actions_iam_permissions_sandbox.json
   role_name              = "github-actions-iam"
   tags_common            = local.tags
-  tags_prefix            = "data-platform-terraform-oidc"
+  tags_prefix            = "data-platform"
   providers = {
     aws = aws.sandbox
   }
@@ -150,11 +150,11 @@ data "aws_iam_policy_document" "github_actions_iam_permissions_sandbox" {
 module "github-oidc-provider-data-engineering" {
 
   source                 = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v2.1.0"
-  github_repositories    = ["ministryofjustice/data-platform-terraform-oidc:*"]
+  github_repositories    = ["ministryofjustice/data-platform:*", "ministryofjustice/analytical-platform-iam:*"]
   additional_permissions = data.aws_iam_policy_document.github_actions_iam_permissions_data_engineering.json
   role_name              = "github-actions-iam"
   tags_common            = local.tags
-  tags_prefix            = "data-platform-terraform-oidc"
+  tags_prefix            = "data-platform"
   providers = {
     aws = aws.data_engineering
   }
