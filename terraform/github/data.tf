@@ -12,9 +12,15 @@ data "aws_caller_identity" "data" {
 }
 
 data "github_team" "migration_app_owner" {
-  for_each = local.migration_apps_teams_map
+  for_each = toset(local.unique_old_teams_names)
   provider = github.moj-analytical-services
   slug     = each.key
+}
+
+data "github_repository_teams" "migration_apps_repo_owners" {
+  for_each = local.migration_apps_map
+  provider = github.moj-analytical-services
+  name     = each.value.source_repo_name
 }
 
 data "aws_secretsmanager_secret" "github_token" {
