@@ -138,6 +138,7 @@ locals {
   data_platform_labs_members = [
     "hemeshpatel-moj",
     "murdo-moj",
+    "bogdan-mania-moj",
     "LavMatt"
   ]
 
