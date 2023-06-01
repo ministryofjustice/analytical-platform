@@ -1,6 +1,6 @@
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "4.17.2"
+  version = "5.0.0"
 
   name        = local.name
   description = "Data Engineering App SG"
