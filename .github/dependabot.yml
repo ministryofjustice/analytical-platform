@@ -77,7 +77,3 @@ updates:
     directory: "/terraform/pagerduty/modules/user"
     schedule:
       interval: "daily"
-  - package-ecosystem: "terraform"
-    directory: "/terraform/testing-dependabot-generator"
-    schedule:
-      interval: "daily"
