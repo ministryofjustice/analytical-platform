@@ -25,3 +25,5 @@ jobs:
       - name: Run Dependabot configuration generator
         id: generate_configuration
         run: bash scripts/dependabot/configuration-generator.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
