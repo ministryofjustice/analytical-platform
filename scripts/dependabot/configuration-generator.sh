@@ -51,7 +51,7 @@ if git diff --exit-code ${DEPENDABOT_CONFIGURATION_FILE} > /dev/null 2>&1; then
   exit 0
 else
   gh api --method PUT /repos/${GITHUB_REPOSITORY}/contents/${DEPENDABOT_CONFIGURATION_FILE} \
-    --field branch="${GITHUB_REF_NAME}" \
+    --field branch="${GITHUB_HEAD_REF}" \
     --field message="Committing updated Dependabot configuration" \
     --field encoding="base64" \
     --field content="$( base64 -w 0 ${DEPENDABOT_CONFIGURATION_FILE} )" \
