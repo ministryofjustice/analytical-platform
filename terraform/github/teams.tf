@@ -42,7 +42,9 @@ locals {
     "michaeljcollinsuk",
     "jhpyke",
     "tamsinforbes",
-    "murad-ali-MoJ"
+    "murad-ali-MoJ",
+    "Gary-H9",
+    "mitchdawson1982"
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
@@ -109,7 +111,7 @@ locals {
     "afua-moj",
     "murdo-moj",
     "hemeshpatel-moj",
-    "AntFMoJ" # Anthony Fitzroy
+    "AntFMoJ", # Anthony Fitzroy
   ]
 
   data_engineering_aws_developer_members = [
