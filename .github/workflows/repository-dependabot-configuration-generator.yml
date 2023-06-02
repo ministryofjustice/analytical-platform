@@ -1,0 +1,29 @@
+---
+name: Dependabot configuration generator
+
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "**/*.tf"
+      - "**/*Dockerfile*"
+
+permissions: read-all
+
+jobs:
+  dependabot-configuration-generator:
+    name: Dependabot configuration generator
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Run Dependabot configuration generator
+        id: generate_configuration
+        run: bash -x scripts/dependabot/configuration-generator.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
