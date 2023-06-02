@@ -35,7 +35,7 @@ locals {
     }
   }
 
-  additional_repos_for_ecr = ["analytics-platform-rshiny"]
+  additional_repos_for_ecr = ["analytics-platform-rshiny", "analytics-platform-auth-proxy"]
   # Application Migration -- needed to manage trust policy of the ECR management role
 
   ap_migration_apps  = jsondecode(file("../../configuration/ap_migration_apps.json"))
