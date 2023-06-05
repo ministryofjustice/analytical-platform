@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     pagerduty = {
-      source  = "pagerduty/pagerduty"
+      source = "pagerduty/pagerduty"
     }
   }
 }

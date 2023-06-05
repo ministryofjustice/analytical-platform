@@ -20,7 +20,7 @@ terraform {
 }
 
 provider "aws" {
-  alias  = "session"
+  alias = "session"
 }
 
 provider "aws" {
