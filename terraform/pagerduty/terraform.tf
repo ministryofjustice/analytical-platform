@@ -19,12 +19,14 @@ terraform {
   }
 }
 
-provider "aws" {}
+provider "aws" {
+  alias  = "session"
+}
 
 provider "aws" {
   region = "eu-west-1"
   assume_role {
-    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.current.issuer_arn)) ? null : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/GlobalGitHubActionAdmin"
+    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${data.aws_caller_identity.session.account_id}:role/GlobalGitHubActionAdmin"
   }
 }
 

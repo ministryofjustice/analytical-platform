@@ -1,7 +1,11 @@
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "session" {
+  provider = aws.session
+}
 
-data "aws_iam_session_context" "current" {
-  arn = data.aws_caller_identity.current.arn
+data "aws_iam_session_context" "session" {
+  provider = aws.session
+
+  arn = data.aws_caller_identity.session.arn
 }
 
 data "aws_secretsmanager_secret" "pagerduty_token" {
