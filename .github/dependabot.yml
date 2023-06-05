@@ -1,6 +1,6 @@
 ---
 # This file is auto-generated here, do not manually amend.
-# https://github.com/ministryofjustice/data-platform/blob/main/scripts/dependabot/generate-configuration.sh
+# https://github.com/ministryofjustice/data-platform/blob/main/scripts/dependabot/configuration-generator.sh
 
 version: 2
 
@@ -10,15 +10,19 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
-    directory: "/.devcontainer/features/test"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "docker"
     directory: "/container-images/rshiny"
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
     directory: "/container-images/ubuntu/base"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/.devcontainer/features/test"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pip"
+    directory: "/scripts/pagerduty/slack-on-call"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
