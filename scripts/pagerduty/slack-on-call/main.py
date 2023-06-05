@@ -46,11 +46,13 @@ def get_on_call_user():
 
 
 def get_slack_user_id():
-    response = slack_client.users_lookupByEmail(email=get_on_call_user()[1])
     user_id = None
 
-    if response["ok"]:
+    try:
+        response = slack_client.users_lookupByEmail(email=get_on_call_user()[1])
         user_id = response["user"]["id"]
+    except Exception:
+        pass
 
     return user_id
 
