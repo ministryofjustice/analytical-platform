@@ -59,9 +59,13 @@ def get_slack_user_id():
 
 def main():
     if get_slack_user_id() is None:
-        message = f"{get_on_call_user()[0]} is on support for {get_on_call_schedule_name()}"  # noqa: E501
+        message = (
+            f"{get_on_call_user()[0]} is on support for {get_on_call_schedule_name()}"
+        )
     else:
-        message = f"<@{get_slack_user_id()}> is on support for {get_on_call_schedule_name()}"
+        message = (
+            f"<@{get_slack_user_id()}> is on support for {get_on_call_schedule_name()}"
+        )
 
     slack_client.chat_postMessage(
         channel=slack_channel,
