@@ -27,7 +27,7 @@ cd scripts/pagerduty/slack-on-call
 
 # Run Python container
 docker run -it --rm \
-  --entrypoint /bin/sh \
+  --entrypoint /bin/bash \
   --volume $( pwd ):/app \
   --workdir /app \
   --env PAGERDUTY_SCHEDULE_ID="REPLACE_ME" \
