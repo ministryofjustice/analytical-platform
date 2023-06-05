@@ -1,20 +1,20 @@
-# PagerDuty Slack On-Call
+# PagerDuty Rota to Slack
 
 This script:
 
-1. obtains the on-call user for the given schedule
+1. obtains the user for the given schedule
 
-1. gets the on-call user's Slack handle
+1. gets the user's Slack handle
 
 1. posts a message to the given Slack channel
 
-It is designed to be executed every morning by `.github/workflows/platform-pagerduty-on-call.yml`
+It is designed to be executed every morning by `.github/workflows/platform-pagerduty-rota-to-slack.yml`
 
 ## Adding a Team
 
-1. Add `pagerduty-schedule-id` and `slack-channel` to `.github/workflows/platform-pagerduty-on-call.yml`
+1. Add `pagerduty-schedule-id` and `slack-channel` to `.github/workflows/platform-pagerduty-rota-to-slack.yml`
 
-1. Invite `@PagerDuty On-Call` to `slack-channel`
+1. Invite `@PagerDuty Rota` to `slack-channel`
 
 ## Testing Locally
 <!-- markdownlint-disable MD013 -->
@@ -23,7 +23,7 @@ It is designed to be executed every morning by `.github/workflows/platform-pager
 aws-vault exec analytical-platform-management-production
 
 # Change into script directory
-cd scripts/pagerduty/slack-on-call
+cd scripts/pagerduty/rota-to-slack
 
 # Run Python container
 docker run -it --rm \
@@ -33,7 +33,7 @@ docker run -it --rm \
   --env PAGERDUTY_SCHEDULE_ID="REPLACE_ME" \
   --env PAGERDUTY_TOKEN="$( aws secretsmanager get-secret-value --secret-id pagerduty-token --query SecretString --output text )" \
   --env SLACK_CHANNEL="REPLACE_ME" \
-  --env SLACK_TOKEN="$( aws secretsmanager get-secret-value --secret-id slack-pagerduty-on-call-token --query SecretString --output text )" \
+  --env SLACK_TOKEN="$( aws secretsmanager get-secret-value --secret-id slack-pagerduty-rota-token --query SecretString --output text )" \
   public.ecr.aws/docker/library/python:3.9
 
 # Install requirements
