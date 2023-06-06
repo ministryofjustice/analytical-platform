@@ -10,6 +10,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
+    directory: "/.devcontainer/features/test"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
     directory: "/container-images/rshiny"
     schedule:
       interval: "daily"
@@ -17,12 +21,8 @@ updates:
     directory: "/container-images/ubuntu/base"
     schedule:
       interval: "daily"
-  - package-ecosystem: "docker"
-    directory: "/.devcontainer/features/test"
-    schedule:
-      interval: "daily"
   - package-ecosystem: "pip"
-    directory: "/scripts/pagerduty/slack-on-call"
+    directory: "/scripts/pagerduty/rota-to-slack"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"

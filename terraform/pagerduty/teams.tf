@@ -14,7 +14,9 @@ locals {
         module.users["bogdan.mania@digital.justice.gov.uk"].id,
         module.users["john.hackett@digital.justice.gov.uk"].id,
         module.users["michael.collins@digital.justice.gov.uk"].id,
-        module.users["yikang.mao@justice.gov.uk"].id
+        module.users["yikang.mao@justice.gov.uk"].id,
+        module.users["gary.henderson@digital.justice.gov.uk"].id,
+        module.users["mitch.dawson@digital.justice.gov.uk"].id
       ]
     },
     {
