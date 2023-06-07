@@ -47,6 +47,14 @@ locals {
     {
       name  = "Yikang Mao"
       email = "yikang.mao@justice.gov.uk"
+    },
+    {
+      name  = "Gary Henderson"
+      email = "gary.henderson@digital.justice.gov.uk"
+    },
+    {
+      name  = "Mitch Dawson"
+      email = "mitch.dawson@digital.justice.gov.uk"
     }
   ]
 }

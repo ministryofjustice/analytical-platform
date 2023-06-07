@@ -42,7 +42,9 @@ locals {
     "michaeljcollinsuk",
     "jhpyke",
     "tamsinforbes",
-    "murad-ali-MoJ"
+    "murad-ali-MoJ",
+    "Gary-H9",
+    "mitchdawson1982"
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
@@ -138,6 +140,7 @@ locals {
   data_platform_labs_members = [
     "hemeshpatel-moj",
     "murdo-moj",
+    "bogdan-mania-moj",
     "LavMatt"
   ]
 

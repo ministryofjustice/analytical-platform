@@ -1,6 +1,6 @@
 ---
 # This file is auto-generated here, do not manually amend.
-# https://github.com/ministryofjustice/data-platform/blob/main/scripts/dependabot/generate-configuration.sh
+# https://github.com/ministryofjustice/data-platform/blob/main/scripts/dependabot/configuration-generator.sh
 
 version: 2
 
@@ -21,12 +21,16 @@ updates:
     directory: "/container-images/ubuntu/base"
     schedule:
       interval: "daily"
+  - package-ecosystem: "pip"
+    directory: "/scripts/pagerduty/rota-to-slack"
+    schedule:
+      interval: "daily"
   - package-ecosystem: "terraform"
     directory: "/terraform/application-migration"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/terraform/data-engineering"
+    directory: "/terraform/aws/analytical-platform-data-engineering-production/10ds"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"

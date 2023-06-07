@@ -1,5 +1,5 @@
 ---
-name: Platform - PagerDuty Slack On-Call
+name: Platform - PagerDuty Rota to Slack
 
 on: # yamllint disable-line rule:truthy
   schedule:
@@ -9,14 +9,14 @@ on: # yamllint disable-line rule:truthy
 permissions: read-all
 
 jobs:
-  pagerduty-slack-on-call:
-    name: PagerDuty Slack On-Call
+  pagerduty-rota-to-slack:
+    name: PagerDuty Rota to Slack
     runs-on: ubuntu-latest
     permissions:
       id-token: write
     defaults:
       run:
-        working-directory: scripts/pagerduty/slack-on-call
+        working-directory: scripts/pagerduty/rota-to-slack
     strategy:
       matrix:
         include:
@@ -42,14 +42,14 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # v2.0.0
+        uses: aws-actions/configure-aws-credentials@5727f247b64f324ec403ac56ae05e220fd02b65f # v2.1.0
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
 
       - name: Assume GlobalGitHubActionAdmin Role
         id: assume_global_github_action_admin_role
-        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # v2.0.0
+        uses: aws-actions/configure-aws-credentials@5727f247b64f324ec403ac56ae05e220fd02b65f # v2.1.0
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
@@ -64,9 +64,9 @@ jobs:
         with:
           secret-ids: |
             PAGERDUTY_TOKEN, pagerduty-token
-            SLACK_TOKEN, slack-pagerduty-on-call-token
+            SLACK_TOKEN, slack-pagerduty-rota-token
 
-      - name: Run scripts/pagerduty/slack-on-call.sh
+      - name: Run scripts/pagerduty/rota-to-slack/main.py
         id: run_slack_on_call
         run: |
           python main.py
