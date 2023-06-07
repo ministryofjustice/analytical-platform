@@ -208,5 +208,11 @@
     "source_repo_name": "prisonsreadyreckoner",
     "description": "",
     "team": ""
+  },
+  {
+    "name": "gifts-reporting-app",
+    "source_repo_name": "gifts-reporting-app",
+    "description": "",
+    "team": "gifts-reporting-app-admin-team"
   }
 ]
