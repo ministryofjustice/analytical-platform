@@ -207,6 +207,16 @@
     "name": "prisons-ready-reckoner-app",
     "source_repo_name": "prisonsreadyreckoner",
     "description": "",
-    "team": "mh-cjs-priority-projects"
+    "team": [
+      "mh_cjs_priority_projects"
+    ]
+  },
+  {
+    "name": "gifts-reporting-app",
+    "source_repo_name": "gifts-reporting-app",
+    "description": "",
+    "team": [
+      "gifts-reporting-app-admin-team"
+    ]
   }
 ]
