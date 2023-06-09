@@ -1,0 +1,42 @@
+terraform {
+  backend "s3" {
+    acl            = "private"
+    bucket         = "global-tf-state-aqsvzyd5u9"
+    encrypt        = true
+    key            = "global/analytical-platform-dev/terraform.tfstate"
+    region         = "eu-west-2"
+    dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
+  }
+  required_providers {
+    aws = {
+      version = "5.1.0"
+      source  = "hashicorp/aws"
+    }
+  }
+  required_version = "~> 1.2"
+}
+
+provider "aws" {
+  alias = "session"
+}
+
+provider "aws" {
+  region = "eu-west-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-dev"]}:role/GlobalGitHubActionAdmin"
+  }
+  default_tags {
+    tags = var.tags
+  }
+}
+
+provider "aws" {
+  alias  = "analytical-platform-management-production"
+  region = "eu-west-1"
+  assume_role {
+    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
+  }
+  default_tags {
+    tags = var.tags
+  }
+}
