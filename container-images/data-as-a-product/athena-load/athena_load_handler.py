@@ -32,9 +32,7 @@ def start_query_execution_and_wait(
     res = athena_client.start_query_execution(
         QueryString=sql,
         QueryExecutionContext={"Database": database_name},
-        ResultConfiguration={
-            "OutputLocation": f"s3://athena-data-product-query-results-{account_id}"
-        }
+        WorkGroup="data_product_workgroup"
     )
     query_id = res["QueryExecutionId"]
     while (response := athena_client.get_query_execution(QueryExecutionId=query_id)):
@@ -162,9 +160,7 @@ def refresh_table_partitions(
     """
     athena_client.start_query_execution(
         QueryString=f"MSCK REPAIR TABLE {database_name}.{table_name}",
-        ResultConfiguration={
-            "OutputLocation": f"s3://athena-data-product-query-results-{account_id}"
-        }
+        WorkGroup="data_product_workgroup"
     )
 
 
