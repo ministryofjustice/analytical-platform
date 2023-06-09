@@ -30,6 +30,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-data-development"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/terraform/aws/analytical-platform-data-engineering-production/10ds"
     schedule:
       interval: "daily"
