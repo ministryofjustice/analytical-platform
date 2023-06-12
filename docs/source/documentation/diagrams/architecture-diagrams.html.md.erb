@@ -1,8 +1,8 @@
-# Data Platform - Diagrams
+# Data Platform - Architectural Diagrams
 
 ## C4 Model Diagrams
 
-The [C4 model](https://c4model.com/), is a graphical method for illustrating the structure of software systems. It was developed by Simon Brown with the intention of facilitating clear and concise communication about system architecture. The model employs straightforward diagrams that promote simplicity and can be easily comprehended by both technical and non-technical individuals.
+The [C4 model](https://c4model.com/), is a graphical method for illustrating the structure of software systems. Developed by Simon Brown with the intention of facilitating clear and concise communication about system architecture. The model employs straightforward diagrams that promote simplicity and can be easily comprehended by both technical and non-technical individuals.
 
 ### Level 1 - Context Diagram
 This is the highest level of abstraction and provides an overview of the entire system. It shows the system under consideration and its external dependencies, such as users, external systems, and APIs. Frequency in change will be minimal compared to the other levels.
@@ -19,6 +19,15 @@ This level focuses on the software system's high-level containers, which are typ
 
 This level delves deeper into the containers identified in the previous level. It shows the internal components and their interactions within each container. Components can represent classes, modules, services, or other logical units.
 
-####  3.1 Data Product Component
+####  3.1 Data Product Component - Proposal
+
+This diagram shows the relationships of a Data Product with other components of the Data Platform.
 
 ![Level 3 Diagram](c4-model-level3-data-product.excalidraw.png)
+
+## Editing the diagrams
+
+These diagrams were created using the open source tool [Excalidraw](https://docs.excalidraw.com/). The source of the excalidraw files are embedded into the `.png` format creating a `.excalidraw.png` file.
+
+- On the web using [vscode.dev](https://github.dev/ministryofjustice/data-platform/tree/main/docs/diagrams) with the [Excalidraw extenstion](https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor) 
+- Using Visual Studio Code with the [Excalidraw extension](https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor)
