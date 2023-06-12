@@ -68,8 +68,8 @@ def get_data_product_config(key: str) -> dict:
     ) + "/"
 
     # get timestamp value
-    timestamp_pattern = "^(.*)\/(extraction_timestamp=)([0-9]{1,14})\/(.*)$"
-    m = re.match(timestamp_pattern, key)
+    pattern = "^(.*)\/(extraction_timestamp=)([0-9TZ]{1,16})\/(.*)$"
+    m = re.match(pattern, key)
     if m:
         timestamp = m.group(3)
     else:
