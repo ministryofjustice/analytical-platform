@@ -1,10 +1,6 @@
 locals {
   users = [
     {
-      name  = "Andy Rogers"
-      email = "andy.rogers@digital.justice.gov.uk"
-    },
-    {
       name  = "Emma Terry"
       email = "emma.terry@digital.justice.gov.uk"
     },

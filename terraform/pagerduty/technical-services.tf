@@ -233,7 +233,8 @@ locals {
           ]
         }
       ]
-      enable_email_integration = true
+      enable_email_integration      = true
+      enable_cloudwatch_integration = true
     },
     {
       name              = "Data Platform Security"

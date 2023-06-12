@@ -27,7 +27,6 @@ locals {
         module.users["richard.baguley@digital.justice.gov.uk"].id
       ]
       responders = [
-        module.users["andy.rogers@digital.justice.gov.uk"].id,
         module.users["emma.terry@digital.justice.gov.uk"].id
       ]
     }
