@@ -10,15 +10,15 @@ terraform {
   required_providers {
     auth0 = {
       source  = "auth0/auth0"
-      version = "0.45.0"
+      version = "0.48.0"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "4.65.0"
+      version = "5.3.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.20.0"
+      version = "2.21.1"
     }
     random = {
       source  = "hashicorp/random"
@@ -29,7 +29,7 @@ terraform {
       version = "4.0.4"
     }
   }
-  required_version = "~> 1.2"
+  required_version = "~> 1.5"
 }
 
 provider "auth0" {
@@ -41,7 +41,7 @@ provider "auth0" {
 provider "aws" {
   region = "eu-west-1"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids[var.target_account]}:role/${var.assume_role}"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -49,10 +49,10 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "data-production"
+  alias  = "analytical-platform-data-production"
   region = "eu-west-1"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["data-production"]}:role/${var.assume_role}"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -60,10 +60,10 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "management-production"
+  alias  = "analytical-platform-management-production"
   region = "eu-west-1"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["management-production"]}:role/${var.assume_role}"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags

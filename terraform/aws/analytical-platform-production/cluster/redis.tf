@@ -4,7 +4,7 @@
 
 module "control_panel_redis" {
   source  = "cloudposse/elasticache-redis/aws"
-  version = "0.50.0"
+  version = "0.51.1"
 
   enabled                    = var.redis_enabled
   replication_group_id       = local.redis_replication_group_id

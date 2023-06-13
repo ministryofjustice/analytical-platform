@@ -18,7 +18,7 @@ module "iam_assumable_role_ebs_csi_driver" {
 
 module "iam_assumable_role_control_panel_api" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.17.0"
+  version = "5.20.0"
 
   providers = {
     aws = aws.data-production
@@ -37,7 +37,7 @@ module "iam_assumable_role_control_panel_api" {
 
 module "iam_assumable_role_cert_manager" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.17.0"
+  version = "5.20.0"
 
   create_role                   = true
   role_name_prefix              = "cert_manager"
@@ -52,7 +52,7 @@ module "iam_assumable_role_cert_manager" {
 
 module "iam_assumable_role_cluster_autoscaler" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.17.0"
+  version = "5.20.0"
 
   create_role                   = true
   role_name_prefix              = substr("cluster-autoscaler-${module.eks.cluster_id}", 0, 31)
@@ -67,7 +67,7 @@ module "iam_assumable_role_cluster_autoscaler" {
 
 module "iam_assumable_role_external_dns" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.17.0"
+  version = "5.20.0"
 
   create_role                   = true
   role_name_prefix              = "external_dns"
@@ -82,7 +82,7 @@ module "iam_assumable_role_external_dns" {
 
 module "iam_assumable_role_external_secrets" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.17.0"
+  version = "5.20.0"
 
   create_role                   = true
   role_name_prefix              = "external_secrets"
@@ -97,7 +97,7 @@ module "iam_assumable_role_external_secrets" {
 
 module "iam_assumable_role_prometheus_remote_ingest" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.17.0"
+  version = "5.20.0"
 
   create_role                   = true
   role_name                     = "prometheus_remote_ingest"
@@ -114,13 +114,12 @@ data "aws_iam_policy_document" "prometheus_central_ingest" {
   statement {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
-
     principals {
+      type = "AWS"
       identifiers = [
         "arn:aws:iam::${var.account_ids["development"]}:role/prometheus_remote_ingest",
         "arn:aws:iam::${var.account_ids["production"]}:role/prometheus_remote_ingest"
       ]
-      type = "AWS"
     }
   }
 }
@@ -141,16 +140,16 @@ resource "aws_iam_role_policy_attachment" "prometheus_central_ingest" {
 
 data "aws_iam_policy_document" "efs_csi_driver_assume" {
   statement {
+    effect = "Allow"
     actions = ["sts:AssumeRoleWithWebIdentity"]
+    principals {
+      type        = "Federated"
+      identifiers = ["arn:aws:iam::525294151996:oidc-provider/oidc.eks.eu-west-1.amazonaws.com/id/DDE7A0AC243F2E06BD539D26B3EC28A6"]
+    }
     condition {
       test     = "StringEquals"
       variable = "oidc.eks.eu-west-1.amazonaws.com/id/DDE7A0AC243F2E06BD539D26B3EC28A6:sub"
       values   = ["system:serviceaccount:kube-system:efs-csi-controller-sa"]
-    }
-    effect = "Allow"
-    principals {
-      type        = "Federated"
-      identifiers = ["arn:aws:iam::525294151996:oidc-provider/oidc.eks.eu-west-1.amazonaws.com/id/DDE7A0AC243F2E06BD539D26B3EC28A6"]
     }
   }
 }

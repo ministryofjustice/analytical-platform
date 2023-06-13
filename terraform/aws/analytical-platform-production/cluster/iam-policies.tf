@@ -215,23 +215,16 @@ data "aws_iam_policy_document" "cert_manager" {
   statement {
     sid    = "certManagerGetChange"
     effect = "Allow"
-
-    actions = [
-      "route53:GetChange",
-    ]
-
+    actions = ["route53:GetChange"]
     resources = ["arn:aws:route53:::change/*"]
   }
-
   statement {
     sid    = "certManagerResourceRecordSets"
     effect = "Allow"
-
     actions = [
       "route53:ChangeResourceRecordSets",
       "route53:ListResourceRecordSets",
     ]
-
     resources = ["arn:aws:route53:::hostedzone/${data.aws_route53_zone.main.zone_id}"]
   }
 }
@@ -250,7 +243,6 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
   statement {
     sid    = "clusterAutoscalerAll"
     effect = "Allow"
-
     actions = [
       "autoscaling:DescribeAutoScalingGroups",
       "autoscaling:DescribeAutoScalingInstances",
@@ -258,28 +250,23 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
       "autoscaling:DescribeTags",
       "ec2:DescribeLaunchTemplateVersions",
     ]
-
     resources = ["*"]
   }
 
   statement {
     sid    = "clusterAutoscalerOwn"
     effect = "Allow"
-
     actions = [
       "autoscaling:SetDesiredCapacity",
       "autoscaling:TerminateInstanceInAutoScalingGroup",
       "autoscaling:UpdateAutoScalingGroup",
     ]
-
     resources = ["*"]
-
     condition {
       test     = "StringEquals"
       variable = "autoscaling:ResourceTag/kubernetes.io/cluster/${module.eks.cluster_id}"
       values   = ["owned"]
     }
-
     condition {
       test     = "StringEquals"
       variable = "autoscaling:ResourceTag/k8s.io/cluster-autoscaler/enabled"
@@ -302,23 +289,17 @@ data "aws_iam_policy_document" "external_dns" {
   statement {
     sid    = "externalDNSListHostedZones"
     effect = "Allow"
-
-    actions = [
-      "route53:ListHostedZones",
-    ]
-
+    actions = ["route53:ListHostedZones"]
     resources = ["*"]
   }
 
   statement {
     sid    = "externalDNSResourceRecordSets"
     effect = "Allow"
-
     actions = [
       "route53:ChangeResourceRecordSets",
       "route53:ListResourceRecordSets",
     ]
-
     resources = ["arn:aws:route53:::hostedzone/${data.aws_route53_zone.main.zone_id}"]
   }
 }
@@ -337,14 +318,12 @@ data "aws_iam_policy_document" "external_secrets" {
   statement {
     sid    = "externalSecrets"
     effect = "Allow"
-
     actions = [
       "secretsmanager:GetResourcePolicy",
       "secretsmanager:GetSecretValue",
       "secretsmanager:DescribeSecret",
       "secretsmanager:ListSecretVersionIds"
     ]
-
     resources = ["arn:aws:secretsmanager:eu-west-1:${var.account_ids[var.environment]}:secret:*"]
   }
 }
@@ -387,28 +366,20 @@ data "aws_iam_policy_document" "efs_csi_driver" {
     ]
     resources = ["*"]
   }
-
   statement {
     effect = "Allow"
-    actions = [
-      "elasticfilesystem:CreateAccessPoint"
-    ]
+    actions = ["elasticfilesystem:CreateAccessPoint"]
     resources = ["*"]
-
     condition {
       test     = "StringLike"
       variable = "aws:RequestTag/efs.csi.aws.com/cluster"
       values   = ["true"]
     }
   }
-
   statement {
     effect = "Allow"
-    actions = [
-      "elasticfilesystem:DeleteAccessPoint"
-    ]
+    actions = ["elasticfilesystem:DeleteAccessPoint"]
     resources = ["*"]
-
     condition {
       test     = "StringEquals"
       variable = "aws:RequestTag/efs.csi.aws.com/cluster"
