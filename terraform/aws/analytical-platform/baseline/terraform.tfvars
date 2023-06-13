@@ -29,35 +29,35 @@ tags = {
 
 pagerduty_services = {
   analytical-platform-data-development = {
-    guardduty     = "data-platform-security"
+    guardduty     = "analytical-platform-security"
     cost-explorer = "data-platform"
   }
   analytical-platform-data-engineering-production = {
-    guardduty     = "data-platform-security"
+    guardduty     = "analytical-platform-security"
     cost-explorer = "data-platform"
   }
   analytical-platform-data-engineering-sandbox-a = {
-    guardduty     = "data-platform-security"
+    guardduty     = "analytical-platform-security"
     cost-explorer = "data-platform"
   }
   analytical-platform-data-production = {
-    guardduty     = "data-platform-security"
+    guardduty     = "analytical-platform-security"
     cost-explorer = "data-platform"
   }
   analytical-platform-development = {
-    guardduty     = "data-platform-security"
+    guardduty     = "analytical-platform-security"
     cost-explorer = "data-platform"
   }
   analytical-platform-landing-production = {
-    guardduty     = "data-platform-security"
+    guardduty     = "analytical-platform-security"
     cost-explorer = "data-platform"
   }
   analytical-platform-management-production = {
-    guardduty     = "data-platform-security"
+    guardduty     = "analytical-platform-security"
     cost-explorer = "data-platform"
   }
   analytical-platform-production = {
-    guardduty     = "data-platform-security"
+    guardduty     = "analytical-platform-security"
     cost-explorer = "data-platform"
   }
 }
