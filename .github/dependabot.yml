@@ -34,6 +34,42 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-data-production/artifact-repos"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-data-production/artifact-repos/modules/ecr"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-data-production/kops"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-development/cluster"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-management-production/cluster"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-production/cluster"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform/baseline"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform/baseline/modules/cost-explorer-anomaly-monitor"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform/baseline/modules/guardduty"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/terraform/github"
     schedule:
       interval: "daily"
