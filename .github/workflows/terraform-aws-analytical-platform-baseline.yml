@@ -1,7 +1,7 @@
 ---
 name: Terraform - AWS - Analytical Platform - Baseline
 
-on:
+on: # yamllint disable-line rule:truthy
   pull_request:
     branches:
       - main
