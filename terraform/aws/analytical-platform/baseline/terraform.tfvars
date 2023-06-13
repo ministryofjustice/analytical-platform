@@ -1,47 +1,16 @@
-account_ids = {
-  data-development            = "803963757240"
-  data-engineering-production = "189157455002"
-  data-engineering-sandbox-a  = "684969100054"
-  data-production             = "593291632749"
-  development                 = "525294151996"
-  landing-production          = "335823981503"
-  management-production       = "042130406152"
-  production                  = "312423030077"
-}
+##################################################
+# General
+##################################################
 
-pagerduty_services = {
-  data-development = {
-    guardduty     = "data-platform-security"
-    cost-explorer = "data-platform"
-  }
-  data-engineering-production = {
-    guardduty     = "data-platform-security"
-    cost-explorer = "data-platform"
-  }
-  data-engineering-sandbox-a = {
-    guardduty     = "data-platform-security"
-    cost-explorer = "data-platform"
-  }
-  data-production = {
-    guardduty     = "data-platform-security"
-    cost-explorer = "data-platform"
-  }
-  development = {
-    guardduty     = "data-platform-security"
-    cost-explorer = "data-platform"
-  }
-  landing-production = {
-    guardduty     = "data-platform-security"
-    cost-explorer = "data-platform"
-  }
-  management-production = {
-    guardduty     = "data-platform-security"
-    cost-explorer = "data-platform"
-  }
-  production = {
-    guardduty     = "data-platform-security"
-    cost-explorer = "data-platform"
-  }
+account_ids = {
+  analytical-platform-data-development            = "803963757240"
+  analytical-platform-data-engineering-production = "189157455002"
+  analytical-platform-data-engineering-sandbox-a  = "684969100054"
+  analytical-platform-data-production             = "593291632749"
+  analytical-platform-development                 = "525294151996"
+  analytical-platform-landing-production          = "335823981503"
+  analytical-platform-management-production       = "042130406152"
+  analytical-platform-production                  = "312423030077"
 }
 
 tags = {
@@ -52,4 +21,43 @@ tags = {
   owner                  = "analytical-platform:analytics-platform-tech@digital.justice.gov.uk"
   infrastructure-support = "analytical-platform:analytics-platform-tech@digital.justice.gov.uk"
   source-code            = "github.com/ministryofjustice/analytical-platform-infrastructure"
+}
+
+##################################################
+# PagerDuty
+##################################################
+
+pagerduty_services = {
+  analytical-platform-data-development = {
+    guardduty     = "data-platform-security"
+    cost-explorer = "data-platform"
+  }
+  analytical-platform-data-engineering-production = {
+    guardduty     = "data-platform-security"
+    cost-explorer = "data-platform"
+  }
+  analytical-platform-data-engineering-sandbox-a = {
+    guardduty     = "data-platform-security"
+    cost-explorer = "data-platform"
+  }
+  analytical-platform-data-production = {
+    guardduty     = "data-platform-security"
+    cost-explorer = "data-platform"
+  }
+  analytical-platform-development = {
+    guardduty     = "data-platform-security"
+    cost-explorer = "data-platform"
+  }
+  analytical-platform-landing-production = {
+    guardduty     = "data-platform-security"
+    cost-explorer = "data-platform"
+  }
+  analytical-platform-management-production = {
+    guardduty     = "data-platform-security"
+    cost-explorer = "data-platform"
+  }
+  analytical-platform-production = {
+    guardduty     = "data-platform-security"
+    cost-explorer = "data-platform"
+  }
 }

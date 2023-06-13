@@ -29,10 +29,10 @@ provider "aws" {
 ##################################################
 
 provider "aws" {
-  alias  = "data-development-eu-west-1"
+  alias  = "analytical-platform-data-development-eu-west-1"
   region = "eu-west-1"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["data-development"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-development"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -40,10 +40,10 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "data-development-eu-west-2"
+  alias  = "analytical-platform-data-development-eu-west-2"
   region = "eu-west-2"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["data-development"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-development"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -55,10 +55,10 @@ provider "aws" {
 ##################################################
 
 provider "aws" {
-  alias  = "data-engineering-production-eu-west-1"
+  alias  = "analytical-platform-data-engineering-production-eu-west-1"
   region = "eu-west-1"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["data-engineering-production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -66,10 +66,10 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "data-engineering-production-eu-west-2"
+  alias  = "analytical-platform-data-engineering-production-eu-west-2"
   region = "eu-west-2"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["data-engineering-production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -81,10 +81,10 @@ provider "aws" {
 ##################################################
 
 provider "aws" {
-  alias  = "data-engineering-sandbox-a-eu-west-1"
+  alias  = "analytical-platform-data-engineering-sandbox-a-eu-west-1"
   region = "eu-west-1"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -92,10 +92,10 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "data-engineering-sandbox-a-eu-west-2"
+  alias  = "analytical-platform-data-engineering-sandbox-a-eu-west-2"
   region = "eu-west-2"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -107,10 +107,10 @@ provider "aws" {
 ##################################################
 
 provider "aws" {
-  alias  = "data-production-eu-west-1"
+  alias  = "analytical-platform-data-production-eu-west-1"
   region = "eu-west-1"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["data-production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -118,10 +118,10 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "data-production-eu-west-2"
+  alias  = "analytical-platform-data-production-eu-west-2"
   region = "eu-west-2"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["data-production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -133,10 +133,10 @@ provider "aws" {
 ##################################################
 
 provider "aws" {
-  alias  = "development-eu-west-1"
+  alias  = "analytical-platform-development-eu-west-1"
   region = "eu-west-1"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["development"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-development"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -144,10 +144,10 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "development-eu-west-2"
+  alias  = "analytical-platform-development-eu-west-2"
   region = "eu-west-2"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["development"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-development"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -159,10 +159,10 @@ provider "aws" {
 ##################################################
 
 provider "aws" {
-  alias  = "landing-production-eu-west-1"
+  alias  = "analytical-platform-landing-production-eu-west-1"
   region = "eu-west-1"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["landing-production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-landing-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -170,10 +170,10 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "landing-production-eu-west-2"
+  alias  = "analytical-platform-landing-production-eu-west-2"
   region = "eu-west-2"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["landing-production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-landing-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -185,10 +185,10 @@ provider "aws" {
 ##################################################
 
 provider "aws" {
-  alias  = "management-production-eu-west-1"
+  alias  = "analytical-platform-management-production-eu-west-1"
   region = "eu-west-1"
   assume_role {
-    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["management-production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -196,10 +196,10 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "management-production-eu-west-2"
+  alias  = "analytical-platform-management-production-eu-west-2"
   region = "eu-west-2"
   assume_role {
-    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["management-production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -211,10 +211,10 @@ provider "aws" {
 ##################################################
 
 provider "aws" {
-  alias  = "production-eu-west-1"
+  alias  = "analytical-platform-production-eu-west-1"
   region = "eu-west-1"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
@@ -222,10 +222,10 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "production-eu-west-2"
+  alias  = "analytical-platform-production-eu-west-2"
   region = "eu-west-2"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags

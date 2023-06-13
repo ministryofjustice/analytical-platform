@@ -6,11 +6,11 @@ module "data_development_cost_explorer_anomaly_monitor" {
   source = "./modules/cost-explorer-anomaly-monitor"
 
   providers = {
-    aws.management = aws.management-production-eu-west-1
-    aws.target     = aws.data-development-eu-west-2
+    aws.management = aws.analytical-platform-management-production-eu-west-1
+    aws.target     = aws.analytical-platform-data-development-eu-west-2
   }
 
-  pagerduty_service = var.pagerduty_services["data-development"]["cost-explorer"]
+  pagerduty_service = var.pagerduty_services["analytical-platform-data-development"]["cost-explorer"]
 }
 
 ##################################################
@@ -22,11 +22,11 @@ module "data_engineering_cost_explorer_anomaly_monitor" {
   source = "./modules/cost-explorer-anomaly-monitor"
 
   providers = {
-    aws.management = aws.management-production-eu-west-1
-    aws.target     = aws.data-engineering-production-eu-west-2
+    aws.management = aws.analytical-platform-management-production-eu-west-1
+    aws.target     = aws.analytical-platform-data-engineering-production-eu-west-2
   }
 
-  pagerduty_service = var.pagerduty_services["data-engineering-production"]["cost-explorer"]
+  pagerduty_service = var.pagerduty_services["analytical-platform-data-engineering-production"]["cost-explorer"]
 }
 */
 
@@ -38,11 +38,11 @@ module "data_engineering_sandbox_a_cost_explorer_anomaly_monitor" {
   source = "./modules/cost-explorer-anomaly-monitor"
 
   providers = {
-    aws.management = aws.management-production-eu-west-1
-    aws.target     = aws.data-engineering-sandbox-a-eu-west-2
+    aws.management = aws.analytical-platform-management-production-eu-west-1
+    aws.target     = aws.analytical-platform-data-engineering-sandbox-a-eu-west-2
   }
 
-  pagerduty_service = var.pagerduty_services["data-engineering-sandbox-a"]["cost-explorer"]
+  pagerduty_service = var.pagerduty_services["analytical-platform-data-engineering-sandbox-a"]["cost-explorer"]
 }
 
 
@@ -55,11 +55,11 @@ module "data_production_cost_explorer_anomaly_monitor" {
   source = "./modules/cost-explorer-anomaly-monitor"
 
   providers = {
-    aws.management = aws.management-production-eu-west-1
-    aws.target     = aws.data-production-eu-west-2
+    aws.management = aws.analytical-platform-management-production-eu-west-1
+    aws.target     = aws.analytical-platform-data-production-eu-west-2
   }
 
-  pagerduty_service = var.pagerduty_services["data-engineering-sandbox-a"]["cost-explorer"]
+  pagerduty_service = var.pagerduty_services["analytical-platform-data-engineering-sandbox-a"]["cost-explorer"]
 }
 */
 
@@ -71,11 +71,11 @@ module "development_cost_explorer_anomaly_monitor" {
   source = "./modules/cost-explorer-anomaly-monitor"
 
   providers = {
-    aws.management = aws.management-production-eu-west-1
-    aws.target     = aws.development-eu-west-2
+    aws.management = aws.analytical-platform-management-production-eu-west-1
+    aws.target     = aws.analytical-platform-development-eu-west-2
   }
 
-  pagerduty_service = var.pagerduty_services["development"]["cost-explorer"]
+  pagerduty_service = var.pagerduty_services["analytical-platform-development"]["cost-explorer"]
 }
 
 ##################################################
@@ -86,11 +86,11 @@ module "landing_production_cost_explorer_anomaly_monitor" {
   source = "./modules/cost-explorer-anomaly-monitor"
 
   providers = {
-    aws.management = aws.management-production-eu-west-1
-    aws.target     = aws.landing-production-eu-west-2
+    aws.management = aws.analytical-platform-management-production-eu-west-1
+    aws.target     = aws.analytical-platform-landing-production-eu-west-2
   }
 
-  pagerduty_service = var.pagerduty_services["landing-production"]["cost-explorer"]
+  pagerduty_service = var.pagerduty_services["analytical-platform-landing-production"]["cost-explorer"]
 }
 
 ##################################################
@@ -101,11 +101,11 @@ module "management_production_cost_explorer_anomaly_monitor" {
   source = "./modules/cost-explorer-anomaly-monitor"
 
   providers = {
-    aws.management = aws.management-production-eu-west-1
-    aws.target     = aws.management-production-eu-west-2
+    aws.management = aws.analytical-platform-management-production-eu-west-1
+    aws.target     = aws.analytical-platform-management-production-eu-west-2
   }
 
-  pagerduty_service = var.pagerduty_services["management-production"]["cost-explorer"]
+  pagerduty_service = var.pagerduty_services["analytical-platform-management-production"]["cost-explorer"]
 }
 
 ##################################################
@@ -116,9 +116,9 @@ module "production_cost_explorer_anomaly_monitor" {
   source = "./modules/cost-explorer-anomaly-monitor"
 
   providers = {
-    aws.management = aws.management-production-eu-west-1
-    aws.target     = aws.production-eu-west-2
+    aws.management = aws.analytical-platform-management-production-eu-west-1
+    aws.target     = aws.analytical-platform-production-eu-west-2
   }
 
-  pagerduty_service = var.pagerduty_services["production"]["cost-explorer"]
+  pagerduty_service = var.pagerduty_services["analytical-platform-production"]["cost-explorer"]
 }
