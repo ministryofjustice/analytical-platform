@@ -34,6 +34,18 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform/baseline"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform/baseline/modules/cost-explorer-anomaly-monitor"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform/baseline/modules/guardduty"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/terraform/github"
     schedule:
       interval: "daily"
