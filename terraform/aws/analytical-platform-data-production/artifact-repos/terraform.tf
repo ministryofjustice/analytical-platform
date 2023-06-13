@@ -13,13 +13,24 @@ terraform {
       version = "5.3.0"
     }
   }
-  required_version = "~> 1.2"
+  required_version = "~> 1.5"
 }
 
 provider "aws" {
   region = "eu-west-1"
   assume_role {
     role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/GlobalGitHubActionAdmin"
+  }
+  default_tags {
+    tags = var.tags
+  }
+}
+
+provider "aws" {
+  alias  = "analytical-platform-management-production"
+  region = "eu-west-1"
+  assume_role {
+    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
