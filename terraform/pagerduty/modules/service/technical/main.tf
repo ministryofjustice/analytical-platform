@@ -73,7 +73,8 @@ resource "pagerduty_service_integration" "cloudwatch" {
 
   name    = data.pagerduty_vendor.cloudwatch.name
   service = pagerduty_service.this.id
-  vendor  = data.pagerduty_vendor.cloudwatch.id
+  # vendor  = data.pagerduty_vendor.cloudwatch.id
+  vendor = "PZQ6AUS"
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_cloudwatch_integration_key" {
@@ -103,7 +104,8 @@ resource "pagerduty_service_integration" "cloudtrail" {
 
   name    = data.pagerduty_vendor.cloudtrail.name
   service = pagerduty_service.this.id
-  vendor  = data.pagerduty_vendor.cloudtrail.id
+  # vendor  = data.pagerduty_vendor.cloudtrail.id
+  vendor = "PDSJRA7"
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_cloudtrail_integration_key" {
@@ -133,7 +135,8 @@ resource "pagerduty_service_integration" "guardduty" {
 
   name    = data.pagerduty_vendor.guardduty.name
   service = pagerduty_service.this.id
-  vendor  = data.pagerduty_vendor.guardduty.id
+  # vendor  = data.pagerduty_vendor.guardduty.id
+  vendor = "PH27SPX"
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_guardduty_integration_key" {
@@ -193,7 +196,8 @@ resource "pagerduty_service_integration" "security_hub" {
 
   name    = data.pagerduty_vendor.security_hub.name
   service = pagerduty_service.this.id
-  vendor  = data.pagerduty_vendor.security_hub.id
+  # vendor  = data.pagerduty_vendor.security_hub.id
+  vendor = "PF0BK6R"
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_security_hub_integration_key" {
@@ -221,9 +225,10 @@ data "pagerduty_vendor" "email" {
 resource "pagerduty_service_integration" "email" {
   count = var.enable_email_integration ? 1 : 0
 
-  name              = data.pagerduty_vendor.email.name
-  service           = pagerduty_service.this.id
-  vendor            = data.pagerduty_vendor.email.id
+  name    = data.pagerduty_vendor.email.name
+  service = pagerduty_service.this.id
+  # vendor            = data.pagerduty_vendor.email.id
+  vendor            = "PBPQJ1M"
   integration_email = local.pagerduty_integration_email
 }
 
