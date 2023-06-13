@@ -1,19 +1,19 @@
 ---
-name: Terraform - AWS - Analytical Platform Management Production - kOps
+name: Terraform - AWS - Analytical Platform Production - kOps
 
 on: # yamllint disable-line rule:truthy
   pull_request:
     branches:
       - main
     paths:
-      - .github/workflows/terraform-aws-analytical-platform-management-production-kops.yml
-      - terraform/aws/analytical-platform-management-production/kops/**
+      - .github/workflows/terraform-aws-analytical-platform-production-kops.yml
+      - terraform/aws/analytical-platform-production/kops/**
   push:
     branches:
       - main
     paths:
-      - .github/workflows/terraform-aws-analytical-platform-management-production-kops.yml
-      - terraform/aws/analytical-platform-management-production/kops/**
+      - .github/workflows/terraform-aws-analytical-platform-production-kops.yml
+      - terraform/aws/analytical-platform-production/kops/**
 
 permissions: read-all
 
@@ -25,7 +25,7 @@ jobs:
       id-token: write
     uses: ./.github/workflows/reusable-terraform.yml
     with:
-      working-directory: terraform/aws/analytical-platform-management-production/kops
+      working-directory: terraform/aws/analytical-platform-production/kops
       aws-role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
       terraform-version: 1.5.0
       terraform-backend-config-role: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
