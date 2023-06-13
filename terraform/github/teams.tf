@@ -34,7 +34,7 @@ locals {
   engineers = [ # analytical-platform and analytics-hq gh teams
     "LouiseABowler",
     "ymao2", # Yikang Mao
-    "andyrogers1973",
+
     "BrianEllwood",
     "tom-webber",
     "bogdan-mania-moj",
