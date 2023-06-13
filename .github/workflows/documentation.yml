@@ -8,12 +8,16 @@ on: # yamllint disable-line rule:truthy
     paths:
       - .github/workflows/documentation.yml
       - docs/**
+    paths-ignore:
+      - docs/archive/**
   push:
     branches:
       - main
     paths:
       - .github/workflows/documentation.yml
       - docs/**
+    paths-ignore:
+      - docs/archive/**
   workflow_dispatch:
 
 permissions: read-all
