@@ -30,10 +30,10 @@ jobs:
         with:
           filters: |
             athena_load:
-              - 'container-images/data-as-a-product/athena-load/**'          
+              - 'container-images/data-as-a-product/athena-load/**'
 
   build:
-    if: ${{ needs.detect-changes.outputs.images != '[]' }}
+    if: ${{ needs.detect-changes.outputs.athena_load != '[]' }}
     needs: [detect-changes]
     name: Build image
     runs-on: ubuntu-latest
@@ -59,7 +59,7 @@ jobs:
           aws-access-key-id: ${{ secrets.ECR_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-2
-      
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1

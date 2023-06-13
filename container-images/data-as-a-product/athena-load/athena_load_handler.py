@@ -2,6 +2,8 @@ import ast
 import logging
 import os
 import re
+import time
+from typing import Optional
 
 import boto3
 import pyarrow as pa
@@ -10,20 +12,17 @@ from botocore.exceptions import ClientError
 from mojap_metadata.converters.arrow_converter import ArrowConverter
 from mojap_metadata.converters.glue_converter import GlueConverter, GlueTable
 from pyarrow import parquet as pq
-import time
 
 logging.getLogger().setLevel(logging.INFO)
 
 glue_client = boto3.client("glue")
 athena_client = boto3.client("athena")
-s3_client = boto3.client('s3')
+s3_client = boto3.client("s3")
 s3_resource = boto3.resource("s3")
 
 
 def start_query_execution_and_wait(
-    database_name: str,
-    account_id: str,
-    sql: str
+    database_name: str, account_id: str, sql: str
 ) -> None:
     """
     runs query for given sql and waits for completion
@@ -32,10 +31,10 @@ def start_query_execution_and_wait(
     res = athena_client.start_query_execution(
         QueryString=sql,
         QueryExecutionContext={"Database": database_name},
-        WorkGroup="data_product_workgroup"
+        WorkGroup="data_product_workgroup",
     )
     query_id = res["QueryExecutionId"]
-    while (response := athena_client.get_query_execution(QueryExecutionId=query_id)):
+    while response := athena_client.get_query_execution(QueryExecutionId=query_id):
         state = response["QueryExecution"]["Status"]["State"]
         if state not in ["SUCCEEDED", "FAILED"]:
             time.sleep(0.1)
@@ -59,16 +58,19 @@ def get_data_product_config(key: str) -> dict:
     config["table_name"] = key.split("/")[5]
     config["table_path_raw"] = os.path.dirname(key)
 
-    config["table_path_curated"] = os.path.join(
-        "s3://",
-        config["bucket"],
-        "curated_data",
-        "database_name={}".format(config['database_name']),
-        "table_name={}".format(config['table_name'])
-    ) + "/"
+    config["table_path_curated"] = (
+        os.path.join(
+            "s3://",
+            config["bucket"],
+            "curated_data",
+            "database_name={}".format(config["database_name"]),
+            "table_name={}".format(config["table_name"]),
+        )
+        + "/"
+    )
 
     # get timestamp value
-    pattern = "^(.*)\/(extraction_timestamp=)([0-9TZ]{1,16})\/(.*)$"
+    pattern = "^(.*)\/(extraction_timestamp=)([0-9TZ]{1,16})\/(.*)$"  # noqa W605
     m = re.match(pattern, key)
     if m:
         timestamp = m.group(3)
@@ -77,7 +79,7 @@ def get_data_product_config(key: str) -> dict:
             "Table partition extraction_timestamp is not in the expected format"
         )
     config["extraction_timestamp"] = timestamp
-    config["account_id"] = boto3.client('sts').get_caller_identity()["Account"]
+    config["account_id"] = boto3.client("sts").get_caller_identity()["Account"]
 
     return config
 
@@ -95,11 +97,7 @@ def _tryeval(val: str):
     return val
 
 
-def sql_unload_table_partition(
-    timestamp: str,
-    table_name: str,
-    table_path: str
-) -> str:
+def sql_unload_table_partition(timestamp: str, table_name: str, table_path: str) -> str:
     """
     generates sql string to unload a timestamped partition
     of raw data to given s3 location
@@ -123,10 +121,7 @@ def sql_unload_table_partition(
 
 
 def sql_create_table_partition(
-    database_name: str,
-    table_name: str,
-    table_path: str,
-    timestamp: str
+    database_name: str, table_name: str, table_path: str, timestamp: str
 ) -> str:
     """
     if the table and data do not exist in curated this
@@ -151,23 +146,19 @@ def sql_create_table_partition(
 
 
 def refresh_table_partitions(
-    database_name: str,
-    table_name: str,
-    account_id: str
+    database_name: str, table_name: str, account_id: str
 ) -> None:
     """
     refreshes partitions following an update to a table
     """
     athena_client.start_query_execution(
         QueryString=f"MSCK REPAIR TABLE {database_name}.{table_name}",
-        WorkGroup="data_product_workgroup"
+        WorkGroup="data_product_workgroup",
     )
 
 
 def get_schema_from_existing_table(
-    database_name: str,
-    table_name: str,
-    path_curated: str
+    database_name: str, table_name: str, path_curated: str
 ) -> dict:
     metadata_mojap = GlueTable().generate_to_meta(database_name, table_name)
     metadata_mojap.file_format = "parquet"
@@ -178,10 +169,7 @@ def get_schema_from_existing_table(
 
 
 def does_partition_file_exist(
-    bucket: str,
-    db_name: str,
-    table_name: str,
-    timestamp: str
+    bucket: str, db_name: str, table_name: str, timestamp: str
 ) -> bool:
     """
     returns bool indicating whether the extraction timestamp for
@@ -192,8 +180,7 @@ def does_partition_file_exist(
     table_path = f"table_name={table_name}/"
     paginator = s3_client.get_paginator("list_objects_v2")
     page_iterator = paginator.paginate(
-        Bucket=bucket,
-        Prefix=os.path.join("curated_data", db_path, table_path)
+        Bucket=bucket, Prefix=os.path.join("curated_data", db_path, table_path)
     )
     response = []
     try:
@@ -215,9 +202,9 @@ def infer_glue_schema(
     file_key: str,
     database_name: str,
     file_type: str = "csv",
-    has_headers: bool = True,
+    has_headers: Optional[bool] = True,
     sample_size_mb: float = 1.5,
-    table_type: str = "raw"
+    table_type: str = "raw",
 ) -> dict:
     """
     function infers and returns glue schema for csv and parquet files.
@@ -230,13 +217,18 @@ def infer_glue_schema(
     raw_table_name = f"{table_name}_raw"
 
     if file_type == "csv":
-        obj = boto3.resource('s3').Object(bucket, key)
+        obj = boto3.resource("s3").Object(bucket, key)
         bytes_range = f"bytes=0-{int(sample_size_mb*1000000)}"
-        byte_rows = obj.get(Range=bytes_range)['Body'].readlines()[:-1]
+        byte_rows = obj.get(Range=bytes_range)["Body"].readlines()[:-1]
 
         str_rows = []
         for row in byte_rows:
-            str_rows.append([_tryeval(val) for val in row.decode('utf-8').strip("\r\n\t").split(",")])
+            str_rows.append(
+                [
+                    _tryeval(val)
+                    for val in row.decode("utf-8").strip("\r\n\t").split(",")
+                ]
+            )
 
         # we don't want spaces or brackets in our column names
         col_names = [
@@ -254,25 +246,30 @@ def infer_glue_schema(
 
         # if numeric and non-numeric values in column make string
         for key, list_values in data_dict.items():
-            types = set([
-                str(value).replace(".", "", 1).isdigit()
-                for value in list_values
-                if value is not None
-            ])
+            types = set(
+                [
+                    str(value).replace(".", "", 1).isdigit()
+                    for value in list_values
+                    if value is not None
+                ]
+            )
             if len(types) > 1:
                 data_dict[key] = [str(value) for value in list_values]
 
         arrow_table = pa.Table.from_pydict(data_dict)
 
     elif file_type == "parquet" and table_type == "curated":
-
         curated_prefix = file_key.replace("s3://" + bucket + "/", "")
-        key = s3_client.list_objects_v2(Bucket=bucket, Prefix=curated_prefix)["Contents"][0]["Key"]
+        key = s3_client.list_objects_v2(Bucket=bucket, Prefix=curated_prefix)[
+            "Contents"
+        ][0]["Key"]
 
         s3 = s3fs.S3FileSystem()
 
         file_path = os.path.join("s3://", bucket, key)
-        arrow_table = pq.ParquetDataset(file_path, filesystem=s3, use_legacy_dataset=False)
+        arrow_table = pq.ParquetDataset(
+            file_path, filesystem=s3, use_legacy_dataset=False
+        )
 
     arrow_schema = arrow_table.schema
     ac = ArrowConverter()
@@ -292,11 +289,11 @@ def infer_glue_schema(
     metadata_glue = gc.generate_from_meta(
         metadata_mojap,
         database_name=database_name,
-        table_location=os.path.dirname(file_key)
+        table_location=os.path.dirname(file_key),
     )
 
     if file_type == "csv" and has_headers:
-        metadata_glue["TableInput"]['Parameters']['skip.header.line.count'] = '1'
+        metadata_glue["TableInput"]["Parameters"]["skip.header.line.count"] = "1"
 
     return metadata_glue
 
@@ -309,18 +306,18 @@ def create_raw_athena_table(metadata_glue: dict) -> None:
     try:
         glue_client.get_database(Name="data_products_raw")
     except ClientError as e:
-        if e.response['Error']['Code'] == 'EntityNotFoundException':
+        if e.response["Error"]["Code"] == "EntityNotFoundException":
             db_meta = {
                 "DatabaseInput": {
                     "Description": "for holding tables of raw data products",
-                    "Name": "data_products_raw"
+                    "Name": "data_products_raw",
                 }
             }
             glue_client.create_database(**db_meta)
         else:
             logging.error("Unexpected error: %s" % e)
             raise
-    table_name = metadata_glue['TableInput']['Name']
+    table_name = metadata_glue["TableInput"]["Name"]
     try:
         glue_client.delete_table(DatabaseName="data_products_raw", Name=table_name)
     except ClientError:
@@ -336,7 +333,7 @@ def create_curated_athena_table(
     curated_path: str,
     bucket: str,
     extraction_timestamp: str,
-    account_id: str
+    account_id: str,
 ):
     """
     creates curated parquet file from raw file and updates table
@@ -347,11 +344,11 @@ def create_curated_athena_table(
     try:
         glue_client.get_database(Name=database_name)
     except ClientError as e:
-        if e.response['Error']['Code'] == 'EntityNotFoundException':
+        if e.response["Error"]["Code"] == "EntityNotFoundException":
             db_meta = {
                 "DatabaseInput": {
                     "Description": "database for {} products".format(database_name),
-                    "Name": database_name
+                    "Name": database_name,
                 }
             }
             glue_client.create_database(**db_meta)
@@ -360,37 +357,33 @@ def create_curated_athena_table(
             raise
 
     try:
-        table_metadata = glue_client.get_table(DatabaseName=database_name, Name=table_name)
+        table_metadata = glue_client.get_table(
+            DatabaseName=database_name, Name=table_name
+        )
         table_exists = True if table_metadata else None
 
     except ClientError as e:
-        curated_prefix = curated_path.replace(
-            "s3://" + bucket + "/", ""
-        )
+        curated_prefix = curated_path.replace("s3://" + bucket + "/", "")
         existing_files = s3_client.list_objects_v2(
-            Bucket=bucket,
-            Prefix=curated_prefix
+            Bucket=bucket, Prefix=curated_prefix
         )["KeyCount"]
-        if e.response['Error']['Code'] == 'EntityNotFoundException' and existing_files == 0:
+        if (
+            e.response["Error"]["Code"] == "EntityNotFoundException"
+            and existing_files == 0
+        ):
             # only want to run this query if no table or data exist in s3
             start_query_execution_and_wait(
                 database_name,
                 account_id,
                 sql_create_table_partition(
-                    database_name,
-                    table_name,
-                    curated_path,
-                    extraction_timestamp
-                )
+                    database_name, table_name, curated_path, extraction_timestamp
+                ),
             )
 
             return
 
     partition_file_exists = does_partition_file_exist(
-        bucket,
-        database_name,
-        table_name,
-        extraction_timestamp
+        bucket, database_name, table_name, extraction_timestamp
     )
     if table_exists and not partition_file_exists:
         logging.info("table does already exist but partition for timestamp does not")
@@ -398,23 +391,16 @@ def create_curated_athena_table(
         start_query_execution_and_wait(
             "data_products_raw",
             account_id,
-            sql_unload_table_partition(
-                extraction_timestamp,
-                table_name,
-                curated_path
-            )
+            sql_unload_table_partition(extraction_timestamp, table_name, curated_path),
         )
 
         logging.info("Updating table {0}.{1}".format(database_name, table_name))
-        table_metadata = get_schema_from_existing_table(database_name, table_name, curated_path)
-        glue_client.delete_table(
-            DatabaseName=database_name,
-            Name=table_name
+        table_metadata = get_schema_from_existing_table(
+            database_name, table_name, curated_path
         )
+        glue_client.delete_table(DatabaseName=database_name, Name=table_name)
         glue_client.create_table(**table_metadata)
-        refresh_table_partitions(
-            database_name, table_name, account_id
-        )
+        refresh_table_partitions(database_name, table_name, account_id)
 
     elif not table_exists and partition_file_exists:
         logging.info("partition data exists but glue table does not")
@@ -422,39 +408,33 @@ def create_curated_athena_table(
             curated_path,
             database_name=database_name,
             file_type="parquet",
-            table_type="curated"
+            table_type="curated",
         )
 
         glue_client.create_table(**table_metadata)
-        refresh_table_partitions(
-            database_name, table_name, account_id
-        )
+        refresh_table_partitions(database_name, table_name, account_id)
     elif not table_exists and not partition_file_exists:
         logging.info("table and partition do not exist but other curated data do")
         # unload query to make partitioned data
         start_query_execution_and_wait(
             "data_products_raw",
             account_id,
-            sql_unload_table_partition(
-                extraction_timestamp,
-                table_name,
-                curated_path
-            )
+            sql_unload_table_partition(extraction_timestamp, table_name, curated_path),
         )
 
         table_metadata = infer_glue_schema(
             curated_path,
             database_name=database_name,
             file_type="parquet",
-            table_type="curated"
+            table_type="curated",
         )
         glue_client.create_table(**table_metadata)
-        refresh_table_partitions(
-            database_name, table_name, account_id
-        )
+        refresh_table_partitions(database_name, table_name, account_id)
 
     else:
-        logging.info("partition for extraction_timestamp and table already exists so nothing more to be done.")
+        logging.info(
+            "partition for extraction_timestamp and table already exists so nothing more to be done."
+        )
 
 
 def clean_up_temp_tables(table_name: str) -> None:
@@ -478,6 +458,6 @@ def handler(event, context):
         config["table_path_curated"],
         config["bucket"],
         config["extraction_timestamp"],
-        config["account_id"]
+        config["account_id"],
     )
     clean_up_temp_tables(config["table_name"] + "_raw")
