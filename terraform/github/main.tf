@@ -1,7 +1,7 @@
 # Repositories
 module "core" {
   for_each     = { for repo in local.core_repos : repo.name => repo }
-  source       = "./modules/repository"
+  source       = ".././modules/repository"
   name         = each.key
   type         = "core"
   description  = each.value.description
@@ -19,7 +19,7 @@ module "core" {
 
 module "data-platform" {
   for_each               = { for repo in local.data_platform_repos : repo.name => repo }
-  source                 = "./modules/repository"
+  source                 = ".././modules/repository"
   name                   = each.key
   type                   = "core"
   description            = each.value.description
@@ -38,7 +38,7 @@ module "data-platform" {
 }
 
 module "data-platform-app-template" {
-  source      = "./modules/repository"
+  source      = ".././modules/repository"
   name        = "data-platform-app-template"
   description = "Template repository for data-platform apps"
   visibility  = "internal"
@@ -52,7 +52,7 @@ module "data-platform-app-template" {
 
 module "data-platform-apps" {
   for_each           = local.migration_apps_map
-  source             = "./modules/repository"
+  source             = ".././modules/repository"
   name               = each.key
   type               = "app"
   description        = each.value.description
@@ -85,7 +85,7 @@ module "data-platform-apps" {
 
 module "migration_apps_teams" {
   for_each    = local.team_repo_map
-  source      = "../modules/team"
+  source      = ".././modules/team"
   name        = each.key
   description = data.github_team.migration_app_owner[each.key].description
 
@@ -97,7 +97,7 @@ module "migration_apps_teams" {
 
 # Everyone, with access to the above repositories
 module "core-team" {
-  source      = "../modules/team"
+  source      = ".././modules/team"
   name        = "analytics-hq"
   description = "Analytical Platform team"
   repositories = concat(
@@ -114,7 +114,7 @@ module "core-team" {
 }
 
 module "data-platform-tech-archs-team" {
-  source       = "../modules/team"
+  source       = ".././modules/team"
   name         = "data-tech-archs"
   description  = "Data Platform Technical Architects"
   repositories = [for repo in module.data-platform : repo.repository.name]
@@ -126,7 +126,7 @@ module "data-platform-tech-archs-team" {
 
 # People who need full AWS access
 module "aws-team" {
-  source      = "../modules/team"
+  source      = ".././modules/team"
   name        = "analytical-platform"
   description = "Analytical Platform team: people who get Administrator AWS access"
 
@@ -140,7 +140,7 @@ module "aws-team" {
 # Data Engineering Team
 
 module "data-engineering-team" {
-  source      = "../modules/team"
+  source      = ".././modules/team"
   name        = "data-engineering"
   description = "Data Engineering team with Sandbox Access"
 
@@ -151,7 +151,7 @@ module "data-engineering-team" {
 
 # Data Engineering AWS Team
 module "data-engineering-aws-team" {
-  source      = "../modules/team"
+  source      = ".././modules/team"
   name        = "data-engineering-aws"
   description = "Data Engineering team with Environment Access"
 
@@ -164,14 +164,14 @@ module "data-engineering-aws-team" {
 # Allow data engineering to raise PRs in Data Platform repos
 module "contributor-access" {
   for_each          = toset([for repo in module.data-platform : repo.repository.name])
-  source            = "../modules/contributor"
+  source            = ".././modules/contributor"
   application_teams = ["data-engineering"]
   repository_id     = each.key
 }
 
 # Data Platform Core Infrastructure Team
 module "data_platform_core_infrastructure_team" {
-  source       = "../modules/team"
+  source       = ".././modules/team"
   name         = "data-platform-core-infra"
   description  = "Data Platform Core Infrastructure team"
   repositories = [for repo in module.data-platform : repo.repository.name]
@@ -183,7 +183,7 @@ module "data_platform_core_infrastructure_team" {
 
 # Data Platform Labs Team
 module "data_platform_labs_team" {
-  source       = "../modules/team"
+  source       = ".././modules/team"
   name         = "data-platform-labs"
   description  = "Data Platform Labs team"
   repositories = [for repo in module.data-platform : repo.repository.name]
@@ -195,7 +195,7 @@ module "data_platform_labs_team" {
 
 # Data Platform Security Auditor Team
 module "data_platform_security_auditor_team" {
-  source      = "../modules/team"
+  source      = ".././modules/team"
   name        = "data-platform-security-and-auditors"
   description = "Data Platform Security and Auditor Team"
   maintainers = local.data_platform_security_auditor_members
@@ -205,7 +205,7 @@ module "data_platform_security_auditor_team" {
 
 # Data Platform Limited AWS Access Team
 module "data_platform_engineering_developer_team" {
-  source      = "../modules/team"
+  source      = ".././modules/team"
   name        = "data-engineering-aws-developers"
   description = "Data Engineering AWS (Developer Access)"
   maintainers = local.maintainers
