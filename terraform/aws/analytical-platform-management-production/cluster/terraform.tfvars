@@ -3,10 +3,9 @@
 ##################################################
 
 account_ids = {
-  development           = "525294151996"
-  management-production = "042130406152"
-  production            = "312423030077"
+  analytical-platform-management-production = "042130406152"
 }
+
 tags = {
   business-unit          = "Platforms"
   application            = "Analytical Platform"
