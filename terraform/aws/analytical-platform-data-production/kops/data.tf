@@ -2,6 +2,16 @@
 # AWS
 ##################################################
 
+data "aws_caller_identity" "session" {
+  provider = aws.session
+}
+
+data "aws_iam_session_context" "session" {
+  provider = aws.session
+
+  arn = data.aws_caller_identity.session.arn
+}
+
 data "aws_caller_identity" "current" {}
 
 data "aws_iam_policy" "access_mojap_non_sensitive_files_for_docker_builds" {
