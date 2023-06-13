@@ -3,7 +3,6 @@ import logging
 import os
 import re
 import time
-from typing import Optional
 
 import boto3
 import pyarrow as pa
@@ -202,7 +201,7 @@ def infer_glue_schema(
     file_key: str,
     database_name: str,
     file_type: str = "csv",
-    has_headers: Optional[bool] = True,
+    has_headers: bool = True,
     sample_size_mb: float = 1.5,
     table_type: str = "raw",
 ) -> dict:
@@ -360,7 +359,8 @@ def create_curated_athena_table(
         table_metadata = glue_client.get_table(
             DatabaseName=database_name, Name=table_name
         )
-        table_exists = True if table_metadata else None
+        if 'table_metadata' in locals():
+            table_exists = True
 
     except ClientError as e:
         curated_prefix = curated_path.replace("s3://" + bucket + "/", "")
