@@ -68,4 +68,4 @@ jobs:
         shell: bash
         run: |
           docker build -t ${{ env.ACCOUNT_NUMBER }}.dkr.ecr.eu-west-2.amazonaws.com/${{ env.name }}:${{ env.version }} .
-          docker push ${{ env.ecr_registry }}/${{ env.name }}:${{ env.version }}
+          docker push ${{ env.ACCOUNT_NUMBER }}/${{ env.name }}:${{ env.version }}
