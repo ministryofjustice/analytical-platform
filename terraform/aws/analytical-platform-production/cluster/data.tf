@@ -2,6 +2,16 @@
 # AWS
 ##################################################
 
+data "aws_caller_identity" "session" {
+  provider = aws.session
+}
+
+data "aws_iam_session_context" "session" {
+  provider = aws.session
+
+  arn = data.aws_caller_identity.session.arn
+}
+
 data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
@@ -31,17 +41,17 @@ data "aws_secretsmanager_secret_version" "control_panel_rds_db_password" {
 }
 
 data "aws_secretsmanager_secret_version" "pagerduty_analytical_platform_compute_cloudwatch_integration_key" {
-  provider  = aws.management-production
+  provider  = aws.analytical-platform-management-production
   secret_id = "pagerduty/analytical-platform-compute/integration-keys/cloudwatch"
 }
 
 data "aws_secretsmanager_secret_version" "pagerduty_analytical_platform_networking_cloudwatch_integration_key" {
-  provider  = aws.management-production
+  provider  = aws.analytical-platform-management-production
   secret_id = "pagerduty/analytical-platform-networking/integration-keys/cloudwatch"
 }
 
 data "aws_secretsmanager_secret_version" "pagerduty_analytical_platform_storage_cloudwatch_integration_key" {
-  provider  = aws.management-production
+  provider  = aws.analytical-platform-management-production
   secret_id = "pagerduty/analytical-platform-storage/integration-keys/cloudwatch"
 }
 

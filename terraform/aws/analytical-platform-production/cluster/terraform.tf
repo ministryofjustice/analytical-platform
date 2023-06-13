@@ -49,6 +49,10 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias = "session"
+}
+
+provider "aws" {
   alias  = "analytical-platform-data-production"
   region = "eu-west-1"
   assume_role {
@@ -63,7 +67,7 @@ provider "aws" {
   alias  = "analytical-platform-management-production"
   region = "eu-west-1"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags

@@ -21,7 +21,7 @@ module "iam_assumable_role_control_panel_api" {
   version = "5.20.0"
 
   providers = {
-    aws = aws.data-production
+    aws = aws.analytical-platform-data-production
   }
 
   create_role                   = true
@@ -117,8 +117,8 @@ data "aws_iam_policy_document" "prometheus_central_ingest" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${var.account_ids["development"]}:role/prometheus_remote_ingest",
-        "arn:aws:iam::${var.account_ids["production"]}:role/prometheus_remote_ingest"
+        "arn:aws:iam::${var.account_ids["analytical-platform-development"]}:role/prometheus_remote_ingest",
+        "arn:aws:iam::${var.account_ids["analytical-platform-production"]}:role/prometheus_remote_ingest"
       ]
     }
   }
@@ -140,7 +140,7 @@ resource "aws_iam_role_policy_attachment" "prometheus_central_ingest" {
 
 data "aws_iam_policy_document" "efs_csi_driver_assume" {
   statement {
-    effect = "Allow"
+    effect  = "Allow"
     actions = ["sts:AssumeRoleWithWebIdentity"]
     principals {
       type        = "Federated"

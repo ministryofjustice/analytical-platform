@@ -66,21 +66,21 @@ data "aws_iam_policy_document" "control_panel_api" {
     sid       = "CanCreateIAMPolicies"
     effect    = "Allow"
     actions   = ["iam:CreatePolicy"]
-    resources = ["arn:aws:iam::${var.account_ids["data-production"]}:policy/${var.resource_prefix}-*"]
+    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/${var.resource_prefix}-*"]
   }
   statement {
     sid       = "CanDeleteIAMPolicies"
     effect    = "Allow"
     actions   = ["iam:DeletePolicy"]
-    resources = ["arn:aws:iam::${var.account_ids["data-production"]}:policy/${var.resource_prefix}-*"]
+    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/${var.resource_prefix}-*"]
   }
   statement {
     sid     = "CanAttachPolicies"
     effect  = "Allow"
     actions = ["iam:AttachRolePolicy", ]
     resources = [
-      "arn:aws:iam::${var.account_ids["data-production"]}:role/${var.resource_prefix}_user_*",
-      "arn:aws:iam::${var.account_ids["data-production"]}:role/${var.resource_prefix}_app_*"
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_user_*",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_app_*"
     ]
   }
   statement {
@@ -92,15 +92,15 @@ data "aws_iam_policy_document" "control_panel_api" {
       "iam:DetachRolePolicy",
       "iam:DetachUserPolicy"
     ]
-    resources = ["arn:aws:iam::${var.account_ids["data-production"]}:*"]
+    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:*"]
   }
   statement {
     sid     = "CanCreateRoles"
     effect  = "Allow"
     actions = ["iam:CreateRole"]
     resources = [
-      "arn:aws:iam::${var.account_ids["data-production"]}:role/${var.resource_prefix}_user_*",
-      "arn:aws:iam::${var.account_ids["data-production"]}:role/${var.resource_prefix}_app_*"
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_user_*",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_app_*"
     ]
   }
   statement {
@@ -115,8 +115,8 @@ data "aws_iam_policy_document" "control_panel_api" {
       "iam:DeleteRolePolicy"
     ]
     resources = [
-      "arn:aws:iam::${var.account_ids["data-production"]}:role/${var.resource_prefix}_user_*",
-      "arn:aws:iam::${var.account_ids["data-production"]}:role/${var.resource_prefix}_app_*"
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_user_*",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_app_*"
     ]
   }
   statement {
@@ -124,8 +124,8 @@ data "aws_iam_policy_document" "control_panel_api" {
     effect  = "Allow"
     actions = ["iam:GetRolePolicy"]
     resources = [
-      "arn:aws:iam::${var.account_ids["data-production"]}:role/${var.resource_prefix}_user_*",
-      "arn:aws:iam::${var.account_ids["data-production"]}:role/${var.resource_prefix}_app_*"
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_user_*",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_app_*"
     ]
   }
   statement {
@@ -133,15 +133,15 @@ data "aws_iam_policy_document" "control_panel_api" {
     effect  = "Allow"
     actions = ["iam:PutRolePolicy"]
     resources = [
-      "arn:aws:iam::${var.account_ids["data-production"]}:role/${var.resource_prefix}_user_*",
-      "arn:aws:iam::${var.account_ids["data-production"]}:role/${var.resource_prefix}_app_*"
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_user_*",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_app_*"
     ]
   }
   statement {
     sid       = "CanUpdateAssumeRolesPolicies"
     effect    = "Allow"
     actions   = ["iam:UpdateAssumeRolePolicy"]
-    resources = ["arn:aws:iam::${var.account_ids["data-production"]}:role/${var.resource_prefix}_user_*"]
+    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_user_*"]
   }
   statement {
     sid    = "CanCreateAndDeleteSSMParameters"
@@ -155,13 +155,13 @@ data "aws_iam_policy_document" "control_panel_api" {
       "ssm:DeleteParameters",
       "ssm:AddTagsToResource"
     ]
-    resources = ["arn:aws:ssm:*:${var.account_ids["data-production"]}:parameter/${var.resource_prefix}*"]
+    resources = ["arn:aws:ssm:*:${var.account_ids["analytical-platform-data-production"]}:parameter/${var.resource_prefix}*"]
   }
   statement {
     sid       = "CanListRoles"
     effect    = "Allow"
     actions   = ["iam:ListRoles"]
-    resources = ["arn:aws:iam::${var.account_ids["data-production"]}:role/*"]
+    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/*"]
   }
   statement {
     sid    = "CanManagePolicies"
@@ -179,7 +179,7 @@ data "aws_iam_policy_document" "control_panel_api" {
       "iam:DetachRolePolicy",
       "iam:AttachRolePolicy"
     ]
-    resources = ["arn:aws:iam::${var.account_ids["data-production"]}:policy/${var.resource_prefix}/group/*"]
+    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/${var.resource_prefix}/group/*"]
   }
   statement {
     sid    = "CanManageSecrets"
@@ -195,12 +195,12 @@ data "aws_iam_policy_document" "control_panel_api" {
       "secretsmanager:UpdateSecret",
       "secretsmanager:DeleteSecret"
     ]
-    resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${var.account_ids["data-production"]}:secret:alpha/apps/*"]
+    resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${var.account_ids["analytical-platform-data-production"]}:secret:alpha/apps/*"]
   }
 }
 
 resource "aws_iam_policy" "control_panel_api" {
-  provider = aws.data-production
+  provider = aws.analytical-platform-data-production
 
   name        = "prod_eks_control_panel_api"
   description = "Control Panel policy for ${var.resource_prefix} EKS cluster"
@@ -213,9 +213,9 @@ resource "aws_iam_policy" "control_panel_api" {
 
 data "aws_iam_policy_document" "cert_manager" {
   statement {
-    sid    = "certManagerGetChange"
-    effect = "Allow"
-    actions = ["route53:GetChange"]
+    sid       = "certManagerGetChange"
+    effect    = "Allow"
+    actions   = ["route53:GetChange"]
     resources = ["arn:aws:route53:::change/*"]
   }
   statement {
@@ -287,9 +287,9 @@ resource "aws_iam_policy" "cluster_autoscaler" {
 
 data "aws_iam_policy_document" "external_dns" {
   statement {
-    sid    = "externalDNSListHostedZones"
-    effect = "Allow"
-    actions = ["route53:ListHostedZones"]
+    sid       = "externalDNSListHostedZones"
+    effect    = "Allow"
+    actions   = ["route53:ListHostedZones"]
     resources = ["*"]
   }
 
@@ -324,7 +324,7 @@ data "aws_iam_policy_document" "external_secrets" {
       "secretsmanager:DescribeSecret",
       "secretsmanager:ListSecretVersionIds"
     ]
-    resources = ["arn:aws:secretsmanager:eu-west-1:${var.account_ids[var.environment]}:secret:*"]
+    resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${var.account_ids["analytical-platform-production"]}:secret:*"]
   }
 }
 
@@ -342,7 +342,7 @@ data "aws_iam_policy_document" "prometheus_remote_ingest" {
   statement {
     effect    = "Allow"
     actions   = ["sts:AssumeRole"]
-    resources = ["arn:aws:iam::${var.account_ids["management-production"]}:role/prometheus_central_ingest"]
+    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/prometheus_central_ingest"]
   }
 }
 
@@ -367,8 +367,8 @@ data "aws_iam_policy_document" "efs_csi_driver" {
     resources = ["*"]
   }
   statement {
-    effect = "Allow"
-    actions = ["elasticfilesystem:CreateAccessPoint"]
+    effect    = "Allow"
+    actions   = ["elasticfilesystem:CreateAccessPoint"]
     resources = ["*"]
     condition {
       test     = "StringLike"
@@ -377,8 +377,8 @@ data "aws_iam_policy_document" "efs_csi_driver" {
     }
   }
   statement {
-    effect = "Allow"
-    actions = ["elasticfilesystem:DeleteAccessPoint"]
+    effect    = "Allow"
+    actions   = ["elasticfilesystem:DeleteAccessPoint"]
     resources = ["*"]
     condition {
       test     = "StringEquals"
