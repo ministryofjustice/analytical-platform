@@ -10,15 +10,15 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
-    directory: "/.devcontainer/features/test"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "docker"
     directory: "/container-images/rshiny"
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
     directory: "/container-images/ubuntu/base"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/.devcontainer/features/test"
     schedule:
       interval: "daily"
   - package-ecosystem: "pip"
@@ -27,10 +27,6 @@ updates:
       interval: "daily"
   - package-ecosystem: "terraform"
     directory: "/terraform/application-migration"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "terraform"
-    directory: "/terraform/aws/analytical-platform-data-engineering-production/10ds"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
@@ -43,6 +39,34 @@ updates:
       interval: "daily"
   - package-ecosystem: "terraform"
     directory: "/terraform/aws/analytical-platform/baseline/modules/guardduty"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-data-engineering-production/10ds"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-data-production/artifact-repos"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-data-production/artifact-repos/modules/ecr"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-data-production/kops"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-development/cluster"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-management-production/cluster"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/aws/analytical-platform-production/cluster"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
