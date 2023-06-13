@@ -8,6 +8,7 @@ on: # yamllint disable-line rule:truthy
     paths:
       - .github/workflows/terraform-github.yml
       - terraform/github/**
+      - terraform/modules/**
       - configuration/ap_migration_apps.json
   push:
     branches:
@@ -15,6 +16,7 @@ on: # yamllint disable-line rule:truthy
     paths:
       - .github/workflows/terraform-github.yml
       - terraform/github/**
+      - terraform/modules/**
       - configuration/ap_migration_apps.json
 
 permissions: read-all
