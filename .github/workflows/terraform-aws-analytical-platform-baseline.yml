@@ -25,7 +25,7 @@ jobs:
       id-token: write
     uses: ./.github/workflows/reusable-terraform.yml
     with:
-      working-directory: terraform/global/baseline
+      working-directory: terraform/aws/analytical-platform/baseline
       aws-role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
       terraform-version: 1.5.0
       terraform-backend-config-role: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
