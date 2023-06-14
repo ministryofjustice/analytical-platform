@@ -27,6 +27,6 @@ jobs:
     with:
       working-directory: terraform/aws/analytical-platform-data-engineering-production/10ds
       aws-role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
-      terraform-version: 1.4.6
+      terraform-version: 1.5.0
       terraform-backend-config-role: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
     secrets: inherit
