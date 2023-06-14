@@ -7,16 +7,16 @@ on: # yamllint disable-line rule:truthy
       - main
     paths:
       - .github/workflows/terraform-github.yml
-      - terraform/github/**
-      - terraform/modules/**
+      - terraform/github/data-platform/**
+      - terraform/github/modules/**
       - configuration/ap_migration_apps.json
   push:
     branches:
       - main
     paths:
       - .github/workflows/terraform-github.yml
-      - terraform/github/**
-      - terraform/modules/**
+      - terraform/github/data-platform/**
+      - terraform/github/modules/**
       - configuration/ap_migration_apps.json
 
 permissions: read-all
@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: terraform/github
+        working-directory: terraform/github/data-platform
     permissions:
       contents: read
       id-token: write
@@ -102,7 +102,7 @@ jobs:
       id-token: write
     uses: ./.github/workflows/reusable-terraform.yml
     with:
-      working-directory: terraform/github
+      working-directory: terraform/github/data-platform
       aws-role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
       terraform-version: 1.4.5
       terraform-backend-config-role: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
