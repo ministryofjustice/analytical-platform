@@ -70,19 +70,19 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/terraform/github"
+    directory: "/terraform/github/data-platform"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/terraform/modules/contributor"
+    directory: "/terraform/github/modules/contributor"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/terraform/modules/repository"
+    directory: "/terraform/github/modules/repository"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/terraform/modules/team"
+    directory: "/terraform/github/modules/team"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
