@@ -87,7 +87,7 @@ jobs:
 
       - name: Validate Users
         run: |
-          bash ../../scripts/github/user-validation/main.sh
+          bash ../../../scripts/github/user-validation/main.sh
         env:
           GH_TOKEN: ${{ env.GH_TOKEN }}
 
