@@ -156,17 +156,6 @@ def refresh_table_partitions(
     )
 
 
-def get_schema_from_existing_table(
-    database_name: str, table_name: str, path_curated: str
-) -> dict:
-    metadata_mojap = GlueTable().generate_to_meta(database_name, table_name)
-    metadata_mojap.file_format = "parquet"
-    metadata_mojap.table_location = path_curated
-    gc = GlueConverter()
-    metadata_glue = gc.generate_from_meta(metadata_mojap, database_name=database_name)
-    return metadata_glue
-
-
 def does_partition_file_exist(
     bucket: str, db_name: str, table_name: str, timestamp: str
 ) -> bool:
@@ -372,6 +361,7 @@ def create_curated_athena_table(
             and existing_files == 0
         ):
             # only want to run this query if no table or data exist in s3
+            logging.info(f"This is a new data product. Creating {database_name}.{table_name}")
             start_query_execution_and_wait(
                 database_name,
                 account_id,
@@ -395,11 +385,6 @@ def create_curated_athena_table(
         )
 
         logging.info("Updating table {0}.{1}".format(database_name, table_name))
-        table_metadata = get_schema_from_existing_table(
-            database_name, table_name, curated_path
-        )
-        glue_client.delete_table(DatabaseName=database_name, Name=table_name)
-        glue_client.create_table(**table_metadata)
         refresh_table_partitions(database_name, table_name, account_id)
 
     elif not table_exists and partition_file_exists:
