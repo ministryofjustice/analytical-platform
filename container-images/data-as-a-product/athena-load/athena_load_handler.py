@@ -361,7 +361,9 @@ def create_curated_athena_table(
             and existing_files == 0
         ):
             # only want to run this query if no table or data exist in s3
-            logging.info(f"This is a new data product. Creating {database_name}.{table_name}")
+            logging.info(
+                f"This is a new data product. Creating {database_name}.{table_name}"
+            )
             start_query_execution_and_wait(
                 database_name,
                 account_id,
