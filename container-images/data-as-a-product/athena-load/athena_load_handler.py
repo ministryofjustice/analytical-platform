@@ -9,7 +9,7 @@ import pyarrow as pa
 import s3fs
 from botocore.exceptions import ClientError
 from mojap_metadata.converters.arrow_converter import ArrowConverter
-from mojap_metadata.converters.glue_converter import GlueConverter, GlueTable
+from mojap_metadata.converters.glue_converter import GlueConverter
 from pyarrow import parquet as pq
 
 logging.getLogger().setLevel(logging.INFO)
