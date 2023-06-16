@@ -1,6 +1,6 @@
 module "github-oidc-provider" {
 
-  source                 = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v2.1.0"
+  source                 = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.0"
   github_repositories    = ["ministryofjustice/data-platform:*", "ministryofjustice/analytical-platform-iam:*"]
   additional_permissions = data.aws_iam_policy_document.github_actions_iam_permissions.json
   role_name              = "github-actions-iam"
