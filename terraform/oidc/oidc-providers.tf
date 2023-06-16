@@ -55,7 +55,7 @@ data "aws_iam_policy_document" "github_actions_iam_permissions" {
 
 module "github-oidc-provider-data-ecr" {
 
-  source                 = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v2.1.0"
+  source                 = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.0"
   github_repositories    = formatlist("ministryofjustice/%s:*", concat([for app in local.migration_apps_map : app.name], local.additional_repos_for_ecr))
   additional_permissions = data.aws_iam_policy_document.github_actions_iam_permissions_data_ecr.json
   role_name              = "github-actions-ecr-oidc"
