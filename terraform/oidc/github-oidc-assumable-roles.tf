@@ -108,7 +108,7 @@ module "github_actions_roles_data_engineering" {
 
 module "github_actions_roles_data" {
   for_each            = { for role, config in local.oidc-roles : role => config if try(config.account, "management") == "data" }
-  source              = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v1.0.0"
+  source              = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
   github_repositories = each.value.repositories
   role_name           = "github-${each.key}"
   policy_jsons        = [data.aws_iam_policy_document.github_actions_role_permissions[each.key].json]
