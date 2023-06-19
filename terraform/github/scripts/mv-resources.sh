@@ -54,8 +54,7 @@ chmod +x $mv_commands_file
 
 echo "Generated mv commands in $mv_commands_file"
 
-# Push the states back to the respective backends
+# Commands to push the states back to their remote backends
 # (cd $source_dir && terraform init && terraform state push source.tfstate)
-# echo "Pushed state to $source_dir"
 # (cd $target_dir && terraform init && terraform state push target.tfstate)
-# echo "Pushed state to $target_dir"
+
