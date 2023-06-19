@@ -1,5 +1,5 @@
 ---
-name: Terraform - GitHub
+name: Terraform - GitHub - Data Platform
 
 on: # yamllint disable-line rule:truthy
   pull_request:
