@@ -48,7 +48,7 @@ data "aws_iam_role" "app_role_details" {
   name     = one(each.value.names)
 }
 
-data "github_repositories" "app_repositories" {
-  provider = github.ministryofjustice
-  query    = "org:ministryofjustice topic:aws topic:data-platform-apps topic:data-platform-apps-and-tools topic:helm topic:cloud-platform"
-}
+# data "github_team" "analytical_platform_team" {
+#   provider = github.ministryofjustice
+#   slug = "analytics-hq"
+# }
