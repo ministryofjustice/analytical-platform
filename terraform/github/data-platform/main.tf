@@ -166,4 +166,3 @@ module "data_platform_engineering_developer_team" {
   members     = distinct(concat(local.data_engineering_aws_developer_members, local.maintainers))
   ci          = local.ci_users
 }
-
