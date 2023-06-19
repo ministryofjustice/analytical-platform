@@ -58,7 +58,7 @@ module "core-team" {
   repositories = concat(
     [for repo in module.core : repo.repository.name],
     [for repo in module.data-platform : repo.repository.name],
-    data.github_repositories.app_repositories.full_names,
+    data.github_repositories.app_repositories.names,
     [module.data-platform-app-template.repository.name]
   )
 

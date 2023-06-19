@@ -7,10 +7,6 @@ data "aws_iam_session_context" "whoami" {
   arn      = data.aws_caller_identity.current.arn
 }
 
-data "aws_caller_identity" "data" {
-  provider = aws.data
-}
-
 data "aws_secretsmanager_secret" "github_token" {
   provider = aws.management
   name     = "github-token"
