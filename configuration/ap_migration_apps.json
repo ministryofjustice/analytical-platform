@@ -214,5 +214,11 @@
     "source_repo_name": "gifts-reporting-app",
     "description": "",
     "team": ["gifts-reporting-app-admin-team"]
+  },
+  {
+    "name": "ccmbpt-guidance",
+    "source_repo_name": "ccmbpt-guidance",
+    "description": "",
+    "team": ["ccmbpt-guidance-admin-team]"
   }
 ]
