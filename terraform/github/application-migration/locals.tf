@@ -20,7 +20,7 @@ locals {
     item => distinct([for i in local.team_repo_list : i.repo if i.team == item])
   }
 
-    # GitHub usernames for CI users
+  # GitHub usernames for CI users
   ci_users = [
     "mojanalytics",
     "moj-data-platform-robot"
