@@ -53,7 +53,10 @@ locals {
   ]
 
   tech_archs_members = [ # members of the data-tech-archs gh group
-    "AlexVilela"
+    "AlexVilela",
+    "jhpyke",
+    "tamsinforbes",
+    "murad-ali-MoJ"
   ]
 
   data_engineering_maintainers = [
