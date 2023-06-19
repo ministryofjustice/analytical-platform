@@ -48,7 +48,3 @@ data "aws_iam_role" "app_role_details" {
   name     = one(each.value.names)
 }
 
-# data "github_team" "analytical_platform_team" {
-#   provider = github.ministryofjustice
-#   slug = "analytics-hq"
-# }
