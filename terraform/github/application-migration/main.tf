@@ -44,3 +44,7 @@ module "migration_apps_teams" {
   repositories = each.value
   ci           = local.ci_users
 }
+
+output "team_repo_map" {
+  value = local.team_repo_map
+}
