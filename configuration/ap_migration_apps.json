@@ -38,7 +38,7 @@
   {
       "name": "cjsm-monitoring",
       "source_repo_name": "cjsm-monitoring",
-      "team": [],
+      "team": ["cjs_demand_prisons"],
       "description": ""
   },
   {
@@ -68,7 +68,7 @@
   {
       "name": "coroner-stat-tool-ext",
       "source_repo_name": "coroner-stat-tool-ext",
-      "team": [],
+      "team": ["cajs"],
       "description": ""
   },
   {
@@ -347,7 +347,7 @@
   {
       "name": "probation-staffing-model-dash-app",
       "source_repo_name": "probation-staffing-model-dash-app",
-      "team": [],
+      "team": ["swap"],
       "description": ""
   },
   {
