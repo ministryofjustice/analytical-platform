@@ -1,218 +1,440 @@
 [
   {
-    "name": "bentham-app",
-    "source_repo_name": "bentham-app",
-    "team": "bentham-app-admin-team",
-    "description": ""
+      "name": "anvil-access-tool",
+      "source_repo_name": "anvil-access-tool",
+      "team": ["anvil-access-tool-admin-team"],
+      "description": ""
   },
   {
-    "name": "ccma-gold-scorecards-app",
-    "source_repo_name": "ccma-gold-scorecards-app",
-    "team": "ccma-gold-scorecards-app-admin-team",
-    "description": ""
+      "name": "bentham-app",
+      "source_repo_name": "bentham-app",
+      "team": ["bentham-app-admin-team"],
+      "description": ""
   },
   {
-    "name": "ccpt",
-    "source_repo_name": "ccpt",
-    "team": "",
-    "description": ""
+      "name": "ccma-gold-scorecards-app",
+      "source_repo_name": "ccma-gold-scorecards-app",
+      "team": ["ccma-gold-scorecards-app-admin-team"],
+      "description": ""
   },
   {
-    "name": "cjsm-monitoring",
-    "source_repo_name": "cjsm-monitoring",
-    "team": "cjs-demand-prisons",
-    "description": ""
+      "name": "ccmbpt-analytics-app",
+      "source_repo_name": "ccmbpt-analytics-app",
+      "team": ["ccmbpt-analytics-admin-team"],
+      "description": ""
   },
   {
-    "name": "coroner-stat-tool-ext",
-    "source_repo_name": "coroner-stat-tool-ext",
-    "team": "cajs",
-    "description": ""
+      "name": "ccmbpt-guidance",
+      "source_repo_name": "ccmbpt-guidance",
+      "team": ["ccmbpt-guidance-admin-team"],
+      "description": ""
   },
   {
-    "name": "criminal-scenario-tool",
-    "source_repo_name": "criminal-scenario-tool",
-    "team": "criminal-scenario-tool-administrators",
-    "description": ""
+      "name": "ccpt",
+      "source_repo_name": "ccpt",
+      "team": ["moj-analytical-services"],
+      "description": ""
   },
   {
-    "name": "crown-flow-explorer",
-    "source_repo_name": "crown-flow-explorer",
-    "team": "",
-    "description": ""
+      "name": "cjsm-email-traffic-app",
+      "source_repo_name": "cjsm-email-traffic-app",
+      "team": ["moj-analytical-services"],
+      "description": ""
   },
   {
-    "name": "defcalc",
-    "source_repo_name": "defcalc",
-    "team": "",
-    "description": ""
+      "name": "cjsm-monitoring",
+      "source_repo_name": "cjsm-monitoring",
+      "team": ["cjs_demand_prisons"],
+      "description": ""
   },
   {
-    "name": "gifts-app",
-    "source_repo_name": "gifts-app",
-    "team": "gifts-app-admin-team",
-    "description": ""
+      "name": "cjsm-networkanalysis",
+      "source_repo_name": "cjsm-networkanalysis",
+      "team": ["moj-analytical-services"],
+      "description": ""
   },
   {
-    "name": "gifts-auth-app",
-    "source_repo_name": "gifts-auth-app",
-    "team": "gifts-auth-app-admin-team",
-    "description": ""
+      "name": "commuter-webapp-contracts",
+      "source_repo_name": "commuter-webapp-contracts",
+      "team": ["commuter-webapp-contracts-admin-team"],
+      "description": ""
   },
   {
-    "name": "gold-scorecard-form",
-    "source_repo_name": "gold-scorecard-form",
-    "team": "gold-scorecard-form-admin-team",
-    "description": ""
+      "name": "commuter-webapp-familyman",
+      "source_repo_name": "commuter-webapp-familyman",
+      "team": ["data-engineers"],
+      "description": ""
   },
   {
-    "name": "gpc-anomalies",
-    "source_repo_name": "gpc-anomalies",
-    "team": "gpc-anomalies-admin-team",
-    "description": ""
+      "name": "commuter-webapp-xhibit",
+      "source_repo_name": "commuter-webapp-xhibit",
+      "team": [],
+      "description": ""
   },
   {
-    "name": "hlt-portal",
-    "source_repo_name": "hlt-portal",
-    "team": "hlt-portal-admin-team",
-    "description": ""
+      "name": "coroner-stat-tool-ext",
+      "source_repo_name": "coroner-stat-tool-ext",
+      "team": ["cajs"],
+      "description": ""
   },
   {
-    "name": "hmcts-ccpt",
-    "source_repo_name": "hmcts_ccpt",
-    "team": "",
-    "description": ""
+      "name": "criminal-scenario-tool",
+      "source_repo_name": "criminal-scenario-tool",
+      "team": ["criminal-scenario-tool-administrators"],
+      "description": ""
   },
   {
-    "name": "hmpps-exec-stats",
-    "source_repo_name": "hmpps-exec-stats",
-    "team": "",
-    "description": ""
+      "name": "crown-flow-explorer",
+      "source_repo_name": "crown-flow-explorer",
+      "team": ["crown-flow-explorer-admin-team"],
+      "description": ""
   },
   {
-    "name": "invoice-nlp-app",
-    "source_repo_name": "invoice_nlp_app",
-    "team": "",
-    "description": ""
+      "name": "crown-sitting-days",
+      "source_repo_name": "crown-sitting-days",
+      "team": [],
+      "description": ""
   },
   {
-    "name": "jdl-visulizer",
-    "source_repo_name": "jdl-visulizer",
-    "team": "justice-data-lab",
-    "description": ""
+      "name": "data-discovery",
+      "source_repo_name": "data-discovery",
+      "team": ["data-engineers"],
+      "description": ""
   },
   {
-    "name": "model-redevelopment-website",
-    "source_repo_name": "model-redevelopment-website",
-    "team": "model-redevelopment",
-    "description": ""
+      "name": "defcalc",
+      "source_repo_name": "defcalc",
+      "team": ["defcalc-admin-team"],
+      "description": ""
   },
   {
-    "name": "pay-gap-app",
-    "source_repo_name": "pay-gap-app",
-    "team": "pay-gap-app-admin-team",
-    "description": ""
+      "name": "dmiu-image-matching",
+      "source_repo_name": "dmiu-image-matching",
+      "team": [],
+      "description": ""
   },
   {
-    "name": "probation-mi-dashboard",
-    "source_repo_name": "probation-mi-dashboard",
-    "team": "",
-    "description": ""
+      "name": "drug-conveyancing-app",
+      "source_repo_name": "drug-conveyancing-app",
+      "team": ["drug-conveyancing-app-admin-team"],
+      "description": ""
   },
   {
-    "name": "probation-staffing-model-dash-app",
-    "source_repo_name": "probation-staffing-model-dash-app",
-    "team": "swap",
-    "description": ""
+      "name": "environ-surveillance-hub",
+      "source_repo_name": "environ-surveillance-hub",
+      "team": [],
+      "description": ""
   },
   {
-    "name": "probation-recruitment-app",
-    "source_repo_name": "probation_recruitment_app",
-    "team": "probation-recruitment-app-admin-team",
-    "description": ""
+      "name": "gifts-app",
+      "source_repo_name": "gifts-app",
+      "team": ["gifts-app-admin-team"],
+      "description": ""
   },
   {
-    "name": "rr-strategy",
-    "source_repo_name": "rr_strategy",
-    "team": "rr-strategy-admin-team",
-    "description": ""
+      "name": "gifts-auth-app",
+      "source_repo_name": "gifts-auth-app",
+      "team": ["gifts-auth-app-admin-team"],
+      "description": ""
   },
   {
-    "name": "safety-diagnostic-tool",
-    "source_repo_name": "safety-diagnostic-tool",
-    "team": "prison-data-science",
-    "description": ""
+      "name": "gifts-reporting-app",
+      "source_repo_name": "gifts-reporting-app",
+      "team": ["gifts-reporting-app-admin-team"],
+      "description": ""
   },
   {
-    "name": "sat",
-    "source_repo_name": "sat",
-    "team": "",
-    "description": ""
+      "name": "gold-scorecard-form",
+      "source_repo_name": "gold-scorecard-form",
+      "team": ["gold-scorecard-form-admin-team"],
+      "description": ""
   },
   {
-    "name": "hmpps-hr-dashboard",
-    "source_repo_name": "hmpps-hr-dashboard",
-    "description": "",
-    "team": ["hmpps-hr-dashboard-admin-team"]
+      "name": "gold-scorecard-form-dev",
+      "source_repo_name": "gold-scorecard-form-dev",
+      "team": ["gold-scorecard-form-dev-admin-team"],
+      "description": ""
   },
   {
-    "name": "judicial-reviews-app",
-    "source_repo_name": "judicial-reviews-app",
-    "description": "",
-    "team": ["CAJS"]
+      "name": "gold-scorecard-form-dev",
+      "source_repo_name": "gold-scorecard-form-dev",
+      "team": ["gold-scorecard-form-dev-admin-team"],
+      "description": ""
   },
   {
-    "name": "judicial-wm2",
-    "source_repo_name": "judicial-wm2",
-    "description": "",
-    "team": ["judicial-wm2-admin-team"]
+      "name": "gpc-anomalies",
+      "source_repo_name": "gpc-anomalies",
+      "team": ["gpc-anomalies-admin-team"],
+      "description": ""
   },
   {
-    "name": "ltc-capabilites-app",
-    "source_repo_name": "ltc-capabilites-app",
-    "description": "",
-    "team": ["ltc-capabilites-app-admin-team"]
+      "name": "hlt-portal",
+      "source_repo_name": "hlt-portal",
+      "team": ["hlt-portal-admin-team"],
+      "description": ""
   },
   {
-    "name": "mlp-app",
-    "source_repo_name": "mlp-app",
-    "description": "",
-    "team": ["CAJS"]
+      "name": "hmcts-ccpt",
+      "source_repo_name": "hmcts_ccpt",
+      "team": ["hmcts-ccpt-admin-team"],
+      "description": ""
   },
   {
-    "name": "moj-officehub-locator-webapp",
-    "source_repo_name": "moj-officehub-locator-webapp",
-    "description": "",
-    "team": ["moj-officehub-locator-webapp-admin-team"]
+      "name": "hmpps-exec-stats",
+      "source_repo_name": "hmpps-exec-stats",
+      "team": ["hmpps-exec-stats-admin-team"],
+      "description": ""
   },
   {
-    "name": "pfg-dash-moj",
-    "source_repo_name": "PfG-dash-MoJ",
-    "description": "",
-    "team": ["pfg-dash-moj-admin-team","pfg-dash-moj-write-team"]
+      "name": "hmpps-hr-dashboard",
+      "source_repo_name": "hmpps-hr-dashboard",
+      "team": ["hmpps-hr-dashboard-admin-team"],
+      "description": ""
   },
   {
-    "name": "regime-dashboard",
-    "source_repo_name": "regime_dashboard",
-    "description": "",
-    "team": "regime-dashboard-admin-team"
+      "name": "hr-policy-document-manager",
+      "source_repo_name": "hr-policy-document-manager",
+      "team": [],
+      "description": ""
   },
   {
-    "name": "people-data-self-serve",
-    "source_repo_name": "people-data-self-serve",
-    "description": "",
-    "team": "people-data-self-serve-admin-team"
+      "name": "hr-policy-search-tool",
+      "source_repo_name": "hr_policy_search_tool",
+      "team": ["deds"],
+      "description": ""
   },
   {
-    "name": "prisons-ready-reckoner-app",
-    "source_repo_name": "prisonsreadyreckoner",
-    "description": "",
-    "team": ["mh_cjs_priority_projects"]
+      "name": "intel-app-homepage",
+      "source_repo_name": "intel-app-homepage",
+      "team": ["intel-app-homepage-admin-team"],
+      "description": ""
   },
   {
-    "name": "gifts-reporting-app",
-    "source_repo_name": "gifts-reporting-app",
-    "description": "",
-    "team": ["gifts-reporting-app-admin-team"]
+      "name": "interventions-deploy",
+      "source_repo_name": "interventions-deploy",
+      "team": ["probation-ds-risk-leads"],
+      "description": ""
+  },
+  {
+      "name": "invoice-nlp-app",
+      "source_repo_name": "invoice_nlp_app",
+      "team": ["invoice-nlp-app-admin-team"],
+      "description": ""
+  },
+  {
+      "name": "jdl-visulizer",
+      "source_repo_name": "jdl-visulizer",
+      "team": ["justice-data-lab"],
+      "description": ""
+  },
+  {
+      "name": "judicial-reviews-app",
+      "source_repo_name": "judicial-reviews-app",
+      "team": ["cajs"],
+      "description": ""
+  },
+  {
+      "name": "judicial-wm2",
+      "source_repo_name": "judicial-wm2",
+      "team": ["team-jwcm"],
+      "description": ""
+  },
+  {
+      "name": "legal-aid-tools",
+      "source_repo_name": "legalaidtools",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "ltc-capabilites-app",
+      "source_repo_name": "ltc-capabilites-app",
+      "team": ["ltc-capabilites-app-admin-team"],
+      "description": ""
+  },
+  {
+      "name": "mags-returners-sankey-s3",
+      "source_repo_name": "mags-returners-sankey-s3",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "matrix-booking",
+      "source_repo_name": "matrixbooking",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "mlp-app",
+      "source_repo_name": "mlp-app",
+      "team": ["cajs"],
+      "description": ""
+  },
+  {
+      "name": "mmp-web-app",
+      "source_repo_name": "mmp-web-app",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "model-redevelopment-website",
+      "source_repo_name": "model-redevelopment-website",
+      "team": ["model-redevelopment"],
+      "description": ""
+  },
+  {
+      "name": "moj-officehub-locator-webapp",
+      "source_repo_name": "moj-officehub-locator-webapp",
+      "team": ["moj-officehub-locator-webapp-admin-team"],
+      "description": ""
+  },
+  {
+      "name": "novel-drug-words-app",
+      "source_repo_name": "novel-drug-words-app",
+      "team": ["novel-drug-words-admin-team"],
+      "description": ""
+  },
+  {
+      "name": "opg-lpa-dashboard",
+      "source_repo_name": "opg-lpa-dashboard",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "opg-mi-dashdemo",
+      "source_repo_name": "opg-mi-dashdemo",
+      "team": ["opg-mi-dashdemo-admin-team"],
+      "description": ""
+  },
+  {
+      "name": "pay-gap-app",
+      "source_repo_name": "pay-gap-app",
+      "team": ["pay-gap-app-admin-team"],
+      "description": ""
+  },
+  {
+      "name": "people-data-self-serve",
+      "source_repo_name": "people-data-self-serve",
+      "team": ["people-data-self-serve-admin-team"],
+      "description": ""
+  },
+  {
+      "name": "people-survey-engagement-prediction-app",
+      "source_repo_name": "people-survey-engagement-prediction-app",
+      "team": ["people-analytics"],
+      "description": ""
+  },
+  {
+      "name": "people-survey-prediction-tool",
+      "source_repo_name": "people-survey-prediction-tool",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "people-survey-dashboard",
+      "source_repo_name": "people_survey_dashboard",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "pfg-dash-moj",
+      "source_repo_name": "pfg-dash-moj",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "pi-form",
+      "source_repo_name": "pi_form",
+      "team": ["cajs"],
+      "description": ""
+  },
+  {
+      "name": "pq-tool",
+      "source_repo_name": "pq-tool",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "prison-network-app",
+      "source_repo_name": "prison-network-app",
+      "team": ["prison-network-app-admin-team"],
+      "description": ""
+  },
+  {
+      "name": "prison-visitor-app",
+      "source_repo_name": "prison-visitor-app",
+      "team": ["prison-visitor-app-admin-team"],
+      "description": ""
+  },
+  {
+      "name": "prisons-ready-reckoner-app",
+      "source_repo_name": "prisonsreadyreckonerapp",
+      "team": ["mh_cjs_priority_projects"],
+      "description": ""
+  },
+  {
+      "name": "probation-mi-dashboard",
+      "source_repo_name": "probation-mi-dashboard",
+      "team": ["probation-mi-dashboard-admin-team"],
+      "description": ""
+  },
+  {
+      "name": "probation-staffing-model-dash-app",
+      "source_repo_name": "probation-staffing-model-dash-app",
+      "team": ["swap"],
+      "description": ""
+  },
+  {
+      "name": "regime-dashboard",
+      "source_repo_name": "regime_dashboard",
+      "team": ["moj-analytical-services"],
+      "description": ""
+  },
+  {
+      "name": "remuneration-tool-app",
+      "source_repo_name": "remuneration-tool-app",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "rr-strategy",
+      "source_repo_name": "rr_strategy",
+      "team": ["rr-strategy-admin-team"],
+      "description": ""
+  },
+  {
+      "name": "safety-diagnostic-tool",
+      "source_repo_name": "safety-diagnostic-tool",
+      "team": ["prison-data-science"],
+      "description": ""
+  },
+  {
+      "name": "sat",
+      "source_repo_name": "sat",
+      "team": ["sat-admin-team"],
+      "description": ""
+  },
+  {
+      "name": "segmentation-tool",
+      "source_repo_name": "segmentation-tool",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "statistics-explorer",
+      "source_repo_name": "statistics-explorer",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "stats-web-analytics",
+      "source_repo_name": "stats-web-analytics",
+      "team": [],
+      "description": ""
+  },
+  {
+      "name": "workforce-planning-app",
+      "source_repo_name": "workforce-planning-app",
+      "team": [],
+      "description": ""
   }
 ]
