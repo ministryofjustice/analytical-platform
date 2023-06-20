@@ -232,7 +232,8 @@
       "name": "legal-aid-tools",
       "source_repo_name": "legalaidtools",
       "team": [],
-      "description": ""
+      "description": "",
+      "role_name_suffix": "legalaidtools"
   },
   {
       "name": "ltc-capabilites-app",
@@ -250,7 +251,8 @@
       "name": "matrix-booking",
       "source_repo_name": "matrixbooking",
       "team": [],
-      "description": ""
+      "description": "",
+      "role_name_suffix": "matrixbooking"
   },
   {
       "name": "mlp-app",
