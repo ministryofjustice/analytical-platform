@@ -39,7 +39,7 @@ data "aws_secretsmanager_secret_version" "github_token" {
 data "aws_iam_roles" "data_app_roles" {
   provider   = aws.data
   for_each   = local.migration_apps_map
-  name_regex = format("alpha_app_%s$", each.key)
+  name_regex = try(format("alpha_app_%s$", each.value.role_name_suffix), format("alpha_app_%s$", each.key))
 }
 
 data "aws_iam_role" "app_role_details" {
