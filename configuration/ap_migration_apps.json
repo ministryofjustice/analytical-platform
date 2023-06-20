@@ -109,12 +109,6 @@
       "description": ""
   },
   {
-      "name": "dmiu-image-matching",
-      "source_repo_name": "dmiu-image-matching",
-      "team": [],
-      "description": ""
-  },
-  {
       "name": "drug-conveyancing-app",
       "source_repo_name": "drug-conveyancing-app",
       "team": ["drug-conveyancing-app-admin-team"],
