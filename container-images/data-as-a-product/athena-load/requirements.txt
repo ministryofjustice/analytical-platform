@@ -3,7 +3,7 @@ boto3==1.26.142
 botocore==1.29.142
 dataengineeringutils3==1.4.3
 Deprecated==1.2.14
-fsspec==2023.5.0
+fsspec==2023.6.0
 jmespath==1.0.1
 jsonschema==4.17.3
 mojap-metadata==1.12.2
