@@ -99,7 +99,8 @@
       "name": "data-discovery",
       "source_repo_name": "data-discovery",
       "team": ["data-engineers"],
-      "description": ""
+      "description": "",
+      "role_name_suffix": "data-discovery-tool"
   },
   {
       "name": "defcalc",
