@@ -14,11 +14,19 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
+    directory: "/container-images/data-as-a-product/athena-load"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
     directory: "/container-images/rshiny"
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
     directory: "/container-images/ubuntu/base"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pip"
+    directory: "/container-images/data-as-a-product/athena-load"
     schedule:
       interval: "daily"
   - package-ecosystem: "pip"
