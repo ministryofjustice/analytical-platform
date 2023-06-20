@@ -14,8 +14,8 @@ locals {
   ])
 
   unique_old_teams_names = distinct(flatten(concat(
-    [for app in local.ap_migration_apps : app.team],
-    [for team_repo in local.team_repo_list : team_repo.team]
+    [for app in local.ap_migration_apps : [for team in app.team : lower(team)]],
+    [for team_repo in local.team_repo_list : lower(team_repo.team)]
   )))
 
   team_repo_map = {
