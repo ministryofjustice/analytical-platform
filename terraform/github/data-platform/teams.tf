@@ -72,7 +72,8 @@ locals {
     "pjxcog",
     "sivabathina2",
     "hemeshpatel-moj",
-    "ChikC" # Chike Chinukwue
+    "ChikC",     # Chike Chinukwue
+    "hrahim-moj" # Haymon
   ]
 
   # DATA-ENGINEERING-AWS GITHUB GROUP WITH FULL AWS ACCESS
