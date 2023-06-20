@@ -1,11 +1,5 @@
 [
   {
-      "name": "anvil-access-tool",
-      "source_repo_name": "anvil-access-tool",
-      "team": ["anvil-access-tool-admin-team"],
-      "description": ""
-  },
-  {
       "name": "bentham-app",
       "source_repo_name": "bentham-app",
       "team": ["bentham-app-admin-team"],
@@ -44,7 +38,7 @@
   {
       "name": "cjsm-monitoring",
       "source_repo_name": "cjsm-monitoring",
-      "team": ["cjs_demand_prisons"],
+      "team": [],
       "description": ""
   },
   {
@@ -74,7 +68,7 @@
   {
       "name": "coroner-stat-tool-ext",
       "source_repo_name": "coroner-stat-tool-ext",
-      "team": ["cajs"],
+      "team": [],
       "description": ""
   },
   {
@@ -160,12 +154,6 @@
       "name": "hmcts-ccpt",
       "source_repo_name": "hmcts_ccpt",
       "team": ["hmcts-ccpt-admin-team"],
-      "description": ""
-  },
-  {
-      "name": "hmpps-exec-stats",
-      "source_repo_name": "hmpps-exec-stats",
-      "team": ["hmpps-exec-stats-admin-team"],
       "description": ""
   },
   {
@@ -273,12 +261,6 @@
       "description": ""
   },
   {
-      "name": "novel-drug-words-app",
-      "source_repo_name": "novel-drug-words-app",
-      "team": ["novel-drug-words-app-admin-team", "deds"],
-      "description": ""
-  },
-  {
       "name": "opg-lpa-dashboard",
       "source_repo_name": "opg-lpa-dashboard",
       "team": [],
@@ -365,7 +347,7 @@
   {
       "name": "probation-staffing-model-dash-app",
       "source_repo_name": "probation-staffing-model-dash-app",
-      "team": ["swap"],
+      "team": [],
       "description": ""
   },
   {
