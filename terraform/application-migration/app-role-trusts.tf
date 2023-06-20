@@ -11,6 +11,9 @@ data "aws_iam_role" "app_role_details" {
   name     = one(each.value.names)
 }
 
+output "role_details" {
+  value = data.aws_iam_roles.data_app_roles
+}
 # The policy is derived using the following naming convention:
 # namespace: "data-platform-app-<new repo name>-(prod|dev)
 # serviceaccount: <namespace>
