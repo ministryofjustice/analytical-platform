@@ -2,7 +2,7 @@
 data "aws_iam_roles" "data_app_roles" {
   provider   = aws.data
   for_each   = local.migration_apps_map
-  name_regex = try(format("alpha_app_%s$", each.value.role_name_suffix), format("alpha_app_(%s|%s)$", each.value.source_repo_name, each.key))
+  name_regex = try(format("alpha_app_%s$", each.value.role_name_suffix), coalesce(format("alpha_app_%s$", each.key), format("alpha_app_%s$", each.value.source_repo_name)))
 }
 
 data "aws_iam_role" "app_role_details" {
