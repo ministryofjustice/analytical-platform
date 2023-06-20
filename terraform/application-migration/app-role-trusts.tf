@@ -2,7 +2,7 @@
 data "aws_iam_roles" "data_app_roles" {
   provider   = aws.data
   for_each   = local.migration_apps_map
-  name_regex = format("alpha_app_%s$", each.key)
+  name_regex = try(format("alpha_app_%s$", each.value.role_name_suffix), format("alpha_app_%s$", each.key))
 }
 
 data "aws_iam_role" "app_role_details" {
@@ -10,7 +10,6 @@ data "aws_iam_role" "app_role_details" {
   for_each = data.aws_iam_roles.data_app_roles
   name     = one(each.value.names)
 }
-
 # The policy is derived using the following naming convention:
 # namespace: "data-platform-app-<new repo name>-(prod|dev)
 # serviceaccount: <namespace>

@@ -9,15 +9,24 @@ locals {
       for team in details.teams : {
         team = team.name
         repo = one([for app in local.migration_apps_map : app.name if app.source_repo_name == details.name])
-      }
+      } if team.name != "everyone"
     ]
   ])
 
-  unique_old_teams_names = distinct([for item in local.team_repo_list : item.team])
+  unique_old_teams_names = distinct(flatten(concat(
+    [for app in local.ap_migration_apps : app.team],
+    [for team_repo in local.team_repo_list : team_repo.team]
+  )))
 
   team_repo_map = {
-    for item in local.unique_old_teams_names :
-    item => distinct([for i in local.team_repo_list : i.repo if i.team == item])
+    for team_name in local.unique_old_teams_names : team_name => distinct(concat(flatten([
+      for app in local.ap_migration_apps :
+      contains(app.team, team_name) ? [app.name] : []
+      ]), flatten([
+      for team_repo in local.team_repo_list :
+      team_repo.repo != null && team_repo.team == team_name ? [team_repo.repo] : []
+    ])))
+
   }
 
   # GitHub usernames for CI users
