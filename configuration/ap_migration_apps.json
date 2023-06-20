@@ -20,7 +20,7 @@
   {
       "name": "ccmbpt-analytics-app",
       "source_repo_name": "ccmbpt-analytics-app",
-      "team": ["ccmbpt-analytics-admin-team"],
+      "team": ["CCMBPT", "ccmbpt-analytics-app-admin-team"],
       "description": ""
   },
   {
@@ -32,13 +32,13 @@
   {
       "name": "ccpt",
       "source_repo_name": "ccpt",
-      "team": ["moj-analytical-services"],
-      "description": ""
+      "team": ["ccpt-admin-team"],
+      "description": "Crown Court Performance Dashboard"
   },
   {
       "name": "cjsm-email-traffic-app",
       "source_repo_name": "cjsm-email-traffic-app",
-      "team": ["moj-analytical-services"],
+      "team": ["deds"],
       "description": ""
   },
   {
@@ -50,7 +50,7 @@
   {
       "name": "cjsm-networkanalysis",
       "source_repo_name": "cjsm-networkanalysis",
-      "team": ["moj-analytical-services"],
+      "team": ["deds"],
       "description": ""
   },
   {
@@ -275,7 +275,7 @@
   {
       "name": "novel-drug-words-app",
       "source_repo_name": "novel-drug-words-app",
-      "team": ["novel-drug-words-admin-team"],
+      "team": ["novel-drug-words-app-admin-team", "deds"],
       "description": ""
   },
   {
@@ -353,7 +353,7 @@
   {
       "name": "prisons-ready-reckoner-app",
       "source_repo_name": "prisonsreadyreckonerapp",
-      "team": ["mh_cjs_priority_projects"],
+      "team": ["mh_cjs_priority_projects", "model-redevelopment"],
       "description": ""
   },
   {
@@ -371,7 +371,7 @@
   {
       "name": "regime-dashboard",
       "source_repo_name": "regime_dashboard",
-      "team": ["moj-analytical-services"],
+      "team": ["regime-dashboard-admin-team"],
       "description": ""
   },
   {
