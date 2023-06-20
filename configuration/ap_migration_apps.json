@@ -150,18 +150,6 @@
       "description": ""
   },
   {
-      "name": "gold-scorecard-form-dev",
-      "source_repo_name": "gold-scorecard-form-dev",
-      "team": ["gold-scorecard-form-dev-admin-team"],
-      "description": ""
-  },
-  {
-      "name": "gold-scorecard-form-dev",
-      "source_repo_name": "gold-scorecard-form-dev",
-      "team": ["gold-scorecard-form-dev-admin-team"],
-      "description": ""
-  },
-  {
       "name": "gpc-anomalies",
       "source_repo_name": "gpc-anomalies",
       "team": ["gpc-anomalies-admin-team"],
