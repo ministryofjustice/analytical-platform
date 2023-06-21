@@ -17,6 +17,11 @@ module "eks" {
       most_recent       = true
       resolve_conflicts = "OVERWRITE"
     }
+    aws-ebs-csi-driver = {
+      most_recent              = true
+      resolve_conflicts        = "OVERWRITE"
+      service_account_role_arn = module.ebs_csi_driver_iam_role.iam_role_arn
+    }
     kube-proxy = {
       most_recent       = true
       resolve_conflicts = "OVERWRITE"
