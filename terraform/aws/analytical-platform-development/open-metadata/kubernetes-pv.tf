@@ -15,7 +15,7 @@ resource "kubernetes_persistent_volume" "airflow_dags" {
     persistent_volume_source {
       csi {
         driver        = "efs.csi.aws.com"
-        volume_handle = "${module.efs.id}:/airflow-dags"
+        volume_handle = "${module.efs.id}::${module.efs.access_points["airflow_dags"].id}"
       }
     }
   }
@@ -38,7 +38,7 @@ resource "kubernetes_persistent_volume" "airflow_logs" {
     persistent_volume_source {
       csi {
         driver        = "efs.csi.aws.com"
-        volume_handle = "${module.efs.id}:/airflow-logs"
+        volume_handle = "${module.efs.id}::${module.efs.access_points["airflow_logs"].id}"
       }
     }
   }
