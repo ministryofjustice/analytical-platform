@@ -68,7 +68,10 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        env:
+          ECR_REGISTRY: ${{ env.ACCOUNT_NUMBER }}.dkr.ecr.eu-west-2.amazonaws.com
+        run: |
+          aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${env:ECR_REGISTRY}
 
       - name: Build, tag, and push docker image to Amazon ECR
         shell: bash
