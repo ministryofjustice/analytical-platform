@@ -11,7 +11,7 @@ resource "kubernetes_persistent_volume" "airflow_dags" {
     }
     access_modes                     = ["ReadWriteMany"]
     persistent_volume_reclaim_policy = "Retain"
-    storage_class_name               = ""
+    storage_class_name               = "efs-sc"
     persistent_volume_source {
       csi {
         driver        = "efs.csi.aws.com"
@@ -34,7 +34,7 @@ resource "kubernetes_persistent_volume" "airflow_logs" {
     }
     access_modes                     = ["ReadWriteMany"]
     persistent_volume_reclaim_policy = "Retain"
-    storage_class_name               = ""
+    storage_class_name               = "efs-sc"
     persistent_volume_source {
       csi {
         driver        = "efs.csi.aws.com"

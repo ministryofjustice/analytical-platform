@@ -13,7 +13,7 @@ resource "kubernetes_persistent_volume_claim" "airflow_dags" {
         storage = "10Gi"
       }
     }
-    storage_class_name = ""
+    storage_class_name = "efs-sc"
     volume_name        = kubernetes_persistent_volume.airflow_dags.metadata[0].name
   }
   wait_until_bound = false
@@ -34,7 +34,7 @@ resource "kubernetes_persistent_volume_claim" "airflow_logs" {
         storage = "5Gi"
       }
     }
-    storage_class_name = ""
+    storage_class_name = "efs-sc"
     volume_name        = kubernetes_persistent_volume.airflow_logs.metadata[0].name
   }
   wait_until_bound = false
