@@ -67,5 +67,5 @@ jobs:
       - name: Build, tag, and push docker image to Amazon ECR
         shell: bash
         run: |
-          docker build -t ${{ env.ACCOUNT_NUMBER }}.dkr.ecr.eu-west-2.amazonaws.com/${{ env.name }}:${{ env.version }} .
+          docker build -t ${{ env.ACCOUNT_NUMBER }}.dkr.ecr.eu-west-2.amazonaws.com/${{ env.name }}:${{ env.version }} container-images/data-as-a-product/athena-load
           docker push ${{ env.ACCOUNT_NUMBER }}.dkr.ecr.eu-west-2.amazonaws.com/${{ env.name }}:${{ env.version }}
