@@ -96,6 +96,7 @@ resource "helm_release" "openmetadata" {
       {
         host                = "open-metadata.data-platform.moj.woffenden.dev"
         acm_certificate_arn = aws_acm_certificate_validation.open_metadata.certificate_arn
+        eks_role_arn        = module.open_metadata_iam_role.iam_role_arn
       }
     )
   ]

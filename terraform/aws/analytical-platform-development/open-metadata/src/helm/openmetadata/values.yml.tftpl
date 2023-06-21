@@ -2,6 +2,9 @@
 global:
   openmetadata:
     host: ${host}
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: ${eks_role_arn}
 service:
   type: NodePort
 ingress:

@@ -74,3 +74,17 @@ module "external_dns_iam_role" {
     }
   }
 }
+
+module "open_metadata_iam_role" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.20.0"
+
+  role_name_prefix = "open-metadata"
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${kubernetes_namespace.open_metadata.metadata[0].name}:openmetadata"]
+    }
+  }
+}
