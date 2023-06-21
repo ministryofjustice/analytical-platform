@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - build-and-push-to-ecr-workflow
     paths:
       - .github/workflows/build-and-push-to-ecr-athena-load-image.yml
       - container-images/data-as-a-product/athena-load/**
