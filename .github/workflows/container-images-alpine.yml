@@ -72,7 +72,7 @@ jobs:
 
       - name: Scan image
         id: scan_image_anchore
-        uses: anchore/scan-action@4be3c24559b430723e51858969965e163b196957 # v3.3.5
+        uses: anchore/scan-action@24fd7c9060f3c96848dd1929fac8d796fb5ae4b4 # v3.3.6
         with:
           image: ${{ env.name }}:${{ env.version }}-amd64
           severity-cutoff: critical
@@ -88,7 +88,7 @@ jobs:
 
       - name: Scan SBOM
         id: scan_sbom
-        uses: anchore/scan-action@4be3c24559b430723e51858969965e163b196957 # v3.3.5
+        uses: anchore/scan-action@24fd7c9060f3c96848dd1929fac8d796fb5ae4b4 # v3.3.6
         with:
           sbom: sbom-x86_64.spdx.json
           severity-cutoff: critical
