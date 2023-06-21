@@ -7,7 +7,7 @@ locals {
   team_repo_list = flatten([
     for repo, details in data.github_repository_teams.migration_apps_repo_owners : [
       for team in details.teams : {
-        team = team.name
+        team = lower(team.name)
         repo = one([for app in local.migration_apps_map : app.name if app.source_repo_name == details.name])
       } if team.name != "everyone"
     ]
