@@ -32,6 +32,12 @@ module "eks" {
     }
   }
 
+  eks_managed_node_group_defaults = {
+    iam_role_additional_policies = {
+      AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    }
+  }
+
   eks_managed_node_groups = {
     main = {
       min_size       = 1
