@@ -282,8 +282,8 @@ def infer_glue_schema(
 
     if file_type == "csv" and has_headers:
         metadata_glue["TableInput"]["Parameters"]["skip.header.line.count"] = "1"
-        metadata_glue['TableInput']['StorageDescriptor']['SerdeInfo'][
-            'SerializationLibrary'
+        metadata_glue["TableInput"]["StorageDescriptor"]["SerdeInfo"][
+            "SerializationLibrary"
         ] = "org.apache.hadoop.hive.serde2.OpenCSVSerde"
 
     return metadata_glue

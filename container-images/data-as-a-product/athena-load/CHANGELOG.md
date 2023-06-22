@@ -10,8 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Changed the SerializationLibrary in serdeinfo of glue table metadata from LazySimpleSerDe to OpenCSVSerde
-
+- Changed the SerializationLibrary in serdeinfo of glue table metadata from
+LazySimpleSerDeto OpenCSVSerde
 
 ## [0.0.1] - 2023-06-21
 
