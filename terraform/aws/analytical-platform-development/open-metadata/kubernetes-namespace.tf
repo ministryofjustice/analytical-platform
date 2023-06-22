@@ -15,3 +15,9 @@ resource "kubernetes_namespace" "open_metadata" {
     name = "open-metadata"
   }
 }
+
+resource "kubernetes_namespace" "jupyterhub" {
+  metadata {
+    name = "jupyterhub"
+  }
+}

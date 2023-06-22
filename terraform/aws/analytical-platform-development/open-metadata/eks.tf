@@ -41,9 +41,25 @@ module "eks" {
   eks_managed_node_groups = {
     main = {
       min_size       = 1
-      max_size       = 5
-      desired_size   = 3
+      max_size       = 10
+      desired_size   = 5
       instance_types = ["t3.large"]
+    }
+  }
+
+  fargate_profiles = {
+    jupyterhub = {
+      name                     = "jupyterhub"
+      iam_role_name            = "jupyterhub-fargate"
+      iam_role_use_name_prefix = true
+      selectors = [
+        {
+          namespace = "jupyterhub"
+          labels = {
+            app = "jupyterhub"
+          }
+        }
+      ]
     }
   }
 
