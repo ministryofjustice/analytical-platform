@@ -267,6 +267,12 @@ def infer_glue_schema(
     metadata_mojap.file_format = file_type
     metadata_mojap.column_names_to_lower(inplace=True)
 
+    for col in metadata_mojap.columns:
+        if col["type"] == "null":
+            metadata_mojap.update_column(
+                {"name": col["name"], "type": "string"}
+            )
+
     if table_type == "curated":
         metadata_mojap.name = table_name
         metadata_mojap.columns.append(
