@@ -2,6 +2,25 @@
 global:
   openmetadata:
     host: ${host}
+  authorizer:
+    className: "org.openmetadata.service.security.DefaultAuthorizer"
+    containerRequestFilter: "org.openmetadata.service.security.JwtFilter"
+    initialAdmins:
+      - "Richard.Baguley@justice.gov.uk"
+      - "Jacob.Woffenden@justice.gov.uk"
+      - "Tamsin.Forbes@justice.gov.uk"
+      - "Jacob.Hamblin-Pyke@justice.gov.uk"
+      - "Julia.Lawrence@justice.gov.uk"
+      - "Jeremy.Collins@justice.gov.uk"
+    principalDomain: "justice.gov.uk"
+  authentication:
+    provider: "azure"
+    publicKeys:
+    - "https://${host}/api/v1/config/jwks"
+    - "https://login.microsoftonline.com/common/discovery/keys"
+    authority: "https://login.microsoftonline.com/${tenant_id}"
+    clientId: "${client_id}" # Azure Application
+    callbackUrl: "https://${host}/callback"
 serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn: ${eks_role_arn}
