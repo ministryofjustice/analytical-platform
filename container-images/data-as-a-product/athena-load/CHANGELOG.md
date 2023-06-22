@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Changed the SerializationLibrary in serdeinfo of glue table metadata from
 LazySimpleSerDeto OpenCSVSerde
+- `infer_glue_schema()` changed so null columns are typed as string before
 
 ## [0.0.1] - 2023-06-21
 
