@@ -211,10 +211,11 @@ def infer_glue_schema(
 
         str_rows = []
         for row in byte_rows:
+            # use 'utf-8-sig' as decodes both with and without byte order mark BOM
             str_rows.append(
                 [
                     _tryeval(val)
-                    for val in row.decode("utf-8").strip("\r\n\t").split(",")
+                    for val in row.decode("utf-8-sig").strip("\r\n\t").split(",")
                 ]
             )
 
