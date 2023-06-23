@@ -127,6 +127,8 @@ airflow:
   serviceAccount:
     create: true
     name: "airflow"
+    annotations:
+      eks.amazonaws.com/role-arn: ${openmetadata_airflow_eks_role_arn}
   scheduler:
     logCleanup:
       enabled: false

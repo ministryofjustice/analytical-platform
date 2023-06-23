@@ -94,6 +94,7 @@ resource "helm_release" "openmetadata_dependencies" {
       {
         openmetadata_mysql_password         = random_password.openmetadata_mysql.result
         openmetadata_airflow_mysql_password = random_password.openmetadata_airflow_mysql.result
+        openmetadata_airflow_eks_role_arn   = module.open_metadata_airflow_iam_role.iam_role_arn
       }
     )
   ]
