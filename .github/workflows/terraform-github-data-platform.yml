@@ -58,7 +58,7 @@ jobs:
 
       - name: Get AWS Secrets
         id: get_aws_secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@8b74ff84db6163db54c6c42ed90b0b9f2bc8a60a # v1.0.3
+        uses: aws-actions/aws-secretsmanager-get-secrets@022e8919774ecb75e8e375656d7b1898936ab878 # v1.0.4
         with:
           secret-ids: |
             GH_TOKEN, github-token
