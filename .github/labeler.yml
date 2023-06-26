@@ -8,3 +8,6 @@ github-workflow:
 
 identity-access-management:
   - "terraform/github/teams.tf"
+
+devcontainer:
+  - ".devcontainer/**"
