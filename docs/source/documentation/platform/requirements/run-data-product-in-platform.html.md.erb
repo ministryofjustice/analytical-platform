@@ -15,7 +15,7 @@ We want a compute process that is scalable and event driven to run the data prod
 
 ## Data Producer Configuration Flow
 
-![Data platform general diagram](images/data-platform-configuration-flow.png "Data platform configuration Flow")
+![Data platform general diagram](../images/data-platform-configuration-flow.png "Data platform configuration Flow")
 
 **For now** - Data product configuration will be sent to the Data Platform S3 bucket via [GitHub Actions](https://github.com/ministryofjustice/data-platform-products/blob/main/.github/workflows/data-product-example-2-poc.yaml).
 
@@ -29,7 +29,7 @@ Event bridge rule will trigger lambda. Lambda will be responsible to extract zip
 
 ## Data Flow Architecture
 
-![Data platform general diagram](images/data-platform-data-flow.png "Data platform data Flow")
+![Data platform general diagram](../images/data-platform-data-flow.png "Data platform data Flow")
 
 The data will be sent via an api, and will land into the data-platform-bucket
 > `${DATA_PLATFORM_PRODUCTS}/${DATA_PLATFORM_PRODUCT_NAME}/rawdata/extraction_timestamp/${SOMEDATA}.csv
