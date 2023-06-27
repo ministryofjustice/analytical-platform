@@ -1,5 +1,5 @@
 attrs==23.1.0
-boto3==1.26.142
+boto3==1.26.161
 botocore==1.29.142
 dataengineeringutils3==1.4.3
 Deprecated==1.2.14
