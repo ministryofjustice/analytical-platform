@@ -39,11 +39,11 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
-    main = {
+    openmetadata = {
       min_size       = 1
-      max_size       = 10
-      desired_size   = 5
-      instance_types = ["t3.large"]
+      max_size       = 5
+      desired_size   = 3
+      instance_types = ["t3.2xlarge"]
     }
   }
 
