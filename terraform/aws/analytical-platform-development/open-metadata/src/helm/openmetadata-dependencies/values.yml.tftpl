@@ -1,60 +1,16 @@
-# Default values for deps.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-# MySQL configurations for helm dependency
-# you can find more details about this here https://artifacthub.io/packages/helm/bitnami/mysql
+---
 mysql:
-  enabled: true
-  fullnameOverride: "mysql"
-  image:
-    pullPolicy: "Always"
-  auth:
-    rootPassword: password # provided by CI/CD
-  primary:
-    persistence:
-      size: 5Gi
-    service:
-      nodePort: 3306
-  initdbScripts:
-    init_openmetadata_db_scripts.sql: |
-      CREATE DATABASE openmetadata_db;
-      CREATE USER 'openmetadata_user'@'%' IDENTIFIED BY '${openmetadata_mysql_password}';
-      GRANT ALL PRIVILEGES ON openmetadata_db.* TO 'openmetadata_user'@'%' WITH GRANT OPTION;
-      commit;
-    init_airflow_db_scripts.sql: |
-      CREATE DATABASE airflow_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-      CREATE USER 'airflow_user'@'%' IDENTIFIED BY '${openmetadata_airflow_mysql_password}';
-      GRANT ALL PRIVILEGES ON airflow_db.* TO 'airflow_user'@'%' WITH GRANT OPTION;
-      commit;
+  enabled: false
 
-# ElasticSearch configurations for helm dependency
-# you can find more details about this here https://artifacthub.io/packages/helm/elastic/elasticsearch
 elasticsearch:
-  enabled: true
-  replicas: 1
-  minimumMasterNodes: 1
-  fullnameOverride: "elasticsearch"
-  imagePullPolicy: "Always"
-  esJavaOpts: "-Xmx128m -Xms128m"
-  maxUnavailable: 0
-  clusterHealthCheckParams: "wait_for_status=yellow&timeout=20s"
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "256M"
-    limits:
-      cpu: "1000m"
-      memory: "1024M"
+  enabled: false
 
-# Airflow configurations for helm dependency
-# you can find more details about this here https://github.com/airflow-helm/charts
 airflow:
   enabled: true
   airflow:
     image:
       repository: docker.getcollate.io/openmetadata/ingestion
-      tag: 1.0.4
+      tag: 1.0.5
       pullPolicy: "IfNotPresent"
     executor: "KubernetesExecutor"
     extraVolumeMounts:
@@ -80,11 +36,11 @@ airflow:
       AIRFLOW__OPENMETADATA_SECRETS_MANAGER__AWS_ACCESS_KEY: ""
     users:
       - username: admin
-        password: admin
+        password: ${openmetadata_airflow_password}
         role: Admin
-        email: spiderman@superhero.org
-        firstName: Peter
-        lastName: Parker
+        email: airflow@data-platform.service.justice.gov.uk
+        firstName: Data
+        lastName: Platform
   web:
     extraVolumes:
       - name: pod-template
@@ -118,12 +74,12 @@ airflow:
     enabled: false
   externalDatabase:
     type: mysql
-    host: mysql
+    host: ${openmetadata_airflow_rds_host}
     port: 3306
-    database: airflow_db
-    user: airflow_user
-    passwordSecret: airflow-mysql-secrets
-    passwordSecretKey: airflow-mysql-password
+    database: airflow
+    user: ${openmetadata_airflow_rds_user}
+    passwordSecret: ${openmetadata_airflow_rds_password_secret}
+    passwordSecretKey: ${openmetadata_airflow_rds_password_secret_key}
   serviceAccount:
     create: true
     name: "airflow"

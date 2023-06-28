@@ -1,6 +1,12 @@
-resource "random_password" "openmetadata_airflow" {
-  length  = 32
-  special = false
+resource "kubernetes_secret" "openmetadata_opensearch" {
+  metadata {
+    name      = "opensearch-credentials"
+    namespace = kubernetes_namespace.open_metadata.metadata[0].name
+  }
+  data = {
+    password = random_password.opensearch_master_password.result
+  }
+  type = "Opaque"
 }
 
 resource "kubernetes_secret" "openmetadata_airflow" {
@@ -14,34 +20,51 @@ resource "kubernetes_secret" "openmetadata_airflow" {
   type = "Opaque"
 }
 
-resource "random_password" "openmetadata_mysql" {
-  length  = 32
-  special = false
-}
-
-resource "kubernetes_secret" "openmetadata_mysql" {
+resource "kubernetes_secret" "openmetadata_airflow_rds_credentials" {
   metadata {
-    name      = "mysql-secrets"
+    name      = "openmetadata-airflow-rds-credentials"
     namespace = kubernetes_namespace.open_metadata.metadata[0].name
   }
   data = {
-    openmetadata-mysql-password = random_password.openmetadata_mysql.result
+    username = local.openmetadata_airflow_rds_credentials.username
+    password = local.openmetadata_airflow_rds_credentials.password
   }
   type = "Opaque"
 }
 
-resource "random_password" "openmetadata_airflow_mysql" {
-  length  = 32
-  special = false
-}
-
-resource "kubernetes_secret" "openmetadata_airflow_mysql" {
+resource "kubernetes_secret" "openmetadata_rds_credentials" {
   metadata {
-    name      = "airflow-mysql-secrets"
+    name      = "openmetadata-rds-credentials"
     namespace = kubernetes_namespace.open_metadata.metadata[0].name
   }
   data = {
-    airflow-mysql-password = random_password.openmetadata_airflow_mysql.result
+    username = local.openmetadata_rds_credentials.username
+    password = local.openmetadata_rds_credentials.password
   }
   type = "Opaque"
 }
+
+/*
+I've created this manually because the file() function cannot parse binary files, and filebase64() creates them on disk as base64 encoded
+
+kubectl \
+  --namespace open-metadata \
+  create \
+  secret \
+  generic \
+  openmetadata-jwt-tls \
+  --from-file=private-key.der=./src/tls/openmetadata/jwt/private-key.der \
+  --from-file=public-key.der=src/tls/openmetadata/jwt/public-key.der
+
+resource "kubernetes_secret" "openmetadata_jwt_tls" {
+  metadata {
+    name      = "openmetadata-jwt-tls"
+    namespace = kubernetes_namespace.open_metadata.metadata[0].name
+  }
+  data = {
+    "private-key.der" = filebase64("${path.module}/src/tls/openmetadata/jwt/private-key.der")
+    "public-key.der"  = filebase64("${path.module}/src/tls/openmetadata/jwt/public-key.der")
+  }
+  type = "Opaque"
+}
+*/

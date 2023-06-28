@@ -1,6 +1,6 @@
 module "cluster_autoscaler_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.20.0"
+  version = "5.22.0"
 
   role_name_prefix                 = "cluster-autoscaler"
   attach_cluster_autoscaler_policy = true
@@ -16,7 +16,7 @@ module "cluster_autoscaler_iam_role" {
 
 module "ebs_csi_driver_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.20.0"
+  version = "5.22.0"
 
   role_name_prefix      = "ebs-csi-driver"
   attach_ebs_csi_policy = true
@@ -31,7 +31,7 @@ module "ebs_csi_driver_iam_role" {
 
 module "efs_csi_driver_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.20.0"
+  version = "5.22.0"
 
   role_name_prefix      = "efs-csi-driver"
   attach_efs_csi_policy = true
@@ -46,7 +46,7 @@ module "efs_csi_driver_iam_role" {
 
 module "load_balancer_controller_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.20.0"
+  version = "5.22.0"
 
   role_name_prefix                       = "load-balancer-controller"
   attach_load_balancer_controller_policy = true
@@ -61,7 +61,7 @@ module "load_balancer_controller_iam_role" {
 
 module "cert_manager_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.20.0"
+  version = "5.22.0"
 
   role_name_prefix              = "cert-manager"
   attach_cert_manager_policy    = true
@@ -77,7 +77,7 @@ module "cert_manager_iam_role" {
 
 module "external_dns_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.20.0"
+  version = "5.22.0"
 
   role_name_prefix              = "external-dns"
   attach_external_dns_policy    = true
@@ -93,7 +93,7 @@ module "external_dns_iam_role" {
 
 module "open_metadata_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.20.0"
+  version = "5.22.0"
 
   role_name_prefix = "open-metadata"
 
@@ -107,9 +107,13 @@ module "open_metadata_iam_role" {
 
 module "open_metadata_airflow_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.20.0"
+  version = "5.22.0"
 
   role_name_prefix = "open-metadata-airflow"
+
+  role_policy_arns = {
+    open-metadata-airflow = module.open_metadata_airflow_iam_policy.arn
+  }
 
   oidc_providers = {
     main = {

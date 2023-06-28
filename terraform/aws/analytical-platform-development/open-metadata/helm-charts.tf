@@ -92,15 +92,19 @@ resource "helm_release" "openmetadata_dependencies" {
     templatefile(
       "${path.module}/src/helm/openmetadata-dependencies/values.yml.tftpl",
       {
-        openmetadata_mysql_password         = random_password.openmetadata_mysql.result
-        openmetadata_airflow_mysql_password = random_password.openmetadata_airflow_mysql.result
-        openmetadata_airflow_eks_role_arn   = module.open_metadata_airflow_iam_role.iam_role_arn
+        openmetadata_airflow_password                = random_password.openmetadata_airflow.result
+        openmetadata_airflow_eks_role_arn            = module.open_metadata_airflow_iam_role.iam_role_arn
+        openmetadata_airflow_rds_host                = module.airflow_rds.db_instance_address
+        openmetadata_airflow_rds_user                = module.airflow_rds.db_instance_username
+        openmetadata_airflow_rds_password_secret     = kubernetes_secret.openmetadata_airflow_rds_credentials.metadata[0].name
+        openmetadata_airflow_rds_password_secret_key = "password"
       }
     )
   ]
-  wait = false /* this is temporary */
+  wait    = true
+  timeout = 600
 
-  depends_on = [kubernetes_secret.openmetadata_airflow, kubernetes_secret.openmetadata_mysql, kubernetes_secret.openmetadata_airflow_mysql]
+  depends_on = [kubernetes_secret.openmetadata_airflow]
 }
 
 resource "helm_release" "openmetadata" {
@@ -113,15 +117,26 @@ resource "helm_release" "openmetadata" {
     templatefile(
       "${path.module}/src/helm/openmetadata/values.yml.tftpl",
       {
-        host                = "open-metadata.data-platform.moj.woffenden.dev"
-        acm_certificate_arn = aws_acm_certificate_validation.open_metadata.certificate_arn
-        eks_role_arn        = module.open_metadata_iam_role.iam_role_arn
-        client_id           = data.aws_secretsmanager_secret_version.open_metadata_client_id.secret_string
-        tenant_id           = data.aws_secretsmanager_secret_version.open_metadata_tenant_id.secret_string
+        namespace                                      = kubernetes_namespace.open_metadata.metadata[0].name
+        host                                           = "open-metadata.data-platform.moj.woffenden.dev"
+        acm_certificate_arn                            = aws_acm_certificate_validation.open_metadata.certificate_arn
+        eks_role_arn                                   = module.open_metadata_iam_role.iam_role_arn
+        client_id                                      = data.aws_secretsmanager_secret_version.open_metadata_client_id.secret_string
+        tenant_id                                      = data.aws_secretsmanager_secret_version.open_metadata_tenant_id.secret_string
+        jwt_key_id                                     = random_uuid.openmetadata_jwt.result
+        openmetadata_elasticsearch_host                = resource.aws_opensearch_domain.openmetadata.endpoint
+        openmetadata_elasticsearch_user                = "openmetadata"
+        openmetadata_elasticsearch_password_secret     = kubernetes_secret.openmetadata_opensearch.metadata[0].name
+        openmetadata_elasticsearch_password_secret_key = "password"
+        openmetadata_rds_host                          = module.rds.db_instance_address
+        openmetadata_rds_user                          = module.rds.db_instance_username
+        openmetadata_rds_password_secret               = kubernetes_secret.openmetadata_rds_credentials.metadata[0].name
+        openmetadata_rds_password_secret_key           = "password"
       }
     )
   ]
-  wait = false /* this is temporary */
+  wait    = true
+  timeout = 600
 
   depends_on = [helm_release.openmetadata_dependencies, aws_acm_certificate_validation.open_metadata]
 }
