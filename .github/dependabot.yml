@@ -14,15 +14,19 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
-    directory: "/container-images/data-as-a-product/athena-load"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "docker"
     directory: "/container-images/rshiny"
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
     directory: "/containers/alpine-base"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/containers/daap-athena-load"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/containers/daap-simulated-data-producer"
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
@@ -34,7 +38,11 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "pip"
-    directory: "/container-images/data-as-a-product/athena-load"
+    directory: "/containers/daap-athena-load/src/var/task"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pip"
+    directory: "/containers/daap-simulated-data-producer/src"
     schedule:
       interval: "daily"
   - package-ecosystem: "pip"
