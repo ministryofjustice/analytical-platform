@@ -1,4 +1,0 @@
-pandas==2.0.3
-psycopg2==2.9.6
-requests==2.31.0
-SQLAlchemy==2.0.17

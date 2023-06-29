@@ -12,8 +12,6 @@ ENV CONTAINER_GID="10000" \
     CONTAINER_USER="nonroot" \
     CONTAINER_HOME="/app"
 
-COPY src/requirements.txt .
-
 RUN addgroup \
       --gid ${CONTAINER_GID} \
       --system \
@@ -28,7 +26,10 @@ RUN addgroup \
     && apk add --no-cache \
       python3==3.11.4-r0 \
       py3-pip==23.1.2-r0 \
-    && python3 -m pip install --requirement requirements.txt
+      py3-pandas==1.5.3-r1 \
+      py3-psycopg2==2.9.6-r1 \
+      py3-requests==2.31.0-r0 \
+      py3-sqlalchemy==1.4.48-r0
 
 USER ${CONTAINER_USER}
 
