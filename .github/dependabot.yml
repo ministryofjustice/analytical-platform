@@ -42,10 +42,6 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "pip"
-    directory: "/containers/daap-simulated-data-producer/src"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "pip"
     directory: "/scripts/pagerduty/rota-to-slack"
     schedule:
       interval: "daily"
