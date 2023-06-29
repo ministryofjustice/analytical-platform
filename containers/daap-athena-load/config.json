@@ -3,9 +3,9 @@
     "version": "0.1.0",
     "registry": "ecr",
     "ecr": {
-        "account": "123456789012",
+        "role": "arn:aws:iam::013433889002:role/data-platform-github-actions",
+        "account": "374269020027",
         "region": "eu-west-2",
-        "oidc_role": "arn:aws:iam::123456789012:role/oidc-role",
         "repository": "data-platform-athena-load-lambda-ecr-repo"
     }
 }
