@@ -2,3 +2,5 @@
 alpine-base: ./containers/alpine-base/**
 ubuntu-base: ./containers/ubuntu-base/**
 kubectl: ./containers/kubectl/**
+daap-athena-load: ./containers/daap-athena-load/**
+daap-simulated-data-producer: ./containers/daap-simulated-data-producer/**
