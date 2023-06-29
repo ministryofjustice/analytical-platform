@@ -62,12 +62,23 @@ if [[ "${GITHUB_ACTIONS}" == "true" ]]; then
     echo "No difference in files, exiting."
     exit 0
   else
+    mainSha=$(gh api --method GET /repos/"${GITHUB_REPOSITORY}"/contents/"${DEPENDABOT_CONFIGURATION_FILE}" --field ref="main" | jq -r '.sha')
+    branchSha=$(gh api --method GET /repos/"${GITHUB_REPOSITORY}"/contents/"${DEPENDABOT_CONFIGURATION_FILE}" --field ref="${GITHUB_HEAD_REF}" | jq -r '.sha')
+
+    if [[ "${branchSha}" != "${mainSha}" ]]; then
+      echo "Branch has already been updated, using branch data"
+      export apiFieldSha="${branchSha}"
+    else
+      echo "Branch has not been updated, using main data"
+      export apiFieldSha="${mainSha}"
+    fi
+
     gh api --method PUT /repos/${GITHUB_REPOSITORY}/contents/${DEPENDABOT_CONFIGURATION_FILE} \
       --field branch="${GITHUB_HEAD_REF}" \
       --field message="Committing updated Dependabot configuration" \
       --field encoding="base64" \
       --field content="$( base64 -w 0 ${DEPENDABOT_CONFIGURATION_FILE} )" \
-      --field sha="$( gh api --method GET /repos/${GITHUB_REPOSITORY}/contents/${DEPENDABOT_CONFIGURATION_FILE} --field ref="main" | jq -r '.sha' )"
+      --field sha="${apiFieldSha}"
   fi
 else
   echo "Not running in GitHub Actions, exiting."
