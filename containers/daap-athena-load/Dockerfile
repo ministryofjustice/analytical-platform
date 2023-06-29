@@ -2,7 +2,7 @@ FROM public.ecr.aws/lambda/python:3.10
 
 COPY src/var/task ${LAMDA_TASK_ROOT}
 
-RUN python -m pip install --upgrade pip==23.1.2 \
+RUN python -m pip install --no-cache-dir --upgrade pip==23.1.2 \
     && python -m pip install --no-cache-dir --requirement requirements.txt
 
 CMD ["athena_load_handler.handler"]
