@@ -1,9 +1,12 @@
 data "aws_iam_policy_document" "open_metadata_airflow" {
   statement {
-    sid       = "AllowAssumeRole"
-    effect    = "Allow"
-    actions   = ["sts:AssumeRole"]
-    resources = ["arn:aws:iam::593291632749:role/open-metadata-airflow20230623105404064900000001"]
+    sid     = "AllowAssumeRole"
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    resources = [
+      "arn:aws:iam::593291632749:role/open-metadata-airflow20230623105404064900000001", // analytical-platform-data-production
+      "arn:aws:iam::013433889002:role/open-metadata-airflow20230623105404064900000001"  // data-platform-development
+    ]
   }
 }
 
