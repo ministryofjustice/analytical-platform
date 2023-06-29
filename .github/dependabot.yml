@@ -26,6 +26,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
+    directory: "/containers/kubectl"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
     directory: "/containers/ubuntu-base"
     schedule:
       interval: "daily"
