@@ -1,6 +1,6 @@
 # hadolint global ignore=DL3008
 
-FROM public.ecr.aws/lts/ubuntu@sha256:443e1135d27f060d57ec1b14117587b6ca53d6926a11ad0f1ffc142fd6b4b9a5
+FROM public.ecr.aws/lts/ubuntu:20.04
 
 LABEL org.opencontainers.image.vendor="Ministry of Justice" \
       org.opencontainers.image.authors="Data Platform" \
@@ -8,7 +8,7 @@ LABEL org.opencontainers.image.vendor="Ministry of Justice" \
       org.opencontainers.image.description="R Shiny image for Analytical Platform" \
       org.opencontainers.image.url="https://github.com/ministryofjustice/data-platform/tree/main/container-images/rshiny"
 
-ARG R_VERSION="4.1.3" \
+ARG R_VERSION="3.6.3" \
     R_ENV_VERSION="0.17.1" \
     AP_SHINY_SERVER_VERSION="0.0.6" \
     SHINY_SERVER_VERSION="1.5.20.1002"
