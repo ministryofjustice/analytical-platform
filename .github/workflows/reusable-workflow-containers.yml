@@ -10,6 +10,9 @@
     prepare-environment:
       name: Prepare Environment
       runs-on: ubuntu-latest
+      outputs:
+        name: ${{ steps.prepare_environment.outputs.name }}
+        version: ${{ steps.prepare_environment.outputs.version }}
       steps:
         - name: Checkout
           id: checkout
@@ -70,7 +73,7 @@
 
     build-scan:
       if: github.ref != 'refs/heads/main'
-      needs: [preflight-checks]
+      needs: [prepare-environment,preflight-checks]
       name: Build
       runs-on: ubuntu-latest
       steps:
@@ -86,13 +89,13 @@
             file: containers/${{ inputs.image }}/Dockerfile
             push: false
             load: true
-            tags: ${{ steps.prepare-environment.name }}:${{ steps.prepare-environment.name }}
+            tags: ${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
 
         - name: Scan Image
           id: scan_image
           uses: aquasecurity/trivy-action@41f05d9ecffa2ed3f1580af306000f734b733e54 # v0.11.2
           with:
-            image-ref: ${{ steps.prepare-environment.name }}:${{ steps.prepare-environment.name }}
+            image-ref: ${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
             exit-code: 1
             format: sarif
             output: trivy-results.sarif
