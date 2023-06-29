@@ -13,6 +13,7 @@ jobs:
     outputs:
       name: ${{ steps.prepare_environment.outputs.name }}
       version: ${{ steps.prepare_environment.outputs.version }}
+      registry: ${{ steps.prepare_environment.outputs.registry }}
     steps:
       - name: Checkout
         id: checkout
@@ -23,6 +24,7 @@ jobs:
         run: |
           echo "name=$(jq -r '.name' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_OUTPUT}"
           echo "version=$(jq -r '.version' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_OUTPUT}"
+          echo "registry=$(jq -r '.registry' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_OUTPUT}"
 
   preflight-checks:
     if: github.ref != 'refs/heads/main'
@@ -74,7 +76,7 @@ jobs:
   build-scan:
     if: github.ref != 'refs/heads/main'
     needs: [prepare-environment, preflight-checks]
-    name: Build
+    name: Build and Scan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -107,3 +109,47 @@ jobs:
         uses: github/codeql-action/upload-sarif@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.2.7
         with:
           sarif_file: trivy-results.sarif
+
+  build-push-dockerhub:
+    if: github.ref == 'refs/heads/main' && ${{ needs.prepare-environment.outputs.version }} == 'dockerhub'
+    needs: [prepare-environment]
+    name: Build and Push to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Login to Docker Hub
+        id: docker_login
+        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2.2.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push
+        id: build_and_push
+        uses: docker/build-push-action@2eb1c1961a95fc15694676618e422e8ba1d63825 # v4.1.1
+        with:
+          context: containers/${{ inputs.image }}
+          file: containers/${{ inputs.image }}/Dockerfile
+          push: true
+          tags: ministryofjustice/data-platform-${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
+
+  build-push-ecr:
+    if: github.ref == 'refs/heads/main' && ${{ needs.prepare-environment.outputs.version }} == 'ecr'
+    needs: [prepare-environment]
+    name: Build and Push to ECR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Prepare ECR Configuration
+        id: prepare_ecr_configuration
+        run: |
+          echo "ecr_account=$(jq -r '.ecr.account' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
+          echo "ecr_region=$(jq -r '.ecr.region' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
+          echo "ecr_oidc_role=$(jq -r '.ecr.oidc_role' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
+          echo "ecr_repository=$(jq -r '.ecr.repository' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"

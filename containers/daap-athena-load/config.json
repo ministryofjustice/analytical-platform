@@ -1,7 +1,11 @@
 {
     "name": "daap-athena-load",
     "version": "0.1.0",
-    "registry_type": "ecr",
-    "ecr_account_id": "123456789012",
-    "ecr_repository_name": "daap-athena-load"
+    "registry": "ecr",
+    "ecr": {
+        "account": "123456789012",
+        "region": "eu-west-2",
+        "oidc_role": "arn:aws:iam::123456789012:role/oidc-role",
+        "repository": "data-platform-athena-load-lambda-ecr-repo"
+    }
 }
