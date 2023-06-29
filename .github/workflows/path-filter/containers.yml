@@ -1,0 +1,3 @@
+---
+alpine-base: ./containers/alpine-base/**
+ubuntu-base: ./containers/ubuntu-base/**
