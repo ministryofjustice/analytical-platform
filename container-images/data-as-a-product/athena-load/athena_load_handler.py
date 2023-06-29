@@ -270,9 +270,7 @@ def infer_glue_schema(
 
     for col in metadata_mojap.columns:
         if col["type"] == "null":
-            metadata_mojap.update_column(
-                {"name": col["name"], "type": "string"}
-            )
+            metadata_mojap.update_column({"name": col["name"], "type": "string"})
 
     if table_type == "curated":
         metadata_mojap.name = table_name
