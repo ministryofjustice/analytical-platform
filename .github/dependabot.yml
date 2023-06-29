@@ -25,6 +25,14 @@ updates:
     directory: "/container-images/ubuntu/base"
     schedule:
       interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/containers/alpine-base"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/containers/ubuntu-base"
+    schedule:
+      interval: "daily"
   - package-ecosystem: "pip"
     directory: "/container-images/data-as-a-product/athena-load"
     schedule:
