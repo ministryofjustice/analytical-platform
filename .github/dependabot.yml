@@ -14,10 +14,6 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
-    directory: "/container-images/rshiny"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "docker"
     directory: "/containers/alpine-base"
     schedule:
       interval: "daily"
@@ -31,6 +27,26 @@ updates:
       interval: "daily"
   - package-ecosystem: "docker"
     directory: "/containers/kubectl"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/containers/rshiny-3.5.3"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/containers/rshiny-3.6.3"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/containers/rshiny-4.0.5"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/containers/rshiny-4.1.3"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/containers/rshiny-4.2.2"
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
