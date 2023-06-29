@@ -51,3 +51,4 @@ jobs:
     uses: ./.github/workflows/reusable-workflow-containers.yml
     with:
       image: ${{ matrix.image }}
+    secrets: inherit
