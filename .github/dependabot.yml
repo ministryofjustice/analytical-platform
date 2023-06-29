@@ -22,10 +22,6 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
-    directory: "/container-images/ubuntu/base"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "docker"
     directory: "/containers/alpine-base"
     schedule:
       interval: "daily"
