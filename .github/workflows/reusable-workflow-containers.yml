@@ -76,28 +76,24 @@ jobs:
         id: check_version_ecr
         run: |
 
-          imageTag='"0.0.1"'
-          checkImageTagExists=$(aws ecr describe-images \
+          aws ecr describe-images \
             --registry-id "${{ env.ecr_account }}" \
-            --repository-name "${{ env.ecr_repository }}" | grep -F ${imageTag})
+            --repository-name "${{ env.ecr_repository }}" | grep -F '"0.0.1"'
 
-          if [[ -z "${checkImageTagExists}" ]]; then
-            echo "tag_exists=false" >>"${GITHUB_ENV}"
-          else
-            echo "tag_exists=true" >>"${GITHUB_ENV}"
-          fi
-
-          imageTag='"0.1.0"'
-          checkImageTagExists=$(aws ecr describe-images \
+          aws ecr describe-images \
             --registry-id "${{ env.ecr_account }}" \
-            --repository-name "${{ env.ecr_repository }}" | grep -F ${imageTag})
+            --repository-name "${{ env.ecr_repository }}" | grep -F '"0.1.0"'
 
-          if [[ -z "${checkImageTagExists}" ]]; then
-            echo "tag_exists=false" >>"${GITHUB_ENV}"
-          else
-            echo "tag_exists=true" >>"${GITHUB_ENV}"
-          fi
+          # imageTag='"0.0.1"'
+          # checkImageTagExists=$(aws ecr describe-images \
+          #   --registry-id "${{ env.ecr_account }}" \
+          #   --repository-name "${{ env.ecr_repository }}" | grep -F ${imageTag})
 
+          # if [[ -z "${checkImageTagExists}" ]]; then
+          #   echo "tag_exists=false" >>"${GITHUB_ENV}"
+          # else
+          #   echo "tag_exists=true" >>"${GITHUB_ENV}"
+          # fi
 
       - name: Check CHANGELOG Updates
         id: check_changelog_updates
