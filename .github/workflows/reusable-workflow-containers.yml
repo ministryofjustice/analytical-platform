@@ -224,7 +224,7 @@ jobs:
         id: login_ecr
         uses: aws-actions/amazon-ecr-login@e407df249e6c155d03c0e4375f34bc2385f52d65 # v1.6.1
         with:
-          registries: ${{ env.ecr_account }}.dkr.ecr.${{ env.ecr_region }}.amazonaws.com
+          registries: ${{ env.ecr_account }}
 
       - name: Build and Push
         id: build_and_push
