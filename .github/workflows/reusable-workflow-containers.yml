@@ -66,32 +66,25 @@ jobs:
           aws-region: ${{ env.ecr_region }}
           role-to-assume: ${{ env.ecr_role }}
 
-      # - name: Login to Amazon ECR
-      #   if: needs.prepare-environment.outputs.registry == 'ecr'
-      #   id: login_ecr
-      #   uses: aws-actions/amazon-ecr-login@e407df249e6c155d03c0e4375f34bc2385f52d65 # v1.6.1
+      - name: Login to Amazon ECR
+        if: needs.prepare-environment.outputs.registry == 'ecr'
+        id: login_ecr
+        uses: aws-actions/amazon-ecr-login@e407df249e6c155d03c0e4375f34bc2385f52d65 # v1.6.1
 
       - name: Check Version (ECR)
         if: needs.prepare-environment.outputs.registry == 'ecr'
         id: check_version_ecr
         run: |
-          # imageTag=$(aws ecr describe-images \
-          #   --registry-id "${{ env.ecr_account }}" \
-          #   --repository-name "${{ env.ecr_repository }}" \
-          #   | jq -r --arg imageTag "${{ needs.prepare-environment.outputs.version }}" '.imageDetails[] | select(.imageTags[] == $imageTag) | .imageTags[]')
-          # export imageTag
+          imageTag='"'${{ needs.prepare-environment.outputs.version }}'"'
+          checkImageTagExists=$(aws ecr describe-images \
+            --registry-id "${{ env.ecr_account }}" \
+            --repository-name "${{ env.ecr_repository }}" | grep -F ${imageTag})
 
-          # if [[ -z "${imageTag}" ]]; then
-          #   echo "tag_exists=false" >>"${GITHUB_ENV}"
-          # else
-          #   echo "tag_exists=true" >>"${GITHUB_ENV}"
-          # fi
-
-          # aws ecr describe-images --registry-id "${{ env.ecr_account }}" --repository-name "${{ env.ecr_repository }}"
-
-          aws ecr get-login-password --region ${{ env.ecr_region }} | skopeo login --username AWS --password-stdin ${{ env.ecr_account }}.dkr.ecr.${{ env.ecr_region }}.amazonaws.com
-
-          skopeo list-tags docker://${{ env.ecr_account }}.dkr.ecr.${{ env.ecr_region }}.amazonaws.com/${{ env.ecr_repository }}
+          if [[ -z "${checkImageTagExists}" ]]; then
+            echo "tag_exists=false" >>"${GITHUB_ENV}"
+          else
+            echo "tag_exists=true" >>"${GITHUB_ENV}"
+          fi
 
       - name: Check CHANGELOG Updates
         id: check_changelog_updates
