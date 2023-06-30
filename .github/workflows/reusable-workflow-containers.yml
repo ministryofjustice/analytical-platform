@@ -75,17 +75,21 @@ jobs:
         if: needs.prepare-environment.outputs.registry == 'ecr'
         id: check_version_ecr
         run: |
-          imageTag=$(aws ecr describe-images \
-            --registry-id "${{ env.ecr_account }}" \
-            --repository-name "${{ env.ecr_repository }}" \
-            | jq -r --arg imageTag "${{ needs.prepare-environment.outputs.version }}" '.imageDetails[] | select(.imageTags[] == $imageTag) | .imageTags[]')
-          export imageTag
+          # imageTag=$(aws ecr describe-images \
+          #   --registry-id "${{ env.ecr_account }}" \
+          #   --repository-name "${{ env.ecr_repository }}" \
+          #   | jq -r --arg imageTag "${{ needs.prepare-environment.outputs.version }}" '.imageDetails[] | select(.imageTags[] == $imageTag) | .imageTags[]')
+          # export imageTag
 
-          if [[ -z "${imageTag}" ]]; then
-            echo "tag_exists=false" >>"${GITHUB_ENV}"
-          else
-            echo "tag_exists=true" >>"${GITHUB_ENV}"
-          fi
+          # if [[ -z "${imageTag}" ]]; then
+          #   echo "tag_exists=false" >>"${GITHUB_ENV}"
+          # else
+          #   echo "tag_exists=true" >>"${GITHUB_ENV}"
+          # fi
+
+          aws ecr describe-images --registry-id "${{ env.ecr_account }}" --repository-name "${{ env.ecr_repository }}"
+
+          aws ecr describe-images --registry-id "${{ env.ecr_account }}" --repository-name "${{ env.ecr_repository }}" --output json
 
       - name: Check CHANGELOG Updates
         id: check_changelog_updates
