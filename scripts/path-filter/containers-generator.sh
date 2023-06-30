@@ -44,7 +44,7 @@ if [[ "${GITHUB_ACTIONS}" == "true" ]]; then
 
     gh api --method PUT /repos/${GITHUB_REPOSITORY}/contents/${PATH_FILTER_CONFIGURATION_FILE} \
       --field branch="${GITHUB_HEAD_REF}" \
-      --field message="Committing updated Dependabot configuration" \
+      --field message="Committing updated path-filter configuration" \
       --field encoding="base64" \
       --field content="$( base64 -w 0 ${PATH_FILTER_CONFIGURATION_FILE} )" \
       --field sha="${apiFieldSha}"
