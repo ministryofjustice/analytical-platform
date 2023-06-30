@@ -75,7 +75,7 @@ jobs:
         if: needs.prepare-environment.outputs.registry == 'ecr'
         id: check_version_ecr
         run: |
-          imageTag=\"${{ needs.prepare-environment.outputs.version }}\"
+          imageTag="${{ needs.prepare-environment.outputs.version }}"
           checkImageTagExists=$(aws ecr describe-images \
             --registry-id "${{ env.ecr_account }}" \
             --repository-name "${{ env.ecr_repository }}" | grep -F ${imageTag})
