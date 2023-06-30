@@ -171,7 +171,7 @@ jobs:
   #         sarif_file: trivy-results.sarif
 
   # build-push-dockerhub:
-  #   if: (github.ref == 'refs/heads/main') && (needs.prepare-environment.outputs.version == 'dockerhub')
+  #   if: (github.ref == 'refs/heads/main') && (needs.prepare-environment.outputs.registry == 'dockerhub')
   #   needs: [prepare-environment]
   #   name: Build and Push to Docker Hub
   #   runs-on: ubuntu-latest
@@ -197,7 +197,7 @@ jobs:
   #         tags: ministryofjustice/data-platform-${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
 
   # build-push-ecr:
-  #   if: (github.ref == 'refs/heads/main') && (needs.prepare-environment.outputs.version == 'ecr')
+  #   if: (github.ref == 'refs/heads/main') && (needs.prepare-environment.outputs.registry == 'ecr')
   #   needs: [prepare-environment]
   #   name: Build and Push to ECR
   #   runs-on: ubuntu-latest
