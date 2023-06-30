@@ -10,3 +10,5 @@ env/
 **/terraform.tfstate
 *.tar
 sbom-*
+**/*.tfstate
+**/plan.json

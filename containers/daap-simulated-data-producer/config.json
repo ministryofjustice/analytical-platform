@@ -1,0 +1,5 @@
+{
+    "name": "daap-simulated-data-producer",
+    "version": "0.1.0",
+    "registry": "dockerhub"
+}

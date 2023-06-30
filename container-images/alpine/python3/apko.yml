@@ -1,7 +1,0 @@
----
-include: container-images/alpine/base/apko.yml
-
-contents:
-  packages:
-    - python3
-    - py3-pip

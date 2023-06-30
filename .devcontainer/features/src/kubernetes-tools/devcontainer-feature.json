@@ -58,6 +58,17 @@
       "description": "MoJ Cloud Platform CLI version",
       "proposals": ["latest"],
       "default": "latest"
+    },
+    "installK9s": {
+      "type": "boolean",
+      "description": "Install k9s (https://github.com/derailed/k9s)",
+      "default": true
+    },
+    "K9sVersion": {
+      "type": "string",
+      "description": "k9s version",
+      "proposals": ["latest"],
+      "default": "latest"
     }
   },
   "customizations": {
