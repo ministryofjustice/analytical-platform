@@ -1,0 +1,87 @@
+---
+global:
+  elasticsearch:
+    host: ${openmetadata_elasticsearch_host}
+    port: 443
+    scheme: https
+    connectionTimeoutSecs: 5
+    socketTimeoutSecs: 60
+    batchSize: 10
+    auth:
+      enabled: true
+      username: ${openmetadata_elasticsearch_user}
+      password:
+        secretRef: ${openmetadata_elasticsearch_password_secret}
+        secretKey: ${openmetadata_elasticsearch_password_secret_key}
+  database:
+    host: ${openmetadata_rds_host}
+    port: 3306
+    driverClass: com.mysql.cj.jdbc.Driver
+    dbScheme: mysql
+    dbUseSSL: true
+    databaseName: openmetadata
+    auth:
+      username: ${openmetadata_rds_user}
+      password:
+        secretRef: ${openmetadata_rds_password_secret}
+        secretKey: ${openmetadata_rds_password_secret_key}
+  pipelineServiceClientConfig:
+    apiEndpoint: http://openmetadata-dependencies-web.${namespace}.svc.cluster.local:8080
+    metadataApiEndpoint: http://openmetadata.${namespace}.svc.cluster.local:8585/api
+  openmetadata:
+    host: ${host}
+    uri: "https://${host}"
+  authorizer:
+    className: "org.openmetadata.service.security.DefaultAuthorizer"
+    containerRequestFilter: "org.openmetadata.service.security.JwtFilter"
+    initialAdmins:
+      - "Jacob.Woffenden"
+      - "Richard.Baguley"
+      - "Julia.Lawrence"
+    allowedEmailRegistrationDomains:
+      - "justice.gov.uk"
+    principalDomain: "justice.gov.uk"
+    enforcePrincipalDomain: true
+  authentication:
+    provider: "azure"
+    publicKeys:
+      - "https://${host}/api/v1/system/config/jwks"
+      - "https://login.microsoftonline.com/common/discovery/keys"
+    authority: "https://login.microsoftonline.com/${tenant_id}"
+    clientId: "${client_id}"
+    callbackUrl: "https://${host}/callback"
+    jwtPrincipalClaims:
+      - "email"
+      - "preferred_username"
+      - "sub"
+  jwtTokenConfiguration:
+    rsapublicKeyFilePath: "/opt/openmetadata/jwt/tls/public-key.der"
+    rsaprivateKeyFilePath: "/opt/openmetadata/jwt/tls/private-key.der"
+    jwtissuer: "${host}"
+    keyId: "${jwt_key_id}"
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: ${eks_role_arn}
+service:
+  type: NodePort
+ingress:
+  enabled: true
+  className: "alb"
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: ${acm_certificate_arn}
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
+  hosts:
+    - host: ${host}
+      paths:
+        - path: /
+          pathType: Prefix
+extraVolumes:
+  - name: openmetadata-jwt-tls
+    secret:
+      secretName: openmetadata-jwt-tls
+extraVolumeMounts:
+  - name: openmetadata-jwt-tls
+    mountPath: /opt/openmetadata/jwt/tls
