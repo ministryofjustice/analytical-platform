@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2023-09-30
+
+###
+
+- Added `registries` key to ECR login
+
 ## [0.1.0] - 2023-09-30
 
 ###
