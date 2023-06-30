@@ -87,9 +87,9 @@ jobs:
           #   echo "tag_exists=true" >>"${GITHUB_ENV}"
           # fi
 
-          aws ecr describe-images --registry-id "${{ env.ecr_account }}" --repository-name "${{ env.ecr_repository }}"
+          # aws ecr describe-images --registry-id "${{ env.ecr_account }}" --repository-name "${{ env.ecr_repository }}"
 
-          aws ecr describe-images --registry-id "${{ env.ecr_account }}" --repository-name "${{ env.ecr_repository }}" --output json
+          skopeo list-tags docker://${{ env.ecr_account }}.dkr.ecr.${{ env.ecr_region }}.amazonaws.com/${{ env.ecr_repository }}
 
       - name: Check CHANGELOG Updates
         id: check_changelog_updates
@@ -236,4 +236,4 @@ jobs:
   #         context: containers/${{ inputs.image }}
   #         file: containers/${{ inputs.image }}/Dockerfile
   #         push: true
-  #         tags: ${{ env.ecr_account }}.dkr.ecr.${{ env.ecr_region }}.amazonaws.com/d${{ env.ecr_repository }}:${{ needs.prepare-environment.outputs.version }}
+  #         tags: ${{ env.ecr_account }}.dkr.ecr.${{ env.ecr_region }}.amazonaws.com/${{ env.ecr_repository }}:${{ needs.prepare-environment.outputs.version }}
