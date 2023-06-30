@@ -1,6 +1,6 @@
 module "efs" {
   source  = "terraform-aws-modules/efs/aws"
-  version = "1.1.1"
+  version = "1.2.0"
 
   name          = "open-metadata"
   encrypted     = false
