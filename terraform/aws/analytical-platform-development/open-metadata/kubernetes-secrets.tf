@@ -47,6 +47,8 @@ resource "kubernetes_secret" "openmetadata_rds_credentials" {
 /*
 I've created this manually because the file() function cannot parse binary files, and filebase64() creates them on disk as base64 encoded
 
+These files have been moved to 1Password
+
 kubectl \
   --namespace open-metadata \
   create \
