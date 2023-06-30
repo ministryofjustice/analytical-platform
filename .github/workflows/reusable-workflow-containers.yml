@@ -78,7 +78,7 @@ jobs:
           imageTag=$(aws ecr describe-images \
             --registry-id "${{ env.ecr_account }}" \
             --repository-name "${{ env.ecr_repository }}" \
-            | jq -r --arg imageTag "${{ env.version }}" '.imageDetails[] | select(.imageTags[] == $imageTag) | .imageTags[]')
+            | jq -r --arg imageTag "${{ needs.prepare-environment.outputs.version }}" '.imageDetails[] | select(.imageTags[] == $imageTag) | .imageTags[]')
           export imageTag
 
           if [[ -z "${imageTag}" ]]; then
