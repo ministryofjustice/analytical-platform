@@ -75,7 +75,8 @@ jobs:
         if: needs.prepare-environment.outputs.registry == 'ecr'
         id: check_version_ecr
         run: |
-          imageTag='"${{ needs.prepare-environment.outputs.version }}"'
+
+          imageTag='"0.0.1"'
           checkImageTagExists=$(aws ecr describe-images \
             --registry-id "${{ env.ecr_account }}" \
             --repository-name "${{ env.ecr_repository }}" | grep -F ${imageTag})
@@ -85,6 +86,18 @@ jobs:
           else
             echo "tag_exists=true" >>"${GITHUB_ENV}"
           fi
+
+          imageTag='"0.1.0"'
+          checkImageTagExists=$(aws ecr describe-images \
+            --registry-id "${{ env.ecr_account }}" \
+            --repository-name "${{ env.ecr_repository }}" | grep -F ${imageTag})
+
+          if [[ -z "${checkImageTagExists}" ]]; then
+            echo "tag_exists=false" >>"${GITHUB_ENV}"
+          else
+            echo "tag_exists=true" >>"${GITHUB_ENV}"
+          fi
+
 
       - name: Check CHANGELOG Updates
         id: check_changelog_updates
