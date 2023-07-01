@@ -157,7 +157,7 @@ You can preview how your changes will look, if you've cloned this repository to 
 make preview
 ```
 
-This will run a preview web server on http://localhost:4567 which you can open in your browser.
+This will run a preview web server on <http://localhost:4567> which you can open in your browser.
 
 Use `make check` to compile the site to HTML and check the URLs are valid.
 
@@ -186,4 +186,3 @@ Further configuration options are described on the Tech Docs Template website: [
 ### Last review date
 
 30th June 2023
-
