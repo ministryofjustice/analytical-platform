@@ -143,7 +143,7 @@ For guidance see the Tech Docs Template [Write your content](https://tdt-documen
 
 The Markdown syntax may use [kramdown](https://kramdown.gettalong.org/syntax.html) TBC.
 
-While editing the files locally, you can start a Docker container that will use Middleman to act as a server hosting the webpages. See [preview docs](#preview-docs).
+While editing the files locally, you can start a Docker container that will use Middleman to act as a server hosting the web pages. See [preview docs](#preview-docs).
 
 Every change should be reviewed in a pull request, no matter how minor. PR request reviewer/s should be enabled within the main branch protection settings.
 
@@ -151,7 +151,7 @@ Merging the changes to the `main` branch automatically publishes the changes via
 
 ## Preview docs
 
-You can preview how your changes will look, if you've cloned this repo to your local machine, Change directory to `docs` and run this command:
+You can preview how your changes will look, if you've cloned this repository to your local machine, Change directory to `docs` and run this command:
 
 ```
 make preview
@@ -159,7 +159,7 @@ make preview
 
 This will run a preview web server on http://localhost:4567 which you can open in your browser.
 
-Use `make check` to compile the site to html and check the URLs are valid.
+Use `make check` to compile the site to HTML and check the URLs are valid.
 
 This is only accessible on your computer, and won't be accessible to anyone else.
 
@@ -171,7 +171,7 @@ Any changes you push/merge into the `main` branch should be published to GitHub 
 
 ## Template configuration
 
-The webpage layout is configured using the config/tech-docs.yml file.
+The web page layout is configured using the config/tech-docs.yml file.
 
 The template can be configured in [config/tech-docs.yml](config/tech-docs.yml)
 
