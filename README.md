@@ -135,39 +135,51 @@ As above - preferably our Slack channel: `#data-platform` (or email `data-platfo
 
 ## Editing and publishing the Technocal Docs
 
-The [published](https://technical-documentation.data-platform.service.justice.gov.uk/) documentation is created by editing `*.html.md.erb` files, found in the [docs source](docs/source/) folder.
+The [published](https://technical-documentation.data-platform.service.justice.gov.uk/)
+documentation is created by editing `*.html.md.erb` files,
+found in the [docs source](docs/source/) folder.
 
 The syntax is Markdown, more details can be found [here](https://daringfireball.net/projects/markdown/).
 
 For guidance see the Tech Docs Template [Write your content](https://tdt-documentation.london.cloudapps.digital/write_docs/content/).
 
-The Markdown syntax may use [kramdown](https://kramdown.gettalong.org/syntax.html) TBC.
+The Markdown syntax may use [kramdown](https://kramdown.gettalong.org/syntax.html).
 
-While editing the files locally, you can start a Docker container that will use Middleman to act as a server hosting the web pages. See [preview docs](#preview-docs).
+While editing the files locally, you can start a Docker container that will use
+Middleman to act as a server hosting the web pages. See [preview docs](#preview-docs).
 
-Every change should be reviewed in a pull request, no matter how minor. PR request reviewer/s should be enabled within the main branch protection settings.
+Every change should be reviewed in a pull request, no matter how minor.
+PR request reviewer/s should be enabled within the main branch protection
+settings.
 
-Merging the changes to the `main` branch automatically publishes the changes via GH Action. See [publishing](#publishing).
+Merging the changes to the `main` branch automatically publishes the
+changes via GH Action. See [publishing](#publishing).
 
 ## Preview docs
 
-You can preview how your changes will look, if you've cloned this repository to your local machine, Change directory to `docs` and run this command:
+You can preview how your changes will look, if you've cloned this repository
+to your local machine, Change directory to `docs` and run this command:
 
-```
+```bash
 make preview
 ```
 
-This will run a preview web server on <http://localhost:4567> which you can open in your browser.
+This will run a preview web server on <http://localhost:4567> which you can
+open in your browser.
 
 Use `make check` to compile the site to HTML and check the URLs are valid.
 
-This is only accessible on your computer, and won't be accessible to anyone else.
+This is only accessible on your computer, and won't be accessible to anyone
+else.
 
-For more details see the [tech-docs-github-pages-publisher](https://github.com/ministryofjustice/tech-docs-github-pages-publisher) repository.
+For more details see the
+[tech-docs-github-pages-publisher](https://github.com/ministryofjustice/tech-docs-github-pages-publisher)
+repository.
 
 ## Publishing
 
-Any changes you push/merge into the `main` branch should be published to GitHub Pages site automatically.
+Any changes you push/merge into the
+`main` branch should be published to GitHub Pages site automatically.
 
 ## Template configuration
 
@@ -175,13 +187,8 @@ The web page layout is configured using the config/tech-docs.yml file.
 
 The template can be configured in [config/tech-docs.yml](config/tech-docs.yml)
 
-Key config settings:
-
-- `service_link:` - This should be the docpath to your site. This is usually
-  `/[repo name]`, so if your repository is `ministryofjustice/awesome-docs`
-  `service_link` will be `/awesome-docs`
-
-Further configuration options are described on the Tech Docs Template website: [Global Configuration](https://tdt-documentation.london.cloudapps.digital/configure_project/global_configuration/).
+Further configuration options are described on the Tech Docs Template
+website: [Global Configuration](https://tdt-documentation.london.cloudapps.digital/configure_project/global_configuration/).
 
 ### Last review date
 
