@@ -182,6 +182,7 @@ Key config settings:
   `service_link` will be `/awesome-docs`
 
 Further configuration options are described on the Tech Docs Template website: [Global Configuration](https://tdt-documentation.london.cloudapps.digital/configure_project/global_configuration/).
+
 ### Last review date
 
 30th June 2023
