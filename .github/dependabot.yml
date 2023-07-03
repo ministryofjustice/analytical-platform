@@ -259,6 +259,17 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform/oidc"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
     directory: "terraform/github/application-migration"
     schedule:
       interval: "daily"
@@ -271,17 +282,6 @@ updates:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "terraform"
     directory: "terraform/github/data-platform"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/oidc"
     schedule:
       interval: "daily"
       time: "09:00"
