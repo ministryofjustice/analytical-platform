@@ -1,5 +1,5 @@
 ---
-name: Terraform - AWS - Analytical Platform - Baseline
+name: Terraform - AWS - Analytical Platform - OIDC
 
 on: # yamllint disable-line rule:truthy
   pull_request:
