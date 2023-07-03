@@ -86,7 +86,7 @@ data "aws_iam_policy_document" "github_actions_role_permissions" {
 module "github_actions_roles" {
   for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-management-production" }
 
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v1.0.0"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
 
   providers = {
     aws = aws.analytical-platform-management-production
@@ -102,7 +102,7 @@ module "github_actions_roles" {
 module "github_actions_roles_sandbox" {
   for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-engineering-sandbox-a" }
 
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v1.0.0"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
 
   providers = {
     aws = aws.analytical-platform-data-engineering-sandbox-a
@@ -118,7 +118,7 @@ module "github_actions_roles_sandbox" {
 module "github_actions_roles_data_engineering" {
   for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-engineering-production" }
 
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v1.0.0"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
 
   providers = {
     aws = aws.analytical-platform-data-engineering-production
@@ -134,7 +134,7 @@ module "github_actions_roles_data_engineering" {
 module "github_actions_roles_data" {
   for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-production" }
 
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v1.0.0"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
 
   providers = {
     aws = aws.analytical-platform-data-production
