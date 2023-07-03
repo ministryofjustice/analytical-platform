@@ -33,7 +33,7 @@ module "rds" {
   create_db_option_group      = false
   create_db_subnet_group      = true
   create_monitoring_role      = true
-  manage_master_user_password = true
+  manage_master_user_password = false
 
   parameters = var.rds_paramaters
 
