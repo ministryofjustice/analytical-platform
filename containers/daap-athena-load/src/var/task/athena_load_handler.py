@@ -211,10 +211,11 @@ def infer_glue_schema(
 
         str_rows = []
         for row in byte_rows:
+            # use 'utf-8-sig' as decodes both with and without byte order mark BOM
             str_rows.append(
                 [
                     _tryeval(val)
-                    for val in row.decode("utf-8").strip("\r\n\t").split(",")
+                    for val in row.decode("utf-8-sig").strip("\r\n\t").split(",")
                 ]
             )
 
@@ -267,6 +268,10 @@ def infer_glue_schema(
     metadata_mojap.file_format = file_type
     metadata_mojap.column_names_to_lower(inplace=True)
 
+    for col in metadata_mojap.columns:
+        if col["type"] == "null":
+            metadata_mojap.update_column({"name": col["name"], "type": "string"})
+
     if table_type == "curated":
         metadata_mojap.name = table_name
         metadata_mojap.columns.append(
@@ -282,6 +287,9 @@ def infer_glue_schema(
 
     if file_type == "csv" and has_headers:
         metadata_glue["TableInput"]["Parameters"]["skip.header.line.count"] = "1"
+        metadata_glue["TableInput"]["StorageDescriptor"]["SerdeInfo"][
+            "SerializationLibrary"
+        ] = "org.apache.hadoop.hive.serde2.OpenCSVSerde"
 
     return metadata_glue
 
