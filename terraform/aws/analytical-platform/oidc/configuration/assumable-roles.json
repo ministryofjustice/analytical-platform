@@ -1,6 +1,6 @@
 {
   "moj-data-transfer-api-infra": {
-    "account": "data_engineering",
+    "account": "analytical-platform-data-engineering-production",
     "stateConfig": [
       {
         "stateBucket": "moj-data-transfer-api-pulumi-backend/",
@@ -8,11 +8,16 @@
       }
     ],
     "repositories": ["ministryofjustice/moj-data-transfer-api:*"],
-    "targets": ["data", "data_engineering", "sandbox"],
-    "stateLockingDetails": []
+    "targets": [
+      "analytical-platform-data-production",
+      "analytical-platform-data-engineering-production",
+      "analytical-platform-data-engineering-sandbox-a"
+    ],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
   },
   "data-engineering-pulumi-components": {
-    "account": "sandbox",
+    "account": "analytical-platform-data-engineering-sandbox-a",
     "stateConfig": [
       {
         "stateBucket": "sandbox-pulumi-backend/",
@@ -20,7 +25,7 @@
       }
     ],
     "repositories": ["ministryofjustice/data-engineering-pulumi-components:*"],
-    "targets": ["sandbox"],
+    "targets": ["analytical-platform-data-engineering-sandbox-a"],
     "stateLockingDetails": [],
     "ssmParameterConfig": [
       {
@@ -30,7 +35,7 @@
     ]
   },
   "register-my-data": {
-    "account": "data_engineering",
+    "account": "analytical-platform-data-engineering-production",
     "stateConfig": [
       {
         "stateBucket": "register-my-data-pulumi-backend/",
@@ -38,7 +43,10 @@
       }
     ],
     "repositories": ["ministryofjustice/register-my-data:*"],
-    "targets": ["data_engineering", "data"],
+    "targets": [
+      "analytical-platform-data-engineering-production",
+      "analytical-platform-data-production"
+    ],
     "stateLockingDetails": [],
     "ssmParameterConfig": [
       {
@@ -48,7 +56,7 @@
     ]
   },
   "data-engineering-airflow": {
-    "account": "data_engineering",
+    "account": "analytical-platform-data-engineering-production",
     "stateConfig": [
       {
         "stateBucket": "data-engineering-airflow-pulumi-backend/",
@@ -56,11 +64,15 @@
       }
     ],
     "repositories": ["ministryofjustice/data-engineering-airflow:*"],
-    "targets": ["data_engineering", "data"],
-    "stateLockingDetails": []
+    "targets": [
+      "analytical-platform-data-engineering-production",
+      "analytical-platform-data-production"
+    ],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
   },
   "data-uploader": {
-    "account": "data_engineering",
+    "account": "analytical-platform-data-engineering-production",
     "stateConfig": [
       {
         "stateBucket": "ap-uploader-pulumi-backend/",
@@ -68,7 +80,10 @@
       }
     ],
     "repositories": ["ministryofjustice/analytical-platform-uploader:*"],
-    "targets": ["data_engineering", "data"],
+    "targets": [
+      "analytical-platform-data-engineering-production",
+      "analytical-platform-data-production"
+    ],
     "stateLockingDetails": [],
     "ssmParameterConfig": [
       {
@@ -78,7 +93,7 @@
     ]
   },
   "analytical-platform-data-engineering": {
-    "account": "data_engineering",
+    "account": "analytical-platform-data-engineering-production",
     "stateConfig": [
       {
         "stateBucket": "analytical-platform-data-engineering-pulumi-backend/",
@@ -86,12 +101,15 @@
       }
     ],
     "repositories": ["ministryofjustice/analytical-platform-data-engineering:*"],
-    "targets": ["data", "data_engineering"],
+    "targets": [
+      "analytical-platform-data-production",
+      "analytical-platform-data-engineering-production"
+    ],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
   },
   "analytical-platform-data-engineering-sandbox": {
-    "account": "sandbox",
+    "account": "analytical-platform-data-engineering-sandbox-a",
     "stateConfig": [
       {
         "stateBucket": "managed-pipelines-sandbox-pulumi-backend/",
@@ -99,12 +117,12 @@
       }
     ],
     "repositories": ["ministryofjustice/analytical-platform-data-engineering:*"],
-    "targets": ["sandbox"],
+    "targets": ["analytical-platform-data-engineering-sandbox-a"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
   },
   "pulumi-oidc-test": {
-    "account": "sandbox",
+    "account": "analytical-platform-data-engineering-sandbox-a",
     "stateConfig": [
       {
         "stateBucket": "sandbox-pulumi-backend/",
@@ -112,36 +130,36 @@
       }
     ],
     "repositories": ["moj-analytical-services/pulumi-oidc-test:*"],
-    "targets": ["sandbox"],
+    "targets": ["analytical-platform-data-engineering-sandbox-a"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
   },
   "lookup-offence-sandbox": {
-    "account": "sandbox",
+    "account": "analytical-platform-data-engineering-sandbox-a",
     "stateConfig": [],
     "repositories": ["ministryofjustice/lookup-offence-sandbox:*"],
-    "targets": ["sandbox"],
+    "targets": ["analytical-platform-data-engineering-sandbox-a"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
   },
   "create-a-derived-table": {
-    "account": "data",
+    "account": "analytical-platform-data-production",
     "stateConfig": [],
     "repositories": ["moj-analytical-services/create-a-derived-table:*"],
-    "targets": ["data"],
+    "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
   },
   "lookup-offence": {
-    "account": "data",
+    "account": "analytical-platform-data-production",
     "stateConfig": [],
     "repositories": ["moj-analytical-services/lookup_offence:*"],
-    "targets": ["data"],
+    "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
   },
   "data-platform-apps": {
-    "account": "data",
+    "account": "analytical-platform-data-production",
     "stateConfig": [],
     "repositories": [
       "ministryofjustice/hmpps-hr-dashboard:*",
@@ -151,7 +169,7 @@
       "ministryofjustice/pfg-dash-moj:*",
       "ministryofjustice/regime-dashboard:*"
     ],
-    "targets": ["data"],
+    "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
   }

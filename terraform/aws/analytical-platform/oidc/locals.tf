@@ -1,17 +1,4 @@
 locals {
-
-  accounts = {
-    data             = "593291632749",
-    dev              = "525294151996",
-    prod             = "312423030077",
-    data_engineering = "189157455002",
-    security         = "110958189132",
-    landing          = "335823981503",
-    management       = "042130406152",
-    sandbox          = "684969100054",
-    dev_data         = "803963757240",
-    mi_dev           = "967617145656"
-  }
   tags = {
     business-unit = "Platforms"
     project       = "data-platform-oidc"
@@ -19,7 +6,8 @@ locals {
     is-production = "true"
     source-code   = "github.com/ministryofjustice/data-platform/tree/main/terraform/oidc"
   }
-  oidc-roles = jsondecode(file("${path.module}/github-oidc-assumable-roles-config.json"))
+
+  oidc_roles = jsondecode(file("${path.module}/configuration/assumable-roles.json"))
 
   deployment-roles = {
     "github-actions-infrastructure" = {
@@ -29,8 +17,11 @@ locals {
     "data-engineering-infrastructure" = {
       description = "Deploys data engineering infrastructure",
       trusts = {
-        name     = "github-actions-infrastructure",
-        accounts = ["data", "data_engineering"]
+        name = "github-actions-infrastructure",
+        accounts = [
+          "analytical-platform-data-production",
+          "analytical-platform-data-engineering-production"
+        ]
       }
     }
   }

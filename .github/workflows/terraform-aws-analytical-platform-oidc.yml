@@ -1,19 +1,19 @@
 ---
-name: Terraform - OIDC
+name: Terraform - AWS - Analytical Platform - Baseline
 
 on: # yamllint disable-line rule:truthy
   pull_request:
     branches:
       - main
     paths:
-      - .github/workflows/terraform-oidc.yml
+      - .github/workflows/terraform-aws-analytical-platform-oidc.yml
       - configuration/ap_migration_apps.json
       - terraform/oidc/**
   push:
     branches:
       - main
     paths:
-      - .github/workflows/terraform-oidc.yml
+      - .github/workflows/terraform-aws-analytical-platform-oidc.yml
       - configuration/ap_migration_apps.json
       - terraform/oidc/**
 
@@ -29,6 +29,6 @@ jobs:
     with:
       working-directory: terraform/oidc
       aws-role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
-      terraform-version: 1.4.6
+      terraform-version: 1.5.0
       terraform-backend-config-role: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
     secrets: inherit
