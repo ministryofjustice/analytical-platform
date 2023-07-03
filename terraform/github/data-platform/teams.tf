@@ -66,9 +66,6 @@ locals {
   # DATA-ENGINEERING GITHUB GROUP WITH SANDBOX-ONLY ACCESS
 
   data_engineering_members = [
-    "lalithanagarur",
-    "Bharat-Dhiman",
-    "mdowniecog",
     "pjxcog",
     "sivabathina2",
     "hemeshpatel-moj",
@@ -92,11 +89,8 @@ locals {
     "LavMatt",
     "williamorrie", # William Orr
     "gustavmoller",
-    "jhpyke",         # Jake Hamblin-Pyke
-    "lalithanagarur", # Lalitha Nagarur (Cog)
-    "murad-ali-MoJ",  # Murad Ali
-    "Bharat-Dhiman",  # Bharat Dhiman (Cog)
-    "mdowniecog",     # Michael Downie (Cog)
+    "jhpyke",        # Jake Hamblin-Pyke
+    "murad-ali-MoJ", # Murad Ali
     "oliver-critchfield",
     "AlexVilela",
     "davidbridgwood",
