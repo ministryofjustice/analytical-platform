@@ -9,7 +9,7 @@ locals {
 
   oidc_roles = jsondecode(file("${path.module}/configuration/assumable-roles.json"))
 
-  deployment-roles = {
+  deployment_roles = {
     "github-actions-infrastructure" = {
       description = "Allows GitHub Actions and self-hosted runners to administer this account",
       trusts      = {},

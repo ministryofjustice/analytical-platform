@@ -25,7 +25,7 @@ module "management-assumable-role" {
 }
 
 module "data-assumable-role" {
-  for_each = local.deployment-roles
+  for_each = local.deployment_roles
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.25.0"
@@ -54,7 +54,7 @@ module "data-assumable-role" {
 }
 
 module "data-engineering-assumable-role" {
-  for_each = local.deployment-roles
+  for_each = local.deployment_roles
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.25.0"
