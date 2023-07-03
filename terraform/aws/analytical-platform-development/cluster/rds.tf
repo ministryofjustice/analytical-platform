@@ -30,10 +30,10 @@ module "rds" {
   monitoring_interval  = var.rds_monitoring_interval
   monitoring_role_name = var.rds_monitoring_role_name
 
-  create_db_option_group = false
-  create_db_subnet_group = true
-  create_monitoring_role = true
-  create_random_password = false
+  create_db_option_group      = false
+  create_db_subnet_group      = true
+  create_monitoring_role      = true
+  manage_master_user_password = false
 
   parameters = var.rds_paramaters
 
