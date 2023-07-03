@@ -8,14 +8,14 @@ on: # yamllint disable-line rule:truthy
     paths:
       - .github/workflows/terraform-aws-analytical-platform-oidc.yml
       - configuration/ap_migration_apps.json
-      - terraform/oidc/**
+      - terraform/aws/analytical-platform/oidc/**
   push:
     branches:
       - main
     paths:
       - .github/workflows/terraform-aws-analytical-platform-oidc.yml
       - configuration/ap_migration_apps.json
-      - terraform/oidc/**
+      - terraform/aws/analytical-platform/oidc/**
 
 permissions: read-all
 
@@ -27,7 +27,7 @@ jobs:
       id-token: write
     uses: ./.github/workflows/reusable-terraform.yml
     with:
-      working-directory: terraform/oidc
+      working-directory: terraform/aws/analytical-platform/oidc
       aws-role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
       terraform-version: 1.5.0
       terraform-backend-config-role: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
