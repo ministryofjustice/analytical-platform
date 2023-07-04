@@ -1,4 +1,7 @@
 ---
+# This file is auto-generated here, do not manually amend.
+# https://github.com/ministryofjustice/data-platform/blob/main/scripts/dependabot/configuration-generator.sh
+
 version: 2
 
 updates:
@@ -6,11 +9,307 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "github-actions"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: ".devcontainer/features/test"
     schedule:
       interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
+    directory: "containers/alpine-base"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
+    directory: "containers/daap-athena-load"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
+    directory: "containers/daap-simulated-data-producer"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
+    directory: "containers/kubectl"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
+    directory: "containers/rshiny-3.5.3"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
+    directory: "containers/rshiny-3.6.3"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
+    directory: "containers/rshiny-4.0.5"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
+    directory: "containers/rshiny-4.1.3"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
+    directory: "containers/rshiny-4.2.2"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
+    directory: "containers/ubuntu-base"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "pip"
+    directory: "=containers/daap-athena-load/src/var/task"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "python"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "pip"
+    directory: "scripts/pagerduty/rota-to-slack"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "python"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "terraform"
-    directory: "/"
+    directory: "terraform/application-migration"
     schedule:
       interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-data-engineering-production/10ds"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-data-production/airflow"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-data-production/artifact-repos"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-data-production/kops"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-development/cluster"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-development/open-metadata"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-management-production/cluster"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-production/cluster"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform/baseline"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform/oidc"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/github/application-migration"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/github/data-platform"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/pagerduty"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
