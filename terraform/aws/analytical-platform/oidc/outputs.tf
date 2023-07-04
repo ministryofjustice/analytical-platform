@@ -1,23 +1,23 @@
-# output "github-roles" {
-#   value = {
-#     for role, config in local.oidc-roles : module.github_actions_roles[role].role => data.aws_iam_policy_document.github_actions_role_permissions[role].json if module.github_actions_roles != {} && try(config.account, "management") == "management"
-#   }
-# }
+output "analytical_platform_data_engineering_production_github_oidc_roles" {
+  value = {
+    for role, config in local.oidc_roles : module.analytical_platform_data_engineering_production_github_oidc_role[role].role => data.aws_iam_policy_document.github_oidc_role[role].json if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-engineering-production"
+  }
+}
 
-# output "github-sandbox-roles" {
-#   value = {
-#     for role, config in local.oidc-roles : module.github_actions_roles_sandbox[role].role => data.aws_iam_policy_document.github_actions_role_permissions[role].json if try(config.account, "management") == "sandbox"
-#   }
-# }
+output "analytical_platform_data_engineering_sandbox_a_github_oidc_roles" {
+  value = {
+    for role, config in local.oidc_roles : module.analytical_platform_data_engineering_sandbox_a_github_oidc_role[role].role => data.aws_iam_policy_document.github_oidc_role[role].json if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-engineering-sandbox-a"
+  }
+}
 
-# output "github-data_engineering-roles" {
-#   value = {
-#     for role, config in local.oidc-roles : module.github_actions_roles_data_engineering[role].role => data.aws_iam_policy_document.github_actions_role_permissions[role].json if try(config.account, "management") == "data_engineering"
-#   }
-# }
+output "analytical_platform_data_production_github_oidc_roles" {
+  value = {
+    for role, config in local.oidc_roles : module.analytical_platform_data_production_github_oidc_role[role].role => data.aws_iam_policy_document.github_oidc_role[role].json if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-production"
+  }
+}
 
-# output "github-data-roles" {
-#   value = {
-#     for role, config in local.oidc-roles : module.github_actions_roles_data[role].role => data.aws_iam_policy_document.github_actions_role_permissions[role].json if try(config.account, "management") == "data"
-#   }
-# }
+output "analytical_platform_management_production_github_oidc_roles" {
+  value = {
+    for role, config in local.oidc_roles : module.analytical_platform_management_production_github_oidc_role[role].role => data.aws_iam_policy_document.github_oidc_role[role].json if module.analytical_platform_management_production_github_oidc_role != {} && try(config.account, "analytical-platform-management-production") == "analytical-platform-management-production"
+  }
+}

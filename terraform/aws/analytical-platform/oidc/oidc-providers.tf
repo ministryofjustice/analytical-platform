@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_production_
 }
 
 module "analytical_platform_data_engineering_production_github_oidc_provider" {
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.0"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.1"
 
   providers = {
     aws = aws.analytical-platform-data-engineering-production
@@ -103,7 +103,7 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_sandbox_a_g
 }
 
 module "analytical_platform_data_engineering_sandbox_a_github_oidc_provider" {
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.0"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.1"
 
   providers = {
     aws = aws.analytical-platform-data-engineering-sandbox-a
@@ -144,7 +144,7 @@ data "aws_iam_policy_document" "analytical_platform_data_production_github_oidc_
 }
 
 module "analytical_platform_data_production_github_oidc_provider" {
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.0"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.1"
 
   providers = {
     aws = aws.analytical-platform-data-production
@@ -205,7 +205,7 @@ data "aws_iam_policy_document" "analytical_platform_management_production_github
 }
 
 module "analytical_platform_management_production_github_oidc_provider" {
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.0"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.1"
 
   providers = {
     aws = aws.analytical-platform-management-production
