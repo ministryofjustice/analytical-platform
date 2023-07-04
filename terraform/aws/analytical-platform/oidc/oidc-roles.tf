@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "github_actions_role_permissions" {
+data "aws_iam_policy_document" "github_oidc_role" {
   for_each = local.oidc_roles
 
   dynamic "statement" {
@@ -83,39 +83,7 @@ data "aws_iam_policy_document" "github_actions_role_permissions" {
   }
 }
 
-module "github_actions_roles" {
-  for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-management-production" }
-
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
-
-  providers = {
-    aws = aws.analytical-platform-management-production
-  }
-
-  role_name           = "github-${each.key}"
-  policy_jsons        = [data.aws_iam_policy_document.github_actions_role_permissions[each.key].json]
-  github_repositories = each.value.repositories
-
-  tags = local.tags
-}
-
-module "github_actions_roles_sandbox" {
-  for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-engineering-sandbox-a" }
-
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
-
-  providers = {
-    aws = aws.analytical-platform-data-engineering-sandbox-a
-  }
-
-  role_name           = "github-${each.key}"
-  policy_jsons        = [data.aws_iam_policy_document.github_actions_role_permissions[each.key].json]
-  github_repositories = each.value.repositories
-
-  tags = local.tags
-}
-
-module "github_actions_roles_data_engineering" {
+module "analytical_platform_data_engineering_production_github_oidc_role" {
   for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-engineering-production" }
 
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
@@ -125,13 +93,29 @@ module "github_actions_roles_data_engineering" {
   }
 
   role_name           = "github-${each.key}"
-  policy_jsons        = [data.aws_iam_policy_document.github_actions_role_permissions[each.key].json]
+  policy_jsons        = [data.aws_iam_policy_document.github_oidc_role[each.key].json]
   github_repositories = each.value.repositories
 
-  tags = local.tags
+  tags = var.tags
 }
 
-module "github_actions_roles_data" {
+module "analytical_platform_data_engineering_sandbox_a_github_oidc_role" {
+  for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-engineering-sandbox-a" }
+
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
+
+  providers = {
+    aws = aws.analytical-platform-data-engineering-sandbox-a
+  }
+
+  role_name           = "github-${each.key}"
+  policy_jsons        = [data.aws_iam_policy_document.github_oidc_role[each.key].json]
+  github_repositories = each.value.repositories
+
+  tags = var.tags
+}
+
+module "analytical_platform_data_production_github_oidc_role" {
   for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-production" }
 
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
@@ -141,8 +125,24 @@ module "github_actions_roles_data" {
   }
 
   role_name           = "github-${each.key}"
-  policy_jsons        = [data.aws_iam_policy_document.github_actions_role_permissions[each.key].json]
+  policy_jsons        = [data.aws_iam_policy_document.github_oidc_role[each.key].json]
   github_repositories = each.value.repositories
 
-  tags = local.tags
+  tags = var.tags
+}
+
+module "analytical_platform_management_production_github_oidc_role" {
+  for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-management-production" }
+
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
+
+  providers = {
+    aws = aws.analytical-platform-management-production
+  }
+
+  role_name           = "github-${each.key}"
+  policy_jsons        = [data.aws_iam_policy_document.github_oidc_role[each.key].json]
+  github_repositories = each.value.repositories
+
+  tags = var.tags
 }
