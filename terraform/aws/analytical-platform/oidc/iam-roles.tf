@@ -1,6 +1,6 @@
 module "analytical_platform_data_development_assumable_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.26.0"
+  version = "5.27.0"
 
   providers = {
     aws = aws.analytical-platform-data-development
@@ -28,7 +28,7 @@ module "analytical_platform_data_engineering_production_assumable_role" {
   for_each = local.deployment_roles
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.26.0"
+  version = "5.27.0"
 
   providers = {
     aws = aws.analytical-platform-data-engineering-production
@@ -54,7 +54,7 @@ module "analytical_platform_data_engineering_production_assumable_role" {
 
 module "analytical_platform_data_engineering_sandbox_a_assumable_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.26.0"
+  version = "5.27.0"
 
   providers = {
     aws = aws.analytical-platform-data-engineering-sandbox-a
@@ -86,7 +86,7 @@ module "analytical_platform_data_production_assumable_role" {
   for_each = local.deployment_roles
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.26.0"
+  version = "5.27.0"
 
   providers = {
     aws = aws.analytical-platform-data-production
@@ -113,7 +113,7 @@ module "analytical_platform_data_production_assumable_role" {
 
 module "analytical_platform_development_assumable_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.26.0"
+  version = "5.27.0"
 
   providers = {
     aws = aws.analytical-platform-development
@@ -139,7 +139,7 @@ module "analytical_platform_development_assumable_role" {
 
 module "analytical_platform_landing_production_assumable_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.26.0"
+  version = "5.27.0"
 
   providers = {
     aws = aws.analytical-platform-landing-production
@@ -165,7 +165,7 @@ module "analytical_platform_landing_production_assumable_role" {
 
 module "analytical_platform_management_production_assumable_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.26.0"
+  version = "5.27.0"
 
   providers = {
     aws = aws.analytical-platform-management-production
@@ -191,7 +191,7 @@ module "analytical_platform_management_production_assumable_role" {
 
 module "analytical_platform_production_assumable_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.26.0"
+  version = "5.27.0"
 
   providers = {
     aws = aws.analytical-platform-production
@@ -217,7 +217,7 @@ module "analytical_platform_production_assumable_role" {
 
 module "mi_platform_development_assumable_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.26.0"
+  version = "5.27.0"
 
   providers = {
     aws = aws.mi-platform-development
