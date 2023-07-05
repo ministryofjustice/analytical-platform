@@ -14,4 +14,3 @@ resource "aws_iam_role" "rds_s3_export" {
   name               = "rds-s3-export"
   assume_role_policy = data.aws_iam_policy_document.export_role_assume.json
 }
-

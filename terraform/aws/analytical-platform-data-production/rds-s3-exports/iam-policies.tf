@@ -12,7 +12,6 @@ data "aws_iam_policy_document" "export_policy" {
     resources = [
       "arn:aws:s3:::alpha-vcms-data",
       "arn:aws:s3:::alpha-vcms-data/*"
-
     ]
   }
 }
