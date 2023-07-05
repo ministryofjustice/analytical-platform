@@ -4,7 +4,7 @@ resource "aws_kms_key" "export_rds_snapshot_to_S3" {
   customer_master_key_spec = "SYMMETRIC_DEFAULT"
   policy                   = <<EOF
 {
-    "Id": "key-consolepolicy-3",
+        "Id": "key-consolepolicy-3",
     "Version": "2012-10-17",
     "Statement": [
         {
