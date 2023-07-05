@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "open_metadata_airflow" {
 
 module "open_metadata_airflow_iam_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.26.0"
+  version = "5.27.0"
 
   name_prefix = "open-metadata-airflow"
 
