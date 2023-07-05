@@ -1,6 +1,6 @@
 data "aws_iam_policy_document" "export_policy" {
   statement {
-    sid    = "ExportPolicy"
+    sid    = "AllowS3"
     effect = "Allow"
     actions = [
       "s3:PutObject*",
