@@ -70,7 +70,8 @@ locals {
     "sivabathina2",
     "hemeshpatel-moj",
     "ChikC",     # Chike Chinukwue
-    "hrahim-moj" # Haymon
+    "hrahim-moj", # Haymon
+    "lalithanagarur"
   ]
 
   # DATA-ENGINEERING-AWS GITHUB GROUP WITH FULL AWS ACCESS
