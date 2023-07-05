@@ -13,8 +13,6 @@ jobs:
     name: Pull request assigner
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      issues: write
       pull-requests: write
     steps:
       - name: Pull request assigner
