@@ -1,6 +1,17 @@
-resource "aws_kms_key" "export_rds_snapshot_to_S3" {
-  description              = "Export RDS snapshot to S3"
-  key_usage                = "ENCRYPT_DECRYPT"
-  customer_master_key_spec = "SYMMETRIC_DEFAULT"
-  policy                   = data.aws_iam_policy_document.kms_key_policy.json
+data "aws_iam_policy_document" "export_kms_key" {
+  statement {
+    sid     = "EnableIAMUserPermissions"
+    effect  = "Allow"
+    actions = ["kms:*"]
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+    resources = ["*"]
+  }
+}
+
+resource "aws_kms_key" "rds_s3_export" {
+  policy              = data.aws_iam_policy_document.export_kms_key.json
+  enable_key_rotation = true
 }

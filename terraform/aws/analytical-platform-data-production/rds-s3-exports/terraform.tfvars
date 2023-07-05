@@ -10,10 +10,10 @@ account_ids = {
 tags = {
   business-unit          = "Platforms"
   application            = "Data Platform"
-  component              = "rds-s3-exports"
+  component              = "RDS to S3 Exports"
   environment            = "production"
   is-production          = "true"
   owner                  = "data-platform:data-platform-tech@digital.justice.gov.uk"
   infrastructure-support = "data-platform:data-platform-tech@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/data-platform"
+  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/rds-s3-exports"
 }
