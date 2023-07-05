@@ -20,3 +20,16 @@ resource "aws_iam_policy" "rds_s3_export" {
   name   = "rds-s3-export"
   policy = data.aws_iam_policy_document.export_policy.json
 }
+
+data "aws_iam_policy_document" "kms_key_policy" {
+  statement {
+    sid    = "Enable IAM User Permissions"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::593291632749:root"]
+    }
+    actions   = ["kms:*"]
+    resources = ["*"]
+  }
+}
