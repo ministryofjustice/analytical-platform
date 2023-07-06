@@ -69,7 +69,7 @@ locals {
     "pjxcog",
     "sivabathina2",
     "hemeshpatel-moj",
-    "ChikC",     # Chike Chinukwue
+    "ChikC",      # Chike Chinukwue
     "hrahim-moj", # Haymon
     "lalithanagarur"
   ]
