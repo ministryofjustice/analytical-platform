@@ -99,8 +99,11 @@ module "open_metadata_iam_role" {
 
   oidc_providers = {
     main = {
-      provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${kubernetes_namespace.open_metadata.metadata[0].name}:openmetadata"]
+      provider_arn = module.eks.oidc_provider_arn
+      namespace_service_accounts = concat(
+        ["${kubernetes_namespace.open_metadata.metadata[0].name}:openmetadata"],
+        formatlist("${local.datahub_namespace}:%s", local.datahub_service_accounts)
+      )
     }
   }
 }
@@ -117,8 +120,11 @@ module "open_metadata_airflow_iam_role" {
 
   oidc_providers = {
     main = {
-      provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${kubernetes_namespace.open_metadata.metadata[0].name}:airflow"]
+      provider_arn = module.eks.oidc_provider_arn
+      namespace_service_accounts = concat(
+        ["${kubernetes_namespace.open_metadata.metadata[0].name}:airflow"],
+        formatlist("${local.datahub_namespace}:%s", local.datahub_service_accounts)
+      )
     }
   }
 }
