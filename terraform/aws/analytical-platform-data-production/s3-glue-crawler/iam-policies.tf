@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "crawler_policy" {
     actions = [
       "kms:Decrypt"
     ]
-    resources = ["arn:aws:kms:*:${data.aws_caller_identity.current.account_id}:key/add key-id here"]
+    resources = ["${data.aws_kms_key.by_alias.arn}"]
   }
 }
 
