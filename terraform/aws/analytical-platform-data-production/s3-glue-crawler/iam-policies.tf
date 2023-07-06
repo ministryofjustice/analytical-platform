@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "crawler_policy" {
     actions = [
       "kms:Decrypt"
     ]
-    resources = ["${data.aws_kms_key.by_alias.arn}"]
+    resources = [data.aws_kms_key.by_alias.arn]
   }
 }
 
