@@ -106,8 +106,9 @@ locals {
     "afua-moj",
     "murdo-moj",
     "hemeshpatel-moj",
-    "AntFMoJ", # Anthony Fitzroy
-    "tomholt1" # Tom Holt
+    "AntFMoJ",  # Anthony Fitzroy
+    "tomholt1", # Tom Holt
+    "lalithanagarur"
   ]
 
   data_engineering_aws_developer_members = [
