@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "alpha_vcms_data_crawler_policy" {
     sid       = "AllowKMS"
     effect    = "Allow"
     actions   = ["kms:Decrypt"]
-    resources = [data.aws_kms_key.by_alias.arn]
+    resources = [data.aws_kms_key.rds_s3_export.arn]
   }
 }
 
