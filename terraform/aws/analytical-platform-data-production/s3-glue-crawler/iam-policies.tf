@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "alpha_vcms_data_crawler_policy" {
   }
 }
 
-resource "aws_iam_policy" "alpha_vcms_crawler_policy" {
-  name   = "alpha-vcms-crawler-policy"
+resource "aws_iam_policy" "alpha_vcms_crawler" {
+  name   = "alpha-vcms-crawler"
   policy = data.aws_iam_policy_document.alpha_vcms_data_crawler_policy.json
 }
