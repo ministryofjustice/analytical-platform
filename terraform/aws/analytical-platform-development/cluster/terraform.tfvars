@@ -172,6 +172,11 @@ eks_role_mappings = [
     groups   = ["system:masters"]
     rolearn  = "arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin"
     username = "global-github-actions-admin"
+  },
+  {
+    groups   = ["system:masters"]
+    rolearn  = "arn:aws:iam::335889174965:role/data-platform-apps-and-tools-development-airflow-execution"
+    username = "data-platform-apps-and-tools-development-airflow"
   }
 ]
 
