@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "glue_policy" {
+data "aws_iam_policy_document" "glue_assume_policy" {
   statement {
     sid     = "AllowAssume"
     effect  = "Allow"
@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "glue_policy" {
   }
 }
 
-resource "aws_iam_role" "glue_vcms_crawler_role" {
-  name               = "AWSGlueServiceRole-vcms-crawler"
-  assume_role_policy = data.aws_iam_policy_document.glue_policy.json
+resource "aws_iam_role" "alpha_vcms_data_crawler" {
+  name               = "alpha-vcms-data-crawler"
+  assume_role_policy = data.aws_iam_policy_document.glue_assume_policy.json
 }
