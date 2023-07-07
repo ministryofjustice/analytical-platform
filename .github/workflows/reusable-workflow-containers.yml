@@ -194,6 +194,8 @@ jobs:
           file: containers/${{ inputs.image }}/Dockerfile
           push: true
           tags: ministryofjustice/data-platform-${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
+          build-args: |
+            VERSION=${{ needs.prepare-environment.outputs.version }}
 
   build-push-ecr:
     if: (github.ref == 'refs/heads/main') && (needs.prepare-environment.outputs.registry == 'ecr')
@@ -234,3 +236,5 @@ jobs:
           file: containers/${{ inputs.image }}/Dockerfile
           push: true
           tags: ${{ env.ecr_account }}.dkr.ecr.${{ env.ecr_region }}.amazonaws.com/${{ env.ecr_repository }}:${{ needs.prepare-environment.outputs.version }}
+          build-args: |
+            VERSION=${{ needs.prepare-environment.outputs.version }}
