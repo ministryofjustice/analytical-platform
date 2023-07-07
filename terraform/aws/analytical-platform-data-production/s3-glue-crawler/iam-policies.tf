@@ -9,9 +9,9 @@ data "aws_iam_policy_document" "alpha_vcms_data_crawler_policy" {
     resources = ["arn:aws:s3:::alpha-vcms-data/*"]
   }
   statement {
-    sid    = "AllowKMS"
-    effect = "Allow"
-    actions = ["kms:Decrypt"]
+    sid       = "AllowKMS"
+    effect    = "Allow"
+    actions   = ["kms:Decrypt"]
     resources = [data.aws_kms_key.by_alias.arn]
   }
 }
