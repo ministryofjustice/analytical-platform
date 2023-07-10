@@ -281,7 +281,7 @@ resource "aws_secretsmanager_secret_version" "pagerduty_airflow_integration_key"
 ##################################################
 
 data "pagerduty_vendor" "alert_manager" {
-  name = "Alert Manager Integration"
+  name = "Prometheus"
 }
 
 resource "pagerduty_service_integration" "alert_manager" {
