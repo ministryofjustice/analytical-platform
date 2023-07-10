@@ -74,11 +74,12 @@ locals {
           ]
         }
       ]
-      enable_cloudwatch_integration   = true
-      enable_cloudtrail_integration   = true
-      enable_guardduty_integration    = true
-      enable_security_hub_integration = true
-      enable_email_integration        = true
+      enable_cloudwatch_integration    = true
+      enable_cloudtrail_integration    = true
+      enable_guardduty_integration     = true
+      enable_security_hub_integration  = true
+      enable_email_integration         = true
+      enable_alert_manager_integration = true
     },
     {
       name              = "Analytical Platform Networking"
@@ -272,11 +273,12 @@ locals {
           ]
         }
       ]
-      enable_cloudwatch_integration   = true
-      enable_cloudtrail_integration   = true
-      enable_guardduty_integration    = true
-      enable_security_hub_integration = true
-      enable_email_integration        = true
+      enable_cloudwatch_integration    = true
+      enable_cloudtrail_integration    = true
+      enable_guardduty_integration     = true
+      enable_security_hub_integration  = true
+      enable_email_integration         = true
+      enable_alert_manager_integration = true
     }
   ]
 }
@@ -301,6 +303,7 @@ module "technical_services" {
   enable_security_hub_integration     = try(each.value.enable_security_hub_integration, false)
   enable_email_integration            = try(each.value.enable_email_integration, false)
   enable_airflow_integration          = try(each.value.enable_airflow_integration, false)
+  enable_alert_manager                = try(each.value.enable_airflow_integration, false)
 
   depends_on = [module.escalation_policies]
 }

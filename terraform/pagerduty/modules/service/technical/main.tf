@@ -275,3 +275,34 @@ resource "aws_secretsmanager_secret_version" "pagerduty_airflow_integration_key"
   secret_id     = aws_secretsmanager_secret.pagerduty_airflow_integration_key[0].id
   secret_string = pagerduty_service_integration.airflow[0].integration_key
 }
+
+##################################################
+# Alert Manager Integration
+##################################################
+
+data "pagerduty_vendor" "alert_manager" {
+  name = "Alert Manager Integration"
+}
+
+resource "pagerduty_service_integration" "alert_manager" {
+  count = var.enable_alert_manager_integration ? 1 : 0
+
+  name    = data.pagerduty_vendor.alert_manager.name
+  service = pagerduty_service.this.id
+  #vendor = data.pagerduty_vendor.alert_manager.id
+  vendor  = "P1S0PW6"
+}
+
+resource "aws_secretsmanager_secret" "pagerduty_alert_manager_integration_key" {
+  count = var.enable_alert_manager_integration ? 1 : 0
+
+  name       = "${local.secretsmanager_prefix}/alert_manager"
+  kms_key_id = "alias/aws/secretsmanager"
+}
+
+resource "aws_secretsmanager_secret_version" "pagerduty_alert_manager_integration_key" {
+  count = var.enable_alert_manager_integration ? 1 : 0
+
+  secret_id     = aws_secretsmanager_secret.pagerduty_alert_manager_integration_key[0].id
+  secret_string = pagerduty_service_integration.alert_manager[0].integration_key
+}
