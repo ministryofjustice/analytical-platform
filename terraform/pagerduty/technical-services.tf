@@ -79,7 +79,6 @@ locals {
       enable_guardduty_integration     = true
       enable_security_hub_integration  = true
       enable_email_integration         = true
-      enable_alert_manager_integration = true
     },
     {
       name              = "Analytical Platform Networking"
