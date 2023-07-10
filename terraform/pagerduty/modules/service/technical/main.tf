@@ -290,7 +290,7 @@ resource "pagerduty_service_integration" "alert_manager" {
   name    = data.pagerduty_vendor.alert_manager.name
   service = pagerduty_service.this.id
   #vendor = data.pagerduty_vendor.alert_manager.id
-  vendor  = "P1S0PW6"
+  vendor = "P1S0PW6"
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_alert_manager_integration_key" {

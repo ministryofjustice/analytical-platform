@@ -10,5 +10,5 @@ for offset in 0 100 200 300 400; do # As of 12/04/2023 the API has 5 pages of ve
     --url "https://api.pagerduty.com/vendors?limit=100&offset=${offset}" \
     --header "Accept: application/vnd.pagerduty+json;version=2" \
     --header "Authorization: Token token=${PAGERDUTY_TOKEN}" \
-    --header 'Content-Type: application/json' | jq -r '.vendors[] | select(.name == "Prometheus")'
+    --header 'Content-Type: application/json' | jq -r '.vendors[].name'
 done
