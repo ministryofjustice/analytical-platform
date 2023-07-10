@@ -74,11 +74,11 @@ locals {
           ]
         }
       ]
-      enable_cloudwatch_integration    = true
-      enable_cloudtrail_integration    = true
-      enable_guardduty_integration     = true
-      enable_security_hub_integration  = true
-      enable_email_integration         = true
+      enable_cloudwatch_integration   = true
+      enable_cloudtrail_integration   = true
+      enable_guardduty_integration    = true
+      enable_security_hub_integration = true
+      enable_email_integration        = true
     },
     {
       name              = "Analytical Platform Networking"
