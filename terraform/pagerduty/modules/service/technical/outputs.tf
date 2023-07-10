@@ -33,3 +33,7 @@ output "email_integration_key" {
 output "airflow_integration_key" {
   value = var.enable_airflow_integration ? pagerduty_service_integration.airflow[0].integration_key : null
 }
+
+output "alert_manager_integration_key" {
+  value = var.enable_alert_manager_integration ? pagerduty_service_integration.alert_manager[0].integration_key : null
+}
