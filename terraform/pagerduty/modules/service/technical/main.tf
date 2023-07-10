@@ -296,7 +296,7 @@ resource "pagerduty_service_integration" "alert_manager" {
 resource "aws_secretsmanager_secret" "pagerduty_alert_manager_integration_key" {
   count = var.enable_alert_manager_integration ? 1 : 0
 
-  name       = "${local.secretsmanager_prefix}/alert_manager"
+  name       = "${local.secretsmanager_prefix}/alert-manager"
   kms_key_id = "alias/aws/secretsmanager"
 }
 
