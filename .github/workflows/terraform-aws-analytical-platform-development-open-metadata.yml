@@ -27,6 +27,6 @@ jobs:
     with:
       working-directory: terraform/aws/analytical-platform-development/open-metadata
       aws-role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
-      terraform-version: 1.5.0
+      terraform-version: 1.5.2
       terraform-backend-config-role: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
     secrets: inherit
