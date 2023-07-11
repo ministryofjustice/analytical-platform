@@ -14,6 +14,10 @@
     "../features/src/pulumi-tools": {},
     "../features/src/terraform-tools": {}
   },
+  "overrideFeatureInstallOrder": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "../features/src/base"
+  ],
   "remoteUser": "vscode",
   "runArgs": ["--name=platform-engineering-devcontainer"],
   "mounts": [
