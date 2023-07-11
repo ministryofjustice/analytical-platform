@@ -1,6 +1,6 @@
 module "airflow_rds" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "6.0.0"
+  version = "6.1.0"
 
   identifier = "openmetadata-airflow"
 
@@ -25,7 +25,7 @@ module "airflow_rds" {
 
 module "rds" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "6.0.0"
+  version = "6.1.0"
 
   identifier = "openmetadata"
 
