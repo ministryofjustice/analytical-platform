@@ -91,3 +91,8 @@ variable "enable_airflow_integration" {
   type        = bool
   description = "Enable Airflow integration for this service"
 }
+
+variable "enable_alert_manager_integration" {
+  type        = bool
+  description = "Enable Alert Manager integration for this service"
+}
