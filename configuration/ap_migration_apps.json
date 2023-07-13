@@ -420,6 +420,7 @@
     "name": "imb-fees-consultation",
     "source_repo_name": "victims-bill-consultation",
     "team": [],
-    "description": ""
+    "description": "",
+    "role_name_suffix": "victims-bill-consultation"
   }
 ]
