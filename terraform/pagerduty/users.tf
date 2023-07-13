@@ -29,10 +29,6 @@ locals {
       email = "louise.bowler@digital.justice.gov.uk"
     },
     {
-      name  = "Bogdan Mania"
-      email = "bogdan.mania@digital.justice.gov.uk"
-    },
-    {
       name  = "John Hackett"
       email = "john.hackett@digital.justice.gov.uk"
     },
