@@ -12,10 +12,7 @@ module "airflow_analytical_platform_development_iam_role" {
 
   oidc_providers = {
     one = {
-      provider_arn = format(
-        "arn:aws:iam::${var.account_ids["analytical-platform-development"]}:oidc-provider/%s",
-        replace(data.aws_eks_cluster.analytical_platform_development.identity[0].oidc[0].issuer, "https://", "")
-      )
+      provider_arn               = resource.aws_iam_openid_connect_provider.analytical_platform_development.arn
       namespace_service_accounts = ["airflow:airflow"]
     }
   }
