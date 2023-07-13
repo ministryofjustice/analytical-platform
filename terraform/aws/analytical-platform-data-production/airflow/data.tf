@@ -20,5 +20,5 @@ data "aws_eks_cluster" "analytical_platform_development" {
 }
 
 data "tls_certificate" "analytical_platform_development_eks_oidc_issuer" {
-  url = data.aws_eks_cluster.analytical_platform_development.identity.0.oidc.0.issuer
+  url = data.aws_eks_cluster.analytical_platform_development.identity[0].oidc[0].issuer
 }
