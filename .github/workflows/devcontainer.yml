@@ -9,6 +9,13 @@ on: # yamllint disable-line rule:truthy
       - .github/workflows/devcontainer.yml
       - .github/workflows/path-filter/devcontainer.yml
       - .devcontainer/**
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/devcontainer.yml
+      - .github/workflows/path-filter/devcontainer.yml
+      - .devcontainer/**
 
 permissions: read-all
 
@@ -17,6 +24,7 @@ env:
 
 jobs:
   detect-changes:
+    if: github.ref != 'refs/heads/main'
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
@@ -33,7 +41,7 @@ jobs:
           filters: .github/workflows/path-filter/devcontainer.yml
 
   test:
-    if: ${{ needs.detect-changes.outputs.features != '[]' }}
+    if: (github.ref == 'refs/heads/main') && (needs.detect-changes.outputs.features != '[]')
     needs: [detect-changes]
     name: Test
     runs-on: ubuntu-latest
@@ -68,7 +76,7 @@ jobs:
             --base-image devcontainer
 
   test-scenarios:
-    if: ${{ needs.detect-changes.outputs.features != '[]' }}
+    if: (github.ref == 'refs/heads/main') && (needs.detect-changes.outputs.features != '[]')
     needs: [detect-changes]
     name: Test Scenarios
     runs-on: ubuntu-latest
@@ -103,6 +111,7 @@ jobs:
             --base-image devcontainer
 
   build:
+    if: github.ref != 'refs/heads/main'
     name: Build
     runs-on: ubuntu-latest
     strategy:
@@ -133,4 +142,47 @@ jobs:
           devcontainer build \
             --platform ${{ matrix.platform }} \
             --image-name ghcr.io/ministryofjustice/data-platform-devcontainer \
-            --workspace-folder .
+            --workspace-folder . \
+            --config .devcontainer/devcontainer-build.json
+
+  publish:
+    # if: github.ref == 'refs/heads/main'
+    name: Publish
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      packages: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Install devcontainer CLI
+        id: install_devcontainer_cli
+        run: npm install -g @devcontainers/cli@${{ env.DEVCONTAINER_CLI_VERSION }}
+
+      - name: Set up Docker QEMU
+        id: setup_docker_qemu
+        uses: docker/setup-qemu-action@2b82ce82d56a2a04d2637cd93a637ae1b359c0a7 # v2.2.0
+
+      - name: Set up Docker Buildx
+        id: setup_docker_buildx
+        uses: docker/setup-buildx-action@4c0219f9ac95b02789c1075625400b2acbff50b1 # v2.9.1
+
+      - name: Login to GitHub Container Registry
+        id: ghcr_login
+        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2.2.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Image
+        id: publish_image
+        run: |
+          devcontainer build \
+            --push true \
+            --platform "linux/amd64,linux/arm64" \
+            --image-name ghcr.io/ministryofjustice/data-platform-devcontainer:latest \
+            --workspace-folder . \
+            --config .devcontainer/devcontainer-build.json

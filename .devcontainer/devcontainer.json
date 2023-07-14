@@ -1,23 +1,6 @@
 {
   "name": "ministryofjustice-data-platform",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-  "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": { "configureZshAsDefaultShell": true },
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "./features/src/base": {},
-    "./features/src/aws-tools": {},
-    "./features/src/cicd-tools": {},
-    "./features/src/container-tools": {},
-    "./features/src/git-tools": {},
-    "./features/src/kubernetes-tools": {},
-    "./features/src/policy-tools": {},
-    "./features/src/pulumi-tools": {},
-    "./features/src/terraform-tools": {}
-  },
-  "overrideFeatureInstallOrder": [
-    "ghcr.io/devcontainers/features/common-utils",
-    "./features/src/base"
-  ],
+  "image": "ghcr.io/ministryofjustice/data-platform-devcontainer:latest",
   "remoteUser": "vscode",
   "runArgs": ["--name=ministryofjustice-data-platform-devcontainer"],
   "mounts": [
@@ -25,10 +8,5 @@
     { "source": "ministryofjustice-data-platform-devcontainer-workspace", "target": "/home/vscode/workspace", "type": "volume" },
     { "source": "ministryofjustice-data-platform-devcontainer-commandhistory", "target": "/home/vscode/.commandhistory", "type": "volume" }
   ],
-  "workspaceFolder": "/home/vscode/workspace",
-  "customizations": {
-    "vscode": {
-      "extensions": ["EditorConfig.EditorConfig", "GitHub.vscode-pull-request-github", "GitHub.vscode-github-actions"]
-    }
-  }
+  "workspaceFolder": "/home/vscode/workspace"
 }
