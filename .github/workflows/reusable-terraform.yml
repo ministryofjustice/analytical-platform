@@ -98,7 +98,7 @@ jobs:
         with:
           github-token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
           script: |
-            github.pulls.createReview({
+            github.pullRequests.createReview({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
