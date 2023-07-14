@@ -24,8 +24,24 @@ on: # yamllint disable-line rule:truthy
         type: string
 
 jobs:
+  determine-workflow-mode:
+    name: Determine Workflow Mode
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.determine_mode.outputs.mode }}
+    steps:
+      - name: Determine Mode
+        id: determine_mode
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "mode=Apply" >>"${GITHUB_OUTPUT}"
+          else
+            echo "mode=Plan" >>"${GITHUB_OUTPUT}"
+          fi
+
   terraform:
-    name: Terraform
+    needs: [determine-workflow-mode]
+    name: ${{ needs.determine-workflow-mode.outputs.mode }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -74,6 +90,21 @@ jobs:
         shell: bash
         run: terraform plan -input=false -no-color
         working-directory: ${{ inputs.working-directory }}
+
+      - name: Automatically approve if plan has no changes
+        if: steps.terraform_plan.outputs.stdout == 'No changes. Infrastructure is up-to-date.'
+        id: automatic_approval
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'Terraform plan has no changes, automatically approving.',
+              event: 'APPROVE'
+            })
 
       - name: Apply
         if: github.ref == 'refs/heads/main'

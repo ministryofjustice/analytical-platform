@@ -23,6 +23,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      pull-requests: write
     uses: ./.github/workflows/reusable-terraform.yml
     with:
       working-directory: terraform/aws/analytical-platform-development/open-metadata
