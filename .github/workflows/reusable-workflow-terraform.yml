@@ -54,7 +54,10 @@ jobs:
       - name: Retrieve Working Directory
         id: retrieve_working_directory
         run: |
-          echo "working-directory=$(yq -e .${{ inputs.component }} .github/workflows/path-filter/terraform.yml | sed 's/.\{3\}$//')" >>"${GITHUB_ENV}
+          workingDirectory=$(yq -e ".${{ inputs.component }}" .github/workflows/path-filter/terraform.yml | sed 's/.\{3\}$//')
+          export workingDirectory
+
+          echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
