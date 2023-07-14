@@ -2,7 +2,10 @@
 on: # yamllint disable-line rule:truthy
   workflow_call:
     inputs:
-      working-directory:
+      # working-directory:
+      #   required: true
+      #   type: string
+      component:
         required: true
         type: string
       aws-region:
@@ -17,7 +20,8 @@ on: # yamllint disable-line rule:truthy
         required: true
         type: string
       terraform-version:
-        required: true
+        default: latest
+        required: false
         type: string
       terraform-backend-config-role:
         required: true
@@ -48,6 +52,11 @@ jobs:
         id: checkout
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
+      - name: Retrieve Working Directory
+        id: retrieve_working_directory
+        run: |
+          echo "working-directory=$(yq -e .${{ inputs.component }} .github/workflows/path-filter/terraform.yml | sed 's/.\{3\}$//')" >>"${GITHUB_ENV}
+
       - name: Configure AWS Credentials
         id: configure_aws_credentials
         uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
@@ -77,19 +86,19 @@ jobs:
             -reconfigure \
             -upgrade \
             -no-color
-        working-directory: ${{ inputs.working-directory }}
+        working-directory: ${{ env.working-directory }}
 
       - name: Validate
         id: terraform_validate
         shell: bash
         run: terraform validate -no-color
-        working-directory: ${{ inputs.working-directory }}
+        working-directory: ${{ env.working-directory }}
 
       - name: Plan
         id: terraform_plan
         shell: bash
         run: terraform plan -input=false -no-color
-        working-directory: ${{ inputs.working-directory }}
+        working-directory: ${{ env.working-directory }}
 
       - name: Automatic Approval
         if: (contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
@@ -125,4 +134,4 @@ jobs:
         id: terraform_apply
         shell: bash
         run: terraform apply -input=false -auto-approve -no-color
-        working-directory: ${{ inputs.working-directory }}
+        working-directory: ${{ env.working-directory }}
