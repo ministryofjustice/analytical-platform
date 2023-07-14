@@ -1,55 +1,55 @@
 ---
-  name: Terraform
+name: Terraform
 
-  on: # yamllint disable-line rule:truthy
-    pull_request:
-      branches:
-        - main
-      paths:
-        - .github/workflows/terraform.yml
-        - terraform/**
-    push:
-      branches:
-        - main
-      paths:
-        - .github/workflows/terraform.yml
-        - terraform/**
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/terraform.yml
+      - terraform/**
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/terraform.yml
+      - terraform/**
 
-  permissions: read-all
+permissions: read-all
 
-  jobs:
-    detect-changes:
-      name: Detect Changes
-      runs-on: ubuntu-latest
-      permissions:
-        contents: read
-        pull-requests: read
-      outputs:
-        components: ${{ steps.detect_changes.outputs.changes }}
-      steps:
-        - name: Checkout
-          id: checkout
-          uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+jobs:
+  detect-changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      components: ${{ steps.detect_changes.outputs.changes }}
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
-        - name: Detect changes
-          id: detect_changes
-          uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
-          with:
-            filters: .github/workflows/path-filter/terraform.yml
+      - name: Detect changes
+        id: detect_changes
+        uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
+        with:
+          filters: .github/workflows/path-filter/terraform.yml
 
-    terraform-workflow:
-      needs: [detect-changes]
-      name: Reusable Workflow
-      permissions:
-        contents: read
-        id-token: write
-        security-events: write
-        pull-requests: write
-      strategy:
-        fail-fast: false
-        matrix:
-          component: ${{ fromJson(needs.detect-changes.outputs.components) }}
-      uses: ./.github/workflows/reusable-workflow-terraform.yml
-      with:
-        component: ${{ matrix.component }}
-      secrets: inherit
+  terraform-workflow:
+    needs: [detect-changes]
+    name: Reusable Workflow
+    permissions:
+      contents: read
+      id-token: write
+      security-events: write
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        component: ${{ fromJson(needs.detect-changes.outputs.components) }}
+    uses: ./.github/workflows/reusable-workflow-terraform.yml
+    with:
+      component: ${{ matrix.component }}
+    secrets: inherit
