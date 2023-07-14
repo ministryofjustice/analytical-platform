@@ -37,6 +37,14 @@ jobs:
         with:
           filters: .github/workflows/path-filter/terraform.yml
 
+      - name: Component Count
+        id: component_count
+        run: |
+          if [[ "$( echo "${{ steps.detect_changes.outputs.changes }}" | jq '. | length' )" -gt 1 ]]; then
+            echo "FAIL: Only one component can be worked on at a time" >>"${GITHUB_STEP_SUMMARY}"
+            exit 1
+          else
+
   terraform-workflow:
     needs: [detect-changes]
     name: Reusable Workflow
