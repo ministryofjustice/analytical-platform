@@ -2,9 +2,6 @@
 on: # yamllint disable-line rule:truthy
   workflow_call:
     inputs:
-      # working-directory:
-      #   required: true
-      #   type: string
       component:
         required: true
         type: string
@@ -17,14 +14,16 @@ on: # yamllint disable-line rule:truthy
         required: false
         type: string
       aws-role-to-assume:
-        required: true
+        default: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
+        required: false
         type: string
       terraform-version:
         default: latest
         required: false
         type: string
       terraform-backend-config-role:
-        required: true
+        default: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
+        required: false
         type: string
 
 jobs:
