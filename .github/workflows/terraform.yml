@@ -40,9 +40,10 @@ jobs:
       - name: Component Count
         id: component_count
         run: |
-          components=$( echo ${{ steps.detect_changes.outputs.changes }} | jq '. | length' )
+          components=$( printf '${{ steps.detect_changes.outputs.changes }}' | jq '. | length' )
 
-          if [[ "${components}" -gt 1 ]]; then
+
+          if [[ ${components} -gt 1 ]]; then
             echo "FAIL: Only one component can be worked on at a time" >>"${GITHUB_STEP_SUMMARY}"
             exit 1
           else
