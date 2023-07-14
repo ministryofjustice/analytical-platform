@@ -92,11 +92,11 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
 
       - name: Automatically approve if plan has no changes
-        if: steps.terraform_plan.outputs.stdout == 'No changes. Infrastructure is up-to-date.'
+        if: steps.terraform_plan.outputs.stdout == 'No changes. Infrastructure is up-to-date.' || steps.terraform_plan.outputs.stdout == 'No changes. Your infrastructure matches the configuration.'
         id: automatic_approval
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
           script: |
             github.pulls.createReview({
               owner: context.repo.owner,
