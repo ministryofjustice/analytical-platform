@@ -170,7 +170,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
-              body: 'Automatic approval because there are no changes 🚀',
+              body: 'Automatically approving as no changes were detected in the Terraform plan',
               event: 'APPROVE'
             })
 
