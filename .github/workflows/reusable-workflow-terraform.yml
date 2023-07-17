@@ -124,7 +124,7 @@ jobs:
             <details><summary>Plan Output</summary>
 
             \`\`\`\n
-            ${process.env.TERRAFORM_PLAN}
+            ${{ steps.terraform_plan.outputs.stdout }}
             \`\`\`
 
             </details>
