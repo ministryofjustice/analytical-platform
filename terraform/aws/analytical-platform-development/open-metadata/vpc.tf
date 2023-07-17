@@ -1,4 +1,8 @@
 module "vpc" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+  #checkov:skip=CKV_AWS_356:Module managed policy
+  #checkov:skip=CKV_AWS_111:Module managed policy
+
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.1.0"
 

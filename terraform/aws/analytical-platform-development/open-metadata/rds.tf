@@ -1,4 +1,6 @@
 module "airflow_rds" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/rds/aws"
   version = "6.1.0"
 
@@ -24,6 +26,8 @@ module "airflow_rds" {
 }
 
 module "rds" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/rds/aws"
   version = "6.1.0"
 
