@@ -111,7 +111,8 @@ jobs:
       - name: Render Checkov Output
         id: render_checkov_output
         shell: bash
-        run: cat reports/checkov.txt
+        run: |
+          echo "checkov-output=$(cat reports/checkov.txt)" >>"${GITHUB_ENV}"
 
       - name: Upload SARIF
         id: upload_sarif
@@ -149,7 +150,7 @@ jobs:
             <details><summary>Static Analysis Output</summary>
 
             \`\`\`\n
-            ${{ steps.render_checkov_output.outputs.stdout }}
+            ${{ env.checkov-output }}
             \`\`\`
 
             </details>
