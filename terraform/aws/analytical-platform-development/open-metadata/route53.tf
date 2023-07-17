@@ -1,4 +1,7 @@
 resource "aws_route53_zone" "data_platform_moj_woffenden_dev" {
+  #checkov:skip=CKV2_AWS_39:This is not production infrastructure
+  #checkov:skip=CKV2_AWS_38:This is not production infrastructure
+
   name = "data-platform.moj.woffenden.dev"
 }
 
