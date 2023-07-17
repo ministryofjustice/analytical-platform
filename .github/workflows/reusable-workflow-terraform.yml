@@ -102,7 +102,18 @@ jobs:
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
+          quiet: true
+          download_external_modules: true
+          output_format: cli,sarif
+          output_file_path: console,reports/checkov.sarif
         continue-on-error: true
+
+      - name: Upload SARIF
+        if: always()
+        id: upload_sarif
+        uses: github/codeql-action/upload-sarif@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.2.7
+        with:
+          sarif_file: reports/checkov.sarif
 
       - name: Plan
         id: terraform_plan
@@ -120,20 +131,21 @@ jobs:
             const output = ` ### Terraform Component 🧱\`${{ inputs.component }}\`
             #### Terraform Initialization ⚙️\`${{ steps.terraform_init.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.terraform_validate.outcome }}\`
+
+            <details><summary>Validation Output</summary>
+
+            \`\`\`\n
+            ${{ steps.terraform_validate.outputs.stdout }}
+            \`\`\`
+
+            </details>
+
             #### Terraform Static Analysis 🔍\`${{ steps.terraform_static_analysis.outcome }}\`
 
             <details><summary>Static Analysis Output</summary>
 
             \`\`\`\n
             ${{ steps.terraform_static_analysis.outputs.stdout }}
-            \`\`\`
-
-            </details>
-
-            <details><summary>Validation Output</summary>
-
-            \`\`\`\n
-            ${{ steps.terraform_validate.outputs.stdout }}
             \`\`\`
 
             </details>
