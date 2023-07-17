@@ -105,14 +105,8 @@ jobs:
           quiet: true
           download_external_modules: true
           output_format: cli,sarif
-          output_file_path: reports/checkov.txt,reports/checkov.sarif
+          output_file_path: console,reports/checkov.sarif
         continue-on-error: true
-
-      - name: Render Checkov Output
-        id: render_checkov_output
-        shell: bash
-        run: |
-          echo "checkov-output=$(cat reports/checkov.txt)" >>"${GITHUB_ENV}"
 
       - name: Upload SARIF
         id: upload_sarif
@@ -147,13 +141,7 @@ jobs:
 
             #### Terraform Static Analysis 🔍\`${{ steps.terraform_static_analysis.outcome }}\`
 
-            <details><summary>Static Analysis Output</summary>
-
-            \`\`\`\n
-            ${{ env.checkov-output }}
-            \`\`\`
-
-            </details>
+            See workflow run for full output.
 
             #### Terraform Plan 📖\`${{ steps.terraform_plan.outcome }}\`
 
