@@ -141,7 +141,7 @@ jobs:
 
             #### Terraform Static Analysis 🛂\`${{ steps.terraform_static_analysis.outcome }}\`
 
-            [View Workflow Run](https://github.com/${{ github.repository_owner }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            [View Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
             #### Terraform Plan 📖\`${{ steps.terraform_plan.outcome }}\`
 
