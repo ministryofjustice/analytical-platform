@@ -109,7 +109,8 @@ jobs:
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
           script: |
-            const output = `#### Terraform Initialization ⚙️\`${{ steps.terraform_init.outcome }}\`
+            const output = ` ### Terraform Component 🧱\`${{ inputs.component }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.terraform_init.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.terraform_validate.outcome }}\`
 
             <details><summary>Validation Output</summary>
@@ -140,7 +141,7 @@ jobs:
             })
 
             const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Terraform Initialization')
+              return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.component }}')
             })
 
             if (botComment) {
@@ -159,8 +160,8 @@ jobs:
               })
             }
 
-      - name: Automatic Approval
-        if: (contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
+      - name: Automatic Approval for Dependabot
+        if: (github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
         id: automatic_approval
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
@@ -170,22 +171,8 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
-              body: 'Automatically approving as no changes were detected in the Terraform plan',
+              body: 'Automatically approving as no changes were detected in the Terraform plan, and the pull request was raised by Dependabot.\n\n@dependabot merge 🤖 🤝 🤖',
               event: 'APPROVE'
-            })
-
-      - name: Allow Dependabot to Merge Automatically
-        if: (github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
-        id: allow_dependabot_automatic_merge
-        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
-        with:
-          github-token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
-          script: |
-            github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              body: '@dependabot merge 🤖 🤝 🤖'
             })
 
       - name: Apply
