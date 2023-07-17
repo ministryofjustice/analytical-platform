@@ -96,6 +96,14 @@ jobs:
         run: terraform validate -no-color
         working-directory: ${{ env.working-directory }}
 
+      - name: Static Analysis
+        id: terraform_static_analysis
+        uses: bridgecrewio/checkov-action@4e78331a460093edf2b3b5196200fcbc97fe56fa # v12.2425.0
+        with:
+          directory: ${{ env.working-directory }}
+          framework: terraform
+        continue-on-error: true
+
       - name: Plan
         id: terraform_plan
         shell: bash
@@ -112,6 +120,15 @@ jobs:
             const output = ` ### Terraform Component 🧱\`${{ inputs.component }}\`
             #### Terraform Initialization ⚙️\`${{ steps.terraform_init.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.terraform_validate.outcome }}\`
+            #### Terraform Static Analysis 🔍\`${{ steps.terraform_static_analysis.outcome }}\`
+
+            <details><summary>Static Analysis Output</summary>
+
+            \`\`\`\n
+            ${{ steps.terraform_static_analysis.outputs.stdout }}
+            \`\`\`
+
+            </details>
 
             <details><summary>Validation Output</summary>
 
