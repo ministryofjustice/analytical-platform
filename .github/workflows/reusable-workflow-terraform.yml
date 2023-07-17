@@ -139,9 +139,9 @@ jobs:
 
             </details>
 
-            #### Terraform Static Analysis 🔍\`${{ steps.terraform_static_analysis.outcome }}\`
+            #### Terraform Static Analysis 🛂\`${{ steps.terraform_static_analysis.outcome }}\`
 
-            See workflow run for full output.
+            [View Workflow Run](https://github.com/${{ github.repository_owner }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
             #### Terraform Plan 📖\`${{ steps.terraform_plan.outcome }}\`
 
@@ -188,18 +188,22 @@ jobs:
         run: |
           if [[ "${{ steps.terraform_init.outcome }}" != "success" ]]; then
             export failBuild=true
+            echo "FAIL: Terraform Initialisation" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
           if [[ "${{ steps.terraform_validate.outcome }}" != "success" ]]; then
-          export failBuild=true
+            export failBuild=true
+            echo "FAIL: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
           if [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]]; then
             export failBuild=true
+            echo "FAIL: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
           if [[ "${{ steps.terraform_plan.outcome }}" != "success" ]]; then
             export failBuild=true
+            echo "FAIL: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
           if [[ "${failBuild}" == "true" ]]; then
