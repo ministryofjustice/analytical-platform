@@ -108,8 +108,8 @@ jobs:
           output_file_path: reports/checkov.txt,reports/checkov.sarif
         continue-on-error: true
 
-      - name: DEBUG - Checkov Output
-        id: debug_checkov_output
+      - name: Render Checkov Output
+        id: render_checkov_output
         shell: bash
         run: cat reports/checkov.txt
 
@@ -146,7 +146,13 @@ jobs:
 
             #### Terraform Static Analysis 🔍\`${{ steps.terraform_static_analysis.outcome }}\`
 
-            Link to workflow run: [${{ github.run_id }}](${{ github.event.pull_request.html_url }}/checks?check_suite_id=${{ github.event.check_suite.id }})
+            <details><summary>Static Analysis Output</summary>
+
+            \`\`\`\n
+            ${{ steps.render_checkov_output.outputs.stdout }}
+            \`\`\`
+
+            </details>
 
             #### Terraform Plan 📖\`${{ steps.terraform_plan.outcome }}\`
 
@@ -187,7 +193,29 @@ jobs:
               })
             }
 
+      - name: Process Outcomes
+        id: process_outcomes
+        shell: bash
+        run: |
+          if [[ "${{ steps.terraform_init.outcome }}" != "success" ]]; then
+            export failBuild=true
+          fi
 
+          if [[ "${{ steps.terraform_validate.outcome }}" != "success" ]]; then
+          export failBuild=true
+          fi
+
+          if [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]]; then
+            export failBuild=true
+          fi
+
+          if [[ "${{ steps.terraform_plan.outcome }}" != "success" ]]; then
+            export failBuild=true
+          fi
+
+          if [[ "${failBuild}" == "true" ]]; then
+            exit 1
+          fi
 
       - name: Automatic Approval for Dependabot
         if: (github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
