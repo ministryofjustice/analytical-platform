@@ -105,11 +105,15 @@ jobs:
           quiet: true
           download_external_modules: true
           output_format: cli,sarif
-          output_file_path: console,reports/checkov.sarif
+          output_file_path: reports/checkov.txt,reports/checkov.sarif
         continue-on-error: true
 
+      - name: DEBUG - Checkov Output
+        id: debug_checkov_output
+        shell: bash
+        run: cat reports/checkov.txt
+
       - name: Upload SARIF
-        if: always()
         id: upload_sarif
         uses: github/codeql-action/upload-sarif@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.2.7
         with:
@@ -122,9 +126,9 @@ jobs:
         working-directory: ${{ env.working-directory }}
         continue-on-error: true
 
-      - name: Plan Comment
+      - name: Comment
         if: github.event_name == 'pull_request'
-        id: plan_comment
+        id: comment
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
           script: |
@@ -142,13 +146,7 @@ jobs:
 
             #### Terraform Static Analysis 🔍\`${{ steps.terraform_static_analysis.outcome }}\`
 
-            <details><summary>Static Analysis Output</summary>
-
-            \`\`\`\n
-            ${{ steps.terraform_static_analysis.outputs.stdout }}
-            \`\`\`
-
-            </details>
+            Link to workflow run: [${{ github.run_id }}](${{ github.event.pull_request.html_url }}/checks?check_suite_id=${{ github.event.check_suite.id }})
 
             #### Terraform Plan 📖\`${{ steps.terraform_plan.outcome }}\`
 
@@ -188,6 +186,8 @@ jobs:
                 body: output
               })
             }
+
+
 
       - name: Automatic Approval for Dependabot
         if: (github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
