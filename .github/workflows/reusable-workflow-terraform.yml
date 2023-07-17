@@ -1,0 +1,183 @@
+---
+on: # yamllint disable-line rule:truthy
+  workflow_call:
+    inputs:
+      component:
+        required: true
+        type: string
+      aws-region:
+        default: eu-west-1
+        required: false
+        type: string
+      aws-role-session-name:
+        default: githubactionsrolesession
+        required: false
+        type: string
+      aws-role-to-assume:
+        default: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
+        required: false
+        type: string
+      terraform-version:
+        default: latest
+        required: false
+        type: string
+      terraform-backend-config-role:
+        default: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
+        required: false
+        type: string
+
+jobs:
+  determine-workflow-mode:
+    name: Determine Workflow Mode
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.determine_mode.outputs.mode }}
+    steps:
+      - name: Determine Mode
+        id: determine_mode
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "mode=Apply" >>"${GITHUB_OUTPUT}"
+          else
+            echo "mode=Plan" >>"${GITHUB_OUTPUT}"
+          fi
+
+  terraform:
+    needs: [determine-workflow-mode]
+    name: ${{ needs.determine-workflow-mode.outputs.mode }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Retrieve Working Directory
+        id: retrieve_working_directory
+        run: |
+          workingDirectory=$(yq -e ".${{ inputs.component }}" .github/workflows/path-filter/terraform.yml | sed 's/.\{3\}$//')
+          export workingDirectory
+
+          echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
+
+      - name: Configure AWS Credentials
+        id: configure_aws_credentials
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+        with:
+          aws-region: ${{ inputs.aws-region }}
+          role-to-assume: ${{ inputs.aws-role-to-assume }}
+          role-session-name: ${{ inputs.aws-role-session-name }}
+
+      - name: Set up Terraform
+        id: setup_terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+        with:
+          terraform_version: ${{ inputs.terraform-version }}
+
+      - name: Prepare Terraform
+        id: terraform_prepare
+        shell: bash
+        run: |
+          echo "TF_IN_AUTOMATION=true" >> ${GITHUB_ENV}
+
+      - name: Initialise
+        id: terraform_init
+        shell: bash
+        run: |
+          terraform init \
+            -backend-config=role_arn=${{ inputs.terraform-backend-config-role }} \
+            -reconfigure \
+            -upgrade \
+            -no-color
+        working-directory: ${{ env.working-directory }}
+
+      - name: Validate
+        id: terraform_validate
+        shell: bash
+        run: terraform validate -no-color
+        working-directory: ${{ env.working-directory }}
+
+      - name: Plan
+        id: terraform_plan
+        shell: bash
+        run: terraform plan -input=false -no-color
+        working-directory: ${{ env.working-directory }}
+        continue-on-error: true
+
+      - name: Plan Comment
+        if: github.event_name == 'pull_request'
+        id: plan_comment
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+        with:
+          script: |
+            const output = ` ### Terraform Component 🧱\`${{ inputs.component }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.terraform_init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.terraform_validate.outcome }}\`
+
+            <details><summary>Validation Output</summary>
+
+            \`\`\`\n
+            ${{ steps.terraform_validate.outputs.stdout }}
+            \`\`\`
+
+            </details>
+
+            #### Terraform Plan 📖\`${{ steps.terraform_plan.outcome }}\`
+
+            <details><summary>Plan Output</summary>
+
+            \`\`\`\n
+            ${{ steps.terraform_plan.outputs.stdout }}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.component }}')
+            })
+
+            if (botComment) {
+              github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: output
+              })
+            } else {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              })
+            }
+
+      - name: Automatic Approval for Dependabot
+        if: (github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
+        id: automatic_approval
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+        with:
+          github-token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
+          script: |
+            github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              body: 'Automatically approving as no changes were detected in the Terraform plan, and the pull request was raised by Dependabot.\n\n@dependabot merge 🤖 🤝 🤖',
+              event: 'APPROVE'
+            })
+
+      - name: Apply
+        if: github.ref == 'refs/heads/main'
+        id: terraform_apply
+        shell: bash
+        run: terraform apply -input=false -auto-approve -no-color
+        working-directory: ${{ env.working-directory }}
