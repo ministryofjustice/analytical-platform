@@ -6,6 +6,6 @@
         "role": "arn:aws:iam::013433889002:role/data-platform-gha",
         "account": "374269020027",
         "region": "eu-west-2",
-        "repository": "data_platform_get_glue_metadata_ecr_repo"
+        "repository": "data-platform-get-glue-metadata-lambda-ecr-repo"
     }
 }
