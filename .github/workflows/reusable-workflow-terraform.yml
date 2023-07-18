@@ -118,7 +118,7 @@ jobs:
           working_directory: ${{ env.working-directory }}
           format: sarif
           soft_fail: true
-          additional_arg: --out reports/tfsec.sarif
+          additional_args: --out reports/tfsec.sarif
 
       - name: Upload SARIF - Checkov
         if: github.ref != 'refs/heads/main'
