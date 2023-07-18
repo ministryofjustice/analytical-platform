@@ -197,21 +197,31 @@ jobs:
           if [[ "${{ steps.terraform_init.outcome }}" != "success" ]]; then
             export failBuild=true
             echo "FAIL: Terraform Initialisation" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_init.outcome }}" == "success" ]]; then
+            echo "PASS: Terraform Initialisation" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
           if [[ "${{ steps.terraform_validate.outcome }}" != "success" ]]; then
             export failBuild=true
             echo "FAIL: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_validate.outcome }}" == "success" ]]; then
+            echo "PASS: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
-          if [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]] && [[ "${{ env.override-static-analysis }}" == "true" ]] ; then
+          if [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]] && [[ -z "${{ env.override-static-analysis }}" ]]; then
             export failBuild=true
             echo "FAIL: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]] && [[ "${{ env.override-static-analysis }}" == "true" ]]; then
+            echo "OVERRIDDEN: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis.outcome }}" == "success" ]]; then
+            echo "PASS: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
           if [[ "${{ steps.terraform_plan.outcome }}" != "success" ]]; then
             export failBuild=true
             echo "FAIL: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_plan.outcome }}" == "success" ]]; then
+            echo "PASS: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
           if [[ "${failBuild}" == "true" ]]; then
