@@ -109,6 +109,15 @@ jobs:
           output_format: cli
         continue-on-error: true
 
+      - name: Terraform Static Analysis - Trivy
+        if: github.ref != 'refs/heads/main'
+        id: terraform_static_analysis_trivy
+        uses: aquasecurity/trivy-action@41f05d9ecffa2ed3f1580af306000f734b733e54 # 0.11.2
+        with:
+          scan-type: config
+          scan-ref: ${{ env.working-directory }}
+          exit-code: 255
+
       - name: Upload SARIF - Checkov
         if: github.ref != 'refs/heads/main'
         id: upload_sarif_checkov
