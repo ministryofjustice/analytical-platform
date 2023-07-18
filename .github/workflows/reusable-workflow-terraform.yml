@@ -226,13 +226,13 @@ jobs:
             echo "PASS: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
-          if [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
+          if [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+            echo "PASS: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
             export failBuild=true
             echo "FAIL: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
           elif [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
             echo "OVERRIDDEN: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
-            echo "PASS: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
           elif [[ "${{ steps.terraform_static_analysis.outcome }}" == "success" ]]; then
             echo "PASS: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
           fi

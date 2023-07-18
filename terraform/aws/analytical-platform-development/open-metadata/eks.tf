@@ -1,4 +1,6 @@
 module "eks" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/eks/aws"
   version = "19.15.3"
 
