@@ -182,10 +182,18 @@ jobs:
               })
             }
 
+      - name: Check for Static Analysis Override
+        if: contains(github.event.issue.labels.*.name, 'override-static-analysis')
+        id: check_for_static_analysis_override
+        run: |
+            echo "override-static-analysis=true" >>"${GITHUB_ENV}"
+
       - name: Process Outcomes
         id: process_outcomes
         shell: bash
         run: |
+          failBuild=false
+
           if [[ "${{ steps.terraform_init.outcome }}" != "success" ]]; then
             export failBuild=true
             echo "FAIL: Terraform Initialisation" >>"${GITHUB_STEP_SUMMARY}"
@@ -196,16 +204,10 @@ jobs:
             echo "FAIL: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
-          if [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]]; then
+          if [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]] && [[ "${{ env.override-static-analysis }}" == "true" ]] ; then
             export failBuild=true
             echo "FAIL: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
           fi
-
-          ### DEBUG ###
-          if [[ "${{ github.event.pull_request.labels.*.name }}" == *"override-static-analysis"* ]]; then
-            unset failBuild
-          fi
-          #############
 
           if [[ "${{ steps.terraform_plan.outcome }}" != "success" ]]; then
             export failBuild=true
