@@ -106,8 +106,7 @@ jobs:
           framework: terraform
           quiet: true
           download_external_modules: true
-          output_format: cli,sarif
-          output_file_path: console,reports/checkov.sarif
+          output_format: cli
         continue-on-error: true
 
       - name: Terraform Static Analysis - tfsec
@@ -116,23 +115,7 @@ jobs:
         uses: aquasecurity/tfsec-action@b466648d6e39e7c75324f25d83891162a721f2d6 # v1.0.3
         with:
           working_directory: ${{ env.working-directory }}
-          format: sarif,text
           soft_fail: true
-          additional_args: --out reports/tfsec.sarif
-
-      - name: Upload SARIF - Checkov
-        if: github.ref != 'refs/heads/main'
-        id: upload_sarif_checkov
-        uses: github/codeql-action/upload-sarif@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.2.7
-        with:
-          sarif_file: reports/checkov.sarif
-
-      - name: Upload SARIF - tfsec
-        if: github.ref != 'refs/heads/main'
-        id: upload_sarif_tfsec
-        uses: github/codeql-action/upload-sarif@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.2.7
-        with:
-          sarif_file: reports/tfsec.sarif
 
       - name: Plan Terraform
         id: terraform_plan
