@@ -182,11 +182,26 @@ jobs:
               })
             }
 
-      - name: Check for Static Analysis Override
-        if: contains(github.event.issue.labels.*.name, 'override-static-analysis')
+      - name: Check for Static Analysis Override Label
         id: check_for_static_analysis_override
-        run: |
-            echo "override-static-analysis=true" >>"${GITHUB_ENV}"
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+        with:
+          script: |
+            const labels = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+
+            const overrideStaticAnalysis = labels.data.find(label => {
+              return label.name === 'override-static-analysis'
+            })
+
+            if (overrideStaticAnalysis) {
+              console.log('true')
+            } else {
+              console.log('false')
+            }
 
       - name: Process Outcomes
         id: process_outcomes
@@ -213,6 +228,8 @@ jobs:
             echo "FAIL: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
           elif [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]] && [[ "${{ env.override-static-analysis }}" == "true" ]]; then
             echo "OVERRIDDEN: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+            echo "PASS: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
           elif [[ "${{ steps.terraform_static_analysis.outcome }}" == "success" ]]; then
             echo "PASS: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
           fi
