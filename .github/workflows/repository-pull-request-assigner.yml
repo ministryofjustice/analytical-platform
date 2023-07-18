@@ -1,0 +1,29 @@
+---
+name: Pull request assigner
+
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    types:
+      - opened
+
+permissions: read-all
+
+jobs:
+  pull-request-assigner:
+    if: github.actor != 'dependabot[bot]'
+    name: Pull request assigner
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Pull request assigner
+        id: pull_request_assigner
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+        with:
+          script: |
+            github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              assignees: [context.actor]
+            })
