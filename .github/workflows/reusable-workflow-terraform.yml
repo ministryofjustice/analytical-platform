@@ -109,13 +109,12 @@ jobs:
           output_format: cli
         continue-on-error: true
 
-      - name: Terraform Static Analysis - tfsec
+      - name: Upload SARIF - Checkov
         if: github.ref != 'refs/heads/main'
-        id: terraform_static_analysis_tfsec
-        uses: aquasecurity/tfsec-action@b466648d6e39e7c75324f25d83891162a721f2d6 # v1.0.3
+        id: upload_sarif_checkov
+        uses: github/codeql-action/upload-sarif@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.2.7
         with:
-          working_directory: ${{ env.working-directory }}
-          soft_fail: true
+          sarif_file: reports/checkov.sarif
 
       - name: Plan Terraform
         id: terraform_plan
@@ -230,11 +229,6 @@ jobs:
           elif [[ "${{ steps.terraform_validate.outcome }}" == "success" ]]; then
             echo "PASS: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
           fi
-
-          ### DEBUG
-          echo "TFSEC RETURN CODE"
-          echo "${{ steps.terraform_static_analysis_tfsec.outputs.tfsec-return-code }}"
-          #########
 
           if [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
             echo "PASS: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
