@@ -116,7 +116,7 @@ jobs:
         uses: aquasecurity/tfsec-action@b466648d6e39e7c75324f25d83891162a721f2d6 # v1.0.3
         with:
           working_directory: ${{ env.working-directory }}
-          format: sarif
+          format: sarif,text
           soft_fail: true
           additional_args: --out reports/tfsec.sarif
 
@@ -247,6 +247,11 @@ jobs:
           elif [[ "${{ steps.terraform_validate.outcome }}" == "success" ]]; then
             echo "PASS: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
           fi
+
+          ### DEBUG
+          echo "TFSEC RETURN CODE"
+          echo "${{ steps.terraform_static_analysis_tfsec.outputs.tfsec-return-code }}"
+          #########
 
           if [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
             echo "PASS: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
