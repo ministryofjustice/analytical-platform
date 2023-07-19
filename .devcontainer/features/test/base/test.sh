@@ -10,5 +10,6 @@ check "first-run-notice.txt file existence" stat /usr/local/etc/vscode-dev-conta
 check ".zshrc file existence" stat /home/vscode/.zshrc
 
 check "direnv version" direnv --version
+check "pip3 version" pip3 --version
 
 reportResults

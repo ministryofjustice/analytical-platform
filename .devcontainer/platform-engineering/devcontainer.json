@@ -12,6 +12,7 @@
     "../features/src/kubernetes-tools": {},
     "../features/src/policy-tools": {},
     "../features/src/pulumi-tools": {},
+    "../features/src/sast-tools": {},
     "../features/src/terraform-tools": {}
   },
   "overrideFeatureInstallOrder": [

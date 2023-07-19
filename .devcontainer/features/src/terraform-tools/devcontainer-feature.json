@@ -2,7 +2,7 @@
   "id": "terraform-tools",
   "version": "1.0.0",
   "name": "terraform-tools",
-  "description": "Terraform Tools - Terraform Switcher, Terraform Docs, hcl2json",
+  "description": "Terraform Tools - Terraform Switcher, Terraform Docs, hcl2json, tfsec",
   "options": {
     "installTerraformSwitcher": {
       "type": "boolean",
@@ -38,6 +38,17 @@
       "default": true
     },
     "hcl2jsonVersion": {
+      "type": "string",
+      "description": "hcl2json version",
+      "proposals": ["latest"],
+      "default": "latest"
+    },
+    "installTfsec": {
+      "type": "boolean",
+      "description": "Install tfsec (https://github.com/aquasecurity/tfsec)",
+      "default": true
+    },
+    "tfsecVersion": {
       "type": "string",
       "description": "hcl2json version",
       "proposals": ["latest"],

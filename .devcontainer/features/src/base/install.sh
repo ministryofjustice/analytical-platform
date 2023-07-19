@@ -26,3 +26,8 @@ mkdir --parents /home/vscode/.dotfiles && chown vscode:vscode /home/vscode/.dotf
 source /usr/local/bin/devcontainer-utils
 
 apt_install "direnv"
+apt_install "python3-pip"
+
+### Python
+
+pip3 install --upgrade pip
