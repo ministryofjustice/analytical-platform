@@ -118,7 +118,7 @@ jobs:
           additional_args: --no-colour --exclude-path ${{ env.working-directory }}/.terraform/modules --tfvars-file ${{ env.working-directory }}/terraform.tfvars
         continue-on-error: true
 
-      # Commenting out until it has feature parity with its replacement (Trivy), currently doesn't show the file name of alert, and doesn't allow for passing tfvars
+      # Commenting out until action has feature parity with its replacement, Trivy. Currently doesn't show the file name of finding, and doesn't allow for passing tfvars files
       # - name: Terraform Static Analysis - Trivy
       #   if: github.ref != 'refs/heads/main'
       #   id: terraform_static_analysis_trivy
@@ -144,9 +144,9 @@ jobs:
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
           script: |
-            const output = ` ### Terraform Component 🧱\`${{ inputs.component }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.terraform_init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.terraform_validate.outcome }}\`
+            const output = ` ### Terraform Component 🧱: \`${{ inputs.component }}\`
+            #### Terraform Initialization ⚙️: \`${{ steps.terraform_init.outcome }}\`
+            #### Terraform Validation 🤖: \`${{ steps.terraform_validate.outcome }}\`
 
             <details><summary>Validation Output</summary>
 
@@ -158,11 +158,11 @@ jobs:
 
             #### Terraform Static Analysis 🛂
 
-            ##### Checkov\`${{ steps.terraform_static_analysis_checkov.outcome }}\`
+            Checkov: \`${{ steps.terraform_static_analysis_checkov.outcome }}\`
 
-            ##### tfsec\`${{ steps.terraform_static_analysis_tfsec.outcome }}\`
+            tfsec: \`${{ steps.terraform_static_analysis_tfsec.outcome }}\`
 
-            #### Terraform Plan 📖\`${{ steps.terraform_plan.outcome }}\`
+            #### Terraform Plan 📖: \`${{ steps.terraform_plan.outcome }}\`
 
             <details><summary>Plan Output</summary>
 
