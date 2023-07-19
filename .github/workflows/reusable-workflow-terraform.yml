@@ -115,7 +115,7 @@ jobs:
         uses: aquasecurity/tfsec-action@b466648d6e39e7c75324f25d83891162a721f2d6 # v1.0.3
         with:
           working_directory: ${{ env.working-directory }}
-          additional_args: --no-colour --exclude-downloaded-modules --tfvars-file ${{ env.working-directory }}/terraform.tfvars
+          additional_args: --no-colour --exclude-downloaded-modules --exclude-path ${{ env.working-directory }}/.terraform/modules --tfvars-file ${{ env.working-directory }}/terraform.tfvars
         continue-on-error: true
 
       # Commenting out until it has feature parity with its replacement (Trivy), currently doesn't show the file name of alert
