@@ -116,7 +116,7 @@ jobs:
         with:
           scan-ref: ${{ env.working-directory }}
           scan-type: config
-          format: github
+          format: table
           exit-code: 1
         continue-on-error: true
 
