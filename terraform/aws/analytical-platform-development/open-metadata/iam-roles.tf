@@ -1,4 +1,6 @@
 module "cluster_autoscaler_iam_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.27.0"
 
@@ -15,6 +17,8 @@ module "cluster_autoscaler_iam_role" {
 }
 
 module "ebs_csi_driver_iam_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.27.0"
 
@@ -30,6 +34,8 @@ module "ebs_csi_driver_iam_role" {
 }
 
 module "efs_csi_driver_iam_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.27.0"
 
@@ -45,6 +51,8 @@ module "efs_csi_driver_iam_role" {
 }
 
 module "load_balancer_controller_iam_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.27.0"
 
@@ -60,6 +68,8 @@ module "load_balancer_controller_iam_role" {
 }
 
 module "cert_manager_iam_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.27.0"
 
@@ -76,6 +86,8 @@ module "cert_manager_iam_role" {
 }
 
 module "external_dns_iam_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.27.0"
 
@@ -92,6 +104,8 @@ module "external_dns_iam_role" {
 }
 
 module "open_metadata_iam_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.27.0"
 
@@ -109,6 +123,8 @@ module "open_metadata_iam_role" {
 }
 
 module "open_metadata_airflow_iam_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.27.0"
 

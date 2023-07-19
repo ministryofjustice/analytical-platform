@@ -1,4 +1,8 @@
 resource "aws_opensearch_domain" "openmetadata" {
+  #checkov:skip=CKV_AWS_84:If productionised, will revisit this - Ensure Elasticsearch Domain Logging is enabled
+  #checkov:skip=CKV_AWS_317:If productionised, will revisit this - Ensure Elasticsearch Domain Audit Logging is enabled
+  #checkov:skip=CKV_AWS_247:If productionised, will revisit this - Ensure all data stored in the Elasticsearch is encrypted with a CMK
+
   domain_name    = "openmetadata"
   engine_version = "OpenSearch_1.3"
 
@@ -49,6 +53,8 @@ resource "aws_opensearch_domain" "openmetadata" {
 }
 
 data "aws_iam_policy_document" "opensearch_domain" {
+  #checkov:skip=CKV_AWS_283:Required as per AWS documentation
+
   statement {
     effect  = "Allow"
     actions = ["es:ESHttp*"]

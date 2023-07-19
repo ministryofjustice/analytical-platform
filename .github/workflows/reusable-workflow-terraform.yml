@@ -79,7 +79,7 @@ jobs:
         run: |
           echo "TF_IN_AUTOMATION=true" >> ${GITHUB_ENV}
 
-      - name: Initialise
+      - name: Initialise Terraform
         id: terraform_init
         shell: bash
         run: |
@@ -90,28 +90,63 @@ jobs:
             -no-color
         working-directory: ${{ env.working-directory }}
 
-      - name: Validate
+      - name: Validate Terraform
+        if: github.ref != 'refs/heads/main'
         id: terraform_validate
         shell: bash
         run: terraform validate -no-color
         working-directory: ${{ env.working-directory }}
 
-      - name: Plan
+      - name: Terraform Static Analysis - Checkov
+        if: github.ref != 'refs/heads/main'
+        id: terraform_static_analysis_checkov
+        uses: bridgecrewio/checkov-action@4e78331a460093edf2b3b5196200fcbc97fe56fa # v12.2425.0
+        with:
+          directory: ${{ env.working-directory }}
+          framework: terraform
+          quiet: true
+          download_external_modules: true
+          output_format: cli
+        continue-on-error: true
+
+      - name: Terraform Static Analysis - tfsec
+        if: github.ref != 'refs/heads/main'
+        id: terraform_static_analysis_tfsec
+        uses: aquasecurity/tfsec-action@b466648d6e39e7c75324f25d83891162a721f2d6 # v1.0.3
+        with:
+          working_directory: ${{ env.working-directory }}
+          additional_args: --no-colour --exclude-path ${{ env.working-directory }}/.terraform/modules --tfvars-file ${{ env.working-directory }}/terraform.tfvars
+        continue-on-error: true
+
+      # Commenting out until action has feature parity with its replacement, Trivy. Currently doesn't show the file name of finding, and doesn't allow for passing tfvars files
+      # - name: Terraform Static Analysis - Trivy
+      #   if: github.ref != 'refs/heads/main'
+      #   id: terraform_static_analysis_trivy
+      #   uses: aquasecurity/trivy-action@41f05d9ecffa2ed3f1580af306000f734b733e54 # 0.11.2
+      #   with:
+      #     scan-ref: ${{ env.working-directory }}
+      #     scan-type: config
+      #     format: table
+      #     exit-code: 1
+      #     skip-dirs: .terraform/modules
+      #   continue-on-error: true
+
+      - name: Plan Terraform
         id: terraform_plan
         shell: bash
         run: terraform plan -input=false -no-color
         working-directory: ${{ env.working-directory }}
         continue-on-error: true
 
-      - name: Plan Comment
+      - name: Comment on Pull Request
         if: github.event_name == 'pull_request'
-        id: plan_comment
+        id: comment
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
           script: |
-            const output = ` ### Terraform Component 🧱\`${{ inputs.component }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.terraform_init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.terraform_validate.outcome }}\`
+            const output = ` ### Terraform Component 🧱: \`${{ inputs.component }}\`
+            #### Terraform Initialization ⚙️: \`${{ steps.terraform_init.outcome }}\`
+            #### Terraform Validation 🤖: \`${{ steps.terraform_validate.outcome }}\`
 
             <details><summary>Validation Output</summary>
 
@@ -121,7 +156,13 @@ jobs:
 
             </details>
 
-            #### Terraform Plan 📖\`${{ steps.terraform_plan.outcome }}\`
+            #### Terraform Static Analysis 🛂
+
+            Checkov: \`${{ steps.terraform_static_analysis_checkov.outcome }}\`
+
+            tfsec: \`${{ steps.terraform_static_analysis_tfsec.outcome }}\`
+
+            #### Terraform Plan 📖: \`${{ steps.terraform_plan.outcome }}\`
 
             <details><summary>Plan Output</summary>
 
@@ -160,8 +201,87 @@ jobs:
               })
             }
 
+      - name: Check for Static Analysis Override Label
+        if: github.ref != 'refs/heads/main'
+        id: check_for_static_analysis_override
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+        with:
+          result-encoding: string
+          script: |
+            const labels = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+
+            const overrideStaticAnalysis = labels.data.find(label => {
+              return label.name === 'override-static-analysis'
+            })
+
+            if (overrideStaticAnalysis) {
+              console.log('Found label')
+              return "true"
+            } else {
+              console.log('Did not find label')
+              return "false"
+            }
+
+      - name: Process Outcomes
+        if: github.ref != 'refs/heads/main'
+        id: process_outcomes
+        shell: bash
+        run: |
+          failBuild=false
+
+          if [[ "${{ steps.terraform_init.outcome }}" != "success" ]]; then
+            export failBuild=true
+            echo "FAIL: Terraform Initialisation" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_init.outcome }}" == "success" ]]; then
+            echo "PASS: Terraform Initialisation" >>"${GITHUB_STEP_SUMMARY}"
+          fi
+
+          if [[ "${{ steps.terraform_validate.outcome }}" != "success" ]]; then
+            export failBuild=true
+            echo "FAIL: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_validate.outcome }}" == "success" ]]; then
+            echo "PASS: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
+          fi
+
+          if [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+            echo "PASS: Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
+            export failBuild=true
+            echo "FAIL: Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
+            echo "OVERRIDDEN: Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" == "success" ]]; then
+            echo "PASS: Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
+          fi
+
+          if [[ "${{ steps.terraform_static_analysis_tfsec.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+            echo "PASS: Terraform Static Analysis - tfsec" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis_tfsec.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
+            export failBuild=true
+            echo "FAIL: Terraform Static Analysis - tfsec" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis_tfsec.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
+            echo "OVERRIDDEN: Terraform Static Analysis - tfsec" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis_tfsec.outcome }}" == "success" ]]; then
+            echo "PASS: Terraform Static Analysis - tfsec" >>"${GITHUB_STEP_SUMMARY}"
+          fi
+
+          if [[ "${{ steps.terraform_plan.outcome }}" != "success" ]]; then
+            export failBuild=true
+            echo "FAIL: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_plan.outcome }}" == "success" ]]; then
+            echo "PASS: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
+          fi
+
+          if [[ "${failBuild}" == "true" ]]; then
+            exit 1
+          fi
+
       - name: Automatic Approval for Dependabot
-        if: (github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
+        if: (github.event_name == 'pull_request' && github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
         id: automatic_approval
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
@@ -175,7 +295,7 @@ jobs:
               event: 'APPROVE'
             })
 
-      - name: Apply
+      - name: Apply Terraform
         if: github.ref == 'refs/heads/main'
         id: terraform_apply
         shell: bash

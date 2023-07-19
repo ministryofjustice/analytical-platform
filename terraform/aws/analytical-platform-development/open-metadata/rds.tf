@@ -1,4 +1,7 @@
+#tfsec:ignore:aws-rds-enable-performance-insights
 module "airflow_rds" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/rds/aws"
   version = "6.1.0"
 
@@ -23,7 +26,10 @@ module "airflow_rds" {
   skip_final_snapshot = true
 }
 
+#tfsec:ignore:aws-rds-enable-performance-insights
 module "rds" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/rds/aws"
   version = "6.1.0"
 

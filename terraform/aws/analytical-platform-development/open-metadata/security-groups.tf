@@ -1,4 +1,6 @@
 module "rds_security_group" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
 
@@ -17,6 +19,8 @@ module "rds_security_group" {
 }
 
 module "opensearch_security_group" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
 

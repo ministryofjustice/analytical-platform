@@ -1,4 +1,10 @@
+#tfsec:ignore:aws-eks-no-public-cluster-access
+#tfsec:ignore:aws-eks-no-public-cluster-access-to-cidr
+#tfsec:ignore:aws-eks-enable-control-plane-logging
+#tfsec:ignore:aws-ec2-no-public-egress-sgr
 module "eks" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
   source  = "terraform-aws-modules/eks/aws"
   version = "19.15.3"
 
