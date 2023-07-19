@@ -28,4 +28,6 @@ source /usr/local/bin/devcontainer-utils
 apt_install "direnv"
 apt_install "python3-pip"
 
-###
+### Python
+
+pip3 install --upgrade pip
