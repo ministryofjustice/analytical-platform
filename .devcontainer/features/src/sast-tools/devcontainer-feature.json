@@ -1,0 +1,31 @@
+{
+  "id": "sast-tools",
+  "version": "1.0.0",
+  "name": "sast-tools",
+  "description": "SAST Tools - Checkov, Trivy",
+  "options": {
+    "installCheckov": {
+      "type": "boolean",
+      "description": "Install Pulumi (https://github.com/bridgecrewio/checkov)",
+      "default": true
+    },
+    "checkovVersion": {
+      "type": "string",
+      "description": "Checkov version",
+      "proposals": ["latest"],
+      "default": "latest"
+    },
+    "installTrivy": {
+      "type": "boolean",
+      "description": "Install Trivy (https://github.com/aquasecurity/trivy)",
+      "default": true
+    },
+    "trivyVersion": {
+      "type": "string",
+      "description": "Trivy version",
+      "proposals": ["latest"],
+      "default": "latest"
+    }
+  },
+  "installsAfter": ["./features/src/base"]
+}

@@ -2,7 +2,7 @@
   "id": "terraform-tools",
   "version": "1.0.0",
   "name": "terraform-tools",
-  "description": "Terraform Tools - Terraform Switcher, Terraform Docs, hcl2json",
+  "description": "Terraform Tools - Terraform Switcher, Terraform Docs, hcl2json, tfsec",
   "options": {
     "installTerraformSwitcher": {
       "type": "boolean",

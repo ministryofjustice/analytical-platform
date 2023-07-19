@@ -7,4 +7,5 @@ git-tools: ./.devcontainer/features/**/git-tools/**
 kubernetes-tools: ./.devcontainer/features/**/kubernetes-tools/**
 policy-tools: ./.devcontainer/features/**/policy-tools/**
 pulumi-tools: ./.devcontainer/features/**/pulumi-tools/**
+sast-tools: ./.devcontainer/features/**/sast-tools/**
 terraform-tools: ./.devcontainer/features/**/terraform-tools/**
