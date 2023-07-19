@@ -109,167 +109,178 @@ jobs:
           output_format: cli
         continue-on-error: true
 
-      - name: Upload SARIF - Checkov
+      - name: Terraform Static Analysis - Trivy
         if: github.ref != 'refs/heads/main'
-        id: upload_sarif_checkov
-        uses: github/codeql-action/upload-sarif@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.2.7
+        id: terraform_static_analysis_trivy
+        uses: aquasecurity/trivy-action@41f05d9ecffa2ed3f1580af306000f734b733e54 # 0.11.2
         with:
-          sarif_file: reports/checkov.sarif
-
-      - name: Plan Terraform
-        id: terraform_plan
-        shell: bash
-        run: terraform plan -input=false -no-color
-        working-directory: ${{ env.working-directory }}
+          scan-ref: ${{ env.working-directory }}
+          scan-type: config
+          format: github
+          exit-code: 1
         continue-on-error: true
 
-      - name: Comment on Pull Request
-        if: github.event_name == 'pull_request'
-        id: comment
-        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
-        with:
-          script: |
-            const output = ` ### Terraform Component 🧱\`${{ inputs.component }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.terraform_init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.terraform_validate.outcome }}\`
-
-            <details><summary>Validation Output</summary>
-
-            \`\`\`\n
-            ${{ steps.terraform_validate.outputs.stdout }}
-            \`\`\`
-
-            </details>
-
-            #### Terraform Static Analysis 🛂\`${{ steps.terraform_static_analysis_checkov.outcome }}\`
-
-            [View Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-            #### Terraform Plan 📖\`${{ steps.terraform_plan.outcome }}\`
-
-            <details><summary>Plan Output</summary>
-
-            \`\`\`\n
-            ${{ steps.terraform_plan.outputs.stdout }}
-            \`\`\`
-
-            </details>
-
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`*`;
-
-
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            })
-
-            const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.component }}')
-            })
-
-            if (botComment) {
-              github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: output
-              })
-            } else {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
-              })
-            }
-
-      - name: Check for Static Analysis Override Label
-        if: github.ref != 'refs/heads/main'
-        id: check_for_static_analysis_override
-        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
-        with:
-          result-encoding: string
-          script: |
-            const labels = await github.rest.issues.listLabelsOnIssue({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            })
-
-            const overrideStaticAnalysis = labels.data.find(label => {
-              return label.name === 'override-static-analysis'
-            })
-
-            if (overrideStaticAnalysis) {
-              console.log('Found label')
-              return "true"
-            } else {
-              console.log('Did not find label')
-              return "false"
-            }
-
-      - name: Process Outcomes
-        if: github.ref != 'refs/heads/main'
-        id: process_outcomes
+      - name: DEBUG
+        id: debug
         shell: bash
         run: |
-          failBuild=false
+          echo "CHECKOV: ${{ steps.terraform_static_analysis_checkov.outcome }}"
+          echo "TRIVY: ${{ steps.terraform_static_analysis_trivy.outcome }}"
 
-          if [[ "${{ steps.terraform_init.outcome }}" != "success" ]]; then
-            export failBuild=true
-            echo "FAIL: Terraform Initialisation" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_init.outcome }}" == "success" ]]; then
-            echo "PASS: Terraform Initialisation" >>"${GITHUB_STEP_SUMMARY}"
-          fi
+      # - name: Plan Terraform
+      #   id: terraform_plan
+      #   shell: bash
+      #   run: terraform plan -input=false -no-color
+      #   working-directory: ${{ env.working-directory }}
+      #   continue-on-error: true
 
-          if [[ "${{ steps.terraform_validate.outcome }}" != "success" ]]; then
-            export failBuild=true
-            echo "FAIL: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_validate.outcome }}" == "success" ]]; then
-            echo "PASS: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
-          fi
+      # - name: Comment on Pull Request
+      #   if: github.event_name == 'pull_request'
+      #   id: comment
+      #   uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+      #   with:
+      #     script: |
+      #       const output = ` ### Terraform Component 🧱\`${{ inputs.component }}\`
+      #       #### Terraform Initialization ⚙️\`${{ steps.terraform_init.outcome }}\`
+      #       #### Terraform Validation 🤖\`${{ steps.terraform_validate.outcome }}\`
 
-          if [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
-            echo "PASS: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
-            export failBuild=true
-            echo "FAIL: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
-            echo "OVERRIDDEN: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" == "success" ]]; then
-            echo "PASS: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
-          fi
+      #       <details><summary>Validation Output</summary>
 
-          if [[ "${{ steps.terraform_plan.outcome }}" != "success" ]]; then
-            export failBuild=true
-            echo "FAIL: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_plan.outcome }}" == "success" ]]; then
-            echo "PASS: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
-          fi
+      #       \`\`\`\n
+      #       ${{ steps.terraform_validate.outputs.stdout }}
+      #       \`\`\`
 
-          if [[ "${failBuild}" == "true" ]]; then
-            exit 1
-          fi
+      #       </details>
 
-      - name: Automatic Approval for Dependabot
-        if: (github.event_name == 'pull_request' && github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
-        id: automatic_approval
-        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
-        with:
-          github-token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
-          script: |
-            github.rest.pulls.createReview({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              body: 'Automatically approving as no changes were detected in the Terraform plan, and the pull request was raised by Dependabot.\n\n@dependabot merge 🤖 🤝 🤖',
-              event: 'APPROVE'
-            })
+      #       #### Terraform Static Analysis 🛂\`${{ steps.terraform_static_analysis_checkov.outcome }}\`
 
-      - name: Apply Terraform
-        if: github.ref == 'refs/heads/main'
-        id: terraform_apply
-        shell: bash
-        run: terraform apply -input=false -auto-approve -no-color
-        working-directory: ${{ env.working-directory }}
+      #       [View Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+      #       #### Terraform Plan 📖\`${{ steps.terraform_plan.outcome }}\`
+
+      #       <details><summary>Plan Output</summary>
+
+      #       \`\`\`\n
+      #       ${{ steps.terraform_plan.outputs.stdout }}
+      #       \`\`\`
+
+      #       </details>
+
+      #       *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+
+      #       const { data: comments } = await github.rest.issues.listComments({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         issue_number: context.issue.number,
+      #       })
+
+      #       const botComment = comments.find(comment => {
+      #         return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.component }}')
+      #       })
+
+      #       if (botComment) {
+      #         github.rest.issues.updateComment({
+      #           owner: context.repo.owner,
+      #           repo: context.repo.repo,
+      #           comment_id: botComment.id,
+      #           body: output
+      #         })
+      #       } else {
+      #         github.rest.issues.createComment({
+      #           issue_number: context.issue.number,
+      #           owner: context.repo.owner,
+      #           repo: context.repo.repo,
+      #           body: output
+      #         })
+      #       }
+
+      # - name: Check for Static Analysis Override Label
+      #   if: github.ref != 'refs/heads/main'
+      #   id: check_for_static_analysis_override
+      #   uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+      #   with:
+      #     result-encoding: string
+      #     script: |
+      #       const labels = await github.rest.issues.listLabelsOnIssue({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         issue_number: context.issue.number,
+      #       })
+
+      #       const overrideStaticAnalysis = labels.data.find(label => {
+      #         return label.name === 'override-static-analysis'
+      #       })
+
+      #       if (overrideStaticAnalysis) {
+      #         console.log('Found label')
+      #         return "true"
+      #       } else {
+      #         console.log('Did not find label')
+      #         return "false"
+      #       }
+
+      # - name: Process Outcomes
+      #   if: github.ref != 'refs/heads/main'
+      #   id: process_outcomes
+      #   shell: bash
+      #   run: |
+      #     failBuild=false
+
+      #     if [[ "${{ steps.terraform_init.outcome }}" != "success" ]]; then
+      #       export failBuild=true
+      #       echo "FAIL: Terraform Initialisation" >>"${GITHUB_STEP_SUMMARY}"
+      #     elif [[ "${{ steps.terraform_init.outcome }}" == "success" ]]; then
+      #       echo "PASS: Terraform Initialisation" >>"${GITHUB_STEP_SUMMARY}"
+      #     fi
+
+      #     if [[ "${{ steps.terraform_validate.outcome }}" != "success" ]]; then
+      #       export failBuild=true
+      #       echo "FAIL: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
+      #     elif [[ "${{ steps.terraform_validate.outcome }}" == "success" ]]; then
+      #       echo "PASS: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
+      #     fi
+
+      #     if [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+      #       echo "PASS: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
+      #     elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
+      #       export failBuild=true
+      #       echo "FAIL: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
+      #     elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
+      #       echo "OVERRIDDEN: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
+      #     elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" == "success" ]]; then
+      #       echo "PASS: Terraform Static Analysis" >>"${GITHUB_STEP_SUMMARY}"
+      #     fi
+
+      #     if [[ "${{ steps.terraform_plan.outcome }}" != "success" ]]; then
+      #       export failBuild=true
+      #       echo "FAIL: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
+      #     elif [[ "${{ steps.terraform_plan.outcome }}" == "success" ]]; then
+      #       echo "PASS: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
+      #     fi
+
+      #     if [[ "${failBuild}" == "true" ]]; then
+      #       exit 1
+      #     fi
+
+      # - name: Automatic Approval for Dependabot
+      #   if: (github.event_name == 'pull_request' && github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
+      #   id: automatic_approval
+      #   uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+      #   with:
+      #     github-token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
+      #     script: |
+      #       github.rest.pulls.createReview({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         pull_number: context.payload.pull_request.number,
+      #         body: 'Automatically approving as no changes were detected in the Terraform plan, and the pull request was raised by Dependabot.\n\n@dependabot merge 🤖 🤝 🤖',
+      #         event: 'APPROVE'
+      #       })
+
+      # - name: Apply Terraform
+      #   if: github.ref == 'refs/heads/main'
+      #   id: terraform_apply
+      #   shell: bash
+      #   run: terraform apply -input=false -auto-approve -no-color
+      #   working-directory: ${{ env.working-directory }}
