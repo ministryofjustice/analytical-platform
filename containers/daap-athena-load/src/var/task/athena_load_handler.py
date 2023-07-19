@@ -438,8 +438,8 @@ def clean_up_temp_tables(table_name: str) -> None:
 
 
 def handler(event, context):
-    bucket_name = event["detail"]["requestParameters"]["bucketName"]
-    file_key = event["detail"]["requestParameters"]["key"]
+    bucket_name = event["detail"]["bucket"]["name"]
+    file_key = event["detail"]["object"]["key"]
 
     full_s3_path = os.path.join("s3://", bucket_name, file_key)
     logging.info(f"file is: {full_s3_path}")
