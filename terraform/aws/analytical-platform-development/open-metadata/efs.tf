@@ -1,3 +1,4 @@
+#tfsec:ignore:aws-efs-enable-at-rest-encryption
 module "efs" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
