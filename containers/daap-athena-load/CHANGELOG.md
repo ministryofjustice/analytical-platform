@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2]
+
+### Added
+
+- `image_version` to lambda code, applied as env var inside container in v1.0.1
+
+### Changed
+
+- the keys to get the bucket and key from the event passed to the lambda from eventbridge
+as the event rule have changed slightly.
+
 ## [1.0.1]
 
 ### Added
