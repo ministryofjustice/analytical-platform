@@ -109,6 +109,14 @@ jobs:
           output_format: cli
         continue-on-error: true
 
+      - name: Terraform Static Analysis - tfsec
+        if: github.ref != 'refs/heads/main'
+        id: terraform_static_analysis_tfsec
+        uses: aquasecurity/tfsec-action@b466648d6e39e7c75324f25d83891162a721f2d6 # v1.0.3
+        with:
+          working_directory: ${{ env.working-directory }}
+        continue-on-error: true
+
       - name: Terraform Static Analysis - Trivy
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_trivy
@@ -118,6 +126,7 @@ jobs:
           scan-type: config
           format: table
           exit-code: 1
+          skip-dirs: .terraform/modules
         continue-on-error: true
 
       - name: DEBUG
@@ -125,6 +134,7 @@ jobs:
         shell: bash
         run: |
           echo "CHECKOV: ${{ steps.terraform_static_analysis_checkov.outcome }}"
+          echo "TFSEC: ${{ steps.terraform_static_analysis_tfsec.outcome }}"
           echo "TRIVY: ${{ steps.terraform_static_analysis_trivy.outcome }}"
 
       # - name: Plan Terraform
