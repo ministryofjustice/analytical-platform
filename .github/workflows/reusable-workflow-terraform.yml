@@ -117,7 +117,7 @@ jobs:
           working_directory: ${{ env.working-directory }}
           # additional_args: --no-colour --exclude-path ${{ env.working-directory }}/.terraform/modules --tfvars-file ${{ env.working-directory }}/terraform.tfvars
           additional_args: --no-colour --tfvars-file ${{ env.working-directory }}/terraform.tfvars
-          continue-on-error: true
+        continue-on-error: true
 
       # Commenting out until it has feature parity with its replacement (Trivy), currently doesn't show the file name of alert
       # - name: Terraform Static Analysis - Trivy
