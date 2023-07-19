@@ -11,3 +11,8 @@ fi
 if [[ "${INSTALLHCL2JSON}" == "true" ]]; then
   bash $( dirname $0 )/install-hcl2json.sh
 fi
+
+
+if [[ "${INSTALLTFSEC}" == "true" ]]; then
+  bash $( dirname $0 )/install-tfsec.sh
+fi

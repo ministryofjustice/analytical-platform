@@ -42,6 +42,17 @@
       "description": "hcl2json version",
       "proposals": ["latest"],
       "default": "latest"
+    },
+    "installTfsec": {
+      "type": "boolean",
+      "description": "Install tfsec (https://github.com/aquasecurity/tfsec)",
+      "default": true
+    },
+    "tfsecVersion": {
+      "type": "string",
+      "description": "hcl2json version",
+      "proposals": ["latest"],
+      "default": "latest"
     }
   },
   "customizations": {
