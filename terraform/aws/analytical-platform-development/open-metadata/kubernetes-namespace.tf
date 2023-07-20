@@ -21,3 +21,9 @@ resource "kubernetes_namespace" "jupyterhub" {
     name = "jupyterhub"
   }
 }
+
+resource "kubernetes_namespace" "coder" {
+  metadata {
+    name = "coder"
+  }
+}

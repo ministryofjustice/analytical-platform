@@ -70,3 +70,14 @@ resource "kubernetes_secret" "openmetadata_jwt_tls" {
   type = "Opaque"
 }
 */
+
+resource "kubernetes_secret" "coder_rds_connection_url" {
+  metadata {
+    name      = "coder-rds-connection-url"
+    namespace = kubernetes_namespace.coder.metadata[0].name
+  }
+  data = {
+    "url" = "postgres://${local.coder_rds_credentials.username}:${local.coder_rds_credentials.password}@${module.coder_rds.db_instance_address}:${module.coder_rds.db_instance_port}/${module.coder_rds.db_instance_name}"
+  }
+  type = "Opaque"
+}

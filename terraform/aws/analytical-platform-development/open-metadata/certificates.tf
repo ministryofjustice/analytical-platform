@@ -15,3 +15,13 @@ resource "aws_acm_certificate" "datahub" {
     create_before_destroy = true
   }
 }
+
+
+resource "aws_acm_certificate" "coder" {
+  domain_name       = "coder.data-platform.moj.woffenden.dev"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
