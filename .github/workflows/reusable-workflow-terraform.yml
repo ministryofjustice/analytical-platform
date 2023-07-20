@@ -52,6 +52,7 @@ jobs:
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
 
       - name: Assume GlobalGitHubActionAdmin Role
+        if: github.ref != 'refs/heads/main'
         id: assume_global_github_action_admin_role
         uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
         with:
@@ -69,6 +70,14 @@ jobs:
         with:
           secret-ids: |
             GITHUB_ROBOT_TOKEN, github-token
+
+      - name: Assume GlobalGitHubActionAccess Role
+        if: github.ref != 'refs/heads/main'
+        id: assume_global_github_action_access_role
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+        with:
+          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
 
       - name: Set up Terraform
         id: setup_terraform
@@ -88,6 +97,7 @@ jobs:
         working-directory: ${{ env.working-directory }}
         run: |
           terraform init \
+            -backend-config="role_arn=arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin" \
             -reconfigure \
             -upgrade \
             -no-color
