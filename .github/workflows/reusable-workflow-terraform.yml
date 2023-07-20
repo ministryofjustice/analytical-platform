@@ -5,24 +5,8 @@ on: # yamllint disable-line rule:truthy
       component:
         required: true
         type: string
-      aws-region:
-        default: eu-west-1
-        required: false
-        type: string
-      aws-role-session-name:
-        default: githubactionsrolesession
-        required: false
-        type: string
-      aws-role-to-assume:
-        default: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
-        required: false
-        type: string
       terraform-version:
         default: latest
-        required: false
-        type: string
-      terraform-backend-config-role:
-        default: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
         required: false
         type: string
 
@@ -51,8 +35,9 @@ jobs:
         id: checkout
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
-      - name: Retrieve Working Directory
-        id: retrieve_working_directory
+      - name: Prepare Environment
+        id: prepare_environment
+        shell: bash
         run: |
           workingDirectory=$(yq -e ".${{ inputs.component }}" .github/workflows/path-filter/terraform.yml | sed 's/.\{3\}$//')
           export workingDirectory
@@ -63,9 +48,27 @@ jobs:
         id: configure_aws_credentials
         uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
         with:
-          aws-region: ${{ inputs.aws-region }}
-          role-to-assume: ${{ inputs.aws-role-to-assume }}
-          role-session-name: ${{ inputs.aws-role-session-name }}
+          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
+
+      - name: Assume GlobalGitHubActionAdmin Role
+        id: assume_global_github_action_admin_role
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+        with:
+          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+          role-skip-session-tagging: true
+
+      - name: Retrieve GitHub Robot Token
+        if: github.ref != 'refs/heads/main'
+        id: retrieve_github_robot_token
+        uses: aws-actions/aws-secretsmanager-get-secrets@022e8919774ecb75e8e375656d7b1898936ab878 # v1.0.4
+        with:
+          secret-ids: |
+            GITHUB_ROBOT_TOKEN, github-token
 
       - name: Set up Terraform
         id: setup_terraform
@@ -82,20 +85,20 @@ jobs:
       - name: Initialise Terraform
         id: terraform_init
         shell: bash
+        working-directory: ${{ env.working-directory }}
         run: |
           terraform init \
-            -backend-config=role_arn=${{ inputs.terraform-backend-config-role }} \
             -reconfigure \
             -upgrade \
             -no-color
-        working-directory: ${{ env.working-directory }}
 
       - name: Validate Terraform
         if: github.ref != 'refs/heads/main'
         id: terraform_validate
-        shell: bash
-        run: terraform validate -no-color
         working-directory: ${{ env.working-directory }}
+        shell: bash
+        run: |
+          terraform validate -no-color
 
       - name: Terraform Static Analysis - Checkov
         if: github.ref != 'refs/heads/main'
@@ -133,9 +136,10 @@ jobs:
 
       - name: Plan Terraform
         id: terraform_plan
-        shell: bash
-        run: terraform plan -input=false -no-color
         working-directory: ${{ env.working-directory }}
+        shell: bash
+        run: |
+          terraform plan -input=false -no-color
         continue-on-error: true
 
       - name: Comment on Pull Request
@@ -285,7 +289,7 @@ jobs:
         id: automatic_approval
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
-          github-token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
+          github-token: ${{ env.GITHUB_ROBOT_TOKEN }}
           script: |
             github.rest.pulls.createReview({
               owner: context.repo.owner,
@@ -298,6 +302,7 @@ jobs:
       - name: Apply Terraform
         if: github.ref == 'refs/heads/main'
         id: terraform_apply
-        shell: bash
-        run: terraform apply -input=false -auto-approve -no-color
         working-directory: ${{ env.working-directory }}
+        shell: bash
+        run: |
+          terraform apply -input=false -auto-approve -no-color
