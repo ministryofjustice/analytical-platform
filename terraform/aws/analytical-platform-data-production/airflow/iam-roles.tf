@@ -1,6 +1,6 @@
 module "airflow_analytical_platform_development_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.27.0"
+  version = "5.28.0"
 
   create_role = true
 
