@@ -3,7 +3,7 @@
 declare -xr DEPENDABOT_CONFIGURATION_FILE=".github/dependabot.yml"
 
 dockerFolders=$(find . -type f -name "*Dockerfile*" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
-pythonFolders==$(find . -type f -name "*requirements*.txt" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
+pythonFolders=$(find . -type f -name "*requirements*.txt" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
 terraformFolders=$(find . -type f -name ".terraform.lock.hcl" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
 
 echo "=== Docker Folders ==="

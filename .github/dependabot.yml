@@ -149,7 +149,7 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "pip"
-    directory: "=containers/daap-athena-load/src/var/task"
+    directory: "containers/daap-athena-load/src/var/task"
     schedule:
       interval: "daily"
       time: "09:00"
