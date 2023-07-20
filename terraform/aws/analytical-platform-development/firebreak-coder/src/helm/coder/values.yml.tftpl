@@ -1,0 +1,49 @@
+---
+coder:
+  env:
+    - name: CODER_ACCESS_URL
+      value: "https://${coder_access_url}"
+    - name: CODER_PG_CONNECTION_URL
+      valueFrom:
+        secretKeyRef:
+          name: ${coder_db_url_secret}
+          key: ${coder_db_url_key}
+    - name: CODER_OIDC_ISSUER_URL
+      valueFrom:
+        secretKeyRef:
+          name: ${oidc_issuer_url_secret}
+          key: string
+    - name: CODER_OIDC_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: ${oidc_client_id_secret}
+          key: string
+    - name: CODER_OIDC_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: ${oidc_client_secret_secret}
+          key: string
+    - name: CODER_OIDC_EMAIL_DOMAIN
+      value: ${oidc_email_domain}
+    - name: CODER_OIDC_SIGN_IN_TEXT
+      value: ${oidc_sign_in_text}
+    - name: CODER_OIDC_ICON_URL
+      value: ${oidc_icon_url}
+    # - name: CODER_DISABLE_PASSWORD_AUTH
+    #   value: "true"
+
+  service:
+    enable: true
+    type: NodePort
+
+  ingress:
+    enable: true
+    className: alb
+    host: ${coder_access_url}
+    annotations:
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+      alb.ingress.kubernetes.io/certificate-arn: ${acm_certificate_arn}
+      alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+      alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
+
