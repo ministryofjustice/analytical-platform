@@ -14,7 +14,7 @@ module "open_metadata_airflow_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.27.0"
+  version = "5.28.0"
 
   name_prefix = "open-metadata-airflow"
 
