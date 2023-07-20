@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Bumped python version to 3.11
+- Bumped botocore and boto3 versions
 
 ## [1.0.0]
 
