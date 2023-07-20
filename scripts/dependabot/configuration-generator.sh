@@ -63,6 +63,10 @@ for folder in ${pythonFolders}; do
   printf "      include: \"scope\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "    reviewers:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "      - \"ministryofjustice/data-platform-core-infra\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "    labels:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "      - \"dependencies\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "      - \"terraform\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "      - \"override-static-analysis\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
 done
 
 for folder in ${terraformFolders}; do
