@@ -31,10 +31,3 @@ data "aws_secretsmanager_secret_version" "openmetadata_rds_credentials" {
 
   depends_on = [module.rds]
 }
-
-
-data "aws_secretsmanager_secret_version" "coder_rds_credentials" {
-  secret_id = module.coder_rds.db_instance_master_user_secret_arn
-
-  depends_on = [module.coder_rds]
-}

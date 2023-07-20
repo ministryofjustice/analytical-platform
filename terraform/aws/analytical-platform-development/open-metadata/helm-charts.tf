@@ -140,18 +140,3 @@ resource "helm_release" "openmetadata" {
 
   depends_on = [helm_release.openmetadata_dependencies, aws_acm_certificate_validation.open_metadata]
 }
-
-# resource "helm_release" "coder" {
-#   name       = "coder"
-#   repository = "https://helm.coder.com/v2"
-#   chart      = "coder"
-#   version    = "0.26.1"
-#   namespace  = kubernetes_namespace.open_metadata.metadata[0].name
-#   values = [
-#     templatefile(
-#       "${path.module}/src/helm/coder/values.yml.tftpl", {}
-#     )
-#   ]
-
-#   depends_on = [aws_acm_certificate_validation.coder]
-# }
