@@ -15,8 +15,6 @@ jobs:
   dependabot-configuration-generator:
     name: Dependabot configuration generator
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout
         id: checkout
@@ -26,4 +24,4 @@ jobs:
         id: generate_configuration
         run: bash -x scripts/dependabot/configuration-generator.sh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
