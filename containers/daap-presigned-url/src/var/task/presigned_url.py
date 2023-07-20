@@ -1,9 +1,10 @@
-import os
 import json
-import uuid
-import boto3
 import logging
+import os
+import uuid
 from datetime import datetime
+
+import boto3
 
 
 logging.basicConfig(level=logging.INFO, force=True)
@@ -16,7 +17,7 @@ def handler(event, context):
     database = event["queryStringParameters"]["database"]
     table = event["queryStringParameters"]["table"]
     amz_date = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
-    md5 = str(event["queryStringParameters"]["contentMD5"])
+    # md5 = str(event["queryStringParameters"]["contentMD5"])
     uuid_string = str(uuid.uuid4())
     file_name = os.path.join(
         "raw_data",
