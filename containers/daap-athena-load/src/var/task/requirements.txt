@@ -16,5 +16,5 @@ PyYAML==6.0
 s3fs==0.4.2
 s3transfer==0.6.1
 six==1.16.0
-urllib3==1.26.16
+urllib3==2.0.4
 wrapt==1.15.0
