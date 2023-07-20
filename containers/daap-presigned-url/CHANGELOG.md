@@ -8,12 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.1]
-
-### Changed
-
-- Bumped python version to 3.11
-
 ## [1.0.0]
 
 ### Added
