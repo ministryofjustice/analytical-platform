@@ -3,7 +3,7 @@
 declare -xr DEPENDABOT_CONFIGURATION_FILE=".github/dependabot.yml"
 
 dockerFolders=$(find . -type f -name "*Dockerfile*" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
-pythonFolders==$(find . -type f -name "*requirements*.txt" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
+pythonFolders=$(find . -type f -name "*requirements*.txt" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
 terraformFolders=$(find . -type f -name ".terraform.lock.hcl" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
 
 echo "=== Docker Folders ==="
@@ -77,6 +77,10 @@ for folder in ${terraformFolders}; do
   printf "      include: \"scope\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "    reviewers:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "      - \"ministryofjustice/data-platform-core-infra\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "    labels:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "      - \"dependencies\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "      - \"terraform\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "      - \"override-static-analysis\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
 done
 
 if [[ "${GITHUB_ACTIONS}" == "true" ]]; then
