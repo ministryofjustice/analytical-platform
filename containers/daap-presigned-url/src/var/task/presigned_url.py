@@ -6,7 +6,6 @@ from datetime import datetime
 
 import boto3
 
-
 logging.basicConfig(level=logging.INFO, force=True)
 root_logger = logging.getLogger()
 s3 = boto3.client("s3")
