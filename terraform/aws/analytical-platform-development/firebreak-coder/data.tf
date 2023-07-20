@@ -10,8 +10,6 @@ data "aws_iam_session_context" "session" {
 
 data "aws_caller_identity" "current" {}
 
-data "aws_region" "current" {}
-
 data "aws_route53_zone" "data_platform_moj_woffenden_dev" {
   name = "data-platform.moj.woffenden.dev"
 }
@@ -28,4 +26,16 @@ data "aws_vpc" "open_metadata" {
 
 data "aws_eks_cluster" "open_metadata" {
   name = "open-metadata"
+}
+
+data "aws_secretsmanager_secret_version" "coder_azuread_client_id" {
+  secret_id = "coder/azuread/client-id"
+}
+
+data "aws_secretsmanager_secret_version" "coder_azuread_client_secret" {
+  secret_id = "coder/azuread/client-secret"
+}
+
+data "aws_secretsmanager_secret_version" "coder_azuread_issuer_url" {
+  secret_id = "coder/azuread/issuer-url"
 }
