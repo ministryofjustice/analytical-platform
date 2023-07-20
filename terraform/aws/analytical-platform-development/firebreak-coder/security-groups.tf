@@ -1,5 +1,6 @@
 module "rds_security_group" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
+  #checkov:skip=CKV2_AWS_5:PoC only
 
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"

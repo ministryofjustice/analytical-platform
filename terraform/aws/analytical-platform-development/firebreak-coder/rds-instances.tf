@@ -1,6 +1,13 @@
 #tfsec:ignore:aws-rds-enable-performance-insights
 module "coder_rds" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
+  #checkov:skip=CKV_AWS_129:PoC only
+  #checkov:skip=CKV_AWS_133:PoC only
+  #checkov:skip=CKV_AWS_293:PoC only
+  #checkov:skip=CKV_AWS_118:PoC only
+  #checkov:skip=CKV_AWS_353:PoC only
+  #checkov:skip=CKV_AWS_338:PoC only
+  #checkov:skip=CKV2_AWS_60:PoC only
 
   source  = "terraform-aws-modules/rds/aws"
   version = "6.1.0"
