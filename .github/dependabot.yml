@@ -17,6 +17,17 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "docker"
+    directory: ".devcontainer/features/test"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
     directory: "containers/alpine-base"
     schedule:
       interval: "daily"
@@ -159,17 +170,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "docker"
-    directory: ".devcontainer/features/test"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "docker"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "pip"
     directory: "containers/daap-athena-load/src/var/task"
     schedule:
@@ -216,21 +216,6 @@ updates:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "terraform"
     directory: "terraform/application-migration"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform/baseline"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -395,7 +380,7 @@ updates:
       - "terraform"
       - "override-static-analysis"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform/oidc"
+    directory: "terraform/aws/analytical-platform-production/cluster"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -410,7 +395,22 @@ updates:
       - "terraform"
       - "override-static-analysis"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-production/cluster"
+    directory: "terraform/aws/analytical-platform/baseline"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+    labels:
+      - "dependencies"
+      - "terraform"
+      - "override-static-analysis"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform/oidc"
     schedule:
       interval: "daily"
       time: "09:00"
