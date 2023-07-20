@@ -9,4 +9,4 @@ COPY src/var/task ${LAMDA_TASK_ROOT}
 RUN python -m pip install --no-cache-dir --upgrade pip==23.1.2 \
     && python -m pip install --no-cache-dir --requirement requirements.txt
 
-CMD ["get_glue_metadata.handler"]
+CMD ["presigned_url.handler"]
