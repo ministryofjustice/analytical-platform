@@ -51,5 +51,12 @@ module "rds" {
   username = "openmetadata"
   db_name  = "openmetadata"
 
+  parameters = [
+    {
+      name  = "sort_buffer_size"
+      value = 10485760
+    }
+  ]
+
   skip_final_snapshot = true
 }

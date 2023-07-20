@@ -86,7 +86,7 @@ resource "helm_release" "openmetadata_dependencies" {
   name       = "openmetadata-dependencies"
   repository = "https://helm.open-metadata.org"
   chart      = "openmetadata-dependencies"
-  version    = "1.0.6"
+  version    = "1.1.4"
   namespace  = kubernetes_namespace.open_metadata.metadata[0].name
   values = [
     templatefile(
@@ -111,7 +111,7 @@ resource "helm_release" "openmetadata" {
   name       = "openmetadata"
   repository = "https://helm.open-metadata.org"
   chart      = "openmetadata"
-  version    = "1.0.6"
+  version    = "1.1.4"
   namespace  = kubernetes_namespace.open_metadata.metadata[0].name
   values = [
     templatefile(
