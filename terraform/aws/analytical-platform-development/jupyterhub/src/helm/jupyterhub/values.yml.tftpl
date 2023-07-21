@@ -1,12 +1,12 @@
 hub:
-  image: 
+  image:
     name: 593291632749.dkr.ecr.eu-west-1.amazonaws.com/analytical-platform-poc
     tag: jupyterhub-poc
   config:
     GenericOAuthenticator:
       authorize_url: https://dev-analytics-moj.eu.auth0.com/authorize
-      client_id: ezW4WJnXEB3lwShQnhA0gIgA1n3hJKcI
-      client_secret: 7y4mgiC3ekxuJLWNxQC4If06F3wurrior_zXtoaD00MqpN4Q4VIYM7g7yt0yWhqN
+      client_id: ${client_id}
+      client_secret: ${client_secret}
       oauth_callback_url: https://hub-b.services.dev.analytical-platform.service.justice.gov.uk/hub/oauth_callback
       scope:
       - openid
@@ -30,7 +30,7 @@ hub:
 ingress:
   enabled: true
   ingressClassName: alb
-  hosts: 
+  hosts:
     - hub.data-platform.moj.woffenden.dev
   annotations:
       alb.ingress.kubernetes.io/scheme: internet-facing
