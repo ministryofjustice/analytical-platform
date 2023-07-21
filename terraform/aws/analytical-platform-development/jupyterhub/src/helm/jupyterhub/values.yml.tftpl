@@ -1,0 +1,52 @@
+hub:
+  image: 
+    name: 593291632749.dkr.ecr.eu-west-1.amazonaws.com/analytical-platform-poc
+    tag: jupyterhub-poc
+  config:
+    GenericOAuthenticator:
+      authorize_url: https://dev-analytics-moj.eu.auth0.com/authorize
+      client_id: ezW4WJnXEB3lwShQnhA0gIgA1n3hJKcI
+      client_secret: 7y4mgiC3ekxuJLWNxQC4If06F3wurrior_zXtoaD00MqpN4Q4VIYM7g7yt0yWhqN
+      oauth_callback_url: https://hub-b.services.dev.analytical-platform.service.justice.gov.uk/hub/oauth_callback
+      scope:
+      - openid
+      - name
+      - profile
+      - email
+      token_url: https://dev-analytics-moj.eu.auth0.com/oauth/token
+      userdata_url: https://dev-analytics-moj.eu.auth0.com/userinfo
+      username_key: nickname
+    JupyterHub:
+      authenticator_class: generic-oauth
+    allowed_users:
+    - jhackett-ap
+    - julialawrence
+    - bagg3rs
+    - BrianEllwood
+    - Gary-H9
+    - ymao2
+    - mitchdawson1982
+    - jacobwoffenden
+ingress:
+  enabled: true
+  ingressClassName: alb
+  hosts: 
+    - hub.data-platform.moj.woffenden.dev
+  annotations:
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+      alb.ingress.kubernetes.io/certificate-arn: ${acm_certificate_arn}
+      alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+      alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
+scheduling:
+  userScheduler:
+    enabled: false
+proxy:
+  chp:
+    networkPolicy:
+      enabled: false
+    extraCommandLineFlags:
+      - "--auto-rewrite"
+prePuller:
+  hook:
+    enabled: false
