@@ -29,7 +29,7 @@ This implementation of the development container is meant to have all repositori
 - devcontainer CLI
 
   ```bash
-  npm install --global @devcontainers/cli@latest
+  sudo npm install --location=global @devcontainers/cli@latest
   ```
 
 - Visual Studio Code
