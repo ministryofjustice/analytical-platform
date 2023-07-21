@@ -1,0 +1,5 @@
+{
+  "name": "rstudio-jupyterhub",
+  "version": "0.0.1",
+  "registry": "dockerhub"
+}
