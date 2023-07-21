@@ -335,6 +335,21 @@ updates:
       - "terraform"
       - "override-static-analysis"
   - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-development/jupyterhub"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+    labels:
+      - "dependencies"
+      - "terraform"
+      - "override-static-analysis"
+  - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-development/open-metadata"
     schedule:
       interval: "daily"
