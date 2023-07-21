@@ -12,7 +12,6 @@ aws-analytical-platform-data-production-s3-glue-crawler: terraform/aws/analytica
 aws-analytical-platform-development-cluster: terraform/aws/analytical-platform-development/cluster/**
 aws-analytical-platform-development-jupyterhub: terraform/aws/analytical-platform-development/jupyterhub/**
 aws-analytical-platform-development-open-metadata: terraform/aws/analytical-platform-development/open-metadata/**
-aws-analytical-platform-development-firebreak-coder: terraform/aws/analytical-platform-development/jupyterhub/**
 aws-analytical-platform-management-production-cluster: terraform/aws/analytical-platform-management-production/cluster/**
 aws-analytical-platform-production-cluster: terraform/aws/analytical-platform-production/cluster/**
 aws-analytical-platform-baseline: terraform/aws/analytical-platform/baseline/**
