@@ -14,4 +14,5 @@ rshiny-3.6.3: containers/rshiny-3.6.3/**
 rshiny-4.0.5: containers/rshiny-4.0.5/**
 rshiny-4.1.3: containers/rshiny-4.1.3/**
 rshiny-4.2.2: containers/rshiny-4.2.2/**
+rstudio: containers/rstudio/**
 ubuntu-base: containers/ubuntu-base/**
