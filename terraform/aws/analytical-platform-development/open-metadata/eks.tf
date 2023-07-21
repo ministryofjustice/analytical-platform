@@ -53,22 +53,6 @@ module "eks" {
     }
   }
 
-  fargate_profiles = {
-    jupyterhub = {
-      name                     = "jupyterhub"
-      iam_role_name            = "jupyterhub-fargate"
-      iam_role_use_name_prefix = true
-      selectors = [
-        {
-          namespace = "jupyterhub"
-          labels = {
-            app = "jupyterhub"
-          }
-        }
-      ]
-    }
-  }
-
   manage_aws_auth_configmap = true
 
   aws_auth_roles = [
