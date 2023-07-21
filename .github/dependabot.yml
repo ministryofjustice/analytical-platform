@@ -160,6 +160,17 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "docker"
+    directory: "containers/rstudio"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
     directory: "containers/ubuntu-base"
     schedule:
       interval: "daily"
