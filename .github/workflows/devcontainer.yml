@@ -7,7 +7,7 @@ on: # yamllint disable-line rule:truthy
       - main
     paths:
       - .github/workflows/devcontainer.yml
-      - .github/workflows/path-filter/devcontainer.yml
+      - .github/path-filter/devcontainer.yml
       - .devcontainer/**
 
 permissions: read-all
@@ -30,7 +30,7 @@ jobs:
         id: detect_changes
         uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         with:
-          filters: .github/workflows/path-filter/devcontainer.yml
+          filters: .github/path-filter/devcontainer.yml
 
   test:
     if: ${{ needs.detect-changes.outputs.features != '[]' }}

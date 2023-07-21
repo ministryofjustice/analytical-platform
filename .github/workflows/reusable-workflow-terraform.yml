@@ -39,7 +39,7 @@ jobs:
         id: prepare_environment
         shell: bash
         run: |
-          workingDirectory=$(yq -e ".${{ inputs.component }}" .github/workflows/path-filter/terraform.yml | sed 's/.\{3\}$//')
+          workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filter/terraform.yml | sed 's/.\{3\}$//')
           export workingDirectory
 
           echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"

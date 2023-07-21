@@ -35,7 +35,7 @@ jobs:
         id: detect_changes
         uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         with:
-          filters: .github/workflows/path-filter/terraform.yml
+          filters: .github/path-filter/terraform.yml
 
   terraform-workflow:
     needs: [detect-changes]

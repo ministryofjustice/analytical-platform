@@ -1,5 +1,5 @@
 ---
-name: Terraform path filter configuration generator
+name: Terraform path-filter configuration generator
 
 on: # yamllint disable-line rule:truthy
   pull_request:
@@ -11,8 +11,8 @@ on: # yamllint disable-line rule:truthy
 permissions: read-all
 
 jobs:
-  dependabot-configuration-generator:
-    name: Terraform path filter configuration generator
+  terraform-configuration-generator:
+    name: Terraform path-filter configuration generator
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -21,8 +21,8 @@ jobs:
         id: checkout
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
-      - name: Run Terraform path filter configuration generator
+      - name: Run Terraform path-filter configuration generator
         id: generate_configuration
-        run: bash -x scripts/path-filter/terraform-generator.sh
+        run: bash -x scripts/path-filter/generator.sh terraform
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
