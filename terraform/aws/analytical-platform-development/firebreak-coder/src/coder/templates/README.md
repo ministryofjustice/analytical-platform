@@ -14,7 +14,7 @@ tar -cvf ${TEMPLATE_NAME}.tar -C ${TEMPLATE_NAME} .
 
 1. Upload packaged template
 
-  1. Set a name e.g. `kubernetes`
+  1. Set a name e.g. `${TEMPLATE_NAME}`
 
   1. Set an icon e.g. `/icon/k8s.png`
 

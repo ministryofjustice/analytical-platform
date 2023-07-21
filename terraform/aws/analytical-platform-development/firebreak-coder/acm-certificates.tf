@@ -2,6 +2,8 @@ resource "aws_acm_certificate" "coder" {
   domain_name       = "coder.data-platform.moj.woffenden.dev"
   validation_method = "DNS"
 
+  subject_alternative_names = ["*.coder.data-platform.moj.woffenden.dev"]
+
   lifecycle {
     create_before_destroy = true
   }

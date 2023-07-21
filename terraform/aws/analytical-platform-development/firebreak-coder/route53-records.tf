@@ -5,6 +5,8 @@ resource "aws_route53_record" "coder_acm_validation" {
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
     }
+    # Skips the domain if it doesn't contain a wildcard
+    if length(regexall("\\*\\..+", dvo.domain_name)) > 0
   }
 
   allow_overwrite = true
