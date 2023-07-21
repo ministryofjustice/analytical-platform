@@ -160,7 +160,7 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "docker"
-    directory: "containers/rstudio/ffs"
+    directory: "containers/rstudio"
     schedule:
       interval: "daily"
       time: "09:00"
