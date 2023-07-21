@@ -38,6 +38,7 @@ jobs:
           filters: .github/path-filter/containers.yml
 
   container-workflow:
+    if: ${{ needs.detect-changes.outputs.images != '[]' }}
     needs: [detect-changes]
     name: Reusable Workflow
     permissions:

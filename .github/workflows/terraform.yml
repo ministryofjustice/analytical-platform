@@ -38,6 +38,7 @@ jobs:
           filters: .github/path-filter/terraform.yml
 
   terraform-workflow:
+    if: ${{ needs.detect-changes.outputs.components != '[]' }}
     needs: [detect-changes]
     name: Reusable Workflow
     permissions:
