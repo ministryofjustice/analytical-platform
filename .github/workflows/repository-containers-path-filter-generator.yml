@@ -12,6 +12,7 @@ permissions: read-all
 
 jobs:
   container-configuration-generator:
+    if: github.actor != 'dependabot[bot]'
     name: Containers path-filter configuration generator
     runs-on: ubuntu-latest
     permissions:

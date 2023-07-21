@@ -12,6 +12,7 @@ permissions: read-all
 
 jobs:
   terraform-configuration-generator:
+    if: github.actor != 'dependabot[bot]'
     name: Terraform path-filter configuration generator
     runs-on: ubuntu-latest
     permissions:
