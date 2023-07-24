@@ -61,6 +61,17 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "docker"
+    directory: "containers/daap-docs"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
     directory: "containers/daap-get-glue-metadata"
     schedule:
       interval: "daily"
