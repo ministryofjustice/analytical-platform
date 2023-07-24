@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Bumped botocore and boto3 versions
+- Bumped botocore, boto3, fsspec, parameterized, pyarrow, s3fs and urllib3 versions
 
 ## [1.0.3]
 
