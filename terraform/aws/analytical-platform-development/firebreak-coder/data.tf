@@ -28,6 +28,10 @@ data "aws_eks_cluster" "open_metadata" {
   name = "open-metadata"
 }
 
+data "tls_certificate" "open_metadata_eks_oidc_issuer" {
+  url = data.aws_eks_cluster.open_metadata.identity[0].oidc[0].issuer
+}
+
 data "aws_secretsmanager_secret_version" "coder_azuread_client_id" {
   secret_id = "coder/azuread/client-id"
 }

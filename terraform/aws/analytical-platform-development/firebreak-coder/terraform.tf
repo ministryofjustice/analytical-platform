@@ -24,6 +24,10 @@ terraform {
       source  = "hashicorp/random"
       version = "3.5.1"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "4.0.4"
+    }
   }
   required_version = "~> 1.5"
 }
@@ -36,6 +40,17 @@ provider "aws" {
   region = "eu-west-2"
   assume_role {
     role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-development"]}:role/GlobalGitHubActionAdmin"
+  }
+  default_tags {
+    tags = var.tags
+  }
+}
+
+provider "aws" {
+  alias  = "analytical-platform-data-production"
+  region = "eu-west-2"
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
