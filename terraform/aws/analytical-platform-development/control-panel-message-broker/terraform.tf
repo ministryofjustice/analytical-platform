@@ -1,24 +1,16 @@
 terraform {
   backend "s3" {
     acl            = "private"
-    bucket         = "<UPDATEME>"
+    bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "aws/analytical-platform-development/sqs/terraform.tfstate"
+    key            = "aws/analytical-platform-development/control-panel-message-broker/terraform.tfstate"
     region         = "eu-west-2"
-    dynamodb_table = "<UPDATEME>-locks"
+    dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "5.9.0"
-    }
-    helm = {
-      source  = "hashicorp/helm"
-      version = "2.10.1"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.22.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -50,27 +42,5 @@ provider "aws" {
   }
   default_tags {
     tags = var.tags
-  }
-}
-
-provider "helm" {
-  kubernetes {
-    host                   = module.eks.cluster_endpoint
-    cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-    exec {
-      api_version = "client.authentication.k8s.io/v1beta1"
-      command     = "bash"
-      args        = ["../../../../scripts/eks/terraform-authentication.sh", data.aws_caller_identity.current.account_id, module.eks.cluster_name]
-    }
-  }
-}
-
-provider "kubernetes" {
-  host                   = module.eks.cluster_endpoint
-  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-  exec {
-    api_version = "client.authentication.k8s.io/v1beta1"
-    command     = "bash"
-    args        = ["../../../../scripts/eks/terraform-authentication.sh", data.aws_caller_identity.current.account_id, module.eks.cluster_name]
   }
 }
