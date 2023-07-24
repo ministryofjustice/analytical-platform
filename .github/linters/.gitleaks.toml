@@ -1,0 +1,13 @@
+
+title = "gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+
+description = "global allow list"
+
+regexes = [
+  '''ASIAQGIFY4DVKJW2ZNKM'''
+]
