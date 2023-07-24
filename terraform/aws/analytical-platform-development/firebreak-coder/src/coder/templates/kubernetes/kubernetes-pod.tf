@@ -24,6 +24,7 @@ resource "kubernetes_pod" "main" {
       run_as_user = "1000"
       fs_group    = "1000"
     }
+    service_account_name = kubernetes_service_account.main.metadata[0].name
     container {
       name              = "dev"
       image             = "codercom/enterprise-base:ubuntu"

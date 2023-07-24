@@ -39,3 +39,10 @@ data "aws_secretsmanager_secret_version" "coder_azuread_client_secret" {
 data "aws_secretsmanager_secret_version" "coder_azuread_issuer_url" {
   secret_id = "coder/azuread/issuer-url"
 }
+
+data "kubernetes_service_account" "coder" {
+  metadata {
+    name      = "coder"
+    namespace = kubernetes_namespace.coder.metadata[0].name
+  }
+}

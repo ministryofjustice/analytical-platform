@@ -2,7 +2,7 @@ resource "helm_release" "coder" {
   name       = "coder"
   repository = "https://helm.coder.com/v2"
   chart      = "coder"
-  version    = "0.26.1"
+  version    = "0.27.1"
   namespace  = kubernetes_namespace.coder.metadata[0].name
   values = [
     templatefile(

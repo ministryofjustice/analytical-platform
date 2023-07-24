@@ -56,10 +56,17 @@ data "coder_parameter" "home_disk_size" {
   description  = "The size of the home disk in GB"
   default      = "10"
   type         = "number"
-  icon         = "/emojis/1f4be.png"
   mutable      = false
   validation {
     min = 1
     max = 99999
   }
+}
+
+data "coder_parameter" "github_account_name" {
+  name         = "github_account_name"
+  display_name = "GitHub Account Name"
+  description  = "The name of your GitHub account"
+  type         = "string"
+  mutable      = false
 }
