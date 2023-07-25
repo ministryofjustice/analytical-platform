@@ -1,5 +1,5 @@
 module "karpenter" {
-  #checkov:skip=CKV_TF_1:Module is from Terraform registry 
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
   source  = "terraform-aws-modules/eks/aws//modules/karpenter"
   version = "19.15.3"
 
