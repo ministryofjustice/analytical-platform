@@ -43,7 +43,7 @@ This implementation of the development container is meant to have all repositori
     This command could fail as `code` might not be in your `${PATH}` yet, if that is the case, install it via Visual Studio Code's UI
 
     ```bash
-    /usr/local/bin/code --install-extension ms-vscode-remote.remote-containers
+    /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code --install-extension ms-vscode-remote.remote-containers
     ```
 
 ---
