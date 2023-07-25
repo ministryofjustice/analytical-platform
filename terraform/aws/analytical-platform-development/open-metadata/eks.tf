@@ -45,12 +45,14 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
-    openmetadata = {
-      min_size       = 1
-      max_size       = 5
-      desired_size   = 3
-      disk_size      = 150
-      instance_types = ["t3.2xlarge"]
+    openmetadata-eks = {
+      use_custom_launch_template = false
+      launch_template_name       = ""
+      min_size                   = 1
+      max_size                   = 5
+      desired_size               = 3
+      disk_size                  = 150
+      instance_types             = ["t3.2xlarge"]
     }
   }
 
