@@ -1,0 +1,129 @@
+---
+owner_slack: "#data-platform-notifications"
+title: Terraform
+last_reviewed_on: 2023-07-25
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+## Creating a new Terraform component
+
+To create a new Terraform component, you will need to:
+
+1. Create a directory in `terraform`, e.g. if AWS `terraform/aws/${AWS_ACCOUNT_NAME}/${COMPONENT}`
+
+1. Add the following files
+
+    `data.tf`
+
+      ```hcl
+      data "aws_caller_identity" "session" {
+        provider = aws.session
+      }
+
+      data "aws_iam_session_context" "session" {
+        provider = aws.session
+
+        arn = data.aws_caller_identity.session.arn
+      }
+      ```
+
+    `terraform.tf`
+
+      ```hcl
+      terraform {
+        backend "s3" {
+          acl            = "private"
+          bucket         = "global-tf-state-aqsvzyd5u9"
+          encrypt        = true
+          key            = "aws/${AWS_ACCOUNT_NAME}/${COMPONENT}/terraform.tfstate"
+          region         = "eu-west-2"
+          dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
+        }
+        required_providers {
+          aws = {
+            source  = "hashicorp/aws"
+            version = "${LATEST_VERSION}" # can be found at https://registry.terraform.io/providers/hashicorp/aws/latest
+          }
+        }
+        required_version = "~> 1.5"
+      }
+
+      provider "aws" {
+        alias = "session"
+      }
+
+      provider "aws" {
+        region = "eu-west-2"
+        assume_role {
+          role_arn = "arn:aws:iam::${var.account_ids["${AWS_ACCOUNT_NAME}"]}:role/GlobalGitHubActionAdmin"
+        }
+        default_tags {
+          tags = var.tags
+        }
+      }
+
+      provider "aws" {
+        alias  = "analytical-platform-management-production"
+        region = "eu-west-2"
+        assume_role {
+          role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
+        }
+        default_tags {
+          tags = var.tags
+        }
+      }
+      ```
+
+    `terraform.tfvars`
+
+      ```hcl
+      account_ids = {
+        ${AWS_ACCOUNT_NAME}                       = "${AWS_ACCOUNT_ID}"
+        analytical-platform-management-production = "042130406152"
+      }
+
+      tags = {
+        business-unit          = "Platforms"
+        application            = "Data Platform"
+        component              = "${COMPONENT}"
+        environment            = "${ENVIRONMENT}"
+        is-production          = "${IS_PRODUCTION}"
+        owner                  = "data-platform:data-platform-tech@digital.justice.gov.uk"
+        infrastructure-support = "data-platform:data-platform-tech@digital.justice.gov.uk"
+        source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/${AWS_ACCOUNT_NAME}/${COMPONENT}"
+      }
+      ```
+
+    `variables.tf`
+
+      ```hcl
+      variable "account_ids" {
+        type        = map(string)
+        description = "Map of account names to account IDs"
+      }
+
+      variable "tags" {
+        type        = map(string)
+        description = "Map of tags to apply to resources"
+      }
+      ```
+
+1. Generate a Terraform lock file by running the following command in the component directory
+
+    ```bash
+    terraform init -upgrade -backend=false
+    ```
+
+1. Add an entry to `.github/path-filter/terraform.yml` by running the following command in the root of the repository
+
+    ```bash
+    bash scripts/path-filter/configuration-generator.sh terraform
+    ```
+
+1. Add an entry to Dependabot's configuration in `.github/dependabot.yml` by running the following command in the root of the repository
+
+    ```bash
+    bash scripts/dependabot/configuration-generator.sh
+    ```

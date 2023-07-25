@@ -1,0 +1,66 @@
+---
+owner_slack: "#data-platform-notifications"
+title: Containers
+last_reviewed_on: 2023-07-25
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+## Creating a new container
+
+To create a new container, you will need to:
+
+1. Create a directory in `containers`, e.g. `containers/example-application`
+
+1. Create the configuration file `containers/${CONTAINER_NAME}/config.yml` with the following contents
+
+    If you are using DockerHub:
+
+      ```json
+      {
+        "name": "example-application", # this will be appended to ministryofjustice/data-platform-${name}
+        "version": "1.0.0",            # this is the tag that will be applied to the image
+        "registry": "dockerhub"
+      }
+      ```
+
+    If you are using Modernisation Platform's ECR:
+
+      ```json
+      {
+        "name": "example-application",
+        "version": "1.0.0", # this is the tag that will be applied to the image
+        "registry": "ecr",
+        "ecr": {
+            "role": "arn:aws:iam::013433889002:role/data-platform-gha",
+            "account": "374269020027",
+            "region": "eu-west-2",
+            "repository": "data-platform-example-application-ecr-repo" # this is the name of the ECR repository in the Modernisation Platform
+        }
+      }
+      ```
+
+1. Create the CHANGELOG `containers/${CONTAINER_NAME}/CHANGELOG.md` following the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format
+
+1. Add your Dockerfile and source code
+
+1. Add an entry to `.github/path-filter/containers.yml` by running
+
+    ```bash
+    bash scripts/path-filter/configuration-generator.sh containers
+    ```
+
+1. Add an entry to Dependabot's configuration in `.github/dependabot.yml` by running
+
+    ```bash
+    bash scripts/dependabot/configuration-generator.sh
+    ```
+
+## Updating a container
+
+1. Make the changes required to the container
+
+1. Update the version in `containers/${CONTAINER_NAME}/config.yml`
+
+1. Update the CHANGELOG `containers/${CONTAINER_NAME}/CHANGELOG.md` following the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format
