@@ -27,7 +27,7 @@ jobs:
           fi
 
   terraform-static-analysis:
-    if: github.ref != 'refs/heads/main'
+    if: (github.ref != 'refs/heads/main' && github.actor != 'dependabot[bot]')
     name: Static Analysis
     runs-on: ubuntu-latest
     steps:
