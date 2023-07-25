@@ -31,7 +31,7 @@ module "eks" {
     }, {
       rolearn  = module.karpenter.role_arn
       username = "system:node:{{EC2PrivateDNSName}}"
-      groups = [
+      groups   = [
         "system:bootstrappers",
         "system:nodes",
       ]
