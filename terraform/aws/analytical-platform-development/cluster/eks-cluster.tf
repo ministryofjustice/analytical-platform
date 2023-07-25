@@ -28,10 +28,10 @@ module "eks" {
       groups   = ["system:masters"]
       rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${one(data.aws_iam_roles.aws_sso_administrator_access.names)}"
       username = "restricted-admin"
-    }, {
+      },{
       rolearn  = module.karpenter.role_arn
       username = "system:node:{{EC2PrivateDNSName}}"
-      groups   = [
+      groups = [
         "system:bootstrappers",
         "system:nodes",
       ]
