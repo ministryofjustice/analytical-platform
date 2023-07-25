@@ -236,10 +236,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform/baseline"
     schedule:
@@ -251,10 +247,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-data-engineering-production/10ds"
     schedule:
@@ -266,10 +258,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-data-production/airflow"
     schedule:
@@ -281,10 +269,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-data-production/artifact-repos"
     schedule:
@@ -296,10 +280,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-data-production/kops"
     schedule:
@@ -311,10 +291,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-data-production/rds-s3-exports"
     schedule:
@@ -326,10 +302,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-data-production/s3-glue-crawler"
     schedule:
@@ -341,10 +313,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-development/cluster"
     schedule:
@@ -356,10 +324,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-development/open-metadata"
     schedule:
@@ -371,10 +335,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-management-production/cluster"
     schedule:
@@ -386,10 +346,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform/oidc"
     schedule:
@@ -401,10 +357,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-production/cluster"
     schedule:
@@ -416,10 +368,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/github/application-migration"
     schedule:
@@ -431,10 +379,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/github/data-platform"
     schedule:
@@ -446,10 +390,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
   - package-ecosystem: "terraform"
     directory: "terraform/pagerduty"
     schedule:
@@ -461,7 +401,3 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-    labels:
-      - "dependencies"
-      - "terraform"
-      - "override-static-analysis"
