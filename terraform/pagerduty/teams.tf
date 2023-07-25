@@ -10,7 +10,6 @@ locals {
       responders = [
         module.users["thomas.webber@digital.justice.gov.uk"].id,
         module.users["brian.ellwood@digital.justice.gov.uk"].id,
-        module.users["louise.bowler@digital.justice.gov.uk"].id,
         module.users["john.hackett@digital.justice.gov.uk"].id,
         module.users["michael.collins@digital.justice.gov.uk"].id,
         module.users["yikang.mao@justice.gov.uk"].id,
