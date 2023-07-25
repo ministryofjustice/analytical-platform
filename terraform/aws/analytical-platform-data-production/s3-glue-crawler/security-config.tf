@@ -11,7 +11,8 @@ resource "aws_glue_security_configuration" "glue_security_config" {
     }
 
     s3_encryption {
-      s3_encryption_mode = "DISABLED"
+      kms_key_arn = data.aws_kms_key.rds_s3_export.arn
+      s3_encryption_mode = "SSE-KMS"
     }
   }
 }
