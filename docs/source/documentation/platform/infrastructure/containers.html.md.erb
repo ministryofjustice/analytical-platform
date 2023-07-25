@@ -15,7 +15,7 @@ To create a new container, you will need to:
 
 1. Create the configuration file `containers/${CONTAINER_NAME}/config.yml` with the following contents
 
-    If you are using DockerHub:
+    If you are using DockerHub (public images):
 
       ```json
       {
@@ -25,12 +25,12 @@ To create a new container, you will need to:
       }
       ```
 
-    If you are using Modernisation Platform's ECR:
+    If you are using Modernisation Platform's AWS ECR (internal images):
 
       ```json
       {
-        "name": "example-application",
-        "version": "1.0.0", # this is the tag that will be applied to the image
+        "name": "example-application", # this isn't used for ECR, but should be the same as the directory name
+        "version": "1.0.0",            # this is the tag that will be applied to the image
         "registry": "ecr",
         "ecr": {
             "role": "arn:aws:iam::013433889002:role/data-platform-gha",
@@ -45,17 +45,21 @@ To create a new container, you will need to:
 
 1. Add your Dockerfile and source code
 
+    If you are using the `ADD` or `COPY` directives in your Dockerfile, the build context is relative to your container's directory
+
 1. Add an entry to `.github/path-filter/containers.yml` by running
 
     ```bash
     bash scripts/path-filter/configuration-generator.sh containers
     ```
 
-1. Add an entry to Dependabot's configuration in `.github/dependabot.yml` by running
+1. Add an entry to `.github/dependabot.yml` by running
 
     ```bash
     bash scripts/dependabot/configuration-generator.sh
     ```
+
+1. Submit your changes using a pull request
 
 ## Updating a container
 
@@ -64,3 +68,5 @@ To create a new container, you will need to:
 1. Update the version in `containers/${CONTAINER_NAME}/config.yml`
 
 1. Update the CHANGELOG `containers/${CONTAINER_NAME}/CHANGELOG.md` following the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format
+
+1. Submit your changes using a pull request

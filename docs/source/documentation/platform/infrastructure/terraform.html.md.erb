@@ -11,9 +11,18 @@ review_in: 6 months
 
 To create a new Terraform component, you will need to:
 
-1. Create a directory in `terraform`, e.g. if AWS `terraform/aws/${AWS_ACCOUNT_NAME}/${COMPONENT}`
+1. Create a directory in `terraform`, e.g. `terraform/aws/${AWS_ACCOUNT_NAME}/${COMPONENT}`
 
-1. Add the following files
+1. Add the following files substituting the values in `${}` as appropriate
+
+    | Key | Value | Example |
+    |---|---|---|
+    | `AWS_ACCOUNT_NAME` | Name of the account as it appears in<br />AWS IAM Identity Center | `analytical-platform-development` |
+    | `AWS_ACCOUNT_ID` | ID of the account as it appears in<br />AWS IAM Identity Center | `123456789012` |
+    | `COMPONENT` | Name of the component<br />(We refer to a **component** as a collection of resources that create a service) | `eks` |
+    | `ENVIRONMENT` | Name of the environment<br /> | `development` |
+    | `IS_PRODUCTION` | Whether the environment is production<br /> | `false` |
+
 
     `data.tf`
 
@@ -44,7 +53,7 @@ To create a new Terraform component, you will need to:
         required_providers {
           aws = {
             source  = "hashicorp/aws"
-            version = "${LATEST_VERSION}" # can be found at https://registry.terraform.io/providers/hashicorp/aws/latest
+            version = "${LATEST_VERSION}" # e.g. 5.9.0 can be found at https://registry.terraform.io/providers/hashicorp/aws/latest
           }
         }
         required_version = "~> 1.5"
@@ -110,7 +119,7 @@ To create a new Terraform component, you will need to:
       }
       ```
 
-1. Generate a Terraform lock file by running the following command in the component directory
+1. Generate a Terraform lock file by running the following command in the component's directory
 
     ```bash
     terraform init -upgrade -backend=false
@@ -122,7 +131,7 @@ To create a new Terraform component, you will need to:
     bash scripts/path-filter/configuration-generator.sh terraform
     ```
 
-1. Add an entry to Dependabot's configuration in `.github/dependabot.yml` by running the following command in the root of the repository
+1. Add an entry to `.github/dependabot.yml` by running the following command in the root of the repository
 
     ```bash
     bash scripts/dependabot/configuration-generator.sh
