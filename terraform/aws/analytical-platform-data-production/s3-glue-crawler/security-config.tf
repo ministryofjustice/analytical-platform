@@ -3,7 +3,8 @@ resource "aws_glue_security_configuration" "glue_security_config" {
 
   encryption_configuration {
     cloudwatch_encryption {
-      cloudwatch_encryption_mode = "DISABLED"
+      cloudwatch_encryption_mode = "SSE-KMS"
+      kms_key_arn = data.aws_kms_key.rds_s3_export.arn
     }
 
     job_bookmarks_encryption {
@@ -11,8 +12,7 @@ resource "aws_glue_security_configuration" "glue_security_config" {
     }
 
     s3_encryption {
-      kms_key_arn = data.aws_kms_key.rds_s3_export.arn
-      s3_encryption_mode = "SSE-KMS"
+      s3_encryption_mode = "DISABLED"
     }
   }
 }
