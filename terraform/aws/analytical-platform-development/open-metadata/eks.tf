@@ -49,6 +49,7 @@ module "eks" {
       min_size       = 1
       max_size       = 5
       desired_size   = 3
+      disk_size      = 150
       instance_types = ["t3.2xlarge"]
     }
   }
