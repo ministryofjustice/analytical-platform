@@ -11,16 +11,11 @@ resource "coder_agent" "main" {
     sudo ./aws/install
     cd -
 
-    curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=/tmp/code-server --version 4.15.0
-    /tmp/code-server/bin/code-server --auth none --port 13337 >/tmp/code-server.log 2>&1 &
+    pip3 install jupyterlab
+    $HOME/.local/bin/jupyter lab --ServerApp.token='' --ip='*'
 
   EOT
 
-  # The following metadata blocks are optional. They are used to display
-  # information about your workspace in the dashboard. You can remove them
-  # if you don't want to display any information.
-  # For basic resources, you can use the `coder stat` command.
-  # If you need more control, you can write your own script.
   metadata {
     display_name = "CPU Usage"
     key          = "0_cpu_usage"
@@ -30,8 +25,8 @@ resource "coder_agent" "main" {
   }
 
   metadata {
-    display_name = "RAM Usage"
-    key          = "1_ram_usage"
+    display_name = "Memory Usage"
+    key          = "1_mem_usage"
     script       = "coder stat mem"
     interval     = 10
     timeout      = 1

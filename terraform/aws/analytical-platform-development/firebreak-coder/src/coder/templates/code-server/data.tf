@@ -5,7 +5,6 @@ data "coder_parameter" "cpu" {
   display_name = "CPU"
   description  = "The number of CPU cores"
   default      = "2"
-  icon         = "/icon/memory.svg"
   mutable      = true
   option {
     name  = "2 Cores"
@@ -15,14 +14,6 @@ data "coder_parameter" "cpu" {
     name  = "4 Cores"
     value = "4"
   }
-  option {
-    name  = "6 Cores"
-    value = "6"
-  }
-  option {
-    name  = "8 Cores"
-    value = "8"
-  }
 }
 
 data "coder_parameter" "memory" {
@@ -30,7 +21,6 @@ data "coder_parameter" "memory" {
   display_name = "Memory"
   description  = "The amount of memory in GB"
   default      = "2"
-  icon         = "/icon/memory.svg"
   mutable      = true
   option {
     name  = "2 GB"
@@ -39,14 +29,6 @@ data "coder_parameter" "memory" {
   option {
     name  = "4 GB"
     value = "4"
-  }
-  option {
-    name  = "6 GB"
-    value = "6"
-  }
-  option {
-    name  = "8 GB"
-    value = "8"
   }
 }
 
