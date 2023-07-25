@@ -28,7 +28,7 @@ jobs:
 
   terraform-static-analysis:
     if: github.ref != 'refs/heads/main'
-    name: Terraform Static Analysis
+    name: Static Analysis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -56,7 +56,7 @@ jobs:
           output_format: cli
         continue-on-error: true
 
-      - name: Terraform Static Analysis - tfsec
+      - name: tfsec
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_tfsec
         uses: aquasecurity/tfsec-action@b466648d6e39e7c75324f25d83891162a721f2d6 # v1.0.3
@@ -97,8 +97,8 @@ jobs:
         with:
           script: |
             const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
-            #### Checkov 🛂: \`${{ steps.terraform_init.outcome }}\`
-            #### tfsec 🛂: \`${{ steps.terraform_validate.outcome }}\`
+            #### Checkov 🛂: \`${{ steps.terraform_static_analysis_checkov.outcome }}\`
+            #### tfsec 🛂: \`${{ steps.terraform_static_analysis_tfsec.outcome }}\`
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`, Marker: \`${{ inputs.component }}_static_analysis\`*`;
 
