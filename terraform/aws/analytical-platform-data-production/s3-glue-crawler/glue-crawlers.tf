@@ -12,8 +12,6 @@ resource "aws_glue_crawler" "alpha_vmcs_data" {
     }
   )
 
-  security_configuration = "aws_glue_security_configuration.glue_security_config.name"
-
   s3_target {
     path = "s3://alpha-vcms-data/vcms-data-3/vcms/"
   }
