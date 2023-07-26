@@ -7,6 +7,46 @@ review_in: 6 months
 
 # <%= current_page.data.title %>
 
+Data Platform's Core Infrastructure team offer a standardised pipeline for running Terraform. This is done via GitHub Actions and is available to all teams.
+
+Terraform components are scanned by [Checkov](https://github.com/bridgecrewio/checkov) and [tfsec](https://github.com/aquasecurity/tfsec)
+
+Terraform components are also linted by the Super Linter with [fmt](https://developer.hashicorp.com/terraform/cli/commands/fmt), [tflint](https://github.com/terraform-linters/tflint) and [terrascan](https://github.com/accurics/terrascan)
+
+## Style guide
+
+### Structure
+
+* data sources should be placed in `data.tf`
+
+* providers and versions should be placed in `terraform.tf`
+
+* variables should be placed in `variables.tf`
+
+* outputs should be placed in `outputs.tf`
+
+* resources should be grouped in files which are based from their name, e.g.
+
+  * IAM policies should be placed in `iam-policies.tf`
+
+  * IAM roles should be placed in `iam-roles.tf`
+
+  * KMS keys should be placed in `kms-keys.tf`
+
+* locals should be placed in `locals.tf`
+
+* modules should be placed in `modules/`
+
+### Naming
+
+* resources should be named using snake case, e.g. `resource "aws_iam_role" "example_role_name" {}`
+
+* resources shouldn't contain what they are, e.g. `resource "aws_iam_role" "example_role_name" {}` is preferred over `resource "aws_iam_role" "example_role_name_role" {}`
+
+* modules should be named using snake case, e.g. `module "example_module_name" {}`
+
+* modules should be name relative to what they are doing, e.g. `module "example_iam_role" {}`
+
 ## Creating a new Terraform component
 
 To create a new Terraform component, you will need to:
@@ -22,7 +62,6 @@ To create a new Terraform component, you will need to:
     | `COMPONENT` | Name of the component<br />(We refer to a **component** as a collection of resources that create a service) | `eks` |
     | `ENVIRONMENT` | Name of the environment<br /> | `development` |
     | `IS_PRODUCTION` | Whether the environment is production<br /> | `false` |
-
 
     `data.tf`
 
@@ -136,3 +175,11 @@ To create a new Terraform component, you will need to:
     ```bash
     bash scripts/dependabot/configuration-generator.sh
     ```
+
+1. Submit your changes using a pull request
+
+## Updating a Terraform component
+
+1. Make the changes required to the component
+
+1. Submit your changes using a pull request

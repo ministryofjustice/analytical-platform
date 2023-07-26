@@ -7,6 +7,12 @@ review_in: 6 months
 
 # <%= current_page.data.title %>
 
+Data Platform's Core Infrastructure team offer a managed pipeline for building, scanning and pushing containers to a registry. This is done via GitHub Actions and is available to all teams.
+
+Images are scanned for vulnerabilities using [Trivy](https://github.com/aquasecurity/trivy), currently with a default severity of `CRITICAL`
+
+Dockerfiles are linted by the Super Linter with [Hadolint](https://github.com/hadolint/hadolint)
+
 ## Creating a new container
 
 To create a new container, you will need to:
