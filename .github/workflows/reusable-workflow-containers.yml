@@ -50,7 +50,7 @@ jobs:
           fi
 
       - name: Check Version (GitHub Container Registry)
-        if: needs.prepare-environment.outputs.registry == 'dockerhub'
+        if: needs.prepare-environment.outputs.registry == 'ghcr'
         id: check_version_ghcr
         env:
           GH_TOKEN: ${{ github.token }}
@@ -227,7 +227,7 @@ jobs:
         uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2.2.0
         with:
           username: ${{ github.actor }}
-          password: ${{ github.token }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Push
         id: build_and_push
