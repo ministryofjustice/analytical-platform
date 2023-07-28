@@ -59,6 +59,21 @@ module "eks" {
     }
   }
 
-  workers_additional_policies = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
-  write_kubeconfig            = false
+  workers_additional_policies          = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
+  worker_additional_security_group_ids = [aws_security_group.allow_karpenter_communication.id]
+  write_kubeconfig                     = false
+}
+
+resource "aws_security_group" "allow_karpenter_communication" {
+  description = " allows karpenter nodes  to communicate with infrastructure"
+  vpc_id      = module.vpc.vpc_id
+}
+
+resource "aws_security_group_rule" "allow_karpenter" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 65535
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.karpenter.id  
+  security_group_id        = aws_security_group.allow_karpenter_communication.id  
 }
