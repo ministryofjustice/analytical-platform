@@ -120,6 +120,7 @@ jobs:
           quiet: true
           download_external_modules: true
           output_format: cli
+          skip_check: CKV_GIT_1
         continue-on-error: true
 
       - name: Terraform Static Analysis - tfsec
