@@ -53,7 +53,7 @@ To create a new Terraform component, you will need to:
 
 1. Create a directory in `terraform`, e.g. `terraform/aws/${AWS_ACCOUNT_NAME}/${COMPONENT}`
 
-1. Add the following files substituting the values in `${}` as appropriate
+1. Using the table below for reference, create the required files in the component directory, replacing the placeholders with the correct values
 
     | Key | Value | Example |
     |---|---|---|
@@ -63,7 +63,7 @@ To create a new Terraform component, you will need to:
     | `ENVIRONMENT` | Name of the environment<br /> | `development` |
     | `IS_PRODUCTION` | Whether the environment is production<br /> | `false` |
 
-    `data.tf`
+    `data.tf` [(Example)](https://github.com/ministryofjustice/data-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/data.tf)
 
       <details>
 
@@ -83,7 +83,7 @@ To create a new Terraform component, you will need to:
 
       </details>
 
-    `terraform.tf`
+    `terraform.tf` [(Example)](https://github.com/ministryofjustice/data-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/terraform.tf)
 
       <details>
 
@@ -136,7 +136,7 @@ To create a new Terraform component, you will need to:
 
       </details>
 
-    `terraform.tfvars`
+    `terraform.tfvars` [(Example)](https://github.com/ministryofjustice/data-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/terraform.tfvars)
 
       <details>
 
@@ -162,7 +162,7 @@ To create a new Terraform component, you will need to:
 
       </details>
 
-    `variables.tf`
+    `variables.tf` [(Example)](https://github.com/ministryofjustice/data-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/variables.tf)
 
       <details>
 
@@ -181,16 +181,6 @@ To create a new Terraform component, you will need to:
       ```
 
       </details>
-
-  Examples of these files can be found below
-
-  - [`data.tf`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/data.tf)
-
-  - [`terraform.tf`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/terraform.tf)
-
-  - [`terraform.tfvars`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/terraform.tfvars)
-
-  - [`variables.tf`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/variables.tf)
 
 1. Generate a Terraform lock file by running the following command in the component's directory
 
