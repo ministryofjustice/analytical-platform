@@ -103,6 +103,26 @@ module "external_dns_iam_role" {
   }
 }
 
+module "amazon_managed_prometheus_iam_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.28.0"
+
+  role_name_prefix = "amazon-managed-prometheus"
+
+  role_policy_arns = {
+    amazon-managed-prometheus = module.amazon_managed_prometheus_iam_policy.arn
+  }
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${kubernetes_namespace.prometheus.metadata[0].name}:prometheus"]
+    }
+  }
+}
+
 module "open_metadata_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
