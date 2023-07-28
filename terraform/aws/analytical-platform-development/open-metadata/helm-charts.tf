@@ -82,6 +82,24 @@ resource "helm_release" "external_dns" {
   ]
 }
 
+resource "helm_release" "amazon_managed_prometheus_proxy" {
+  name       = "prometheus-proxy"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  chart      = "prometheus"
+  version    = "23.1.0"
+  namespace  = kubernetes_namespace.prometheus.metadata[0].name
+  values = [
+    templatefile(
+      "${path.module}/src/helm/prometheus/values.yml.tftpl",
+      {
+        aws_region                  = data.aws_region.current.name
+        eks_role_arn                = module.amazon_managed_prometheus_iam_role.iam_role_arn
+        prometheus_remote_write_url = "${module.managed_prometheus.workspace_prometheus_endpoint}api/v1/remote_write"
+      }
+    )
+  ]
+}
+
 resource "helm_release" "openmetadata_dependencies" {
   name       = "openmetadata-dependencies"
   repository = "https://helm.open-metadata.org"

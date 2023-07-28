@@ -43,7 +43,9 @@ locals {
     "tamsinforbes",
     "murad-ali-MoJ",
     "Gary-H9",
-    "mitchdawson1982"
+    "mitchdawson1982",
+    "jhackett-ap", # John Hackett
+    "bagg3rs"      # Richard Baguley
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
