@@ -240,7 +240,6 @@ jobs:
           build-args: |
             VERSION=${{ needs.prepare-environment.outputs.version }}
 
-
   build-push-ecr:
     if: (github.ref == 'refs/heads/main') && (needs.prepare-environment.outputs.registry == 'ecr')
     needs: [prepare-environment]
