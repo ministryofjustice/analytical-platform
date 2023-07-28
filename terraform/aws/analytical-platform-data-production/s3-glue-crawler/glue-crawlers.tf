@@ -1,9 +1,9 @@
-resource "aws_glue_crawler" "alpha_vmcs_data_2" {
+resource "aws_glue_crawler" "alpha_vcms_data" {
   # checkov:skip=CKV_AWS_195:security configuration disabled
   # as crawler not writing encrypted data, only crawling
   # for schema and metadata
   name          = "alpha-vcms-data_2"
-  database_name = aws_glue_catalog_database.alpha_vcms_data_2.name
+  database_name = aws_glue_catalog_database.alpha_vcms_data.name
   role          = aws_iam_role.alpha_vcms_data_crawler.arn
 
   configuration = jsonencode(
