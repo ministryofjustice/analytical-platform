@@ -1,6 +1,12 @@
 {
   "absolute": true,
-  "ignore": ["**/.github/workflows/devcontainer.yml", "**/.devcontainer/**/devcontainer.json", "**/.github/workflows/documentation.yml","**/containers/daap-docs/src/var/task/swagger.json"],
+  "ignore": [
+    "**/.github/workflows/devcontainer.yml",
+    "**/.devcontainer/**/devcontainer.json",
+    "**/.github/workflows/documentation.yml",
+    "**/containers/daap-docs/src/var/task/swagger.json",
+    "**/.github/workflows/reusable-workflow-terraform.yml"
+  ],
   "reporters": ["consoleFull"],
   "threshold": 0
 }
