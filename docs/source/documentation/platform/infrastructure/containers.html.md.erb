@@ -31,6 +31,16 @@ To create a new container, you will need to:
       }
       ```
 
+    If you are using GitHub Container Registry (public images):
+
+      ```json
+      {
+        "name": "example-application", # this will be appended to ghcr.io/ministryofjustice/data-platform-${name}
+        "version": "1.0.0",            # this is the tag that will be applied to the image
+        "registry": "ghcr"
+      }
+      ```
+
     If you are using Modernisation Platform's AWS ECR (internal images):
 
       ```json
