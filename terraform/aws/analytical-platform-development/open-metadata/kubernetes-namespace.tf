@@ -10,6 +10,12 @@ resource "kubernetes_namespace" "external_dns" {
   }
 }
 
+resource "kubernetes_namespace" "prometheus" {
+  metadata {
+    name = "prometheus"
+  }
+}
+
 resource "kubernetes_namespace" "open_metadata" {
   metadata {
     name = "open-metadata"
