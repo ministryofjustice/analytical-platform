@@ -40,7 +40,22 @@ jobs:
         if: needs.prepare-environment.outputs.registry == 'dockerhub'
         id: check_version_dockerhub
         run: |
-          checkTag=$(skopeo list-tags docker://ministryofjustice/data-platform-${{ needs.prepare-environment.outputs.name }} | jq -r --arg imageTag "${{ needs.prepare-environment.outputs.version }}" '.Tags | index($imageTag)')
+          checkTag=$(skopeo list-tags docker://docker.io/ministryofjustice/data-platform-${{ needs.prepare-environment.outputs.name }} | jq -r --arg imageTag "${{ needs.prepare-environment.outputs.version }}" '.Tags | index($imageTag)')
+          export checkTag
+
+          if [[ -z "${imageTag}" ]]; then
+            echo "tag_exists=false" >>"${GITHUB_ENV}"
+          else
+            echo "tag_exists=true" >>"${GITHUB_ENV}"
+          fi
+
+      - name: Check Version (GitHub Container Registry)
+        if: needs.prepare-environment.outputs.registry == 'dockerhub'
+        id: check_version_ghcr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          checkTag=$(gh api /orgs/ministryofjustice/packages/container/${container}/versions | grep -F ${imageTag} || echo "false")
           export checkTag
 
           if [[ -z "${imageTag}" ]]; then
@@ -196,6 +211,35 @@ jobs:
           tags: ministryofjustice/data-platform-${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
           build-args: |
             VERSION=${{ needs.prepare-environment.outputs.version }}
+
+  build-push-ghcr:
+    if: (github.ref == 'refs/heads/main') && (needs.prepare-environment.outputs.registry == 'ghcr')
+    needs: [prepare-environment]
+    name: Build and Push to GitHub Container Registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Login to GitHub Container Registry
+        id: login_ghcr
+        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2.2.0
+        with:
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Build and Push
+        id: build_and_push
+        uses: docker/build-push-action@2eb1c1961a95fc15694676618e422e8ba1d63825 # v4.1.1
+        with:
+          context: containers/${{ inputs.image }}
+          file: containers/${{ inputs.image }}/Dockerfile
+          push: true
+          tags: ghcr.io/ministryofjustice/data-platform-${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
+          build-args: |
+            VERSION=${{ needs.prepare-environment.outputs.version }}
+
 
   build-push-ecr:
     if: (github.ref == 'refs/heads/main') && (needs.prepare-environment.outputs.registry == 'ecr')
