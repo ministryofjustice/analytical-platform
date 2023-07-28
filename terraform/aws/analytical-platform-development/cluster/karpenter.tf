@@ -24,7 +24,7 @@ resource "aws_security_group_rule" "karpenter" {
   to_port                  = 65535
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.karpenter.id
-  security_group_id        = aws_security_group.karpenter.id  
+  security_group_id        = aws_security_group.karpenter.id
 }
 
 resource "aws_security_group_rule" "eks_node_karpenter" {
@@ -33,5 +33,5 @@ resource "aws_security_group_rule" "eks_node_karpenter" {
   to_port                  = 65535
   protocol                 = "tcp"
   source_security_group_id = module.eks.worker_security_group_id
-  security_group_id        = aws_security_group.karpenter.id  
+  security_group_id        = aws_security_group.karpenter.id
 }
