@@ -22,5 +22,10 @@
     }
   },
   "mounts": [{ "source": "ministryofjustice-data-platform-devcontainer-gh", "target": "/home/vscode/.config/gh", "type": "volume" }],
+  "customizations": {
+    "vscode": {
+      "extensions": ["EditorConfig.EditorConfig", "GitHub.vscode-pull-request-github", "GitHub.vscode-github-actions"]
+    }
+  },
   "installsAfter": ["./features/src/base"]
 }

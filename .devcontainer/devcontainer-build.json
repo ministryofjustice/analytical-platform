@@ -17,18 +17,5 @@
   "overrideFeatureInstallOrder": [
     "ghcr.io/devcontainers/features/common-utils",
     "./features/src/base"
-  ],
-  "remoteUser": "vscode",
-  "runArgs": ["--name=ministryofjustice-data-platform-devcontainer"],
-  "mounts": [
-    { "source": "ministryofjustice-data-platform-devcontainer-persisted", "target": "/opt/vscode-dev-containers", "type": "volume" },
-    { "source": "ministryofjustice-data-platform-devcontainer-workspace", "target": "/home/vscode/workspace", "type": "volume" },
-    { "source": "ministryofjustice-data-platform-devcontainer-commandhistory", "target": "/home/vscode/.commandhistory", "type": "volume" }
-  ],
-  "workspaceFolder": "/home/vscode/workspace",
-  "customizations": {
-    "vscode": {
-      "extensions": ["EditorConfig.EditorConfig", "GitHub.vscode-pull-request-github", "GitHub.vscode-github-actions"]
-    }
-  }
+  ]
 }
