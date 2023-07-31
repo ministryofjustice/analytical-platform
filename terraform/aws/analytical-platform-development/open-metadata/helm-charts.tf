@@ -100,6 +100,24 @@ resource "helm_release" "amazon_managed_prometheus_proxy" {
   ]
 }
 
+resource "helm_release" "auth0_exporter" {
+  name       = "auth0-exporter"
+  repository = "https://tfadeyi.github.io/auth0-simple-exporter"
+  chart      = "auth0-exporter"
+  version    = "0.0.2"
+  namespace  = kubernetes_namespace.prometheus.metadata[0].name
+  values = [
+    templatefile(
+      "${path.module}/src/helm/auth0-exporter/values.yml.tftpl",
+      {
+        auth0_domain        = "alpha-analytics-moj.eu.auth0.com"
+        auth0_client_id     = ""
+        auth0_client_secret = ""
+      }
+    )
+  ]
+}
+
 resource "helm_release" "openmetadata_dependencies" {
   name       = "openmetadata-dependencies"
   repository = "https://helm.open-metadata.org"

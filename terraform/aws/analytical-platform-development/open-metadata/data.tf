@@ -31,3 +31,7 @@ data "aws_secretsmanager_secret_version" "openmetadata_rds_credentials" {
 
   depends_on = [module.rds]
 }
+
+data "aws_cloudwatch_event_bus" "auth0" {
+  name = "aws.partner/auth0.com/alpha-analytics-moj-c855a398-59a4-44d3-b042-7873e5a9ba75/auth0.logs" // This was created by Auth0, we accepted it in the UI
+}

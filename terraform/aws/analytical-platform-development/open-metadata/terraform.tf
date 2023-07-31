@@ -8,6 +8,10 @@ terraform {
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
   required_providers {
+    auth0 = {
+      source  = "auth0/auth0"
+      version = "0.50.0"
+    }
     aws = {
       source  = "hashicorp/aws"
       version = "5.10.0"
