@@ -14,7 +14,7 @@ RUN apt update && apt upgrade -y && apt install curl gpg -y
 # Install Soft Serve as the non-root user
 RUN curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg
 RUN echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list
-RUN apt update && apt install soft-serve -y 
+RUN apt update && apt install soft-serve -y
 
 # Create a non-root user and group 'softserve'
 RUN groupadd -r softserve && useradd -m -r -g softserve softserve

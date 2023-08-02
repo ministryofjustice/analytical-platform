@@ -12,4 +12,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Create Soft Serve Docker image as a PoC during firebreak. 
+- Create Soft Serve Docker image as a PoC during firebreak.
