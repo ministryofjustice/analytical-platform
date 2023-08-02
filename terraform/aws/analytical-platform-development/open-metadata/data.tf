@@ -12,6 +12,24 @@ data "aws_caller_identity" "current" {}
 
 data "aws_region" "current" {}
 
+data "aws_secretsmanager_secret_version" "auth0_domain" {
+  provider = aws.analytical-platform-management-production
+
+  secret_id = "auth0/domain"
+}
+
+data "aws_secretsmanager_secret_version" "auth0_client_id" {
+  provider = aws.analytical-platform-management-production
+
+  secret_id = "auth0/client-id"
+}
+
+data "aws_secretsmanager_secret_version" "auth0_client_secret" {
+  provider = aws.analytical-platform-management-production
+
+  secret_id = "auth0/client-secret"
+}
+
 data "aws_secretsmanager_secret_version" "open_metadata_client_id" {
   secret_id = "open-metadata/azure/clientid"
 }
