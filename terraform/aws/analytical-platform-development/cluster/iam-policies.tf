@@ -477,7 +477,7 @@ data "aws_iam_policy_document" "control_panel_api" {
       "sqs:ReceiveMessage",
       "sqs:SendMessage"
     ]
-    resources = ["arn:aws:sqs::${var.account_ids[var.target_account]}:*"]
+    resources = ["arn:aws:sqs::${var.account_ids["analytical-platform-development"]}:*"]
   }
 }
 
