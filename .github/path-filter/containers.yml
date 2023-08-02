@@ -16,4 +16,5 @@ rshiny-4.0.5: containers/rshiny-4.0.5/**
 rshiny-4.1.3: containers/rshiny-4.1.3/**
 rshiny-4.2.2: containers/rshiny-4.2.2/**
 rstudio: containers/rstudio/**
+soft-serve: containers/soft-serve/**
 ubuntu-base: containers/ubuntu-base/**

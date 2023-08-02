@@ -171,6 +171,17 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "docker"
+    directory: "containers/soft-serve"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "docker"
     directory: "containers/ubuntu-base"
     schedule:
       interval: "daily"
@@ -227,17 +238,6 @@ updates:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "terraform"
     directory: "terraform/application-migration"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform/baseline"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -325,6 +325,17 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-development/cluster/.terraform/modules/iam_assumable_role_ebs_csi_driver/_template/test"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-development/open-metadata"
     schedule:
       interval: "daily"
@@ -347,7 +358,7 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform/oidc"
+    directory: "terraform/aws/analytical-platform-production/cluster"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -358,7 +369,18 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-production/cluster"
+    directory: "terraform/aws/analytical-platform/baseline"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform/oidc"
     schedule:
       interval: "daily"
       time: "09:00"

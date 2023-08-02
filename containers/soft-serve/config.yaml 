@@ -1,0 +1,5 @@
+{
+    "name": "soft-serve",       # this will be appended to ministryofjustice/data-platform-${name}
+    "version": "1.0.0",         # this is the tag that will be applied to the image
+    "registry": "dockerhub"
+  }
