@@ -3,6 +3,7 @@
 # bash scripts/path-filter/configuration-generator.sh terraform
 
 application-migration: terraform/application-migration/**
+aws-analytical-platform-baseline: terraform/aws/analytical-platform/baseline/**
 aws-analytical-platform-data-engineering-production-10ds: terraform/aws/analytical-platform-data-engineering-production/10ds/**
 aws-analytical-platform-data-production-airflow: terraform/aws/analytical-platform-data-production/airflow/**
 aws-analytical-platform-data-production-artifact-repos: terraform/aws/analytical-platform-data-production/artifact-repos/**
@@ -12,9 +13,9 @@ aws-analytical-platform-data-production-s3-glue-crawler: terraform/aws/analytica
 aws-analytical-platform-development-cluster: terraform/aws/analytical-platform-development/cluster/**
 aws-analytical-platform-development-open-metadata: terraform/aws/analytical-platform-development/open-metadata/**
 aws-analytical-platform-management-production-cluster: terraform/aws/analytical-platform-management-production/cluster/**
-aws-analytical-platform-production-cluster: terraform/aws/analytical-platform-production/cluster/**
-aws-analytical-platform-baseline: terraform/aws/analytical-platform/baseline/**
 aws-analytical-platform-oidc: terraform/aws/analytical-platform/oidc/**
+aws-analytical-platform-production-cluster: terraform/aws/analytical-platform-production/cluster/**
+cloud-platform-live-data-platform-development-soft-serve: terraform/cloud-platform/live/data-platform-development/soft-serve/**
 github-application-migration: terraform/github/application-migration/**
 github-data-platform: terraform/github/data-platform/**
 pagerduty: terraform/pagerduty/**

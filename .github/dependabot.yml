@@ -369,6 +369,17 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "terraform"
+    directory: "terraform/cloud-platform/live/data-platform-development/soft-serve"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-core-infra"
+  - package-ecosystem: "terraform"
     directory: "terraform/github/application-migration"
     schedule:
       interval: "daily"
