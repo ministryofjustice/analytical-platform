@@ -101,10 +101,10 @@ data "aws_iam_policy_document" "karpenter_controller" {
 
   statement {
     actions = [
-    "sqs:DeleteMessage",
-    "sqs:GetQueueUrl",
-    "sqs:GetQueueAttributes",
-    "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueUrl",
+      "sqs:GetQueueAttributes",
+      "sqs:ReceiveMessage",
     ]
     resources = [module.karpenter.queue_arn]
   }
