@@ -11,7 +11,7 @@ resource "aws_sqs_queue_policy" "s3_queue_iam_policy" {
       "Effect": "Allow",
       "Principal": {
          "AWS": [
-            "${var.account_ids.["analytical-platform-development"]}"
+            "${var.account_ids["analytical-platform-development"]}"
          ]
       },
       "Action" : [
@@ -40,7 +40,7 @@ resource "aws_sqs_queue_policy" "iam_queue_iam_policy" {
       "Effect": "Allow",
       "Principal": {
          "AWS": [
-            "${var.account_ids.["analytical-platform-development"]}"
+            "${var.account_ids["analytical-platform-development"]}"
          ]
       },
       "Action" : [
@@ -69,7 +69,7 @@ resource "aws_sqs_queue_policy" "auth_queue_iam_policy" {
       "Effect": "Allow",
       "Principal": {
          "AWS": [
-            "${var.account_ids.["analytical-platform-development"]}"
+            "${var.account_ids["analytical-platform-development"]}"
          ]
       },
       "Action" : [
