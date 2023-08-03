@@ -5,7 +5,7 @@ dataengineeringutils3==1.4.3
 Deprecated==1.2.14
 fsspec==2023.6.0
 jmespath==1.0.1
-jsonschema==4.17.3
+jsonschema==4.18.6
 mojap-metadata==1.12.2
 numpy==1.24.3
 parameterized==0.7.5
