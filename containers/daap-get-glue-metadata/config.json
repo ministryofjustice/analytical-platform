@@ -1,6 +1,6 @@
 {
     "name": "daap-get-glue-metadata",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "registry": "ecr",
     "ecr": {
         "role": "arn:aws:iam::013433889002:role/data-platform-gha",

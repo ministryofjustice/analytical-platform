@@ -6,7 +6,7 @@ module "eks" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/eks/aws"
-  version = "19.15.3"
+  version = "19.15.4"
 
   cluster_name    = "open-metadata"
   cluster_version = "1.27"
@@ -45,11 +45,14 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
-    openmetadata = {
-      min_size       = 1
-      max_size       = 5
-      desired_size   = 3
-      instance_types = ["t3.2xlarge"]
+    openmetadata-eks = {
+      use_custom_launch_template = false
+      launch_template_name       = ""
+      min_size                   = 1
+      max_size                   = 5
+      desired_size               = 3
+      disk_size                  = 150
+      instance_types             = ["t3.2xlarge"]
     }
   }
 
