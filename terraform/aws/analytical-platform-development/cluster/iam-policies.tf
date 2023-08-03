@@ -472,12 +472,13 @@ data "aws_iam_policy_document" "control_panel_api" {
     sid    = "CanManageSqsMessages"
     effect = "Allow"
     actions = [
+      "sqs:GetQueueAttributes",
       "sqs:GetQueueUrl",
       "sqs:DeleteMessage",
       "sqs:ReceiveMessage",
       "sqs:SendMessage"
     ]
-    resources = ["arn:aws:sqs::${var.account_ids["analytical-platform-development"]}:*"]
+    resources = ["arn:aws:sqs:eu-west-2:${var.account_ids["analytical-platform-development"]}:*"]
   }
 }
 
