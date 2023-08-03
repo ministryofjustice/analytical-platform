@@ -7,11 +7,16 @@ resource "aws_sqs_queue_policy" "s3_queue_iam_policy" {
   "Id": "sqspolicy",
   "Statement": [
     {
-      "Sid": "First",
+      "Sid": "CanManageSqsMessages",
       "Effect": "Allow",
       "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.s3_queue.arn}"
+      "Action" : [
+          "sqs:GetQueueUrl",
+          "sqs:DeleteMessage",
+          "sqs:ReceiveMessage",
+          "sqs:SendMessage"
+        ],
+      "Resource": ""arn:aws:sqs::${var.account_ids["analytical-platform-development"]}:*""
     }
   ]
 }
@@ -27,11 +32,16 @@ resource "aws_sqs_queue_policy" "iam_queue_iam_policy" {
   "Id": "sqspolicy",
   "Statement": [
     {
-      "Sid": "First",
+      "Sid": "CanManageSqsMessages",
       "Effect": "Allow",
       "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.iam_queue.arn}"
+      "Action" : [
+          "sqs:GetQueueUrl",
+          "sqs:DeleteMessage",
+          "sqs:ReceiveMessage",
+          "sqs:SendMessage"
+        ],
+      "Resource": ""arn:aws:sqs::${var.account_ids["analytical-platform-development"]}:*""
     }
   ]
 }
@@ -47,11 +57,16 @@ resource "aws_sqs_queue_policy" "auth_queue_iam_policy" {
   "Id": "sqspolicy",
   "Statement": [
     {
-      "Sid": "First",
+      "Sid": "CanManageSqsMessages",
       "Effect": "Allow",
       "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.auth_queue.arn}"
+      "Action" : [
+          "sqs:GetQueueUrl",
+          "sqs:DeleteMessage",
+          "sqs:ReceiveMessage",
+          "sqs:SendMessage"
+        ],
+      "Resource": ""arn:aws:sqs::${var.account_ids["analytical-platform-development"]}:*""
     }
   ]
 }
