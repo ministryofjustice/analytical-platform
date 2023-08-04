@@ -24,7 +24,7 @@ def _make_log_dict(level: str, msg: str, extra: dict, func: str) -> dict:
     msg_dict["date_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     msg_dict["message"] = msg
     msg_dict["function_name"] = func
-    # if extra is not None:
+
     for k, v in extra.items():
         msg_dict[k] = v
     return msg_dict
@@ -51,10 +51,11 @@ class DataPlatformLogger:
             "table_name": "useful_table"
         })
     """
+
     def __init__(
         self,
         format: str = "%(levelname)-8s | %(asctime)s | %(message)s",
-        extra: dict = {}
+        extra: dict = {},
     ):
         self.extra = extra
         self.log_list_dict = []
@@ -123,7 +124,9 @@ class DataPlatformLogger:
         Also adds the displays log info plus everything contained in extra.
 
         """
-        log_dict = _make_log_dict("wanring", msg, self.extra, inspect.stack()[1].function)
+        log_dict = _make_log_dict(
+            "wanring", msg, self.extra, inspect.stack()[1].function
+        )
         self.log_list_dict.append(log_dict)
         self.logger.warning(msg, *args, extra=self.extra, **kwargs)
 
@@ -144,17 +147,20 @@ class DataPlatformLogger:
         writes the list of log dicts to s3 as a json file in the correct
         format for an athena table
         """
-        s3_client = boto3.client('s3')
-        date = datetime.now().strftime('%Y-%m-%d')
-        date_time = datetime.now().strftime('%Y-%m-%dT%H:%M:%S:%f')[:-3]
-        if "lambda_name" in self.extra.keys() and "data_product_name" in self.extra.keys():
+        s3_client = boto3.client("s3")
+        date = datetime.now().strftime("%Y-%m-%d")
+        date_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S:%f")[:-3]
+        if (
+            "lambda_name" in self.extra.keys()
+            and "data_product_name" in self.extra.keys()
+        ):
             key = os.path.join(
                 "logs",
                 "json",
                 f"lambda_name={self.extra['lambda_name']}",
                 f"data_product_name={self.extra['data_product_name']}",
                 f"date={date}",
-                f"{date_time}_log.json"
+                f"{date_time}_log.json",
             )
         else:
             key = os.path.join("logs", "json", f"date={date}", f"{date_time}_log.json")
@@ -164,9 +170,4 @@ class DataPlatformLogger:
         for line in self.log_list_dict:
             jlines += json.dumps(line) + "\n"
 
-        s3_client.put_object(
-            Body=jlines,
-            Bucket=bucket,
-            Key=key,
-            **kwargs
-        )
+        s3_client.put_object(Body=jlines, Bucket=bucket, Key=key, **kwargs)
