@@ -478,7 +478,7 @@ data "aws_iam_policy_document" "control_panel_api" {
       "sqs:ReceiveMessage",
       "sqs:SendMessage"
     ]
-    resources = ["arn:aws:sqs:eu-west-2:${var.account_ids["analytical-platform-development"]}:*"]
+    resources = ["arn:aws:sqs:${data.aws_region.sqs_region.name}:${var.account_ids["analytical-platform-development"]}:*"]
   }
 }
 
