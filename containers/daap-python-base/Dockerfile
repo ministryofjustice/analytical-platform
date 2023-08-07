@@ -1,6 +1,6 @@
 FROM public.ecr.aws/lambda/python:3.11
 
-ARG VERSION
+ARG BASE_VERSION
 
 ENV BASE_VERSION="${VERSION}"
 
