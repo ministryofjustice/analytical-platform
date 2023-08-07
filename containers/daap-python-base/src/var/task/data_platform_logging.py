@@ -5,6 +5,7 @@ import os
 import sys
 import time
 from datetime import datetime
+from typing import List
 
 import boto3
 
@@ -58,7 +59,7 @@ class DataPlatformLogger:
         extra: dict = {},
     ):
         self.extra = extra
-        self.log_list_dict = []
+        self.log_list_dict: List[dict] = []
         self.format = format
         self.logger = logging.getLogger()
 
