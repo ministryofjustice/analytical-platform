@@ -47,7 +47,7 @@ __zsh_prompt() {
           elif [[ "$( kubectl config get-contexts | grep "*" | awk "{ print $2 }" | cut -d"/" -f2 )" == *"production"* ]]; then \
             echo -n "[ k8s: %{$fg[red]%}production%{$reset_color%} ] "; \
           elif [[ "$( kubectl config get-contexts | grep "*" | awk "{ print $2 }" | cut -d"/" -f2 )" == *"live.cloud-platform.service.justice.gov.uk"* ]]; then \
-            echo -n "[ k8s: %{$fg[red]%}cloud-platform%{$reset_color%} ] "; \
+            echo -n "[ k8s: %{$fg[red]%}cloud-platform-live%{$reset_color%} ] "; \
           fi`'
     fi
 
