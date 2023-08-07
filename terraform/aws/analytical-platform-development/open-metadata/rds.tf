@@ -3,7 +3,7 @@ module "airflow_rds" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/rds/aws"
-  version = "6.1.0"
+  version = "6.1.1"
 
   identifier = "openmetadata-airflow"
 
@@ -31,7 +31,7 @@ module "rds" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/rds/aws"
-  version = "6.1.0"
+  version = "6.1.1"
 
   identifier = "openmetadata"
 

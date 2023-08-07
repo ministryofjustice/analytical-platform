@@ -2,8 +2,11 @@ module "managed_grafana" {
   source  = "terraform-aws-modules/managed-service-grafana/aws"
   version = "2.0.0"
 
-  name         = "open-metadata"
-  license_type = "ENTERPRISE_FREE_TRIAL"
+  name = "open-metadata"
+
+  /* We clickopsed the license, so we need to set this to false */
+  # license_type = "ENTERPRISE_FREE_TRIAL"
+  associate_license = false
 
   account_access_type       = "CURRENT_ACCOUNT"
   authentication_providers  = ["AWS_SSO"]
