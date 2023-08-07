@@ -4,7 +4,7 @@ ARG BASE_VERSION
 
 ENV BASE_VERSION="${VERSION}"
 
-COPY src/var/task .
+COPY src/var/task ${LAMDA_TASK_ROOT}
 
 RUN python -m pip install --no-cache-dir --upgrade pip==23.2.1 \
     && python -m pip install --no-cache-dir --requirement requirements.txt
