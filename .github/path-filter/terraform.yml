@@ -13,7 +13,6 @@ aws-analytical-platform-development-cluster: terraform/aws/analytical-platform-d
 aws-analytical-platform-development-open-metadata: terraform/aws/analytical-platform-development/open-metadata/**
 aws-analytical-platform-management-production-cluster: terraform/aws/analytical-platform-management-production/cluster/**
 aws-analytical-platform-production-cluster: terraform/aws/analytical-platform-production/cluster/**
-cloud-platform-live-data-platform-development-soft-serve: terraform/cloud-platform/live/data-platform-development/soft-serve/**
 aws-analytical-platform-baseline: terraform/aws/analytical-platform/baseline/**
 aws-analytical-platform-oidc: terraform/aws/analytical-platform/oidc/**
 github-application-migration: terraform/github/application-migration/**

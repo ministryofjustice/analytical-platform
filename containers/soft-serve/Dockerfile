@@ -17,13 +17,13 @@ RUN echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/
 RUN apt update && apt install soft-serve -y
 
 # Create a non-root user and group 'softserve'
-RUN groupadd -r softserve && useradd -m -r -g softserve softserve
+RUN groupadd -r softserve && useradd -u 1001 -m -r -g softserve softserve
 
 # Set ownership and permissions for the installation directory
 RUN chown -R softserve:softserve /soft-serve
 RUN chmod -R 755 /soft-serve
 
-USER softserve
+USER 1001
 
 # Change working directory to the user's home directory
 # WORKDIR /home/softserve
@@ -38,4 +38,4 @@ EXPOSE 23233/tcp
 # Git
 EXPOSE 9418/tcp
 
-CMD ["/soft-serve/scripts/entrypoint.sh"]
+ENTRYPOINT ["/soft-serve/scripts/entrypoint.sh"]
