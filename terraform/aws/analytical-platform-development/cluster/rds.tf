@@ -4,7 +4,7 @@
 
 module "rds" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "6.1.0"
+  version = "6.1.1"
 
   identifier          = local.rds_identifier
   engine              = var.rds_engine
