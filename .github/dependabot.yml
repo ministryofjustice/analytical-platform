@@ -182,39 +182,6 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "pip"
-    directory: "containers/daap-athena-load/src/var/task"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "pip"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "pip"
-    directory: "containers/daap-get-glue-metadata/src/var/task"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "pip"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "pip"
-    directory: "containers/daap-presigned-url/src/var/task"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "pip"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "pip"
     directory: "scripts/pagerduty/rota-to-slack"
     schedule:
       interval: "daily"
