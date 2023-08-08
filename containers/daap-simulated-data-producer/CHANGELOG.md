@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2023-08-08
+
+###
+
+- Bumped Alpine to 3.18.3
+
 ## [0.1.0] - 2023-09-30
 
 ###
