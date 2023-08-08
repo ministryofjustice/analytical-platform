@@ -10,6 +10,7 @@ aws-analytical-platform-data-production-kops: terraform/aws/analytical-platform-
 aws-analytical-platform-data-production-rds-s3-exports: terraform/aws/analytical-platform-data-production/rds-s3-exports/**
 aws-analytical-platform-data-production-s3-glue-crawler: terraform/aws/analytical-platform-data-production/s3-glue-crawler/**
 aws-analytical-platform-development-cluster: terraform/aws/analytical-platform-development/cluster/**
+aws-analytical-platform-development-control-panel-message-broker: terraform/aws/analytical-platform-development/control-panel-message-broker/**
 aws-analytical-platform-development-open-metadata: terraform/aws/analytical-platform-development/open-metadata/**
 aws-analytical-platform-management-production-cluster: terraform/aws/analytical-platform-management-production/cluster/**
 aws-analytical-platform-production-cluster: terraform/aws/analytical-platform-production/cluster/**

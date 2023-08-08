@@ -199,11 +199,14 @@ module "iam_assumable_role_superset" {
 ##################################################
 
 module "iam_assumable_role_control_panel_api" {
-  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.28.0"
-  create_role                   = true
-  role_name_prefix              = "dev_control_panel_api"
-  provider_url                  = module.eks.cluster_oidc_issuer_url
-  role_policy_arns              = [aws_iam_policy.control_panel_api.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:${var.control_panel_kubernetes_service_account}"]
+  source           = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version          = "5.28.0"
+  create_role      = true
+  role_name_prefix = "dev_control_panel_api"
+  provider_url     = module.eks.cluster_oidc_issuer_url
+  role_policy_arns = [aws_iam_policy.control_panel_api.arn]
+  oidc_fully_qualified_subjects = [
+    "system:serviceaccount:${var.control_panel_kubernetes_service_account}",
+    "system:serviceaccount:${var.control_panel_celery_kubernetes_service_account}"
+  ]
 }
