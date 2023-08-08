@@ -337,3 +337,8 @@ variable "control_panel_kubernetes_service_account" {
   type        = string
   description = "The kubernetes service account that the control panel runs as e.g. cpanel:cpanel-frontend"
 }
+
+variable "control_panel_celery_kubernetes_service_account" {
+  type        = string
+  description = "The kubernetes service account that the control panel runs as e.g. cpanel:cpanel-celery-worker"
+}
