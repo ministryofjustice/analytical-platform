@@ -8,6 +8,7 @@ daap-authorizer: containers/daap-authorizer/**
 daap-docs: containers/daap-docs/**
 daap-get-glue-metadata: containers/daap-get-glue-metadata/**
 daap-presigned-url: containers/daap-presigned-url/**
+daap-python-base: containers/daap-python-base/**
 daap-simulated-data-producer: containers/daap-simulated-data-producer/**
 kubectl: containers/kubectl/**
 rshiny-3.5.3: containers/rshiny-3.5.3/**
