@@ -7,12 +7,14 @@ on: # yamllint disable-line rule:truthy
       - main
     paths:
       - .github/workflows/terraform.yml
+      - configuration/ap_migration_apps.json
       - terraform/**
   push:
     branches:
       - main
     paths:
       - .github/workflows/terraform.yml
+      - configuration/ap_migration_apps.json
       - terraform/**
 
 permissions: read-all
