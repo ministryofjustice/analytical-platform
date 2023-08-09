@@ -422,5 +422,29 @@
     "team": [],
     "description": "",
     "role_name_suffix": "victims-bill-consultation"
+  },
+  {
+    "name": "aqa-website",
+    "source_repo_name": "aqa_website",
+    "team": "aqa-website-admin",
+    "description": ""
+  },
+  {
+    "name": "exit-survey-app",
+    "source_repo_name": "exit_survey_app",
+    "team": "exit-survey-app-admin-team",
+    "description": ""
+  },
+  {
+    "name": "occupeye-shiny-app",
+    "source_repo_name": "occupeye_shiny_app",
+    "team": "",
+    "description": ""
+  },
+  {
+    "name": "prison-estate-digital-map",
+    "source_repo_name": "prison-estate-digital-map",
+    "team": "prison-estate-digital-map-admin-team",
+    "description": ""
   }
 ]
