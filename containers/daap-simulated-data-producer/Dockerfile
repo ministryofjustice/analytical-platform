@@ -29,7 +29,7 @@ RUN addgroup \
       py3-pandas==1.5.3-r1 \
       py3-psycopg2==2.9.6-r1 \
       py3-requests==2.31.0-r0 \
-      py3-sqlalchemy==1.4.48-r0
+      py3-sqlalchemy==1.4.49-r0
 
 USER ${CONTAINER_USER}
 
