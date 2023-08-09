@@ -2,7 +2,7 @@
   "id": "git-tools",
   "version": "1.0.0",
   "name": "git-tools",
-  "description": "Git Tools - GitHub CLI, Git Crypt",
+  "description": "Git Tools - GitHub CLI, Git Crypt, pre-commit",
   "options": {
     "installGithubCli": {
       "type": "boolean",
@@ -18,6 +18,11 @@
     "installGitCrypt": {
       "type": "boolean",
       "description": "Install Git Crypt (https://github.com/AGWA/git-crypt)",
+      "default": true
+    },
+    "installPreCommit": {
+      "type": "boolean",
+      "description": "Install Pre-Commit (https://pre-commit.com)",
       "default": true
     }
   },

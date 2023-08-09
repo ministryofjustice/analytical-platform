@@ -30,4 +30,4 @@ apt_install "python3-pip"
 
 ### Python
 
-pip3 install --upgrade pip
+pip_install "pip"
