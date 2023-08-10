@@ -1,4 +1,4 @@
-FROM 013433889002.dkr.ecr.eu-west-2.amazonaws.com/test_lambda_python_base:0.1.0
+FROM 374269020027.dkr.ecr.eu-west-2.amazonaws.com/data-platform-python-base-ecr-repo:0.1.0
 
 ARG VERSION
 
