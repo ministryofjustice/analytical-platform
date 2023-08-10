@@ -38,7 +38,7 @@ This will enable the project to improve project integrity,
 begin to secure the supply chain,
 and [provide assurances about security practices](https://slsa.dev/).
 
-In order to sign commits please [follow the github docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
+In order to sign commits please [follow the GitHub docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
 as they are very good.
 
 ## External contributions
