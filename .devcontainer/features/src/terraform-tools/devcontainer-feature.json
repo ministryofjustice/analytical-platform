@@ -57,7 +57,7 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["hashicorp.terraform"],
+      "extensions": ["hashicorp.terraform", "Infracost.infracost"],
       "settings": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "hashicorp.terraform"

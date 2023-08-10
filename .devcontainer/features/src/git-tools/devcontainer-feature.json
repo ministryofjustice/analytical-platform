@@ -27,5 +27,10 @@
     }
   },
   "mounts": [{ "source": "ministryofjustice-data-platform-devcontainer-gh", "target": "/home/vscode/.config/gh", "type": "volume" }],
-  "installsAfter": ["./features/src/base"]
+  "installsAfter": ["./features/src/base"],
+  "customizations": {
+    "vscode": {
+      "extensions": ["EditorConfig.EditorConfig", "GitHub.copilot", "GitHub.copilot-chat", "GitHub.vscode-pull-request-github", "GitHub.vscode-github-actions"]
+    }
+  }
 }
