@@ -27,3 +27,13 @@ mv infracost-linux-${ARCHITECTURE} /usr/local/bin/infracost
 chmod +x /usr/local/bin/infracost
 
 rm infracost-linux-${ARCHITECTURE}.tar.gz
+
+### Completion
+
+infracost completion --shell zsh > /usr/local/share/zsh/site-functions/_infracost
+
+### Config
+
+mkdir --parents /home/vscode/.config/infracost
+
+chown --recursive vscode:vscode /home/vscode/.config/infracost

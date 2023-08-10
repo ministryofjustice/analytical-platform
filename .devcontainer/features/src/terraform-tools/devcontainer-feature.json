@@ -66,6 +66,7 @@
       "default": "latest"
     }
   },
+  "mounts": [{ "source": "ministryofjustice-data-platform-devcontainer-infracost", "target": "/home/vscode/.config/infracost", "type": "volume" }],
   "customizations": {
     "vscode": {
       "extensions": ["hashicorp.terraform", "Infracost.infracost"],
