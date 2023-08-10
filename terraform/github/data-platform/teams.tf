@@ -26,7 +26,8 @@ locals {
     "amycufflin",
     "ChikC",    # Chike Chinukwue
     "EO510",    # Eki Osehenye
-    "Braimah-L" # Braimah Lat
+    "Braimah-L", # Braimah Lat
+    "imkatiewatson" # Katie Watson 
   ]
 
   # GitHub usernames for engineers who need full AWS access
