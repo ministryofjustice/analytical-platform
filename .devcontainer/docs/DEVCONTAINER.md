@@ -121,10 +121,12 @@ The supplied `~/.kube/config`:
 1. Run base image
 
    ```bash
+   docker build --file .devcontainer/features/test/Dockerfile --tag devcontainer .
+
    docker run -it --rm \
      --volume $( pwd ):/workspace \
      --volume $( pwd )/.devcontainer/features/src/base/devcontainer-utils:/usr/local/bin/devcontainer-utils \
-       mcr.microsoft.com/devcontainers/base:ubuntu
+     devcontainer
    ```
 
 1. Test feature
