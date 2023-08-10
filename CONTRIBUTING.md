@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # Contributing to the MoJ Data Platform
 
 ## Table of contents
@@ -9,7 +10,6 @@
 * [Signing Contributions](#signing-contributions)
 * [External Contributions](#external-contributions)
 * [Licence](#licence)
-
 
 ## Code of Conduct
 

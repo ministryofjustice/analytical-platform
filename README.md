@@ -165,7 +165,8 @@ bash scripts/docs/docker.sh preview
 This will run a preview web server on <http://localhost:4567> which you can
 open in your browser.
 
-Use `bash scripts/docs/docker.sh check` to compile the site to HTML and check the URLs are valid.
+Use `bash scripts/docs/docker.sh check` to compile
+the site to HTML and check the URLs are valid.
 
 This is only accessible on your computer, and won't be accessible to anyone
 else.
