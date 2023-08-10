@@ -16,7 +16,6 @@
 The Ministry of Justice [Code of Conduct](https://github.com/ministryofjustice/.github/blob/main/CODE_OF_CONDUCT.md) is used to govern the project and those participating.
 Please report unacceptable behavior to the maintainers or administrators.
 
-
 ## Standards
 
 We follow the [MoJ Technical Guidance](https://technical-guidance.service.justice.gov.uk/#moj-technical-guidance),
@@ -30,7 +29,6 @@ Bugs are tracked on the [project issues](https://github.com/ministryofjustice/da
 ## Reporting security issues
 
 Please report any security issues inline with the Ministry of Justice [Vulnerability Disclosure Policy](https://mojdigital.blog.gov.uk/vulnerability-disclosure-policy/)
-
 
 ## Signing contributions
 

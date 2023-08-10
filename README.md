@@ -133,7 +133,7 @@ As above - preferably our Slack channel: `#data-platform` (or email `data-platfo
 
 (placeholder) -->
 
-## Editing and publishing the Technocal Docs
+## Editing and publishing the Technical Documentation
 
 The [published](https://technical-documentation.data-platform.service.justice.gov.uk/)
 documentation is created by editing `*.html.md.erb` files,
@@ -142,8 +142,6 @@ found in the [docs source](docs/source/) folder.
 The syntax is Markdown, more details can be found [here](https://daringfireball.net/projects/markdown/).
 
 For guidance see the Tech Docs Template [Write your content](https://tdt-documentation.london.cloudapps.digital/write_docs/content/).
-
-The Markdown syntax may use [kramdown](https://kramdown.gettalong.org/syntax.html).
 
 While editing the files locally, you can start a Docker container that will use
 Middleman to act as a server hosting the web pages. See [preview docs](#preview-docs).
@@ -158,16 +156,16 @@ changes via GH Action. See [publishing](#publishing).
 ## Preview docs
 
 You can preview how your changes will look, if you've cloned this repository
-to your local machine, Change directory to `docs` and run this command:
+to your local machine, run this command:
 
 ```bash
-make preview
+bash scripts/docs/docker.sh preview
 ```
 
 This will run a preview web server on <http://localhost:4567> which you can
 open in your browser.
 
-Use `make check` to compile the site to HTML and check the URLs are valid.
+Use `bash scripts/docs/docker.sh check` to compile the site to HTML and check the URLs are valid.
 
 This is only accessible on your computer, and won't be accessible to anyone
 else.
@@ -192,4 +190,4 @@ website: [Global Configuration](https://tdt-documentation.london.cloudapps.digit
 
 ### Last review date
 
-30th June 2023
+10th August 2023

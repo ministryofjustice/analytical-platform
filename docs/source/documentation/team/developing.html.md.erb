@@ -1,13 +1,13 @@
 ---
 owner_slack: "#data-platform-notifications"
-title: Development Environment
+title: Developing Data Platform
 last_reviewed_on: 2023-08-10
 review_in: 6 months
 ---
 
 # <%= current_page.data.title %>
 
-There is a lot of technical that tooling we utilise in the Analytical and Data Platforms.
+There is a lot of technical that tooling we utilise in developing the Analytical and Data Platforms.
 
 To ease the onboarding process, we have created a [dev container](https://containers.dev/) that contains all the tools you need to get up and running.
 
@@ -148,6 +148,20 @@ When new functionality is added you will need to rebuild the container, to do th
 Tools are bundled into features that focus on one area of functionality, e.g. AWS, Kubernetes, and Terraform.
 
 You can find the features [here](https://github.com/ministryofjustice/data-platform/tree/main/.devcontainer/features/src)
+
+### Pre-Commit
+
+We use [pre-commit](https://pre-commit.com/) to run checks on our code before it is committed.
+
+Once you've cloned the Data Platform repository, you can install the pre-commit hooks using the following command:
+
+    ```bash
+    pre-commit install
+    ```
+
+### EditorConfig
+
+We use [EditorConfig](https://editorconfig.org/) to maintain consistent coding styles between different editors and IDEs.
 
 ### AWS Vault
 
