@@ -1,17 +1,17 @@
+import copy
 import os
 import re
 import time
+from typing import Tuple
 
 import boto3
 import s3fs
 from botocore.exceptions import ClientError
+from data_platform_logging import DataPlatformLogger
 from mojap_metadata.converters.arrow_converter import ArrowConverter
 from mojap_metadata.converters.glue_converter import GlueConverter
-from pyarrow import parquet as pq
-import copy
 from pyarrow import csv as pa_csv
-from data_platform_logging import DataPlatformLogger
-
+from pyarrow import parquet as pq
 
 glue_client = boto3.client("glue")
 athena_client = boto3.client("athena")
@@ -31,7 +31,7 @@ s3_security_opts = {
 
 def start_query_execution_and_wait(
     database_name: str, data_bucket: str, sql: str
-) -> None:
+) -> str:
     """
     runs query for given sql and waits for completion
     """
@@ -41,7 +41,7 @@ def start_query_execution_and_wait(
             QueryExecutionContext={"Database": database_name},
             WorkGroup="data_product_workgroup",
         )
-    except Exception as e:
+    except ClientError as e:
         if e.response['Error']['Code'] == 'InvalidRequestException':
             logger.error(f"This sql caused an error: {sql}")
             logger.write_log_dict_to_s3_json(bucket=data_bucket, **s3_security_opts)
@@ -220,7 +220,7 @@ def infer_glue_schema(
     has_headers: bool = True,
     sample_size_mb: float = 1.5,
     table_type: str = "raw",
-) -> dict:
+) -> Tuple[dict, dict]:
     """
     function infers and returns glue schema for csv and parquet files.
     schema are inferred using arrow
@@ -388,7 +388,7 @@ def create_curated_athena_table(
             glue_client.create_database(**db_meta)
         else:
             logger.error("Unexpected error: %s" % e)
-            logger.write_log_dict_to_s3_json(bucket=data_bucket, **s3_security_opts)
+            logger.write_log_dict_to_s3_json(bucket=bucket, **s3_security_opts)
             raise
 
     try:
@@ -434,7 +434,7 @@ def create_curated_athena_table(
             sql_unload_table_partition(extraction_timestamp, table_name, curated_path, metadata),
         )
 
-        logger.info("Updated table {0}.{1}, using query id {qid}".format(database_name, table_name, qid))
+        logger.info("Updated table {0}.{1}, using query id {2}".format(database_name, table_name, qid))
         refresh_table_partitions(database_name, table_name)
 
     elif not table_exists and partition_file_exists:
