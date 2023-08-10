@@ -33,7 +33,6 @@ locals {
   # GitHub usernames for engineers who need full AWS access
 
   engineers = [ # analytical-platform and analytics-hq gh teams
-    "LouiseABowler",
     "ymao2", # Yikang Mao
     "BrianEllwood",
     "tom-webber",
