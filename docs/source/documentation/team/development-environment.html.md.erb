@@ -1,0 +1,225 @@
+---
+owner_slack: "#data-platform-notifications"
+title: Development Environment
+last_reviewed_on: 2023-08-10
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+There is a lot of technical that tooling we utilise in the Analytical and Data Platforms.
+
+To ease the onboarding process, we have created a [dev container](https://containers.dev/) that contains all the tools you need to get up and running.
+
+This implementation of the dev container is designed to have repositories cloned into it under the persistent workspace `/home/vscode/workspace`.
+Once we begin our journey to the monorepo, this should become redundant, but that means that right now, it is not intended to use this with GitHub Codespaces, but its still possible.
+
+## Getting Started
+
+### Prerequisites
+
+- macOS
+
+- Homebrew
+
+    ```bash
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
+
+- Docker
+
+    ```bash
+    brew install --cask docker
+    ```
+- Node
+
+    ```bash
+    brew install node
+    ```
+- Dev Container CLI
+
+    ```bash
+    sudo npm install --location=global @devcontainers/cli@latest
+    ```
+
+- Visual Studio Code
+
+    ```bash
+    brew install --cask visual-studio-code
+    ```
+
+- Dev Containers Visual Studio Code Extension
+
+    ```bash
+    /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code --install-extension ms-vscode-remote.remote-containers
+    ```
+
+### Setup
+
+Your GPG and SSH agents are mounted from macOS, so GPG and SSH commands inside the container should work without any configuration updates.
+
+1. Clone the Data Platform repository
+
+      <details>
+
+      <summary>Example</summary>
+
+      ```bash
+      mkdir -p ~/Developer/github.com/ministryofjustice
+
+      git clone git@github.com:ministryofjustice/data-platform.git ~/Developer/github.com/ministryofjustice/data-platform
+      ```
+
+      </details>
+
+1. Open the Data Platform repository in Visual Studio Code
+
+      <details>
+
+      <summary>Example</summary>
+
+      ```bash
+      cd ~/Developer/github.com/ministryofjustice/data-platform
+
+      /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code .
+      ```
+
+      </details>
+
+1. Open the Visual Studio Code Command Palette using `Shift-Command-P`
+
+1. Run `Dev Container: Reopen in Container`
+
+1. Wait for the container to build, it may take 5 to 10 minutes.
+
+1. Open a new terminal window in Visual Studio Code using `Control-Shift-Backtick`
+
+1. Clone the Data Platform repository (this time its inside the container)
+      <details>
+
+      <summary>Example</summary>
+
+      ```bash
+      mkdir --parents ${HOME}/workspace/github.com/ministryofjustice
+
+      git clone git@github.com:ministryofjustice/data-platform.git ${HOME}/workspace/github.com/ministryofjustice
+      ```
+
+### Updating
+
+When new functionality is added you will need to rebuild the container, to do this:
+
+1. Pull the latest changes from the Data Platform repository on the host machine
+
+      <details>
+
+      <summary>Example</summary>
+
+      ```bash
+      cd ~/Developer/github.com/ministryofjustice/data-platform
+
+      git fetch
+
+      git pull
+      ```
+
+      </details>
+
+1. Open the Data Platform repository in Visual Studio Code
+
+      <details>
+
+      <summary>Example</summary>
+
+      ```bash
+      cd ~/Developer/github.com/ministryofjustice/data-platform
+
+      /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code .
+      ```
+
+      </details>
+
+1. Open the Visual Studio Code Command Palette using `Shift-Command-P`
+
+1. Run `Dev Container: Rebuild and Reopen in Container`
+
+## Tools
+
+Tools are bundled into features that focus on one area of functionality, e.g. AWS, Kubernetes, and Terraform.
+
+You can find the features [here](https://github.com/ministryofjustice/data-platform/tree/main/.devcontainer/features/src)
+
+### AWS Vault
+
+Our AWS accounts are accessed using AWS IAM Identity Center. A curated AWS configuration file is provided as part of the AWS feature.
+
+You can see the configuration file [here](https://github.com/ministryofjustice/data-platform/blob/main/.devcontainer/features/src/aws-tools/src/home/vscode/.aws/config)
+
+In its current form, it only offers `AdministratorAccess` level access (if you have access to it), but we hope to add more granular access in the future.
+
+### Kubernetes
+
+We host our own EKS clusters in Analytical Platform. A curated Kubernetes configuration file is provided as part of the Kubernetes feature.
+
+You can see the configuration file [here](https://github.com/ministryofjustice/data-platform/blob/main/.devcontainer/features/src/kubernetes-tools/src/home/vscode/.kube/config)
+
+The provided configuration file handles authentication to EKS clusters using AWS Vault.
+
+#### Cloud Platform Authentication
+
+> Rebuilding the dev container will reset the Kubernetes configuration file, so you'll need to authenticate again.
+
+1. Login to Cloud Platform Kuberos (https://login.cloud-platform.service.justice.gov.uk/)
+
+1. Obtain the command from "Authenticate Manually"
+
+1. Replace your Auth0 email with the generic `auth0` user
+
+    ```bash
+    kubectl config set-credentials "auth0" \
+      --auth-provider=oidc \
+      --auth-provider-arg=client-id="..." \
+      --auth-provider-arg=client-secret="..." \
+      --auth-provider-arg=id-token="..." \
+      --auth-provider-arg=refresh-token="..." \
+      --auth-provider-arg=idp-issuer-url="https://justice-cloud-platform.eu.auth0.com/"
+    ```
+
+1. Set Cloud Platform to the current context
+
+    ```bash
+    kubectl config use-context live.cloud-platform.service.justice.gov.uk
+    ```
+
+## Developing a Feature
+
+### Testing
+
+1. Run the script
+
+    ```bash
+    bash scripts/devcontainer/feature-test.sh ${FEATURE_NAME}
+    ```
+
+### Debugging
+
+1. Build the base image
+
+    ```bash
+    docker build --file .devcontainer/features/test/Dockerfile --tag devcontainer .
+    ```
+
+1. Run the container
+
+    ```bash
+    docker run -it --rm \
+     --volume $( pwd ):/workspace \
+     --volume $( pwd )/.devcontainer/features/src/base/devcontainer-utils:/usr/local/bin/devcontainer-utils \
+     devcontainer
+    ```
+
+1. Run the script
+
+    ```bash
+    bash -x /workspace/.devcontainer/features/src/<feature>/install-<tool>.sh
+    ```
