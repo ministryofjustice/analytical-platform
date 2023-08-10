@@ -18,14 +18,16 @@ athena_client = boto3.client("athena")
 s3_client = boto3.client("s3")
 s3_resource = boto3.resource("s3")
 
-logger = DataPlatformLogger(extra={
-    "image_version": os.getenv("VERSION", "unknown"),
-    "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-})
+logger = DataPlatformLogger(
+    extra={
+        "image_version": os.getenv("VERSION", "unknown"),
+        "base_image_version": os.getenv("BASE_VERSION", "unknown"),
+    }
+)
 
 s3_security_opts = {
-    "ACL": 'bucket-owner-full-control',
-    "ServerSideEncryption": 'AES256'
+    "ACL": "bucket-owner-full-control",
+    "ServerSideEncryption": "AES256",
 }
 
 
@@ -42,7 +44,7 @@ def start_query_execution_and_wait(
             WorkGroup="data_product_workgroup",
         )
     except ClientError as e:
-        if e.response['Error']['Code'] == 'InvalidRequestException':
+        if e.response["Error"]["Code"] == "InvalidRequestException":
             logger.error(f"This sql caused an error: {sql}")
             logger.write_log_dict_to_s3_json(bucket=data_bucket, **s3_security_opts)
             raise ValueError(e)
@@ -123,7 +125,9 @@ def _get_column_names_and_types(metadata) -> str:
     return select_str
 
 
-def sql_unload_table_partition(timestamp: str, table_name: str, table_path: str, metadata: dict) -> str:
+def sql_unload_table_partition(
+    timestamp: str, table_name: str, table_path: str, metadata: dict
+) -> str:
     """
     generates sql string to unload a timestamped partition
     of raw data to given s3 location
@@ -171,9 +175,7 @@ def sql_create_table_partition(
     return partition_sql
 
 
-def refresh_table_partitions(
-    database_name: str, table_name: str
-) -> None:
+def refresh_table_partitions(database_name: str, table_name: str) -> None:
     """
     refreshes partitions following an update to a table
     """
@@ -235,13 +237,13 @@ def infer_glue_schema(
         # can infer schema on a sample of data, here we stream a csv as a bytes object from s3
         # at the max size and then iterate over small chunk sizes to find a full line after
         # the max sample size, which we can then read into pyarrow and infer schema.
-        max_size = int(sample_size_mb*1000000)
-        start_byte = b''
+        max_size = int(sample_size_mb * 1000000)
+        start_byte = b""
         chunk_size = 5
         final_size = 0
         # the character that we'll split the data with (bytes, not string)
         # could csv dialect (newline character etc) from csv.sniffer in further dev
-        newline = '\n'.encode()
+        newline = "\n".encode()
         obj = boto3.resource("s3").Object(bucket, key)
         bytes_stream = obj.get()["Body"]
         finished = False
@@ -252,7 +254,7 @@ def infer_glue_schema(
             else:
                 chunk = start_byte + bytes_stream.read(chunk_size)
 
-            if chunk == b'':
+            if chunk == b"":
                 break
 
             last_newline = chunk.rfind(newline)
@@ -266,15 +268,14 @@ def infer_glue_schema(
                     final_size += max_size
                 else:
                     final_size += chunk_size
-        bytes_stream_final = obj.get(Range=f'bytes=0-{final_size-1}')["Body"]
+        bytes_stream_final = obj.get(Range=f"bytes=0-{final_size-1}")["Body"]
         logger.info(f"schema inferred using {round((final_size-1)/1000000,2)}MB sample")
 
         # null_values has been set to an empty list as "N/A" was being read as null (in a numeric column), with
         # type inferred as int but "N/A" persiting in the csv and so failing to be cast as an int.
         # Empty list means nothing inferred as null other than null.
         arrow_table = pa_csv.read_csv(
-            bytes_stream_final,
-            convert_options=pa_csv.ConvertOptions(null_values=[])
+            bytes_stream_final, convert_options=pa_csv.ConvertOptions(null_values=[])
         )
     elif file_type == "parquet" and table_type == "curated":
         curated_prefix = file_key.replace("s3://" + bucket + "/", "")
@@ -326,8 +327,12 @@ def infer_glue_schema(
     # want a schema version where all columns are string type
     metadata_glue_str = copy.deepcopy(metadata_glue)
 
-    for i, column in enumerate(metadata_glue_str["TableInput"]["StorageDescriptor"]["Columns"]):
-        metadata_glue_str["TableInput"]["StorageDescriptor"]["Columns"][i]["Type"] = "string"
+    for i, column in enumerate(
+        metadata_glue_str["TableInput"]["StorageDescriptor"]["Columns"]
+    ):
+        metadata_glue_str["TableInput"]["StorageDescriptor"]["Columns"][i][
+            "Type"
+        ] = "string"
 
     return metadata_glue, metadata_glue_str
 
@@ -367,7 +372,7 @@ def create_curated_athena_table(
     curated_path: str,
     bucket: str,
     extraction_timestamp: str,
-    metadata
+    metadata,
 ):
     """
     creates curated parquet file from raw file and updates table
@@ -412,7 +417,11 @@ def create_curated_athena_table(
                 database_name,
                 bucket,
                 sql_create_table_partition(
-                    database_name, table_name, curated_path, extraction_timestamp, metadata
+                    database_name,
+                    table_name,
+                    curated_path,
+                    extraction_timestamp,
+                    metadata,
                 ),
             )
             logger.info(
@@ -431,10 +440,16 @@ def create_curated_athena_table(
         qid = start_query_execution_and_wait(
             "data_products_raw",
             bucket,
-            sql_unload_table_partition(extraction_timestamp, table_name, curated_path, metadata),
+            sql_unload_table_partition(
+                extraction_timestamp, table_name, curated_path, metadata
+            ),
         )
 
-        logger.info("Updated table {0}.{1}, using query id {2}".format(database_name, table_name, qid))
+        logger.info(
+            "Updated table {0}.{1}, using query id {2}".format(
+                database_name, table_name, qid
+            )
+        )
         refresh_table_partitions(database_name, table_name)
 
     elif not table_exists and partition_file_exists:
@@ -454,7 +469,9 @@ def create_curated_athena_table(
         qid = start_query_execution_and_wait(
             "data_products_raw",
             bucket,
-            sql_unload_table_partition(extraction_timestamp, table_name, curated_path, metadata),
+            sql_unload_table_partition(
+                extraction_timestamp, table_name, curated_path, metadata
+            ),
         )
         logger.info(f"created files for partition using query id {qid}")
         table_metadata, _ = infer_glue_schema(
@@ -484,11 +501,13 @@ def handler(event, context):
     full_s3_path = os.path.join("s3://", bucket_name, file_key)
     config = get_data_product_config(full_s3_path)
 
-    logger.add_extras({
-        "lambda_name": context.function_name,
-        "data_product_name": config["database_name"],
-        "table_name": config["table_name"]
-    })
+    logger.add_extras(
+        {
+            "lambda_name": context.function_name,
+            "data_product_name": config["database_name"],
+            "table_name": config["table_name"],
+        }
+    )
 
     logger.info(f"config: {config}")
 
@@ -502,7 +521,7 @@ def handler(event, context):
         config["table_path_curated"],
         config["bucket"],
         config["extraction_timestamp"],
-        metadata_types
+        metadata_types,
     )
     clean_up_temp_tables(config["table_name"] + "_raw")
 
