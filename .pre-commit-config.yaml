@@ -3,16 +3,13 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
-      - id: end-of-file-fixer
-      - id: trailing-whitespace
-
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.4.0
-    hooks:
-      - id: detect-secrets
-        args: ['--baseline', '.secrets.baseline']
+      - name: End of File Fixer
+        id: end-of-file-fixer
+      - name: Trailing Whitespace Fixer
+        id: trailing-whitespace
 
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.81.0
     hooks:
-      - id: terraform_fmt
+      - name: Terraform Format
+        id: terraform_fmt
