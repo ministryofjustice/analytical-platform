@@ -2,7 +2,7 @@
   "id": "terraform-tools",
   "version": "1.0.0",
   "name": "terraform-tools",
-  "description": "Terraform Tools - Terraform Switcher, Terraform Docs, hcl2json, tfsec",
+  "description": "Terraform Tools - Terraform Switcher, Terraform Docs, hcl2json, tfsec, infracost",
   "options": {
     "installTerraformSwitcher": {
       "type": "boolean",
@@ -51,6 +51,17 @@
     "tfsecVersion": {
       "type": "string",
       "description": "hcl2json version",
+      "proposals": ["latest"],
+      "default": "latest"
+    },
+    "installInfracost": {
+      "type": "boolean",
+      "description": "Install Infracost (https://github.com/infracost/infracost)",
+      "default": true
+    },
+    "infracostVersion": {
+      "type": "string",
+      "description": "Infracost version",
       "proposals": ["latest"],
       "default": "latest"
     }

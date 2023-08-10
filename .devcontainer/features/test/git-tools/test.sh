@@ -9,5 +9,4 @@ check "git-crypt version" git-crypt --version
 check "pre-commit version" pre-commit --version
 check "detect-secrets version" detect-secrets --version
 
-
 reportResults
