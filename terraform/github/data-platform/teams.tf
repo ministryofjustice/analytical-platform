@@ -24,9 +24,10 @@ locals {
     "mshodge",        # Michael Hodges
     "YvanMOJdigital", # Yvan Smith
     "amycufflin",
-    "ChikC",    # Chike Chinukwue
-    "EO510",    # Eki Osehenye
-    "Braimah-L" # Braimah Lat
+    "ChikC",        # Chike Chinukwue
+    "EO510",        # Eki Osehenye
+    "Braimah-L",    # Braimah Lat
+    "imkatiewatson" # Katie Watson
   ]
 
   # GitHub usernames for engineers who need full AWS access
