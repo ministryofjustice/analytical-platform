@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.11
+FROM 013433889002.dkr.ecr.eu-west-2.amazonaws.com/test_lambda_python_base:0.1.0
 
 ARG VERSION
 
