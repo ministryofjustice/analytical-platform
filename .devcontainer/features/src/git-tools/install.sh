@@ -11,3 +11,7 @@ fi
 if [[ "${INSTALLPRECOMMIT}" == "true" ]]; then
   bash $( dirname $0 )/install-pre-commit.sh
 fi
+
+if [[ "${INSTALLDETECTSECRETS}" == "true" ]]; then
+  bash $( dirname $0 )/install-detect-secrets.sh
+fi

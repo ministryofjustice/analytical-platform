@@ -2,7 +2,7 @@
   "id": "git-tools",
   "version": "1.0.0",
   "name": "git-tools",
-  "description": "Git Tools - GitHub CLI, Git Crypt, pre-commit",
+  "description": "Git Tools - GitHub CLI, Git Crypt, Pre-Commit, Detect-Secrets",
   "options": {
     "installGithubCli": {
       "type": "boolean",
@@ -23,6 +23,11 @@
     "installPreCommit": {
       "type": "boolean",
       "description": "Install Pre-Commit (https://pre-commit.com)",
+      "default": true
+    },
+    "installDetectSecrets": {
+      "type": "boolean",
+      "description": "Install Detect Secrets (https://github.com/Yelp/detect-secrets)",
       "default": true
     }
   },
