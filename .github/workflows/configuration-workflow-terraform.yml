@@ -1,0 +1,33 @@
+---
+name: Application migration terraform
+
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+    paths:
+      - configuration/ap_migration_apps.json
+  push:
+    branches:
+      - main
+    paths:
+      - configuration/ap_migration_apps.json
+
+permissions: read-all
+
+jobs:
+  terraform-workflow:
+    name: Reusable Workflow
+    permissions:
+      contents: read
+      id-token: write
+      security-events: write
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        component: ["application-migration", "github-application-migration"]
+    uses: ./.github/workflows/reusable-workflow-terraform.yml
+    with:
+      component: ${{ matrix.component }}
+    secrets: inherit
