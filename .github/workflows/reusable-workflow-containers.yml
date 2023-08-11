@@ -55,8 +55,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          echo "${{ env.GH_TOKEN }}" | skopeo login ghcr.io --username ${{ github.actor }} --password-stdin
+
           imageTag='"${{ needs.prepare-environment.outputs.version }}"'
-          checkTag=$(gh api /orgs/ministryofjustice/packages/container/${container}/versions | grep -F ${imageTag} || echo "false")
+          checkTag=$(skopeo list-tags docker://ghcr.io/ministryofjustice/data-platform-${{ needs.prepare-environment.outputs.name }} | jq -r --arg imageTag "${{ needs.prepare-environment.outputs.version }}" '.Tags | index($imageTag)')
           export checkTag
 
           if [[ -z "${imageTag}" ]]; then
