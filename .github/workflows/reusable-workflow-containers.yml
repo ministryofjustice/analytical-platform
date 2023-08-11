@@ -62,8 +62,8 @@ jobs:
           if skopeo list-tags docker://ghcr.io/ministryofjustice/data-platform-${{ needs.prepare-environment.outputs.name }}; then
             image_exists=true
           else
-            image_exists=false
-            tag_exists=false
+            echo "image_exists=false" >>"${GITHUB_ENV}"
+            echo "tag_exists=false" >>"${GITHUB_ENV}"
           fi
 
           if [[ "${image_exists}" == "true" ]]; then
