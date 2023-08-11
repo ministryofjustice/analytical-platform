@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2023-08-11
+
+### Changed
+
+- Push image to GitHub Container Registry, so downstream builds can pull it
+
 ## [0.1.0]
 
 ###
