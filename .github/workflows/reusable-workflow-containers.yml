@@ -55,6 +55,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          imageTag='"${{ needs.prepare-environment.outputs.version }}"'
           checkTag=$(gh api /orgs/ministryofjustice/packages/container/${container}/versions | grep -F ${imageTag} || echo "false")
           export checkTag
 
