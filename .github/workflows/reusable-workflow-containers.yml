@@ -59,7 +59,7 @@ jobs:
 
           imageTag="${{ needs.prepare-environment.outputs.version }}"
 
-          if skopeo list-tags docker://ghcr.io/ministryofjustice/data-platform-${imageName}; then
+          if skopeo list-tags docker://ghcr.io/ministryofjustice/data-platform-${{ needs.prepare-environment.outputs.name }}; then
             image_exists=true
           else
             image_exists=false
