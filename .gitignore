@@ -12,3 +12,4 @@ env/
 sbom-*
 **/*.tfstate
 **/plan.json
+.infracost

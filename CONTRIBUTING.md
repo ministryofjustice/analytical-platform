@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # Contributing to the MoJ Data Platform
 
 ## Table of contents
@@ -10,12 +11,10 @@
 * [External Contributions](#external-contributions)
 * [Licence](#licence)
 
-
 ## Code of Conduct
 
 The Ministry of Justice [Code of Conduct](https://github.com/ministryofjustice/.github/blob/main/CODE_OF_CONDUCT.md) is used to govern the project and those participating.
 Please report unacceptable behavior to the maintainers or administrators.
-
 
 ## Standards
 
@@ -31,7 +30,6 @@ Bugs are tracked on the [project issues](https://github.com/ministryofjustice/da
 
 Please report any security issues inline with the Ministry of Justice [Vulnerability Disclosure Policy](https://mojdigital.blog.gov.uk/vulnerability-disclosure-policy/)
 
-
 ## Signing contributions
 
 In addition to following the above guidance,
@@ -40,7 +38,7 @@ This will enable the project to improve project integrity,
 begin to secure the supply chain,
 and [provide assurances about security practices](https://slsa.dev/).
 
-In order to sign commits please [follow the github docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
+In order to sign commits please [follow the GitHub docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
 as they are very good.
 
 ## External contributions

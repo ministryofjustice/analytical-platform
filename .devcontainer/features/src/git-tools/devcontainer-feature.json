@@ -2,7 +2,7 @@
   "id": "git-tools",
   "version": "1.0.0",
   "name": "git-tools",
-  "description": "Git Tools - GitHub CLI, Git Crypt",
+  "description": "Git Tools - GitHub CLI, Git Crypt, Pre-Commit, Detect-Secrets",
   "options": {
     "installGithubCli": {
       "type": "boolean",
@@ -19,8 +19,23 @@
       "type": "boolean",
       "description": "Install Git Crypt (https://github.com/AGWA/git-crypt)",
       "default": true
+    },
+    "installPreCommit": {
+      "type": "boolean",
+      "description": "Install Pre-Commit (https://pre-commit.com)",
+      "default": true
+    },
+    "installDetectSecrets": {
+      "type": "boolean",
+      "description": "Install Detect Secrets (https://github.com/Yelp/detect-secrets)",
+      "default": true
     }
   },
   "mounts": [{ "source": "ministryofjustice-data-platform-devcontainer-gh", "target": "/home/vscode/.config/gh", "type": "volume" }],
-  "installsAfter": ["./features/src/base"]
+  "installsAfter": ["./features/src/base"],
+  "customizations": {
+    "vscode": {
+      "extensions": ["EditorConfig.EditorConfig", "GitHub.copilot", "GitHub.copilot-chat", "GitHub.vscode-pull-request-github", "GitHub.vscode-github-actions"]
+    }
+  }
 }
