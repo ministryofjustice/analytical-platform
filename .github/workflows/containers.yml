@@ -44,6 +44,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      packages: write
       security-events: write
     strategy:
       fail-fast: false
