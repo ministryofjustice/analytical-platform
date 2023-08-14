@@ -18,7 +18,7 @@ locals {
     }
   }
 
-  additional_repos_for_ecr = ["analytics-platform-rshiny", "analytics-platform-auth-proxy", "prison-estate-digital-map", "exit-survey-app", "aqa-website", "bold-case-info-dashboard"]
+  additional_repos_for_ecr = ["analytics-platform-rshiny", "analytics-platform-auth-proxy", "bold-case-info-dashboard"]
 
   ap_migration_apps  = jsondecode(file("../../../../configuration/ap_migration_apps.json"))
   migration_apps_map = { for app in local.ap_migration_apps : app.name => app } # so can be used in for_each
