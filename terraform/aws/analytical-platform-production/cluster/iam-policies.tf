@@ -197,6 +197,18 @@ data "aws_iam_policy_document" "control_panel_api" {
     ]
     resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${var.account_ids["analytical-platform-data-production"]}:secret:alpha/apps/*"]
   }
+  statement {
+    sid    = "CanManageSqsMessages"
+    effect = "Allow"
+    actions = [
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl",
+      "sqs:DeleteMessage",
+      "sqs:ReceiveMessage",
+      "sqs:SendMessage"
+    ]
+    resources = ["arn:aws:sqs:${data.aws_region.sqs_region.name}:${var.account_ids["analytical-platform-data-production"]}:*"]
+  }
 }
 
 resource "aws_iam_policy" "control_panel_api" {
