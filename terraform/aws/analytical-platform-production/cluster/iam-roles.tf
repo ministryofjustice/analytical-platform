@@ -17,9 +17,8 @@ module "iam_assumable_role_ebs_csi_driver" {
 ##################################################
 
 module "iam_assumable_role_control_panel_api" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.28.0"
-
+  source    = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version   = "5.28.0"
   providers = {
     aws = aws.analytical-platform-data-production
   }
