@@ -29,6 +29,7 @@ jobs:
         component:
           [
             "application-migration",
+            "aws-analytical-platform-oidc",
             "github-application-migration",
             "github-data-platform",
           ]
