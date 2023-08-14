@@ -26,7 +26,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: ["application-migration", "github-application-migration"]
+        component:
+          [
+            "application-migration",
+            "github-application-migration",
+            "github-data-platform",
+          ]
     uses: ./.github/workflows/reusable-workflow-terraform.yml
     with:
       component: ${{ matrix.component }}
