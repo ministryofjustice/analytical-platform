@@ -18,6 +18,20 @@ def handler(event, context):
     amz_date = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
     # md5 = str(event["queryStringParameters"]["contentMD5"])
     uuid_string = str(uuid.uuid4())
+
+    if type(database) != str or type(table) != str:
+        return {
+            "statusCode": 400,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps(
+                {
+                    "error": {
+                        "message": "Database or table is not convertible to string type."
+                    }
+                }
+            ),
+        }
+
     file_name = os.path.join(
         "raw_data",
         database,
@@ -46,15 +60,34 @@ def handler(event, context):
 
     root_logger.info(f"s3 key: {file_name}")
 
-    URL = s3.generate_presigned_post(
-        Bucket=bucket_name,
-        Key=file_name,
-        Fields=fields,
-        Conditions=conditions,
-        ExpiresIn=200,
-    )
-    return {
-        "statusCode": 200,
-        "headers": {"Content-Type": "application/json"},
-        "body": json.dumps({"URL": URL}),
-    }
+    # Check the data product has been registered, ie has associated code or metadata in s3
+    data_product_registration = s3.list_objects_v2(
+        Bucket=bucket_name, Prefix=f"code/{database}"
+    )["Contents"]
+
+    if not any(data_product_registration):
+        return {
+            "statusCode": 404,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps(
+                {
+                    "error": {
+                        "message": "Data product registration relating to database not found."
+                    }
+                }
+            ),
+        }
+
+    if any(data_product_registration) and type(database) == str and type(table) == str:
+        URL = s3.generate_presigned_post(
+            Bucket=bucket_name,
+            Key=file_name,
+            Fields=fields,
+            Conditions=conditions,
+            ExpiresIn=200,
+        )
+        return {
+            "statusCode": 200,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps({"URL": URL}),
+        }
