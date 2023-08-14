@@ -1,5 +1,11 @@
 [
   {
+    "name": "aqa-website",
+    "source_repo_name": "aqa_website",
+    "team": ["aqa-website-admin"],
+    "description": ""
+  },
+  {
     "name": "bentham-app",
     "source_repo_name": "bentham-app",
     "team": ["bentham-app-admin-team"],
@@ -115,6 +121,12 @@
     "description": ""
   },
   {
+    "name": "exit-survey-app",
+    "source_repo_name": "exit_survey_app",
+    "team": ["exit-survey-app-admin-team"],
+    "description": ""
+  },
+  {
     "name": "gifts-app",
     "source_repo_name": "gifts-app",
     "team": ["gifts-app-admin-team"],
@@ -173,6 +185,13 @@
     "source_repo_name": "hr_policy_search_tool",
     "team": ["deds"],
     "description": ""
+  },
+  {
+    "name": "imb-fees-consultation",
+    "source_repo_name": "victims-bill-consultation",
+    "team": [],
+    "description": "",
+    "role_name_suffix": "victims-bill-consultation"
   },
   {
     "name": "intel-app-homepage",
@@ -261,6 +280,12 @@
     "description": ""
   },
   {
+    "name": "occupeye-shiny-app",
+    "source_repo_name": "occupeye_shiny_app",
+    "team": [],
+    "description": ""
+  },
+  {
     "name": "opg-lpa-dashboard",
     "source_repo_name": "opg-lpa-dashboard",
     "team": [],
@@ -318,6 +343,12 @@
     "name": "pq-tool",
     "source_repo_name": "pq-tool",
     "team": [],
+    "description": ""
+  },
+  {
+    "name": "prison-estate-digital-map",
+    "source_repo_name": "prison-estate-digital-map",
+    "team": ["prison-estate-digital-map-admin-team"],
     "description": ""
   },
   {
@@ -405,46 +436,15 @@
     "description": ""
   },
   {
-    "name": "workforce-planning-app",
-    "source_repo_name": "workforce-planning-app",
-    "team": [],
-    "description": ""
-  },
-  {
     "name": "temperature-check",
     "source_repo_name": "temperature-check",
     "team": [],
     "description": ""
   },
   {
-    "name": "imb-fees-consultation",
-    "source_repo_name": "victims-bill-consultation",
+    "name": "workforce-planning-app",
+    "source_repo_name": "workforce-planning-app",
     "team": [],
-    "description": "",
-    "role_name_suffix": "victims-bill-consultation"
-  },
-  {
-    "name": "aqa-website",
-    "source_repo_name": "aqa_website",
-    "team": ["aqa-website-admin"],
-    "description": ""
-  },
-  {
-    "name": "exit-survey-app",
-    "source_repo_name": "exit_survey_app",
-    "team": ["exit-survey-app-admin-team"],
-    "description": ""
-  },
-  {
-    "name": "occupeye-shiny-app",
-    "source_repo_name": "occupeye_shiny_app",
-    "team": [],
-    "description": ""
-  },
-  {
-    "name": "prison-estate-digital-map",
-    "source_repo_name": "prison-estate-digital-map",
-    "team": ["prison-estate-digital-map-admin-team"],
     "description": ""
   }
 ]
