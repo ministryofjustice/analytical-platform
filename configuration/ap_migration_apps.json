@@ -78,6 +78,12 @@
     "description": ""
   },
   {
+    "name": "cost-to-serve",
+    "source_repo_name": "cost_to_serve",
+    "team": ["cost-to-serve-read-team"],
+    "description": ""
+  },
+  {
     "name": "criminal-scenario-tool",
     "source_repo_name": "criminal-scenario-tool",
     "team": ["criminal-scenario-tool-administrators"],
@@ -106,6 +112,30 @@
     "name": "defcalc",
     "source_repo_name": "defcalc",
     "team": ["defcalc-admin-team"],
+    "description": ""
+  },
+  {
+    "name": "df-bid-shiny",
+    "source_repo_name": "df_bid_shiny",
+    "team": ["df-bid-shiny-admin-team", "df-bid-shiny-read-team"],
+    "description": ""
+  },
+  {
+    "name": "df-bid-shiny-ws",
+    "source_repo_name": "df_bid_shiny_ws",
+    "team": ["df-bid-shiny-ws-admin-team"],
+    "description": ""
+  },
+  {
+    "name": "df-bid-shiny-pwb",
+    "source_repo_name": "df_bid_shiny_pwb",
+    "team": ["df-bid-shiny-pwb-admin-team", "df-bid-shiny-pwb-read-team"],
+    "description": ""
+  },
+  {
+    "name": "df-bid-shiny-acc",
+    "source_repo_name": "df_bid_shiny_acc",
+    "team": ["df-bid-shiny-acc-admin-team"],
     "description": ""
   },
   {
@@ -421,6 +451,12 @@
     "name": "segmentation-tool",
     "source_repo_name": "segmentation-tool",
     "team": [],
+    "description": ""
+  },
+  {
+    "name": "segmentation-tool-draft",
+    "source_repo_name": "segmentation_tool_draft",
+    "team": ["probation-ds-risk"],
     "description": ""
   },
   {
