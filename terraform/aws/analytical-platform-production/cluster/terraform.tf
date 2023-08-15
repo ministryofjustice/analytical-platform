@@ -76,7 +76,7 @@ provider "aws" {
 
 provider "aws" {
   alias  = "control-panel-sqs-region"
-  region = "eu-west-2"
+  region = "eu-west-1"
   default_tags {
     tags = var.tags
   }
