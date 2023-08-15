@@ -63,7 +63,7 @@ def handler(event, context):
     # Check the data product has been registered, ie has associated code or metadata in s3
     data_product_registration = s3.list_objects_v2(
         Bucket=bucket_name, Prefix=f"code/{database}"
-    )["Contents"]
+    ).get("Contents", [])
 
     if not any(data_product_registration):
         return {
