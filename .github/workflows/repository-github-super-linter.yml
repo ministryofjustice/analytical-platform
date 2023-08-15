@@ -26,20 +26,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Load Super-Linter Variables
+        id: load_super_linter_variables
+        run: cat .github/super-linter.env >>"${GITHUB_ENV}"
+
       - name: GitHub Super-Linter
         id: super_linter
         uses: github/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BRANCH: main
-          VALIDATE_ALL_CODEBASE: false
-          FILTER_REGEX_EXCLUDE: .*archive/.*
-          # yamllint disable rule:line-length
-          VALIDATE_GITHUB_ACTIONS: false # yaml This is disabled until Super-Linter ships with a newer version of actionlint supports the new `var` context
-          # yamllint enable rule:line-length
-          # TODO: Fix all the shell scripts and re-enable these
-          VALIDATE_BASH: false
-          VALIDATE_BASH_EXEC: false
-          VALIDATE_SHELL_SHFMT: false
-          VALIDATE_HTML: false
-          VALIDATE_JAVASCRIPT_STANDARD: false
