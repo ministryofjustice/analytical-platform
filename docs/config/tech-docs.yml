@@ -10,7 +10,7 @@ host: https://technical-documentation.data-platform.service.justice.gov.uk
 show_govuk_logo: false
 service_name: Data Platform
 service_link: /
-phase: Alpha
+phase: Discovery
 
 # Links to show on right-hand-side of header
 header_links:
