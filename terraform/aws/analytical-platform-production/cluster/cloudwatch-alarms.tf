@@ -258,36 +258,36 @@ resource "aws_cloudwatch_metric_alarm" "rds_high_swap_usage" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "rds_anamalous_connection_count" {
-  alarm_name                = "rds-${local.rds_identifier}-anamalous-connection-count"
-  comparison_operator       = "GreaterThanUpperThreshold"
-  evaluation_periods        = "5"
-  threshold_metric_id       = "e1"
-  alarm_description         = "Anomalous database connection count detected. Something unusual is happening."
-  alarm_actions             = [aws_sns_topic.analytical_platform_compute_alerts.arn]
-  ok_actions                = [aws_sns_topic.analytical_platform_compute_alerts.arn]
-  insufficient_data_actions = [aws_sns_topic.analytical_platform_compute_alerts.arn]
+# resource "aws_cloudwatch_metric_alarm" "rds_anamalous_connection_count" {
+#   alarm_name                = "rds-${local.rds_identifier}-anamalous-connection-count"
+#   comparison_operator       = "GreaterThanUpperThreshold"
+#   evaluation_periods        = "5"
+#   threshold_metric_id       = "e1"
+#   alarm_description         = "Anomalous database connection count detected. Something unusual is happening."
+#   alarm_actions             = [aws_sns_topic.analytical_platform_compute_alerts.arn]
+#   ok_actions                = [aws_sns_topic.analytical_platform_compute_alerts.arn]
+#   insufficient_data_actions = [aws_sns_topic.analytical_platform_compute_alerts.arn]
 
-  metric_query {
-    id          = "e1"
-    expression  = "ANOMALY_DETECTION_BAND(m1, 2)"
-    label       = "DatabaseConnections (Expected)"
-    return_data = "true"
-  }
+#   metric_query {
+#     id          = "e1"
+#     expression  = "ANOMALY_DETECTION_BAND(m1, 2)"
+#     label       = "DatabaseConnections (Expected)"
+#     return_data = "true"
+#   }
 
-  metric_query {
-    id          = "m1"
-    return_data = "true"
-    metric {
-      metric_name = "DatabaseConnections"
-      namespace   = "AWS/RDS"
-      period      = "600"
-      stat        = "Average"
-      unit        = "Count"
+#   metric_query {
+#     id          = "m1"
+#     return_data = "true"
+#     metric {
+#       metric_name = "DatabaseConnections"
+#       namespace   = "AWS/RDS"
+#       period      = "600"
+#       stat        = "Average"
+#       unit        = "Count"
 
-      dimensions = {
-        DBInstanceIdentifier = local.rds_identifier
-      }
-    }
-  }
-}
+#       dimensions = {
+#         DBInstanceIdentifier = local.rds_identifier
+#       }
+#     }
+#   }
+# }
