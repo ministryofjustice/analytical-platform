@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0]
+
+### Changed
+
+- Uses new base image daap-python-base:0.3.0, which includes intial version of the
+custom logger.
+- DataPlatformLogger has been implemented, creating log entries to the stdout and
+a queryable json file.
+- infer_glue_schema() has been improved to better infer data types for a sample of
+csv data.
+
 ## [1.0.5]
 
 ### Changed
