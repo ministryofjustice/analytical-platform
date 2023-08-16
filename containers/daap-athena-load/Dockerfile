@@ -1,4 +1,4 @@
-FROM 374269020027.dkr.ecr.eu-west-2.amazonaws.com/data-platform-python-base-ecr-repo:0.1.0
+FROM ghcr.io/ministryofjustice/data-platform-daap-python-base:0.3.0
 
 ARG VERSION
 
