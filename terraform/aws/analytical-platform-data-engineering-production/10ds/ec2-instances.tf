@@ -1,6 +1,6 @@
 module "ec2" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "5.2.1"
+  version = "5.3.1"
 
   name                        = local.name
   ami                         = local.ami
