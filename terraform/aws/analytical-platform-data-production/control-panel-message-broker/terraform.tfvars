@@ -1,5 +1,5 @@
 account_ids = {
-  analytical-platform-production            = "312423030077"
+  analytical-platform-gsdata-production            = "593291632749"
   analytical-platform-management-production = "042130406152"
 }
 
@@ -11,5 +11,5 @@ tags = {
   is-production          = "true"
   owner                  = "data-platform:data-platform-tech@digital.justice.gov.uk"
   infrastructure-support = "data-platform:data-platform-tech@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-production/control-panel-message-broker"
+  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/control-panel-message-broker"
 }
