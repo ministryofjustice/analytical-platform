@@ -1,5 +1,5 @@
 account_ids = {
-  analytical-platform-data-production       = "593291632749"
+  analytical-platform-production            = "312423030077"
   analytical-platform-management-production = "042130406152"
 }
 

@@ -3,7 +3,7 @@ terraform {
     acl            = "private"
     bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "aws/analytical-platform-data-production/control-panel-message-broker/terraform.tfstate"
+    key            = "aws/analytical-platform-production/control-panel-message-broker/terraform.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
@@ -27,7 +27,7 @@ provider "aws" {
 provider "aws" {
   region = "eu-west-1"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
