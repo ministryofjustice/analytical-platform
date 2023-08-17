@@ -19,26 +19,26 @@ data "aws_iam_policy_document" "source" {
   }
 }
 
-data "aws_iam_policy_document" "sqs_iam_policy_document" {
+data "aws_iam_policy_document" "sqs_iam" {
   source_policy_documents = [data.aws_iam_policy_document.source.json]
 
   statement {
-    resources = [aws_sqs_queue.iam_queue.arn]
+    resources = [aws_sqs_queue.iam.arn]
   }
 }
 
-data "aws_iam_policy_document" "sqs_s3_policy_document" {
+data "aws_iam_policy_document" "sqs_s3" {
   source_policy_documents = [data.aws_iam_policy_document.source.json]
 
   statement {
-    resources = [aws_sqs_queue.s3_queue.arn]
+    resources = [aws_sqs_queue.s3.arn]
   }
 }
 
-data "aws_iam_policy_document" "sqs_auth_policy_document" {
+data "aws_iam_policy_document" "sqs_auth" {
   source_policy_documents = [data.aws_iam_policy_document.source.json]
 
   statement {
-    resources = [aws_sqs_queue.auth_queue.arn]
+    resources = [aws_sqs_queue.auth.arn]
   }
 }
