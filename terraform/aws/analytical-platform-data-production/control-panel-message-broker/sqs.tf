@@ -1,14 +1,14 @@
 resource "aws_sqs_queue" "s3" {
   #ts:skip=AWS.SQS.NetworkSecurity.High.0570
-  name = "s3_queue"
+  name = "control-panel-s3"
 }
 
 resource "aws_sqs_queue" "iam" {
   #ts:skip=AWS.SQS.NetworkSecurity.High.0570
-  name = "iam_queue"
+  name = "control-panel-iam"
 }
 
 resource "aws_sqs_queue" "auth" {
   #ts:skip=AWS.SQS.NetworkSecurity.High.0570
-  name = "auth_queue"
+  name = "control-panel-auth"
 }
