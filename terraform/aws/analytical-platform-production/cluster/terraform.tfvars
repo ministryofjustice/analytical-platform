@@ -186,3 +186,4 @@ eks_node_group_instance_types = ["r5.2xlarge"]
 ##################################################
 
 control_panel_kubernetes_service_account = "cpanel:cpanel-frontend"
+control_panel_celery_kubernetes_service_account = "cpanel:cpanel-celery-worker"

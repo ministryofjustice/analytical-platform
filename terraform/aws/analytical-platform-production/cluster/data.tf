@@ -14,6 +14,10 @@ data "aws_iam_session_context" "session" {
 
 data "aws_region" "current" {}
 
+data "aws_region" "sqs_region" {
+  provider = aws.control-panel-sqs-region
+}
+
 data "aws_caller_identity" "current" {}
 
 data "aws_availability_zones" "available" {}

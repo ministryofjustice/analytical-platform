@@ -74,6 +74,14 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias  = "control-panel-sqs-region"
+  region = "eu-west-1"
+  default_tags {
+    tags = var.tags
+  }
+}
+
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
