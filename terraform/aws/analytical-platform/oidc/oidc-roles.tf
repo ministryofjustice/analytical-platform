@@ -149,6 +149,7 @@ module "analytical_platform_management_production_github_oidc_role" {
 
 
 resource "aws_iam_role" "github_actions" {
+  provider           = aws.analytical-platform-data-production
   name               = "github-actions-ecr-oidc"
   assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role.json
 }
@@ -163,7 +164,7 @@ data "aws_iam_policy_document" "github_oidc_assume_role" {
     principals {
       type = "Federated"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
+        "arn:aws:iam::${data.aws_caller_identity.data_production.account_id}:oidc-provider/token.actions.githubusercontent.com"
       ]
     }
 
@@ -188,13 +189,15 @@ data "aws_iam_policy_document" "github_oidc_assume_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "read_only" {
+  provider   = aws.analytical-platform-data-production
   role       = aws_iam_role.github_actions.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
 # Add actions missing from arn:aws:iam::aws:policy/ReadOnlyAccess
 resource "aws_iam_policy" "extra_permissions" {
-  name        = "github-actions-ecr-oidc"
+  provider    = aws.analytical-platform-data-production
+  name        = aws_iam_role.github_actions.name
   path        = "/"
   description = "A policy for extra permissions for GitHub Actions"
 
@@ -202,6 +205,7 @@ resource "aws_iam_policy" "extra_permissions" {
 }
 
 resource "aws_iam_role_policy_attachment" "extra_permissions" {
+  provider   = aws.analytical-platform-data-production
   role       = aws_iam_role.github_actions.name
   policy_arn = aws_iam_policy.extra_permissions.arn
 }
