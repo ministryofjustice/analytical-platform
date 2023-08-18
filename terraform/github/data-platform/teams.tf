@@ -1,7 +1,6 @@
 locals {
   maintainers = [ # maintainers of analytics-hq and analytical-platform gh teams
     "julialawrence",
-    "jhackett-ap", # John Hackett
     "bagg3rs"      # Richard Baguley
   ]
 
@@ -126,7 +125,6 @@ locals {
   ]
 
   data_platform_core_infrastructure_members = [
-    "jhackett-ap", # John Hackett
     "Emterry",     # Emma Terry
     "jhpyke",
     "tamsinforbes",
