@@ -89,7 +89,7 @@ data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
       values   = ["sqs.eu-west-1.amazonaws.com"]
     }
   }
-  statement = {
+  statement {
     sid       = ""
     effect    = "Allow"
     actions   = ["eks:DescribeCluster"]
