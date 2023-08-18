@@ -150,9 +150,9 @@ module "analytical_platform_data_production_github_oidc_provider" {
     aws = aws.analytical-platform-data-production
   }
 
-  role_name              = "github-actions-ecr-oidc"
+  role_name              = "github-actions-ecr-oidc-dummy"
   additional_permissions = data.aws_iam_policy_document.analytical_platform_data_production_github_oidc_provider.json
-  github_repositories    = formatlist("ministryofjustice/%s:*", concat([for app in local.migration_apps_map : app.name], local.additional_repos_for_ecr))
+  github_repositories    = [format("ministryofjustice/%s:*", "data-platform-dummy-repo")]
 
   tags_prefix = "data-platform"
   tags_common = var.tags
