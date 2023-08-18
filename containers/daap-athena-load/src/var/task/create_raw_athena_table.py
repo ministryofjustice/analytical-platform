@@ -7,7 +7,7 @@ def create_raw_athena_table(
 ) -> None:
     """
     Creates an empty athena table from the raw file pushed by
-    a data producer for raw data. All column types are string.
+    a data producer for raw data.
     """
     try:
         glue_client.get_database(Name="data_products_raw")
