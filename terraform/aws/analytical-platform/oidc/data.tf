@@ -7,7 +7,7 @@ data "aws_caller_identity" "session" {
 }
 
 data "aws_caller_identity" "data_production" {
-  providers = aws.analytical-platform-data-production
+  provider = aws.analytical-platform-data-production
 }
 
 data "aws_iam_session_context" "session" {
