@@ -115,6 +115,7 @@ def create_curated_athena_table(
             database_name=database_name,
             file_type="parquet",
             table_type="curated",
+            logger=logger,
         )
 
         glue_client.create_table(**table_metadata)
@@ -137,6 +138,7 @@ def create_curated_athena_table(
             database_name=database_name,
             file_type="parquet",
             table_type="curated",
+            logger=logger,
         )
         glue_client.create_table(**table_metadata)
         refresh_table_partitions(database_name, table_name)
