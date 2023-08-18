@@ -1,13 +1,14 @@
+from typing import Tuple
+import copy
+import os
+
+import boto3
+import s3fs
+from data_platform_logging import DataPlatformLogger
 from mojap_metadata.converters.arrow_converter import ArrowConverter
 from mojap_metadata.converters.glue_converter import GlueConverter
-from data_platform_logging import DataPlatformLogger
 from pyarrow import csv as pa_csv
 from pyarrow import parquet as pq
-from typing import Tuple
-import boto3
-import copy
-import s3fs
-import os
 
 s3_client = boto3.client("s3")
 
