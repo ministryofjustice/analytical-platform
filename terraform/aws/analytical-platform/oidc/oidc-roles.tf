@@ -194,7 +194,7 @@ resource "aws_iam_role_policy_attachment" "read_only" {
 
 # Add actions missing from arn:aws:iam::aws:policy/ReadOnlyAccess
 resource "aws_iam_policy" "extra_permissions" {
-  name        = var.role_name
+  name        = "github-actions-ecr-oidc"
   path        = "/"
   description = "A policy for extra permissions for GitHub Actions"
 
