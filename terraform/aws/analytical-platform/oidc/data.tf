@@ -6,7 +6,7 @@ data "aws_caller_identity" "session" {
   provider = aws.session
 }
 
-data "aws_caller_identity" "data_producion" {
+data "aws_caller_identity" "data_production" {
   providers = aws.analytical-platform-data-production
 }
 
