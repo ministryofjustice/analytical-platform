@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
     actions   = ["cloudwatch:PutMetricData"]
     resources = ["*"]
   }
-  statment {
+  statement {
     sid    = ""
     effect = "Allow"
     actions = [
