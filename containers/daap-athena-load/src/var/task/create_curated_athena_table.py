@@ -1,9 +1,10 @@
-import boto3
-from data_platform_logging import DataPlatformLogger
-from botocore.exceptions import ClientError
-from infer_glue_schema import infer_glue_schema
 import time
 import os
+
+import boto3
+from botocore.exceptions import ClientError
+from data_platform_logging import DataPlatformLogger
+from infer_glue_schema import infer_glue_schema
 
 athena_client = boto3.client("athena")
 s3_client = boto3.client("s3")
