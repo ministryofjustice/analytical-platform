@@ -95,6 +95,19 @@ data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
     actions   = ["eks:DescribeCluster"]
     resources = ["arn:aws:eks:eu-west-1:593291632749:cluster/airflow-dev"]
   }
+}
 
-
+data "aws_iam_policy_document" "airflow_dev_execution_assume_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    principals {
+      type = "Service"
+      identifiers = [
+        "fairflow.amazonaws.com",
+        "airflow-env.amazonaws.com"
+      ]
+    }
+    actions = ["sts:AssumeRole"]
+  }
 }

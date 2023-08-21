@@ -17,3 +17,13 @@ module "airflow_analytical_platform_development_iam_role" {
     }
   }
 }
+
+resource "aws_iam_role" "airflow_dev_execution_role" {
+  name               = "airflow-dev-execution-role"
+  assume_role_policy = data.aws_iam_policy_document.airflow_dev_execution_assume_role_policy.json
+
+  inline_policy {
+    name   = "airflow-dev-execution-role-policy"
+    policy = data.aws_iam_policy_document.airflow_dev_execution_role_policy.json
+  }
+}
