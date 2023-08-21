@@ -1,9 +1,10 @@
 import os
 import re
+
 import boto3
-from data_platform_logging import DataPlatformLogger
 from create_curated_athena_table import create_curated_athena_table
 from create_raw_athena_table import create_raw_athena_table
+from data_platform_logging import DataPlatformLogger
 from infer_glue_schema import infer_glue_schema
 
 glue_client = boto3.client("glue")
@@ -40,7 +41,9 @@ def handler(event, context):
     )
     logger.info(f"config: {config}")
     logger.info(f"file is: {full_s3_path}")
-    metadata_types, metadata_str = infer_glue_schema(full_s3_path, "data_products_raw")
+    metadata_types, metadata_str = infer_glue_schema(
+        full_s3_path, "data_products_raw", logger=logger
+    )
 
     # Create a table of all string-type columns, to load raw data into
     create_raw_athena_table(

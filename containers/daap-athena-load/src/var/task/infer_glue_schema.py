@@ -1,6 +1,6 @@
-from typing import Tuple
 import copy
 import os
+from typing import Tuple
 
 import boto3
 import s3fs
