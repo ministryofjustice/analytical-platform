@@ -104,7 +104,7 @@ data "aws_iam_policy_document" "airflow_dev_execution_assume_role_policy" {
     principals {
       type = "Service"
       identifiers = [
-        "fairflow.amazonaws.com",
+        "airflow.amazonaws.com",
         "airflow-env.amazonaws.com"
       ]
     }
