@@ -3,8 +3,8 @@ import time
 
 import boto3
 from botocore.exceptions import ClientError
-from data_platform_logging import DataPlatformLogger
 from create_raw_athena_table import create_glue_database
+from data_platform_logging import DataPlatformLogger
 from infer_glue_schema import infer_glue_schema
 
 athena_client = boto3.client("athena")
