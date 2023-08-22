@@ -16,13 +16,13 @@ body:
     attributes:
       description: Steps to reproduce the behaviour.
       label: To Reproduce
-      placeholder:  1. Go to '...'
+      placeholder: 1. Go to '...'
 
-                    2. Click on '....'
-      
-                    3. Scroll down to '....'
-      
-                    4. See error...
+                  2. Click on '....'
+
+                  3. Scroll down to '....'
+
+                  4. See error...
     validations:
       required: false
   - type: textarea

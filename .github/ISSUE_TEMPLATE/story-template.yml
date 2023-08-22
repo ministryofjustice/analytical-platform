@@ -16,9 +16,9 @@ body:
                     I need/want/expect to… *[what does the user want to do?]*
 
                     So that… *[why does the user want to do this?]*"
-      value: "As a…  
+      value: "As a…
 
-              I need/want/expect to… 
+              I need/want/expect to…
 
               So that…"
     validations:
@@ -54,16 +54,16 @@ body:
     attributes:
       label: Hypothesis
       placeholder: "If we... [do a thing]
-                    
+
                     Then... [this will happen]"
       value: "If we... [do a thing]
-              
+
               Then... [this will happen]"
   - type: textarea
     id: proposal
     attributes:
       description: A proposal that is something testable, don't worry whether it works or not, it's a place for ideas.
-      label: Proposal 
+      label: Proposal
       value:
     validations:
       required: false
@@ -71,7 +71,7 @@ body:
     id: additional-information
     attributes:
       description: Please add any useful links or additional information that would be beneficial to anyone working on this Issue.
-      label: Additional Information 
+      label: Additional Information
       value:
     validations:
       required: false
@@ -85,11 +85,11 @@ body:
         Example
         - [ ] Documentation has been written / updated
 
-        - [ ] README has been updated  
+        - [ ] README has been updated
 
-        - [ ] User docs have been updated  
+        - [ ] User docs have been updated
 
-        - [ ] Another team member has reviewed 
+        - [ ] Another team member has reviewed
 
         - [ ] Tests are green
     validations:
