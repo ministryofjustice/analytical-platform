@@ -12,7 +12,7 @@ resource "aws_s3_bucket_public_access_block" "mojap_airflow_dev_access_block" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_object" "object" {
+resource "aws_s3_object" "requirements" {
   bucket = "mojap-airflow-dev"
   key    = "requirements.txt"
   source = "./files/requirements.txt"
