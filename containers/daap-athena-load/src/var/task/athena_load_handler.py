@@ -47,7 +47,11 @@ def handler(event, context):
 
     # Create a table of all string-type columns, to load raw data into
     create_raw_athena_table(
-        metadata_glue=metadata_str, logger=logger, glue_client=glue_client
+        metadata_glue=metadata_str,
+        logger=logger,
+        glue_client=glue_client,
+        bucket=bucket_name,
+        s3_security_opts=s3_security_opts,
     )
 
     # Load the raw string data into the raw tables

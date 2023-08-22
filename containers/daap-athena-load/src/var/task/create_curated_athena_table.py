@@ -4,6 +4,7 @@ import time
 import boto3
 from botocore.exceptions import ClientError
 from data_platform_logging import DataPlatformLogger
+from create_raw_athena_table import create_glue_database
 from infer_glue_schema import infer_glue_schema
 
 athena_client = boto3.client("athena")
@@ -29,21 +30,7 @@ def create_curated_athena_table(
     """
 
     table_exists = False
-    try:
-        glue_client.get_database(Name=database_name)
-    except ClientError as e:
-        if e.response["Error"]["Code"] == "EntityNotFoundException":
-            db_meta = {
-                "DatabaseInput": {
-                    "Description": "database for {} products".format(database_name),
-                    "Name": database_name,
-                }
-            }
-            glue_client.create_database(**db_meta)
-        else:
-            logger.error("Unexpected error: %s" % e)
-            logger.write_log_dict_to_s3_json(bucket=bucket, **s3_security_opts)
-            raise
+    create_glue_database(glue_client, database_name, logger, bucket, s3_security_opts)
 
     try:
         table_metadata = glue_client.get_table(
