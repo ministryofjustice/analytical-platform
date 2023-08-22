@@ -12,6 +12,14 @@ body:
       validations:
       required: true
   - type: textarea
+      id: context
+      attributes:
+      description: What are you working on?
+      label: Describe the context.
+      value:
+      validations:
+      required: false
+  - type: textarea
     id: value-purpose
     attributes:
       description: Describe the value and purpose of the ticket.

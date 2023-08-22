@@ -40,6 +40,33 @@ body:
       value:
     validations:
       required: false
+  - type: input
+    id: user-types
+    attributes:
+      description: Please add the types of users impacted
+      placeholder: Joe Bloggs
+      label: User Types
+      value:
+    validations:
+      required: false
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: Hypothesis
+      placeholder: "If we... [do a thing]
+                    
+                    Then... [this will happen]"
+      value: "If we... [do a thing]
+              
+              Then... [this will happen]"
+  - type: textarea
+    id: proposal
+    attributes:
+      description: A proposal that is something testable, don't worry whether it works or not, it's a place for ideas.
+      label: Proposal 
+      value:
+    validations:
+      required: false
   - type: textarea
     id: additional-information
     attributes:
