@@ -1,4 +1,5 @@
 <!-- markdownlint-disable MD003 -->
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -8,16 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1]
+
+### Changed
+
+- Code refactored into several files.
+- Added comments
+
 ## [1.1.0]
 
 ### Changed
 
 - Uses new base image daap-python-base:0.3.0, which includes intial version of the
-custom logger.
+  custom logger.
 - DataPlatformLogger has been implemented, creating log entries to the stdout and
-a queryable json file.
+  a queryable json file.
 - infer_glue_schema() has been improved to better infer data types for a sample of
-csv data.
+  csv data.
 
 ## [1.0.5]
 
@@ -47,7 +55,7 @@ csv data.
 ### Changed
 
 - the keys to get the bucket and key from the event passed to the lambda from eventbridge
-as the event rule have changed slightly.
+  as the event rule have changed slightly.
 
 ## [1.0.1]
 
@@ -60,10 +68,10 @@ as the event rule have changed slightly.
 ### Changed
 
 - Changed the SerializationLibrary in serdeinfo of glue table metadata from
-`LazySimpleSerDe` to `OpenCSVSerde`
+  `LazySimpleSerDe` to `OpenCSVSerde`
 - `infer_glue_schema()` changed so null columns are typed as `string` not `null`
 - The csv bytes value in `infer_glue_schema()` now decodes using uft-8-sig encoding
-as byte order marks were persisting in some data
+  as byte order marks were persisting in some data
 
 ## [0.1.1] - 2023-09-30
 
