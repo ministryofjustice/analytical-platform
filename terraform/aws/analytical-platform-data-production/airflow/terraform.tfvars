@@ -18,3 +18,11 @@ tags = {
   infrastructure-support = "data-platform:data-platform-tech@digital.justice.gov.uk"
   source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/airflow"
 }
+
+##################################################
+# Network
+##################################################
+
+azs                  = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+private_subnet_cidrs = ["10.200.20.0/24", "10.200.21.0/24", "10.200.22.0/24"]
+public_subnet_cidrs  = ["10.200.10.0/24", "10.200.11.0/24", "10.200.12.0/24"]
