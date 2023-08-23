@@ -27,7 +27,6 @@ resource "aws_subnet" "public_subnet" {
   count                   = length(var.public_subnet_cidrs)
   cidr_block              = element(var.public_subnet_cidrs, count.index)
   availability_zone       = element(var.azs, count.index)
-  map_public_ip_on_launch = true
   tags = {
     Name = "airflow-dev-public-${element(var.azs, count.index)}"
   }
@@ -38,7 +37,6 @@ resource "aws_subnet" "private_subnet" {
   count                   = length(var.private_subnet_cidrs)
   cidr_block              = element(var.private_subnet_cidrs, count.index)
   availability_zone       = element(var.azs, count.index)
-  map_public_ip_on_launch = true
   tags = {
     Name = "airflow-dev-private-${element(var.azs, count.index)}"
   }
