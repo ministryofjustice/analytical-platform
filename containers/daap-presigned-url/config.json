@@ -1,6 +1,6 @@
 {
   "name": "daap-presigned-url",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "registry": "ecr",
   "ecr": {
     "role": "arn:aws:iam::013433889002:role/modernisation-platform-oidc-cicd",

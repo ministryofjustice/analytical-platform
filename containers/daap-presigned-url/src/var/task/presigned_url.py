@@ -3,13 +3,18 @@ import logging
 import os
 import uuid
 from datetime import datetime
+from data_platform_logging import DataPlatformLogger
 
 import boto3
 
-logging.basicConfig(level=logging.INFO, force=True)
-root_logger = logging.getLogger()
 s3 = boto3.client("s3")
 
+logger = DataPlatformLogger(
+    extra={
+        "image_version": os.getenv("VERSION", "unknown"),
+        "base_image_version": os.getenv("BASE_VERSION", "unknown"),
+    }
+)
 
 def handler(event, context):
     bucket_name = os.environ["BUCKET_NAME"]
@@ -58,7 +63,7 @@ def handler(event, context):
         ["content-length-range", 0, 5000000000],
     ]
 
-    root_logger.info(f"s3 key: {file_name}")
+    logger.info(f"s3 key: {file_name}")
 
     # Check the data product has been registered, ie has associated code or metadata in s3
     data_product_registration = s3.list_objects_v2(
