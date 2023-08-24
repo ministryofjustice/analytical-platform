@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "airflow_analytical_platform_development" {
 
 module "airflow_analytical_platform_development_iam_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.28.0"
+  version = "5.29.0"
 
   name = "airflow-analytical-platform-development"
 
