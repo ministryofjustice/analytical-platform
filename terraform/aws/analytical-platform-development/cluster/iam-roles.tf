@@ -89,7 +89,7 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
 
 module "iam_assumable_role_cert_manager" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.28.0"
+  version                       = "5.29.0"
   create_role                   = true
   role_name_prefix              = "cert_manager"
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
@@ -103,7 +103,7 @@ module "iam_assumable_role_cert_manager" {
 
 module "iam_assumable_role_cluster_autoscaler" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.28.0"
+  version                       = "5.29.0"
   create_role                   = true
   role_name_prefix              = substr("cluster-autoscaler-${module.eks.cluster_id}", 0, 31)
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
@@ -130,7 +130,7 @@ module "iam_assumable_role_ebs_csi_driver" {
 
 module "iam_assumable_role_external_dns" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.28.0"
+  version                       = "5.29.0"
   create_role                   = true
   role_name_prefix              = "external_dns"
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
@@ -144,7 +144,7 @@ module "iam_assumable_role_external_dns" {
 
 module "iam_assumable_role_external_secrets" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.28.0"
+  version                       = "5.29.0"
   create_role                   = true
   role_name_prefix              = "external_secrets"
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
@@ -158,7 +158,7 @@ module "iam_assumable_role_external_secrets" {
 
 module "iam_assumable_role_jupyterhub_teama" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.28.0"
+  version                       = "5.29.0"
   create_role                   = true
   role_name                     = "jupyterhub-teama"
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
@@ -172,7 +172,7 @@ module "iam_assumable_role_jupyterhub_teama" {
 
 module "iam_assumable_role_prometheus_remote_ingest" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.28.0"
+  version                       = "5.29.0"
   create_role                   = true
   role_name                     = "prometheus_remote_ingest"
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
@@ -186,7 +186,7 @@ module "iam_assumable_role_prometheus_remote_ingest" {
 
 module "iam_assumable_role_superset" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.28.0"
+  version                       = "5.29.0"
   create_role                   = true
   role_name_prefix              = "superset"
   provider_url                  = "oidc.eks.eu-west-1.amazonaws.com/id/DDE7A0AC243F2E06BD539D26B3EC28A6"
@@ -200,7 +200,7 @@ module "iam_assumable_role_superset" {
 
 module "iam_assumable_role_control_panel_api" {
   source           = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version          = "5.28.0"
+  version          = "5.29.0"
   create_role      = true
   role_name_prefix = "dev_control_panel_api"
   provider_url     = module.eks.cluster_oidc_issuer_url
