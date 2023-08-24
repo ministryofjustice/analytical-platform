@@ -30,8 +30,3 @@ variable "public_subnet_cidrs" {
   type        = list(string)
   description = "List of public subnet CIDR ranges"
 }
-
-variable "eip_private_ips" {
-  type        = list(string)
-  description = "List of private IP addresses for use with EIP addresses"
-}

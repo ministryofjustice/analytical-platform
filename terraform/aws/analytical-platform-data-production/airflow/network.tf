@@ -25,7 +25,6 @@ resource "aws_internet_gateway" "airflow_dev" {
 resource "aws_eip" "airflow_dev_eip" {
   domain                    = "vpc"
   count                     = length(var.eip_private_ips)
-  associate_with_private_ip = element(var.eip_private_ips, count.index)
   depends_on                = [aws_internet_gateway.airflow_dev]
   tags = {
     Name = "airflow-dev-${element(var.azs, count.index)}"
