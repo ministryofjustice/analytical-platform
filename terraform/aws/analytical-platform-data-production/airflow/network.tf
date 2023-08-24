@@ -22,6 +22,15 @@ resource "aws_internet_gateway" "airflow_dev" {
   }
 }
 
+resource "aws_eip" "airflow_dev_eip" {
+  domain     = "vpc"
+  count      = length(var.azs)
+  depends_on = [aws_internet_gateway.airflow_dev]
+  tags = {
+    Name = "airflow-dev-${element(var.azs, count.index)}"
+  }
+}
+
 resource "aws_subnet" "public_subnet" {
   vpc_id            = aws_vpc.airflow_dev.id
   count             = length(var.public_subnet_cidrs)
