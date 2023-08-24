@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Use custom logging library image
-- Use custom logging library 
+- Use custom logging library
 
 ## [1.1.1] 2023-08-30
 

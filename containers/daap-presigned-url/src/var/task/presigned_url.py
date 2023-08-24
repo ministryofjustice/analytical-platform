@@ -1,11 +1,10 @@
 import json
-import logging
 import os
 import uuid
 from datetime import datetime
-from data_platform_logging import DataPlatformLogger
 
 import boto3
+from data_platform_logging import DataPlatformLogger
 
 s3 = boto3.client("s3")
 
@@ -15,6 +14,7 @@ logger = DataPlatformLogger(
         "base_image_version": os.getenv("BASE_VERSION", "unknown"),
     }
 )
+
 
 def handler(event, context):
     bucket_name = os.environ["BUCKET_NAME"]
