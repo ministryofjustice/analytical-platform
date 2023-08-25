@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Prepare Environment
         id: prepare_environment
@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Check Version (Docker Hub)
         if: needs.prepare-environment.outputs.registry == 'dockerhub'
@@ -168,7 +168,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Build Image
         id: build_image
@@ -205,7 +205,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Login to Docker Hub
         id: docker_login
@@ -233,7 +233,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Login to GitHub Container Registry
         id: login_ghcr
@@ -262,7 +262,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Prepare ECR Configuration
         id: prepare_ecr_configuration
