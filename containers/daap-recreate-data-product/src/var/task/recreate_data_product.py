@@ -29,34 +29,15 @@ def handler(event, context):
         glue.delete_table(DatabaseName=data_product_to_recreate, Name=table["Name"])
 
     # Remove curated data files for that data product
-    paginator = s3.get_paginator("list_objects_v2")
-    pages = paginator.paginate(
-        Bucket=curated_data_bucket,
-        Prefix=f"curated_data/database_name={data_product_to_recreate}/",
+    s3_recursive_delete(
+        bucket=curated_data_bucket,
+        prefix=f"curated_data/database_name={data_product_to_recreate}/",
+        s3_client=s3,
     )
 
-    delete_us = dict(Objects=[])
-    for item in pages.search("Contents"):
-        delete_us["Objects"].append(dict(Key=item["Key"]))
-
-        # delete once aws limit reached
-        if len(delete_us["Objects"]) >= 1000:
-            s3.delete_objects(Bucket=curated_data_bucket, Delete=delete_us)
-            delete_us = dict(Objects=[])
-            print(
-                f"deleted 1000 data files from curated_data/database_name={data_product_to_recreate}/"
-            )
-
-    # delete remaining
-    if len(delete_us["Objects"]):
-        s3.delete_objects(Bucket=curated_data_bucket, Delete=delete_us)
-        print(
-            f"deleted all data files from curated_data/database_name={data_product_to_recreate}/"
-        )
-
     # Feed all data files through the load process again. Curated files are recreated.
-    aws_lambda = boto3.client("lambda")
     # If there are over 1000 files, the lambda will get jammed up
+    aws_lambda = boto3.client("lambda")
     for file in data_product_registration:
         key = file["Key"]
         payload = f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}}, "object":{{"key":"{key}"}}}}}}'
@@ -65,3 +46,24 @@ def handler(event, context):
         )
 
     print(f"data product {data_product_to_recreate} recreated")
+
+
+def s3_recursive_delete(bucket, prefix, s3_client) -> None:
+    """Delete all files from a prefix in s3"""
+    paginator = s3_client.get_paginator("list_objects_v2")
+    pages = paginator.paginate(Bucket=bucket, Prefix=prefix)
+
+    delete_us = dict(Objects=[])
+    for item in pages.search("Contents"):
+        delete_us["Objects"].append(dict(Key=item["Key"]))
+
+        # delete once aws limit reached
+        if len(delete_us["Objects"]) >= 1000:
+            s3_client.delete_objects(Bucket=bucket, Delete=delete_us)
+            delete_us = dict(Objects=[])
+            print(f"deleted 1000 data files from {prefix}")
+
+    # delete remaining
+    if len(delete_us["Objects"]):
+        s3_client.delete_objects(Bucket=bucket, Delete=delete_us)
+        print(f"deleted all data files from {prefix}/")
