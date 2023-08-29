@@ -51,6 +51,18 @@ resource "aws_subnet" "private_subnet" {
   }
 }
 
+resource "aws_nat_gateway" "airflow_dev" {
+  count         = length(var.azs)
+  allocation_id = aws_eip.airflow_dev_eip[count.index].id
+  subnet_id     = aws_subnet.public_subnet[count.index].id
+
+  tags = {
+    Name = "airflow-dev-${element(var.azs, count.index)}"
+  }
+
+  depends_on = [aws_subnet.public_subnet]
+}
+
 resource "aws_route_table" "airflow_dev_public" {
   vpc_id = aws_vpc.airflow_dev.id
 
@@ -72,4 +84,32 @@ resource "aws_route_table_association" "airflow_dev_public_route_table_assoc" {
   count          = length(var.azs)
   subnet_id      = aws_subnet.public_subnet[count.index].id
   route_table_id = aws_route_table.airflow_dev_public.id
+}
+
+resource "aws_route_table" "airflow_dev_private" {
+  vpc_id = aws_vpc.airflow_dev.id
+  count  = length(var.azs)
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.airflow_dev[count.index].id
+  }
+  route {
+    cidr_block         = "10.26.0.0/15"
+    transit_gateway_id = "tgw-0e7b982ea47c28fba"
+  }
+  route { # known dead end to noms-live
+    cidr_block         = "10.40.0.0/18"
+    transit_gateway_id = "tgw-0e7b982ea47c28fba"
+  }
+
+  tags = {
+    Name = "airflow-dev-private-${element(var.azs, count.index)}"
+  }
+}
+
+resource "aws_route_table_association" "airflow_dev_private_route_table_assoc" {
+  count          = length(var.azs)
+  subnet_id      = aws_subnet.private_subnet[count.index].id
+  route_table_id = aws_route_table.airflow_dev_private[count.index].id
 }
