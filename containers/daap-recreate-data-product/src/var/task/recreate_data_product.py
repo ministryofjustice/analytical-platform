@@ -15,9 +15,9 @@ def handler(event, context):
         Bucket=raw_data_bucket, Prefix=f"raw_data/{data_product_to_recreate}"
     )
     data_product_registration = s3_response.get("Contents", [])
-    print(data_product_registration)
     if not any(data_product_registration):
         raise ValueError(f"No data product found for {data_product_to_recreate}")
+    print(data_product_registration)
 
     # Drop existing athena tables for that data product
     glue = boto3.client("glue")
@@ -66,4 +66,4 @@ def s3_recursive_delete(bucket, prefix, s3_client) -> None:
     # delete remaining
     if len(delete_us["Objects"]):
         s3_client.delete_objects(Bucket=bucket, Delete=delete_us)
-        print(f"deleted all data files from {prefix}/")
+        print(f"deleted all data files from {prefix}")
