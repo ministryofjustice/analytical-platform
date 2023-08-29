@@ -16,6 +16,10 @@ variable "tags" {
 # Network
 ##################################################
 
+variable "vpc_cidr_block" {
+  type        = string
+  description = "CIDR range for the VPC"
+}
 variable "azs" {
   type        = list(string)
   description = "List of availability zones in Ireland region"
