@@ -74,7 +74,7 @@ def s3_recursive_delete(bucket, prefix, s3_client=s3) -> None:
     paginator = s3_client.get_paginator("list_objects_v2")
     pages = paginator.paginate(Bucket=bucket, Prefix=prefix)
 
-    delete_us = dict(Objects=[])
+    delete_us: dict = dict(Objects=[])
     for item in pages.search("Contents"):
         delete_us["Objects"].append(dict(Key=item["Key"]))
 
