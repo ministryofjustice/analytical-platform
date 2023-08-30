@@ -70,7 +70,7 @@ def handler(event, context):
     logger.info(f"amz_date: {amz_date}")
     logger.info(f"md5: {md5}")
     logger.info(f"uuid_string: {uuid_string}")
-    
+
     # Check the data product has been registered, ie has associated code or metadata in s3
     data_product_registration = s3.list_objects_v2(
         Bucket=bucket_name, Prefix=f"code/{database}"

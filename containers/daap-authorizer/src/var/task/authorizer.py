@@ -3,7 +3,6 @@ import os
 
 from data_platform_logging import DataPlatformLogger
 
-
 logger = DataPlatformLogger(
     extra={
         "image_version": os.getenv("VERSION", "unknown"),
