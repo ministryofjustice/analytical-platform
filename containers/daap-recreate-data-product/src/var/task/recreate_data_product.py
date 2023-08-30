@@ -87,8 +87,9 @@ def s3_recursive_delete(bucket, prefix, s3_client=s3) -> None:
 
     # delete remaining
     if len(delete_us["Objects"]):
+        number_of_files = len(delete_us["Objects"])
         s3_client.delete_objects(Bucket=bucket, Delete=delete_us)
-        logger.info(f"deleted {len(delete_us)} data files from {prefix}")
+        logger.info(f"deleted {number_of_files} data files from {prefix}")
 
 
 def get_data_product_pages(
