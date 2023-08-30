@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] 2023-08-30
+
+### Changed
+
+- Switched to Modernisation Platform's OIDC role
+
 ## [1.1.1]
 
 ### Changed
