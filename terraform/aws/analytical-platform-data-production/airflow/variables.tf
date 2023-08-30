@@ -20,6 +20,17 @@ variable "vpc_cidr_block" {
   type        = string
   description = "CIDR range for the VPC"
 }
+
+variable "noms_live_dead_end_cidr_block" {
+  type        = string
+  description = "CIDR range for NOMS live"
+}
+
+variable "modernisation_platform_cidr_block" {
+  type        = string
+  description = "CIDR range for Modernisation Platform"
+}
+
 variable "azs" {
   type        = list(string)
   description = "List of availability zones in Ireland region"
@@ -34,3 +45,9 @@ variable "public_subnet_cidrs" {
   type        = list(string)
   description = "List of public subnet CIDR ranges"
 }
+
+variable "transit_gateway_ids" {
+  type        = map(string)
+  description = "Map of transit gateway names to ids"
+}
+
