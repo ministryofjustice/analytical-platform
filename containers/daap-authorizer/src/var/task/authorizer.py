@@ -1,10 +1,18 @@
 import json
-import logging
 import os
 
+from data_platform_logging import DataPlatformLogger
+
+
+logger = DataPlatformLogger(
+    extra={
+        "image_version": os.getenv("VERSION", "unknown"),
+        "base_image_version": os.getenv("BASE_VERSION", "unknown"),
+    }
+)
 
 def handler(event, context):
-    logging.info(f"event: {event}")
+    logger.info(f"event: {event}")
 
     authorizationToken = json.dumps(event["authorizationToken"])
     characters_to_remove = '"[]"'

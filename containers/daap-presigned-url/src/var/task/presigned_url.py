@@ -63,7 +63,14 @@ def handler(event, context):
         ["content-length-range", 0, 5000000000],
     ]
 
+    logger.info(f"s3 bucket: {bucket_name}")
     logger.info(f"s3 key: {file_name}")
+    logger.info(f"database: {database}")
+    logger.info(f"table: {table}")
+    logger.info(f"amz_date: {amz_date}")
+    logger.info(f"md5: {md5}")
+    logger.info(f"uuid_string: {uuid_string}")
+    
 
     # Check the data product has been registered, ie has associated code or metadata in s3
     data_product_registration = s3.list_objects_v2(
