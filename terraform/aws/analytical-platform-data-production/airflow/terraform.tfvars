@@ -23,6 +23,13 @@ tags = {
 # Network
 ##################################################
 vpc_cidr_block       = "10.200.0.0/16"
+noms_live_dead_end   = "10.40.0.0/18"
 azs                  = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
 private_subnet_cidrs = ["10.200.20.0/24", "10.200.21.0/24", "10.200.22.0/24"]
 public_subnet_cidrs  = ["10.200.10.0/24", "10.200.11.0/24", "10.200.12.0/24"]
+
+
+transit_gateway_ids = {
+  "airflow-dev-cloud-platform" = "tgw-009e14703041026a5"
+  "airflow-dev-moj"            = "tgw-0e7b982ea47c28fba"
+}

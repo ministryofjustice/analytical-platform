@@ -71,7 +71,7 @@ resource "aws_route_table" "airflow_dev_public" {
     gateway_id = aws_internet_gateway.airflow_dev.id
   }
   route { # known dead end to noms-live
-    cidr_block = "10.40.0.0/18"
+    cidr_block = var.noms_live_dead_end
     gateway_id = aws_internet_gateway.airflow_dev.id
   }
 
@@ -96,11 +96,11 @@ resource "aws_route_table" "airflow_dev_private" {
   }
   route {
     cidr_block         = "10.26.0.0/15"
-    transit_gateway_id = "tgw-0e7b982ea47c28fba"
+    transit_gateway_id = var.transit_gateway_ids["airflow-dev-moj"]
   }
   route { # known dead end to noms-live
-    cidr_block         = "10.40.0.0/18"
-    transit_gateway_id = "tgw-0e7b982ea47c28fba"
+    cidr_block         = var.noms_live_dead_end
+    transit_gateway_id = var.transit_gateway_ids["airflow-dev-moj"]
   }
 
   tags = {
@@ -115,12 +115,8 @@ resource "aws_route_table_association" "airflow_dev_private_route_table_assoc" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_dev_cloud_platform" {
-  subnet_ids = [
-    aws_subnet.private_subnet[0].id,
-    aws_subnet.private_subnet[1].id,
-    aws_subnet.private_subnet[2].id,
-  ]
-  transit_gateway_id = "tgw-009e14703041026a5"
+  subnet_ids         = aws_subnet.private_subnet[*].id
+  transit_gateway_id = var.transit_gateway_ids["airflow-dev-cloud-platform"]
   vpc_id             = aws_vpc.airflow_dev.id
   tags = {
     Name = "airflow-dev-cloud-platform"
@@ -128,12 +124,8 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_dev_cloud_platform" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_dev_moj" {
-  subnet_ids = [
-    aws_subnet.private_subnet[0].id,
-    aws_subnet.private_subnet[1].id,
-    aws_subnet.private_subnet[2].id,
-  ]
-  transit_gateway_id = "tgw-0e7b982ea47c28fba"
+  subnet_ids         = aws_subnet.private_subnet[*].id
+  transit_gateway_id = var.transit_gateway_ids["airflow-dev-moj"]
   vpc_id             = aws_vpc.airflow_dev.id
 
   tags = {
