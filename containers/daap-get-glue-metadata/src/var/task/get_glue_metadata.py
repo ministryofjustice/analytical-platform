@@ -1,3 +1,4 @@
+import os
 import json
 
 import boto3
@@ -9,6 +10,7 @@ logger = DataPlatformLogger(
         "base_image_version": os.getenv("BASE_VERSION", "unknown"),
     }
 )
+
 
 def handler(event, context):
     database = event["queryStringParameters"]["database"]

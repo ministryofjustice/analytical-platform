@@ -11,6 +11,7 @@ logger = DataPlatformLogger(
     }
 )
 
+
 def handler(event, context):
     logger.info(f"event: {event}")
 
