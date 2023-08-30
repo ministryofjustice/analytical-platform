@@ -41,8 +41,9 @@ def handler(event, context):
     if not any(data_product_tables):
         logger.info(f"No tables found for data product {data_product_to_recreate}")
     for table in data_product_tables:
-        glue.delete_table(DatabaseName=data_product_to_recreate, Name=table["Name"])
-        logger.info(f"Deleted glue table {data_product_to_recreate}.{table}")
+        table_name = table["Name"]
+        glue.delete_table(DatabaseName=data_product_to_recreate, Name=table_name)
+        logger.info(f"Deleted glue table {data_product_to_recreate}.{table_name}")
     # Remove curated data files for that data product
     s3_recursive_delete(
         bucket=curated_data_bucket,
