@@ -34,3 +34,5 @@ transit_gateway_ids = {
   "airflow-dev-cloud-platform" = "tgw-009e14703041026a5"
   "airflow-dev-moj"            = "tgw-0e7b982ea47c28fba"
 }
+
+dev_eks_role_id = "airflow-dev-eksRole-role-211908c"

@@ -28,3 +28,11 @@ resource "aws_iam_role" "airflow_dev_execution_role" {
     policy = data.aws_iam_policy_document.airflow_dev_execution_role_policy.json
   }
 }
+
+
+resource "aws_iam_role" "airflow_dev_cluster_role" {
+  name                = var.dev_eks_role_id
+  description         = "Role for EKS to manage clusters for Airflow dev"
+  assume_role_policy  = data.aws_iam_policy_document.airflow_dev_eks_assume_role_policy.json
+  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"]
+}

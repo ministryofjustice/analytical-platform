@@ -51,3 +51,7 @@ variable "transit_gateway_ids" {
   description = "Map of transit gateway names to ids"
 }
 
+variable "dev_eks_role_id" {
+  type        = string
+  description = "ID of role used by EKS cluster for Airflow-dev"
+}

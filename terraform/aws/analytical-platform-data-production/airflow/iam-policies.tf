@@ -111,3 +111,17 @@ data "aws_iam_policy_document" "airflow_dev_execution_assume_role_policy" {
     actions = ["sts:AssumeRole"]
   }
 }
+
+data "aws_iam_policy_document" "airflow_dev_eks_assume_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    principals {
+      type = "Service"
+      identifiers = [
+        "eks.amazonaws.com"
+      ]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+}
