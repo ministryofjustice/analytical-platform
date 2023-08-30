@@ -1,5 +1,5 @@
-import os
 import json
+import os
 
 import boto3
 from data_platform_logging import DataPlatformLogger
