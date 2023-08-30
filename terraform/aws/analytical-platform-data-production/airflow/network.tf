@@ -113,3 +113,30 @@ resource "aws_route_table_association" "airflow_dev_private_route_table_assoc" {
   subnet_id      = aws_subnet.private_subnet[count.index].id
   route_table_id = aws_route_table.airflow_dev_private[count.index].id
 }
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_dev_cloud_platform" {
+  subnet_ids = [
+    aws_subnet.private_subnet[0].id,
+    aws_subnet.private_subnet[1].id,
+    aws_subnet.private_subnet[2].id,
+  ]
+  transit_gateway_id = "tgw-009e14703041026a5"
+  vpc_id             = aws_vpc.airflow_dev.id
+  tags = {
+    Name = "airflow-dev-cloud-platform"
+  }
+}
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_dev_moj" {
+  subnet_ids = [
+    aws_subnet.private_subnet[0].id,
+    aws_subnet.private_subnet[1].id,
+    aws_subnet.private_subnet[2].id,
+  ]
+  transit_gateway_id = "tgw-0e7b982ea47c28fba"
+  vpc_id             = aws_vpc.airflow_dev.id
+
+  tags = {
+    Name = "airflow-dev-moj"
+  }
+}
