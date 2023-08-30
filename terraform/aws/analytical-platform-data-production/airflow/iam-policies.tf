@@ -111,3 +111,41 @@ data "aws_iam_policy_document" "airflow_dev_execution_assume_role_policy" {
     actions = ["sts:AssumeRole"]
   }
 }
+
+data "aws_iam_policy_document" "airflow_dev_cloudwatch_logs_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    actions = [
+      "logs:PutLogEvents",
+      "logs:DescribeLogStreams",
+      "logs:DescribeLogGroups",
+      "logs:CreateLogStream",
+      "logs:CreateLogGroup"
+    ]
+    resources = ["*"]
+  }
+}
+data "aws_iam_policy_document" "airflow_dev_cloudwatch_logs_assume_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    principals {
+      type = "Service"
+      identifiers = [
+        "vpc-flow-logs.amazonaws.com"
+      ]
+    }
+    actions = ["sts:AssumeRole"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = ["593291632749"]
+    }
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = ["arn:aws:ec2:eu-west-1:593291632749:vpc-flow-log/*"]
+    }
+  }
+}

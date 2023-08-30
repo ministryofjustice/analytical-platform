@@ -28,3 +28,14 @@ resource "aws_iam_role" "airflow_dev_execution_role" {
     policy = data.aws_iam_policy_document.airflow_dev_execution_role_policy.json
   }
 }
+
+resource "aws_iam_role" "airflow_dev_flow_log_role" {
+  name               = "airflow-dev-flow-log-role"
+  description        = "Flow log role for Airflow dev"
+  assume_role_policy = data.aws_iam_policy_document.airflow_dev_cloudwatch_logs_assume_role_policy.json
+
+  inline_policy {
+    name   = "airflow-dev-cloudwatch-logs-role-policy"
+    policy = data.aws_iam_policy_document.airflow_dev_cloudwatch_logs_role_policy.json
+  }
+}

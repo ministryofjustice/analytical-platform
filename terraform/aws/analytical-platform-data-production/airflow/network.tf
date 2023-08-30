@@ -113,3 +113,23 @@ resource "aws_route_table_association" "airflow_dev_private_route_table_assoc" {
   subnet_id      = aws_subnet.private_subnet[count.index].id
   route_table_id = aws_route_table.airflow_dev_private[count.index].id
 }
+
+resource "aws_cloudwatch_log_group" "airflow_dev_vpc_flow_log_group" {
+  name = "airflow-dev-vpc-flow-log-group"
+}
+
+resource "aws_flow_log" "airflow_dev" {
+  iam_role_arn    = aws_iam_role.airflow_dev_flow_log_role.arn
+  log_destination = aws_cloudwatch_log_group.airflow_dev_vpc_flow_log_group.arn
+  traffic_type    = "ALL" # ???
+  vpc_id          = aws_vpc.airflow_dev.id
+}
+# flow log components
+# │  ├─ aws:ec2/flowLog:FlowLog                                    airflow-dev
+# │  │     ID: fl-0f0649a3bb58c8feb
+
+# ├─ aws:cloudwatch/logGroup:LogGroup                              airflow-dev-vpc-flow-log
+# │     ID: airflow-dev-vpc-flow-log
+
+# ├─ aws:iam/role:Role                                             airflow-dev-flow-log-role
+# │     ID: airflow-dev-flow-log-role
