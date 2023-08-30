@@ -29,11 +29,10 @@ def handler(event, context):
     logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
 
     # Check data product has associated data
-    data_product_contents = get_data_product_contents(
+    data_product_pages = get_data_product_pages(
         bucket=raw_data_bucket,
         data_product_prefix=raw_prefix,
     )
-    print(data_product_contents)
 
     # Drop existing athena tables for that data product
     glue = boto3.client("glue")
@@ -53,14 +52,14 @@ def handler(event, context):
     # Feed all data files through the load process again. Curated files are recreated.
     aws_lambda = boto3.client("lambda")
     count = 0
-    for file in data_product_contents:
+    for item in data_product_pages.search("Contents"):
         if count == 1000:
             # Wait 5 mins for other invocations to finish
             time.sleep(360)
             count = 0
         count += 1
 
-        key = file["Key"]
+        key = item["Key"]
         payload = f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}}, "object":{{"key":"{key}"}}}}}}'
         aws_lambda.invoke(
             FunctionName=athena_load_lambda, InvocationType="Event", Payload=payload
@@ -91,14 +90,16 @@ def s3_recursive_delete(bucket, prefix, s3_client=s3) -> None:
         logger.info(f"deleted {len(delete_us)} data files from {prefix}")
 
 
-def get_data_product_contents(
+def get_data_product_pages(
     bucket, data_product_prefix, s3_client=s3, log_bucket=log_bucket
 ) -> list[dict]:
-    s3_response = s3_client.list_objects_v2(Bucket=bucket, Prefix=data_product_prefix)
-    data_product_contents = s3_response.get("Contents", [])
-    if not any(data_product_contents):
-        error_text = f"No data product found for {data_product_prefix}"
-        logger.error(error_text)
-        logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
-        raise ValueError(error_text)
-    return data_product_contents
+    paginator = s3_client.get_paginator("list_objects_v2")
+    pages = paginator.paginate(Bucket=bucket, Prefix=data_product_prefix)
+    # An empty page in the paginator only happens when no files exist
+    for page in pages:
+        if page["KeyCount"] == 0:
+            error_text = f"No data product found for {data_product_prefix}"
+            logger.error(error_text)
+            logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
+            raise ValueError(error_text)
+    return pages

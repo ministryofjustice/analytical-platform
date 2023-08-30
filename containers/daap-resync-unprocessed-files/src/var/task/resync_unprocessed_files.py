@@ -29,15 +29,14 @@ def handler(event, context):
     logger.info(f"Curated prefix: {curated_prefix}")
     logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
 
-    # Check data product has associated data
-    data_product_contents = get_data_product_contents(
+    # Check data product has associated raw data
+    raw_pages = get_data_product_pages(
         bucket=raw_data_bucket,
         data_product_prefix=raw_prefix,
     )
 
     # Find extraction timestamps in the raw area, and not in the curated area
     paginator = s3.get_paginator("list_objects_v2")
-    raw_pages = paginator.paginate(Bucket=raw_data_bucket, Prefix=raw_prefix)
     curated_pages = paginator.paginate(
         Bucket=curated_data_bucket, Prefix=curated_prefix
     )
@@ -85,14 +84,16 @@ def handler(event, context):
     logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
 
 
-def get_data_product_contents(
+def get_data_product_pages(
     bucket, data_product_prefix, s3_client=s3, log_bucket=log_bucket
 ) -> list[dict]:
-    s3_response = s3_client.list_objects_v2(Bucket=bucket, Prefix=data_product_prefix)
-    data_product_contents = s3_response.get("Contents", [])
-    if not any(data_product_contents):
-        error_text = f"No data product found for {data_product_prefix}"
-        logger.error(error_text)
-        logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
-        raise ValueError(error_text)
-    return data_product_contents
+    paginator = s3_client.get_paginator("list_objects_v2")
+    pages = paginator.paginate(Bucket=bucket, Prefix=data_product_prefix)
+    # An empty page in the paginator only happens when no files exist
+    for page in pages:
+        if page["KeyCount"] == 0:
+            error_text = f"No data product found for {data_product_prefix}"
+            logger.error(error_text)
+            logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
+            raise ValueError(error_text)
+    return pages
