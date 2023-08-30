@@ -21,9 +21,14 @@ variable "vpc_cidr_block" {
   description = "CIDR range for the VPC"
 }
 
-variable "noms_live_dead_end" {
+variable "noms_live_dead_end_cidr_block" {
   type        = string
   description = "CIDR range for NOMS live"
+}
+
+variable "modernisation_platform_cidr_block" {
+  type        = string
+  description = "CIDR range for Modernisation Platform"
 }
 
 variable "azs" {

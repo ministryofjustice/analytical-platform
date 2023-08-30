@@ -71,7 +71,7 @@ resource "aws_route_table" "airflow_dev_public" {
     gateway_id = aws_internet_gateway.airflow_dev.id
   }
   route { # known dead end to noms-live
-    cidr_block = var.noms_live_dead_end
+    cidr_block = var.noms_live_dead_end_cidr_block
     gateway_id = aws_internet_gateway.airflow_dev.id
   }
 
@@ -95,11 +95,11 @@ resource "aws_route_table" "airflow_dev_private" {
     nat_gateway_id = aws_nat_gateway.airflow_dev[count.index].id
   }
   route {
-    cidr_block         = "10.26.0.0/15"
+    cidr_block         = var.modernisation_platform_cidr_block
     transit_gateway_id = var.transit_gateway_ids["airflow-dev-moj"]
   }
   route { # known dead end to noms-live
-    cidr_block         = var.noms_live_dead_end
+    cidr_block         = var.noms_live_dead_end_cidr_block
     transit_gateway_id = var.transit_gateway_ids["airflow-dev-moj"]
   }
 
