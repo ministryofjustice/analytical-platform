@@ -112,6 +112,40 @@ data "aws_iam_policy_document" "airflow_dev_execution_assume_role_policy" {
   }
 }
 
+data "aws_iam_policy_document" "airflow_dev_cluster_autoscaler_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    actions = [
+      "ec2:DescribeInstanceTypes",
+      "autoscaling:TerminateInstanceInAutoScalingGroup",
+      "autoscaling:SetDesiredCapacity",
+      "autoscaling:DescribeTags",
+      "autoscaling:DescribeLaunchConfigurations",
+      "autoscaling:DescribeAutoScalingInstances",
+      "autoscaling:DescribeAutoScalingGroups"
+    ]
+    resources = ["*"]
+  }
+
+}
+
+data "aws_iam_policy_document" "airflow_dev_cluster_autoscaler_assume_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::593291632749:role/airflow-dev-node-instance-role"]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+}
+
 data "aws_iam_policy_document" "airflow_dev_cloudwatch_logs_role_policy" {
   statement {
     sid    = ""
