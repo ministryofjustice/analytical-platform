@@ -113,20 +113,47 @@ data "aws_iam_policy_document" "airflow_dev_execution_assume_role_policy" {
 }
 
 
-resource "aws_iam_role" "airflow_dev_node_instance_role" {
-  name               = "airflow-dev-node-instance-role"
-  description        = "Node execution role for Airflow dev"
-  assume_role_policy = data.aws_iam_policy_document.airflow_dev_node_instance_assume_role_policy.json
-  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
-    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
-    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
-    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+# flow log policy
 
-
-  ]
-
-  inline_policy {
-    name   = "airflow-dev-node-instance-role-policy"
-    policy = data.aws_iam_policy_document.airflow_dev_node_instance_inline_role_policy.json
+data "aws_iam_policy_document" "airflow_dev_flow_log_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    actions = [
+      "logs:PutLogEvents",
+      "logs:DescribeLogStreams",
+      "logs:DescribeLogGroups",
+      "logs:CreateLogStream",
+      "logs:CreateLogGroup"
+    ]
+    resources = ["*"]
   }
+
+}
+
+
+data "aws_iam_policy_document" "airflow_dev_flow_log_assume_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    principals {
+      type = "Service"
+      identifiers = [
+        "vpc-flow-logs.amazonaws.com"
+      ]
+    }
+    actions = ["sts:AssumeRole"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = ["593291632749"]
+    }
+
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = ["arn:aws:ec2:eu-west-1:593291632749:vpc-flow-log/*"]
+    }
+  }
+
 }
