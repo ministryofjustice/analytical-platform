@@ -1,3 +1,4 @@
+<!-- markdownlint-disable -->
 ---
 name: Data Platform Story
 about: Create new Data Platform story
