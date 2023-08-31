@@ -1,6 +1,6 @@
 resource "aws_eks_cluster" "airflow_dev_eks_cluster" {
   name     = "airflow-dev"
-  role_arn = aws_iam_role.airflow_dev_cluster_role.arn
+  role_arn = var.dev_eks_role_arn
   enabled_cluster_log_types = ["api",
     "audit",
     "authenticator",
@@ -10,7 +10,9 @@ resource "aws_eks_cluster" "airflow_dev_eks_cluster" {
   version = "1.24"
 
   vpc_config {
-    subnet_ids = [aws_subnet.private_subnet[0].id, aws_subnet.private_subnet[1].id, aws_subnet.private_subnet[2].id]
+    subnet_ids          = aws_subnet.private_subnet[*].id
+    public_access_cidrs = ["0.0.0.0/0"]
+    security_group_ids  = ["sg-0bcd3cf5dc6d7b314"]
   }
 }
 
