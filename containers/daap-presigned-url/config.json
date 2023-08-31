@@ -1,9 +1,9 @@
 {
   "name": "daap-presigned-url",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "registry": "ecr",
   "ecr": {
-    "role": "arn:aws:iam::013433889002:role/data-platform-gha",
+    "role": "arn:aws:iam::013433889002:role/modernisation-platform-oidc-cicd",
     "account": "374269020027",
     "region": "eu-west-2",
     "repository": "data-platform-presigned-url-lambda-ecr-repo"
