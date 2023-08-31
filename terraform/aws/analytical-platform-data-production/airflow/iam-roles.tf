@@ -75,7 +75,7 @@ resource "aws_iam_role" "airflow_dev_node_instance_role" {
 
 resource "aws_iam_role" "airflow_dev_default_pod_role" {
   name               = "airflow-dev-default-pod-role"
-  description        = "Defualt pod role for Airflow dev"
+  description        = "Default pod role for Airflow dev"
   assume_role_policy = data.aws_iam_policy_document.airflow_dev_default_pod_role_policy.json
 
 }
