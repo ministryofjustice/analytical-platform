@@ -132,3 +132,25 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_dev_moj" {
     Name = "airflow-dev-moj"
   }
 }
+
+
+resource "aws_security_group" "airflow_dev_security_group" {
+  name        = var.dev_cluster_sg_name
+  description = "Managed by Pulumi"
+  vpc_id      = aws_vpc.airflow_dev.id
+  ingress {
+    description     = "Allow pods to communicate with the cluster API Server"
+    protocol        = "tcp"
+    from_port       = 443
+    to_port         = 443
+    security_groups = [var.dev_node_sg_id]
+  }
+  egress {
+    description = "Allow internet access."
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+  }
+}
+

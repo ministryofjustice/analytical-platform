@@ -51,3 +51,17 @@ variable "transit_gateway_ids" {
   description = "Map of transit gateway names to ids"
 }
 
+variable "dev_eks_role_arn" {
+  type        = string
+  description = "ARN of role used by EKS cluster for Airflow-Dev"
+}
+
+variable "dev_cluster_sg_name" {
+  type        = string
+  description = "Name of cluster security group for Airflow-Dev"
+}
+
+variable "dev_node_sg_id" {
+  type        = string
+  description = "ID of node security group for Airflow-Dev"
+}

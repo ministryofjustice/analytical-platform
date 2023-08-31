@@ -34,3 +34,9 @@ transit_gateway_ids = {
   "airflow-dev-cloud-platform" = "tgw-009e14703041026a5"
   "airflow-dev-moj"            = "tgw-0e7b982ea47c28fba"
 }
+
+dev_eks_role_arn = "arn:aws:iam::593291632749:role/airflow-dev-eksRole-role-211908c"
+
+dev_cluster_sg_name = "airflow-dev-eksClusterSecurityGroup-6a4dde4"
+
+dev_node_sg_id = "sg-01930457ae391c7f0"
