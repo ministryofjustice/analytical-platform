@@ -181,7 +181,7 @@ data "aws_iam_policy_document" "airflow_dev_flow_log_assume_policy" {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = ["593291632749"]
+      values   = [var.account_ids["analytical-platform-data-production"]]
     }
 
     condition {
