@@ -15,7 +15,7 @@ module "airflow_analytical_platform_development_iam_policy" {
 
   policy = data.aws_iam_policy_document.airflow_analytical_platform_development.json
 }
-
+# airflow execution policy
 data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
   statement {
     sid       = ""
@@ -112,6 +112,7 @@ data "aws_iam_policy_document" "airflow_dev_execution_assume_role_policy" {
   }
 }
 
+#airflow auto cluster policy
 data "aws_iam_policy_document" "airflow_dev_cluster_autoscaler_policy" {
   statement {
     sid    = ""
@@ -146,7 +147,9 @@ data "aws_iam_policy_document" "airflow_dev_cluster_autoscaler_assume_role_polic
   }
 }
 
-data "aws_iam_policy_document" "airflow_dev_cloudwatch_logs_role_policy" {
+# flow log policy
+
+data "aws_iam_policy_document" "airflow_dev_flow_log_role_policy" {
   statement {
     sid    = ""
     effect = "Allow"
@@ -159,8 +162,12 @@ data "aws_iam_policy_document" "airflow_dev_cloudwatch_logs_role_policy" {
     ]
     resources = ["*"]
   }
+
 }
-data "aws_iam_policy_document" "airflow_dev_cloudwatch_logs_assume_role_policy" {
+
+
+
+data "aws_iam_policy_document" "airflow_dev_flow_log_assume_policy" {
   statement {
     sid    = ""
     effect = "Allow"
@@ -176,10 +183,68 @@ data "aws_iam_policy_document" "airflow_dev_cloudwatch_logs_assume_role_policy" 
       variable = "aws:SourceAccount"
       values   = [var.account_ids["analytical-platform-data-production"]]
     }
+
     condition {
       test     = "ArnLike"
       variable = "aws:SourceArn"
       values   = ["arn:aws:ec2:eu-west-1:593291632749:vpc-flow-log/*"]
     }
   }
+
+}
+
+# airflow dev node instance policy
+
+data "aws_iam_policy_document" "airflow_dev_node_instance_inline_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+      resources = [
+        "arn:aws:iam::593291632749:role/airflow-dev-cluster-autoscaler-role",
+        "arn:aws:iam::593291632749:role/airflow*"
+      ]
+    actions = ["sts:AssumeRole"]
+  }
+
+}
+
+
+data "aws_iam_policy_document" "airflow_dev_node_instance_assume_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    principals {
+      type = "Service"
+      identifiers = [
+        "ec2.amazonaws.com",
+
+      ]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+
+}
+# airflow default pod policy
+
+
+data "aws_iam_policy_document" "airflow_dev_default_pod_assume_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    principals {
+      type = "Service"
+      identifiers = [
+        "ec2.amazonaws.com"
+      ]
+    }
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::593291632749:role/airflow-dev-node-instance-role"
+      ]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+
 }
