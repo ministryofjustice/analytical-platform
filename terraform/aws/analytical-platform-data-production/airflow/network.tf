@@ -143,3 +143,25 @@ resource "aws_flow_log" "airflow_dev" {
   traffic_type    = "ALL" # ???
   vpc_id          = aws_vpc.airflow_dev.id
 }
+
+
+resource "aws_security_group" "airflow_dev_security_group" {
+  name        = var.dev_cluster_sg_name
+  description = "Managed by Pulumi"
+  vpc_id      = aws_vpc.airflow_dev.id
+  ingress {
+    description     = "Allow pods to communicate with the cluster API Server"
+    protocol        = "tcp"
+    from_port       = 443
+    to_port         = 443
+    security_groups = [var.dev_node_sg_id]
+  }
+  egress {
+    description = "Allow internet access."
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+  }
+}
+
