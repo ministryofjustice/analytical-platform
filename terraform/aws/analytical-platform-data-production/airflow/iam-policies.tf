@@ -199,13 +199,10 @@ data "aws_iam_policy_document" "airflow_dev_node_instance_inline_role_policy" {
   statement {
     sid    = ""
     effect = "Allow"
-    principals {
-      type = "Service"
-      identifiers = [
+      resources = [
         "arn:aws:iam::593291632749:role/airflow-dev-cluster-autoscaler-role",
         "arn:aws:iam::593291632749:role/airflow*"
       ]
-    }
     actions = ["sts:AssumeRole"]
   }
 
