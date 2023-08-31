@@ -1,3 +1,4 @@
+<!-- markdownlint-disable -->
 ---
 name: Data Platform Feature Request
 about: Create new Data Platform Feature Request

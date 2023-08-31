@@ -1,3 +1,4 @@
+<!-- markdownlint-disable -->
 ---
 name: Data Platform Bug
 about: Create new Data Platform bug

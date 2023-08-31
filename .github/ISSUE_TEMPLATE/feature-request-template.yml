@@ -1,0 +1,38 @@
+name: Feature Request
+description: ✨ Create a Feature Request
+title: " ✨ <title>"
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      description: A clear and concise description of what the feature request is.
+      label: Describe the feature request.
+      value:
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      description: What are you working on?
+      label: Describe the context.
+      value:
+    validations:
+      required: false
+  - type: textarea
+    id: value-purpose
+    attributes:
+      description: Describe the value and purpose of the ticket.
+      label: Value / Purpose
+      value:
+    validations:
+      required: false
+  - type: input
+    id: user-types
+    attributes:
+      description: Please add the types of users impacted
+      placeholder: Joe Bloggs
+      label: User Types
+      value:
+    validations:
+      required: false
