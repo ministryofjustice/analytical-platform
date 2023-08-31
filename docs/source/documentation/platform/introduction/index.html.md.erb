@@ -8,51 +8,51 @@ weight: 0
 
 # <%= current_page.data.title %>
 
-The main reasons that support why the Data Platform will exist are to:
+>*Our vision is to connect people to the tooling, systems and data they need in a secure and supported environment to streamline the delivery of the Ministry of Justice's (MoJ) digital and data strategies.*
 
-- Offer better tools for data analysis
-- Avoid siloed data, frequently hard to find and access
-- Enable analysis beyond Excel, to improve scalability, traceability, reproducibility
-- Make it easier for frequent update of data analysis
-- Offer a single source of truth for data/business entities, used to feed decisions at different levels
+The Data Platform is a data analysis platform currently in development at the Ministry of Justice, within the [Platforms & Architecture team](https://peoplefinder.service.gov.uk/teams/platforms-architecture-data-platform). 
 
-Side effects
+It will either integrate or replace the functionality of the [Analytical Platform](https://user-guidance.analytical-platform.service.justice.gov.uk/). We would find a suitable place for Analytical Platform users to migrate before making this decision.
 
-- Move out of deprecated and expensive legacy tech (SAS, etc)
-- Offer a cheaper solution
+We are developing the Data Platform because the Analytical Platform caters to Data Analysts but does not scale to the needs of people who work with data in other ways.
 
-## Mission
+## Reasons and benefits
 
-> The mission of the data platform is to connect the right people, systems, and data to improve justice outcomes.
+The main reasons for developing the Data Platform are to:
 
-The purpose of the Data Platform is to enable consumers of data to connect directly with producers of data in order to make better decisions. These producers and consumers may be internal or external to the MoJ.
+- Meet the needs of Data Producers and Data Users – internal or external – to provide new ways of working with the Ministry of Justice's data:
+    - **Data Producers** includes Digital Product Owners, Service Owners and System Owners
+    - **Data Users** may perform any of: data analysis, data modelling, data science, management information (MI) reporting, performance reporting, statistics publication
+- Make it easier to find, access and utilise data than is currently possible, to improve the cost and pace at which project teams can deliver while reducing data siloes
+- Replace legacy technology that is costly
+- Offer a single source of truth for entities that influence decisions across government, to ensure consistency, accuracy and traceability of our data
 
-> The goal of the data platform is to offer means for data sharing between services*. A secondary goal is to enable data analysis.
+Streamlining data sharing and analysis would be the main benefits of having the Data Platform. By data sharing, we mean combining data sets between offerings such as applications, systems and services rather than via email or dashboards.
 
-\* ”services” here is used loosely and represents other systems, applications, products, etc.
+## Example use case
 
-- From an **operational** point of view, this data is shared by one system and consumed by a different system, in order to offer some functionality. This is not sharing via email or in dashboards.
+The following is an example use case of how the Data Platform might benefit users.
 
-    For example there could be a system that combines the number of available social housing with number of people being released from prison that require social housing, and potentially show a warning if there's not enough housing. This is a made up example to show how data from very independent services could be consumed by a third service, in order to provide richer functionality.
+There are two services that separate teams manage: Service A and Service B.
 
-- From an **analytical** point of view, this data may be available for processing and analysis on the Analytical Platform.
+- Service A contains data on available social housing
+- Service B contains data on the number of people being released from prison that require social housing
 
-    This means enabling data processing, without doing the data processing itself. In other words, teams should be able to <span style="color: rgb(54,179,126);">use the data platform on a self service way</span> and use it to process data available in the platform, in order to make it available for other services and for data visualisation.
+You could use the Data Platform to create a system that shares the data from both services and shows a warning if there is not enough housing available.
 
-From a high level point of view, this is what the Data Platform would look like:
+You could then upload the combined data to the Analytical Platform for analysis and modelling.
 
-![Data platform general diagram](../images/what-is-the-data-platform.png "Data platform general diagram")
+In other words, you could use the two platforms together to self-serve data sharing, processing and analysis. This reduces the time it currently takes to manually access and combine data sets before you can analyse them.
 
-### Conclusions
+## Design and development
 
-Given the goal to offer means for data sharing between services, it must be possible for data to be registered in the data platform and also discovered. In other words, a person responsible for an independent system must be able to search for available data on the platform, and must be able to easily add their data to the platform, making it available for others to find and use.
+We are currently in the Discovery phase of developing the Data Platform. 
 
-<span style="color: #4C9AFF">Data has to be intentionally shared.</span> The platform is not a backup for databases, nor a target for a database dump, where everything available from a system is made available. Instead, data must be curated before being made available to the platform. Because it needs to be shared intentionally, the person that makes the data available in the platform would usually have <span style="color: #4C9AFF">domain knowledge about that data</span>.
+Taking a user-centred design approach, we are currently conducting user research to help us develop two key areas of the Data Platform:
 
-## Analytical Platform
+- **Data Catalogue**, which aims to improve data discoverability beyond the Analytical Platform's [Data Discovery tool](https://data-discovery-tool.analytical-platform.service.justice.gov.uk/)
+- **Data as a Product**, which would provide a new way to send data from a source to the platform, and manage that data; we call this the **data product** approach
 
-The Analytical Platform is part of the Data Platform.
+The insights we gather influence the Data Platform's requirements and design. This is to ensure we build a platform that meets the needs of its intended users.
 
-The Data Platform contains a data mesh. The Analytical Platform isn’t part of the data mesh.
-
-![Data platform overview](../images/data-platform-overview.png "Data platform overview")
+We plan to communicate updates about the Data Platform's development through our blog. If you have any questions, see the Contact page for ways to get in touch with us.
