@@ -17,7 +17,7 @@ module "airflow_analytical_platform_development_iam_role" {
     }
   }
 }
-
+# airflow execution role
 resource "aws_iam_role" "airflow_dev_execution_role" {
   name               = "airflow-dev-execution-role"
   description        = "Execution role for Airflow dev"
@@ -28,7 +28,7 @@ resource "aws_iam_role" "airflow_dev_execution_role" {
     policy = data.aws_iam_policy_document.airflow_dev_execution_role_policy.json
   }
 }
-
+# airflow auto cluster role
 resource "aws_iam_role" "airflow_dev_cluster_autoscaler_role" {
   name               = "airflow-dev-cluster-autoscaler-role"
   description        = "Cluster Autoscaler role for Airflow dev"
@@ -39,3 +39,42 @@ resource "aws_iam_role" "airflow_dev_cluster_autoscaler_role" {
     policy = data.aws_iam_policy_document.airflow_dev_cluster_autoscaler_policy.json
   }
 }
+
+# flow log role
+resource "aws_iam_role" "airflow_dev_flow_log_role" {
+  name               = "airflow-dev-flow-log-role"
+  description        = "Flow log role for Airflow dev"
+  assume_role_policy = data.aws_iam_policy_document.airflow_dev_flow_log_assume_policy.json
+
+  inline_policy {
+    name   = "airflow-dev-flow-log-policy"
+    policy = data.aws_iam_policy_document.airflow_dev_flow_log_role_policy.json
+  }
+}
+# airflow node instace role
+
+resource "aws_iam_role" "airflow_dev_node_instance_role" {
+  name               = "airflow-dev-node-instance-role"
+  description        = "Node execution role for Airflow dev"
+  assume_role_policy = data.aws_iam_policy_document.airflow_dev_node_instance_assume_role_policy.json
+  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  ]
+
+  inline_policy {
+    name   = "airflow-dev-node-instance-role-policy"
+    policy = data.aws_iam_policy_document.airflow_dev_node_instance_inline_role_policy.json
+  }
+}
+
+# airflow default pod role
+
+resource "aws_iam_role" "airflow_dev_default_pod_role" {
+  name               = "airflow-dev-default-pod-role"
+  description        = "Default pod role for Airflow dev"
+  assume_role_policy = data.aws_iam_policy_document.airflow_dev_default_pod_assume_role_policy.json
+
+}
+
