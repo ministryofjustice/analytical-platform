@@ -227,7 +227,7 @@ data "aws_iam_policy_document" "airflow_dev_node_instance_assume_role_policy" {
 # airflow default pod policy
 
 
-data "aws_iam_policy_document" "airflow_dev_default_pod_role_policy" {
+data "aws_iam_policy_document" "airflow_dev_default_pod_assume_role_policy" {
   statement {
     sid    = ""
     effect = "Allow"
