@@ -2,7 +2,7 @@ module "cluster_autoscaler_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.28.0"
+  version = "5.29.2"
 
   role_name_prefix                 = "cluster-autoscaler"
   attach_cluster_autoscaler_policy = true
@@ -20,7 +20,7 @@ module "ebs_csi_driver_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.28.0"
+  version = "5.29.2"
 
   role_name_prefix      = "ebs-csi-driver"
   attach_ebs_csi_policy = true
@@ -37,7 +37,7 @@ module "efs_csi_driver_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.28.0"
+  version = "5.29.2"
 
   role_name_prefix      = "efs-csi-driver"
   attach_efs_csi_policy = true
@@ -54,7 +54,7 @@ module "load_balancer_controller_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.28.0"
+  version = "5.29.2"
 
   role_name_prefix                       = "load-balancer-controller"
   attach_load_balancer_controller_policy = true
@@ -71,7 +71,7 @@ module "cert_manager_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.28.0"
+  version = "5.29.2"
 
   role_name_prefix              = "cert-manager"
   attach_cert_manager_policy    = true
@@ -89,7 +89,7 @@ module "external_dns_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.28.0"
+  version = "5.29.2"
 
   role_name_prefix              = "external-dns"
   attach_external_dns_policy    = true
@@ -107,7 +107,7 @@ module "amazon_managed_prometheus_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.28.0"
+  version = "5.29.2"
 
   role_name_prefix = "amazon-managed-prometheus"
 
@@ -127,7 +127,7 @@ module "open_metadata_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.28.0"
+  version = "5.29.2"
 
   role_name_prefix = "open-metadata"
 
@@ -146,7 +146,7 @@ module "open_metadata_airflow_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.28.0"
+  version = "5.29.2"
 
   role_name_prefix = "open-metadata-airflow"
 
