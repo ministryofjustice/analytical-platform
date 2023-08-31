@@ -220,7 +220,7 @@ data "aws_iam_policy_document" "airflow_dev_node_instance_assume_role_policy" {
       type = "Service"
       identifiers = [
         "ec2.amazonaws.com",
-      
+
       ]
     }
     actions = ["sts:AssumeRole"]
