@@ -120,7 +120,7 @@ resource "aws_iam_policy" "karpenter_irsa" {
 
 module "iam_karpenter_controller_irsa" {
   source                         = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                        = "5.29.0"
+  version                        = "5.29.2"
   create_role                    = true
   role_name_prefix               = "karpenter_controller"
   provider_url                   = module.eks.cluster_oidc_issuer_url
