@@ -165,8 +165,6 @@ data "aws_iam_policy_document" "airflow_dev_flow_log_role_policy" {
 
 }
 
-
-
 data "aws_iam_policy_document" "airflow_dev_flow_log_assume_policy" {
   statement {
     sid    = ""
@@ -199,10 +197,10 @@ data "aws_iam_policy_document" "airflow_dev_node_instance_inline_role_policy" {
   statement {
     sid    = ""
     effect = "Allow"
-      resources = [
-        "arn:aws:iam::593291632749:role/airflow-dev-cluster-autoscaler-role",
-        "arn:aws:iam::593291632749:role/airflow*"
-      ]
+    resources = [
+      "arn:aws:iam::593291632749:role/airflow-dev-cluster-autoscaler-role",
+      "arn:aws:iam::593291632749:role/airflow*"
+    ]
     actions = ["sts:AssumeRole"]
   }
 
