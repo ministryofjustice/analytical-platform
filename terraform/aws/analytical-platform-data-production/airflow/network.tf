@@ -154,18 +154,3 @@ resource "aws_security_group" "airflow_dev_security_group" {
   }
 }
 
-# resource "aws_vpc_security_group_egress_rule" "airflow_dev_egress" {
-#   cidr_ipv4         = "0.0.0.0/0"
-#   ip_protocol       = "-1"
-#   security_group_id = aws_security_group.airflow_dev_security_group.id
-# }
-
-# resource "aws_vpc_security_group_ingress_rule" "airflow_dev_ingress" {
-#   security_group_id = aws_security_group.airflow_dev_security_group.id
-
-#   referenced_security_group_id = var.dev_node_sg_id
-#   ip_protocol                  = "TCP"
-#   from_port                    = 443
-#   to_port                      = 443
-#   description                  = "Allow pods to communicate with the cluster API Server"
-# }
