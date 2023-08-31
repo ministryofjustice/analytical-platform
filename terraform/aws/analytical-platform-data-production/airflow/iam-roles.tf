@@ -61,8 +61,6 @@ resource "aws_iam_role" "airflow_dev_node_instance_role" {
     "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-
-
   ]
 
   inline_policy {
