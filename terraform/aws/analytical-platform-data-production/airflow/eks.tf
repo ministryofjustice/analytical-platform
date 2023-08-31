@@ -59,8 +59,8 @@ resource "aws_eks_node_group" "dev_node_group_high_memory" {
   }
 
   taint {
-    key = "high-memory"
-    value = "true"
+    key    = "high-memory"
+    value  = "true"
     effect = "NO_SCHEDULE"
   }
 
