@@ -22,6 +22,7 @@ tags = {
 ##################################################
 # Network
 ##################################################
+
 vpc_cidr_block                    = "10.200.0.0/16"
 noms_live_dead_end_cidr_block     = "10.40.0.0/18"
 modernisation_platform_cidr_block = "10.26.0.0/15"
@@ -35,8 +36,10 @@ transit_gateway_ids = {
   "airflow-dev-moj"            = "tgw-0e7b982ea47c28fba"
 }
 
-dev_eks_role_arn = "arn:aws:iam::593291632749:role/airflow-dev-eksRole-role-211908c"
+##################################################
+# EKS Cluster
+##################################################
 
+dev_eks_role_arn    = "arn:aws:iam::593291632749:role/airflow-dev-eksRole-role-211908c"
 dev_cluster_sg_name = "airflow-dev-eksClusterSecurityGroup-6a4dde4"
-
-dev_node_sg_id = "sg-01930457ae391c7f0"
+dev_node_sg_id      = "sg-01930457ae391c7f0"

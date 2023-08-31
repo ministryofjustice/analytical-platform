@@ -144,7 +144,6 @@ resource "aws_flow_log" "airflow_dev" {
   vpc_id          = aws_vpc.airflow_dev.id
 }
 
-
 resource "aws_security_group" "airflow_dev_security_group" {
   name        = var.dev_cluster_sg_name
   description = "Managed by Pulumi"

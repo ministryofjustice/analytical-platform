@@ -15,7 +15,7 @@ module "airflow_analytical_platform_development_iam_policy" {
 
   policy = data.aws_iam_policy_document.airflow_analytical_platform_development.json
 }
-# airflow execution policy
+
 data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
   statement {
     sid       = ""
@@ -112,7 +112,6 @@ data "aws_iam_policy_document" "airflow_dev_execution_assume_role_policy" {
   }
 }
 
-#airflow auto cluster policy
 data "aws_iam_policy_document" "airflow_dev_cluster_autoscaler_policy" {
   statement {
     sid    = ""
@@ -146,8 +145,6 @@ data "aws_iam_policy_document" "airflow_dev_cluster_autoscaler_assume_role_polic
     actions = ["sts:AssumeRole"]
   }
 }
-
-# flow log policy
 
 data "aws_iam_policy_document" "airflow_dev_flow_log_role_policy" {
   statement {
@@ -191,8 +188,6 @@ data "aws_iam_policy_document" "airflow_dev_flow_log_assume_policy" {
 
 }
 
-# airflow dev node instance policy
-
 data "aws_iam_policy_document" "airflow_dev_node_instance_inline_role_policy" {
   statement {
     sid    = ""
@@ -205,7 +200,6 @@ data "aws_iam_policy_document" "airflow_dev_node_instance_inline_role_policy" {
   }
 
 }
-
 
 data "aws_iam_policy_document" "airflow_dev_node_instance_assume_role_policy" {
   statement {
@@ -222,8 +216,6 @@ data "aws_iam_policy_document" "airflow_dev_node_instance_assume_role_policy" {
   }
 
 }
-# airflow default pod policy
-
 
 data "aws_iam_policy_document" "airflow_dev_default_pod_assume_role_policy" {
   statement {
