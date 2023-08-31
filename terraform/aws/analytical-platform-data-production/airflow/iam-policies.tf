@@ -242,7 +242,7 @@ data "aws_iam_policy_document" "airflow_dev_default_pod_role_policy" {
     }
 
     principals {
-      type = "aws"
+      type = "AWS"
       identifiers = [
         "arn:aws:iam::593291632749:role/airflow-dev-node-instance-role"
       ]
