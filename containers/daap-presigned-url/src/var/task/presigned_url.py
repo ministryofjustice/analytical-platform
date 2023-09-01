@@ -83,6 +83,7 @@ def handler(event, context):
     logger.info(f"amz_date: {amz_date}")
     logger.info(f"md5: {md5}")
     logger.info(f"uuid_string: {uuid_string}")
+    logger.info(f"event: {event}")
 
     logger.write_log_dict_to_s3_json(bucket_name, **s3_security_opts)
 
