@@ -68,4 +68,3 @@ resource "aws_eks_node_group" "dev_node_group_high_memory" {
     high-memory = "true"
   }
 }
-
