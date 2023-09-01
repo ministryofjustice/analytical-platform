@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
     sid       = ""
     effect    = "Allow"
     actions   = ["airflow:PublishMetrics"]
-    resources = ["arn:aws:airflow:eu-west-1:593291632749:environment/dev"]
+    resources = ["arn:aws:airflow:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:environment/dev"]
   }
 
   statement {
@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
       "logs:CreateLogStream",
       "logs:CreateLogGroup"
     ]
-    resources = ["arn:aws:logs:eu-west-1:593291632749:log-group:airflow-dev-*"]
+    resources = ["arn:aws:logs:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:log-group:airflow-dev-*"]
   }
   statement {
     sid       = ""
@@ -82,7 +82,7 @@ data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
       "kms:DescribeKey",
       "kms:Decrypt"
     ]
-    not_resources = ["arn:aws:kms:*:593291632749:key/*"]
+    not_resources = ["arn:aws:kms:*:${var.account_ids["analytical-platform-data-production"]}:key/*"]
     condition {
       test     = "StringLike"
       variable = "kms:ViaService"
@@ -93,7 +93,7 @@ data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
     sid       = ""
     effect    = "Allow"
     actions   = ["eks:DescribeCluster"]
-    resources = ["arn:aws:eks:eu-west-1:593291632749:cluster/airflow-dev"]
+    resources = ["arn:aws:eks:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:cluster/airflow-dev"]
   }
 }
 
@@ -140,7 +140,7 @@ data "aws_iam_policy_document" "airflow_dev_cluster_autoscaler_assume_role_polic
     }
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::593291632749:role/airflow-dev-node-instance-role"]
+      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/airflow-dev-node-instance-role"]
     }
     actions = ["sts:AssumeRole"]
   }
@@ -182,7 +182,7 @@ data "aws_iam_policy_document" "airflow_dev_flow_log_assume_policy" {
     condition {
       test     = "ArnLike"
       variable = "aws:SourceArn"
-      values   = ["arn:aws:ec2:eu-west-1:593291632749:vpc-flow-log/*"]
+      values   = ["arn:aws:ec2:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:vpc-flow-log/*"]
     }
   }
 
@@ -193,8 +193,8 @@ data "aws_iam_policy_document" "airflow_dev_node_instance_inline_role_policy" {
     sid    = ""
     effect = "Allow"
     resources = [
-      "arn:aws:iam::593291632749:role/airflow-dev-cluster-autoscaler-role",
-      "arn:aws:iam::593291632749:role/airflow*"
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/airflow-dev-cluster-autoscaler-role",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/airflow*"
     ]
     actions = ["sts:AssumeRole"]
   }
@@ -231,7 +231,7 @@ data "aws_iam_policy_document" "airflow_dev_default_pod_assume_role_policy" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::593291632749:role/airflow-dev-node-instance-role"
+        "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/airflow-dev-node-instance-role"
       ]
     }
     actions = ["sts:AssumeRole"]
@@ -258,7 +258,7 @@ data "aws_iam_policy_document" "airflow_prod_execution_role_policy" {
     sid       = ""
     effect    = "Allow"
     actions   = ["airflow:PublishMetrics"]
-    resources = ["arn:aws:airflow:eu-west-1:593291632749:environment/prod"]
+    resources = ["arn:aws:airflow:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:environment/prod"]
   }
 
   statement {
@@ -290,7 +290,7 @@ data "aws_iam_policy_document" "airflow_prod_execution_role_policy" {
       "logs:CreateLogStream",
       "logs:CreateLogGroup"
     ]
-    resources = ["arn:aws:logs:eu-west-1:593291632749:log-group:airflow-prod-*"]
+    resources = ["arn:aws:logs:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:log-group:airflow-prod-*"]
   }
   statement {
     sid       = ""
@@ -320,7 +320,7 @@ data "aws_iam_policy_document" "airflow_prod_execution_role_policy" {
       "kms:DescribeKey",
       "kms:Decrypt"
     ]
-    not_resources = ["arn:aws:kms:*:593291632749:key/*"]
+    not_resources = ["arn:aws:kms:*:${var.account_ids["analytical-platform-data-production"]}:key/*"]
     condition {
       test     = "StringLike"
       variable = "kms:ViaService"
@@ -331,6 +331,6 @@ data "aws_iam_policy_document" "airflow_prod_execution_role_policy" {
     sid       = ""
     effect    = "Allow"
     actions   = ["eks:DescribeCluster"]
-    resources = ["arn:aws:eks:eu-west-1:593291632749:cluster/airflow-prod"]
+    resources = ["arn:aws:eks:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:cluster/airflow-prod"]
   }
 }
