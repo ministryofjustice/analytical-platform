@@ -134,9 +134,9 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_dev_moj" {
 }
 
 resource "aws_cloudwatch_log_group" "airflow_dev_vpc_flow_log" {
-  name = "airflow-dev-vpc-flow-log"
+  name              = "airflow-dev-vpc-flow-log"
   retention_in_days = 400
-  skip_destroy = true
+  skip_destroy      = true
 }
 
 resource "aws_flow_log" "airflow_dev" {
