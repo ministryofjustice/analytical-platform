@@ -140,8 +140,12 @@ resource "aws_cloudwatch_log_group" "airflow_dev_vpc_flow_log" {
 resource "aws_flow_log" "airflow_dev" {
   iam_role_arn    = aws_iam_role.airflow_dev_flow_log_role.arn
   log_destination = aws_cloudwatch_log_group.airflow_dev_vpc_flow_log.arn
-  traffic_type    = "ALL" # ???
+  traffic_type    = "ALL"
   vpc_id          = aws_vpc.airflow_dev.id
+
+  tags = {
+    Name = "airflow-dev"
+  }
 }
 
 resource "aws_security_group" "airflow_dev_security_group" {
