@@ -133,13 +133,13 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_dev_moj" {
   }
 }
 
-resource "aws_cloudwatch_log_group" "airflow_dev_vpc_flow_log_group" {
+resource "aws_cloudwatch_log_group" "airflow_dev_vpc_flow_log" {
   name = "airflow-dev-vpc-flow-log-group"
 }
 
 resource "aws_flow_log" "airflow_dev" {
   iam_role_arn    = aws_iam_role.airflow_dev_flow_log_role.arn
-  log_destination = aws_cloudwatch_log_group.airflow_dev_vpc_flow_log_group.arn
+  log_destination = aws_cloudwatch_log_group.airflow_dev_vpc_flow_log.arn
   traffic_type    = "ALL" # ???
   vpc_id          = aws_vpc.airflow_dev.id
 }
