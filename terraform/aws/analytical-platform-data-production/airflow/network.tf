@@ -134,7 +134,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_dev_moj" {
 }
 
 resource "aws_cloudwatch_log_group" "airflow_dev_vpc_flow_log" {
-  name = "airflow-dev-vpc-flow-log-group"
+  name = "airflow-dev-vpc-flow-log"
 }
 
 resource "aws_flow_log" "airflow_dev" {
