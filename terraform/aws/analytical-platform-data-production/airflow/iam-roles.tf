@@ -74,3 +74,15 @@ resource "aws_iam_role" "airflow_dev_default_pod_role" {
   assume_role_policy = data.aws_iam_policy_document.airflow_dev_default_pod_assume_role_policy.json
 
 }
+############################ AIRFLOW PRODUCTION INFRASTRUCTURE
+
+resource "aws_iam_role" "airflow_prod_execution_role" {
+  name               = "airflow-prod-execution-role"
+  description        = "Execution role for Airflow"
+  assume_role_policy = data.aws_iam_policy_document.airflow_prod_execution_assume_role_policy.json
+
+  inline_policy {
+    name   = "airflow-prod-execution-role-policy"
+    policy = data.aws_iam_policy_document.airflow_prod_execution_role_policy.json
+  }
+}

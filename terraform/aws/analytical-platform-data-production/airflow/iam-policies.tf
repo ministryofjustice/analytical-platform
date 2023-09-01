@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
     sid       = ""
     effect    = "Allow"
     actions   = ["airflow:PublishMetrics"]
-    resources = ["arn:aws:airflow:eu-west-1:593291632749:environment/dev"]
+    resources = ["arn:aws:airflow:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:environment/dev"]
   }
 
   statement {
@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
       "logs:CreateLogStream",
       "logs:CreateLogGroup"
     ]
-    resources = ["arn:aws:logs:eu-west-1:593291632749:log-group:airflow-dev-*"]
+    resources = ["arn:aws:logs:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:log-group:airflow-dev-*"]
   }
   statement {
     sid       = ""
@@ -82,7 +82,7 @@ data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
       "kms:DescribeKey",
       "kms:Decrypt"
     ]
-    not_resources = ["arn:aws:kms:*:593291632749:key/*"]
+    not_resources = ["arn:aws:kms:*:${var.account_ids["analytical-platform-data-production"]}:key/*"]
     condition {
       test     = "StringLike"
       variable = "kms:ViaService"
@@ -93,7 +93,7 @@ data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
     sid       = ""
     effect    = "Allow"
     actions   = ["eks:DescribeCluster"]
-    resources = ["arn:aws:eks:eu-west-1:593291632749:cluster/airflow-dev"]
+    resources = ["arn:aws:eks:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:cluster/airflow-dev"]
   }
 }
 
@@ -140,7 +140,7 @@ data "aws_iam_policy_document" "airflow_dev_cluster_autoscaler_assume_role_polic
     }
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::593291632749:role/airflow-dev-node-instance-role"]
+      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/airflow-dev-node-instance-role"]
     }
     actions = ["sts:AssumeRole"]
   }
@@ -182,7 +182,7 @@ data "aws_iam_policy_document" "airflow_dev_flow_log_assume_policy" {
     condition {
       test     = "ArnLike"
       variable = "aws:SourceArn"
-      values   = ["arn:aws:ec2:eu-west-1:593291632749:vpc-flow-log/*"]
+      values   = ["arn:aws:ec2:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:vpc-flow-log/*"]
     }
   }
 
@@ -193,8 +193,8 @@ data "aws_iam_policy_document" "airflow_dev_node_instance_inline_role_policy" {
     sid    = ""
     effect = "Allow"
     resources = [
-      "arn:aws:iam::593291632749:role/airflow-dev-cluster-autoscaler-role",
-      "arn:aws:iam::593291632749:role/airflow*"
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/airflow-dev-cluster-autoscaler-role",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/airflow*"
     ]
     actions = ["sts:AssumeRole"]
   }
@@ -231,10 +231,106 @@ data "aws_iam_policy_document" "airflow_dev_default_pod_assume_role_policy" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::593291632749:role/airflow-dev-node-instance-role"
+        "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/airflow-dev-node-instance-role"
       ]
     }
     actions = ["sts:AssumeRole"]
   }
 
+}
+
+############################ AIRFLOW PRODUCTION INFRASTRUCTURE
+
+data "aws_iam_policy_document" "airflow_prod_execution_assume_role_policy" {
+  statement {
+    # sid = ""
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["airflow.amazonaws.com", "airflow-env.amazonaws.com"]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+data "aws_iam_policy_document" "airflow_prod_execution_role_policy" {
+  statement {
+    sid       = ""
+    effect    = "Allow"
+    actions   = ["airflow:PublishMetrics"]
+    resources = ["arn:aws:airflow:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:environment/prod"]
+  }
+
+  statement {
+    sid       = ""
+    effect    = "Deny"
+    actions   = ["s3:ListAllMyBuckets"]
+    resources = ["*"]
+  }
+
+  statement {
+    sid     = ""
+    effect  = "Allow"
+    actions = ["s3:List*", "s3:GetObject*", "s3:GetBucket*"]
+    resources = [
+      "arn:aws:s3:::mojap-airflow-prod/*",
+      "arn:aws:s3:::mojap-airflow-prod"
+    ]
+  }
+  statement {
+    sid    = ""
+    effect = "Allow"
+    actions = [
+      "logs:PutLogEvents",
+      "logs:GetQueryResults",
+      "logs:GetLogRecord",
+      "logs:GetLogGroupFields",
+      "logs:GetLogEvents",
+      "logs:DescribeLogGroups",
+      "logs:CreateLogStream",
+      "logs:CreateLogGroup"
+    ]
+    resources = ["arn:aws:logs:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:log-group:airflow-prod-*"]
+  }
+  statement {
+    sid       = ""
+    effect    = "Allow"
+    actions   = ["cloudwatch:PutMetricData"]
+    resources = ["*"]
+  }
+  statement {
+    sid    = ""
+    effect = "Allow"
+    actions = [
+      "sqs:SendMessage",
+      "sqs:ReceiveMessage",
+      "sqs:GetQueueUrl",
+      "sqs:GetQueueAttributes",
+      "sqs:DeleteMessage",
+      "sqs:ChangeMessageVisibility"
+    ]
+    resources = ["arn:aws:sqs:eu-west-1:*:airflow-celery-*"]
+  }
+  statement {
+    sid    = ""
+    effect = "Allow"
+    actions = [
+      "kms:GenerateDataKey*",
+      "kms:Encrypt",
+      "kms:DescribeKey",
+      "kms:Decrypt"
+    ]
+    not_resources = ["arn:aws:kms:*:${var.account_ids["analytical-platform-data-production"]}:key/*"]
+    condition {
+      test     = "StringLike"
+      variable = "kms:ViaService"
+      values   = ["sqs.eu-west-1.amazonaws.com"]
+    }
+  }
+  statement {
+    sid       = ""
+    effect    = "Allow"
+    actions   = ["eks:DescribeCluster"]
+    resources = ["arn:aws:eks:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:cluster/airflow-prod"]
+  }
 }
