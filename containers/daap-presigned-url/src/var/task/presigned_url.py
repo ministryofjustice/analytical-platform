@@ -72,7 +72,7 @@ def handler(event, context):
         {
             "lambda_name": context.function_name,
             "data_product_name": database,
-            "table_name": table
+            "table_name": table,
         }
     )
 
