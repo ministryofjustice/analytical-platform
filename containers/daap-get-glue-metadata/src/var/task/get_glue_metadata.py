@@ -15,7 +15,7 @@ logger = DataPlatformLogger(
 def handler(event, context):
     database = event["queryStringParameters"]["database"]
     table = event["queryStringParameters"]["table"]
-    
+
     logger.info(f"event: {event}")
     logger.add_extras(
         {
