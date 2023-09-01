@@ -15,6 +15,11 @@ logger = DataPlatformLogger(
     }
 )
 
+s3_security_opts = {
+    "ACL": "bucket-owner-full-control",
+    "ServerSideEncryption": "AES256",
+}
+
 
 def handler(event, context):
     bucket_name = os.environ["BUCKET_NAME"]
@@ -63,6 +68,14 @@ def handler(event, context):
         ["content-length-range", 0, 5000000000],
     ]
 
+    logger.add_extras(
+        {
+            "lambda_name": context.function_name,
+            "data_product_name": database,
+            "table_name": table
+        }
+    )
+
     logger.info(f"s3 bucket: {bucket_name}")
     logger.info(f"s3 key: {file_name}")
     logger.info(f"database: {database}")
@@ -70,6 +83,8 @@ def handler(event, context):
     logger.info(f"amz_date: {amz_date}")
     logger.info(f"md5: {md5}")
     logger.info(f"uuid_string: {uuid_string}")
+
+    logger.write_log_dict_to_s3_json(bucket_name, **s3_security_opts)
 
     # Check the data product has been registered, ie has associated code or metadata in s3
     data_product_registration = s3.list_objects_v2(

@@ -13,6 +13,7 @@ logger = DataPlatformLogger(
 
 def handler(event, context):
     logger.info(f"event: {event}")
+    logger.add_extras({"lambda_name": context.function_name})
 
     authorizationToken = json.dumps(event["authorizationToken"])
     characters_to_remove = '"[]"'
