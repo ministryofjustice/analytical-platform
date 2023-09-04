@@ -89,7 +89,7 @@ resource "aws_iam_role" "airflow_prod_execution_role" {
 
 ########################Airflow dev EKS Role###########################
 
-resource "aws_iam_role" "airflow_dev_eksRole_role_211908c" {
+resource "aws_iam_role" "airflow_dev_eks_role_role_211908c" {
   name               = "airflow-dev-eksRole-role-211908c"
   description        = "Allows EKS to manage clusters on your behalf."
   assume_role_policy = data.aws_iam_policy_document.airflow_dev_eks_role_role_211908c_assume_role_policy.json
