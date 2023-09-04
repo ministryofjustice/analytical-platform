@@ -60,3 +60,10 @@ data "aws_iam_policy_document" "airflow_bucket_policy" {
     ]
   }
 }
+
+############################ AIRFLOW PRODUCTION INFRASTRUCTURE
+
+resource "aws_s3_bucket" "mojap_airflow_prod" {
+  bucket = "mojap-airflow-prod"
+}
+
