@@ -1,7 +1,7 @@
 locals {
   maintainers = [ # maintainers of analytics-hq and analytical-platform gh teams
     "julialawrence",
-    "bagg3rs"      # Richard Baguley
+    "bagg3rs" # Richard Baguley
   ]
 
   # GitHub usernames for CI users
@@ -43,7 +43,7 @@ locals {
     "murad-ali-MoJ",
     "Gary-H9",
     "mitchdawson1982",
-    "bagg3rs"      # Richard Baguley
+    "bagg3rs" # Richard Baguley
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
@@ -124,10 +124,11 @@ locals {
   ]
 
   data_platform_core_infrastructure_members = [
-    "Emterry",     # Emma Terry
+    "Emterry", # Emma Terry
     "jhpyke",
+    "murad-ali-MoJ",
     "tamsinforbes",
-    "murad-ali-MoJ"
+    "tom-webber"
   ]
 
   data_platform_labs_maintainers = [
