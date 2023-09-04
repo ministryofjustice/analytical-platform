@@ -86,3 +86,14 @@ resource "aws_iam_role" "airflow_prod_execution_role" {
     policy = data.aws_iam_policy_document.airflow_prod_execution_role_policy.json
   }
 }
+
+########################Airflow dev EKS Role###########################
+
+resource "aws_iam_role" "airflow_dev_eksRole_role_211908c" {
+  name               = "airflow-dev-eksRole-role-211908c"
+  description        = "EKS role for Airflow"
+  assume_role_policy = data.aws_iam_policy_document.airflow_dev_eksRole_role_211908c_assume_role_policy.json
+  managed_policy_arns = [
+    "arn:aws:iam::593291632749:role/airflow-dev-eksRole-role-211908c"
+  ]
+}

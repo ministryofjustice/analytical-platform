@@ -334,3 +334,22 @@ data "aws_iam_policy_document" "airflow_prod_execution_role_policy" {
     resources = ["arn:aws:eks:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:cluster/airflow-prod"]
   }
 }
+
+
+########################Airflow dev EKS Policy###########################
+
+data "aws_iam_policy_document" "airflow_dev_eksRole_role_211908c_assume_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    principals {
+      type = "Service"
+      identifiers = [
+        "ec2.amazonaws.com",
+
+      ]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+
+}
