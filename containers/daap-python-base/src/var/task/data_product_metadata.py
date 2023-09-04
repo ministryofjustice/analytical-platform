@@ -4,11 +4,10 @@ import traceback
 
 import boto3
 import botocore
-from jsonschema import validate
-from jsonschema.exceptions import ValidationError
-
 from data_platform_logging import DataPlatformLogger
 from dataengineeringutils3.s3 import get_filepaths_from_s3_folder, read_json_from_s3
+from jsonschema import validate
+from jsonschema.exceptions import ValidationError
 
 s3_client = boto3.client("s3")
 
@@ -25,7 +24,7 @@ def get_data_product_metadata_path(data_product_name):
         "metadata",
         data_product_name,
         "v1.0",
-        "metadata.json"
+        "metadata.json",
     )
     return metadata_s3_path
 
@@ -41,9 +40,21 @@ def get_data_product_metadata_spec_path(version: str = None) -> str:
         )
         versions.sort()
         latest_version = versions[-1]
-        spec_path = os.path.join("s3://", get_bucket_name(), "data_product_metadata_spec", latest_version, "moj_data_product_metadata_spec.json")
+        spec_path = os.path.join(
+            "s3://",
+            get_bucket_name(),
+            "data_product_metadata_spec",
+            latest_version,
+            "moj_data_product_metadata_spec.json",
+        )
     else:
-        spec_path = os.path.join("s3://", get_bucket_name(), "data_product_metadata_spec", version, "moj_data_product_metadata_spec.json")
+        spec_path = os.path.join(
+            "s3://",
+            get_bucket_name(),
+            "data_product_metadata_spec",
+            version,
+            "moj_data_product_metadata_spec.json",
+        )
 
     return spec_path
 
@@ -53,19 +64,21 @@ def split_bucket_and_key(path):
     return bucket, key
 
 
-class DataProductMetadata():
+class DataProductMetadata:
     """
     class to handle creation and updating of
     metadata relating to a dataproduct
     """
+
     def __init__(self, data_product_name: str, logger: DataPlatformLogger):
         self.data_product_name = data_product_name
         self.logger = logger
-        bucket, key = split_bucket_and_key(get_data_product_metadata_path(data_product_name))
+        bucket, key = split_bucket_and_key(
+            get_data_product_metadata_path(data_product_name)
+        )
         self.metadata_bucket = bucket
         self.metadata_key = key
         self._check_if_metadata_exists()
-
 
     def _check_if_metadata_exists(self) -> bool:
         # establish whether metadata for data product already exists
@@ -73,13 +86,16 @@ class DataProductMetadata():
             # get head of object (if it exists)
             s3_client.head_object(Bucket=self.metadata_bucket, Key=self.metadata_key)
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "404":
+            if e.response["Error"]["Code"] == "404":
+                self.logger.info("No metadata exists for this data product")
                 self.metadata_exists = False
             else:
                 self.logger.error(f"Uknown error - {e}")
                 raise Exception(f"Uknown error - {e}")
         else:
-            self.logger.info("version 1 of metadata already exists for this data product")
+            self.logger.info(
+                "version 1 of metadata already exists for this data product"
+            )
             self.metadata_exists = True
 
         return self
@@ -89,13 +105,16 @@ class DataProductMetadata():
         data_product_metadata: dict,
         metadata_schema_version: str = None,
     ) -> bool:
-
-        metadata_schema = read_json_from_s3(get_data_product_metadata_spec_path(metadata_schema_version))
+        metadata_schema = read_json_from_s3(
+            get_data_product_metadata_spec_path(metadata_schema_version)
+        )
         try:
             validate(instance=data_product_metadata, schema=metadata_schema)
         except ValidationError:
             self.error_traceback = traceback.format_exc()
-            self.logger.error(f"metadata has failed validation with error: {self.error_traceback}")
+            self.logger.error(
+                f"metadata has failed validation with error: {self.error_traceback}"
+            )
             self.valid_metadata = False
         else:
             self.logger.info("metadata has passed validation")
@@ -112,6 +131,6 @@ class DataProductMetadata():
             **{
                 "ACL": "bucket-owner-full-control",
                 "ServerSideEncryption": "AES256",
-            }
+            },
         )
         self.logger.info("Data Product metadata written to s3")
