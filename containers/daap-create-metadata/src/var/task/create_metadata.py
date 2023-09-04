@@ -29,7 +29,8 @@ def handler(event, context):
             "headers": {"Content-Type": "application/json"},
             "body": json.dumps(
                 {
-                    "message": "The name of the data product is missing, it must be specified in the metadata against the 'name' key"
+                    "message": "Data product name is missing, it must be specified \
+                        in the metadata against the 'name' key"
                 }
             ),
         }
@@ -80,7 +81,8 @@ def handler(event, context):
             "body": json.dumps(
                 {
                     "data_product_name": data_product_name,
-                    "message": f"Your metadata failed validation with this error: {data_product_metadata.error_traceback}",
+                    "message": f"Your metadata failed validation with \
+                        this error: {data_product_metadata.error_traceback}",
                 }
             ),
         }

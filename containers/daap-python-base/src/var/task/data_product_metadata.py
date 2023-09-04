@@ -13,11 +13,11 @@ s3_client = boto3.client("s3")
 
 
 # These can be moved to separate module for all paths when work starts on that
-def get_bucket_name():
+def get_bucket_name() -> str:
     return os.environ["BUCKET_NAME"]
 
 
-def get_data_product_metadata_path(data_product_name):
+def get_data_product_metadata_path(data_product_name: str) -> str:
     metadata_s3_path = os.path.join(
         "s3://",
         get_bucket_name(),
@@ -29,9 +29,9 @@ def get_data_product_metadata_path(data_product_name):
     return metadata_s3_path
 
 
-def get_data_product_metadata_spec_path(version: str = None) -> str:
-    # if version is None we'll get the latest version
-    if version is None:
+def get_data_product_metadata_spec_path(version: str = "") -> str:
+    # if version is empty we'll get the latest version
+    if version == "":
         file_paths = get_filepaths_from_s3_folder(
             os.path.join("s3://", get_bucket_name(), "data_product_metadata_spec")
         )
@@ -80,7 +80,7 @@ class DataProductMetadata:
         self.metadata_key = key
         self._check_if_metadata_exists()
 
-    def _check_if_metadata_exists(self) -> bool:
+    def _check_if_metadata_exists(self) -> object:
         # establish whether metadata for data product already exists
         try:
             # get head of object (if it exists)
@@ -103,8 +103,8 @@ class DataProductMetadata:
     def validate_metadata(
         self,
         data_product_metadata: dict,
-        metadata_schema_version: str = None,
-    ) -> bool:
+        metadata_schema_version: str = "",
+    ) -> object:
         metadata_schema = read_json_from_s3(
             get_data_product_metadata_spec_path(metadata_schema_version)
         )
