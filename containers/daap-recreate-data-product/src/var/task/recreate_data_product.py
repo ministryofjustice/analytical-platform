@@ -55,8 +55,8 @@ def handler(event, context):
     count = 0
     for item in data_product_pages.search("Contents"):
         if count == 1000:
-            # Wait 5 mins for other invocations to finish
-            time.sleep(360)
+            # Wait 15 mins (max lambda processing time) for other invocations to finish
+            time.sleep(900)
             count = 0
         count += 1
 
