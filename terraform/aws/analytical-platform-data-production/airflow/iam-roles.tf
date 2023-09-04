@@ -94,6 +94,6 @@ resource "aws_iam_role" "airflow_dev_eksRole_role_211908c" {
   description        = "EKS role for Airflow"
   assume_role_policy = data.aws_iam_policy_document.airflow_dev_eksRole_role_211908c_assume_role_policy.json
   managed_policy_arns = [
-    "arn:aws:iam::593291632749:role/airflow-dev-eksRole-role-211908c"
+    "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   ]
 }
