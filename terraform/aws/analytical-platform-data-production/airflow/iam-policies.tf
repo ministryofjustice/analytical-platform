@@ -345,7 +345,7 @@ data "aws_iam_policy_document" "airflow_dev_eksRole_role_211908c_assume_role_pol
     principals {
       type = "Service"
       identifiers = [
-        "ec2.amazonaws.com",
+        "eks.amazonaws.com",
 
       ]
     }
