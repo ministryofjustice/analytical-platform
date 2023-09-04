@@ -338,7 +338,7 @@ data "aws_iam_policy_document" "airflow_prod_execution_role_policy" {
 
 ########################Airflow dev EKS Policy###########################
 
-data "aws_iam_policy_document" "airflow_dev_eks_role_role_211908c_assume_role_policy" {
+data "aws_iam_policy_document" "airflow_dev_eks_assume_role_policy" {
   statement {
     sid    = ""
     effect = "Allow"
