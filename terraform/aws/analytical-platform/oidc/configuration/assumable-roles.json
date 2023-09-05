@@ -7,7 +7,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
-    "repositories": ["ministryofjustice/moj-data-transfer-api:*"],
+    "repositories": ["ministryofjustice/moj-data-transfer-api"],
     "targets": [
       "analytical-platform-data-production",
       "analytical-platform-data-engineering-production",
@@ -24,7 +24,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
-    "repositories": ["ministryofjustice/data-engineering-pulumi-components:*"],
+    "repositories": ["ministryofjustice/data-engineering-pulumi-components"],
     "targets": ["analytical-platform-data-engineering-sandbox-a"],
     "stateLockingDetails": [],
     "ssmParameterConfig": [
@@ -42,7 +42,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
-    "repositories": ["ministryofjustice/register-my-data:*"],
+    "repositories": ["ministryofjustice/register-my-data"],
     "targets": [
       "analytical-platform-data-engineering-production",
       "analytical-platform-data-production"
@@ -63,7 +63,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
-    "repositories": ["ministryofjustice/data-engineering-airflow:*"],
+    "repositories": ["ministryofjustice/data-engineering-airflow"],
     "targets": [
       "analytical-platform-data-engineering-production",
       "analytical-platform-data-production"
@@ -79,7 +79,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
-    "repositories": ["ministryofjustice/analytical-platform-uploader:*"],
+    "repositories": ["ministryofjustice/analytical-platform-uploader"],
     "targets": [
       "analytical-platform-data-engineering-production",
       "analytical-platform-data-production"
@@ -100,7 +100,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
-    "repositories": ["ministryofjustice/analytical-platform-data-engineering:*"],
+    "repositories": ["ministryofjustice/analytical-platform-data-engineering"],
     "targets": [
       "analytical-platform-data-production",
       "analytical-platform-data-engineering-production"
@@ -116,7 +116,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
-    "repositories": ["ministryofjustice/analytical-platform-data-engineering:*"],
+    "repositories": ["ministryofjustice/analytical-platform-data-engineering"],
     "targets": ["analytical-platform-data-engineering-sandbox-a"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
@@ -129,7 +129,7 @@
         "stateBucketKey": "pulumi-oidc-test/.pulumi/"
       }
     ],
-    "repositories": ["moj-analytical-services/pulumi-oidc-test:*"],
+    "repositories": ["moj-analytical-services/pulumi-oidc-test"],
     "targets": ["analytical-platform-data-engineering-sandbox-a"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
@@ -137,7 +137,7 @@
   "lookup-offence-sandbox": {
     "account": "analytical-platform-data-engineering-sandbox-a",
     "stateConfig": [],
-    "repositories": ["ministryofjustice/lookup-offence-sandbox:*"],
+    "repositories": ["ministryofjustice/lookup-offence-sandbox"],
     "targets": ["analytical-platform-data-engineering-sandbox-a"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
@@ -145,7 +145,7 @@
   "create-a-derived-table": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
-    "repositories": ["moj-analytical-services/create-a-derived-table:*"],
+    "repositories": ["moj-analytical-services/create-a-derived-table"],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
@@ -153,7 +153,7 @@
   "lookup-offence": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
-    "repositories": ["moj-analytical-services/lookup_offence:*"],
+    "repositories": ["moj-analytical-services/lookup_offence"],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
@@ -162,12 +162,12 @@
     "account": "analytical-platform-data-production",
     "stateConfig": [],
     "repositories": [
-      "ministryofjustice/hmpps-hr-dashboard:*",
-      "ministryofjustice/ltc-capabilites-app:*",
-      "ministryofjustice/mlp-app:*",
-      "ministryofjustice/moj-officehub-locator-webapp:*",
-      "ministryofjustice/pfg-dash-moj:*",
-      "ministryofjustice/regime-dashboard:*"
+      "ministryofjustice/hmpps-hr-dashboard",
+      "ministryofjustice/ltc-capabilites-app",
+      "ministryofjustice/mlp-app",
+      "ministryofjustice/moj-officehub-locator-webapp",
+      "ministryofjustice/pfg-dash-moj",
+      "ministryofjustice/regime-dashboard"
     ],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
