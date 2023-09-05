@@ -4,7 +4,11 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPlugin(govukEleventyPlugin, {
     header: {
       organisationName: 'Ministry of Justice',
-      productName: 'Data Platform'
+      productName: 'Data Platform',
+      search: {
+        indexPath: '/search.json',
+        sitemapPath: '/sitemap'
+      }
     }
   })
 
