@@ -130,12 +130,12 @@ def search_string_for_regex(string: str, regex: str) -> str:
 
 
 def database_name_regex() -> str:
-    return """database_name=([^\/]*)\/"""
+    return """database_name=([^\/]*)\/"""  # noqa: W605
 
 
 def table_name_regex() -> str:
-    return """table_name=([^\/]*)\/"""
+    return """table_name=([^\/]*)\/"""  # noqa: W605
 
 
 def extraction_timestamp_regex() -> str:
-    return """(extraction_timestamp=[^\/]*)\/"""
+    return """(extraction_timestamp=[^\/]*)\/"""  # noqa: W605
