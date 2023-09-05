@@ -110,6 +110,7 @@ def get_data_product_pages(
 
 def get_raw_data_unique_extraction_timestamps(raw_pages: PageIterator) -> set:
     """
+    return the unique slugs of data product, table and extraction timestamp
     example key: `raw_data/data_product/table/extraction_timestamp=timestamp/file.csv`
     size > 0 because sometimes empty directories get listed in contents
     """
