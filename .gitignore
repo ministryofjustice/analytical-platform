@@ -13,3 +13,4 @@ sbom-*
 **/*.tfstate
 **/plan.json
 .infracost
+__pycache__
