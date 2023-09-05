@@ -2,6 +2,7 @@ import os
 import re
 
 import boto3
+from botocore.paginate import PageIterator
 from data_platform_logging import DataPlatformLogger
 
 s3 = boto3.client("s3")
@@ -94,7 +95,7 @@ def handler(event, context):
 
 def get_data_product_pages(
     bucket, data_product_prefix, s3_client=s3, log_bucket=log_bucket
-) -> list[dict]:
+) -> PageIterator:
     paginator = s3_client.get_paginator("list_objects_v2")
     pages = paginator.paginate(Bucket=bucket, Prefix=data_product_prefix)
     # An empty page in the paginator only happens when no files exist
@@ -107,7 +108,7 @@ def get_data_product_pages(
     return pages
 
 
-def get_raw_data_unique_extraction_timestamps(raw_pages: list[dict]) -> set:
+def get_raw_data_unique_extraction_timestamps(raw_pages: PageIterator) -> set:
     """
     example key: `raw_data/data_product/table/extraction_timestamp=timestamp/file.csv`
     size > 0 because sometimes empty directories get listed in contents
@@ -129,12 +130,12 @@ def search_string_for_regex(string: str, regex: str) -> str:
 
 
 def database_name_regex() -> str:
-    return "database_name=([^\/]*)\/"
+    return """database_name=([^\/]*)\/"""
 
 
 def table_name_regex() -> str:
-    return "table_name=([^\/]*)\/"
+    return """table_name=([^\/]*)\/"""
 
 
 def extraction_timestamp_regex() -> str:
-    return "(extraction_timestamp=[^\/]*)\/"
+    return """(extraction_timestamp=[^\/]*)\/"""
