@@ -102,7 +102,7 @@ module "analytical_platform_data_engineering_production_github_oidc_role" {
 module "analytical_platform_data_engineering_sandbox_a_github_oidc_role" {
   for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-engineering-sandbox-a" }
 
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v3.0.0"
 
   providers = {
     aws = aws.analytical-platform-data-engineering-sandbox-a
