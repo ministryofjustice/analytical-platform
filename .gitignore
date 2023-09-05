@@ -13,3 +13,5 @@ sbom-*
 **/*.tfstate
 **/plan.json
 .infracost
+node_modules
+docs-11ty/_site
