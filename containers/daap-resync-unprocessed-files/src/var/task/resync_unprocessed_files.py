@@ -1,4 +1,5 @@
 import os
+import re
 
 import boto3
 from data_platform_logging import DataPlatformLogger
@@ -42,22 +43,29 @@ def handler(event, context):
     )
 
     # key = "raw_data/data_product/table/extraction_timestamp=timestamp/file.csv"
-    raw_table_timestamps = set(
-        "/".join(item["Key"].split("/")[1:4])
-        for item in raw_pages.search("Contents")
-        if item["Size"] > 0
-    )
+    raw_table_timestamps = get_raw_data_unique_extraction_timestamps(raw_pages)
 
     curated_table_timestamps = set()
     for item in curated_pages.search("Contents"):
         # key = "curated_data/database_name=data_product/table_name=table"
         #       + "/extraction_timestamp=timestamp/file.parquet"
         if item["Size"] > 0:
-            key_parts = item["Key"].split("/")
-            data_product = key_parts[1].split("=")[1]
-            table = key_parts[2].split("=")[1]
+            data_product = search_string_for_regex(
+                string=item["Key"], regex=database_name_regex()
+            )
+
+            table = search_string_for_regex(
+                string=item["Key"], regex=table_name_regex()
+            )
+
+            extraction_timestamp = search_string_for_regex(
+                string=item["Key"], regex=extraction_timestamp_regex()
+            )
+
             # Both sets need the same formatting to compare them
-            curated_table_timestamps.add(f"{data_product}/{table}/{key_parts[3]}")
+            curated_table_timestamps.add(
+                f"{data_product}/{table}/{extraction_timestamp}"
+            )
 
     timestamps_to_resync = raw_table_timestamps - curated_table_timestamps
     raw_keys_to_resync = [
@@ -97,3 +105,36 @@ def get_data_product_pages(
             logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
             raise ValueError(error_text)
     return pages
+
+
+def get_raw_data_unique_extraction_timestamps(raw_pages: list[dict]) -> set:
+    """
+    example key: `raw_data/data_product/table/extraction_timestamp=timestamp/file.csv`
+    size > 0 because sometimes empty directories get listed in contents
+    """
+    return set(
+        "/".join(item["Key"].split("/")[1:-1])
+        for item in raw_pages.search("Contents")
+        if item["Size"] > 0
+    )
+
+
+def search_string_for_regex(string: str, regex: str) -> str:
+    """Search a string for a regex pattern and return the first result"""
+    database_name_search = re.search(regex, string)
+    if database_name_search:
+        return database_name_search.groups()[0]
+    else:
+        raise ValueError(f"{regex} not found in {string}")
+
+
+def database_name_regex() -> str:
+    return "database_name=([^\/]*)\/"
+
+
+def table_name_regex() -> str:
+    return "table_name=([^\/]*)\/"
+
+
+def extraction_timestamp_regex() -> str:
+    return "(extraction_timestamp=[^\/]*)\/"
