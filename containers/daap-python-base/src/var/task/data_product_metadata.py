@@ -123,14 +123,18 @@ class DataProductMetadata:
         return self
 
     def write_json_to_s3(self) -> None:
-        json_metadata = json.dumps(self.data_product_metadata)
-        s3_client.put_object(
-            Body=json_metadata,
-            Bucket=self.metadata_bucket,
-            Key=self.metadata_key,
-            **{
-                "ACL": "bucket-owner-full-control",
-                "ServerSideEncryption": "AES256",
-            },
-        )
-        self.logger.info("Data Product metadata written to s3")
+        if hasattr(self, "data_product_metadata") and self.valid_metadata:
+            json_metadata = json.dumps(self.data_product_metadata)
+            s3_client.put_object(
+                Body=json_metadata,
+                Bucket=self.metadata_bucket,
+                Key=self.metadata_key,
+                **{
+                    "ACL": "bucket-owner-full-control",
+                    "ServerSideEncryption": "AES256",
+                }
+            )
+            self.logger.info("Data Product metadata written to s3")
+        else:
+            self.logger.error("Metadata need to be validated before writing to s3, run the validate() class method")
+            raise ValidationError("Metadata must be validated before being written to s3.")
