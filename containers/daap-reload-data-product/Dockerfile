@@ -6,4 +6,4 @@ ENV VERSION="${VERSION}"
 
 COPY src/var/task ${LAMDA_TASK_ROOT}
 
-CMD ["recreate_data_product.handler"]
+CMD ["reload_data_product.handler"]

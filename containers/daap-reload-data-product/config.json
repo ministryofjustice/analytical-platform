@@ -1,11 +1,11 @@
 {
-  "name": "daap-recreate-data-product",
+  "name": "daap-reload-data-product",
   "version": "1.0.0",
   "registry": "ecr",
   "ecr": {
     "role": "arn:aws:iam::013433889002:role/data-platform-gha",
     "account": "374269020027",
     "region": "eu-west-2",
-    "repository": "data-platform-recreate-data-product-lambda-ecr-repo"
+    "repository": "data-platform-reload-data-product-lambda-ecr-repo"
   }
 }
