@@ -100,7 +100,7 @@ class DataProductMetadata:
 
         return self
 
-    def validate_metadata(
+    def validate(
         self,
         data_product_metadata: dict,
         metadata_schema_version: str = "",
@@ -122,7 +122,7 @@ class DataProductMetadata:
             self.data_product_metadata = data_product_metadata
         return self
 
-    def write_metadata_json_to_s3(self) -> None:
+    def write_json_to_s3(self) -> None:
         json_metadata = json.dumps(self.data_product_metadata)
         s3_client.put_object(
             Body=json_metadata,
