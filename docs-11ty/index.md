@@ -1,7 +1,8 @@
 ---
 homepage: true
-layout: page
-title: Data Platform Documentation
+layout: product
+title: Data Platform
+description: All the documentation, user facing and internal
 ---
 
 Hello world!
