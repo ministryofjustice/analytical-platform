@@ -3,3 +3,4 @@
 # bash scripts/path-filter/configuration-generator.sh pytest
 
 daap-get-glue-metadata: containers/daap-get-glue-metadata/**
+daap-python-base: containers/daap-python-base/**

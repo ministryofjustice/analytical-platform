@@ -8,9 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2023-09-07
+
+### Added
+
+- data_platform_paths module. This contains code for generating paths to files
+in S3 and names of tables in Athena.
+
 ## [0.4.0] - 2023-09-01
 
-## Added
+### Added
 
 - data_product_metadata python module. This contains code that will be used,
 intially by an API endpoint to create data product metadata, but in future,
