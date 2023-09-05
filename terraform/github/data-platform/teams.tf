@@ -35,7 +35,6 @@ locals {
     "ymao2",    # Yikang Mao
     "BrianEllwood",
     "tom-webber",
-    "bogdan-mania-moj",
     "Emterry", # Emma Terry
     "michaeljcollinsuk",
     "jhpyke",
@@ -138,7 +137,6 @@ locals {
   data_platform_labs_members = [
     "hemeshpatel-moj",
     "murdo-moj",
-    "bogdan-mania-moj",
     "LavMatt"
   ]
 
