@@ -5,6 +5,7 @@
 alpine-base: containers/alpine-base/**
 daap-athena-load: containers/daap-athena-load/**
 daap-authorizer: containers/daap-authorizer/**
+daap-create-metadata: containers/daap-create-metadata/**
 daap-docs: containers/daap-docs/**
 daap-get-glue-metadata: containers/daap-get-glue-metadata/**
 daap-presigned-url: containers/daap-presigned-url/**
