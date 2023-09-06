@@ -2,6 +2,7 @@ import os
 import time
 
 import boto3
+from botocore.paginate import PageIterator
 from data_platform_logging import DataPlatformLogger
 
 s3 = boto3.client("s3")
@@ -94,7 +95,7 @@ def s3_recursive_delete(bucket, prefix, s3_client=s3) -> None:
 
 def get_data_product_pages(
     bucket, data_product_prefix, s3_client=s3, log_bucket=log_bucket
-) -> list[dict]:
+) -> PageIterator:
     paginator = s3_client.get_paginator("list_objects_v2")
     pages = paginator.paginate(Bucket=bucket, Prefix=data_product_prefix)
     # An empty page in the paginator only happens when no files exist
