@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+}
+
+.govuk-header {
+
+  .govuk-header__logo img {
+    vertical-align: bottom;
+  }
+
+  .app-site-search {
+    @media (max-width: 62.25em) {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.x-govuk-related-navigation .govuk-link[aria-current] {
+  font-weight: bold;
+}
+
+// Allows feedback banner to have correct bottom margin.
+.x-govuk-masthead {
+  margin-top: 0;
+}

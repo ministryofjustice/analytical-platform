@@ -1,0 +1,8 @@
+{% for scriptConfig in pluginConfig.scripts %}
+  {% if scriptConfig.type|length %}
+    <script type="{{scriptConfig.type}}" src="{{scriptConfig.src}}"></script>
+  {% else %}
+    <script src="{{scriptConfig.src}}"></script>
+  {% endif %}
+{% endfor %}
+

@@ -1,0 +1,15 @@
+.x-govuk-breadcrumbs--inverse {
+  @include govuk-responsive-padding(3, "bottom");
+  @include govuk-responsive-padding(4, "top");
+  border-bottom: 1px solid $x-govuk-masthead-border-colour;
+  color: $x-govuk-masthead-colour;
+  margin-top: 0;
+
+  .govuk-breadcrumbs__list-item:before {
+    border-color: $x-govuk-masthead-colour;
+  }
+
+  .govuk-breadcrumbs__link:not(:focus) {
+    color: inherit;
+  }
+}

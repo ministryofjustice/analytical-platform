@@ -1,0 +1,33 @@
+{% extends "govuk-prototype-kit/layouts/unbranded.njk" %}
+
+{% block pageTitle %}
+Home – GOV.UK Prototype Kit
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Your prototype homepage is missing
+      <span class="govuk-caption-xl">{{releaseVersion}}</span>
+    </h1>{{releaseVersion | log }}
+
+    <p>Your homepage file does not exist or may have been deleted.</p>
+
+    <p>To create a standard template homepage:</p>
+
+    <ol class="govuk-list govuk-list--number">
+      <li>Create a new file in app/views folder.</li>
+      <li>Name it index.html.</li>
+      <li>Copy the code below and paste it into the index.html file.</li>
+    </ol>
+
+    <pre><code>
+      {{- starterHomepageCode }}
+    </code></pre>
+
+  </div>
+</div>
+
+{% endblock %}

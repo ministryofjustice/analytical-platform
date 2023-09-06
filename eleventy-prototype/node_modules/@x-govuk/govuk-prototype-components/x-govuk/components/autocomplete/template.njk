@@ -1,0 +1,54 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{# Only select the first item if a value hasn’t already been given #}
+{% set selectFirstItem = true %}
+{% if params.value and params.value in params.items %}
+  {% set selectFirstItem = false %}
+{% endif %}
+
+{# The first item should be either an empty option or an instruction #}
+{% if params.allowEmpty %}
+  {% set firstItem = {
+    value: "",
+    text: "",
+    selected: selectFirstItem
+  } %}
+{% else %}
+  {% set firstItem = {
+    value: "",
+    text: "Select an option",
+    disabled: true,
+    selected: selectFirstItem
+  } %}
+{% endif %}
+
+{% set items = [] %}
+{% set addFirstItem = items.push(firstItem) %}
+
+{# Use text for item value if none provided #}
+{% for item in params.items %}
+  {% set addItem = items.push({
+    text: item.text,
+    value: item.value or item.text
+  }) %}
+{% endfor %}
+
+{{ govukSelect({
+  id: params.id,
+  name: params.name,
+  items: items,
+  describedBy: params.describedBy,
+  label: params.label,
+  hint: params.hint,
+  errorMessage: params.errorMessage,
+  formGroup: params.formGroup,
+  classes: params.classes,
+  attributes: {
+    "data-module": "autocomplete",
+    "data-autoselect": params.autoselect,
+    "data-display-menu": params.displayMenu,
+    "data-min-length": params.minLength,
+    "data-show-all-values": params.showAllValues,
+    "data-show-no-options-found": params.showNoOptionsFound
+  }
+}) }}
