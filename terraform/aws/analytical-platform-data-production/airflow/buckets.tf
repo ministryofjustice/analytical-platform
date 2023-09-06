@@ -24,7 +24,7 @@ resource "aws_s3_object" "requirements" {
   server_side_encryption = "AES256"
 }
 
-resource "aws_s3_object" "kubeconfig" {
+resource "aws_s3_object" "kubeconfig_dev" {
   bucket = "mojap-airflow-dev"
   key    = "dags/.kube/config"
   source = "./files/dev/config"
@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "airflow_bucket_policy" {
   statement {
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::593291632749:role/data-ga-s3-sync"]
+      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-ga-s3-sync"]
     }
 
     actions = [
@@ -117,4 +117,9 @@ data "aws_iam_policy_document" "allow_s3_sync_role_to_see_prod_bucket" {
       "${aws_s3_bucket.mojap_airflow_prod.arn}/*"
     ]
   }
+}
+
+moved {
+  from = aws_s3_object.kubeconfig
+  to   = aws_s3_object.kubeconfig_dev
 }
