@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "airflow_bucket_policy" {
   statement {
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::593291632749:role/data-ga-s3-sync"]
+      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-ga-s3-sync"]
     }
 
     actions = [
