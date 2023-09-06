@@ -132,9 +132,13 @@ class DataProductMetadata:
                 **{
                     "ACL": "bucket-owner-full-control",
                     "ServerSideEncryption": "AES256",
-                }
+                },
             )
             self.logger.info("Data Product metadata written to s3")
         else:
-            self.logger.error("Metadata need to be validated before writing to s3, run the validate() class method")
-            raise ValidationError("Metadata must be validated before being written to s3.")
+            self.logger.error(
+                "Metadata need to be validated before writing to s3, run the validate() class method"
+            )
+            raise ValidationError(
+                "Metadata must be validated before being written to s3."
+            )
