@@ -20,7 +20,6 @@ raw_data_bucket = os.environ.get("RAW_DATA_BUCKET", "")
 curated_data_bucket = os.environ.get("CURATED_DATA_BUCKET", "")
 log_bucket = os.environ.get("RAW_DATA_BUCKET", "")
 athena_load_lambda = os.environ.get("ATHENA_LOAD_LAMBDA", "")
-s3 = boto3.client("s3")
 
 
 def handler(event, context):
