@@ -23,7 +23,9 @@ def handler(event, context):
         data_product_name = event["metadata"]["name"]
     except KeyError:
         logger.error("The name of the data product is missing")
-        logger.write_log_dict_to_s3_json(os.environ["BUCKET_NAME"], **s3_security_opts)
+        logger.write_log_dict_to_s3_json(
+            os.environ["BUCKET_NAME"], **s3_security_opts
+        )
         return {
             "statusCode": 400,
             "headers": {"Content-Type": "application/json"},
