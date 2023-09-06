@@ -1,0 +1,46 @@
+{
+    "clusters": [
+        {
+            "cluster": {
+                "server": "https://59429428EBABBB9F911A173D7B8E8179.gr7.eu-west-1.eks.amazonaws.com",
+                "certificate-authority-data": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1ETXlNakU0TkRReE4xb1hEVE15TURNeE9URTRORFF4TjFvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTXhPCnl2aE1wZjRZSjM1aGZaOHNlVXMwMzR2ckJVa25weGdDNGJHVnU5dTMwejdXSysyb2k5VFV2WjVoSzF4VitCcUoKQndSUFlwVkgwUHJQUjBYZUJpS3ZrTTNuN0plSG8rWXoxZXl1OWJXeGhmbHhqb25Xb1FMTlBGNEVkUWcyR3dIMQpwbEwyNmwyZ0s0VzVYcERRZVNJV1VsUVFmbWE2NW4zd0dlbGttdUpySzJqMkJEZEFCK2pMRGZzV2oxSGlyTlBBCkdlOGpRam9zRWF5bUVWQTQ4d3U4UExQNUZCempnR2VNd2xaLzNWWER5YVNaM3pGeDhIdFhBNUtHNHM3Rk5OMEkKaWFPbTFNc1g0TWNxS1BFQU1XbDR1RUN2aTl5Q2dXbUtERU5BVk9HTFVvTGc0c28yZVRoL3MweUJJV0svdG0yVQpnbTVLam5MbFBrYmRER25VM0NFQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZJSk1VbUNUS2ptb0huMy90dk1OMmtsZUUvS25NQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFCekxFQ09NeWxZamg0ejBuOWpGOThEUGhoanBpejJPTVFxcG1aQndNV29UTFVDWmRGSApKWWpDQnB6R3ROQ1RxZDNnUHlQQ1lKdmt6bzhxR0hYcVVBTjJIRmx4STgzRHA5WFhMSExQVitqYWRQSWhmaXhICnFTQktITzBNSy8yTVprOVF6c2NFSnMzdk1kSmJxZHgvWWd3MHJXdE5LSG1oWExvYkpqK1BoTzZRY2ZXRysrTWkKTmE2M28zZkQzREtKOEZyRmtVcFlFQk00Vm1lNExrSThBVitFNXBVUGxnMGlCZHd3THhVM0F2LzRGcmNmd1U5cQpMZmlwbUlyS2owZGd0b1ovbW10WWJyLzY5UEtrbSt3VWdzSjBPN2g5bm9GdTE4N1ZNZ2U3ckk1aEZ1Q3NWS3NYCjZ1WEpET0tqVDEwVnpJcmJsblZqK05XeVpRM3lvNDkwV084NAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
+            },
+            "name": "kubernetes"
+        }
+    ],
+    "current-context": "aws",
+    "kind": "Config",
+    "contexts": [
+        {
+            "context": {
+                "cluster": "kubernetes",
+                "user": "aws"
+            },
+            "name": "aws"
+        }
+    ],
+    "users": [
+        {
+            "user": {
+                "exec": {
+                    "env": [
+                        {
+                            "value": "{\"apiVersion\": \"client.authentication.k8s.io/v1beta1\"}",
+                            "name": "KUBERNETES_EXEC_INFO"
+                        }
+                    ],
+                    "args": [
+                        "eks",
+                        "get-token",
+                        "--cluster-name",
+                        "airflow-dev"
+                    ],
+                    "apiVersion": "client.authentication.k8s.io/v1beta1",
+                    "command": "aws"
+                }
+            },
+            "name": "aws"
+        }
+    ],
+    "apiVersion": "v1"
+}
