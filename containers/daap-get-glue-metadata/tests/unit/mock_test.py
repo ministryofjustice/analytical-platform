@@ -71,6 +71,7 @@ def test_success_case(glue_client, monkeypatch, fake_context):
     body = json.loads(test_response["body"])
 
     assert test_response["statusCode"] == 200
+    assert test_response["headers"]["Content-Type"] == "application/json"
     assert body["Table"].items() >= table_input.items()
 
     expected_metadata = {"HTTPStatusCode", "HTTPHeaders", "RetryAttempts"}
@@ -93,6 +94,7 @@ def test_table_does_not_exist(glue_client, monkeypatch, fake_context):
     body = json.loads(test_response["body"])
 
     assert test_response["statusCode"] == 404
+    assert test_response["headers"]["Content-Type"] == "application/json"
     assert "message" in body["error"]
 
 
@@ -106,4 +108,5 @@ def test_invalid_request(fake_context):
     body = json.loads(test_response["body"])
 
     assert test_response["statusCode"] == 400
+    assert test_response["headers"]["Content-Type"] == "application/json"
     assert "message" in body["error"]

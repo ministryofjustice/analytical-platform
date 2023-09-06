@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Ensure Content-Type header is set to 'application/json'.
+
 ## [1.1.0]
 
 ### Changed

@@ -19,6 +19,7 @@ def handler(event, context):
     except KeyError:
         return {
             "statusCode": 400,
+            "headers": {"Content-Type": "application/json"},
             "body": json.dumps(
                 {
                     "error": {
@@ -43,6 +44,7 @@ def handler(event, context):
     except glue_client.exceptions.EntityNotFoundException:
         return {
             "statusCode": 404,
+            "headers": {"Content-Type": "application/json"},
             "body": json.dumps(
                 {
                     "error": {
@@ -52,4 +54,8 @@ def handler(event, context):
             ),
         }
 
-    return {"statusCode": 200, "body": json.dumps(resp, default=str)}
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "application/json"},
+        "body": json.dumps(resp, default=str),
+    }
