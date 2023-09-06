@@ -104,7 +104,7 @@ locals {
     "RossKen",
     "afua-moj",
     "murdo-moj",
-    "hemeshpatel-moj",
+    "matmoore",
     "AntFMoJ",  # Anthony Fitzroy
     "tomholt1", # Tom Holt
     "lalithanagarur",
@@ -135,8 +135,8 @@ locals {
   ]
 
   data_platform_labs_members = [
-    "hemeshpatel-moj",
     "murdo-moj",
+    "matmoore",
     "LavMatt"
   ]
 
