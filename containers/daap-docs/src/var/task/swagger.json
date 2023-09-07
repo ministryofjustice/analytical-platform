@@ -149,19 +149,16 @@
         "summary": "Register metadata for a new data product you want to upload to the Data Platform.",
         "description": "Registers the first version of your data product's metadata and enables you to proceed with uploading data.",
         "operationId": "registerDataProduct",
-        "consumes": [
-          "application/json"
-        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/registerDataProduct"
+              }
+            }
+          }
+        },
         "parameters": [
-          {
-            "in": "body",
-            "name": "metadata",
-            "schema": {
-              "$ref": "#/components/schemas/registerDataProduct"
-            },
-            "required": true,
-            "description": "a json object detailing the metadata associated with your data product"
-          },
           {
             "in": "header",
             "name": "authorizationToken",
@@ -223,7 +220,7 @@
         }
       },
       "dataProductMetadataSchema": {
-        "$ref": "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.0.0/moj_data_product_metadata_spec.json"
+        "$ref": "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/dpl-1193-metadata-api/terraform/environments/data-platform/data-product-metadata-json-schema/v1.0.0/moj_data_product_metadata_spec.json"
       },
       "UploadDataRequest": {
         "required": [
