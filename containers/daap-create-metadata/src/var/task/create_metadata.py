@@ -21,8 +21,10 @@ def handler(event, context):
 
     logger.info(f"event: {event}")
 
+    request_body = json.loads(event["body"])
+
     try:
-        data_product_name = event["metadata"]["name"]
+        data_product_name = request_body["metadata"]["name"]
     except KeyError:
         logger.error("The name of the data product is missing from the metadata.")
         logger.write_log_dict_to_s3_json(os.environ["BUCKET_NAME"], **s3_security_opts)
@@ -42,7 +44,7 @@ def handler(event, context):
     data_product_metadata = DataProductMetadata(data_product_name, logger)
 
     if not data_product_metadata.metadata_exists:
-        data_product_metadata.validate(event["metadata"])
+        data_product_metadata.validate(request_body["metadata"])
     else:
         data_product_metadata.logger.write_log_dict_to_s3_json(
             os.environ["BUCKET_NAME"], **s3_security_opts
