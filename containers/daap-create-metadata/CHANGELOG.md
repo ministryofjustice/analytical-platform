@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3]
+
+### Changed
+
+- How the lambda handler gets the json metadata, passed to the api endpoint by the user,
+from the event arg.
+
+
 ## [1.0.2]
 
 ### Added
