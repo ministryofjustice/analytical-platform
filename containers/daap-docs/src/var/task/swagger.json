@@ -176,12 +176,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "example": [
-                    {
-                      "data_product_name": "example_data_product",
-                      "message": "Data product metadata has been created."
-                    }
-                  ]
+                  "example": {
+                    "data_product_name": "example_data_product",
+                    "message": "Data product metadata has been created."
+                  }
                 }
               }
             }
@@ -192,12 +190,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "example": [
-                    {
-                      "data_product_name": "example_data_product",
-                      "message": "Your data product already has a version 1 registered metadata."
-                    }
-                  ]
+                  "example": {
+                    "data_product_name": "example_data_product",
+                    "message": "Your data product already has a version 1 registered metadata."
+                  }
                 }
               }
             }
