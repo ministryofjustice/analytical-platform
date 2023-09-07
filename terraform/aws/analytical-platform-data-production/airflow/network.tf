@@ -232,13 +232,13 @@ resource "aws_subnet" "private_subnet_prod" {
 resource "aws_nat_gateway" "airflow_prod" {
   count         = length(var.azs)
   allocation_id = aws_eip.airflow_prod_eip[count.index].id
-  subnet_id     = aws_subnet.public_subnet[count.index].id
+  subnet_id     = aws_subnet.public_subnet_prod[count.index].id
 
   tags = {
     Name = "airflow-prod-${element(var.azs, count.index)}"
   }
 
-  depends_on = [aws_subnet.public_subnet]
+  depends_on = [aws_subnet.public_subnet_prod]
 }
 
 resource "aws_route_table" "airflow_prod_public" {
@@ -260,7 +260,7 @@ resource "aws_route_table" "airflow_prod_public" {
 
 resource "aws_route_table_association" "airflow_prod_public_route_table_assoc" {
   count          = length(var.azs)
-  subnet_id      = aws_subnet.public_subnet[count.index].id
+  subnet_id      = aws_subnet.public_subnet_prod[count.index].id
   route_table_id = aws_route_table.airflow_prod_public.id
 }
 
