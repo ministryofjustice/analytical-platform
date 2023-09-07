@@ -1,5 +1,5 @@
 resource "aws_vpc" "airflow_dev" {
-  cidr_block = var.vpc_cidr_block
+  cidr_block = var.dev_vpc_cidr_block
 
   tags = {
     Name = "airflow-dev"
@@ -33,8 +33,8 @@ resource "aws_eip" "airflow_dev_eip" {
 
 resource "aws_subnet" "public_subnet" {
   vpc_id            = aws_vpc.airflow_dev.id
-  count             = length(var.public_subnet_cidrs)
-  cidr_block        = element(var.public_subnet_cidrs, count.index)
+  count             = length(var.dev_public_subnet_cidrs)
+  cidr_block        = element(var.dev_public_subnet_cidrs, count.index)
   availability_zone = element(var.azs, count.index)
   tags = {
     Name = "airflow-dev-public-${element(var.azs, count.index)}"
@@ -43,8 +43,8 @@ resource "aws_subnet" "public_subnet" {
 
 resource "aws_subnet" "private_subnet" {
   vpc_id            = aws_vpc.airflow_dev.id
-  count             = length(var.private_subnet_cidrs)
-  cidr_block        = element(var.private_subnet_cidrs, count.index)
+  count             = length(var.dev_private_subnet_cidrs)
+  cidr_block        = element(var.dev_private_subnet_cidrs, count.index)
   availability_zone = element(var.azs, count.index)
   tags = {
     Name = "airflow-dev-private-${element(var.azs, count.index)}"
@@ -177,7 +177,7 @@ resource "aws_security_group" "airflow_dev_security_group" {
 #  /_/   \_\|_||_|   |_|  |_| \___/  \_/\_/   |_|    |_|   \___/  \__,_| \__,_| \___| \__||_| \___/ |_| |_|
 
 resource "aws_vpc" "airflow_prod" {
-  cidr_block = var.vpc_cidr_block
+  cidr_block = var.prod_vpc_cidr_block
 
   tags = {
     Name = "airflow-prod"
@@ -211,8 +211,8 @@ resource "aws_eip" "airflow_prod_eip" {
 
 resource "aws_subnet" "public_subnet_prod" {
   vpc_id            = aws_vpc.airflow_prod.id
-  count             = length(var.public_subnet_cidrs)
-  cidr_block        = element(var.public_subnet_cidrs, count.index)
+  count             = length(var.prod_public_subnet_cidrs)
+  cidr_block        = element(var.prod_public_subnet_cidrs, count.index)
   availability_zone = element(var.azs, count.index)
   tags = {
     Name = "airflow-prod-public-${element(var.azs, count.index)}"
@@ -221,8 +221,8 @@ resource "aws_subnet" "public_subnet_prod" {
 
 resource "aws_subnet" "private_subnet_prod" {
   vpc_id            = aws_vpc.airflow_prod.id
-  count             = length(var.private_subnet_cidrs)
-  cidr_block        = element(var.private_subnet_cidrs, count.index)
+  count             = length(var.prod_private_subnet_cidrs)
+  cidr_block        = element(var.prod_private_subnet_cidrs, count.index)
   availability_zone = element(var.azs, count.index)
   tags = {
     Name = "airflow-prod-private-${element(var.azs, count.index)}"

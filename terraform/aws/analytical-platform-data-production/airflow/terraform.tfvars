@@ -23,12 +23,17 @@ tags = {
 # Network
 ##################################################
 
-vpc_cidr_block                    = "10.200.0.0/16"
 noms_live_dead_end_cidr_block     = "10.40.0.0/18"
 modernisation_platform_cidr_block = "10.26.0.0/15"
 azs                               = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
-private_subnet_cidrs              = ["10.200.20.0/24", "10.200.21.0/24", "10.200.22.0/24"]
-public_subnet_cidrs               = ["10.200.10.0/24", "10.200.11.0/24", "10.200.12.0/24"]
+
+dev_vpc_cidr_block                    = "10.200.0.0/16"
+dev_private_subnet_cidrs              = ["10.200.20.0/24", "10.200.21.0/24", "10.200.22.0/24"]
+dev_public_subnet_cidrs               = ["10.200.10.0/24", "10.200.11.0/24", "10.200.12.0/24"]
+
+prod_vpc_cidr_block                    = "10.201.0.0/16"
+prod_private_subnet_cidrs              = ["10.201.20.0/24", "10.201.21.0/24", "10.201.22.0/24"]
+prod_public_subnet_cidrs               = ["10.201.10.0/24", "10.201.11.0/24", "10.201.12.0/24"]
 
 
 transit_gateway_ids = {
