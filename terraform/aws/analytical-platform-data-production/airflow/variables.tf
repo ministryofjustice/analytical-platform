@@ -65,3 +65,13 @@ variable "dev_node_sg_id" {
   type        = string
   description = "ID of node security group for Airflow-Dev"
 }
+
+variable "prod_cluster_sg_name" {
+  type        = string
+  description = "Name of cluster security group for Airflow-Prod"
+}
+
+variable "prod_node_sg_id" {
+  type        = string
+  description = "ID of node security group for Airflow-Prod"
+}

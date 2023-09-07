@@ -87,6 +87,17 @@ resource "aws_iam_role" "airflow_prod_execution_role" {
   }
 }
 
+resource "aws_iam_role" "airflow_prod_flow_log_role" {
+  name               = "airflow-prod-flow-log-role"
+  description        = "Flow log role for Airflow Prod"
+  assume_role_policy = data.aws_iam_policy_document.airflow_dev_flow_log_assume_policy.json
+
+  inline_policy {
+    name   = "airflow-prod-flow-log-policy"
+    policy = data.aws_iam_policy_document.airflow_prod_flow_log_role_policy.json
+  }
+}
+
 ########################Airflow dev EKS Role###########################
 
 resource "aws_iam_role" "airflow_dev_eks_role" {

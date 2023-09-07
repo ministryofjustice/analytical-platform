@@ -96,11 +96,11 @@ resource "aws_route_table" "airflow_dev_private" {
   }
   route {
     cidr_block         = var.modernisation_platform_cidr_block
-    transit_gateway_id = var.transit_gateway_ids["airflow-dev-moj"]
+    transit_gateway_id = var.transit_gateway_ids["airflow-moj"]
   }
   route { # known dead end to noms-live
     cidr_block         = var.noms_live_dead_end_cidr_block
-    transit_gateway_id = var.transit_gateway_ids["airflow-dev-moj"]
+    transit_gateway_id = var.transit_gateway_ids["airflow-moj"]
   }
 
   tags = {
@@ -116,20 +116,20 @@ resource "aws_route_table_association" "airflow_dev_private_route_table_assoc" {
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_dev_cloud_platform" {
   subnet_ids         = aws_subnet.private_subnet[*].id
-  transit_gateway_id = var.transit_gateway_ids["airflow-dev-cloud-platform"]
+  transit_gateway_id = var.transit_gateway_ids["airflow-cloud-platform"]
   vpc_id             = aws_vpc.airflow_dev.id
   tags = {
-    Name = "airflow-dev-cloud-platform"
+    Name = "airflow-cloud-platform"
   }
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_dev_moj" {
   subnet_ids         = aws_subnet.private_subnet[*].id
-  transit_gateway_id = var.transit_gateway_ids["airflow-dev-moj"]
+  transit_gateway_id = var.transit_gateway_ids["airflow-moj"]
   vpc_id             = aws_vpc.airflow_dev.id
 
   tags = {
-    Name = "airflow-dev-moj"
+    Name = "airflow-moj"
   }
 }
 
@@ -175,7 +175,7 @@ resource "aws_security_group" "airflow_dev_security_group" {
 #    / _ \  | || '__|| |_ | | / _ \\ \ /\ / / | |_) || '__|/ _ \  / _` || | | | / __|| __|| | / _ \ | '_ \ 
 #   / ___ \ | || |   |  _|| || (_) |\ V  V /  |  __/ | |  | (_) || (_| || |_| || (__ | |_ | || (_) || | | |
 #  /_/   \_\|_||_|   |_|  |_| \___/  \_/\_/   |_|    |_|   \___/  \__,_| \__,_| \___| \__||_| \___/ |_| |_|
-                                                                                                                                                                                             
+
 resource "aws_vpc" "airflow_prod" {
   cidr_block = var.vpc_cidr_block
 
@@ -209,7 +209,7 @@ resource "aws_eip" "airflow_prod_eip" {
   }
 }
 
-resource "aws_subnet" "public_subnet" {
+resource "aws_subnet" "public_subnet_prod" {
   vpc_id            = aws_vpc.airflow_prod.id
   count             = length(var.public_subnet_cidrs)
   cidr_block        = element(var.public_subnet_cidrs, count.index)
@@ -219,7 +219,7 @@ resource "aws_subnet" "public_subnet" {
   }
 }
 
-resource "aws_subnet" "private_subnet" {
+resource "aws_subnet" "private_subnet_prod" {
   vpc_id            = aws_vpc.airflow_prod.id
   count             = length(var.private_subnet_cidrs)
   cidr_block        = element(var.private_subnet_cidrs, count.index)
@@ -274,11 +274,11 @@ resource "aws_route_table" "airflow_prod_private" {
   }
   route {
     cidr_block         = var.modernisation_platform_cidr_block
-    transit_gateway_id = var.transit_gateway_ids["airflow-prod-moj"]
+    transit_gateway_id = var.transit_gateway_ids["airflow-moj"]
   }
   route { # known dead end to noms-live
     cidr_block         = var.noms_live_dead_end_cidr_block
-    transit_gateway_id = var.transit_gateway_ids["airflow-prod-moj"]
+    transit_gateway_id = var.transit_gateway_ids["airflow-moj"]
   }
 
   tags = {
@@ -294,20 +294,20 @@ resource "aws_route_table_association" "airflow_prod_private_route_table_assoc" 
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_prod_cloud_platform" {
   subnet_ids         = aws_subnet.private_subnet[*].id
-  transit_gateway_id = var.transit_gateway_ids["airflow-prod-cloud-platform"]
+  transit_gateway_id = var.transit_gateway_ids["airflow-cloud-platform"]
   vpc_id             = aws_vpc.airflow_prod.id
   tags = {
-    Name = "airflow-prod-cloud-platform"
+    Name = "airflow-cloud-platform"
   }
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_prod_moj" {
   subnet_ids         = aws_subnet.private_subnet[*].id
-  transit_gateway_id = var.transit_gateway_ids["airflow-prod-moj"]
+  transit_gateway_id = var.transit_gateway_ids["airflow-moj"]
   vpc_id             = aws_vpc.airflow_prod.id
 
   tags = {
-    Name = "airflow-prod-moj"
+    Name = "airflow-moj"
   }
 }
 
