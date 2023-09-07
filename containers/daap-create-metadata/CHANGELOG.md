@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2]
+
+### Added
+
+- logging of event passed to lambda function.
+
 ## [1.0.1]
 
 - No real change but need to comply with workflow to
