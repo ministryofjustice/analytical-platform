@@ -19,6 +19,8 @@ def handler(event, context):
         "ServerSideEncryption": "AES256",
     }
 
+    logger.info(f"event: {event}")
+
     try:
         data_product_name = event["metadata"]["name"]
     except KeyError:
