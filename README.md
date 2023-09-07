@@ -35,6 +35,23 @@ so that users can understand what a repository does through its name.
 | [Data Platform support](https://github.com/ministryofjustice/data-platform-support)            | This repository is used for support and provides templated forms for our users.           |
 | [Modernisation Platform environments repository](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/data-platform) | Hosting environment for the data platform |
 
+### Testing locally
+
+Unit tests are implemented per container using pytest. We use
+[moto](https://pypi.org/project/moto/) to mock out AWS services.
+
+For example, to test `daap-get-glue-metadata`, run:
+
+```shell
+cd containers/daap-get-glue-metadata
+pip install -r tests/requirements.txt
+pytest
+```
+
+To test the full docker image without deploying it to lambda,
+follow the instructions in
+[Testing AWS base images](https://docs.aws.amazon.com/lambda/latest/dg/images-test.html#images-test-AWSbase).
+
 ### OpenSSF Best Practices
 
 These are the requirements currently met by this repository in line with the

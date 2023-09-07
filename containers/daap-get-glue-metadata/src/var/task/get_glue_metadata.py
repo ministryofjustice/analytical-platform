@@ -13,8 +13,21 @@ logger = DataPlatformLogger(
 
 
 def handler(event, context):
-    database = event["queryStringParameters"]["database"]
-    table = event["queryStringParameters"]["table"]
+    try:
+        database = event["queryStringParameters"]["database"]
+        table = event["queryStringParameters"]["table"]
+    except KeyError:
+        return {
+            "statusCode": 400,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps(
+                {
+                    "error": {
+                        "message": "Missing required parameters: expected `database` and `table`."
+                    }
+                }
+            ),
+        }
 
     logger.info(f"event: {event}")
     logger.add_extras(
@@ -26,6 +39,23 @@ def handler(event, context):
     )
 
     glue_client = boto3.client("glue")
-    resp = glue_client.get_table(DatabaseName=database, Name=table)
+    try:
+        resp = glue_client.get_table(DatabaseName=database, Name=table)
+    except glue_client.exceptions.EntityNotFoundException:
+        return {
+            "statusCode": 404,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps(
+                {
+                    "error": {
+                        "message": f"Table {table} in database {database} does not exist in the glue catalog."
+                    }
+                }
+            ),
+        }
 
-    return {"statusCode": 200, "body": json.dumps(resp, default=str)}
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "application/json"},
+        "body": json.dumps(resp, default=str),
+    }
