@@ -1,6 +1,6 @@
 extends: ["spectral:oas"]
 overrides:
   - files:
-    - "swagger.json"
+      - "containers/daap-docs/src/var/task/swagger.json"
     rules:
       oas3-schema: "warn"
