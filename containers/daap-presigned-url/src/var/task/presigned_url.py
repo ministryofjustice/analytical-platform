@@ -5,6 +5,7 @@ from datetime import datetime
 
 import boto3
 from data_platform_logging import DataPlatformLogger
+from data_platform_paths import DataProductConfig
 
 s3 = boto3.client("s3")
 
@@ -25,9 +26,9 @@ def handler(event, context):
     bucket_name = os.environ["BUCKET_NAME"]
     database = event["queryStringParameters"]["database"]
     table = event["queryStringParameters"]["table"]
-    amz_date = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    amz_date = datetime.utcnow()
     md5 = str(event["queryStringParameters"]["contentMD5"])
-    uuid_string = str(uuid.uuid4())
+    uuid_value = uuid.uuid4()
 
     if type(database) != str or type(table) != str:
         return {
@@ -42,13 +43,13 @@ def handler(event, context):
             ),
         }
 
-    file_name = os.path.join(
-        "raw_data",
-        database,
-        table,
-        f"extraction_timestamp={amz_date}",
-        uuid_string,
+    data_product = DataProductConfig(
+        name=database, table_name=table, bucket_name=bucket_name
     )
+    file_name = data_product.raw_data_path(
+        timestamp=amz_date, uuid_value=uuid_value
+    ).key
+
     fields = {
         "x-amz-server-side-encryption": "AES256",
         "x-amz-acl": "bucket-owner-full-control",
@@ -60,7 +61,7 @@ def handler(event, context):
     conditions = [
         {"x-amz-server-side-encryption": "AES256"},
         {"x-amz-acl": "bucket-owner-full-control"},
-        {"x-amz-date": amz_date},
+        {"x-amz-date": amz_date.strftime("%Y%m%dT%H%M%SZ")},
         {"Content-MD5": md5},
         ["starts-with", "$Content-MD5", ""],
         ["starts-with", "$Content-Type", ""],
@@ -82,7 +83,7 @@ def handler(event, context):
     logger.info(f"table: {table}")
     logger.info(f"amz_date: {amz_date}")
     logger.info(f"md5: {md5}")
-    logger.info(f"uuid_string: {uuid_string}")
+    logger.info(f"uuid_string: {uuid_value}")
     logger.info(f"event: {event}")
 
     logger.write_log_dict_to_s3_json(bucket_name, **s3_security_opts)

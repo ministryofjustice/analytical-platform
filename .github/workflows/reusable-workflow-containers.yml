@@ -128,7 +128,7 @@ jobs:
             SHA not found for "${GITHUB_HEAD_REF}" branch, assuming CHANGELOG.md does not exist
             "changelog_updated=false" >>"${GITHUB_ENV}"
           elif [[ "${mainSha}" == "${branchSha}" ]]; then
-            echo "CHANGELOG.md matches main branch, neesd to be updated"
+            echo "CHANGELOG.md matches main branch, needs to be updated"
             echo "changelog_updated=false" >>"${GITHUB_ENV}"
           elif [[ "${mainSha}" != "${branchSha}" ]]; then
             echo "CHANGELOG.md does not match main branch, does not need to be updated"
