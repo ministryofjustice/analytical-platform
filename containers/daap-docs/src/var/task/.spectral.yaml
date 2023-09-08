@@ -1,0 +1,6 @@
+extends: ["spectral:oas"]
+overrides:
+  - files:
+    - "swagger.json"
+    rules:
+      oas3-schema: "warn"
