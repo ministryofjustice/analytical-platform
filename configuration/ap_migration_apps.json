@@ -145,12 +145,6 @@
     "description": ""
   },
   {
-    "name": "environ-surveillance-hub",
-    "source_repo_name": "environ-surveillance-hub",
-    "team": [],
-    "description": ""
-  },
-  {
     "name": "exit-survey-app",
     "source_repo_name": "exit_survey_app",
     "team": ["exit-survey-app-admin-team"],
@@ -258,13 +252,6 @@
     "source_repo_name": "judicial-wm2",
     "team": ["team-jwcm"],
     "description": ""
-  },
-  {
-    "name": "legal-aid-tools",
-    "source_repo_name": "legalaidtools",
-    "team": [],
-    "description": "",
-    "role_name_suffix": "legalaidtools"
   },
   {
     "name": "ltc-capabilites-app",
