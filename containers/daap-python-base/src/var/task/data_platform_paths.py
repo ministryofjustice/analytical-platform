@@ -133,9 +133,24 @@ class DataProductConfig:
         return BucketPath(bucket=bucket_name, key=key)
 
     @staticmethod
+    def metadata_spec_prefix(bucket_name: str | None = None) -> BucketPath:
+        """
+        Path to the metadata spec files
+        """
+        if bucket_name is None:
+            bucket_name = get_bucket_name()
+
+        return BucketPath(
+            bucket_name,
+            os.path.join(
+                "data_product_metadata_spec",
+            ),
+        )
+
+    @staticmethod
     def metadata_spec_path(version: str, bucket_name: str | None = None) -> BucketPath:
         """
-        Path to the metadata spec file
+        Path to a metadata spec file
         """
         if bucket_name is None:
             bucket_name = get_bucket_name()
