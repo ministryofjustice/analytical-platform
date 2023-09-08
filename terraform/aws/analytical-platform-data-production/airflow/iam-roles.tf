@@ -98,6 +98,11 @@ resource "aws_iam_role" "airflow_prod_flow_log_role" {
   }
 }
 
+import {
+  to = aws_iam_role.airflow_prod_flow_log_role
+  id = "airflow-prod-flow-log-role"
+}
+
 ########################Airflow dev EKS Role###########################
 
 resource "aws_iam_role" "airflow_dev_eks_role" {

@@ -21,6 +21,11 @@ variable "noms_live_dead_end_cidr_block" {
   description = "CIDR range for NOMS live"
 }
 
+variable "laa_prod_cidr_block" {
+  type        = string
+  description = "CIDR range for LAA Prod"
+}
+
 variable "modernisation_platform_cidr_block" {
   type        = string
   description = "CIDR range for Modernisation Platform"
@@ -97,4 +102,9 @@ variable "prod_private_subnet_cidrs" {
 variable "prod_public_subnet_cidrs" {
   type        = list(string)
   description = "List of public subnet CIDR ranges"
+}
+
+variable "prod_vpc_sg_name" {
+  type        = string
+  description = "VPC security group"
 }
