@@ -42,7 +42,7 @@ class BucketPath(NamedTuple):
 
     @property
     def parent(self):
-        return os.path.dirname(self.key)
+        return BucketPath(self.bucket, os.path.dirname(self.key))
 
     @staticmethod
     def from_uri(uri):

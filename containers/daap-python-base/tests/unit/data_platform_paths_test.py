@@ -34,7 +34,7 @@ def test_bucket_path_parent():
     uri = "s3://bucket/path/to/something"
     path = BucketPath.from_uri(uri)
 
-    assert path.parent == "path/to"
+    assert path.parent.key == "path/to"
 
 
 def test_bucket_name_returns_environment_variable(monkeypatch):
