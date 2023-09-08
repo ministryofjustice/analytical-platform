@@ -336,5 +336,6 @@
         "in": "header"
       }
     }
-  }
+  },
+  "additional_properties": true
 }
