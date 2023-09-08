@@ -43,3 +43,4 @@ jobs:
           VALIDATE_SHELL_SHFMT: false
           VALIDATE_HTML: false
           VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_OPENAPI: false
