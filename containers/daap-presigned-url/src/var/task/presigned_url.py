@@ -30,7 +30,7 @@ def handler(event, context):
     md5 = str(event["queryStringParameters"]["contentMD5"])
     uuid_value = uuid.uuid4()
 
-    if type(database) != str or type(table) != str:
+    if not isinstance(database, str) or not isinstance(table, str):
         return {
             "statusCode": 400,
             "headers": {"Content-Type": "application/json"},
@@ -106,7 +106,7 @@ def handler(event, context):
             ),
         }
 
-    if any(data_product_registration) and type(database) == str and type(table) == str:
+    if any(data_product_registration):
         URL = s3.generate_presigned_post(
             Bucket=bucket_name,
             Key=file_name,
