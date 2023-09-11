@@ -150,6 +150,7 @@ resource "aws_flow_log" "airflow_dev" {
   }
 }
 
+# Additional Security Group (Define as additional security group in AWS)
 resource "aws_security_group" "airflow_dev_security_group" {
   name        = var.dev_cluster_sg_name
   description = "Managed by Pulumi"
@@ -329,6 +330,7 @@ resource "aws_flow_log" "airflow_prod" {
   }
 }
 
+# Additional Security Group (Define as additional security group in AWS)
 resource "aws_security_group" "airflow_prod_security_group" {
   name        = var.prod_vpc_sg_name
   description = "Managed by Pulumi"
