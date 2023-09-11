@@ -48,199 +48,199 @@
     "templateContent": "status ✅ accepted context data platform built availability products order become complete product needs contain that made available consumers this adr covers mechanisms supported out box by facilitate ingestion into analysis two different approaches were initially proposed analysed: push pull approach raw should sent system passive receives know how fetch from source e.g database both have advantages: advantages reduced complexity around networking sources are likely networks may accessible would require too many hops make reachable fewer systems manage could offer running environment required eliminating need extra hosting standardised all producers there will customisation access each network making more self service guarantee entire transformation process captured hosted avoiding ad hoc transformations happen temporary created only once disadvantages developers another fetches then pushes risk accidentally publishing credentials sure extracts kept sync with code modifications structure handled correctly these deployed managed independently higher mismatch security compromised role potentially several decision current choice support through consequences while infrastructure allow say model forbidden choose their within however natively nor currently encouraged recognise target user groups eg hmcts existing datasets moj which difficult adapt processes adapted onboard expected teams generate adaptations some guidance provided",
     "url": "/tech docs/ADRs/ADR004/"
   },  {
-    "title": "Data Platform",
-"description": "A new platform to revolutionise data sharing in the Ministry of Justice",    "layout": "product",
+    "title": "Analytical Platform",
+"description": "Access to our current data analysis platform","section": "Home",    "layout": "collection",
     "hasFrontmatterDate": false,
-    "date": "10 August 2023",
-    "templateContent": "analytical platform access our current data analysis blog latest news development mvp minimum viable product how guides step by instructions using knowledge base wiki articles written user community release notes new features bug fixes known issues support troubleshooting help from team information ways working show tell schedule tech docs technical descriptions infrastructure architecture",
-    "url": "/"
-  },  {
-    "title": "How-to guides",
-"description": "Step by step instructions for using the Data Platform","section": "Home",    "layout": "sub-navigation",
-    "hasFrontmatterDate": false,
-    "date": "10 August 2023",
-    "templateContent": "",
-    "url": "/how to/how-to/"
-  },  {
-    "title": "Get started",
-"description": "Follow this guide to get set up on the Data Platform","section": "How-to guides",    "layout": "sub-navigation",
-    "hasFrontmatterDate": false,
-    "date": "10 August 2023",
-    "templateContent": "",
-    "url": "/how to/get-started/"
-  },  {
-    "title": "Release notes",
-"description": "New features, bug fixes and known issues","section": "Home",    "layout": "collection",
-    "hasFrontmatterDate": false,
-    "date": "17 August 2023",
+    "date": "11 September 2023",
     "templateContent": "index",
-    "url": "/release notes/release-notes/"
+    "url": "/analytical platform/analytical-platform/"
   },  {
     "title": "Blog",
 "description": "Latest news on the Data Platform's development","section": "Home",    "layout": "collection",
     "hasFrontmatterDate": false,
-    "date": "17 August 2023",
+    "date": "11 September 2023",
     "templateContent": "",
     "url": "/blog/"
-  },  {
-    "title": "Explore and access data",
-"section": "How-to guides",    "layout": "sub-navigation",
-    "hasFrontmatterDate": false,
-    "date": "21 August 2023",
-    "templateContent": "",
-    "url": "/how to/explore-and-access-data/"
-  },  {
-    "title": "Analytical Platform",
-"description": "Access to our current data analysis platform","section": "Home",    "layout": "collection",
-    "hasFrontmatterDate": false,
-    "date": "21 August 2023",
-    "templateContent": "index",
-    "url": "/analytical platform/analytical-platform/"
-  },  {
-    "title": "ADR006",
-"description": "TBD","section": "ADRs",    "layout": "post",
-    "hasFrontmatterDate": false,
-    "date": "22 August 2023",
-    "templateContent": "tbd",
-    "url": "/tech docs/ADRs/ADR006/"
-  },  {
-    "title": "ADR007",
-"description": "TBD","section": "ADRs",    "layout": "post",
-    "hasFrontmatterDate": false,
-    "date": "22 August 2023",
-    "templateContent": "tbd",
-    "url": "/tech docs/ADRs/ADR007/"
-  },  {
-    "title": "ADR008",
-"description": "TBD","section": "ADRs",    "layout": "post",
-    "hasFrontmatterDate": false,
-    "date": "22 August 2023",
-    "templateContent": "tbd",
-    "url": "/tech docs/ADRs/ADR008/"
-  },  {
-    "title": "ADR009",
-"description": "TBD","section": "ADRs",    "layout": "post",
-    "hasFrontmatterDate": false,
-    "date": "22 August 2023",
-    "templateContent": "tbd",
-    "url": "/tech docs/ADRs/ADR009/"
-  },  {
-    "title": "ADR010",
-"description": "TBD","section": "ADRs",    "layout": "post",
-    "hasFrontmatterDate": false,
-    "date": "22 August 2023",
-    "templateContent": "tbd",
-    "url": "/tech docs/ADRs/ADR0010/"
-  },  {
-    "title": "Architectural Decision Records",
-"description": "Index of architecture choices made for the Data Platform","section": "Tech docs",    "layout": "collection",
-    "hasFrontmatterDate": false,
-    "date": "22 August 2023",
-    "templateContent": "architecture decision records this record architectural decisions made by data platform team understand how why see adr 000 statuses: 🤔 proposed ✅ accepted ❌ rejected ⌛️ superseded ♻️ amended",
-    "url": "/tech docs/ADRs/"
   },  {
     "title": "Blog 2",
 "description": "Example blog post 2","section": "Blog",    "layout": "post",
     "hasFrontmatterDate": false,
-    "date": "22 August 2023",
+    "date": "11 September 2023",
     "templateContent": "example blog post",
     "url": "/blog/blog2/"
+  },  {
+    "title": "Data Platform (MVP)",
+"description": "Access to the Data Platform (minimum viable product)","section": "Home",    "layout": "wiki",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "minimum viable product mvp version data platform still development when available will provide access this page",
+    "url": "/data platform/data-platform/"
+  },  {
+    "title": "Automate and report data",
+"section": "How-to guides",    "layout": "sub-navigation",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "",
+    "url": "/how to/automate-and-report-data/"
+  },  {
+    "title": "Explore and access data",
+"section": "How-to guides",    "layout": "sub-navigation",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "",
+    "url": "/how to/explore-and-access-data/"
+  },  {
+    "title": "Get started",
+"description": "Follow this guide to get set up on the Data Platform","section": "How-to guides",    "layout": "sub-navigation",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "",
+    "url": "/how to/get-started/"
+  },  {
+    "title": "How-to guides",
+"description": "Step by step instructions for using the Data Platform","section": "Home",    "layout": "sub-navigation",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "",
+    "url": "/how to/how-to/"
+  },  {
+    "title": "Query data",
+"section": "How-to guides",    "layout": "sub-navigation",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "",
+    "url": "/how to/query-data/"
+  },  {
+    "title": "Upload and manage data",
+"section": "How-to guides",    "layout": "sub-navigation",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "",
+    "url": "/how to/upload-and-manage-data/"
+  },  {
+    "title": "Data Platform",
+"description": "A new platform to revolutionise data sharing in the Ministry of Justice -F",    "layout": "product",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "analytical platform access our current data analysis blog latest news development mvp minimum viable product how guides step by instructions using knowledge base wiki articles written user community release notes new features bug fixes known issues support troubleshooting help from team information ways working show tell schedule tech docs technical descriptions infrastructure architecture",
+    "url": "/"
   },  {
     "title": "Knowledge base",
 "description": "Wiki articles written by our user community","section": "Home",    "layout": "wiki",
     "hasFrontmatterDate": false,
-    "date": "23 August 2023",
+    "date": "11 September 2023",
     "templateContent": "index example knowledge base article another b believe this c can yet !",
     "url": "/knowledge base/knowledge-base/"
   },  {
     "title": "Wiki article 1",
 "description": "Example wiki article 1","section": "Knowledge base",    "layout": "sub-navigation",
     "hasFrontmatterDate": false,
-    "date": "23 August 2023",
+    "date": "11 September 2023",
     "templateContent": "example wiki article",
     "url": "/knowledge base/wiki1/"
   },  {
-    "title": "Tech docs",
-"description": "Technical descriptions of our infrastructure and architecture","section": "Home",    "layout": "collection",
+    "title": "Release notes",
+"description": "New features, bug fixes and known issues","section": "Home",    "layout": "collection",
     "hasFrontmatterDate": false,
-    "date": "23 August 2023",
+    "date": "11 September 2023",
     "templateContent": "index",
-    "url": "/tech docs/tech-docs/"
-  },  {
-    "title": "Ways of working",
-"section": "Team information",    "layout": "sub-navigation",
-    "hasFrontmatterDate": false,
-    "date": "23 August 2023",
-    "templateContent": "our stand ups run daily 09:40 last fifteen minutes will follow one two formats: walk board starting with done column discuss any active issues github via zenhub yesterday today blocked round robin each team member discussing their blockers sprint planning weeks long starts thursday use hour session template agenda below: previous met objective estimated tickets did achieve anything outside goal review caring over next why agree capacity pull new into backlog ensure all have sufficient descriptions epics assigned size other business refinement afternoons forty five minute purpose this ceremony that created enough information pick once issue refined estimate using fibonacci scale data platform show tell every thirty share colleagues wider organisation achievements during justice digital here retrospective end openly positives negatives format either miro jamboard",
-    "url": "/team/ways-of-working/"
-  },  {
-    "title": "Team information",
-"description": "Our ways of working and Show & Tell schedule","section": "Home",    "layout": "sub-navigation",
-    "hasFrontmatterDate": false,
-    "date": "23 August 2023",
-    "templateContent": "general information our team have stand everyday 9:40 plan sprints through github extension zenhub retro every 2 weeks communication use google meet calls slack huddles pairing direct main chat platform this preferred method three channels #data channel with all members data core infrastructure where discussions about anything ranging from: depth technical issues plans day request someone else from help when away lunch musings make standup post your update here #ask anyone who : ask questions services run get advice notifications such pull requests includes updates documentation architecture decision records adr noisy whether join",
-    "url": "/team/team-info/"
-  },  {
-    "title": "Architecture diagrams",
-"description": "Visual representations of the Data Platform's underlying architecture","section": "Tech docs",    "layout": "sub-navigation",
-    "hasFrontmatterDate": false,
-    "date": "23 August 2023",
-    "templateContent": "this page documents technical architecture diagrams that make data platform would like contribute please see contributing updating guidance bottom c4 model four represent context containers components code these different levels help tell right story audience are people inside outside team non level 1 diagram highest abstraction provides overview entire system shows under consideration its external dependencies such users systems apis frequency change likely minimal compared other 2 minimum viable product going deploy part our mvps play vital role service development by aiming release early possible reduce risk never releasing all also get valuable feedback from who using real world situation container focuses software high which typically applications services illustrates major their interactions web servers databases desktop mobile examples 3 component delves deeper into identified previous internal within each can classes modules logical units 3.1 proposal relationships with created open source tool excalidraw files have .png appended onto filename e.g diagram.excalidraw.png allows editors below manipulate version without need export after every edit then use one following methods vscode.dev extenstion recommended small changes requires visual studio extension creating opening cloned downloaded group sessions live collaboration",
-    "url": "/tech docs/diagrams/architecture-diagrams/"
-  },  {
-    "title": "Upload and manage data",
-"section": "How-to guides",    "layout": "sub-navigation",
-    "hasFrontmatterDate": false,
-    "date": "23 August 2023",
-    "templateContent": "",
-    "url": "/how to/upload-and-manage-data/"
-  },  {
-    "title": "Query data",
-"section": "How-to guides",    "layout": "sub-navigation",
-    "hasFrontmatterDate": false,
-    "date": "23 August 2023",
-    "templateContent": "",
-    "url": "/how to/query-data/"
-  },  {
-    "title": "Automate and report data",
-"section": "How-to guides",    "layout": "sub-navigation",
-    "hasFrontmatterDate": false,
-    "date": "23 August 2023",
-    "templateContent": "",
-    "url": "/how to/automate-and-report-data/"
+    "url": "/release notes/release-notes/"
   },  {
     "title": "Request support",
 "description": "Submit a request to the Data Platform Support team","section": "Support",    "layout": "sub-navigation",
     "hasFrontmatterDate": false,
-    "date": "24 August 2023",
+    "date": "11 September 2023",
     "templateContent": "",
     "url": "/support/request-support/"
-  },  {
-    "title": "Support",
-"description": "Troubleshooting help from our Support team","section": "Home",    "layout": "collection",
-    "hasFrontmatterDate": false,
-    "date": "24 August 2023",
-    "templateContent": "important : read support overview before submitting ticket will review your prioritise accordingly contact updates submitted request less than 24 hours ago index",
-    "url": "/support/"
   },  {
     "title": "Shared Responsibility Model",
 "description": "A breakdown of ours and users' responsibilities on the Data Platform","section": "Support",    "layout": "sub-navigation",
     "hasFrontmatterDate": false,
-    "date": "24 August 2023",
+    "date": "11 September 2023",
     "templateContent": "",
     "url": "/support/shared-responsibility-model/"
   },  {
-    "title": "Data Platform (MVP)",
-"description": "Access to the Data Platform (minimum viable product)","section": "Home",    "layout": "wiki",
+    "title": "Support",
+"description": "Troubleshooting help from our Support team","section": "Home",    "layout": "collection",
     "hasFrontmatterDate": false,
-    "date": "24 August 2023",
-    "templateContent": "minimum viable product mvp version data platform still development when available will provide access this page",
-    "url": "/data platform/data-platform/"
+    "date": "11 September 2023",
+    "templateContent": "important : read support overview before submitting ticket will review your prioritise accordingly contact updates submitted request less than 24 hours ago index",
+    "url": "/support/"
+  },  {
+    "title": "Team information",
+"description": "Our ways of working and Show & Tell schedule","section": "Home",    "layout": "sub-navigation",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "general information our team have stand everyday 9:40 plan sprints through github extension zenhub retro every 2 weeks communication use google meet calls slack huddles pairing direct main chat platform this preferred method three channels #data channel with all members data core infrastructure where discussions about anything ranging from: depth technical issues plans day request someone else from help when away lunch musings make standup post your update here #ask anyone who : ask questions services run get advice notifications such pull requests includes updates documentation architecture decision records adr noisy whether join",
+    "url": "/team/team-info/"
+  },  {
+    "title": "Ways of working",
+"section": "Team information",    "layout": "sub-navigation",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "our stand ups run daily 09:40 last fifteen minutes will follow one two formats: walk board starting with done column discuss any active issues github via zenhub yesterday today blocked round robin each team member discussing their blockers sprint planning weeks long starts thursday use hour session template agenda below: previous met objective estimated tickets did achieve anything outside goal review caring over next why agree capacity pull new into backlog ensure all have sufficient descriptions epics assigned size other business refinement afternoons forty five minute purpose this ceremony that created enough information pick once issue refined estimate using fibonacci scale data platform show tell every thirty share colleagues wider organisation achievements during justice digital here retrospective end openly positives negatives format either miro jamboard",
+    "url": "/team/ways-of-working/"
+  },  {
+    "title": "ADR010",
+"description": "TBD","section": "ADRs",    "layout": "post",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "tbd",
+    "url": "/tech docs/ADRs/ADR0010/"
+  },  {
+    "title": "ADR006",
+"description": "TBD","section": "ADRs",    "layout": "post",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "tbd",
+    "url": "/tech docs/ADRs/ADR006/"
+  },  {
+    "title": "ADR007",
+"description": "TBD","section": "ADRs",    "layout": "post",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "tbd",
+    "url": "/tech docs/ADRs/ADR007/"
+  },  {
+    "title": "ADR008",
+"description": "TBD","section": "ADRs",    "layout": "post",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "tbd",
+    "url": "/tech docs/ADRs/ADR008/"
+  },  {
+    "title": "ADR009",
+"description": "TBD","section": "ADRs",    "layout": "post",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "tbd",
+    "url": "/tech docs/ADRs/ADR009/"
+  },  {
+    "title": "Architectural Decision Records",
+"description": "Index of architecture choices made for the Data Platform","section": "Tech docs",    "layout": "collection",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "architecture decision records this record architectural decisions made by data platform team understand how why see adr 000 statuses: 🤔 proposed ✅ accepted ❌ rejected ⌛️ superseded ♻️ amended",
+    "url": "/tech docs/ADRs/"
+  },  {
+    "title": "Architecture diagrams",
+"description": "Visual representations of the Data Platform's underlying architecture","section": "Tech docs",    "layout": "sub-navigation",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "this page documents technical architecture diagrams that make data platform would like contribute please see contributing updating guidance bottom c4 model four represent context containers components code these different levels help tell right story audience are people inside outside team non level 1 diagram highest abstraction provides overview entire system shows under consideration its external dependencies such users systems apis frequency change likely minimal compared other 2 minimum viable product going deploy part our mvps play vital role service development by aiming release early possible reduce risk never releasing all also get valuable feedback from who using real world situation container focuses software high which typically applications services illustrates major their interactions web servers databases desktop mobile examples 3 component delves deeper into identified previous internal within each can classes modules logical units 3.1 proposal relationships with created open source tool excalidraw files have .png appended onto filename e.g diagram.excalidraw.png allows editors below manipulate version without need export after every edit then use one following methods vscode.dev extenstion recommended small changes requires visual studio extension creating opening cloned downloaded group sessions live collaboration",
+    "url": "/tech docs/diagrams/architecture-diagrams/"
   },  {
     "title": "Infrastructure",
 "description": "Descriptions of the Data Platform's infrastructure","section": "Tech docs",    "layout": "sub-navigation",
     "hasFrontmatterDate": false,
-    "date": "1 September 2023",
+    "date": "11 September 2023",
     "templateContent": "",
     "url": "/tech docs/infrastructure/"
+  },  {
+    "title": "Tech docs",
+"description": "Technical descriptions of our infrastructure and architecture","section": "Home",    "layout": "collection",
+    "hasFrontmatterDate": false,
+    "date": "11 September 2023",
+    "templateContent": "index",
+    "url": "/tech docs/tech-docs/"
   }]

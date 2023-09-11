@@ -4,7 +4,7 @@ homepage: true
 key: home
 layout: product
 title: Data Platform
-description: A new platform to revolutionise data sharing in the Ministry of Justice
+description: A new platform to revolutionise data sharing in the Ministry of Justice -F
 includeInBreadcrumbs: false
 startButton:
   href: "/about/"
