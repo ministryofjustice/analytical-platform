@@ -90,11 +90,6 @@ resource "aws_eks_cluster" "airflow_prod_eks_cluster" {
   }
 }
 
-import {
-  to = aws_eks_cluster.airflow_prod_eks_cluster
-  id = "airflow-prod"
-}
-
 output "prod_endpoint" {
   value = aws_eks_cluster.airflow_prod_eks_cluster.endpoint
 }
@@ -118,11 +113,6 @@ resource "aws_eks_node_group" "prod_node_group_standard" {
   update_config {
     max_unavailable = 1
   }
-}
-
-import {
-  to = aws_eks_node_group.prod_node_group_standard
-  id = "airflow-prod:standard"
 }
 
 resource "aws_eks_node_group" "prod_node_group_high_memory" {
@@ -150,9 +140,4 @@ resource "aws_eks_node_group" "prod_node_group_high_memory" {
   labels = {
     high-memory = "true"
   }
-}
-
-import {
-  to = aws_eks_node_group.prod_node_group_high_memory
-  id = "airflow-prod:high-memory"
 }

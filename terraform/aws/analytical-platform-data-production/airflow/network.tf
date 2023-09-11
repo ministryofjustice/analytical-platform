@@ -41,11 +41,6 @@ resource "aws_subnet" "dev_public_subnet" {
   }
 }
 
-moved {
-  from = aws_subnet.public_subnet
-  to   = aws_subnet.dev_public_subnet
-}
-
 resource "aws_subnet" "dev_private_subnet" {
   vpc_id            = aws_vpc.airflow_dev.id
   count             = length(var.dev_private_subnet_cidrs)
@@ -54,11 +49,6 @@ resource "aws_subnet" "dev_private_subnet" {
   tags = {
     Name = "airflow-dev-private-${element(var.azs, count.index)}"
   }
-}
-
-moved {
-  from = aws_subnet.private_subnet
-  to   = aws_subnet.dev_private_subnet
 }
 
 resource "aws_nat_gateway" "airflow_dev" {
@@ -230,11 +220,6 @@ resource "aws_subnet" "prod_public_subnet" {
   }
 }
 
-moved {
-  from = aws_subnet.public_subnet_prod
-  to   = aws_subnet.prod_public_subnet
-}
-
 resource "aws_subnet" "prod_private_subnet" {
   vpc_id            = aws_vpc.airflow_prod.id
   count             = length(var.prod_private_subnet_cidrs)
@@ -243,11 +228,6 @@ resource "aws_subnet" "prod_private_subnet" {
   tags = {
     Name = "airflow-prod-private-${element(var.azs, count.index)}"
   }
-}
-
-moved {
-  from = aws_subnet.private_subnet_prod
-  to   = aws_subnet.prod_private_subnet
 }
 
 resource "aws_nat_gateway" "airflow_prod" {
