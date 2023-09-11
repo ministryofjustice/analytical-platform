@@ -127,7 +127,9 @@ locals {
     "jhpyke",
     "murad-ali-MoJ",
     "tamsinforbes",
-    "tom-webber"
+    "tom-webber",
+    "mitchdawson1982",
+    "Gary-H9"
   ]
 
   data_platform_labs_maintainers = [
