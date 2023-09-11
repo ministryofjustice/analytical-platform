@@ -108,3 +108,20 @@ resource "aws_iam_role" "airflow_dev_eks_role" {
     "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   ]
 }
+
+resource "aws_iam_role" "airflow_prod_node_instance_role" {
+  name               = "airflow-prod-node-instance-role"
+  description        = "Node execution role for Airflow prod"
+  assume_role_policy = data.aws_iam_policy_document.airflow_prod_node_instance_assume_role_policy.json
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  ]
+
+  inline_policy {
+    name   = "airflow-prod-node-instance-role-policy"
+    policy = data.aws_iam_policy_document.airflow_prod_node_instance_inline_role_policy.json
+  }
+}
