@@ -126,8 +126,3 @@ resource "aws_iam_role" "airflow_prod_node_instance_role" {
     policy = data.aws_iam_policy_document.airflow_prod_node_instance_inline_role_policy.json
   }
 }
-
-import {
-  to = aws_iam_role.airflow_prod_node_instance_role
-  id = "airflow-prod-node-instance-role"
-}
