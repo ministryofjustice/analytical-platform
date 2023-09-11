@@ -22,11 +22,11 @@ locals {
     "SimonsMOJ",      # Simon Heron
     "mshodge",        # Michael Hodges
     "YvanMOJdigital", # Yvan Smith
-    "amycufflin",
-    "ChikC",        # Chike Chinukwue
-    "EO510",        # Eki Osehenye
-    "Braimah-L",    # Braimah Lat
-    "imkatiewatson" # Katie Watson
+    "ChikC",          # Chike Chinukwue
+    "EO510",          # Eki Osehenye
+    "Braimah-L",      # Braimah Lat
+    "imkatiewatson",  # Katie Watson
+    "f-marry"         # Fabien Marry
   ]
 
   # GitHub usernames for engineers who need full AWS access
