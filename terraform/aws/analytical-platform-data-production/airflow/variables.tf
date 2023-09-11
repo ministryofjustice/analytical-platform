@@ -84,6 +84,11 @@ variable "prod_vpc_cidr_block" {
   description = "CIDR range for the VPC"
 }
 
+variable "prod_eks_role_arn" {
+  type        = string
+  description = "ARN of role used by EKS cluster for Airflow-Prod"
+}
+
 variable "prod_cluster_sg_name" {
   type        = string
   description = "Name of cluster security group for Airflow-Prod"
