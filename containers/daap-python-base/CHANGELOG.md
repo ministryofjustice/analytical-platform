@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2023-09-08
+
+### Added
+
+- `data_platform_paths.DataProductConfig.metadata_spec_path`
+(method moved from `data_product_metadata` module)
+
+### Removed
+
+- `data_product_metadata.get_bucket_name`
+(use `data_platform_paths.get_bucket_name` instead)
+- `data_product_metadata.get_data_product_metadata_path`
+(use `data_platform_paths.get_data_product_metadata_path` instead)
+
 ## [0.5.0] - 2023-09-07
 
 ### Added

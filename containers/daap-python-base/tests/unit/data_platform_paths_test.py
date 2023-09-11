@@ -181,3 +181,13 @@ def test_extraction_config_parse_from_raw_uri():
     assert config.data_product_config.curated_data_prefix == BucketPath(
         "a-bucket", "curated_data/database_name=database-name/table_name=table-name/"
     )
+
+
+def test_data_product_metadata_spec_path():
+    version = "1"
+    path = DataProductConfig.metadata_spec_path(version, bucket_name="foo")
+
+    assert path == BucketPath(
+        bucket="foo",
+        key="data_product_metadata_spec/1/moj_data_product_metadata_spec.json",
+    )
