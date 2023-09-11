@@ -1,9 +1,9 @@
 {
   "name": "daap-reload-data-product",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "registry": "ecr",
   "ecr": {
-    "role": "arn:aws:iam::013433889002:role/data-platform-gha",
+    "role": "arn:aws:iam::013433889002:role/modernisation-platform-oidc-cicd",
     "account": "374269020027",
     "region": "eu-west-2",
     "repository": "data-platform-reload-data-product-lambda-ecr-repo"
