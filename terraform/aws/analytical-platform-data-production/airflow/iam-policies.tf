@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "airflow_analytical_platform_development" {
 
 module "airflow_analytical_platform_development_iam_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.28.0"
+  version = "5.30.0"
 
   name = "airflow-analytical-platform-development"
 
@@ -239,6 +239,22 @@ data "aws_iam_policy_document" "airflow_dev_default_pod_assume_role_policy" {
 
 }
 
+data "aws_iam_policy_document" "airflow_dev_eks_assume_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    principals {
+      type = "Service"
+      identifiers = [
+        "eks.amazonaws.com",
+
+      ]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+
+}
+
 ############################ AIRFLOW PRODUCTION INFRASTRUCTURE
 
 data "aws_iam_policy_document" "airflow_prod_execution_assume_role_policy" {
@@ -335,21 +351,59 @@ data "aws_iam_policy_document" "airflow_prod_execution_role_policy" {
   }
 }
 
-
-########################Airflow dev EKS Policy###########################
-
-data "aws_iam_policy_document" "airflow_dev_eks_assume_role_policy" {
+data "aws_iam_policy_document" "airflow_prod_node_instance_assume_role_policy" {
   statement {
     sid    = ""
     effect = "Allow"
     principals {
       type = "Service"
       identifiers = [
-        "eks.amazonaws.com",
+        "ec2.amazonaws.com",
 
       ]
     }
     actions = ["sts:AssumeRole"]
   }
 
+}
+
+
+data "aws_iam_policy_document" "airflow_prod_flow_log_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    actions = [
+      "logs:PutLogEvents",
+      "logs:DescribeLogStreams",
+      "logs:DescribeLogGroups",
+      "logs:CreateLogStream",
+      "logs:CreateLogGroup"
+    ]
+    resources = ["*"]
+  }
+}
+
+data "aws_iam_policy_document" "airflow_prod_flow_log_assume_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    principals {
+      type = "Service"
+      identifiers = [
+        "vpc-flow-logs.amazonaws.com"
+      ]
+    }
+    actions = ["sts:AssumeRole"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [var.account_ids["analytical-platform-data-production"]]
+    }
+
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = ["arn:aws:ec2:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:vpc-flow-log/*"]
+    }
+  }
 }

@@ -1,6 +1,6 @@
 module "airflow_analytical_platform_development_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.28.0"
+  version = "5.30.0"
 
   create_role = true
 
@@ -85,6 +85,22 @@ resource "aws_iam_role" "airflow_prod_execution_role" {
     name   = "airflow-prod-execution-role-policy"
     policy = data.aws_iam_policy_document.airflow_prod_execution_role_policy.json
   }
+}
+
+resource "aws_iam_role" "airflow_prod_flow_log_role" {
+  name               = "airflow-prod-flow-log-role"
+  description        = "Flow log role for Airflow Prod"
+  assume_role_policy = data.aws_iam_policy_document.airflow_dev_flow_log_assume_policy.json
+
+  inline_policy {
+    name   = "airflow-prod-flow-log-policy"
+    policy = data.aws_iam_policy_document.airflow_prod_flow_log_role_policy.json
+  }
+}
+
+import {
+  to = aws_iam_role.airflow_prod_flow_log_role
+  id = "airflow-prod-flow-log-role"
 }
 
 ########################Airflow dev EKS Role###########################
