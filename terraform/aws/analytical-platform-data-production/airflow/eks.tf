@@ -25,7 +25,41 @@ resource "aws_security_group" "airflow_dev_cluster_additional_security_group" {
     protocol        = "tcp"
     from_port       = 443
     to_port         = 443
-    security_groups = [var.dev_node_sg_id]
+    security_groups = [var.dev_cluster_node_sg_id]
+  }
+  egress {
+    description = "Allow internet access."
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+  }
+}
+
+resource "aws_security_group" "airflow_dev_cluster_node_security_group" {
+  name        = var.dev_cluster_node_sg_name
+  description = "Managed by Pulumi"
+  vpc_id      = aws_vpc.airflow_dev.id
+  ingress {
+    description     = "Allow nodes to communicate with each other"
+    protocol        = "-1"
+    from_port       = 0
+    to_port         = 0
+    security_groups = [var.dev_cluster_node_sg_id]
+  }
+  ingress {
+    description     = "Allow worker Kubelets and pods to receive communication from the cluster control plane"
+    protocol        = "tcp"
+    from_port       = 1025
+    to_port         = 65535
+    security_groups = [var.dev_cluster_additional_sg_id]
+  }
+  ingress {
+    description     = "Allow pods running extension API servers on port 443 to receive communication from cluster control plane"
+    protocol        = "tcp"
+    from_port       = 443
+    to_port         = 443
+    security_groups = [var.dev_cluster_additional_sg_id]
   }
   egress {
     description = "Allow internet access."
@@ -39,6 +73,11 @@ resource "aws_security_group" "airflow_dev_cluster_additional_security_group" {
 moved {
   from = aws_security_group.airflow_dev_security_group
   to   = aws_security_group.airflow_dev_cluster_additional_security_group
+}
+
+import {
+  to = aws_security_group.airflow_dev_cluster_node_security_group
+  id = "sg-01930457ae391c7f0"
 }
 
 output "endpoint" {

@@ -70,7 +70,12 @@ variable "dev_cluster_additional_sg_name" {
   description = "Name of cluster additional security group for Airflow-Dev"
 }
 
-variable "dev_node_sg_id" {
+variable "dev_cluster_node_sg_id" {
+  type        = string
+  description = "ID of node security group for Airflow-Dev"
+}
+
+variable "dev_cluster_node_sg_name" {
   type        = string
   description = "ID of node security group for Airflow-Dev"
 }

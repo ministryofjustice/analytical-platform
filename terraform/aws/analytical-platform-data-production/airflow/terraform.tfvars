@@ -51,7 +51,8 @@ dev_eks_cluster_name           = "airflow-dev"
 dev_eks_role_arn               = "arn:aws:iam::593291632749:role/airflow-dev-eksRole-role-211908c"
 dev_cluster_additional_sg_name = "airflow-dev-eksClusterSecurityGroup-6a4dde4"
 dev_cluster_additional_sg_id   = "sg-0bcd3cf5dc6d7b314"
-dev_node_sg_id                 = "sg-01930457ae391c7f0"
+dev_cluster_node_sg_id         = "sg-01930457ae391c7f0"
+dev_cluster_node_sg_name       = "airflow-dev-nodeSecurityGroup-f3e4ecd"
 
 ################################################
 
