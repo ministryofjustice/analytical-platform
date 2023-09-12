@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from freezegun import freeze_time
 
 from data_platform_paths import (
     BucketPath,
@@ -10,6 +11,7 @@ from data_platform_paths import (
     data_product_metadata_file_path,
     data_product_raw_data_file_path,
     get_bucket_name,
+    data_product_log_bucket_and_key
 )
 
 
@@ -181,3 +183,11 @@ def test_extraction_config_parse_from_raw_uri():
     assert config.data_product_config.curated_data_prefix == BucketPath(
         "a-bucket", "curated_data/database_name=database-name/table_name=table-name/"
     )
+
+@freeze_time("2023-09-12")
+def test_data_product_log_bucket_and_key(monkeypatch):
+    monkeypatch.setenv("BUCKET_NAME", "a-bucket")
+    log_bucket_path = data_product_log_bucket_and_key("top_test_lambda", "delicious-data-product")
+
+    assert log_bucket_path.bucket == "a-bucket"
+    assert log_bucket_path.key == "logs/json/lambda_name=top_test_lambda/data_product_name=delicious-data-product/date=2023-09-12/2023-09-12T00:00:00:000_log.json"
