@@ -40,12 +40,14 @@ resource "aws_security_group" "airflow_dev_cluster_node_security_group" {
   name        = var.dev_cluster_node_sg_name
   description = "Managed by Pulumi"
   vpc_id      = aws_vpc.airflow_dev.id
+
   ingress {
     description     = "Allow nodes to communicate with each other"
     protocol        = "-1"
     from_port       = 0
     to_port         = 0
-    security_groups = [var.dev_cluster_node_sg_id]
+    security_groups = []
+    self            = true
   }
   ingress {
     description     = "Allow worker Kubelets and pods to receive communication from the cluster control plane"
@@ -61,6 +63,7 @@ resource "aws_security_group" "airflow_dev_cluster_node_security_group" {
     to_port         = 443
     security_groups = [var.dev_cluster_additional_sg_id]
   }
+
   egress {
     description = "Allow internet access."
     protocol    = "-1"
