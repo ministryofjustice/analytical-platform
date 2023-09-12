@@ -54,3 +54,8 @@ dev_node_sg_id      = "sg-01930457ae391c7f0"
 prod_eks_role_arn    = "arn:aws:iam::593291632749:role/airflow-prod-eksRole-role-de6b4f5"
 prod_cluster_sg_name = "airflow-prod-eksClusterSecurityGroup-6ab84a6"
 prod_node_sg_id      = "sg-0f73e78564012634a"
+
+node_group_instance_types = {
+  standard    = ["t3a.large", "t3.large", "t2.large"]
+  high-memory = ["r6i.8xlarge"] # up from r6i.4xlarge to r6i.8xlarge
+}

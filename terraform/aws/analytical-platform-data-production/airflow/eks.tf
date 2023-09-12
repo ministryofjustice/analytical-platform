@@ -103,6 +103,7 @@ resource "aws_eks_node_group" "prod_node_group_standard" {
   node_group_name = "standard"
   node_role_arn   = aws_iam_role.airflow_prod_node_instance_role.arn
   subnet_ids      = aws_subnet.prod_private_subnet[*].id
+  instance_types  = var.node_group_instance_types["standard"]
 
   scaling_config {
     desired_size = 1
@@ -120,6 +121,7 @@ resource "aws_eks_node_group" "prod_node_group_high_memory" {
   node_group_name = "high-memory"
   node_role_arn   = aws_iam_role.airflow_prod_node_instance_role.arn
   subnet_ids      = aws_subnet.prod_private_subnet[*].id
+  instance_types  = var.node_group_instance_types["high-memory"]
 
   scaling_config {
     desired_size = 1
