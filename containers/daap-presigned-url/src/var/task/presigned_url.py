@@ -88,9 +88,10 @@ def handler(event, context):
 
     logger.write_log_dict_to_s3_json(bucket_name, **s3_security_opts)
 
-    # Check the data product has been registered, ie has associated code or metadata in s3
+    # Check the data product has been registered, ie has metadata in s3
     data_product_registration = s3.list_objects_v2(
-        Bucket=bucket_name, Prefix=f"code/{database}"
+        Bucket=data_product.metadata_path().bucket,
+        Prefix=data_product.metadata_path().key,
     ).get("Contents", [])
 
     if not any(data_product_registration):

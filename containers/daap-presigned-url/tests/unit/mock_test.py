@@ -16,12 +16,14 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
     monkeypatch.setenv("BUCKET_NAME", bucket_name)
     monkeypatch.setattr(uuid, "uuid4", lambda: a_uuid)
 
-    # Emulate the data product being set up in the bucket
+    # Emulate the data product registration
     s3_client.create_bucket(
         Bucket=bucket_name,
         CreateBucketConfiguration={"LocationConstraint": region_name},
     )
-    s3_client.put_object(Bucket=bucket_name, Key=f"code/{database}/hello", Body="")
+    s3_client.put_object(
+        Bucket=bucket_name, Key=f"metadata/{database}/v1.0/metadata.json", Body=""
+    )
 
     event = {
         "queryStringParameters": {
