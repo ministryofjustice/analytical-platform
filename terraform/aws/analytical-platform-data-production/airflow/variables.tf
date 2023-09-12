@@ -55,9 +55,19 @@ variable "dev_eks_role_arn" {
   description = "ARN of role used by EKS cluster for Airflow-Dev"
 }
 
-variable "dev_cluster_sg_name" {
+variable "dev_eks_cluster_name" {
   type        = string
-  description = "Name of cluster security group for Airflow-Dev"
+  description = "Name of cluster for Airflow-Dev"
+}
+
+variable "dev_cluster_additional_sg_id" {
+  type        = string
+  description = "Name of cluster additional security group for Airflow-Dev"
+}
+
+variable "dev_cluster_additional_sg_name" {
+  type        = string
+  description = "Name of cluster additional security group for Airflow-Dev"
 }
 
 variable "dev_node_sg_id" {
@@ -89,9 +99,19 @@ variable "prod_eks_role_arn" {
   description = "ARN of role used by EKS cluster for Airflow-Prod"
 }
 
-variable "prod_cluster_sg_name" {
+variable "prod_eks_cluster_name" {
   type        = string
-  description = "Name of cluster security group for Airflow-Prod"
+  description = "Name of cluster for Airflow-Prod"
+}
+
+variable "prod_cluster_additional_sg_id" {
+  type        = string
+  description = "Name of cluster additional security group for Airflow-Prod"
+}
+
+variable "prod_cluster_additional_sg_name" {
+  type        = string
+  description = "Name of cluster additional security group for Airflow-Prod"
 }
 
 variable "prod_node_sg_id" {
