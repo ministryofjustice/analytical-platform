@@ -187,7 +187,11 @@ class DataPlatformLogger:
             if e.response["Error"]["Code"] == "NoSuchKey":
                 jlines = ""
             else:
-                raise e
+                # if an unexpected error we want to exit the method
+                # to avoid creating a log file with 1 line of last log
+                # but not raise an error, disrupting the application
+                print(e)
+                return None
         else:
             data = response.get("Body").read().decode("utf-8")
             jlines = data
