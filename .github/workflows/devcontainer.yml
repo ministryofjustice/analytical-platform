@@ -52,7 +52,7 @@ jobs:
 
       - name: Build Image
         id: build_image
-        uses: docker/build-push-action@4e4ee680f69700760d5620a94c020aef883043aa # v4.2.0
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
           file: .devcontainer/features/test/Dockerfile
           load: true
@@ -87,7 +87,7 @@ jobs:
 
       - name: Build Image
         id: build_image
-        uses: docker/build-push-action@4e4ee680f69700760d5620a94c020aef883043aa # v4.2.0
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
           file: .devcontainer/features/test/Dockerfile
           load: true
