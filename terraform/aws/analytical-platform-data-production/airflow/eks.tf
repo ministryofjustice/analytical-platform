@@ -121,6 +121,9 @@ resource "aws_eks_node_group" "prod_node_group_high_memory" {
   node_group_name = "high-memory"
   node_role_arn   = aws_iam_role.airflow_prod_node_instance_role.arn
   subnet_ids      = aws_subnet.prod_private_subnet[*].id
+  ami_type        = "AL2_x86_64"
+  capacity_type   = "ON_DEMAND"
+  disk_size       = 200
   instance_types  = var.node_group_instance_types["high-memory"]
 
   scaling_config {
