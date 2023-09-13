@@ -70,14 +70,15 @@ class DataPlatformLogger:
 
     def __init__(
         self,
-        lambda_name: str | None = None,
         data_product_name: str | None = None,
         format: str = "%(levelname)-8s | %(asctime)s | %(message)s",
-        extra: dict = {},
+        extra: dict = None,
         level: str = "INFO",
     ):
+        if extra is None:
+            extra = {}
         self.extra = {}
-        self.extra["lambda_name"] = lambda_name
+        self.extra["lambda_name"] = os.getenv("AWS_LAMBDA_FUNCTION_NAME", None)
         self.extra["data_product_name"] = data_product_name
 
         for k, v in extra.items():
@@ -87,7 +88,7 @@ class DataPlatformLogger:
         self.logger = logging.getLogger()
 
         self.log_bucket_path = data_product_log_bucket_and_key(
-            lambda_name=lambda_name, data_product_name=data_product_name
+            lambda_name=self.extra["lambda_name"], data_product_name=data_product_name
         )
 
         # if used in a lambda function we remove the preloaded handlers
