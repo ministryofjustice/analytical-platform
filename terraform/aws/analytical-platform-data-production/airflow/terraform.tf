@@ -19,39 +19,3 @@ terraform {
   }
   required_version = "~> 1.5"
 }
-
-provider "aws" {
-  alias = "session"
-}
-
-provider "aws" {
-  region = "eu-west-1"
-  assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/GlobalGitHubActionAdmin"
-  }
-  default_tags {
-    tags = var.tags
-  }
-}
-
-provider "aws" {
-  alias  = "analytical-platform-development"
-  region = "eu-west-1"
-  assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-development"]}:role/GlobalGitHubActionAdmin"
-  }
-  default_tags {
-    tags = var.tags
-  }
-}
-
-provider "aws" {
-  alias  = "analytical-platform-management-production"
-  region = "eu-west-1"
-  assume_role {
-    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
-  }
-  default_tags {
-    tags = var.tags
-  }
-}
