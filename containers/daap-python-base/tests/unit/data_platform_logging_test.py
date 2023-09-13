@@ -1,7 +1,7 @@
 import json
-import pytest
 
-from data_platform_logging import DataPlatformLogger, _make_log_dict
+import pytest
+from data_platform_logging import DataPlatformLogger
 from freezegun import freeze_time
 
 extra_inputs = [
@@ -15,14 +15,12 @@ extra_inputs = [
         "table_name": "test_table",
         "image_version": "test",
         "base_image_version": "test",
-    }
+    },
 ]
 
 
-@pytest.mark.parametrize("extra_input", extra_inputs)
-@freeze_time("2023-01-01")
-def test_stdout_info_log(extra_input, s3_client, region_name, capsys, monkeypatch):
-    bucket_name = "bucket"
+def setup_bucket(name, s3_client, region_name, monkeypatch):
+    bucket_name = name
     monkeypatch.setenv("BUCKET_NAME", bucket_name)
 
     # Emulate the data product being set up in the bucket
@@ -31,10 +29,24 @@ def test_stdout_info_log(extra_input, s3_client, region_name, capsys, monkeypatc
         CreateBucketConfiguration={"LocationConstraint": region_name},
     )
 
+
+def setup_logger(extra_input):
     if "data_product_name" in extra_input.keys():
         test_logger = DataPlatformLogger(extra=extra_input)
     else:
-        test_logger = DataPlatformLogger(data_product_name="test_database", extra=extra_input)
+        test_logger = DataPlatformLogger(
+            data_product_name="test_database", extra=extra_input
+        )
+    return test_logger
+
+
+@pytest.mark.parametrize("extra_input", extra_inputs)
+@freeze_time("2023-01-01")
+def test_stdout_info_log(extra_input, s3_client, region_name, capsys, monkeypatch):
+    bucket_name = "bucket"
+    setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
+
+    test_logger = setup_logger(extra_input)
 
     test_logger.info("test info message")
     captured = capsys.readouterr()
@@ -44,13 +56,7 @@ def test_stdout_info_log(extra_input, s3_client, region_name, capsys, monkeypatc
 @freeze_time("2023-01-01")
 def test_stdout_warning_log(s3_client, region_name, capsys, monkeypatch):
     bucket_name = "bucket"
-    monkeypatch.setenv("BUCKET_NAME", bucket_name)
-
-    # Emulate the data product being set up in the bucket
-    s3_client.create_bucket(
-        Bucket=bucket_name,
-        CreateBucketConfiguration={"LocationConstraint": region_name},
-    )
+    setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
 
     test_logger = DataPlatformLogger()
     test_logger.warning("test warning message")
@@ -61,13 +67,7 @@ def test_stdout_warning_log(s3_client, region_name, capsys, monkeypatch):
 @freeze_time("2023-01-01")
 def test_stdout_debug_log(s3_client, region_name, capsys, monkeypatch):
     bucket_name = "bucket"
-    monkeypatch.setenv("BUCKET_NAME", bucket_name)
-
-    # Emulate the data product being set up in the bucket
-    s3_client.create_bucket(
-        Bucket=bucket_name,
-        CreateBucketConfiguration={"LocationConstraint": region_name},
-    )
+    setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
 
     test_logger = DataPlatformLogger(level="DEBUG")
     test_logger.debug("test debug message")
@@ -80,13 +80,7 @@ def test_stdout_debug_log(s3_client, region_name, capsys, monkeypatch):
 @freeze_time("2023-01-01")
 def test_stdout_error_log(s3_client, region_name, capsys, monkeypatch):
     bucket_name = "bucket"
-    monkeypatch.setenv("BUCKET_NAME", bucket_name)
-
-    # Emulate the data product being set up in the bucket
-    s3_client.create_bucket(
-        Bucket=bucket_name,
-        CreateBucketConfiguration={"LocationConstraint": region_name},
-    )
+    setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
 
     test_logger = DataPlatformLogger()
     test_logger.error("test error message")
@@ -122,23 +116,15 @@ def test__write_log_dict_to_json_s3(extra_input, s3_client, region_name, monkeyp
         },
     ]
     bucket_name = "bucket"
-    monkeypatch.setenv("BUCKET_NAME", bucket_name)
+    setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
 
-    # Emulate the data product being set up in the bucket
-    s3_client.create_bucket(
-        Bucket=bucket_name,
-        CreateBucketConfiguration={"LocationConstraint": region_name},
-    )
-    if "data_product_name" in extra_input.keys():
-        test_logger = DataPlatformLogger(extra=extra_input)
-    else:
-        test_logger = DataPlatformLogger(data_product_name="test_database", extra=extra_input)
+    test_logger = setup_logger(extra_input)
 
     test_logger.info("test message 1")
     test_logger.info("test message 2")
 
     response = s3_client.get_object(
-        Bucket=bucket_name, Key=test_logger.log_bucket_path.key
+        Bucket="bucket", Key=test_logger.log_bucket_path.key
     )
     data = response.get("Body").read().decode("utf-8")
     json_list = [json.loads(j) for j in data.split("\n") if j != ""]
