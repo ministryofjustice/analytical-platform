@@ -106,6 +106,11 @@ resource "aws_eks_node_group" "dev_node_group_standard" {
   update_config {
     max_unavailable = 1
   }
+  
+  # Allow external changes without Terraform plan difference
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
+  }
 }
 
 resource "aws_eks_node_group" "dev_node_group_high_memory" {
@@ -122,6 +127,11 @@ resource "aws_eks_node_group" "dev_node_group_high_memory" {
 
   update_config {
     max_unavailable = 1
+  }
+
+  # Allow external changes without Terraform plan difference
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
   }
 
   taint {
@@ -197,13 +207,18 @@ resource "aws_eks_node_group" "prod_node_group_standard" {
   instance_types  = var.node_group_instance_types["standard"]
 
   scaling_config {
-    desired_size = 2
+    desired_size = 1
     max_size     = 25
     min_size     = 1
   }
 
   update_config {
     max_unavailable = 1
+  }
+
+  # Allow external changes without Terraform plan difference
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
   }
 }
 
@@ -225,6 +240,11 @@ resource "aws_eks_node_group" "prod_node_group_high_memory" {
 
   update_config {
     max_unavailable = 1
+  }
+
+  # Allow external changes without Terraform plan difference
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
   }
 
   taint {
