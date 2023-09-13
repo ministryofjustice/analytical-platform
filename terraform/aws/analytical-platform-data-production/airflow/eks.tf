@@ -106,7 +106,7 @@ resource "aws_eks_node_group" "dev_node_group_standard" {
   update_config {
     max_unavailable = 1
   }
-  
+
   # Allow external changes without Terraform plan difference
   lifecycle {
     ignore_changes = [scaling_config[0].desired_size]
@@ -145,6 +145,43 @@ resource "aws_eks_node_group" "dev_node_group_high_memory" {
   }
 }
 
+
+resource "kubernetes_namespace" "dev_kube2iam" {
+  provider = kubernetes.dev-airflow-cluster
+  metadata {
+    name = "kube2iam-system"
+  }
+}
+
+import {
+  to = kubernetes_namespace.dev_kube2iam
+  id = "kube2iam-system"
+}
+
+resource "kubernetes_namespace" "dev_kyverno" {
+  provider = kubernetes.dev-airflow-cluster
+  metadata {
+    name = "kyverno-system"
+  }
+}
+
+import {
+  to = kubernetes_namespace.dev_kyverno
+  id = "kyverno-system"
+}
+
+resource "kubernetes_namespace" "dev_cluster_autoscaler" {
+  provider = kubernetes.dev-airflow-cluster
+  metadata {
+    name = "cluster-autoscaler-system"
+  }
+}
+
+import {
+  to = kubernetes_namespace.dev_cluster_autoscaler
+  id = "cluster-autoscaler-system"
+}
+
 ######################################
 ########### EKS PRODUCTION ###########
 ######################################
@@ -179,11 +216,11 @@ resource "aws_security_group" "airflow_prod_cluster_additional_security_group" {
     security_groups = [var.prod_node_sg_id]
   }
   egress {
-    description        = "Allow internet access."
-    protocol           = "-1"
-    cidr_blocks        = ["0.0.0.0/0"]
-    from_port          = 0
-    to_port            = 0
+    description     = "Allow internet access."
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+    from_port       = 0
+    to_port         = 0
     security_groups = []
   }
 }
