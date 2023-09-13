@@ -173,7 +173,11 @@ class DataProductConfig:
         )
 
     @staticmethod
-    def _log_file_path(lambda_name: str | None, data_product_name: str | None , bucket_name: str | None = None):
+    def _log_file_path(
+        lambda_name: str | None,
+        data_product_name: str | None,
+        bucket_name: str | None = None,
+    ):
         """
         Path to json log files created by python lambda applications
         """
@@ -183,10 +187,7 @@ class DataProductConfig:
         date = datetime.now().strftime("%Y-%m-%d")
         date_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S:%f")[:-3]
 
-        if (
-            lambda_name is not None
-            and data_product_name is not None
-        ):
+        if lambda_name is not None and data_product_name is not None:
             key = os.path.join(
                 "logs",
                 "json",
@@ -321,12 +322,10 @@ def data_product_metadata_file_path(
 def data_product_log_bucket_and_key(
     lambda_name: str | None = None,
     data_product_name: str | None = None,
-    bucket_name: str | None = None
+    bucket_name: str | None = None,
 ) -> BucketPath:
     """
     Generate the log file path based on lambda and data product name
     """
 
-    return DataProductConfig._log_file_path(
-        lambda_name, data_product_name, bucket_name
-    )
+    return DataProductConfig._log_file_path(lambda_name, data_product_name, bucket_name)

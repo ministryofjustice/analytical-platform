@@ -3,7 +3,6 @@ import json
 from data_platform_logging import DataPlatformLogger, _make_log_dict
 from freezegun import freeze_time
 
-
 extra_input = {
     "lambda_name": "test_lambda",
     "data_product_name": "test_database",

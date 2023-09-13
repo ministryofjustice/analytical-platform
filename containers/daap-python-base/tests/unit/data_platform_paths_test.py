@@ -203,7 +203,4 @@ def test_data_product_log_bucket_and_key(monkeypatch):
     )
 
     assert log_bucket_path.bucket == "a-bucket"
-    assert (
-        log_bucket_path.key
-        == "logs/json/lambda_name=top_test_lambda/data_product_name=delicious-data-product/date=2023-09-12/2023-09-12T00:00:00:000_log.json"
-    )  # noqa: E501
+    assert log_bucket_path.key == "logs/json/lambda_name=top_test_lambda/data_product_name=delicious-data-product/date=2023-09-12/2023-09-12T00:00:00:000_log.json"  # noqa: E501
