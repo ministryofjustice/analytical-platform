@@ -150,26 +150,6 @@ resource "aws_flow_log" "airflow_dev" {
   }
 }
 
-resource "aws_security_group" "airflow_dev_security_group" {
-  name        = var.dev_cluster_sg_name
-  description = "Managed by Pulumi"
-  vpc_id      = aws_vpc.airflow_dev.id
-  ingress {
-    description     = "Allow pods to communicate with the cluster API Server"
-    protocol        = "tcp"
-    from_port       = 443
-    to_port         = 443
-    security_groups = [var.dev_node_sg_id]
-  }
-  egress {
-    description = "Allow internet access."
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-    from_port   = 0
-    to_port     = 0
-  }
-}
-
 #      _     _         __  _                   ____                   _               _    _
 #     / \   (_) _ __  / _|| |  ___ __      __ |  _ \  _ __  ___    __| | _   _   ___ | |_ (_)  ___   _ __
 #    / _ \  | || '__|| |_ | | / _ \\ \ /\ / / | |_) || '__|/ _ \  / _` || | | | / __|| __|| | / _ \ | '_ \
@@ -326,26 +306,5 @@ resource "aws_flow_log" "airflow_prod" {
 
   tags = {
     Name = "airflow-prod"
-  }
-}
-
-resource "aws_security_group" "airflow_prod_security_group" {
-  name        = var.prod_vpc_sg_name
-  description = "Managed by Pulumi"
-  vpc_id      = aws_vpc.airflow_prod.id
-  ingress {
-    description     = ""
-    protocol        = "-1"
-    from_port       = 0
-    to_port         = 0
-    security_groups = []
-    self            = true
-  }
-  egress {
-    description = ""
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-    from_port   = 0
-    to_port     = 0
   }
 }

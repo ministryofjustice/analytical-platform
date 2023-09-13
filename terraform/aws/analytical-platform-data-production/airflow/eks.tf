@@ -1,5 +1,5 @@
 resource "aws_eks_cluster" "airflow_dev_eks_cluster" {
-  name     = "airflow-dev"
+  name     = var.dev_eks_cluster_name
   role_arn = var.dev_eks_role_arn
   enabled_cluster_log_types = ["api",
     "audit",
@@ -12,8 +12,33 @@ resource "aws_eks_cluster" "airflow_dev_eks_cluster" {
   vpc_config {
     subnet_ids          = aws_subnet.dev_private_subnet[*].id
     public_access_cidrs = ["0.0.0.0/0"]
-    security_group_ids  = ["sg-0bcd3cf5dc6d7b314"]
+    security_group_ids  = [var.dev_cluster_additional_sg_id]
   }
+}
+
+resource "aws_security_group" "airflow_dev_cluster_additional_security_group" {
+  name        = var.dev_cluster_additional_sg_name
+  description = "Managed by Pulumi"
+  vpc_id      = aws_vpc.airflow_dev.id
+  ingress {
+    description     = "Allow pods to communicate with the cluster API Server"
+    protocol        = "tcp"
+    from_port       = 443
+    to_port         = 443
+    security_groups = [var.dev_node_sg_id]
+  }
+  egress {
+    description = "Allow internet access."
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+  }
+}
+
+moved {
+  from = aws_security_group.airflow_dev_security_group
+  to   = aws_security_group.airflow_dev_cluster_additional_security_group
 }
 
 output "endpoint" {
@@ -73,7 +98,7 @@ resource "aws_eks_node_group" "dev_node_group_high_memory" {
 ######################################
 
 resource "aws_eks_cluster" "airflow_prod_eks_cluster" {
-  name     = "airflow-prod"
+  name     = var.prod_eks_cluster_name
   role_arn = var.prod_eks_role_arn
   enabled_cluster_log_types = ["api",
     "audit",
@@ -86,8 +111,38 @@ resource "aws_eks_cluster" "airflow_prod_eks_cluster" {
   vpc_config {
     subnet_ids          = aws_subnet.prod_private_subnet[*].id
     public_access_cidrs = ["0.0.0.0/0"]
-    security_group_ids  = ["sg-0f73e78564012634a"]
+    security_group_ids  = [var.prod_cluster_additional_sg_id]
   }
+}
+
+resource "aws_security_group" "airflow_prod_cluster_additional_security_group" {
+  name        = var.prod_cluster_additional_sg_name
+  description = "Managed by Pulumi"
+  vpc_id      = aws_vpc.airflow_prod.id
+  ingress {
+    description     = "Allow pods to communicate with the cluster API Server"
+    protocol        = "tcp"
+    from_port       = 443
+    to_port         = 443
+    security_groups = [var.prod_node_sg_id]
+  }
+  egress {
+    description = "Allow internet access."
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+  }
+}
+
+moved {
+  from = aws_security_group.airflow_prod_security_group
+  to   = aws_security_group.airflow_prod_cluster_additional_security_group
+}
+
+import {
+  to = aws_security_group.airflow_prod_cluster_additional_security_group
+  id = "sg-0f73e78564012634a"
 }
 
 output "prod_endpoint" {
