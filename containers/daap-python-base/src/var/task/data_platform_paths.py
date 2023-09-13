@@ -172,6 +172,34 @@ class DataProductConfig:
             data_product_name=self.name, bucket_name=self.raw_data_prefix.bucket
         )
 
+    @staticmethod
+    def _log_file_path(
+        lambda_name: str | None,
+        data_product_name: str | None,
+        bucket_name: str | None = None,
+    ):
+        """
+        Path to json log files created by python lambda applications
+        """
+        if bucket_name is None:
+            bucket_name = get_bucket_name()
+
+        date = datetime.now().strftime("%Y-%m-%d")
+        date_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S:%f")[:-3]
+
+        if lambda_name is not None and data_product_name is not None:
+            key = os.path.join(
+                "logs",
+                "json",
+                f"lambda_name={lambda_name}",
+                f"data_product_name={data_product_name}",
+                f"date={date}",
+                f"{date_time}_log.json",
+            )
+        else:
+            key = os.path.join("logs", "json", f"date={date}", f"{date_time}_log.json")
+        return BucketPath(bucket=bucket_name, key=key)
+
     def extraction_config(
         self, timestamp: datetime, uuid_value: UUID
     ) -> ExtractionConfig:
@@ -289,3 +317,15 @@ def data_product_metadata_file_path(
     return DataProductConfig._metadata_path(
         data_product_name=data_product_name, bucket_name=bucket_name
     ).uri
+
+
+def data_product_log_bucket_and_key(
+    lambda_name: str | None = None,
+    data_product_name: str | None = None,
+    bucket_name: str | None = None,
+) -> BucketPath:
+    """
+    Generate the log file path based on lambda and data product name
+    """
+
+    return DataProductConfig._log_file_path(lambda_name, data_product_name, bucket_name)

@@ -8,6 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2023-09-12
+
+### Added
+
+- `data_platform_paths.DataProductConfig._log_file_path`
+(method moved from `data_platform_logging` module)
+
+### Changed
+
+- `data_platform_logging.DataPlatformLogger.write_log_dict_to_s3_json` to
+`_write_log_dict_to_s3_json`, with the method now writing to an s3 json file
+on every log call
+- `data_platform_logging.DataPlatformLogger` gets log file path from
+`data_platform_paths`
+- `data_platform_logging` now includes `security_opts` dict, the extra arguments
+to satisfy bucket security config in the data platform
+
 ## [0.6.0] - 2023-09-08
 
 ### Added
