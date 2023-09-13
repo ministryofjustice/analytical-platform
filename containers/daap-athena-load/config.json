@@ -1,6 +1,6 @@
 {
   "name": "daap-athena-load",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "registry": "ecr",
   "ecr": {
     "role": "arn:aws:iam::013433889002:role/modernisation-platform-oidc-cicd",

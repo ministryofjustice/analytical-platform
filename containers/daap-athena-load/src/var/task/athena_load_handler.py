@@ -74,8 +74,6 @@ def handler(event, context):
     glue_client.delete_table(DatabaseName="data_products_raw", Name=temp_table_name)
     logger.info(f"removed raw table data_products_raw.{temp_table_name}")
 
-    logger.write_log_dict_to_s3_json(bucket_name, **s3_security_opts)
-
 
 def get_data_product_config(key: str) -> dict:
     """
