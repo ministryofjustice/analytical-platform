@@ -221,6 +221,11 @@ class DataProductConfig:
             timestamp=timestamp, data_product_config=self, path=path
         )
 
+    def __eq__(self, other):
+        if type(other) is type(self):
+            return self.__dict__ == other.__dict__
+        return False
+
 
 class ExtractionConfig:
     """
