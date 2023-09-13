@@ -1,43 +1,27 @@
 import json
+import pytest
 
 from data_platform_logging import DataPlatformLogger, _make_log_dict
 from freezegun import freeze_time
 
-extra_input = {
-    "lambda_name": "test_lambda",
-    "data_product_name": "test_database",
-    "table_name": "test_table",
-    "image_version": "test",
-    "base_image_version": "test",
-}
-
-
-@freeze_time("2023-01-01")
-def test__make_log_dict():
-    expected_result = {
-        "level": "debug",
-        "date_time": "2023-01-01 00:00:00",
-        "message": "just a test message",
-        "function_name": "test_function",
-        "image_version": "test",
-        "base_image_version": "test",
-        "lambda_name": "test_lambda",
+extra_inputs = [
+    {
         "data_product_name": "test_database",
         "table_name": "test_table",
+        "image_version": "test",
+        "base_image_version": "test",
+    },
+    {
+        "table_name": "test_table",
+        "image_version": "test",
+        "base_image_version": "test",
     }
-
-    test_result = _make_log_dict(
-        level="debug",
-        msg="just a test message",
-        extra=extra_input,
-        func="test_function",
-    )
-
-    assert test_result == expected_result
+]
 
 
+@pytest.mark.parametrize("extra_input", extra_inputs)
 @freeze_time("2023-01-01")
-def test_stdout_info_log(s3_client, region_name, capsys, monkeypatch):
+def test_stdout_info_log(extra_input, s3_client, region_name, capsys, monkeypatch):
     bucket_name = "bucket"
     monkeypatch.setenv("BUCKET_NAME", bucket_name)
 
@@ -47,7 +31,11 @@ def test_stdout_info_log(s3_client, region_name, capsys, monkeypatch):
         CreateBucketConfiguration={"LocationConstraint": region_name},
     )
 
-    test_logger = DataPlatformLogger(extra=extra_input)
+    if "data_product_name" in extra_input.keys():
+        test_logger = DataPlatformLogger(extra=extra_input)
+    else:
+        test_logger = DataPlatformLogger(data_product_name="test_database", extra=extra_input)
+
     test_logger.info("test info message")
     captured = capsys.readouterr()
     assert "INFO     | 2023-01-01 00:00:00 | test info message\n" == captured.out
@@ -106,8 +94,9 @@ def test_stdout_error_log(s3_client, region_name, capsys, monkeypatch):
     assert "ERROR    | 2023-01-01 00:00:00 | test error message\n" == captured.out
 
 
+@pytest.mark.parametrize("extra_input", extra_inputs)
 @freeze_time("2023-01-01")
-def test__write_log_dict_to_json_s3(s3_client, region_name, monkeypatch):
+def test__write_log_dict_to_json_s3(extra_input, s3_client, region_name, monkeypatch):
     expected_log_json = [
         {
             "level": "info",
@@ -140,8 +129,10 @@ def test__write_log_dict_to_json_s3(s3_client, region_name, monkeypatch):
         Bucket=bucket_name,
         CreateBucketConfiguration={"LocationConstraint": region_name},
     )
-
-    test_logger = DataPlatformLogger(extra=extra_input)
+    if "data_product_name" in extra_input.keys():
+        test_logger = DataPlatformLogger(extra=extra_input)
+    else:
+        test_logger = DataPlatformLogger(data_product_name="test_database", extra=extra_input)
 
     test_logger.info("test message 1")
     test_logger.info("test message 2")
