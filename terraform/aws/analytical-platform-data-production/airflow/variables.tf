@@ -50,9 +50,9 @@ variable "dev_vpc_cidr_block" {
   description = "CIDR range for the VPC"
 }
 
-variable "dev_eks_role_arn" {
+variable "dev_eks_role_name" {
   type        = string
-  description = "ARN of role used by EKS cluster for Airflow-Dev"
+  description = "Name of role used by EKS cluster for Airflow-Dev"
 }
 
 variable "dev_eks_cluster_name" {
@@ -94,9 +94,9 @@ variable "prod_vpc_cidr_block" {
   description = "CIDR range for the VPC"
 }
 
-variable "prod_eks_role_arn" {
+variable "prod_eks_role_name" {
   type        = string
-  description = "ARN of role used by EKS cluster for Airflow-Prod"
+  description = "Name of role used by EKS cluster for Airflow-Prod"
 }
 
 variable "prod_eks_cluster_name" {

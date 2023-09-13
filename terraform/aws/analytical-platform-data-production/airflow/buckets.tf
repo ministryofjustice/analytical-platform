@@ -118,8 +118,3 @@ data "aws_iam_policy_document" "allow_s3_sync_role_to_see_prod_bucket" {
     ]
   }
 }
-
-moved {
-  from = aws_s3_object.kubeconfig
-  to   = aws_s3_object.kubeconfig_dev
-}

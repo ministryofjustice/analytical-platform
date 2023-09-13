@@ -48,7 +48,7 @@ prod_vpc_sg_name = "airflow-prod"
 ##################################################
 
 dev_eks_cluster_name           = "airflow-dev"
-dev_eks_role_arn               = "arn:aws:iam::593291632749:role/airflow-dev-eksRole-role-211908c"
+dev_eks_role_name              = "airflow-dev-eksRole-role-211908c"
 dev_cluster_additional_sg_name = "airflow-dev-eksClusterSecurityGroup-6a4dde4"
 dev_cluster_additional_sg_id   = "sg-0bcd3cf5dc6d7b314"
 dev_node_sg_id                 = "sg-01930457ae391c7f0"
@@ -56,7 +56,7 @@ dev_node_sg_id                 = "sg-01930457ae391c7f0"
 ################################################
 
 prod_eks_cluster_name           = "airflow-prod"
-prod_eks_role_arn               = "arn:aws:iam::593291632749:role/airflow-prod-eksRole-role-de6b4f5"
+prod_eks_role_name              = "airflow-prod-eksRole-role-de6b4f5"
 prod_cluster_additional_sg_id   = "sg-0f73e78564012634a"
 prod_cluster_additional_sg_name = "airflow-prod-eksClusterSecurityGroup-6ab84a6"
 prod_node_sg_id                 = "sg-03ac19a2f24af23ad"

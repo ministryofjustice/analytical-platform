@@ -1,6 +1,6 @@
 resource "aws_eks_cluster" "airflow_dev_eks_cluster" {
   name     = var.dev_eks_cluster_name
-  role_arn = var.dev_eks_role_arn
+  role_arn = aws_iam_role.airflow_dev_eks_role.arn
   enabled_cluster_log_types = ["api",
     "audit",
     "authenticator",
@@ -34,11 +34,6 @@ resource "aws_security_group" "airflow_dev_cluster_additional_security_group" {
     from_port   = 0
     to_port     = 0
   }
-}
-
-moved {
-  from = aws_security_group.airflow_dev_security_group
-  to   = aws_security_group.airflow_dev_cluster_additional_security_group
 }
 
 output "endpoint" {
@@ -99,8 +94,9 @@ resource "aws_eks_node_group" "dev_node_group_high_memory" {
 
 resource "aws_eks_cluster" "airflow_prod_eks_cluster" {
   name     = var.prod_eks_cluster_name
-  role_arn = var.prod_eks_role_arn
-  enabled_cluster_log_types = ["api",
+  role_arn = aws_iam_role.airflow_prod_eks_role.arn
+  enabled_cluster_log_types = [
+    "api",
     "audit",
     "authenticator",
     "controllerManager",
@@ -133,11 +129,6 @@ resource "aws_security_group" "airflow_prod_cluster_additional_security_group" {
     from_port   = 0
     to_port     = 0
   }
-}
-
-moved {
-  from = aws_security_group.airflow_prod_security_group
-  to   = aws_security_group.airflow_prod_cluster_additional_security_group
 }
 
 import {
