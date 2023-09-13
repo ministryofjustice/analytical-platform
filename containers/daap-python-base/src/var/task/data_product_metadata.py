@@ -1,10 +1,10 @@
 import json
-import os
 import traceback
 
 import boto3
 import botocore
 from data_platform_logging import DataPlatformLogger
+from data_platform_paths import DataProductConfig, data_product_metadata_file_path
 from dataengineeringutils3.s3 import get_filepaths_from_s3_folder, read_json_from_s3
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
@@ -12,51 +12,23 @@ from jsonschema.exceptions import ValidationError
 s3_client = boto3.client("s3")
 
 
-# These can be moved to separate module for all paths when work starts on that
-def get_bucket_name() -> str:
-    return os.environ["BUCKET_NAME"]
-
-
-def get_data_product_metadata_path(data_product_name: str) -> str:
-    metadata_s3_path = os.path.join(
-        "s3://",
-        get_bucket_name(),
-        "metadata",
-        data_product_name,
-        "v1.0",
-        "metadata.json",
-    )
-    return metadata_s3_path
-
-
 def get_data_product_metadata_spec_path(version: str = "") -> str:
     # if version is empty we'll get the latest version
     if version == "":
         file_paths = get_filepaths_from_s3_folder(
-            os.path.join("s3://", get_bucket_name(), "data_product_metadata_spec")
+            DataProductConfig.metadata_spec_prefix().uri
         )
         versions = list(
             {i for p in file_paths for i in p.split("/") if i.startswith("v")}
         )
         versions.sort()
         latest_version = versions[-1]
-        spec_path = os.path.join(
-            "s3://",
-            get_bucket_name(),
-            "data_product_metadata_spec",
-            latest_version,
-            "moj_data_product_metadata_spec.json",
-        )
+        path = DataProductConfig.metadata_spec_path(latest_version)
     else:
-        spec_path = os.path.join(
-            "s3://",
-            get_bucket_name(),
-            "data_product_metadata_spec",
-            version,
-            "moj_data_product_metadata_spec.json",
-        )
+        DataProductConfig.metadata_spec_path(version)
+        path = DataProductConfig.metadata_spec_path(version)
 
-    return spec_path
+    return path.uri
 
 
 def split_bucket_and_key(path):
@@ -74,7 +46,7 @@ class DataProductMetadata:
         self.data_product_name = data_product_name
         self.logger = logger
         bucket, key = split_bucket_and_key(
-            get_data_product_metadata_path(data_product_name)
+            data_product_metadata_file_path(data_product_name)
         )
         self.metadata_bucket = bucket
         self.metadata_key = key

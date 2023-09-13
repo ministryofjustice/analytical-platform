@@ -74,7 +74,19 @@ resource "aws_iam_role" "airflow_dev_default_pod_role" {
   assume_role_policy = data.aws_iam_policy_document.airflow_dev_default_pod_assume_role_policy.json
 
 }
-############################ AIRFLOW PRODUCTION INFRASTRUCTURE
+
+resource "aws_iam_role" "airflow_dev_eks_role" {
+  name               = "airflow-dev-eksRole-role-211908c"
+  description        = "Allows EKS to manage clusters on your behalf."
+  assume_role_policy = data.aws_iam_policy_document.airflow_dev_eks_assume_role_policy.json
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  ]
+}
+
+####################################################################################
+######################### AIRFLOW PRODUCTION INFRASTRUCTURE ########################
+####################################################################################
 
 resource "aws_iam_role" "airflow_prod_execution_role" {
   name               = "airflow-prod-execution-role"
@@ -98,13 +110,19 @@ resource "aws_iam_role" "airflow_prod_flow_log_role" {
   }
 }
 
-########################Airflow dev EKS Role###########################
-
-resource "aws_iam_role" "airflow_dev_eks_role" {
-  name               = "airflow-dev-eksRole-role-211908c"
-  description        = "Allows EKS to manage clusters on your behalf."
-  assume_role_policy = data.aws_iam_policy_document.airflow_dev_eks_assume_role_policy.json
+resource "aws_iam_role" "airflow_prod_node_instance_role" {
+  name               = "airflow-prod-node-instance-role"
+  description        = "Node execution role for Airflow prod"
+  assume_role_policy = data.aws_iam_policy_document.airflow_prod_node_instance_assume_role_policy.json
   managed_policy_arns = [
-    "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   ]
+
+  inline_policy {
+    name   = "airflow-prod-node-instance-role-policy"
+    policy = data.aws_iam_policy_document.airflow_prod_node_instance_inline_role_policy.json
+  }
 }

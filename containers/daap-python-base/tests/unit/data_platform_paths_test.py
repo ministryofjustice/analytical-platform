@@ -184,6 +184,16 @@ def test_extraction_config_parse_from_raw_uri():
         "a-bucket", "curated_data/database_name=database-name/table_name=table-name/"
     )
 
+def test_data_product_metadata_spec_path():
+    version = "1"
+    path = DataProductConfig.metadata_spec_path(version, bucket_name="foo")
+
+    assert path == BucketPath(
+        bucket="foo",
+        key="data_product_metadata_spec/1/moj_data_product_metadata_spec.json",
+    )
+
+
 @freeze_time("2023-09-12")
 def test_data_product_log_bucket_and_key(monkeypatch):
     monkeypatch.setenv("BUCKET_NAME", "a-bucket")

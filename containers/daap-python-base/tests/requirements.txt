@@ -1,5 +1,6 @@
-boto3==1.28.40
-botocore==1.31.40
-freezegun==1.2.2
+
+-r ../src/var/task/requirements.txt
+
 pytest==7.4.1
 moto==4.2.2
+freezegun==1.2.2

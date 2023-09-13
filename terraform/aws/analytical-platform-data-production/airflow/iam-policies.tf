@@ -407,3 +407,15 @@ data "aws_iam_policy_document" "airflow_prod_flow_log_assume_policy" {
     }
   }
 }
+
+data "aws_iam_policy_document" "airflow_prod_node_instance_inline_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    resources = [
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/airflow-prod-cluster-autoscaler-role",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/airflow*"
+    ]
+    actions = ["sts:AssumeRole"]
+  }
+}
