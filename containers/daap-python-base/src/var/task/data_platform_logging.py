@@ -28,6 +28,7 @@ logging_levels = {
     "ERROR": logging.ERROR,
 }
 
+
 def _make_log_dict(level: str, msg: str, extra: dict, func: str) -> dict:
     """
     creates a dict with all the standard logging items plus a key
@@ -73,7 +74,7 @@ class DataPlatformLogger:
         data_product_name: str | None = None,
         format: str = "%(levelname)-8s | %(asctime)s | %(message)s",
         extra: dict = {},
-        level: str = "INFO"
+        level: str = "INFO",
     ):
         self.extra = {}
         self.extra["lambda_name"] = lambda_name
@@ -170,9 +171,7 @@ class DataPlatformLogger:
         self.logger.error(msg, *args, extra=self.extra, **kwargs)
 
     def _write_log_dict_to_s3_json(
-        self,
-        log_line: dict,
-        additional_args: dict = s3_security_opts
+        self, log_line: dict, additional_args: dict = s3_security_opts
     ) -> None:
         """
         writes the list of log dicts to s3 as a json file in the correct
@@ -181,18 +180,23 @@ class DataPlatformLogger:
         s3_client = boto3.client("s3")
 
         try:
-            response = s3_client.get_object(Bucket=self.log_bucket_path.bucket, Key=self.log_bucket_path.key)
+            response = s3_client.get_object(
+                Bucket=self.log_bucket_path.bucket, Key=self.log_bucket_path.key
+            )
         except ClientError as e:
             if e.response["Error"]["Code"] == "NoSuchKey":
                 jlines = ""
             else:
                 raise e
         else:
-            data = response.get('Body').read().decode('utf-8')
+            data = response.get("Body").read().decode("utf-8")
             jlines = data
 
         jlines += json.dumps(log_line) + "\n"
 
         s3_client.put_object(
-            Body=jlines, Bucket=self.log_bucket_path.bucket, Key=self.log_bucket_path.key, **additional_args
+            Body=jlines,
+            Bucket=self.log_bucket_path.bucket,
+            Key=self.log_bucket_path.key,
+            **additional_args
         )

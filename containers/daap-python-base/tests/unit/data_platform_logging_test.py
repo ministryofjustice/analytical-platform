@@ -1,7 +1,7 @@
 import json
-from freezegun import freeze_time
 
-from data_platform_logging import _make_log_dict, DataPlatformLogger
+from data_platform_logging import DataPlatformLogger, _make_log_dict
+from freezegun import freeze_time
 
 
 extra_input = {

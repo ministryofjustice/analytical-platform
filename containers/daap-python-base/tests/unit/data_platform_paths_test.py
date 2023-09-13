@@ -1,6 +1,5 @@
 import uuid
 from datetime import datetime
-from freezegun import freeze_time
 
 from data_platform_paths import (
     BucketPath,
@@ -8,11 +7,12 @@ from data_platform_paths import (
     ExtractionConfig,
     QueryTable,
     data_product_curated_data_prefix,
+    data_product_log_bucket_and_key,
     data_product_metadata_file_path,
     data_product_raw_data_file_path,
     get_bucket_name,
-    data_product_log_bucket_and_key
 )
+from freezegun import freeze_time
 
 
 def test_bucket_path_can_be_reassembled():
@@ -184,6 +184,7 @@ def test_extraction_config_parse_from_raw_uri():
         "a-bucket", "curated_data/database_name=database-name/table_name=table-name/"
     )
 
+
 def test_data_product_metadata_spec_path():
     version = "1"
     path = DataProductConfig.metadata_spec_path(version, bucket_name="foo")
@@ -197,7 +198,12 @@ def test_data_product_metadata_spec_path():
 @freeze_time("2023-09-12")
 def test_data_product_log_bucket_and_key(monkeypatch):
     monkeypatch.setenv("BUCKET_NAME", "a-bucket")
-    log_bucket_path = data_product_log_bucket_and_key("top_test_lambda", "delicious-data-product")
+    log_bucket_path = data_product_log_bucket_and_key(
+        "top_test_lambda", "delicious-data-product"
+    )
 
     assert log_bucket_path.bucket == "a-bucket"
-    assert log_bucket_path.key == "logs/json/lambda_name=top_test_lambda/data_product_name=delicious-data-product/date=2023-09-12/2023-09-12T00:00:00:000_log.json"
+    assert (
+        log_bucket_path.key
+        == "logs/json/lambda_name=top_test_lambda/data_product_name=delicious-data-product/date=2023-09-12/2023-09-12T00:00:00:000_log.json"
+    )  # noqa: E501

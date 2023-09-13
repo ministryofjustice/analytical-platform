@@ -1,10 +1,10 @@
 import os
 import sys
+import time
 from os.path import dirname, join
 
 import boto3
 import pytest
-import time
 from moto import mock_s3
 
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
