@@ -41,6 +41,15 @@ variable "transit_gateway_ids" {
   description = "Map of transit gateway names to ids"
 }
 
+##################################################
+# EKS
+##################################################
+
+variable "node_group_instance_types" {
+  type        = map(list(string))
+  description = "Map of node group labels to instance types"
+}
+
 ###################################################
 ############## Development Variables ##############
 ###################################################
