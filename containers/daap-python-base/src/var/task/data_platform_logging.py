@@ -72,7 +72,7 @@ class DataPlatformLogger:
         self,
         data_product_name: str | None = None,
         format: str = "%(levelname)-8s | %(asctime)s | %(message)s",
-        extra: dict = None,
+        extra: dict | None = None,
         level: str = "INFO",
     ):
         if extra is None:
