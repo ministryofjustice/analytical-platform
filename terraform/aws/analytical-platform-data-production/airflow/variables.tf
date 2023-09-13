@@ -114,7 +114,6 @@ variable "prod_cluster_additional_sg_id" {
   description = "Name of cluster additional security group for Airflow-Prod"
 }
 
-variable "prod_cluster_additional_sg_name" {
 variable "prod_eks_cluster_name" {
   type        = string
   description = "Name of cluster for Airflow-Prod"
@@ -127,7 +126,6 @@ variable "prod_cluster_additional_sg_id" {
 
 variable "prod_cluster_additional_sg_name" {
   type        = string
-  description = "Name of cluster additional security group for Airflow-Prod"
   description = "Name of cluster additional security group for Airflow-Prod"
 }
 

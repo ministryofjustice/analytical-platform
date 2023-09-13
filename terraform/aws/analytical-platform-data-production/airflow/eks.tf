@@ -1,8 +1,6 @@
 resource "aws_eks_cluster" "airflow_dev_eks_cluster" {
   name     = var.dev_eks_cluster_name
   role_arn = aws_iam_role.airflow_dev_eks_role.arn
-  name     = var.dev_eks_cluster_name
-  role_arn = var.dev_eks_role_arn
   enabled_cluster_log_types = ["api",
     "audit",
     "authenticator",
@@ -144,10 +142,6 @@ resource "aws_eks_node_group" "dev_node_group_high_memory" {
 resource "aws_eks_cluster" "airflow_prod_eks_cluster" {
   name     = var.prod_eks_cluster_name
   role_arn = aws_iam_role.airflow_prod_eks_role.arn
-  enabled_cluster_log_types = [
-    "api",
-  name     = var.prod_eks_cluster_name
-  role_arn = var.prod_eks_role_arn
   enabled_cluster_log_types = ["api",
     "audit",
     "authenticator",
@@ -175,12 +169,12 @@ resource "aws_security_group" "airflow_prod_cluster_additional_security_group" {
     security_groups = [var.prod_node_sg_id]
   }
   egress {
-    description = "Allow internet access."
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-    from_port   = 0
-    to_port     = 0
-    security_group_ids  = [var.prod_cluster_additional_sg_id]
+    description        = "Allow internet access."
+    protocol           = "-1"
+    cidr_blocks        = ["0.0.0.0/0"]
+    from_port          = 0
+    to_port            = 0
+    security_group_ids = [var.prod_cluster_additional_sg_id]
   }
 }
 
