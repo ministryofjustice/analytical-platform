@@ -106,7 +106,7 @@ resource "aws_eks_node_group" "dev_node_group_standard" {
   update_config {
     max_unavailable = 1
   }
-  
+
   # Allow external changes without Terraform plan difference
   lifecycle {
     ignore_changes = [scaling_config[0].desired_size]
