@@ -27,7 +27,6 @@ def handler(event, context):
     raw_prefix = f"raw_data/{data_product_to_recreate}"
     logger.info(f"Data product to recreate: {data_product_to_recreate}")
     logger.info(f"Raw prefix: {raw_prefix}")
-    logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
 
     # Check data product has associated data
     data_product_pages = get_data_product_pages(
@@ -68,7 +67,6 @@ def handler(event, context):
         )
 
     logger.info(f"data product {data_product_to_recreate} recreated")
-    logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
 
 
 def s3_recursive_delete(bucket, prefix, s3_client=s3) -> None:
@@ -103,6 +101,5 @@ def get_data_product_pages(
         if page["KeyCount"] == 0:
             error_text = f"No data product found for {data_product_prefix}"
             logger.error(error_text)
-            logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
             raise ValueError(error_text)
     return pages
