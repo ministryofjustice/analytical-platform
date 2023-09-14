@@ -86,8 +86,6 @@ def handler(event, context):
     logger.info(f"uuid_string: {uuid_value}")
     logger.info(f"event: {event}")
 
-    logger.write_log_dict_to_s3_json(bucket_name, **s3_security_opts)
-
     # Check the data product has been registered, ie has metadata in s3
     data_product_registration = s3.list_objects_v2(
         Bucket=data_product.metadata_path().bucket,
