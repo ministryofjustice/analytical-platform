@@ -11,8 +11,10 @@ logger = DataPlatformLogger(
     }
 )
 
+glue_client = boto3.client("glue")
 
-def handler(event, context):
+
+def handler(event, context, glue_client=glue_client):
     try:
         database = event["queryStringParameters"]["database"]
         table = event["queryStringParameters"]["table"]
@@ -38,7 +40,6 @@ def handler(event, context):
         }
     )
 
-    glue_client = boto3.client("glue")
     try:
         resp = glue_client.get_table(DatabaseName=database, Name=table)
     except glue_client.exceptions.EntityNotFoundException:
