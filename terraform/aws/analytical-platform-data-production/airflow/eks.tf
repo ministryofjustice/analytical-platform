@@ -176,7 +176,7 @@ resource "kubernetes_config_map" "dev_aws_auth_configmap" {
   }
 
   data = {
-    "mapRoles" = "${file("./files/dev/aws-auth-configmap.yaml")}"
+    "mapRoles" = file("./files/dev/aws-auth-configmap.yaml")
   }
 
 }
