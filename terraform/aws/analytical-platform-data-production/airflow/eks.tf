@@ -145,6 +145,47 @@ resource "aws_eks_node_group" "dev_node_group_high_memory" {
   }
 }
 
+
+resource "kubernetes_namespace" "dev_kube2iam" {
+  provider = kubernetes.dev-airflow-cluster
+  metadata {
+    annotations = {
+      "iam.amazonaws.com/allowed-roles" = jsonencode(["*"])
+    }
+    labels = {
+      "app.kubernetes.io/managed-by" = "terraform"
+    }
+    name = "kube2iam-system"
+  }
+  timeouts {}
+}
+
+import {
+  to = kubernetes_namespace.dev_kube2iam
+  id = "kube2iam-system"
+}
+
+resource "kubernetes_config_map" "dev_aws_auth_configmap" {
+  provider = kubernetes.dev-airflow-cluster
+  metadata {
+    name      = "aws-auth"
+    namespace = "kube-system"
+    labels = {
+      "app.kubernetes.io/managed-by" = "terraform"
+    }
+  }
+
+  data = {
+    "mapRoles" = file("./files/dev/aws-auth-configmap.yaml")
+  }
+
+}
+
+import {
+  to = kubernetes_config_map.dev_aws_auth_configmap
+  id = "kube-system/aws-auth"
+}
+
 ######################################
 ########### EKS PRODUCTION ###########
 ######################################
@@ -179,11 +220,11 @@ resource "aws_security_group" "airflow_prod_cluster_additional_security_group" {
     security_groups = [var.prod_node_sg_id]
   }
   egress {
-    description        = "Allow internet access."
-    protocol           = "-1"
-    cidr_blocks        = ["0.0.0.0/0"]
-    from_port          = 0
-    to_port            = 0
+    description     = "Allow internet access."
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+    from_port       = 0
+    to_port         = 0
     security_groups = []
   }
 }
