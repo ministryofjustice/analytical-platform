@@ -1,16 +1,15 @@
 import os
-import re
 
 import boto3
 from create_curated_athena_table import create_curated_athena_table
 from create_raw_athena_table import create_raw_athena_table
 from data_platform_logging import DataPlatformLogger
+from data_platform_paths import ExtractionConfig
 from infer_glue_schema import infer_glue_schema
 
-glue_client = boto3.client("glue")
 athena_client = boto3.client("athena")
 s3_client = boto3.client("s3")
-s3_resource = boto3.resource("s3")
+glue_client = boto3.client("glue")
 
 logger = DataPlatformLogger(
     extra={
@@ -25,24 +24,34 @@ s3_security_opts = {
 }
 
 
-def handler(event, context):
+def handler(
+    event,
+    context,
+    athena_client=athena_client,
+    s3_client=s3_client,
+    glue_client=glue_client,
+):
     bucket_name = event["detail"]["bucket"]["name"]
     file_key = event["detail"]["object"]["key"]
-
     full_s3_path = os.path.join("s3://", bucket_name, file_key)
-    config = get_data_product_config(full_s3_path)
+
+    extraction = ExtractionConfig.parse_from_uri(full_s3_path)
+    data_product = extraction.data_product_config
 
     logger.add_extras(
         {
             "lambda_name": context.function_name,
-            "data_product_name": config["database_name"],
-            "table_name": config["table_name"],
+            "data_product_name": data_product.curated_data_table.database,
+            "table_name": data_product.curated_data_table.name,
         }
     )
-    logger.info(f"config: {config}")
     logger.info(f"file is: {full_s3_path}")
+    logger.info(
+        f"config: {extraction.timestamp=} {data_product.raw_data_table=} {data_product.curated_data_table=}"
+    )
+
     metadata_types, metadata_str = infer_glue_schema(
-        full_s3_path, "data_products_raw", logger=logger
+        extraction.path, data_product, logger=logger
     )
 
     # Create a table of all string-type columns, to load raw data into
@@ -50,7 +59,7 @@ def handler(event, context):
         metadata_glue=metadata_str,
         logger=logger,
         glue_client=glue_client,
-        bucket=bucket_name,
+        bucket=extraction.path.bucket,
         s3_security_opts=s3_security_opts,
     )
 
@@ -59,58 +68,17 @@ def handler(event, context):
     # Create a curated parquet file from the raw file
     # Add a timestamp and insert raw data to the curated table, casting to type
     create_curated_athena_table(
-        config["database_name"],
-        config["table_name"],
-        config["table_path_curated"],
-        config["bucket"],
-        config["extraction_timestamp"],
+        data_product_config=data_product,
+        extraction_timestamp=extraction.timestamp.strftime("%Y%m%dT%H%M%SZ"),
         metadata=metadata_types,
         logger=logger,
         s3_security_opts=s3_security_opts,
+        glue_client=glue_client,
+        s3_client=s3_client,
+        athena_client=athena_client,
     )
 
     # Delete the raw string tables, which are just used as an intermediary
-    temp_table_name = config["table_name"] + "_raw"
-    glue_client.delete_table(DatabaseName="data_products_raw", Name=temp_table_name)
-    logger.info(f"removed raw table data_products_raw.{temp_table_name}")
-
-    logger.write_log_dict_to_s3_json(bucket_name, **s3_security_opts)
-
-
-def get_data_product_config(key: str) -> dict:
-    """
-    takes the raw file key and populates a config dict
-    for the product
-    """
-
-    config = {}
-    config["bucket"], config["key"] = key.replace("s3://", "").split("/", 1)
-
-    config["database_name"] = key.split("/")[4]
-    config["table_name"] = key.split("/")[5]
-    config["table_path_raw"] = os.path.dirname(key)
-
-    config["table_path_curated"] = (
-        os.path.join(
-            "s3://",
-            config["bucket"],
-            "curated_data",
-            "database_name={}".format(config["database_name"]),
-            "table_name={}".format(config["table_name"]),
-        )
-        + "/"
-    )
-
-    # get timestamp value
-    pattern = "^(.*)\/(extraction_timestamp=)([0-9TZ]{1,16})\/(.*)$"  # noqa W605
-    m = re.match(pattern, key)
-    if m:
-        timestamp = m.group(3)
-    else:
-        raise ValueError(
-            "Table partition extraction_timestamp is not in the expected format"
-        )
-    config["extraction_timestamp"] = timestamp
-    config["account_id"] = boto3.client("sts").get_caller_identity()["Account"]
-
-    return config
+    temp_table = data_product.raw_data_table
+    glue_client.delete_table(DatabaseName=temp_table.database, Name=temp_table.name)
+    logger.info(f"removed raw table data_products_raw.{temp_table.name}")
