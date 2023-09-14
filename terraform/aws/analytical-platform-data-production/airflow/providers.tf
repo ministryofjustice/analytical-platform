@@ -34,68 +34,20 @@ provider "aws" {
   }
 }
 
-# provider "kubernetes" {
-#   host                   = aws_eks_cluster.airflow_prod_eks_cluster.endpoint
-#   cluster_ca_certificate = base64decode(aws_eks_cluster.airflow_prod_eks_cluster.certificate_authority[0].data)
-#   token                  = data.aws_eks_cluster_auth.cluster.token
-# }
-
 provider "kubernetes" {
   alias                  = "dev-airflow-cluster"
   host                   = aws_eks_cluster.airflow_dev_eks_cluster.endpoint
   cluster_ca_certificate = base64decode(aws_eks_cluster.airflow_dev_eks_cluster.certificate_authority[0].data)
   exec {
     api_version = "client.authentication.k8s.io/v1beta1"
-    args        = ["eks", "get-token", "--cluster-name", aws_eks_cluster.airflow_dev_eks_cluster.name]
-    command     = "aws"
+    args = [
+      "eks",
+      "get-token",
+      "--cluster-name",
+      aws_eks_cluster.airflow_dev_eks_cluster.name,
+      "--role-arn",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/restricted-admin"
+    ]
+    command = "aws"
   }
 }
-
-# provider "helm" {
-#   alias = "dev-airflow-cluster"
-#   kubernetes {
-#     host                   = aws_eks_cluster.airflow_dev_eks_cluster.endpoint
-#     cluster_ca_certificate = base64decode(aws_eks_cluster.airflow_dev_eks_cluster.certificate_authority[0].data)
-#     exec {
-#       api_version = "client.authentication.k8s.io/v1beta1"
-#       args        = ["eks", "get-token", "--cluster-name", aws_eks_cluster.airflow_dev_eks_cluster.name]
-#       command     = "aws"
-#     }
-#   }
-# }
-
-provider "kubernetes" {
-  alias                  = "prod-airflow-cluster"
-  host                   = aws_eks_cluster.airflow_prod_eks_cluster.endpoint
-  cluster_ca_certificate = base64decode(aws_eks_cluster.airflow_prod_eks_cluster.certificate_authority[0].data)
-  #   exec {
-  #     api_version = "client.authentication.k8s.io/v1beta1"
-  #     args        = ["eks", "get-token", "--cluster-name", aws_eks_cluster.airflow_prod_eks_cluster.name]
-  #     command     = "aws"
-  #   }
-  exec {
-    api_version = "client.authentication.k8s.io/v1beta1"
-    command     = "bash"
-    args        = ["../../../../scripts/eks/terraform-authentication.sh", data.aws_caller_identity.current.account_id, aws_eks_cluster.airflow_prod_eks_cluster.name]
-  }
-}
-
-
-# exec {
-#   api_version = "client.authentication.k8s.io/v1beta1"
-#   command     = "bash"
-#   args        = ["../../../../scripts/eks/terraform-authentication.sh", data.aws_caller_identity.current.account_id, module.eks.cluster_name]
-# }
-
-# provider "helm" {
-#   alias = "prod-airflow-cluster"
-#   kubernetes {
-#     host                   = aws_eks_cluster.airflow_prod_eks_cluster.endpoint
-#     cluster_ca_certificate = base64decode(aws_eks_cluster.airflow_prod_eks_cluster.certificate_authority[0].data)
-#     exec {
-#       api_version = "client.authentication.k8s.io/v1beta1"
-#       args        = ["eks", "get-token", "--cluster-name", aws_eks_cluster.airflow_prod_eks_cluster.name]
-#       command     = "aws"
-#     }
-#   }
-# }

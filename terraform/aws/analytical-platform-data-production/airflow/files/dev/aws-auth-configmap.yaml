@@ -1,0 +1,25 @@
+- rolearn: 'arn:aws:iam::593291632749:role/airflow-dev-execution-role'
+  username: mwaa-service
+  groups:
+    - ''
+- rolearn: 'arn:aws:iam::593291632749:role/restricted-admin'
+  username: 'arn:aws:iam::593291632749:role/restricted-admin'
+  groups:
+    - 'system:masters'
+- rolearn: 'arn:aws:iam::189157455002:role/restricted-admin'
+  username: 'arn:aws:iam::189157455002:role/restricted-admin'
+  groups:
+    - 'system:masters'
+- rolearn: 'arn:aws:iam::042130406152:role/github-actions-runner'
+  username: 'arn:aws:iam::042130406152:role/github-actions-runner'
+  groups:
+    - 'system:masters'
+- rolearn: 'arn:aws:iam::593291632749:role/airflow-dev-node-instance-role'
+  username: 'system:node:{{EC2PrivateDNSName}}'
+  groups:
+    - 'system:bootstrappers'
+    - 'system:nodes'
+- rolearn: 'arn:aws:iam::593291632749:role/AWSReservedSSO_AdministratorAccess_48361bdb022cb721'
+  username: 'arn:aws:iam::593291632749:role/AWSReservedSSO_AdministratorAccess_48361bdb022cb721'
+  groups:
+    - 'system:masters'

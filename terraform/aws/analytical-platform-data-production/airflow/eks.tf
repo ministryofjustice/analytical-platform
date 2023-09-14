@@ -149,8 +149,15 @@ resource "aws_eks_node_group" "dev_node_group_high_memory" {
 resource "kubernetes_namespace" "dev_kube2iam" {
   provider = kubernetes.dev-airflow-cluster
   metadata {
+    annotations = {
+      "iam.amazonaws.com/allowed-roles" = jsonencode(["*"])
+    }
+    labels = {
+      "app.kubernetes.io/managed-by" = "terraform"
+    }
     name = "kube2iam-system"
   }
+  timeouts {}
 }
 
 import {
@@ -158,28 +165,25 @@ import {
   id = "kube2iam-system"
 }
 
-resource "kubernetes_namespace" "dev_kyverno" {
+resource "kubernetes_config_map" "dev_aws_auth_configmap" {
   provider = kubernetes.dev-airflow-cluster
   metadata {
-    name = "kyverno-system"
+    name      = "aws-auth"
+    namespace = "kube-system"
+    labels = {
+      "app.kubernetes.io/managed-by" = "terraform"
+    }
   }
+
+  data = {
+    "mapRoles" = "${file("./files/dev/aws-auth-configmap.yaml")}"
+  }
+
 }
 
 import {
-  to = kubernetes_namespace.dev_kyverno
-  id = "kyverno-system"
-}
-
-resource "kubernetes_namespace" "dev_cluster_autoscaler" {
-  provider = kubernetes.dev-airflow-cluster
-  metadata {
-    name = "cluster-autoscaler-system"
-  }
-}
-
-import {
-  to = kubernetes_namespace.dev_cluster_autoscaler
-  id = "cluster-autoscaler-system"
+  to = kubernetes_config_map.dev_aws_auth_configmap
+  id = "kube-system/aws-auth"
 }
 
 ######################################
