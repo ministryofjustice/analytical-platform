@@ -14,6 +14,10 @@
   username: 'arn:aws:iam::042130406152:role/github-actions-runner'
   groups:
     - 'system:masters'
+- rolearn: 'arn:aws:iam::042130406152:role/GlobalGitHubActionAccess'
+  username: 'arn:aws:iam::042130406152:role/GlobalGitHubActionAccess'
+  groups:
+    - 'system:masters'
 - rolearn: 'arn:aws:iam::593291632749:role/airflow-dev-node-instance-role'
   username: 'system:node:{{EC2PrivateDNSName}}'
   groups:
