@@ -15,9 +15,10 @@ from __future__ import annotations
 
 import os
 import re
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import NamedTuple
-from uuid import UUID
+from uuid import UUID, uuid4
 
 import boto3
 
@@ -26,6 +27,9 @@ EXTRACTION_TIMESTAMP_FORMAT = "%Y%m%dT%H%M%SZ"
 EXTRACTION_TIMESTAMP_REGEX = re.compile(
     r"^(.*)/(extraction_timestamp=)([0-9TZ]{1,16})/(.*)$"
 )
+
+# https://docs.aws.amazon.com/athena/latest/ug/tables-databases-columns-names.html
+MAX_IDENTIFIER_LENGTH = 255
 
 
 class BucketPath(NamedTuple):
@@ -63,11 +67,39 @@ class QueryTable(NamedTuple):
     name: str
 
 
-def get_bucket_name() -> str:
+def get_raw_data_bucket() -> str:
     """
-    Get the bucket name from the environment
+    Get the raw data bucket name from the environment
     """
-    return os.environ["BUCKET_NAME"]
+    return os.environ.get("RAW_DATA_BUCKET", "") or os.environ["BUCKET_NAME"]
+
+
+def get_curated_data_bucket() -> str:
+    """
+    Get the curated data bucket name from the environment
+    """
+    return os.environ.get("CURATED_DATA_BUCKET") or os.environ["BUCKET_NAME"]
+
+
+def get_log_bucket() -> str:
+    """
+    Get the log data bucket name from the environment
+    """
+    return os.environ.get("LOG_BUCKET") or os.environ["BUCKET_NAME"]
+
+
+def get_metadata_bucket() -> str:
+    """
+    Get the metadata data bucket name from the environment
+    """
+    return os.environ.get("METADATA_BUCKET") or os.environ["BUCKET_NAME"]
+
+
+def get_landing_zone_bucket() -> str:
+    """
+    Get the landing zone bucket name from the environment
+    """
+    return os.environ.get("LANDING_ZONE_BUCKET") or os.environ["BUCKET_NAME"]
 
 
 def get_account_id() -> str:
@@ -77,38 +109,51 @@ def get_account_id() -> str:
     return boto3.client("sts").get_caller_identity()["Account"]
 
 
-class DataProductConfig:
+@dataclass
+class DataProductElement:
     """
-    Configures the name, S3 paths, and athena table names for a data product.
+    A dataset within the data product. The curated data for each element
+    is queryable in its own athena table.
     """
 
-    def __init__(self, name: str, table_name: str, bucket_name: str | None = None):
-        """
-        Generate all the paths based on the data product name and a table name
-        """
-        if bucket_name is None:
-            bucket_name = get_bucket_name()
+    name: str
+    data_product: DataProductConfig
 
-        self.name = name
+    @staticmethod
+    def load(name, data_product_name):
+        data_product = DataProductConfig(name=data_product_name)
+        return DataProductElement(data_product=data_product, name=name)
 
-        self.raw_data_prefix = BucketPath(
-            bucket=bucket_name, key=os.path.join("raw_data", name, table_name) + "/"
+    @property
+    def raw_data_prefix(self):
+        return BucketPath(
+            bucket=self.data_product.raw_data_bucket,
+            key=os.path.join("raw_data", self.data_product.name, self.name) + "/",
         )
 
-        self.curated_data_prefix = BucketPath(
-            bucket_name,
+    @property
+    def curated_data_prefix(self):
+        return BucketPath(
+            self.data_product.curated_data_bucket,
             os.path.join(
                 "curated_data",
-                f"database_name={name}",
-                f"table_name={table_name}",
+                f"database_name={self.data_product.name}",
+                f"table_name={self.name}",
             )
             + "/",
         )
 
-        self.raw_data_table = QueryTable(
-            database=RAW_DATABASE_NAME, name=f"{table_name}_raw"
-        )
-        self.curated_data_table = QueryTable(database=name, name=table_name)
+    def raw_data_table_unique(self):
+        suffix = uuid4()
+        name = f"{self.name}_{suffix}_raw"
+        if len(name) > MAX_IDENTIFIER_LENGTH:
+            raise ValueError(f"Generated table name too long: {name}")
+
+        return QueryTable(database=RAW_DATABASE_NAME, name=name)
+
+    @property
+    def curated_data_table(self):
+        return QueryTable(database=self.data_product.name, name=self.name)
 
     def raw_data_path(self, timestamp: datetime, uuid_value: UUID) -> BucketPath:
         """
@@ -116,93 +161,9 @@ class DataProductConfig:
         """
         return self.extraction_config(timestamp, uuid_value).path
 
-    @staticmethod
-    def _metadata_path(data_product_name: str, bucket_name: str | None = None):
-        """
-        Path to the V1 metadata file
-        """
-        if bucket_name is None:
-            bucket_name = get_bucket_name()
-
-        key = os.path.join(
-            "metadata",
-            data_product_name,
-            "v1.0",
-            "metadata.json",
-        )
-        return BucketPath(bucket=bucket_name, key=key)
-
-    @staticmethod
-    def metadata_spec_prefix(bucket_name: str | None = None) -> BucketPath:
-        """
-        Path to the metadata spec files
-        """
-        if bucket_name is None:
-            bucket_name = get_bucket_name()
-
-        return BucketPath(
-            bucket_name,
-            os.path.join(
-                "data_product_metadata_spec",
-            ),
-        )
-
-    @staticmethod
-    def metadata_spec_path(version: str, bucket_name: str | None = None) -> BucketPath:
-        """
-        Path to a metadata spec file
-        """
-        if bucket_name is None:
-            bucket_name = get_bucket_name()
-
-        return BucketPath(
-            bucket_name,
-            os.path.join(
-                "data_product_metadata_spec",
-                version,
-                "moj_data_product_metadata_spec.json",
-            ),
-        )
-
-    def metadata_path(self):
-        """
-        Path to the V1 metadata file
-        """
-        return DataProductConfig._metadata_path(
-            data_product_name=self.name, bucket_name=self.raw_data_prefix.bucket
-        )
-
-    @staticmethod
-    def _log_file_path(
-        lambda_name: str | None,
-        data_product_name: str | None,
-        bucket_name: str | None = None,
-    ):
-        """
-        Path to json log files created by python lambda applications
-        """
-        if bucket_name is None:
-            bucket_name = get_bucket_name()
-
-        date = datetime.now().strftime("%Y-%m-%d")
-        date_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S:%f")[:-3]
-
-        if lambda_name is not None and data_product_name is not None:
-            key = os.path.join(
-                "logs",
-                "json",
-                f"lambda_name={lambda_name}",
-                f"data_product_name={data_product_name}",
-                f"date={date}",
-                f"{date_time}_log.json",
-            )
-        else:
-            key = os.path.join("logs", "json", f"date={date}", f"{date_time}_log.json")
-        return BucketPath(bucket=bucket_name, key=key)
-
     def extraction_config(
         self, timestamp: datetime, uuid_value: UUID
-    ) -> ExtractionConfig:
+    ) -> RawDataExtraction:
         """
         Config for the data extraction identified by uuid_value and timestamp.
         """
@@ -217,30 +178,94 @@ class DataProductConfig:
             ),
         )
 
-        return ExtractionConfig(
-            timestamp=timestamp, data_product_config=self, path=path
+        return RawDataExtraction(timestamp=timestamp, element=self, path=path)
+
+
+@dataclass
+class DataProductConfig:
+    """
+    Configures the name, and S3 buckets for a data product.
+    """
+
+    name: str
+    landing_zone_bucket: str = field(default_factory=get_landing_zone_bucket)
+    raw_data_bucket: str = field(default_factory=get_raw_data_bucket)
+    curated_data_bucket: str = field(default_factory=get_curated_data_bucket)
+    metadata_bucket: str = field(default_factory=get_metadata_bucket)
+
+    @property
+    def raw_data_prefix(self):
+        return BucketPath(
+            bucket=self.raw_data_bucket,
+            key=os.path.join("raw_data", self.name) + "/",
         )
 
-    def __eq__(self, other):
-        if type(other) is type(self):
-            return self.__dict__ == other.__dict__
-        return False
+    @property
+    def curated_data_prefix(self):
+        return BucketPath(
+            bucket=self.curated_data_bucket,
+            key=os.path.join(
+                "curated_data",
+                f"database_name={self.name}",
+            )
+            + "/",
+        )
+
+    def element(self, name):
+        return DataProductElement(name=name, data_product=self)
+
+    def metadata_path(self):
+        """
+        Path to the V1 metadata file
+        """
+        key = os.path.join(
+            "metadata",
+            self.name,
+            "v1.0",
+            "metadata.json",
+        )
+        return BucketPath(bucket=self.metadata_bucket, key=key)
+
+    @staticmethod
+    def metadata_spec_prefix(bucket_name: str | None = None) -> BucketPath:
+        """
+        Path to the metadata spec files
+        """
+        return BucketPath(
+            bucket_name or get_metadata_bucket(),
+            os.path.join(
+                "data_product_metadata_spec",
+            ),
+        )
+
+    @staticmethod
+    def metadata_spec_path(version: str, bucket_name: str | None = None) -> BucketPath:
+        """
+        Path to a metadata spec file
+        """
+        return BucketPath(
+            bucket_name if bucket_name else get_metadata_bucket(),
+            os.path.join(
+                "data_product_metadata_spec",
+                version,
+                "moj_data_product_metadata_spec.json",
+            ),
+        )
 
 
-class ExtractionConfig:
+@dataclass
+class RawDataExtraction:
     """
     An instance of extracting the raw data for a data product
     """
 
-    def __init__(
-        self,
-        data_product_config: DataProductConfig,
-        path: BucketPath,
-        timestamp: datetime,
-    ):
-        self.data_product_config = data_product_config
-        self.path = path
-        self.timestamp = timestamp
+    path: BucketPath
+    timestamp: datetime
+    element: DataProductElement
+
+    @property
+    def data_product_config(self):
+        return self.element.data_product
 
     @staticmethod
     def parse_extraction_timestamp(raw_data_key: str):
@@ -257,7 +282,7 @@ class ExtractionConfig:
         return datetime.strptime(match.group(3), EXTRACTION_TIMESTAMP_FORMAT)
 
     @staticmethod
-    def parse_from_uri(raw_data_uri) -> ExtractionConfig:
+    def parse_from_uri(raw_data_uri) -> RawDataExtraction:
         """
         Work out the paths from the URI of the raw data
         """
@@ -266,15 +291,13 @@ class ExtractionConfig:
         _, data_product_name, table_name, *_rest = raw_data_file.key.split("/")
 
         data_product_config = DataProductConfig(
-            data_product_name,
-            table_name,
-            bucket_name=raw_data_file.bucket,
+            data_product_name, raw_data_bucket=raw_data_file.bucket
         )
 
-        timestamp = ExtractionConfig.parse_extraction_timestamp(raw_data_file.key)
+        timestamp = RawDataExtraction.parse_extraction_timestamp(raw_data_file.key)
 
-        return ExtractionConfig(
-            data_product_config=data_product_config,
+        return RawDataExtraction(
+            element=data_product_config.element(table_name),
             timestamp=timestamp,
             path=raw_data_file,
         )
@@ -285,52 +308,52 @@ def data_product_raw_data_file_path(
     table_name: str,
     extraction_timestamp: datetime,
     uuid_value: UUID,
-    bucket_name: str | None = None,
 ) -> str:
     """
     The S3 location for the raw uploaded data.
     """
-    config = DataProductConfig(
-        name=data_product_name, table_name=table_name, bucket_name=bucket_name
-    )
-    return config.raw_data_path(
+    element = DataProductConfig(name=data_product_name).element(table_name)
+    return element.raw_data_path(
         timestamp=extraction_timestamp, uuid_value=uuid_value
     ).uri
 
 
-def data_product_curated_data_prefix(
-    data_product_name: str,
-    table_name: str,
-    bucket_name: str | None = None,
-) -> str:
+def data_product_curated_data_prefix(data_product_name: str, table_name: str) -> str:
     """
     The S3 location for partitioned data files in parquet format.
     """
-    config = DataProductConfig(
-        name=data_product_name, table_name=table_name, bucket_name=bucket_name
-    )
+    element = DataProductConfig(name=data_product_name).element(table_name)
 
-    return config.curated_data_prefix.uri
+    return element.curated_data_prefix.uri
 
 
-def data_product_metadata_file_path(
-    data_product_name: str, bucket_name: str | None = None
-) -> str:
+def data_product_metadata_file_path(data_product_name: str) -> str:
     """
     Generate the metadata path based on the data product name
     """
-    return DataProductConfig._metadata_path(
-        data_product_name=data_product_name, bucket_name=bucket_name
-    ).uri
+    return DataProductConfig(data_product_name).metadata_path().uri
 
 
 def data_product_log_bucket_and_key(
-    lambda_name: str | None = None,
-    data_product_name: str | None = None,
-    bucket_name: str | None = None,
+    lambda_name: str | None = None, data_product_name: str | None = None
 ) -> BucketPath:
     """
     Generate the log file path based on lambda and data product name
     """
+    bucket_name = get_log_bucket()
 
-    return DataProductConfig._log_file_path(lambda_name, data_product_name, bucket_name)
+    date = datetime.now().strftime("%Y-%m-%d")
+    date_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S:%f")[:-3]
+
+    if lambda_name is not None and data_product_name is not None:
+        key = os.path.join(
+            "logs",
+            "json",
+            f"lambda_name={lambda_name}",
+            f"data_product_name={data_product_name}",
+            f"date={date}",
+            f"{date_time}_log.json",
+        )
+    else:
+        key = os.path.join("logs", "json", f"date={date}", f"{date_time}_log.json")
+    return BucketPath(bucket=bucket_name, key=key)
