@@ -112,7 +112,6 @@ def test_metadata_does_not_exist(s3_client, region_name, monkeypatch):
 
 
 validation_inputs = [(test_schema_pass, True), (test_schema_fail, False)]
-# expected_outputs = [True, False]
 
 
 @pytest.mark.parametrize("test_schema, expected_out", validation_inputs)
