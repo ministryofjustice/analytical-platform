@@ -12,7 +12,6 @@ def create_curated_athena_table(
     extraction_timestamp,
     metadata,
     logger: DataPlatformLogger,
-    s3_security_opts,
     athena_client,
     s3_client,
     glue_client,
@@ -29,7 +28,7 @@ def create_curated_athena_table(
     bucket = data_product_config.raw_data_prefix.bucket
 
     table_exists = False
-    create_glue_database(glue_client, database_name, logger, bucket, s3_security_opts)
+    create_glue_database(glue_client, database_name, logger, bucket)
 
     try:
         table_metadata = glue_client.get_table(
@@ -58,7 +57,6 @@ def create_curated_athena_table(
                     extraction_timestamp,
                     metadata,
                 ),
-                s3_security_opts=s3_security_opts,
                 logger=logger,
                 athena_client=athena_client,
             )
@@ -87,7 +85,6 @@ def create_curated_athena_table(
                 curated_path,
                 metadata,
             ),
-            s3_security_opts=s3_security_opts,
             logger=logger,
             athena_client=athena_client,
         )
@@ -123,7 +120,6 @@ def create_curated_athena_table(
                 curated_path,
                 metadata,
             ),
-            s3_security_opts=s3_security_opts,
             logger=logger,
             athena_client=athena_client,
         )
@@ -148,7 +144,6 @@ def start_query_execution_and_wait(
     database_name: str,
     data_bucket: str,
     sql: str,
-    s3_security_opts: dict,
     logger: DataPlatformLogger,
     athena_client,
 ) -> str:
@@ -164,11 +159,9 @@ def start_query_execution_and_wait(
     except ClientError as e:
         if e.response["Error"]["Code"] == "InvalidRequestException":
             logger.error(f"This sql caused an error: {sql}")
-            logger.write_log_dict_to_s3_json(bucket=data_bucket, **s3_security_opts)
             raise ValueError(e)
         else:
             logger.error(f"unexpected error: {e}")
-            logger.write_log_dict_to_s3_json(bucket=data_bucket, **s3_security_opts)
             raise ValueError(e)
 
     query_id = res["QueryExecutionId"]
@@ -185,7 +178,6 @@ def start_query_execution_and_wait(
                 query_id, response["QueryExecution"]["Status"].get("StateChangeReason")
             )
         )
-        logger.write_log_dict_to_s3_json(bucket=data_bucket, **s3_security_opts)
         raise ValueError(response["QueryExecution"]["Status"].get("StateChangeReason"))
 
     return query_id

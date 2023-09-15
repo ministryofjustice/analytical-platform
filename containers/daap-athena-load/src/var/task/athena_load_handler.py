@@ -11,18 +11,6 @@ athena_client = boto3.client("athena")
 s3_client = boto3.client("s3")
 glue_client = boto3.client("glue")
 
-logger = DataPlatformLogger(
-    extra={
-        "image_version": os.getenv("VERSION", "unknown"),
-        "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-    }
-)
-
-s3_security_opts = {
-    "ACL": "bucket-owner-full-control",
-    "ServerSideEncryption": "AES256",
-}
-
 
 def handler(
     event,
@@ -38,13 +26,15 @@ def handler(
     extraction = ExtractionConfig.parse_from_uri(full_s3_path)
     data_product = extraction.data_product_config
 
-    logger.add_extras(
-        {
-            "lambda_name": context.function_name,
+    logger = DataPlatformLogger(
+        extra={
+            "image_version": os.getenv("VERSION", "unknown"),
+            "base_image_version": os.getenv("BASE_VERSION", "unknown"),
             "data_product_name": data_product.curated_data_table.database,
             "table_name": data_product.curated_data_table.name,
         }
     )
+
     logger.info(f"file is: {full_s3_path}")
     logger.info(
         f"config: {extraction.timestamp=} {data_product.raw_data_table=} {data_product.curated_data_table=}"
@@ -60,7 +50,6 @@ def handler(
         logger=logger,
         glue_client=glue_client,
         bucket=extraction.path.bucket,
-        s3_security_opts=s3_security_opts,
     )
 
     # Load the raw string data into the raw tables
@@ -72,7 +61,6 @@ def handler(
         extraction_timestamp=extraction.timestamp.strftime("%Y%m%dT%H%M%SZ"),
         metadata=metadata_types,
         logger=logger,
-        s3_security_opts=s3_security_opts,
         glue_client=glue_client,
         s3_client=s3_client,
         athena_client=athena_client,

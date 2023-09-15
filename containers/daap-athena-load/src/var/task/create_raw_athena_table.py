@@ -7,14 +7,13 @@ def create_raw_athena_table(
     logger: DataPlatformLogger,
     glue_client,
     bucket,
-    s3_security_opts,
 ) -> None:
     """
     Creates an empty athena table from the raw file pushed by
     a data producer for raw data.
     """
     database_name = metadata_glue["DatabaseName"]
-    create_glue_database(glue_client, database_name, logger, bucket, s3_security_opts)
+    create_glue_database(glue_client, database_name, logger, bucket)
 
     # Create raw data table, recreating it if necessary
     table_name = metadata_glue["TableInput"]["Name"]
@@ -26,7 +25,7 @@ def create_raw_athena_table(
     logger.info(f"created table {database_name}.{table_name}")
 
 
-def create_glue_database(glue_client, database_name, logger, bucket, s3_security_opts):
+def create_glue_database(glue_client, database_name, logger, bucket):
     """If a glue database doesn't exist, create a glue database"""
     try:
         glue_client.get_database(Name=database_name)
@@ -41,5 +40,4 @@ def create_glue_database(glue_client, database_name, logger, bucket, s3_security
             glue_client.create_database(**db_meta)
         else:
             logger.error("Unexpected error: %s" % e)
-            logger.write_log_dict_to_s3_json(bucket=bucket, **s3_security_opts)
             raise
