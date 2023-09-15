@@ -32,7 +32,7 @@ test_schema_fail = {
 
 def load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client):
     with urllib.request.urlopen(
-        "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.0.0/moj_data_product_metadata_spec.json"
+        "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.0.0/moj_data_product_metadata_spec.json"  # noqa E501
     ) as url:
         data = json.load(url)
     json_data = json.dumps(data)
