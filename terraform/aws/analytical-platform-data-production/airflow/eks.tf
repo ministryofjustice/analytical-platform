@@ -186,6 +186,60 @@ import {
   id = "kube-system/aws-auth"
 }
 
+resource "kubernetes_namespace" "dev_airflow" {
+  provider = kubernetes.dev-airflow-cluster
+  metadata {
+
+    name = "airflow"
+    annotations = {
+      "iam.amazonaws.com/allowed-roles" = jsonencode(["airflow_dev*"])
+    }
+    labels = {
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+  }
+  timeouts {}
+}
+import {
+  to = kubernetes_namespace.dev_airflow
+  id = "airflow"
+}
+resource "kubernetes_namespace" "kyverno" {
+  provider = kubernetes.dev-airflow-cluster
+  metadata {
+    name = "kyverno"
+    labels = {
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+  }
+  timeouts {}
+}
+import {
+  to = kubernetes_namespace.kyverno
+  id = "kyverno"
+}
+
+resource "kubernetes_namespace" "cluster-autoscaler-system" {
+  provider = kubernetes.dev-airflow-cluster
+  metadata {
+    name = "cluster-autoscaler-system"
+    annotations = {
+      "iam.amazonaws.com/allowed-roles" = jsonencode(["airflow-dev-cluster-autoscaler-role"])
+    }
+    labels = {
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+  }
+  timeouts {}
+}
+
+import {
+  to = kubernetes_namespace.cluster-autoscaler-system
+  id = "cluster-autoscaler-system"
+}
+
+
+
 ######################################
 ########### EKS PRODUCTION ###########
 ######################################
