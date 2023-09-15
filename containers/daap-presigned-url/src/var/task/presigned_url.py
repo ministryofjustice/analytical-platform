@@ -16,11 +16,6 @@ logger = DataPlatformLogger(
     }
 )
 
-s3_security_opts = {
-    "ACL": "bucket-owner-full-control",
-    "ServerSideEncryption": "AES256",
-}
-
 
 def handler(event, context):
     bucket_name = os.environ["BUCKET_NAME"]
