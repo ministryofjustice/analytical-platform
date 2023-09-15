@@ -21,7 +21,7 @@ def get_data_product_metadata_spec_path(version: str = "") -> str:
         versions = list(
             {i for p in file_paths for i in p.split("/") if i.startswith("v")}
         )
-        versions.sort()
+        versions.sort(key=lambda x: [int(y.replace("v", "")) for y in x.split(".")])
         latest_version = versions[-1]
         path = DataProductConfig.metadata_spec_path(latest_version)
     else:

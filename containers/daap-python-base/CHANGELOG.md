@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2023-09-15
+
+### Changed
+
+- `get_data_product_metadata_spec_path` to better handle sorting of semantic
+versioning.
+
 ## [1.0.1] - 2023-09-13
 
 ### Changed
