@@ -15,7 +15,7 @@ test_schema_pass = {
     "dataProductOwnerDisplayName": "matt laverty",
     "email": "matthew.laverty@justice.gov.uk",
     "status": "draft",
-    "dpiaRequired": False
+    "dpiaRequired": False,
 }
 
 test_schema_fail = {
@@ -26,17 +26,20 @@ test_schema_fail = {
     "dataProductOwnerDisplayName": "matt laverty",
     "email": "matthew.laverty@justice.gov.uk",
     "status": "draft",
-    "dpiaRequired": False
+    "dpiaRequired": False,
 }
 
+
 def load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client):
-    with urllib.request.urlopen("https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.0.0/moj_data_product_metadata_spec.json") as url:
+    with urllib.request.urlopen(
+        "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.0.0/moj_data_product_metadata_spec.json"
+    ) as url:
         data = json.load(url)
     json_data = json.dumps(data)
     s3_client.put_object(
         Body=json_data,
         Bucket=bucket_name,
-        Key="data_product_metadata_spec/v1.0.0/moj_data_product_metadata_spec.json"
+        Key="data_product_metadata_spec/v1.0.0/moj_data_product_metadata_spec.json",
     )
 
 
@@ -108,8 +111,9 @@ def test_metadata_does_not_exist(s3_client, region_name, monkeypatch):
     assert not md.metadata_exists
 
 
-validation_inputs =[(test_schema_pass, True), (test_schema_fail, False)]
+validation_inputs = [(test_schema_pass, True), (test_schema_fail, False)]
 # expected_outputs = [True, False]
+
 
 @pytest.mark.parametrize("test_schema, expected_out", validation_inputs)
 def test_valid_metadata(test_schema, expected_out, s3_client, region_name, monkeypatch):
