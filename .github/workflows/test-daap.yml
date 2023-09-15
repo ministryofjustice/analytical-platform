@@ -1,0 +1,65 @@
+---
+name: Test DaaP Applications
+
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+    paths:
+      - containers/daap-*/**
+  push:
+    paths:
+      - containers/daap-*/**
+
+jobs:
+  detect-changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      containers: ${{ steps.detect_changes.outputs.changes }}
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+      - name: Generate pytest path filter file
+        run: bash scripts/path-filter/configuration-generator.sh pytest
+
+      - name: Detect changes
+        id: detect_changes
+        uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
+        with:
+          filters: .github/path-filter/pytest.yml
+
+  run-tests:
+    name: Test python
+    if: ${{ needs.detect-changes.outputs.containers != '[]' }}
+    needs: [detect-changes]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        container: ${{ fromJson(needs.detect-changes.outputs.containers) }}
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+      - name: Setup Python
+        id: setup_python
+        uses: actions/setup-python@61a6322f88396a6271a6ee3565807d608ecaddd1 # v4.7.0
+        with:
+          python-version: 3.11
+          cache: pip
+          cache-dependency-path: containers/${{ matrix.container }}/tests/requirements.txt
+
+      - name: Install test dependencies
+        run: python -m pip install -r requirements.txt
+        working-directory: containers/${{ matrix.container }}/tests/
+
+      - name: Run tests
+        run: pytest -vv
+        working-directory: containers/${{ matrix.container }}/tests/unit/
