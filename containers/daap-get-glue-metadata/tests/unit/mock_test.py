@@ -1,6 +1,5 @@
 import json
 
-import boto3
 import get_glue_metadata
 
 
@@ -47,7 +46,7 @@ def create_table(glue_client, table_name, database_name):
     return table_input
 
 
-def test_success_case(glue_client, monkeypatch, fake_context):
+def test_success_case(glue_client, fake_context):
     test_database_name = "test_db"
     test_table_name = "test_table"
     table_input = create_table(
@@ -55,9 +54,6 @@ def test_success_case(glue_client, monkeypatch, fake_context):
         database_name=test_database_name,
         table_name=test_table_name,
     )
-
-    # Use the mock client in the lambda, not a real one
-    monkeypatch.setattr(boto3, "client", lambda _name: glue_client)
 
     test_response = get_glue_metadata.handler(
         {
@@ -67,6 +63,7 @@ def test_success_case(glue_client, monkeypatch, fake_context):
             },
         },
         context=fake_context,
+        glue_client=glue_client,
     )
     body = json.loads(test_response["body"])
 
@@ -78,10 +75,7 @@ def test_success_case(glue_client, monkeypatch, fake_context):
     assert body["ResponseMetadata"].keys() == expected_metadata
 
 
-def test_table_does_not_exist(glue_client, monkeypatch, fake_context):
-    # Use the mock client in the lambda, not a real one
-    monkeypatch.setattr(boto3, "client", lambda _name: glue_client)
-
+def test_table_does_not_exist(glue_client, fake_context):
     test_response = get_glue_metadata.handler(
         {
             "queryStringParameters": {
@@ -90,6 +84,7 @@ def test_table_does_not_exist(glue_client, monkeypatch, fake_context):
             },
         },
         context=fake_context,
+        glue_client=glue_client,
     )
     body = json.loads(test_response["body"])
 
