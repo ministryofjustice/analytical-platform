@@ -27,10 +27,6 @@ def curated_athena_table_kwargs(
             "DatabaseName": "data_products_raw",
         },
         logger=logger,
-        s3_security_opts={
-            "ACL": "bucket-owner-full-control",
-            "ServerSideEncryption": "AES256",
-        },
         glue_client=glue_client,
         s3_client=s3_client,
         athena_client=athena_client,

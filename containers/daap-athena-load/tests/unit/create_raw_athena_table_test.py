@@ -15,7 +15,6 @@ def test_create_raw_athena_table(glue_client):
         logger=logger,
         glue_client=glue_client,
         bucket="bucket",
-        s3_security_opts={},
     )
 
     table = glue_client.get_table(Name="table", DatabaseName="data_products_raw")
@@ -38,7 +37,6 @@ def test_create_raw_athena_table_recreates_the_db(glue_client):
         logger=logger,
         glue_client=glue_client,
         bucket="bucket",
-        s3_security_opts={},
     )
 
     table = glue_client.get_table(Name="table", DatabaseName="data_products_raw")
