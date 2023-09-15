@@ -8,10 +8,25 @@ from datetime import datetime
 from typing import List
 
 import boto3
+from botocore.exceptions import ClientError
+from data_platform_paths import data_product_log_bucket_and_key
 
 # aws lambda uses UTC so setting the timezone for correct time.
 os.putenv("TZ", "Europe/London")
 time.tzset()
+
+# additional arguments relating to data bucket security of data platform
+s3_security_opts = {
+    "ACL": "bucket-owner-full-control",
+    "ServerSideEncryption": "AES256",
+}
+
+logging_levels = {
+    "INFO": logging.INFO,
+    "DEBUG": logging.DEBUG,
+    "WARNING": logging.WARNING,
+    "ERROR": logging.ERROR,
+}
 
 
 def _make_log_dict(level: str, msg: str, extra: dict, func: str) -> dict:
@@ -33,7 +48,7 @@ def _make_log_dict(level: str, msg: str, extra: dict, func: str) -> dict:
 
 class DataPlatformLogger:
     """
-    Logger for Data Platform applications.
+    Logger for Data Platform Lambda python applications.
 
     Provides some flexibility regarding extra information to be logged.
 
@@ -55,13 +70,26 @@ class DataPlatformLogger:
 
     def __init__(
         self,
+        data_product_name: str | None = None,
         format: str = "%(levelname)-8s | %(asctime)s | %(message)s",
-        extra: dict = {},
+        extra: dict | None = None,
+        level: str = "INFO",
     ):
-        self.extra = extra
+        if extra is None:
+            extra = {}
+        self.extra = {}
+        self.extra["lambda_name"] = os.getenv("AWS_LAMBDA_FUNCTION_NAME", None)
+        self.extra["data_product_name"] = data_product_name
+
+        for k, v in extra.items():
+            self.extra[k] = v
         self.log_list_dict: List[dict] = []
         self.format = format
         self.logger = logging.getLogger()
+
+        self.log_bucket_path = data_product_log_bucket_and_key(
+            lambda_name=self.extra["lambda_name"], data_product_name=data_product_name
+        )
 
         # if used in a lambda function we remove the preloaded handlers
         for h in self.logger.handlers:
@@ -71,7 +99,7 @@ class DataPlatformLogger:
 
         handler.setFormatter(logging.Formatter(format, datefmt="%Y-%m-%d %H:%M:%S"))
         self.logger.addHandler(handler)
-        self.logger.setLevel(logging.INFO)
+        self.logger.setLevel(logging_levels[level])
 
     def add_extras(self, other_extras: dict, format=None):
         """
@@ -93,7 +121,7 @@ class DataPlatformLogger:
 
         return self
 
-    def debug(self, msg, *args, **kwargs):
+    def debug(self, msg: str, *args, **kwargs):
         """
         Method for logging message at the debug level. Displays in the standard output
         as per the set format.
@@ -102,10 +130,10 @@ class DataPlatformLogger:
 
         """
         log_dict = _make_log_dict("debug", msg, self.extra, inspect.stack()[1].function)
-        self.log_list_dict.append(log_dict)
+        self._write_log_dict_to_s3_json(log_dict)
         self.logger.debug(msg, *args, extra=self.extra, **kwargs)
 
-    def info(self, msg, *args, **kwargs):
+    def info(self, msg: str, *args, **kwargs):
         """
         Method for logging message at the info level. Displays in the standard output
         as per the set format.
@@ -114,10 +142,10 @@ class DataPlatformLogger:
 
         """
         log_dict = _make_log_dict("info", msg, self.extra, inspect.stack()[1].function)
-        self.log_list_dict.append(log_dict)
+        self._write_log_dict_to_s3_json(log_dict)
         self.logger.info(msg, *args, extra=self.extra, **kwargs)
 
-    def warning(self, msg, *args, **kwargs):
+    def warning(self, msg: str, *args, **kwargs):
         """
         Method for logging message at the warning level. Displays in the standard output
         as per the set format.
@@ -126,12 +154,12 @@ class DataPlatformLogger:
 
         """
         log_dict = _make_log_dict(
-            "wanring", msg, self.extra, inspect.stack()[1].function
+            "warning", msg, self.extra, inspect.stack()[1].function
         )
-        self.log_list_dict.append(log_dict)
+        self._write_log_dict_to_s3_json(log_dict)
         self.logger.warning(msg, *args, extra=self.extra, **kwargs)
 
-    def error(self, msg, *args, **kwargs):
+    def error(self, msg: str, *args, **kwargs):
         """
         Method for logging message at the error level. Displays in the standard output
         as per the set format.
@@ -140,35 +168,40 @@ class DataPlatformLogger:
 
         """
         log_dict = _make_log_dict("error", msg, self.extra, inspect.stack()[1].function)
-        self.log_list_dict.append(log_dict)
+        self._write_log_dict_to_s3_json(log_dict)
         self.logger.error(msg, *args, extra=self.extra, **kwargs)
 
-    def write_log_dict_to_s3_json(self, bucket: str, **kwargs):
+    def _write_log_dict_to_s3_json(
+        self, log_line: dict, additional_args: dict = s3_security_opts
+    ) -> None:
         """
         writes the list of log dicts to s3 as a json file in the correct
         format for an athena table
         """
         s3_client = boto3.client("s3")
-        date = datetime.now().strftime("%Y-%m-%d")
-        date_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S:%f")[:-3]
-        if (
-            "lambda_name" in self.extra.keys()
-            and "data_product_name" in self.extra.keys()
-        ):
-            key = os.path.join(
-                "logs",
-                "json",
-                f"lambda_name={self.extra['lambda_name']}",
-                f"data_product_name={self.extra['data_product_name']}",
-                f"date={date}",
-                f"{date_time}_log.json",
+
+        try:
+            response = s3_client.get_object(
+                Bucket=self.log_bucket_path.bucket, Key=self.log_bucket_path.key
             )
+        except ClientError as e:
+            if e.response["Error"]["Code"] == "NoSuchKey":
+                jlines = ""
+            else:
+                # if an unexpected error we want to exit the method
+                # to avoid creating a log file with 1 line of last log
+                # but not raise an error, disrupting the application
+                print(e)
+                return None
         else:
-            key = os.path.join("logs", "json", f"date={date}", f"{date_time}_log.json")
+            data = response.get("Body").read().decode("utf-8")
+            jlines = data
 
-        # make the json object into the correct format for athena
-        jlines = ""
-        for line in self.log_list_dict:
-            jlines += json.dumps(line) + "\n"
+        jlines += json.dumps(log_line) + "\n"
 
-        s3_client.put_object(Body=jlines, Bucket=bucket, Key=key, **kwargs)
+        s3_client.put_object(
+            Body=jlines,
+            Bucket=self.log_bucket_path.bucket,
+            Key=self.log_bucket_path.key,
+            **additional_args
+        )

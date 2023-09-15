@@ -1,6 +1,6 @@
 module "airflow_analytical_platform_development_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.28.0"
+  version = "5.30.0"
 
   create_role = true
 
@@ -74,7 +74,19 @@ resource "aws_iam_role" "airflow_dev_default_pod_role" {
   assume_role_policy = data.aws_iam_policy_document.airflow_dev_default_pod_assume_role_policy.json
 
 }
-############################ AIRFLOW PRODUCTION INFRASTRUCTURE
+
+resource "aws_iam_role" "airflow_dev_eks_role" {
+  name               = var.dev_eks_role_name
+  description        = "Allows EKS to manage clusters on your behalf."
+  assume_role_policy = data.aws_iam_policy_document.airflow_dev_eks_assume_role_policy.json
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  ]
+}
+
+####################################################################################
+######################### AIRFLOW PRODUCTION INFRASTRUCTURE ########################
+####################################################################################
 
 resource "aws_iam_role" "airflow_prod_execution_role" {
   name               = "airflow-prod-execution-role"
@@ -87,13 +99,44 @@ resource "aws_iam_role" "airflow_prod_execution_role" {
   }
 }
 
-########################Airflow dev EKS Role###########################
+resource "aws_iam_role" "airflow_prod_flow_log_role" {
+  name               = "airflow-prod-flow-log-role"
+  description        = "Flow log role for Airflow Prod"
+  assume_role_policy = data.aws_iam_policy_document.airflow_dev_flow_log_assume_policy.json
 
-resource "aws_iam_role" "airflow_dev_eks_role" {
-  name               = "airflow-dev-eksRole-role-211908c"
+  inline_policy {
+    name   = "airflow-prod-flow-log-policy"
+    policy = data.aws_iam_policy_document.airflow_prod_flow_log_role_policy.json
+  }
+}
+
+resource "aws_iam_role" "airflow_prod_node_instance_role" {
+  name               = "airflow-prod-node-instance-role"
+  description        = "Node execution role for Airflow prod"
+  assume_role_policy = data.aws_iam_policy_document.airflow_prod_node_instance_assume_role_policy.json
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  ]
+
+  inline_policy {
+    name   = "airflow-prod-node-instance-role-policy"
+    policy = data.aws_iam_policy_document.airflow_prod_node_instance_inline_role_policy.json
+  }
+}
+
+resource "aws_iam_role" "airflow_prod_eks_role" {
+  name               = var.prod_eks_role_name
   description        = "Allows EKS to manage clusters on your behalf."
-  assume_role_policy = data.aws_iam_policy_document.airflow_dev_eks_assume_role_policy.json
+  assume_role_policy = data.aws_iam_policy_document.airflow_prod_eks_assume_role_policy.json
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   ]
+}
+
+import {
+  to = aws_iam_role.airflow_prod_eks_role
+  id = "airflow-prod-eksRole-role-de6b4f5"
 }

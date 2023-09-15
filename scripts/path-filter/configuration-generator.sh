@@ -13,13 +13,23 @@ case ${MODE} in
     SEARCH_PATTERN=".terraform.lock.hcl"
     SKIP_FILE=".terraform-path-filter-ignore"
   ;;
+  pytest)
+    PATH_FILTER_CONFIGURATION_FILE=".github/path-filter/pytest.yml"
+    SEARCH_PATTERN="**/*_test.py"
+    SKIP_FILE=".pytest-path-filter-ignore"
+  ;;
   *)
-    echo "Usage: ${0} [containers|terraform]"
+    echo "Usage: ${0} [containers|terraform|pytest]"
     exit 1
   ;;
 esac
 
-folders=$(find . -type f -name "${SEARCH_PATTERN}" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
+if [[ "${MODE}" == "pytest" ]]; then
+  folders=$(find . -type f -wholename "${SEARCH_PATTERN}" | sed 's|/tests/.*$||g' | sort -h | uniq | cut -c 3-)
+else
+  folders=$(find . -type f -name "${SEARCH_PATTERN}" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
+fi
+
 export folders
 
 echo "=== Folders ==="

@@ -13,18 +13,17 @@ def create_raw_athena_table(
     Creates an empty athena table from the raw file pushed by
     a data producer for raw data.
     """
-    create_glue_database(
-        glue_client, "data_products_raw", logger, bucket, s3_security_opts
-    )
+    database_name = metadata_glue["DatabaseName"]
+    create_glue_database(glue_client, database_name, logger, bucket, s3_security_opts)
 
     # Create raw data table, recreating it if necessary
     table_name = metadata_glue["TableInput"]["Name"]
     try:
-        glue_client.delete_table(DatabaseName="data_products_raw", Name=table_name)
+        glue_client.delete_table(DatabaseName=database_name, Name=table_name)
     except ClientError:
         pass
     glue_client.create_table(**metadata_glue)
-    logger.info(f"created table data_products_raw.{table_name}")
+    logger.info(f"created table {database_name}.{table_name}")
 
 
 def create_glue_database(glue_client, database_name, logger, bucket, s3_security_opts):

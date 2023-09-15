@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.3] 2023-09-13
+
+### Changed
+
+- Use `data_platform_paths` from the base image for s3 paths and athena table names
+
 ## [1.1.2] 2023-08-30
 
 ### Changed

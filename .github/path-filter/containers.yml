@@ -5,10 +5,13 @@
 alpine-base: containers/alpine-base/**
 daap-athena-load: containers/daap-athena-load/**
 daap-authorizer: containers/daap-authorizer/**
+daap-create-metadata: containers/daap-create-metadata/**
 daap-docs: containers/daap-docs/**
 daap-get-glue-metadata: containers/daap-get-glue-metadata/**
 daap-presigned-url: containers/daap-presigned-url/**
 daap-python-base: containers/daap-python-base/**
+daap-reload-data-product: containers/daap-reload-data-product/**
+daap-resync-unprocessed-files: containers/daap-resync-unprocessed-files/**
 daap-simulated-data-producer: containers/daap-simulated-data-producer/**
 kubectl: containers/kubectl/**
 rshiny-3.5.3: containers/rshiny-3.5.3/**
