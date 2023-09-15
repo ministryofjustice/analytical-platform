@@ -33,7 +33,7 @@ def handler(event, context):
                 {
                     "error": {
                         "message": "Database or table is not"
-                        + "convertible to string type."
+                        + " convertible to string type."
                     }
                 }
             ),
@@ -97,7 +97,7 @@ def handler(event, context):
                 {
                     "error": {
                         "message": "Data product registration relating"
-                        + "to database not found."
+                        + " to database not found."
                     }
                 }
             ),
