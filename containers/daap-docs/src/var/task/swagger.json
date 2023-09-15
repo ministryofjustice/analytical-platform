@@ -20,7 +20,9 @@
   "paths": {
     "/upload_data": {
       "get": {
-        "tags": ["upload_data"],
+        "tags": [
+          "upload_data"
+        ],
         "summary": "Get a presigned url to upload some data to an existing data product.",
         "description": "Returns a presigned url to post data to.",
         "operationId": "uploadData",
@@ -86,7 +88,9 @@
     },
     "/get_glue_metadata": {
       "get": {
-        "tags": ["get_glue_metadata"],
+        "tags": [
+          "get_glue_metadata"
+        ],
         "summary": "Get metadata for a specified table in a specified Glue database",
         "description": "Returns a json object with all the metadata available for the specified database and table",
         "operationId": "getGlueMetadata",
@@ -136,12 +140,90 @@
           }
         }
       }
+    },
+    "/register_data_product": {
+      "post": {
+        "tags": [
+          "register_data_product"
+        ],
+        "summary": "Register metadata for a new data product you want to upload to the Data Platform.",
+        "description": "Registers the first version of your data product's metadata and enables you to proceed with uploading data.",
+        "operationId": "registerDataProduct",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/registerDataProduct"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorizationToken",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "data_product_name": "example_data_product",
+                    "message": "Data product metadata has been created."
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "unsuccessful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "data_product_name": "example_data_product",
+                    "message": "Your data product already has a version 1 registered metadata."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "registerDataProduct": {
+        "required": [
+          "metadata"
+        ],
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/dataProductMetadataSchema"
+          }
+        }
+      },
+      "dataProductMetadataSchema": {
+        "$ref": "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.0.0/moj_data_product_metadata_spec.json"
+      },
       "UploadDataRequest": {
-        "required": ["database", "table", "contentMD5"],
+        "required": [
+          "database",
+          "table",
+          "contentMD5"
+        ],
         "type": "object",
         "properties": {
           "database": {
@@ -160,7 +242,10 @@
       },
       "URL": {
         "type": "object",
-        "required": ["url", "fields"],
+        "required": [
+          "url",
+          "fields"
+        ],
         "properties": {
           "url": {
             "type": "string",
@@ -173,7 +258,9 @@
       },
       "UploadDataResponse": {
         "type": "object",
-        "required": ["URL"],
+        "required": [
+          "URL"
+        ],
         "properties": {
           "URL": {
             "$ref": "#/components/schemas/URL"

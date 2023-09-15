@@ -22,11 +22,11 @@ locals {
     "SimonsMOJ",      # Simon Heron
     "mshodge",        # Michael Hodges
     "YvanMOJdigital", # Yvan Smith
-    "amycufflin",
-    "ChikC",        # Chike Chinukwue
-    "EO510",        # Eki Osehenye
-    "Braimah-L",    # Braimah Lat
-    "imkatiewatson" # Katie Watson
+    "ChikC",          # Chike Chinukwue
+    "EO510",          # Eki Osehenye
+    "Braimah-L",      # Braimah Lat
+    "imkatiewatson",  # Katie Watson
+    "f-marry"         # Fabien Marry
   ]
 
   # GitHub usernames for engineers who need full AWS access
@@ -35,7 +35,6 @@ locals {
     "ymao2",    # Yikang Mao
     "BrianEllwood",
     "tom-webber",
-    "bogdan-mania-moj",
     "Emterry", # Emma Terry
     "michaeljcollinsuk",
     "jhpyke",
@@ -105,7 +104,7 @@ locals {
     "RossKen",
     "afua-moj",
     "murdo-moj",
-    "hemeshpatel-moj",
+    "matmoore",
     "AntFMoJ",  # Anthony Fitzroy
     "tomholt1", # Tom Holt
     "lalithanagarur",
@@ -128,7 +127,9 @@ locals {
     "jhpyke",
     "murad-ali-MoJ",
     "tamsinforbes",
-    "tom-webber"
+    "tom-webber",
+    "mitchdawson1982",
+    "Gary-H9"
   ]
 
   data_platform_labs_maintainers = [
@@ -136,9 +137,8 @@ locals {
   ]
 
   data_platform_labs_members = [
-    "hemeshpatel-moj",
     "murdo-moj",
-    "bogdan-mania-moj",
+    "matmoore",
     "LavMatt"
   ]
 
