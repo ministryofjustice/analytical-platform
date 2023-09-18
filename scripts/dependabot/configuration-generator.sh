@@ -43,7 +43,7 @@ for ecosystem in docker pip terraform; do
     ;;
   esac
 
-  folders=$(find . -type f -name "${SEARCH_PATTERN}" -not -path "./containers/daap-*" -not -path "./terraform/aws/analytical-platform-data-production/airflow/*" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
+  folders=$(find . -type f -name "${SEARCH_PATTERN}" -not -path "./containers/daap-*" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
   export folders
 
   echo "=== Folders ==="
