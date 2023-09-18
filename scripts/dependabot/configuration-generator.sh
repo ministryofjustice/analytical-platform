@@ -56,7 +56,6 @@ for ecosystem in docker pip terraform; do
     continue
   fi
   
-
     printf "  - package-ecosystem: \"%s\"\n" "${ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
     printf "    directory: \"%s\"\n" "${folder}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
     printf "    schedule:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
