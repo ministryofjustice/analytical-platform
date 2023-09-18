@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] 2023-09-15
+
+### Changed
+
+- Use new version of base image logging module within `daap-create-metadata`
+
 ## [1.0.3]
 
 ### Changed

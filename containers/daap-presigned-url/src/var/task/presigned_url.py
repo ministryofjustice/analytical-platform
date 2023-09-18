@@ -16,11 +16,6 @@ logger = DataPlatformLogger(
     }
 )
 
-s3_security_opts = {
-    "ACL": "bucket-owner-full-control",
-    "ServerSideEncryption": "AES256",
-}
-
 
 def handler(event, context):
     bucket_name = os.environ["BUCKET_NAME"]
@@ -37,7 +32,8 @@ def handler(event, context):
             "body": json.dumps(
                 {
                     "error": {
-                        "message": "Database or table is not convertible to string type."
+                        "message": "Database or table is not"
+                        + " convertible to string type."
                     }
                 }
             ),
@@ -57,7 +53,8 @@ def handler(event, context):
         "Content-MD5": md5,
         "Content-Type": "binary/octet-stream",
     }
-    # File upload is capped at 5GB per single upload so content-length-range is 5GB
+    # File upload is capped at 5GB per single upload so
+    # content-length-range is 5GB
     conditions = [
         {"x-amz-server-side-encryption": "AES256"},
         {"x-amz-acl": "bucket-owner-full-control"},
@@ -99,7 +96,8 @@ def handler(event, context):
             "body": json.dumps(
                 {
                     "error": {
-                        "message": "Data product registration relating to database not found."
+                        "message": "Data product registration relating"
+                        + " to database not found."
                     }
                 }
             ),
@@ -116,5 +114,5 @@ def handler(event, context):
         return {
             "statusCode": 200,
             "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"URL": URL}),
+            "body": json.dumps({"URL": URL}, default=str),
         }

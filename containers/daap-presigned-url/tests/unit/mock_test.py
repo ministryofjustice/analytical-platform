@@ -45,7 +45,7 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
 
 
 @freeze_time("2023-01-01")
-def test_data_product_does_not_exist(s3_client, fake_context, region_name, monkeypatch):
+def test_dataproduct_does_not_exist(s3_client, fake_context, region_name, monkeypatch):
     bucket_name = "bucket"
     database = "database1"
     table = "table1"

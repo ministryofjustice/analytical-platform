@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.4] 2023-09-15
+
+### Changed
+
+- Use new version of base image logging module within `daap-athena-load`
+
 ## [1.1.3] 2023-09-13
 
 ### Changed
