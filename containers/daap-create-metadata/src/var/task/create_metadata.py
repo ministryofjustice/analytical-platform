@@ -35,7 +35,7 @@ def handler(event, context):
 
     data_product_metadata = DataProductMetadata(data_product_name, logger)
 
-    if not data_product_metadata.metadata_exists:
+    if data_product_metadata.metadata_exists is False:
         data_product_metadata.validate(request_body["metadata"])
     else:
         return {
