@@ -16,7 +16,7 @@ sys.path.append(
 )
 
 from data_platform_logging import DataPlatformLogger  # noqa E402
-from data_platform_paths import DataProductConfig  # noqa E402
+from data_platform_paths import DataProductElement  # noqa E402
 
 os.environ["AWS_ACCESS_KEY_ID"] = "testing"
 os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
@@ -73,8 +73,9 @@ def athena_client():
 
 
 @pytest.fixture
-def data_product():
-    return DataProductConfig(name="foo", table_name="bar", bucket_name="bucket")
+def data_product_element(monkeypatch):
+    monkeypatch.setenv("BUCKET_NAME", "bucket")
+    return DataProductElement.load(element_name="foo", data_product_name="bar")
 
 
 @pytest.fixture

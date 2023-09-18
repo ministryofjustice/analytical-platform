@@ -4,7 +4,7 @@ import boto3
 from create_curated_athena_table import create_curated_athena_table
 from create_raw_athena_table import create_raw_athena_table
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import ExtractionConfig
+from data_platform_paths import RawDataExtraction, QueryTable
 from infer_glue_schema import infer_glue_schema
 
 athena_client = boto3.client("athena")
@@ -23,25 +23,28 @@ def handler(
     file_key = event["detail"]["object"]["key"]
     full_s3_path = os.path.join("s3://", bucket_name, file_key)
 
-    extraction = ExtractionConfig.parse_from_uri(full_s3_path)
-    data_product = extraction.data_product_config
+    extraction = RawDataExtraction.parse_from_uri(full_s3_path)
+    data_product_element = extraction.element
 
     logger = DataPlatformLogger(
         extra={
             "image_version": os.getenv("VERSION", "unknown"),
             "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-            "data_product_name": data_product.curated_data_table.database,
-            "table_name": data_product.curated_data_table.name,
+            "data_product_name": data_product_element.curated_data_table.database,
+            "table_name": data_product_element.curated_data_table.name,
         }
     )
 
     logger.info(f"file is: {full_s3_path}")
-    logger.info(
-        f"config: {extraction.timestamp=} {data_product.raw_data_table=} {data_product.curated_data_table=}"
-    )
 
     metadata_types, metadata_str = infer_glue_schema(
-        extraction.path, data_product, logger=logger
+        extraction.path, data_product_element, logger=logger
+    )
+
+    temp_table_name = metadata_types["TableInput"]["Name"]
+    temp_database_name = metadata_types["DatabaseName"]
+    logger.info(
+        f"config: {extraction.timestamp=} {temp_table_name=} {temp_database_name=} {data_product_element.curated_data_table=}"
     )
 
     # Create a table of all string-type columns, to load raw data into
@@ -57,7 +60,8 @@ def handler(
     # Create a curated parquet file from the raw file
     # Add a timestamp and insert raw data to the curated table, casting to type
     create_curated_athena_table(
-        data_product_config=data_product,
+        data_product_element=data_product_element,
+        raw_data_table=QueryTable(database=temp_database_name, name=temp_table_name),
         extraction_timestamp=extraction.timestamp.strftime("%Y%m%dT%H%M%SZ"),
         metadata=metadata_types,
         logger=logger,
@@ -67,6 +71,5 @@ def handler(
     )
 
     # Delete the raw string tables, which are just used as an intermediary
-    temp_table = data_product.raw_data_table
-    glue_client.delete_table(DatabaseName=temp_table.database, Name=temp_table.name)
-    logger.info(f"removed raw table data_products_raw.{temp_table.name}")
+    glue_client.delete_table(DatabaseName=temp_database_name, Name=temp_table_name)
+    logger.info(f"removed raw table data_products_raw.{temp_table_name}")

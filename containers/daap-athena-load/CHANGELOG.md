@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.4] 2023-09-21
+
+### Changed
+
+- The temporary raw athena table is created with a unique name per invocation
+- Use new version of base image paths module
+
 ## [1.1.4] 2023-09-15
 
 ### Changed
