@@ -43,7 +43,7 @@ for ecosystem in docker pip terraform; do
     ;;
   esac
 
-  folders=$(find . -type f -name "${SEARCH_PATTERN}" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
+  folders=$(find . -type f -name "${SEARCH_PATTERN}" -not -path "./containers/daap-*" -not -path "./terraform/aws/analytical-platform-data-production/airflow/*" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
   export folders
 
   echo "=== Folders ==="
@@ -55,6 +55,7 @@ for ecosystem in docker pip terraform; do
     echo "Ignoring ${folder}"
     continue
   fi
+  
 
     printf "  - package-ecosystem: \"%s\"\n" "${ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
     printf "    directory: \"%s\"\n" "${folder}" >>"${DEPENDABOT_CONFIGURATION_FILE}"

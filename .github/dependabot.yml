@@ -126,17 +126,6 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "pip"
-    directory: "terraform/aws/analytical-platform-data-production/airflow/files"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "pip"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "terraform"
     directory: "terraform/application-migration"
     schedule:
@@ -150,17 +139,6 @@ updates:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-data-engineering-production/10ds"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-data-production/airflow"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -216,17 +194,6 @@ updates:
       - "ministryofjustice/data-platform-core-infra"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-development/cluster"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-development/cluster/.terraform/modules/iam_assumable_role_ebs_csi_driver/_template/test"
     schedule:
       interval: "daily"
       time: "09:00"
