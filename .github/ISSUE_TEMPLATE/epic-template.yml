@@ -18,8 +18,8 @@ body:
       description: List of issues in this epic
       label: List issues in this epic
       value: "- [ ] #1
-      
-               - [ ] #2 "
+
+                  - [ ] #2 "
     validations:
       required: false
   - type: textarea
@@ -31,4 +31,3 @@ body:
         Slack channel = #data-platform-epic-name
     validations:
       required: false
-
