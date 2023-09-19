@@ -1,0 +1,19 @@
+<!-- markdownlint-disable -->
+---
+name: 🗃️ Data Platform Epic
+about: Creates a new Data Platform Epic
+labels: Epic
+---
+
+## Describe the Epic
+
+<!-- Brief summary of what this Epic is -->
+
+## List issues in this epic see [here](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/about-task-lists#about-issue-task-lists) for turning tasks into issues
+
+- [ ] #1 
+- [ ] #2
+
+## Other information
+
+- link to dedicated slack channel e.g. #data-platform-epicname
