@@ -19,14 +19,17 @@ locals {
   general_members = [ # members of analytics-hq gh team
     "jacobwoffenden",
     "calumabarnett",
-    "SimonsMOJ",      # Simon Heron
-    "mshodge",        # Michael Hodges
-    "YvanMOJdigital", # Yvan Smith
-    "ChikC",          # Chike Chinukwue
-    "EO510",          # Eki Osehenye
-    "Braimah-L",      # Braimah Lat
-    "imkatiewatson",  # Katie Watson
-    "f-marry"         # Fabien Marry
+    "SimonsMOJ",        # Simon Heron
+    "mshodge",          # Michael Hodges
+    "YvanMOJdigital",   # Yvan Smith
+    "ChikC",            # Chike Chinukwue
+    "EO510",            # Eki Osehenye
+    "Braimah-L",        # Braimah Lat
+    "imkatiewatson",    # Katie Watson
+    "f-marry",          # Fabien Marry
+    "alex-vonfeldmann", # Alex von Feldmann
+    "gfowler-moj",      # Greg Fowler
+    "RNTjustice"        # Richard Trist
   ]
 
   # GitHub usernames for engineers who need full AWS access
