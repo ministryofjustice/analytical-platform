@@ -48,8 +48,4 @@ locals {
 
   # All members
   all_members = concat(local.general_members, local.engineers)
-
-  # Everyone
-  # commented out to satisfy tflint
-  # everyone = concat(local.all_maintainers, local.all_members)
 }

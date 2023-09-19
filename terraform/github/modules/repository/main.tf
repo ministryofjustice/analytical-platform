@@ -15,6 +15,7 @@ resource "github_repository" "default" {
   has_projects           = true
   has_wiki               = var.type == "core" ? true : false
   has_downloads          = true
+  has_discussions        = var.name == "data-platform" ? true : false
   is_template            = var.type == "template" ? true : false
   allow_merge_commit     = var.type == "app" ? true : false # Temp fix for app-migration setup
   allow_squash_merge     = true
