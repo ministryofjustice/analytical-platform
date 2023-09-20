@@ -2,27 +2,31 @@
 eleventyExcludeFromCollections: true
 includeInBreadcrumbs: true
 layout: page
-title: What is the Data Platform?
+title: About
 ---
 
->*Our vision is to connect people to the tooling, systems and data they need in a secure and supported environment to streamline the delivery of the Ministry of Justice's (MoJ) digital and data strategies.*
+>**Our vision is to tranform data sharing at the Ministry of Justice, to streamline the delivery of our [Digital](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1064860/moj-digital-strategy-2025.pdf) and [Data](https://intranet.justice.gov.uk/documents/2022/08/moj-data-strategy.pdf/) strategies.**
+
+## What is the Data Platform?
 
 The Data Platform is a data analysis platform currently in development at the Ministry of Justice, within the [Platforms & Architecture team](https://peoplefinder.service.gov.uk/teams/platforms-architecture-data-platform).
 
 It will either integrate or replace the functionality of the [Analytical Platform](https://user-guidance.analytical-platform.service.justice.gov.uk/). We would find a suitable place for Analytical Platform users to migrate before making this decision.
 
-We are developing the Data Platform because the Analytical Platform caters to Data Analysts but does not scale to the needs of people who work with data in other ways.
+
 
 ## Reasons and benefits
 
-The main reasons for developing the Data Platform are to:
+We are developing the Data Platform because the Analytical Platform caters to Data Analysts but does not scale to the needs of people who work with data in other ways.
 
-- Meet the needs of Data Producers and Data Users – internal or external – to provide new ways of working with the Ministry of Justice's data:
+Other reasons for developing the Data Platform are to:
+
+- meet the needs of Data Producers and Data Users – internal or external – to provide new ways of working with the Ministry of Justice's data:
     - **Data Producers** includes Digital Product Owners, Service Owners and System Owners
     - **Data Users** may perform any of: data analysis, data modelling, data science, management information (MI) reporting, performance reporting, statistics publication
-- Make it easier to find, access and utilise data than is currently possible, to improve the cost and pace at which project teams can deliver while reducing data siloes
-- Replace legacy technology that is costly
-- Offer a single source of truth for entities that influence decisions across government, to ensure consistency, accuracy and traceability of our data
+- make it easier to find, access and utilise data than is currently possible, to improve the cost and pace at which project teams can deliver while reducing data siloes
+- replace legacy technology that is costly
+- offer a single source of truth for entities that influence decisions across government, to ensure consistency, accuracy and traceability of our data
 
 Streamlining data sharing and analysis would be the main benefits of having the Data Platform. By data sharing, we mean combining data sets between offerings such as applications, systems and services rather than via email or dashboards.
 

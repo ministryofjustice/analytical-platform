@@ -5,7 +5,7 @@ eleventyNavigation:
 layout: wiki
 title: Data Platform (MVP)
 includeInBreadcrumbs: true
-description: Access to the Data Platform (minimum viable product)
+description: Access to the Data Platform (Minimum Viable Product)
 ---
 
 The Minimum Viable Product (MVP) version of the Data Platform is still in development. 

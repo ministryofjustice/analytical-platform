@@ -32,7 +32,7 @@ module.exports = function(eleventyConfig) {
           },
           {
               href: 'https://github.com/ministryofjustice/data-platform',
-              text: 'GitHub repository'
+              text: 'GitHub'
           }
         ]
       }
@@ -59,11 +59,7 @@ eleventyConfig.addFilter("filterTagList", function filterTagList(tags) {
       "**/analytical-platform.md",
       "**/blog.md",
       "**/data-platform.md",
-      "**/how-to.md",
-      "**/knowledge-base.md",
-      "**/release-notes.md",
       "**/support.md",
-      "**/team-info.md",
       "**/tech-docs.md"]).sort(function(a, b) {
         return a.data.title.localeCompare(b.data.title); // sort by title ascending
       });
