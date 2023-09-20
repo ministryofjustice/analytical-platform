@@ -44,77 +44,77 @@
     "title": "Analytical Platform",
 "description": "Access to our current data analysis platform","section": "Home",    "layout": "collection",
     "hasFrontmatterDate": false,
-    "date": "14 September 2023",
+    "date": "20 September 2023",
     "templateContent": "index",
     "url": "/analytical platform/analytical-platform/"
-  },  {
-    "title": "Blog",
-"description": "Latest news on the Data Platform's development","section": "Home",    "layout": "wiki",
-    "hasFrontmatterDate": false,
-    "date": "14 September 2023",
-    "templateContent": "coming soon",
-    "url": "/blog/"
-  },  {
-    "title": "Data Platform (MVP)",
-"description": "Access to the Data Platform (Minimum Viable Product)","section": "Home",    "layout": "wiki",
-    "hasFrontmatterDate": false,
-    "date": "14 September 2023",
-    "templateContent": "minimum viable product mvp version data platform still development when available will provide access this page",
-    "url": "/data platform/data-platform/"
-  },  {
-    "title": "Use data to create systems for your users",
-"description": "The Data Platform will enhance data sharing across the Ministry of Justice",    "layout": "product",
-    "hasFrontmatterDate": false,
-    "date": "14 September 2023",
-    "templateContent": "analytical platform access our current data analysis blog latest news development mvp minimum viable product support request help from team tech docs technical descriptions infrastructure architecture",
-    "url": "/"
-  },  {
-    "title": "Request support",
-"description": "Submit a request to the Data Platform Support team","section": "Support",    "layout": "sub-navigation",
-    "hasFrontmatterDate": false,
-    "date": "14 September 2023",
-    "templateContent": "",
-    "url": "/support/request-dp-support/"
-  },  {
-    "title": "Support",
-"description": "Request help from our Support team","section": "Home",    "layout": "collection",
-    "hasFrontmatterDate": false,
-    "date": "14 September 2023",
-    "templateContent": "use github issues manage support requests both analytical platform data submit ticket need account cannot access following channels justice digital slack workspace ask help: #analytical #ask will review your request prioritise accordingly index",
-    "url": "/support/"
   },  {
     "title": "Architectural Decision Records",
 "description": "Index of architecture choices made for the Data Platform","section": "Tech docs",    "layout": "collection",
     "hasFrontmatterDate": false,
-    "date": "14 September 2023",
+    "date": "20 September 2023",
     "templateContent": "architecture decision records this record architectural decisions made by data platform team understand how why see adr 000 statuses: 🤔 proposed ✅ accepted ❌ rejected ⌛️ superseded ♻️ amended",
     "url": "/tech docs/ADRs/"
   },  {
     "title": "Architecture diagrams",
 "description": "Visual representations of the Data Platform's underlying architecture","section": "Tech docs",    "layout": "sub-navigation",
     "hasFrontmatterDate": false,
-    "date": "14 September 2023",
+    "date": "20 September 2023",
     "templateContent": "this page documents technical architecture diagrams that make data platform would like contribute please see contributing updating guidance bottom c4 model four represent context containers components code these different levels help tell right story audience are people inside outside team non level 1 diagram highest abstraction provides overview entire system shows under consideration its external dependencies such users systems apis frequency change likely minimal compared other 2 minimum viable product going deploy part our mvps play vital role service development by aiming release early possible reduce risk never releasing all also get valuable feedback from who using real world situation container focuses software high which typically applications services illustrates major their interactions web servers databases desktop mobile examples 3 component delves deeper into identified previous internal within each can classes modules logical units 3.1 proposal relationships with created open source tool excalidraw files have .png appended onto filename e.g diagram.excalidraw.png allows editors below manipulate version without need export after every edit then use one following methods vscode.dev extenstion recommended small changes requires visual studio extension creating opening cloned downloaded group sessions live collaboration",
     "url": "/tech docs/diagrams/architecture-diagrams/"
-  },  {
-    "title": "Infrastructure",
-"description": "Descriptions of the Data Platform's infrastructure","section": "Tech docs",    "layout": "sub-navigation",
-    "hasFrontmatterDate": false,
-    "date": "14 September 2023",
-    "templateContent": "coming soon",
-    "url": "/tech docs/infrastructure/"
   },  {
     "title": "Tech docs",
 "description": "Technical descriptions of our infrastructure and architecture","section": "Home",    "layout": "collection",
     "hasFrontmatterDate": false,
-    "date": "14 September 2023",
+    "date": "20 September 2023",
     "templateContent": "index",
     "url": "/tech docs/tech-docs/"
+  },  {
+    "title": "Blog",
+"description": "Latest news on the Data Platform's development","section": "Home",    "layout": "wiki",
+    "hasFrontmatterDate": false,
+    "date": "20 September 2023",
+    "templateContent": "coming soon",
+    "url": "/blog/"
+  },  {
+    "title": "Data Platform (MVP)",
+"description": "Access to the Data Platform (Minimum Viable Product)","section": "Home",    "layout": "wiki",
+    "hasFrontmatterDate": false,
+    "date": "20 September 2023",
+    "templateContent": "minimum viable product mvp version data platform still development when available will provide access this page",
+    "url": "/data platform/data-platform/"
   },  {
     "title": "Request support",
 "description": "Submit a request to the Data Platform Support team","section": "Support",    "layout": "sub-navigation",
     "hasFrontmatterDate": false,
-    "date": "14 September 2023",
+    "date": "20 September 2023",
     "templateContent": "",
     "url": "/support/request-ap-support/"
+  },  {
+    "title": "Request support",
+"description": "Submit a request to the Data Platform Support team","section": "Support",    "layout": "sub-navigation",
+    "hasFrontmatterDate": false,
+    "date": "20 September 2023",
+    "templateContent": "",
+    "url": "/support/request-dp-support/"
+  },  {
+    "title": "Support",
+"description": "Request help from our Support team","section": "Home",    "layout": "collection",
+    "hasFrontmatterDate": false,
+    "date": "20 September 2023",
+    "templateContent": "use github issues manage support requests both analytical platform data submit ticket need account cannot access following channels justice digital slack workspace ask help: #analytical #ask will review your request prioritise accordingly index",
+    "url": "/support/"
+  },  {
+    "title": "Infrastructure",
+"description": "Descriptions of the Data Platform's infrastructure","section": "Tech docs",    "layout": "sub-navigation",
+    "hasFrontmatterDate": false,
+    "date": "20 September 2023",
+    "templateContent": "coming soon",
+    "url": "/tech docs/infrastructure/"
+  },  {
+    "title": "Share and access data for your users",
+"description": "The Data Platform will enhance data sharing across the Ministry of Justice",    "layout": "product",
+    "hasFrontmatterDate": false,
+    "date": "20 September 2023",
+    "templateContent": "analytical platform access our current data analysis blog latest news development mvp minimum viable product support request help from team tech docs technical descriptions infrastructure architecture",
+    "url": "/"
   }]

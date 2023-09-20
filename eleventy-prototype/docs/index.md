@@ -3,9 +3,9 @@ order: 0
 homepage: true
 key: home
 layout: product
-title: Use data to create systems for your users
+title: Share and access data for your users
 description: The Data Platform will enhance data sharing across the Ministry of Justice
-includeInBreadcrumbs: true
+includeInBreadcrumbs: false
 startButton:
   href: "/about/"
   text: Find out more
