@@ -3,9 +3,9 @@ order: 0
 homepage: true
 key: home
 layout: product
-title: Data Platform
-description: A new service to enhance data sharing in the Ministry of Justice
-includeInBreadcrumbs: false
+title: Use data to create systems for your users
+description: The Data Platform will enhance data sharing across the Ministry of Justice
+includeInBreadcrumbs: true
 startButton:
   href: "/about/"
   text: Find out more

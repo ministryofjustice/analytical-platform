@@ -12,7 +12,7 @@ module.exports = function(eleventyConfig) {
     header: {
       organisationLogo: 'royal-arms',
       organisationName: 'MoJ',
-      productName: 'Data Platform Hub',
+      productName: 'Data Platform',
       search: {
         label: 'Search',
         indexPath: '/search.json',
