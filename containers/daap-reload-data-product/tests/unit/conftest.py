@@ -23,9 +23,6 @@ sys.path.append(
 )
 
 
-from data_platform_paths import DataProductConfig  # noqa: E402
-
-
 @dataclass
 class FakeContext:
     function_name: str
@@ -75,13 +72,3 @@ def lambda_client():
 @pytest.fixture()
 def do_nothing_lambda_client(lambda_client):
     return MagicMock(spec=lambda_client, auto_spec=True)
-
-
-@pytest.fixture
-def bucket_name():
-    return "bucket"
-
-
-@pytest.fixture
-def data_product(bucket_name):
-    return DataProductConfig("foo", "bar", bucket_name)

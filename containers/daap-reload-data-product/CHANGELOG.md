@@ -9,9 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4]
+
+### Changed
+
+- Update to latest base image
+- Use shared library for S3 paths
+
 ## [1.0.3]
 
-## Changed
+### Changed
 
 - Update to latest base image
 - Add unit tests
