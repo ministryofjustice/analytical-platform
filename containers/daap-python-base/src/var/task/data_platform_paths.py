@@ -4,11 +4,11 @@ and the corresponding athena tables.
 
 Example for data product name "data_product", table name "table":
 
-- Raw data is stored at: raw_data/data_product/table/extraction_timestamp=timestamp/file.csv
+- Raw data is stored at: raw_data/data_product/table/extraction_timestamp=timestamp/3d95ff89-...-53742d0a6a64
 - Curated data is stored at:
   curated_data/database_name=data_product/table_name=table/extraction_timestamp=timestamp/file.parquet
-- Athena table name for raw data is: data_products_raw.table_raw
 - Athena table name for curated data is: data_product.table
+- Athena table name for raw data has the format: data_products_raw.table_8ae7f9ee-7888-4b6a-b01f-8b8b0a537ad2_raw
 """
 
 from __future__ import annotations
@@ -126,6 +126,10 @@ class DataProductElement:
 
     @property
     def raw_data_prefix(self):
+        """
+        The path to the raw data in s3 up to and including the element name,
+        e.g. raw_data/my-data-product/some-element/
+        """
         return BucketPath(
             bucket=self.data_product.raw_data_bucket,
             key=os.path.join("raw_data", self.data_product.name, self.name) + "/",
@@ -133,6 +137,10 @@ class DataProductElement:
 
     @property
     def curated_data_prefix(self):
+        """
+        The path to the curated data in s3 up to and including the element name,
+        e.g. curated_data/database_name=my-data-product/table_name=some-element/
+        """
         return BucketPath(
             self.data_product.curated_data_bucket,
             os.path.join(
@@ -144,6 +152,11 @@ class DataProductElement:
         )
 
     def raw_data_table_unique(self):
+        """
+        A unique table name to use for querying raw data via athena.
+        These tables are always temporary.
+        E.g. ('data_products_raw', 'some_element_3d95ff89-b063-484d-b510-53742d0a6a64_raw)
+        """
         suffix = uuid4()
         name = f"{self.name}_{suffix}_raw"
         if len(name) > MAX_IDENTIFIER_LENGTH:
@@ -153,11 +166,17 @@ class DataProductElement:
 
     @property
     def curated_data_table(self):
+        """
+        The name of the athena table for the data product element.
+        E.g. ('my_data_product', 'some_element')
+        """
         return QueryTable(database=self.data_product.name, name=self.name)
 
     def raw_data_path(self, timestamp: datetime, uuid_value: UUID) -> BucketPath:
         """
         Path to the raw data extracted at a particular timestamp.
+        E.g. raw_data/my-data-product/some-element/extraction_timestamp=
+             20230101T000000Z/3d95ff89-b063-484d-b510-53742d0a6a64
         """
         return self.extraction_config(timestamp, uuid_value).path
 
@@ -185,6 +204,9 @@ class DataProductElement:
 class DataProductConfig:
     """
     Configures the name, and S3 buckets for a data product.
+
+    A data product may contain many `data product elements`. To construct
+    paths for each one, call `.element()` with the name of the element.
     """
 
     name: str
@@ -195,6 +217,10 @@ class DataProductConfig:
 
     @property
     def raw_data_prefix(self):
+        """
+        The path to the raw data in s3 excluding the element name,
+        e.g. raw_data/my-data-product/
+        """
         return BucketPath(
             bucket=self.raw_data_bucket,
             key=os.path.join("raw_data", self.name) + "/",
@@ -202,6 +228,10 @@ class DataProductConfig:
 
     @property
     def curated_data_prefix(self):
+        """
+        The path to the curated data in s3 excluding the element name,
+        e.g. curated_data/database_name=my-data-product/
+        """
         return BucketPath(
             bucket=self.curated_data_bucket,
             key=os.path.join(
@@ -212,6 +242,10 @@ class DataProductConfig:
         )
 
     def element(self, name):
+        """
+        Construct a DataProductElement object to return paths relative to
+        a particular data product element identified by `name`.
+        """
         return DataProductElement(name=name, data_product=self)
 
     def metadata_path(self):
@@ -301,37 +335,6 @@ class RawDataExtraction:
             timestamp=timestamp,
             path=raw_data_file,
         )
-
-
-def data_product_raw_data_file_path(
-    data_product_name: str,
-    table_name: str,
-    extraction_timestamp: datetime,
-    uuid_value: UUID,
-) -> str:
-    """
-    The S3 location for the raw uploaded data.
-    """
-    element = DataProductConfig(name=data_product_name).element(table_name)
-    return element.raw_data_path(
-        timestamp=extraction_timestamp, uuid_value=uuid_value
-    ).uri
-
-
-def data_product_curated_data_prefix(data_product_name: str, table_name: str) -> str:
-    """
-    The S3 location for partitioned data files in parquet format.
-    """
-    element = DataProductConfig(name=data_product_name).element(table_name)
-
-    return element.curated_data_prefix.uri
-
-
-def data_product_metadata_file_path(data_product_name: str) -> str:
-    """
-    Generate the metadata path based on the data product name
-    """
-    return DataProductConfig(data_product_name).metadata_path().uri
 
 
 def data_product_log_bucket_and_key(

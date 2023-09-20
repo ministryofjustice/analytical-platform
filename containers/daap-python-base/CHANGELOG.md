@@ -41,10 +41,10 @@ stored in different S3 buckets.
   `get_curated_data_bucket()`, `get_metadata_bucket` and `get_log_bucket`.
 - `DataProductConfig` `bucket_name` attribute is replaced by `raw_data_bucket`
   and `curated_data_bucket`, and `metadata_bucket`.
-- `bucket_name` is no longer a supported parameter of the
+- Removed
   `data_product_raw_data_file_path`, `data_product_curated_data_prefix`,
   `data_product_metadata_file_path` and `data_product_log_bucket_and_key`
-  helper functions (this was only used in unit tests).
+  (use `DataProductConfig` and `DataProductElement` classes instead).
 
 ## [1.0.2] - 2023-09-15
 

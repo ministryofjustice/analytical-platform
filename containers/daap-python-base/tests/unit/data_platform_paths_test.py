@@ -7,10 +7,7 @@ from data_platform_paths import (
     DataProductConfig,
     DataProductElement,
     RawDataExtraction,
-    data_product_curated_data_prefix,
     data_product_log_bucket_and_key,
-    data_product_metadata_file_path,
-    data_product_raw_data_file_path,
     get_curated_data_bucket,
     get_landing_zone_bucket,
     get_log_bucket,
@@ -72,51 +69,6 @@ def test_metdata_bucket(monkeypatch):
 def test_raw_data_bucket_defaults_to_old_environment_variable(monkeypatch):
     monkeypatch.setenv("BUCKET_NAME", "a-bucket")
     assert get_raw_data_bucket() == "a-bucket"
-
-
-def test_data_product_metadata_file_path(monkeypatch):
-    monkeypatch.setenv("RAW_DATA_BUCKET", "bucket1")
-    monkeypatch.setenv("CURATED_DATA_BUCKET", "bucket2")
-    monkeypatch.setenv("METADATA_BUCKET", "bucket3")
-    monkeypatch.setenv("LANDING_ZONE_BUCKET", "bucket4")
-
-    metadata_path = data_product_metadata_file_path("delicious-data-product")
-
-    assert (
-        metadata_path
-        == "s3://bucket3/metadata/delicious-data-product/v1.0/metadata.json"
-    )
-
-
-def test_data_product_raw_data_file_path(monkeypatch):
-    monkeypatch.setenv("RAW_DATA_BUCKET", "bucket1")
-    monkeypatch.setenv("CURATED_DATA_BUCKET", "bucket2")
-    monkeypatch.setenv("METADATA_BUCKET", "bucket3")
-    monkeypatch.setenv("LANDING_ZONE_BUCKET", "bucket4")
-
-    uuid_value = uuid.uuid4()
-    timestamp = datetime(2023, 9, 6)
-    path = data_product_raw_data_file_path(
-        data_product_name="data-product",
-        table_name="table",
-        extraction_timestamp=timestamp,
-        uuid_value=uuid_value,
-    )
-
-    assert (
-        path
-        == f"s3://bucket1/raw_data/data-product/table/extraction_timestamp=20230906T000000Z/{uuid_value}"
-    )
-
-
-def test_get_data_product_curated_data_prefix(monkeypatch):
-    monkeypatch.setenv("RAW_DATA_BUCKET", "bucket")
-    monkeypatch.setenv("CURATED_DATA_BUCKET", "bucket")
-    monkeypatch.setenv("METADATA_BUCKET", "bucket")
-    monkeypatch.setenv("LANDING_ZONE_BUCKET", "bucket")
-
-    uri = data_product_curated_data_prefix(data_product_name="foo", table_name="table")
-    assert uri == "s3://bucket/curated_data/database_name=foo/table_name=table/"
 
 
 def test_data_product_config_metadata_spec_prefix():
