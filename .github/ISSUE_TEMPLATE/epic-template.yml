@@ -1,19 +1,33 @@
-<!-- markdownlint-disable -->
----
 name: 🗃️ Data Platform Epic
-about: Creates a new Data Platform Epic
-labels: Epic
----
+description: Creates a Data Platform Epic
+title: "[gitmoji] <title>"
+labels: ["Epic"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill out the fields below.
+  - type: textarea
+    id: describe-epic
+    attributes:
+      label: Brief summary of what this Epic is
+      placeholder: "This Epic..."
+  - type: textarea
+    id: list-issues
+    attributes:
+      description: List of issues in this epic
+      label: List issues in this epic
+      value: "- [ ] #1
 
-## Describe the Epic
-
-<!-- Brief summary of what this Epic is -->
-
-## List issues in this epic see [here](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/about-task-lists#about-issue-task-lists) for turning tasks into issues
-
-- [ ] #1 
-- [ ] #2
-
-## Other information
-
-- link to dedicated slack channel e.g. #data-platform-epicname
+                  - [ ] #2 "
+    validations:
+      required: false
+  - type: textarea
+    id: other-info
+    attributes:
+      description: Other information
+      label: Other information
+      value:
+        Slack channel = #data-platform-epic-name
+    validations:
+      required: false
