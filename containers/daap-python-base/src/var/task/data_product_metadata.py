@@ -4,7 +4,7 @@ import traceback
 import boto3
 import botocore
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import DataProductConfig, data_product_metadata_file_path
+from data_platform_paths import DataProductConfig
 from dataengineeringutils3.s3 import get_filepaths_from_s3_folder, read_json_from_s3
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
@@ -46,7 +46,7 @@ class DataProductMetadata:
         self.data_product_name = data_product_name
         self.logger = logger
         bucket, key = split_bucket_and_key(
-            data_product_metadata_file_path(data_product_name)
+            DataProductConfig(name=data_product_name).metadata_path().uri
         )
         self.metadata_bucket = bucket
         self.metadata_key = key
