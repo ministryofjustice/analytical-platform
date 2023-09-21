@@ -16,5 +16,5 @@ sbom-*
 __pycache__
 .github/path-filter/pytest.yml
 
-eleventy-prototype/_site
-eleventy-prototype/node_modules
+docs/_site
+docs/node_modules
