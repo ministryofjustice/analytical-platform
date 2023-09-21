@@ -5,7 +5,7 @@ from datetime import datetime
 
 import boto3
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import DataProductConfig
+from data_platform_paths import DataProductElement
 
 s3 = boto3.client("s3")
 
@@ -18,10 +18,10 @@ logger = DataPlatformLogger(
 
 
 def handler(event, context):
-    bucket_name = os.environ["BUCKET_NAME"]
     database = event["queryStringParameters"]["database"]
     table = event["queryStringParameters"]["table"]
     amz_date = datetime.utcnow()
+    formatted_date = amz_date.strftime("%Y%m%dT%H%M%SZ")
     md5 = str(event["queryStringParameters"]["contentMD5"])
     uuid_value = uuid.uuid4()
 
@@ -39,17 +39,14 @@ def handler(event, context):
             ),
         }
 
-    data_product = DataProductConfig(
-        name=database, table_name=table, bucket_name=bucket_name
-    )
-    file_name = data_product.raw_data_path(
-        timestamp=amz_date, uuid_value=uuid_value
-    ).key
+    element = DataProductElement.load(data_product_name=database, element_name=table)
+    data_product = element.data_product
+    raw_data_path = element.raw_data_path(timestamp=amz_date, uuid_value=uuid_value)
 
     fields = {
         "x-amz-server-side-encryption": "AES256",
         "x-amz-acl": "bucket-owner-full-control",
-        "x-amz-date": amz_date,
+        "x-amz-date": formatted_date,
         "Content-MD5": md5,
         "Content-Type": "binary/octet-stream",
     }
@@ -58,11 +55,11 @@ def handler(event, context):
     conditions = [
         {"x-amz-server-side-encryption": "AES256"},
         {"x-amz-acl": "bucket-owner-full-control"},
-        {"x-amz-date": amz_date.strftime("%Y%m%dT%H%M%SZ")},
+        {"x-amz-date": formatted_date},
         {"Content-MD5": md5},
         ["starts-with", "$Content-MD5", ""],
         ["starts-with", "$Content-Type", ""],
-        ["starts-with", "$key", file_name],
+        ["starts-with", "$key", raw_data_path.key],
         ["content-length-range", 0, 5000000000],
     ]
 
@@ -74,8 +71,7 @@ def handler(event, context):
         }
     )
 
-    logger.info(f"s3 bucket: {bucket_name}")
-    logger.info(f"s3 key: {file_name}")
+    logger.info(f"s3 path: {raw_data_path}")
     logger.info(f"database: {database}")
     logger.info(f"table: {table}")
     logger.info(f"amz_date: {amz_date}")
@@ -103,16 +99,15 @@ def handler(event, context):
             ),
         }
 
-    if any(data_product_registration):
-        URL = s3.generate_presigned_post(
-            Bucket=bucket_name,
-            Key=file_name,
-            Fields=fields,
-            Conditions=conditions,
-            ExpiresIn=200,
-        )
-        return {
-            "statusCode": 200,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"URL": URL}, default=str),
-        }
+    URL = s3.generate_presigned_post(
+        Bucket=raw_data_path.bucket,
+        Key=raw_data_path.key,
+        Fields=fields,
+        Conditions=conditions,
+        ExpiresIn=200,
+    )
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "application/json"},
+        "body": json.dumps({"URL": URL}),
+    }
