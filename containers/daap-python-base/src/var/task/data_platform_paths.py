@@ -112,7 +112,7 @@ def get_account_id() -> str:
 @dataclass
 class DataProductElement:
     """
-    A dataset within the data product. The curated data for each element
+    An entity within the data product. The curated data for each element
     is queryable in its own athena table.
     """
 
