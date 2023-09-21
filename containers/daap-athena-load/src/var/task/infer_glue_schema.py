@@ -1,6 +1,7 @@
 import copy
 import os
-from typing import Tuple
+from io import BytesIO
+from typing import Tuple, BinaryIO
 
 import boto3
 import s3fs
@@ -12,6 +13,54 @@ from pyarrow import csv as pa_csv
 from pyarrow import parquet as pq
 
 s3_client = boto3.client("s3")
+
+
+def csv_sample(
+    bytes_stream: BinaryIO,
+    logger: DataPlatformLogger,
+    sample_size_in_bytes: int = 1_500_000,
+) -> BinaryIO:
+    """
+    Accepts a byte stream containing CSV and returns a new stream that aligns with the line separator, and is at least
+    sample_size_bytes bytes.
+    """
+    read_bytes = bytearray()
+    max_size = sample_size_in_bytes
+    chunk_size = 5
+    final_size = 0
+
+    # the character that we'll split the data with (bytes, not string)
+    # could csv dialect (newline character etc) from csv.sniffer in further dev
+    newline = b"\n"
+
+    finished = False
+
+    while not finished:
+        if final_size == 0:
+            chunk = bytes_stream.read(max_size)
+        else:
+            chunk = bytes_stream.read(chunk_size)
+
+        if chunk == b"":
+            break
+
+        last_newline = chunk.rfind(newline)
+
+        if last_newline == 4:
+            final_size += chunk_size
+            if final_size > sample_size_in_bytes:
+                finished = True
+        else:
+            if final_size == 0:
+                final_size += sample_size_in_bytes
+            else:
+                final_size += chunk_size
+
+        read_bytes.extend(chunk)
+
+    logger.info(f"extracted {round((final_size-1)/1000000,2)}MB sample of csv")
+
+    return BytesIO(read_bytes)
 
 
 def infer_glue_schema(
@@ -39,39 +88,14 @@ def infer_glue_schema(
         # can infer schema on a sample of data, here we stream a csv as a bytes object from s3
         # at the max size and then iterate over small chunk sizes to find a full line after
         # the max sample size, which we can then read into pyarrow and infer schema.
-        max_size = int(sample_size_mb * 1000000)
-        start_byte = b""
-        chunk_size = 5
-        final_size = 0
-        # the character that we'll split the data with (bytes, not string)
-        # could csv dialect (newline character etc) from csv.sniffer in further dev
-        newline = "\n".encode()
         obj = boto3.resource("s3").Object(bucket, key)
         bytes_stream = obj.get()["Body"]
-        finished = False
 
-        while not finished:
-            if final_size == 0:
-                chunk = start_byte + bytes_stream.read(max_size)
-            else:
-                chunk = start_byte + bytes_stream.read(chunk_size)
-
-            if chunk == b"":
-                break
-
-            last_newline = chunk.rfind(newline)
-
-            if last_newline == 4:
-                final_size += chunk_size
-                if final_size > max_size:
-                    finished = True
-            else:
-                if final_size == 0:
-                    final_size += max_size
-                else:
-                    final_size += chunk_size
-        bytes_stream_final = obj.get(Range=f"bytes=0-{final_size-1}")["Body"]
-        logger.info(f"schema inferred using {round((final_size-1)/1000000,2)}MB sample")
+        bytes_stream_final = csv_sample(
+            bytes_stream=bytes_stream,
+            sample_size_in_bytes=int(sample_size_mb * 1_000_000),
+            logger=logger,
+        )
 
         # null_values has been set to an empty list as "N/A" was being read as null (in a numeric column), with
         # type inferred as int but "N/A" persiting in the csv and so failing to be cast as an int.
