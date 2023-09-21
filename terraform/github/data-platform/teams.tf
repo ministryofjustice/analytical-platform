@@ -37,7 +37,6 @@ locals {
   engineers = [ # analytical-platform and analytics-hq gh teams
     "ymao2",    # Yikang Mao
     "BrianEllwood",
-    "tom-webber",
     "Emterry", # Emma Terry
     "michaeljcollinsuk",
     "jhpyke",
@@ -130,7 +129,6 @@ locals {
     "jhpyke",
     "murad-ali-MoJ",
     "tamsinforbes",
-    "tom-webber",
     "mitchdawson1982",
     "Gary-H9"
   ]
@@ -142,7 +140,8 @@ locals {
   data_platform_labs_members = [
     "murdo-moj",
     "matmoore",
-    "LavMatt"
+    "LavMatt",
+    "tom-webber"
   ]
 
   data_platform_security_auditor_members = [
