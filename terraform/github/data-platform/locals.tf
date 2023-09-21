@@ -1,9 +1,5 @@
 locals {
   core_repos = [{ # Legacy Analytical Platform Internal Infrastructure Repos in the MOJ org
-    name        = "ap-terraform-bootstrap",
-    description = "Bootstrap for setting up analytical platform and data engineering accounts"
-    },
-    {
       name        = "analytics-platform-infrastructure",
       description = "Core Infrastructure Repo for Data Platform"
     },
