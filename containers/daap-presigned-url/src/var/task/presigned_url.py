@@ -39,9 +39,9 @@ def handler(event, context):
             ),
         }
 
-    model = DataProductElement.load(data_product_name=database, element_name=table)
-    data_product = model.data_product
-    raw_data_path = model.raw_data_path(timestamp=amz_date, uuid_value=uuid_value)
+    element = DataProductElement.load(data_product_name=database, element_name=table)
+    data_product = element.data_product
+    raw_data_path = element.raw_data_path(timestamp=amz_date, uuid_value=uuid_value)
 
     fields = {
         "x-amz-server-side-encryption": "AES256",
