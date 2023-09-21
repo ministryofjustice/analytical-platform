@@ -50,7 +50,7 @@
 
   <div class="govuk-grid-column-one-third-from-desktop">
     {% from "macros/navigationList.njk" import navigationList %}
-    {{ navigationList(page.url, "Data Platform Hub", collections.homepageLinks) }} 
+    {{ navigationList(page.url, "Data Platform Hub", collections.homepageLinks) }}
     {% if aside or related %}
       {% include "layouts/shared/related.njk" %}
     {% endif %}

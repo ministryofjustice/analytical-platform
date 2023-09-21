@@ -9,7 +9,7 @@ includeInBreadcrumbs: true
 description: Submit a request to the Data Platform Support team
 aside:
   title: Aside
-  content: | 
+  content: |
     A small portion of content that is **indirectly** related to the main content.
 related:
   sections:
