@@ -5,7 +5,7 @@ from typing import Tuple
 import boto3
 import s3fs
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import BucketPath, DataProductConfig
+from data_platform_paths import BucketPath, DataProductElement
 from mojap_metadata.converters.arrow_converter import ArrowConverter
 from mojap_metadata.converters.glue_converter import GlueConverter
 from pyarrow import csv as pa_csv
@@ -16,7 +16,7 @@ s3_client = boto3.client("s3")
 
 def infer_glue_schema(
     file_path: BucketPath,
-    data_product_config: DataProductConfig,
+    data_product_element: DataProductElement,
     logger: DataPlatformLogger,
     file_type: str = "csv",
     has_headers: bool = True,
@@ -27,7 +27,11 @@ def infer_glue_schema(
     function infers and returns glue schema for csv and parquet files.
     schema are inferred using arrow
     """
-
+    table = (
+        data_product_element.curated_data_table
+        if table_type == "curated"
+        else data_product_element.raw_data_table_unique()
+    )
     bucket, key = file_path
     file_key = file_path.uri
 
@@ -91,7 +95,8 @@ def infer_glue_schema(
     ac = ArrowConverter()
     gc = GlueConverter()
     metadata_mojap = ac.generate_to_meta(arrow_schema=arrow_schema)
-    metadata_mojap.name = data_product_config.raw_data_table.name
+
+    metadata_mojap.name = table.name
     metadata_mojap.file_format = file_type
     metadata_mojap.column_names_to_lower(inplace=True)
 
@@ -102,17 +107,12 @@ def infer_glue_schema(
         col["name"] = col["name"].replace(" ", "_").replace("(", "").replace(")", "")
 
     if table_type == "curated":
-        metadata_mojap.name = data_product_config.curated_data_table.name
         metadata_mojap.columns.append(
             {"name": "extraction_timestamp", "type": "string"}
         )
         metadata_mojap.partitions = ["extraction_timestamp"]
 
-    database_name = (
-        data_product_config.curated_data_table.database
-        if table_type == "curated"
-        else data_product_config.raw_data_table.database
-    )
+    database_name = table.database
 
     metadata_glue = gc.generate_from_meta(
         metadata_mojap,

@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, sentinel
+from unittest.mock import MagicMock
 
 import athena_load_handler
 from moto import mock_sts
@@ -25,8 +25,8 @@ def test_handler_does_not_error(
     )
 
     mock_infer_schema.return_value = (
-        sentinel.metadata_glue,
-        sentinel.metadata_glue_str,
+        {"DatabaseName": "data_products_raw", "TableInput": {"Name": "temp"}},
+        {"DatabaseName": "data_products_raw", "TableInput": {"Name": "temp"}},
     )
 
     athena_load_handler.handler(

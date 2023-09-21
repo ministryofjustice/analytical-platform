@@ -8,7 +8,8 @@ from infer_glue_schema import infer_glue_schema
 
 
 def create_curated_athena_table(
-    data_product_config,
+    data_product_element,
+    raw_data_table: QueryTable,
     extraction_timestamp,
     metadata,
     logger: DataPlatformLogger,
@@ -22,10 +23,10 @@ def create_curated_athena_table(
     Loads data as a string into the raw athena table, then casts
     it to it's inferred type in the curated table with a timestamp.
     """
-    database_name = data_product_config.curated_data_table.database
-    table_name = data_product_config.curated_data_table.name
-    curated_path = data_product_config.curated_data_prefix.uri
-    bucket = data_product_config.raw_data_prefix.bucket
+    database_name = data_product_element.curated_data_table.database
+    table_name = data_product_element.curated_data_table.name
+    curated_path = data_product_element.curated_data_prefix.uri
+    bucket = data_product_element.raw_data_prefix.bucket
 
     table_exists = False
     create_glue_database(glue_client, database_name, logger, bucket)
@@ -38,7 +39,7 @@ def create_curated_athena_table(
             table_exists = True
 
     except ClientError as e:
-        curated_prefix = data_product_config.curated_data_prefix.key
+        curated_prefix = data_product_element.curated_data_prefix.key
         existing_files = s3_client.list_objects_v2(
             Bucket=bucket, Prefix=curated_prefix
         )["KeyCount"]
@@ -51,8 +52,8 @@ def create_curated_athena_table(
                 database_name,
                 bucket,
                 sql_create_table_partition(
-                    data_product_config.curated_data_table,
-                    data_product_config.raw_data_table,
+                    data_product_element.curated_data_table,
+                    raw_data_table,
                     curated_path,
                     extraction_timestamp,
                     metadata,
@@ -67,7 +68,7 @@ def create_curated_athena_table(
             return
 
     partition_file_exists = does_partition_file_exist(
-        data_product_config.curated_data_prefix,
+        data_product_element.curated_data_prefix,
         extraction_timestamp,
         logger=logger,
         s3_client=s3_client,
@@ -77,11 +78,11 @@ def create_curated_athena_table(
         logger.info("table does already exist but partition for timestamp does not")
         # unload query to make partitioned data
         qid = start_query_execution_and_wait(
-            data_product_config.raw_data_table.database,
+            raw_data_table.database,
             bucket,
             sql_unload_table_partition(
                 extraction_timestamp,
-                data_product_config.raw_data_table,
+                raw_data_table,
                 curated_path,
                 metadata,
             ),
@@ -99,8 +100,8 @@ def create_curated_athena_table(
     elif not table_exists and partition_file_exists:
         logger.info("partition data exists but glue table does not")
         table_metadata, _ = infer_glue_schema(
-            data_product_config.curated_data_prefix,
-            data_product_config,
+            data_product_element.curated_data_prefix,
+            data_product_element,
             file_type="parquet",
             table_type="curated",
             logger=logger,
@@ -112,11 +113,11 @@ def create_curated_athena_table(
         logger.info("table and partition do not exist but other curated data do")
         # unload query to make partitioned data
         qid = start_query_execution_and_wait(
-            data_product_config.raw_data_table.database,
+            raw_data_table.database,
             bucket,
             sql_unload_table_partition(
                 extraction_timestamp,
-                data_product_config.raw_data_table,
+                raw_data_table,
                 curated_path,
                 metadata,
             ),
@@ -125,8 +126,8 @@ def create_curated_athena_table(
         )
         logger.info(f"created files for partition using query id {qid}")
         table_metadata, _ = infer_glue_schema(
-            data_product_config.curated_data_prefix,
-            data_product_config,
+            data_product_element.curated_data_prefix,
+            data_product_element,
             file_type="parquet",
             table_type="curated",
             logger=logger,

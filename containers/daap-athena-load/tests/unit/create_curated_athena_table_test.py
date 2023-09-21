@@ -14,13 +14,14 @@ from data_platform_paths import BucketPath, QueryTable
 
 @pytest.fixture
 def curated_athena_table_kwargs(
-    data_product, s3_client, glue_client, athena_client, logger
+    data_product_element, s3_client, glue_client, athena_client, logger
 ):
     """
     Helper to construct the args to the function
     """
     return dict(
-        data_product_config=data_product,
+        data_product_element=data_product_element,
+        raw_data_table=data_product_element.raw_data_table_unique(),
         extraction_timestamp="20230101T000000Z",
         metadata={
             "TableInput": {"Name": "table", "StorageDescriptor": {"Columns": []}},
@@ -34,33 +35,45 @@ def curated_athena_table_kwargs(
 
 
 def test_creates_glue_database_if_missing(
-    data_product, curated_athena_table_kwargs, s3_client, glue_client, athena_client
+    data_product_element,
+    curated_athena_table_kwargs,
+    s3_client,
+    glue_client,
+    athena_client,
 ):
     s3_client.create_bucket(Bucket="bucket")
     athena_client.create_work_group(Name="data_product_workgroup")
 
     create_curated_athena_table(**curated_athena_table_kwargs)
 
-    response = glue_client.get_database(Name=data_product.curated_data_table.database)
+    response = glue_client.get_database(
+        Name=data_product_element.curated_data_table.database
+    )
     assert response["ResponseMetadata"]["HTTPStatusCode"] == 200
 
 
 def test_no_error_if_table_exists(
-    curated_athena_table_kwargs, data_product, s3_client, glue_client, athena_client
+    curated_athena_table_kwargs,
+    data_product_element,
+    s3_client,
+    glue_client,
+    athena_client,
 ):
     s3_client.create_bucket(Bucket="bucket")
     athena_client.create_work_group(Name="data_product_workgroup")
     glue_client.create_database(
-        DatabaseInput={"Name": data_product.curated_data_table.database}
+        DatabaseInput={"Name": data_product_element.curated_data_table.database}
     )
     glue_client.create_table(
-        TableInput={"Name": data_product.curated_data_table.name},
-        DatabaseName=data_product.curated_data_table.database,
+        TableInput={"Name": data_product_element.curated_data_table.name},
+        DatabaseName=data_product_element.curated_data_table.database,
     )
 
     create_curated_athena_table(**curated_athena_table_kwargs)
 
-    response = glue_client.get_database(Name=data_product.curated_data_table.database)
+    response = glue_client.get_database(
+        Name=data_product_element.curated_data_table.database
+    )
     assert response["ResponseMetadata"]["HTTPStatusCode"] == 200
 
 
@@ -69,26 +82,28 @@ def test_no_error_if_table_exists_and_partition_exists(
     s3_client,
     glue_client,
     athena_client,
-    data_product,
+    data_product_element,
 ):
     s3_client.create_bucket(Bucket="bucket")
     s3_client.put_object(
         Bucket="bucket",
-        Key=data_product.curated_data_prefix.key + "partition.parquet",
+        Key=data_product_element.curated_data_prefix.key + "partition.parquet",
         Body="",
     )
     athena_client.create_work_group(Name="data_product_workgroup")
     glue_client.create_database(
-        DatabaseInput={"Name": data_product.curated_data_table.database}
+        DatabaseInput={"Name": data_product_element.curated_data_table.database}
     )
     glue_client.create_table(
-        TableInput={"Name": data_product.curated_data_table.name},
-        DatabaseName=data_product.curated_data_table.database,
+        TableInput={"Name": data_product_element.curated_data_table.name},
+        DatabaseName=data_product_element.curated_data_table.database,
     )
 
     create_curated_athena_table(**curated_athena_table_kwargs)
 
-    response = glue_client.get_database(Name=data_product.curated_data_table.database)
+    response = glue_client.get_database(
+        Name=data_product_element.curated_data_table.database
+    )
     assert response["ResponseMetadata"]["HTTPStatusCode"] == 200
 
 

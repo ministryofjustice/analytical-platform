@@ -30,12 +30,12 @@ stored in different S3 buckets.
 ### Removed
 
 - `DataProductConfig` no longer takes a `table_name` argument. Instead, call
-  `data_product_config.model(name)` or `DataProductModel.load` to get a
-  `DataProductModel` instance.
+  `data_product_config.element(name)` or `DataProductElement.load` to get a
+  `DataProductElement` instance.
 - `raw_data_prefix`, `curated_data_prefix` and `curated_data_table` on
   `DataProductConfig` now exclude the table name part. Use `DataProductElement`
   to get the prefix including table name.
-- `raw_data_table` is now a method of `DataProductModel`, and returns a unique
+- `raw_data_table` is now a method of `DataProductElement`, and returns a unique
   name each call.
 - `get_bucket_name()` function is replaced by `get_raw_data_bucket()`,
   `get_curated_data_bucket()`, `get_metadata_bucket` and `get_log_bucket`.

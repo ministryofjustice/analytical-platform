@@ -8,10 +8,10 @@ from infer_glue_schema import infer_glue_schema
 from pyarrow import parquet as pq
 
 
-def test_infer_schema_from_csv(s3_client, logger, data_product):
+def test_infer_schema_from_csv(s3_client, logger, data_product_element):
     s3_client.create_bucket(Bucket="bucket")
     uuid_value = uuid4()
-    path = data_product.raw_data_path(datetime(2023, 1, 1), uuid_value)
+    path = data_product_element.raw_data_path(datetime(2023, 1, 1), uuid_value)
 
     s3_client.put_object(
         Key=path.key,
@@ -27,7 +27,7 @@ def test_infer_schema_from_csv(s3_client, logger, data_product):
 
     metadata_glue, metadata_glue_str = infer_glue_schema(
         file_path=BucketPath(path.bucket, path.key),
-        data_product_config=data_product,
+        data_product_element=data_product_element,
         logger=logger,
     )
 
@@ -42,7 +42,7 @@ def test_infer_schema_from_csv(s3_client, logger, data_product):
     ]
 
 
-def test_infer_schema_from_parquet(s3_client, logger, data_product):
+def test_infer_schema_from_parquet(s3_client, logger, data_product_element):
     table = pa.Table.from_arrays(
         [
             pa.array([2, 4, 5, 100]),
@@ -53,7 +53,7 @@ def test_infer_schema_from_parquet(s3_client, logger, data_product):
     output = pa.BufferOutputStream()
     pq.write_table(table, output)
 
-    path = data_product.curated_data_prefix.key + "foo.parquet"
+    path = data_product_element.curated_data_prefix.key + "foo.parquet"
     s3_client.create_bucket(Bucket="bucket")
     s3_client.put_object(
         Key=path,
@@ -62,8 +62,8 @@ def test_infer_schema_from_parquet(s3_client, logger, data_product):
     )
 
     metadata_glue, metadata_glue_str = infer_glue_schema(
-        file_path=data_product.curated_data_prefix,
-        data_product_config=data_product,
+        file_path=data_product_element.curated_data_prefix,
+        data_product_element=data_product_element,
         logger=logger,
         table_type="curated",
         file_type="parquet",
