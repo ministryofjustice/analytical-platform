@@ -142,7 +142,8 @@ locals {
   data_platform_labs_members = [
     "murdo-moj",
     "matmoore",
-    "LavMatt"
+    "LavMatt",
+    "tom-webber"
   ]
 
   data_platform_security_auditor_members = [
