@@ -4,7 +4,7 @@ import boto3
 from create_curated_athena_table import create_curated_athena_table
 from create_raw_athena_table import create_raw_athena_table
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import RawDataExtraction, QueryTable
+from data_platform_paths import QueryTable, RawDataExtraction
 from infer_glue_schema import infer_glue_schema
 
 athena_client = boto3.client("athena")
@@ -43,9 +43,8 @@ def handler(
 
     temp_table_name = metadata_types["TableInput"]["Name"]
     temp_database_name = metadata_types["DatabaseName"]
-    logger.info(
-        f"config: {extraction.timestamp=} {temp_table_name=} {temp_database_name=} {data_product_element.curated_data_table=}"
-    )
+    logger.info(f"{temp_table_name=} {temp_database_name=}")
+    logger.info(f"{extraction.timestamp=} {data_product_element.curated_data_table=}")
 
     # Create a table of all string-type columns, to load raw data into
     create_raw_athena_table(
