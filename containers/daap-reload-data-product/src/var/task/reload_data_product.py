@@ -83,6 +83,9 @@ def s3_recursive_delete(bucket, prefix, s3_client) -> None:
 
     delete_us: dict = dict(Objects=[])
     for item in pages.search("Contents"):
+        if item is None:
+            continue
+
         delete_us["Objects"].append(dict(Key=item["Key"]))
 
         # delete once aws limit reached

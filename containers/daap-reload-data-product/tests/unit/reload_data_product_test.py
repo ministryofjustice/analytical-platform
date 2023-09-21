@@ -69,6 +69,16 @@ def test_s3_recursive_delete(s3_client, curated_data_bucket, data_product):
     assert keys == ["some-other"]
 
 
+def test_s3_recursive_delete_empty_bucket(
+    s3_client, empty_curated_data_bucket, data_product
+):
+    s3_recursive_delete(
+        bucket=empty_curated_data_bucket,
+        s3_client=s3_client,
+        prefix=data_product.curated_data_prefix.key,
+    )
+
+
 def test_get_data_product_pages(s3_client, raw_data_bucket, data_product):
     pages = list(
         get_data_product_pages(
