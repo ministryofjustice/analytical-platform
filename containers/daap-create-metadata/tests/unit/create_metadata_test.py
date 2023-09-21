@@ -1,6 +1,7 @@
-import create_metadata
-from unittest.mock import patch
 import json
+from unittest.mock import patch
+
+import create_metadata
 
 
 def test_missing_metadata_name_fail(fake_context):
