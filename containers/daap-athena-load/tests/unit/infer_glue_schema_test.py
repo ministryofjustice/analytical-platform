@@ -1,11 +1,29 @@
 from datetime import datetime
 from textwrap import dedent
 from uuid import uuid4
+from io import BytesIO
 
 import pyarrow as pa
 from data_platform_paths import BucketPath
-from infer_glue_schema import infer_glue_schema
+from infer_glue_schema import infer_glue_schema, csv_sample
 from pyarrow import parquet as pq
+import pytest
+
+
+@pytest.mark.parametrize(
+    "test_input,sample_size_in_bytes,expected",
+    [
+        (b"a,b,c", 10, b"a,b,c"),
+        (b"a,b,c\nd,e,f", 1, b"a,b,c\n"),
+    ],
+)
+def test_csv_sample(test_input, expected, sample_size_in_bytes, logger):
+    bytes_stream = BytesIO(test_input)
+    output = csv_sample(
+        bytes_stream, logger=logger, sample_size_in_bytes=sample_size_in_bytes
+    ).getvalue()
+
+    assert output == expected
 
 
 def test_infer_schema_from_csv(s3_client, logger, data_product_element):
