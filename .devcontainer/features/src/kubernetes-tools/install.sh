@@ -23,3 +23,7 @@ fi
 if [[ "${INSTALLK9S}" == "true" ]]; then
   bash $( dirname $0 )/install-k9s.sh
 fi
+
+if [[ "${INSTALLVELERO}" == "true" ]]; then
+  bash $( dirname $0 )/install-velero.sh
+fi
