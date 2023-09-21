@@ -46,7 +46,7 @@ class DataProductMetadata:
         self.data_product_name = data_product_name
         self.logger = logger
         bucket, key = split_bucket_and_key(
-            DataProductConfig(data_product_name).metadata_path().uri
+            DataProductConfig(name=data_product_name).metadata_path().uri
         )
         self.metadata_bucket = bucket
         self.metadata_key = key

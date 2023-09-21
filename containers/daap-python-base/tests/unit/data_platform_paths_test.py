@@ -188,7 +188,7 @@ def test_extraction_config():
 
     element = config.element("some-table")
 
-    extraction = element.extraction_config(uuid_value=uuid_value, timestamp=timestamp)
+    extraction = element.extraction_instance(uuid_value=uuid_value, timestamp=timestamp)
 
     assert extraction.timestamp == timestamp
     assert extraction.path == BucketPath(

@@ -120,9 +120,9 @@ class DataProductElement:
     data_product: DataProductConfig
 
     @staticmethod
-    def load(name, data_product_name):
+    def load(element_name, data_product_name):
         data_product = DataProductConfig(name=data_product_name)
-        return DataProductElement(data_product=data_product, name=name)
+        return DataProductElement(data_product=data_product, name=element_name)
 
     @property
     def raw_data_prefix(self):
@@ -142,8 +142,8 @@ class DataProductElement:
         e.g. curated_data/database_name=my-data-product/table_name=some-element/
         """
         return BucketPath(
-            self.data_product.curated_data_bucket,
-            os.path.join(
+            bucket=self.data_product.curated_data_bucket,
+            key=os.path.join(
                 "curated_data",
                 f"database_name={self.data_product.name}",
                 f"table_name={self.name}",
@@ -178,13 +178,13 @@ class DataProductElement:
         E.g. raw_data/my-data-product/some-element/extraction_timestamp=
              20230101T000000Z/3d95ff89-b063-484d-b510-53742d0a6a64
         """
-        return self.extraction_config(timestamp, uuid_value).path
+        return self.extraction_instance(timestamp, uuid_value).path
 
-    def extraction_config(
+    def extraction_instance(
         self, timestamp: datetime, uuid_value: UUID
     ) -> RawDataExtraction:
         """
-        Config for the data extraction identified by uuid_value and timestamp.
+        Instance of the data extraction identified by uuid_value and timestamp.
         """
         amz_date = timestamp.strftime(EXTRACTION_TIMESTAMP_FORMAT)
 
@@ -203,7 +203,7 @@ class DataProductElement:
 @dataclass
 class DataProductConfig:
     """
-    Configures the name, and S3 buckets for a data product.
+    Configures the name, elements, S3 buckets, and related paths for a data product.
 
     A data product may contain many `data product elements`. To construct
     paths for each one, call `.element()` with the name of the element.
