@@ -4,6 +4,7 @@ import time
 import boto3
 from botocore.paginate import PageIterator
 from data_platform_logging import DataPlatformLogger
+from data_platform_paths import DataProductConfig
 
 s3 = boto3.client("s3")
 glue = boto3.client("glue")
@@ -19,10 +20,6 @@ s3_security_opts = {
     "ServerSideEncryption": "AES256",
 }
 
-raw_data_bucket = os.environ.get("RAW_DATA_BUCKET", "")
-curated_data_bucket = os.environ.get("CURATED_DATA_BUCKET", "")
-athena_load_lambda = os.environ.get("ATHENA_LOAD_LAMBDA", "")
-
 
 def handler(
     event,
@@ -30,13 +27,14 @@ def handler(
     glue=glue,
     s3=s3,
     aws_lambda=boto3.client("lambda"),
-    raw_data_bucket=raw_data_bucket,
-    curated_data_bucket=curated_data_bucket,
-    athena_load_lambda=athena_load_lambda,
+    athena_load_lambda=os.environ.get("ATHENA_LOAD_LAMBDA", ""),
 ):
-    data_product_to_recreate = event.get("data_product", "")
-    raw_prefix = f"raw_data/{data_product_to_recreate}"
-    logger.info(f"Data product to recreate: {data_product_to_recreate}")
+    data_product_name = event.get("data_product", "")
+    data_product = DataProductConfig(name=data_product_name)
+    raw_prefix = data_product.raw_data_prefix.key
+    raw_data_bucket = data_product.raw_data_bucket
+    curated_data_bucket = data_product.curated_data_bucket
+    logger.info(f"Data product to recreate: {data_product.name}")
     logger.info(f"Raw prefix: {raw_prefix}")
 
     # Check data product has associated data
@@ -45,18 +43,18 @@ def handler(
     )
 
     # Drop existing athena tables for that data product
-    glue_response = glue.get_tables(DatabaseName=data_product_to_recreate)
+    glue_response = glue.get_tables(DatabaseName=data_product.name)
     data_product_tables = glue_response.get("TableList", [])
     if not any(data_product_tables):
-        logger.info(f"No tables found for data product {data_product_to_recreate}")
+        logger.info(f"No tables found for data product {data_product.name}")
     for table in data_product_tables:
         table_name = table["Name"]
-        glue.delete_table(DatabaseName=data_product_to_recreate, Name=table_name)
-        logger.info(f"Deleted glue table {data_product_to_recreate}.{table_name}")
+        glue.delete_table(DatabaseName=data_product.name, Name=table_name)
+        logger.info(f"Deleted glue table {data_product.name}.{table_name}")
     # Remove curated data files for that data product
     s3_recursive_delete(
         bucket=curated_data_bucket,
-        prefix=f"curated_data/database_name={data_product_to_recreate}/",
+        prefix=data_product.curated_data_prefix.key,
         s3_client=s3,
     )
 
@@ -75,7 +73,7 @@ def handler(
             FunctionName=athena_load_lambda, InvocationType="Event", Payload=payload
         )
 
-    logger.info(f"data product {data_product_to_recreate} recreated")
+    logger.info(f"data product {data_product_name} recreated")
 
 
 def s3_recursive_delete(bucket, prefix, s3_client) -> None:
@@ -85,6 +83,9 @@ def s3_recursive_delete(bucket, prefix, s3_client) -> None:
 
     delete_us: dict = dict(Objects=[])
     for item in pages.search("Contents"):
+        if item is None:
+            continue
+
         delete_us["Objects"].append(dict(Key=item["Key"]))
 
         # delete once aws limit reached

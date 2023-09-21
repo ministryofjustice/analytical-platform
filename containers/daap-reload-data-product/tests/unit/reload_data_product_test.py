@@ -1,11 +1,13 @@
 import pytest
+from data_platform_paths import DataProductConfig
 from reload_data_product import get_data_product_pages, handler, s3_recursive_delete
 
 
 @pytest.fixture
-def empty_curated_data_bucket(s3_client):
+def empty_curated_data_bucket(s3_client, monkeypatch):
     bucket_name = "curated"
     s3_client.create_bucket(Bucket=bucket_name)
+    monkeypatch.setenv("CURATED_DATA_BUCKET", bucket_name)
     return bucket_name
 
 
@@ -13,7 +15,9 @@ def empty_curated_data_bucket(s3_client):
 def curated_data_bucket(s3_client, empty_curated_data_bucket, data_product):
     bucket_name = empty_curated_data_bucket
     s3_client.put_object(
-        Bucket=bucket_name, Key=f"{data_product.curated_data_prefix.key}baz", Body=""
+        Bucket=bucket_name,
+        Key=f"{data_product.curated_data_prefix.key}table=bar/baz",
+        Body="",
     )
     s3_client.put_object(
         Bucket=bucket_name,
@@ -25,20 +29,28 @@ def curated_data_bucket(s3_client, empty_curated_data_bucket, data_product):
 
 
 @pytest.fixture
-def empty_raw_data_bucket(s3_client):
+def empty_raw_data_bucket(s3_client, monkeypatch):
     bucket_name = "raw"
     s3_client.create_bucket(Bucket=bucket_name)
+    monkeypatch.setenv("RAW_DATA_BUCKET", bucket_name)
     return bucket_name
+
+
+@pytest.fixture
+def data_product(empty_raw_data_bucket, empty_curated_data_bucket):
+    return DataProductConfig(
+        "foo", raw_data_bucket=raw_data_bucket, curated_data_bucket=curated_data_bucket
+    )
 
 
 @pytest.fixture
 def raw_data_bucket(s3_client, empty_raw_data_bucket, data_product):
     bucket_name = empty_raw_data_bucket
     s3_client.put_object(
-        Bucket=bucket_name, Key=data_product.raw_data_prefix.key + "abc", Body=""
+        Bucket=bucket_name, Key=data_product.raw_data_prefix.key + "bar/abc", Body=""
     )
     s3_client.put_object(
-        Bucket=bucket_name, Key=data_product.raw_data_prefix.key + "baz", Body=""
+        Bucket=bucket_name, Key=data_product.raw_data_prefix.key + "bar/baz", Body=""
     )
     return bucket_name
 
@@ -55,6 +67,16 @@ def test_s3_recursive_delete(s3_client, curated_data_bucket, data_product):
         for i in s3_client.list_objects_v2(Bucket=curated_data_bucket)["Contents"]
     ]
     assert keys == ["some-other"]
+
+
+def test_s3_recursive_delete_empty_bucket(
+    s3_client, empty_curated_data_bucket, data_product
+):
+    s3_recursive_delete(
+        bucket=empty_curated_data_bucket,
+        s3_client=s3_client,
+        prefix=data_product.curated_data_prefix.key,
+    )
 
 
 def test_get_data_product_pages(s3_client, raw_data_bucket, data_product):
@@ -90,9 +112,7 @@ def test_handler_recursively_deletes_curated_data(
     raw_data_bucket,
     fake_context,
 ):
-    glue_client.create_database(
-        DatabaseInput={"Name": data_product.curated_data_table.database}
-    )
+    glue_client.create_database(DatabaseInput={"Name": data_product.name})
 
     handler(
         event={"data_product": data_product.name},
@@ -101,8 +121,6 @@ def test_handler_recursively_deletes_curated_data(
         s3=s3_client,
         aws_lambda=do_nothing_lambda_client,
         athena_load_lambda="athena_load_lambda",
-        raw_data_bucket=raw_data_bucket,
-        curated_data_bucket=curated_data_bucket,
     )
 
     keys = [
@@ -121,9 +139,7 @@ def test_handler_invokes_lambda_for_each_raw_file(
     raw_data_bucket,
     fake_context,
 ):
-    glue_client.create_database(
-        DatabaseInput={"Name": data_product.curated_data_table.database}
-    )
+    glue_client.create_database(DatabaseInput={"Name": data_product.name})
 
     handler(
         event={"data_product": data_product.name},
@@ -132,8 +148,6 @@ def test_handler_invokes_lambda_for_each_raw_file(
         s3=s3_client,
         aws_lambda=do_nothing_lambda_client,
         athena_load_lambda="athena_load_lambda",
-        raw_data_bucket=raw_data_bucket,
-        curated_data_bucket=curated_data_bucket,
     )
 
     do_nothing_lambda_client.invoke.assert_any_call(
@@ -158,12 +172,10 @@ def test_handler_deletes_glue_table(
     raw_data_bucket,
     fake_context,
 ):
-    glue_client.create_database(
-        DatabaseInput={"Name": data_product.curated_data_table.database}
-    )
+    glue_client.create_database(DatabaseInput={"Name": data_product.name})
     glue_client.create_table(
         TableInput={"Name": "foo"},
-        DatabaseName=data_product.curated_data_table.database,
+        DatabaseName=data_product.name,
     )
 
     handler(
@@ -173,11 +185,7 @@ def test_handler_deletes_glue_table(
         s3=s3_client,
         aws_lambda=do_nothing_lambda_client,
         athena_load_lambda="athena_load_lambda",
-        raw_data_bucket=raw_data_bucket,
-        curated_data_bucket=curated_data_bucket,
     )
 
-    response = glue_client.get_tables(
-        DatabaseName=data_product.curated_data_table.database
-    )
+    response = glue_client.get_tables(DatabaseName=data_product.name)
     assert response["TableList"] == []
