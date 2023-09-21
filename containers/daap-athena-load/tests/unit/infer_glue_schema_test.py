@@ -13,8 +13,26 @@ import pytest
 @pytest.mark.parametrize(
     "test_input,sample_size_in_bytes,expected",
     [
-        (b"a,b,c", 10, b"a,b,c"),
-        (b"a,b,c\nd,e,f", 1, b"a,b,c\n"),
+        (
+            b"a,b,c",
+            10,
+            b"a,b,c",
+        ),  # Should read to the end of the stream without encountering the line separator
+        (
+            b"a,b,c\nd,e,f",
+            1,
+            b"a,b,c\n",
+        ),  # The sample size is the absolute minimum; should stop when hitting the line separator
+        (
+            b"a,b,c\nd,e,f\n",
+            6,
+            b"a,b,c\n",
+        ),  # The sample size aligns with a line break. The following line shouldn't be read.
+        (
+            b"a,b,c\ndddddddddddd,eeeeeeeeeee,fffffffff",
+            4,
+            b"a,b,c\n",
+        ),  # The sample size doesn't align with a line break. Stop when hitting the following line separator.
     ],
 )
 def test_csv_sample(test_input, expected, sample_size_in_bytes, logger):

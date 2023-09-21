@@ -22,43 +22,33 @@ def csv_sample(
 ) -> BinaryIO:
     """
     Accepts a byte stream containing CSV and returns a new stream that aligns with the line separator, and is at least
-    sample_size_bytes bytes.
+    sample_size_in_bytes bytes.
     """
     read_bytes = bytearray()
-    max_size = sample_size_in_bytes
-    chunk_size = 5
-    final_size = 0
 
     # the character that we'll split the data with (bytes, not string)
     # could csv dialect (newline character etc) from csv.sniffer in further dev
     newline = b"\n"
 
-    finished = False
+    chunk = bytes_stream.read(sample_size_in_bytes)
+    read_bytes.extend(chunk)
+    finished = chunk[-1:] == newline
+    chunk_size = 5
 
     while not finished:
-        if final_size == 0:
-            chunk = bytes_stream.read(max_size)
-        else:
-            chunk = bytes_stream.read(chunk_size)
-
+        chunk = bytes_stream.read(chunk_size)
         if chunk == b"":
             break
 
         last_newline = chunk.rfind(newline)
 
-        if last_newline == 4:
-            final_size += chunk_size
-            if final_size > sample_size_in_bytes:
-                finished = True
+        if last_newline == -1:
+            read_bytes.extend(chunk)
         else:
-            if final_size == 0:
-                final_size += sample_size_in_bytes
-            else:
-                final_size += chunk_size
+            read_bytes.extend(chunk[: last_newline + 1])
+            break
 
-        read_bytes.extend(chunk)
-
-    logger.info(f"extracted {round((final_size-1)/1000000,2)}MB sample of csv")
+    logger.info(f"extracted {round(len(read_bytes)/1000000,2)}MB sample of csv")
 
     return BytesIO(read_bytes)
 
