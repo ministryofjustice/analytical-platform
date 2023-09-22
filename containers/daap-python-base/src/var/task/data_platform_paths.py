@@ -27,6 +27,9 @@ EXTRACTION_TIMESTAMP_FORMAT = "%Y%m%dT%H%M%SZ"
 EXTRACTION_TIMESTAMP_REGEX = re.compile(
     r"^(.*)/(extraction_timestamp=)([0-9TZ]{1,16})/(.*)$"
 )
+DATABASE_NAME = re.compile(r"database_name=([^\/]*))\/")
+TABLE_NAME = re.compile(r"table_name=([^\/]*)\/")
+EXTRACTION_TIMESTAMP_CURATED = re.compile()
 
 # https://docs.aws.amazon.com/athena/latest/ug/tables-databases-columns-names.html
 MAX_IDENTIFIER_LENGTH = 255
@@ -108,25 +111,29 @@ def get_account_id() -> str:
     """
     return boto3.client("sts").get_caller_identity()["Account"]
 
+
 def search_string_for_regex(string: str, regex: str) -> str:
     """Search a string for a regex pattern and return the first result"""
-    database_name_search = re.search(regex, string)
-    if database_name_search:
-        return database_name_search.groups()[0]
+    search_output = regex.search(string)
+    if search_output:
+        return search_output.groups()[0]
     else:
         raise ValueError(f"{regex} not found in {string}")
 
 
-def database_name_regex() -> str:
-    return """database_name=([^\/]*)\/"""  # noqa: W605
+def extract_table_name_from_curated_path(string: str):
+    return search_string_for_regex(string=str, regex=TABLE_NAME)
 
 
-def table_name_regex() -> str:
-    return """table_name=([^\/]*)\/"""  # noqa: W605
+def extract_database_name_from_curated_path(string: str):
+    return search_string_for_regex(string=str, regex=DATABASE_NAME)
 
 
-def extraction_timestamp_regex() -> str:
-    return """(extraction_timestamp=[^\/]*)\/"""  # noqa: W605
+def extract_timestamp_from_curated_path(string: str):
+    return "extraction_timestamp=" + search_string_for_regex(
+        string=str, regex=EXTRACTION_TIMESTAMP_REGEX
+    )
+
 
 @dataclass
 class DataProductElement:
