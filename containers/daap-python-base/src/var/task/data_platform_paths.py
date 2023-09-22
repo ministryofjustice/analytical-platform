@@ -111,7 +111,7 @@ def get_account_id() -> str:
     return boto3.client("sts").get_caller_identity()["Account"]
 
 
-def search_string_for_regex(string: str, regex: str) -> str:
+def search_string_for_regex(string: str, regex: re.Pattern[str]) -> str:
     """Search a string for a regex pattern and return the first result"""
     search_output = regex.search(string)
     if search_output:
