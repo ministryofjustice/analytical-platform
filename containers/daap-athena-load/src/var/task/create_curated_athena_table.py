@@ -27,6 +27,22 @@ def _get_first_parquet_file(
     return pq.ParquetDataset(file_path, filesystem=s3, use_legacy_dataset=False)
 
 
+def _get_table_metadata(
+    glue_client, table_name: str, database_name: str
+) -> dict | None:
+    """
+    Return the table metadata, or None if it doesn't exist
+    """
+    try:
+        return glue_client.get_table(DatabaseName=database_name, Name=table_name)
+
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "EntityNotFoundException":
+            return None
+
+        raise
+
+
 def create_curated_athena_table(
     data_product_element,
     raw_data_table: QueryTable,
@@ -50,24 +66,18 @@ def create_curated_athena_table(
 
     schema_generator = GlueSchemaGenerator(logger)
 
-    table_exists = False
     create_glue_database(glue_client, database_name, logger, bucket)
 
-    try:
-        table_metadata = glue_client.get_table(
-            DatabaseName=database_name, Name=table_name
-        )
-        table_exists = True
+    table_metadata = _get_table_metadata(
+        glue_client=glue_client, database_name=database_name, table_name=table_name
+    )
 
-    except ClientError as e:
+    if table_metadata is None:
         curated_prefix = data_product_element.curated_data_prefix.key
         existing_files = s3_client.list_objects_v2(
             Bucket=bucket, Prefix=curated_prefix
         )["KeyCount"]
-        if (
-            e.response["Error"]["Code"] == "EntityNotFoundException"
-            and existing_files == 0
-        ):
+        if existing_files == 0:
             # only want to run this query if no table or data exist in s3
             qid = start_query_execution_and_wait(
                 database_name,
@@ -95,7 +105,7 @@ def create_curated_athena_table(
         s3_client=s3_client,
     )
 
-    if table_exists and not partition_file_exists:
+    if table_metadata and not partition_file_exists:
         logger.info("table does already exist but partition for timestamp does not")
         # unload query to make partitioned data
         qid = start_query_execution_and_wait(
@@ -118,7 +128,7 @@ def create_curated_athena_table(
         )
         refresh_table_partitions(database_name, table_name, athena_client=athena_client)
 
-    elif not table_exists and partition_file_exists:
+    elif not table_metadata and partition_file_exists:
         logger.info("partition data exists but glue table does not")
 
         arrow_table = _get_first_parquet_file(
@@ -135,7 +145,7 @@ def create_curated_athena_table(
 
         glue_client.create_table(**table_metadata)
         refresh_table_partitions(database_name, table_name, athena_client=athena_client)
-    elif not table_exists and not partition_file_exists:
+    elif not table_metadata and not partition_file_exists:
         logger.info("table and partition do not exist but other curated data do")
         # unload query to make partitioned data
         qid = start_query_execution_and_wait(
