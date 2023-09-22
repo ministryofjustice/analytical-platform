@@ -4,6 +4,7 @@ import re
 import boto3
 from botocore.paginate import PageIterator
 from data_platform_logging import DataPlatformLogger
+from data_platform_paths import *
 
 s3 = boto3.client("s3")
 logger = DataPlatformLogger(
@@ -16,16 +17,24 @@ s3_security_opts = {
     "ACL": "bucket-owner-full-control",
     "ServerSideEncryption": "AES256",
 }
-raw_data_bucket = os.environ.get("RAW_DATA_BUCKET", "")
-curated_data_bucket = os.environ.get("CURATED_DATA_BUCKET", "")
-log_bucket = os.environ.get("RAW_DATA_BUCKET", "")
+
+raw_data_bucket = get_raw_data_bucket()
+curated_data_bucket = get_curated_data_bucket()
+log_bucket = get_log_bucket()
 athena_load_lambda = os.environ.get("ATHENA_LOAD_LAMBDA", "")
 
 
 def handler(event, context):
     data_product_to_recreate = event.get("data_product", "")
-    raw_prefix = f"raw_data/{data_product_to_recreate}"
-    curated_prefix = f"curated_data/database_name={data_product_to_recreate}"
+
+    data_product = DataProductConfig(
+        name=data_product_to_recreate,
+        raw_data_bucket=raw_data_bucket,
+        curated_data_bucket=raw_data_bucket,
+    )
+
+    raw_prefix = data_product.raw_data_prefix
+    curated_prefix = data_product.curated_data_prefix
 
     logger.info(f"Raw prefix: {raw_prefix}")
     logger.info(f"Curated prefix: {curated_prefix}")
@@ -42,17 +51,11 @@ def handler(event, context):
     )
 
     raw_table_timestamps = get_unique_extraction_timestamps(raw_pages)
-    curated_table_timestamps=get_curated_unique_extraction_timestamps(curated_pages)
+    curated_table_timestamps = get_curated_unique_extraction_timestamps(curated_pages)
 
-    # Find extraction timestamps in the raw area,
-    # and not in the curated area
-    timestamps_to_resync = raw_table_timestamps - curated_table_timestamps
-    raw_keys_to_resync = [
-        item["Key"]
-        for timestamp in timestamps_to_resync
-        for item in raw_pages.search("Contents")
-        if timestamp in item["Key"]
-    ]
+    raw_keys_to_resync = get_resync_keys(
+        raw_table_timestamps, curated_table_timestamps, raw_pages
+    )
     logger.info(f"raw keys to resync: {raw_keys_to_resync}")
 
     # Feed unprocessed data files through the load process again.
@@ -72,18 +75,18 @@ def handler(event, context):
     logger.info(str(raw_keys_to_resync))
     logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
 
-# def get_unprocessed_data_files(raw_table_timestamps:list, ):
 
 def get_data_product_pages(
     bucket, data_product_prefix, s3_client=s3, log_bucket=log_bucket
 ) -> PageIterator:
+    """ """
+
     paginator = s3_client.get_paginator("list_objects_v2")
     pages = paginator.paginate(Bucket=bucket, Prefix=data_product_prefix)
-    print(len(list(pages)))
+    # print(len(list(pages)))
     # An empty page in the paginator only happens when no files exist
     for page in pages:
         # print(page["Contents"])
-        print("-----------------------")
 
         if page["KeyCount"] == 0:
             error_text = f"No data product found for {data_product_prefix}"
@@ -104,6 +107,7 @@ def get_unique_extraction_timestamps(pages: PageIterator) -> set:
     result_set = set("/".join(item["Key"].split("/")[1:-1]) for item in filtered_pages)
     return result_set
 
+
 def get_curated_unique_extraction_timestamps(curated_pages: PageIterator) -> set:
     """
     return the unique slugs of data product, table and extraction timestamp
@@ -114,17 +118,42 @@ def get_curated_unique_extraction_timestamps(curated_pages: PageIterator) -> set
     """
     curated_table_timestamps = set()
     for item in curated_pages.search("Contents[?Size > `0`][]"):
+
         data_product = search_string_for_regex(
             string=item["Key"], regex=database_name_regex()
         )
         table = search_string_for_regex(string=item["Key"], regex=table_name_regex())
+
         extraction_timestamp = search_string_for_regex(
             string=item["Key"], regex=extraction_timestamp_regex()
         )
 
-        # Both sets need the same formatting to compare them
-        curated_table_timestamps.add(f"{data_product}/{table}/{extraction_timestamp}")
+        if data_product and table and extraction_timestamp:
+            # Both sets need the same formatting to compare them
+            curated_table_timestamps.add(
+                f"{data_product}/{table}/{extraction_timestamp}"
+            )
     return curated_table_timestamps
+
+
+def get_resync_keys(
+    raw_table_timestamps: set, curated_table_timestamps: set, raw_pages: PageIterator
+) -> list:
+    """Find extraction timestamps in the raw area,
+    and not in the curated area
+    """
+    timestamps_to_resync = [
+        item for item in raw_table_timestamps
+        if item not in curated_table_timestamps
+    ]
+
+    raw_keys_to_resync = [
+        item["Key"]
+        for timestamp in timestamps_to_resync
+        for item in raw_pages.search("Contents")
+        if timestamp in item["Key"]
+    ]
+    return raw_keys_to_resync
 
 
 def search_string_for_regex(string: str, regex: str) -> str:
@@ -133,7 +162,7 @@ def search_string_for_regex(string: str, regex: str) -> str:
     if database_name_search:
         return database_name_search.groups()[0]
     else:
-        raise ValueError(f"{regex} not found in {string}")
+        print(ValueError(f"{regex} not found in {string}"))
 
 
 def database_name_regex() -> str:

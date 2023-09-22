@@ -55,5 +55,10 @@ def bucket_name():
 
 
 @pytest.fixture
-def data_product(bucket_name):
-    return DataProductConfig("data_product", "table_name", bucket_name)
+def data_element(bucket_name):
+    data_product = DataProductConfig(
+        name="data_product",
+        raw_data_bucket=bucket_name,
+        curated_data_bucket=bucket_name,
+    )
+    return data_product.element(name="table_name")
