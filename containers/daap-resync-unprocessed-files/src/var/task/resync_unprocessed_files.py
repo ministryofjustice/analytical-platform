@@ -37,37 +37,15 @@ def handler(event, context):
         data_product_prefix=raw_prefix,
     )
 
-    # Find extraction timestamps in the raw area, and not in the curated area
-    paginator = s3.get_paginator("list_objects_v2")
-    curated_pages = paginator.paginate(
-        Bucket=curated_data_bucket, Prefix=curated_prefix
+    curated_pages = get_data_product_pages(
+        Bucket=curated_data_bucket, data_product_prefix=curated_prefix
     )
 
-    # key = "raw_data/data_product/table/extraction_timestamp=timestamp/file.csv"
-    raw_table_timestamps = get_raw_data_unique_extraction_timestamps(raw_pages)
+    raw_table_timestamps = get_unique_extraction_timestamps(raw_pages)
+    curated_table_timestamps=get_curated_unique_extraction_timestamps(curated_pages)
 
-    curated_table_timestamps = set()
-    for item in curated_pages.search("Contents"):
-        # key = "curated_data/database_name=data_product/table_name=table"
-        #       + "/extraction_timestamp=timestamp/file.parquet"
-        if item["Size"] > 0:
-            data_product = search_string_for_regex(
-                string=item["Key"], regex=database_name_regex()
-            )
-
-            table = search_string_for_regex(
-                string=item["Key"], regex=table_name_regex()
-            )
-
-            extraction_timestamp = search_string_for_regex(
-                string=item["Key"], regex=extraction_timestamp_regex()
-            )
-
-            # Both sets need the same formatting to compare them
-            curated_table_timestamps.add(
-                f"{data_product}/{table}/{extraction_timestamp}"
-            )
-
+    # Find extraction timestamps in the raw area,
+    # and not in the curated area
     timestamps_to_resync = raw_table_timestamps - curated_table_timestamps
     raw_keys_to_resync = [
         item["Key"]
@@ -81,20 +59,23 @@ def handler(event, context):
     # If there are over 1000 files, the lambda will get jammed up
     aws_lambda = boto3.client("lambda")
     for key in raw_keys_to_resync:
-        payload = f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}}, "object":{{"key":"{key}"}}}}}}'
+        payload = f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}},\
+        "object":{{"key":"{key}"}}}}}}'
         aws_lambda.invoke(
             FunctionName=athena_load_lambda, InvocationType="Event", Payload=payload
         )
 
     logger.info(
-        f"data product {data_product_to_recreate} resynced with {len(raw_keys_to_resync)} files"
+        f"data product {data_product_to_recreate} resynced"
+        + "with {len(raw_keys_to_resync)} files"
     )
     logger.info(str(raw_keys_to_resync))
     logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
 
+# def get_unprocessed_data_files(raw_table_timestamps:list, ):
 
 def get_data_product_pages(
-    bucket, data_product_prefix, page_size, s3_client=s3, log_bucket=log_bucket
+    bucket, data_product_prefix, s3_client=s3, log_bucket=log_bucket
 ) -> PageIterator:
     paginator = s3_client.get_paginator("list_objects_v2")
     pages = paginator.paginate(Bucket=bucket, Prefix=data_product_prefix)
@@ -112,18 +93,38 @@ def get_data_product_pages(
     return pages
 
 
-def get_raw_data_unique_extraction_timestamps(raw_pages: PageIterator) -> set:
+def get_unique_extraction_timestamps(pages: PageIterator) -> set:
     """
     return the unique slugs of data product, table and extraction timestamp
     designed for use with boto3's pageiterator and list_object_v2
-    example key: `raw_data/data_product/table/extraction_timestamp=timestamp/file.csv`
+    example key: `key = "raw_data/data_product/table/extraction_timestamp=timestamp/file.csv`
     size > 0 because sometimes empty directories get listed in contents
     """
-    filtered_pages = raw_pages.search("Contents[?Size > `0`][]")
-    result_set = set(
-        "/".join(item["Key"].split("/")[1:-1]) for item in filtered_pages
-    )
+    filtered_pages = pages.search("Contents[?Size > `0`][]")
+    result_set = set("/".join(item["Key"].split("/")[1:-1]) for item in filtered_pages)
     return result_set
+
+def get_curated_unique_extraction_timestamps(curated_pages: PageIterator) -> set:
+    """
+    return the unique slugs of data product, table and extraction timestamp
+    designed for use with boto3's pageiterator and list_object_v2
+    example key: `key = "curated_data/database_name=data_product/table_name=table"
+    + "/extraction_timestamp=timestamp/file.parquet`
+    size > 0 because sometimes empty directories get listed in contents
+    """
+    curated_table_timestamps = set()
+    for item in curated_pages.search("Contents[?Size > `0`][]"):
+        data_product = search_string_for_regex(
+            string=item["Key"], regex=database_name_regex()
+        )
+        table = search_string_for_regex(string=item["Key"], regex=table_name_regex())
+        extraction_timestamp = search_string_for_regex(
+            string=item["Key"], regex=extraction_timestamp_regex()
+        )
+
+        # Both sets need the same formatting to compare them
+        curated_table_timestamps.add(f"{data_product}/{table}/{extraction_timestamp}")
+    return curated_table_timestamps
 
 
 def search_string_for_regex(string: str, regex: str) -> str:

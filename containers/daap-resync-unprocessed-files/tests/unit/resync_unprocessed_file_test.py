@@ -1,7 +1,7 @@
 import pytest
 from resync_unprocessed_files import (
     get_data_product_pages,
-    get_raw_data_unique_extraction_timestamps,
+    get_unique_extraction_timestamps,
 )
 
 # get_data_product_pages - There is test associated in different containers
@@ -45,19 +45,18 @@ def raw_data_bucket(s3_client, empty_raw_data_bucket, data_product):
     )
     return bucket_name
 
-
 def test_get_raw_data_unique_extraction_timestamps(
     s3_client, raw_data_bucket, data_product
 ):
-
     pages = get_data_product_pages(
-            bucket=raw_data_bucket,
-            page_size=1,
-            data_product_prefix=data_product.raw_data_prefix.key,
-            s3_client=s3_client,
-        )
-    raw_table_timestamp = get_raw_data_unique_extraction_timestamps(pages)
+        bucket=raw_data_bucket,
+        data_product_prefix=data_product.raw_data_prefix.key,
+        s3_client=s3_client,
+    )
+    raw_table_timestamp = get_unique_extraction_timestamps(pages)
     assert {i for i in raw_table_timestamp} == {
         "data_product/table_name/extraction_timestamp=timestamp1",
         "data_product/table_name/extraction_timestamp=timestamp2",
     }
+
+def test_get_raw_data_unique_extraction_timestamps(
