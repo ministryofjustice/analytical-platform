@@ -5,7 +5,7 @@ from io import BytesIO
 
 import pyarrow as pa
 from data_platform_paths import BucketPath
-from infer_glue_schema import infer_glue_schema, csv_sample
+from infer_glue_schema import infer_glue_schema, csv_sample, stringify_columns
 from pyarrow import parquet as pq
 import pytest
 
@@ -42,6 +42,31 @@ def test_csv_sample(test_input, expected, sample_size_in_bytes, logger):
     ).getvalue()
 
     assert output == expected
+
+
+def test_stringify_columns():
+    metadata_glue = {
+        "TableInput": {
+            "StorageDescriptor": {
+                "Columns": [
+                    {"Name": "Foo", "Type": "string"},
+                    {"Name": "Bar", "Type": "whatever"},
+                ]
+            }
+        }
+    }
+    metadata_glue_str = stringify_columns(metadata_glue)
+
+    assert metadata_glue_str == {
+        "TableInput": {
+            "StorageDescriptor": {
+                "Columns": [
+                    {"Name": "Foo", "Type": "string"},
+                    {"Name": "Bar", "Type": "string"},
+                ]
+            }
+        }
+    }
 
 
 def test_infer_schema_from_csv(s3_client, logger, data_product_element):

@@ -53,6 +53,22 @@ def csv_sample(
     return BytesIO(read_bytes)
 
 
+def stringify_columns(metadata_glue: dict) -> dict:
+    """
+    Create a copy of the glue metadata where all columns are string type
+    """
+    metadata_glue_str = copy.deepcopy(metadata_glue)
+
+    for i, _ in enumerate(
+        metadata_glue_str["TableInput"]["StorageDescriptor"]["Columns"]
+    ):
+        metadata_glue_str["TableInput"]["StorageDescriptor"]["Columns"][i][
+            "Type"
+        ] = "string"
+
+    return metadata_glue_str
+
+
 def infer_glue_schema(
     file_path: BucketPath,
     data_product_element: DataProductElement,
@@ -140,14 +156,6 @@ def infer_glue_schema(
             "SerializationLibrary"
         ] = "org.apache.hadoop.hive.serde2.OpenCSVSerde"
 
-    # want a schema version where all columns are string type
-    metadata_glue_str = copy.deepcopy(metadata_glue)
-
-    for i, _ in enumerate(
-        metadata_glue_str["TableInput"]["StorageDescriptor"]["Columns"]
-    ):
-        metadata_glue_str["TableInput"]["StorageDescriptor"]["Columns"][i][
-            "Type"
-        ] = "string"
+    metadata_glue_str = stringify_columns(metadata_glue)
 
     return metadata_glue, metadata_glue_str
