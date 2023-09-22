@@ -9,6 +9,7 @@ from data_platform_logging import DataPlatformLogger
 from data_platform_paths import BucketPath, DataProductElement
 from mojap_metadata.converters.arrow_converter import ArrowConverter
 from mojap_metadata.converters.glue_converter import GlueConverter
+from mojap_metadata.metadata.metadata import Metadata
 from pyarrow import csv as pa_csv
 from pyarrow import parquet as pq
 
@@ -53,7 +54,23 @@ def csv_sample(
     return BytesIO(read_bytes)
 
 
-def stringify_columns(metadata_glue: dict) -> dict:
+def _standardise_metadata(metadata_mojap: Metadata, table_name: str, file_type: str):
+    """
+    Standardise the inferred metadata by adding table name/file type and enforcing
+    naming conventions.
+    """
+    metadata_mojap.name = table_name
+    metadata_mojap.file_format = file_type
+    metadata_mojap.column_names_to_lower(inplace=True)
+
+    for col in metadata_mojap.columns:
+        if col["type"] == "null":
+            col["type"] = "string"
+        # no spaces or brackets are allowed in the column name
+        col["name"] = col["name"].replace(" ", "_").replace("(", "").replace(")", "")
+
+
+def _stringify_columns(metadata_glue: dict) -> dict:
     """
     Create a copy of the glue metadata where all columns are string type
     """
@@ -126,15 +143,9 @@ def infer_glue_schema(
     gc = GlueConverter()
     metadata_mojap = ac.generate_to_meta(arrow_schema=arrow_schema)
 
-    metadata_mojap.name = table.name
-    metadata_mojap.file_format = file_type
-    metadata_mojap.column_names_to_lower(inplace=True)
-
-    for col in metadata_mojap.columns:
-        if col["type"] == "null":
-            col["type"] = "string"
-        # no spaces or brackets are allowed in the column name
-        col["name"] = col["name"].replace(" ", "_").replace("(", "").replace(")", "")
+    _standardise_metadata(
+        metadata_mojap=metadata_mojap, table_name=table.name, file_type=file_type
+    )
 
     if table_type == "curated":
         metadata_mojap.columns.append(
@@ -156,6 +167,6 @@ def infer_glue_schema(
             "SerializationLibrary"
         ] = "org.apache.hadoop.hive.serde2.OpenCSVSerde"
 
-    metadata_glue_str = stringify_columns(metadata_glue)
+    metadata_glue_str = _stringify_columns(metadata_glue)
 
     return metadata_glue, metadata_glue_str
