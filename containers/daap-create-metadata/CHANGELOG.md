@@ -9,12 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.5] 2023-09-18
+
+### Changed
+
+- Added unit tests
+
+## [1.0.4] 2023-09-15
+
+### Changed
+
+- Use new version of base image logging module within `daap-create-metadata`
+
 ## [1.0.3]
 
 ### Changed
 
 - How the lambda handler gets the json metadata, passed to the API endpoint
-by the user, from the event arg.
+  by the user, from the event arg.
 
 ## [1.0.2]
 
@@ -25,7 +37,7 @@ by the user, from the event arg.
 ## [1.0.1]
 
 - No real change but need to comply with workflow to
-get image deployed
+  get image deployed
 
 ## [1.0.0]
 

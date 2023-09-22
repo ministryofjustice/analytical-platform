@@ -2,7 +2,7 @@
   "id": "kubernetes-tools",
   "version": "1.0.0",
   "name": "kubernetes-tools",
-  "description": "Kubernetes Tools - kubectl, helm, flux, kubent, MoJ Cloud Platform CLI",
+  "description": "Kubernetes Tools - kubectl, helm, flux, kubent, MoJ Cloud Platform CLI, Velero",
   "options": {
     "installKubectl": {
       "type": "boolean",
@@ -67,6 +67,17 @@
     "K9sVersion": {
       "type": "string",
       "description": "k9s version",
+      "proposals": ["latest"],
+      "default": "latest"
+    },
+    "installVelero": {
+      "type": "boolean",
+      "description": "Install Velero (https://github.com/vmware-tanzu/velero)",
+      "default": true
+    },
+    "veleroVersion": {
+      "type": "string",
+      "description": "Velero version",
       "proposals": ["latest"],
       "default": "latest"
     }

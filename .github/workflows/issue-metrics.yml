@@ -1,0 +1,46 @@
+---
+name: Monthly issue metrics
+
+on:
+  schedule:
+    - cron: "3 2 1 * *"
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  monthly-issue-metrics:
+    name: Monthly issue metrics
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: read
+    steps:
+      - name: Get dates for last month
+        id: get_last_months_dates
+        shell: bash
+        run: |
+          # Calculate the first day of the previous month
+          first_day=$(date -d "last month" +%Y-%m-01)
+
+          # Calculate the last day of the previous month
+          last_day=$(date -d "$first_day +1 month -1 day" +%Y-%m-%d)
+
+          #Set an environment variable with the date range
+          echo "$first_day..$last_day"
+          echo "last_month=$first_day..$last_day" >> "$GITHUB_ENV"
+
+      - name: Run GitHub Issue Metrics action
+        id: run_github_issue_metrics
+        uses: github/issue-metrics@66e9f5b342c761af097cc0355053ad1799b43daf # v2.9.0
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEARCH_QUERY: 'repo:ministryofjustice/data-platform is:issue created:${{ env.last_month }} -reason:"not planned"'
+
+      - name: Create issue
+        id: create_issue
+        uses: peter-evans/create-issue-from-file@433e51abf769039ee20ba1293a088ca19d573b7f # v4.0.1
+        with:
+          title: Monthly issue metrics report
+          token: ${{ secrets.GITHUB_TOKEN }}
+          content-filepath: ./issue_metrics.md

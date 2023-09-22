@@ -10,5 +10,6 @@ check "flux version" flux --version
 check "kubent version" kubent --version
 check "cloud-platform version" cloud-platform version
 check "k9s version" k9s version
+check "velero version" velero version --client-only
 
 reportResults

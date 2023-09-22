@@ -14,3 +14,4 @@ sbom-*
 **/plan.json
 .infracost
 __pycache__
+.github/path-filter/pytest.yml

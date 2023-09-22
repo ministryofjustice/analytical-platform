@@ -89,7 +89,7 @@ jobs:
       - name: Configure AWS Credentials
         if: needs.prepare-environment.outputs.registry == 'ecr'
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@50ac8dd1e1b10d09dac7b8727528b91bed831ac0 # v3.0.2
+        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
         with:
           aws-region: ${{ env.ecr_region }}
           role-to-assume: ${{ env.ecr_role }}
@@ -128,7 +128,7 @@ jobs:
             SHA not found for "${GITHUB_HEAD_REF}" branch, assuming CHANGELOG.md does not exist
             "changelog_updated=false" >>"${GITHUB_ENV}"
           elif [[ "${mainSha}" == "${branchSha}" ]]; then
-            echo "CHANGELOG.md matches main branch, neesd to be updated"
+            echo "CHANGELOG.md matches main branch, needs to be updated"
             echo "changelog_updated=false" >>"${GITHUB_ENV}"
           elif [[ "${mainSha}" != "${branchSha}" ]]; then
             echo "CHANGELOG.md does not match main branch, does not need to be updated"
@@ -172,7 +172,7 @@ jobs:
 
       - name: Build Image
         id: build_image
-        uses: docker/build-push-action@4e4ee680f69700760d5620a94c020aef883043aa # v4.2.0
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Dockerfile
@@ -209,14 +209,14 @@ jobs:
 
       - name: Login to Docker Hub
         id: docker_login
-        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2.2.0
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push
         id: build_and_push
-        uses: docker/build-push-action@4e4ee680f69700760d5620a94c020aef883043aa # v4.2.0
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Dockerfile
@@ -237,7 +237,7 @@ jobs:
 
       - name: Login to GitHub Container Registry
         id: login_ghcr
-        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2.2.0
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -245,7 +245,7 @@ jobs:
 
       - name: Build and Push
         id: build_and_push
-        uses: docker/build-push-action@4e4ee680f69700760d5620a94c020aef883043aa # v4.2.0
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Dockerfile
@@ -274,7 +274,7 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@50ac8dd1e1b10d09dac7b8727528b91bed831ac0 # v3.0.2
+        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
         with:
           aws-region: ${{ env.ecr_region }}
           role-to-assume: ${{ env.ecr_role }}
@@ -287,7 +287,7 @@ jobs:
 
       - name: Build and Push
         id: build_and_push
-        uses: docker/build-push-action@4e4ee680f69700760d5620a94c020aef883043aa # v4.2.0
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Dockerfile

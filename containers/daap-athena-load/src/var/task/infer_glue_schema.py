@@ -5,6 +5,7 @@ from typing import Tuple
 import boto3
 import s3fs
 from data_platform_logging import DataPlatformLogger
+from data_platform_paths import BucketPath, DataProductElement
 from mojap_metadata.converters.arrow_converter import ArrowConverter
 from mojap_metadata.converters.glue_converter import GlueConverter
 from pyarrow import csv as pa_csv
@@ -14,8 +15,8 @@ s3_client = boto3.client("s3")
 
 
 def infer_glue_schema(
-    file_key: str,
-    database_name: str,
+    file_path: BucketPath,
+    data_product_element: DataProductElement,
     logger: DataPlatformLogger,
     file_type: str = "csv",
     has_headers: bool = True,
@@ -26,11 +27,13 @@ def infer_glue_schema(
     function infers and returns glue schema for csv and parquet files.
     schema are inferred using arrow
     """
-
-    bucket, key = file_key.replace("s3://", "").split("/", 1)
-    table_name = key.split("/")[2].replace("table_name=", "")
-
-    raw_table_name = f"{table_name}_raw"
+    table = (
+        data_product_element.curated_data_table
+        if table_type == "curated"
+        else data_product_element.raw_data_table_unique()
+    )
+    bucket, key = file_path
+    file_key = file_path.uri
 
     if file_type == "csv":
         # can infer schema on a sample of data, here we stream a csv as a bytes object from s3
@@ -77,14 +80,12 @@ def infer_glue_schema(
             bytes_stream_final, convert_options=pa_csv.ConvertOptions(null_values=[])
         )
     elif file_type == "parquet" and table_type == "curated":
-        curated_prefix = file_key.replace("s3://" + bucket + "/", "")
-        key = s3_client.list_objects_v2(Bucket=bucket, Prefix=curated_prefix)[
-            "Contents"
-        ][0]["Key"]
+        # We have passed in a prefix, and need to pick a specific file
+        key = s3_client.list_objects_v2(Bucket=bucket, Prefix=key)["Contents"][0]["Key"]
+        file_path = os.path.join("s3://", bucket, key)
 
         s3 = s3fs.S3FileSystem()
 
-        file_path = os.path.join("s3://", bucket, key)
         arrow_table = pq.ParquetDataset(
             file_path, filesystem=s3, use_legacy_dataset=False
         )
@@ -94,7 +95,8 @@ def infer_glue_schema(
     ac = ArrowConverter()
     gc = GlueConverter()
     metadata_mojap = ac.generate_to_meta(arrow_schema=arrow_schema)
-    metadata_mojap.name = raw_table_name
+
+    metadata_mojap.name = table.name
     metadata_mojap.file_format = file_type
     metadata_mojap.column_names_to_lower(inplace=True)
 
@@ -105,11 +107,12 @@ def infer_glue_schema(
         col["name"] = col["name"].replace(" ", "_").replace("(", "").replace(")", "")
 
     if table_type == "curated":
-        metadata_mojap.name = table_name
         metadata_mojap.columns.append(
             {"name": "extraction_timestamp", "type": "string"}
         )
         metadata_mojap.partitions = ["extraction_timestamp"]
+
+    database_name = table.database
 
     metadata_glue = gc.generate_from_meta(
         metadata_mojap,

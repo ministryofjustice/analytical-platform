@@ -59,9 +59,9 @@ variable "dev_vpc_cidr_block" {
   description = "CIDR range for the VPC"
 }
 
-variable "dev_eks_role_arn" {
+variable "dev_eks_role_name" {
   type        = string
-  description = "ARN of role used by EKS cluster for Airflow-Dev"
+  description = "Name of cluster role for Airflow-Dev"
 }
 
 variable "dev_eks_cluster_name" {
@@ -79,7 +79,12 @@ variable "dev_cluster_additional_sg_name" {
   description = "Name of cluster additional security group for Airflow-Dev"
 }
 
-variable "dev_node_sg_id" {
+variable "dev_cluster_node_sg_id" {
+  type        = string
+  description = "ID of node security group for Airflow-Dev"
+}
+
+variable "dev_cluster_node_sg_name" {
   type        = string
   description = "ID of node security group for Airflow-Dev"
 }
@@ -103,9 +108,9 @@ variable "prod_vpc_cidr_block" {
   description = "CIDR range for the VPC"
 }
 
-variable "prod_eks_role_arn" {
+variable "prod_eks_role_name" {
   type        = string
-  description = "ARN of role used by EKS cluster for Airflow-Prod"
+  description = "Name of role used by EKS cluster for Airflow-Prod"
 }
 
 variable "prod_eks_cluster_name" {

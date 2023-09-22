@@ -1,0 +1,33 @@
+---
+name: Data Platform Epic
+description: 🗃️ Creates a Data Platform Epic
+title: "[gitmoji] <title>"
+labels: ["Epic"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill out the fields below.
+  - type: textarea
+    id: describe-epic
+    attributes:
+      label: Brief summary of what this Epic is
+      placeholder: "This Epic..."
+  - type: textarea
+    id: list-issues
+    attributes:
+      description: List issues in this epic, if you don't have any issues just create a checklist and these can be linked by their issue number later
+      label: List of issues in this epic
+      value: "- [ ]
+
+        - [ ]"
+    validations:
+      required: false
+  - type: textarea
+    id: other-info
+    attributes:
+      description: Any other useful information
+      label: Other information
+      placeholder: "Slack channel = #data-platform-epic-name"
+    validations:
+      required: false
