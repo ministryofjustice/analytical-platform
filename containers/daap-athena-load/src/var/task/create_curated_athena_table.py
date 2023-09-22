@@ -57,8 +57,7 @@ def create_curated_athena_table(
         table_metadata = glue_client.get_table(
             DatabaseName=database_name, Name=table_name
         )
-        if "table_metadata" in locals():
-            table_exists = True
+        table_exists = True
 
     except ClientError as e:
         curated_prefix = data_product_element.curated_data_prefix.key
