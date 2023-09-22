@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2023-09-22
+Moved some common functions from daap-resync-unprocessed-files Lambda to base
+
 ## [2.0.0] - 2023-09-15
 
 Many changes to `data_platform_paths` to separate out the concept of
