@@ -4,7 +4,27 @@ from botocore.exceptions import ClientError
 from create_raw_athena_table import create_glue_database
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import BucketPath, QueryTable
-from infer_glue_schema import infer_glue_schema
+from infer_glue_schema import GlueSchemaGenerator
+import os
+import s3fs
+from pyarrow import parquet as pq
+
+
+def _get_first_parquet_file(
+    curated_data_prefix: BucketPath, s3_client
+) -> pq.ParquetDataset:
+    """
+    Return a ParquetDataset from a specific file within the curated data prefix.
+    """
+    curated_bucket, curated_prefix = curated_data_prefix
+    key = s3_client.list_objects_v2(Bucket=curated_bucket, Prefix=curated_prefix)[
+        "Contents"
+    ][0]["Key"]
+    file_path = os.path.join("s3://", curated_bucket, key)
+
+    s3 = s3fs.S3FileSystem()
+
+    return pq.ParquetDataset(file_path, filesystem=s3, use_legacy_dataset=False)
 
 
 def create_curated_athena_table(
@@ -27,6 +47,8 @@ def create_curated_athena_table(
     table_name = data_product_element.curated_data_table.name
     curated_path = data_product_element.curated_data_prefix.uri
     bucket = data_product_element.raw_data_prefix.bucket
+
+    schema_generator = GlueSchemaGenerator(logger)
 
     table_exists = False
     create_glue_database(glue_client, database_name, logger, bucket)
@@ -99,12 +121,17 @@ def create_curated_athena_table(
 
     elif not table_exists and partition_file_exists:
         logger.info("partition data exists but glue table does not")
-        table_metadata, _ = infer_glue_schema(
-            data_product_element.curated_data_prefix,
-            data_product_element,
-            file_type="parquet",
-            table_type="curated",
-            logger=logger,
+
+        arrow_table = _get_first_parquet_file(
+            curated_data_prefix=data_product_element.curated_data_prefix,
+            s3_client=s3_client,
+        )
+
+        table_metadata, _ = schema_generator.generate_from_parquet_schema(
+            arrow_table=arrow_table,
+            table_name=data_product_element.curated_data_table.name,
+            database_name=data_product_element.curated_data_table.database,
+            table_location=data_product_element.curated_data_prefix.uri,
         )
 
         glue_client.create_table(**table_metadata)
@@ -125,13 +152,19 @@ def create_curated_athena_table(
             athena_client=athena_client,
         )
         logger.info(f"created files for partition using query id {qid}")
-        table_metadata, _ = infer_glue_schema(
-            data_product_element.curated_data_prefix,
-            data_product_element,
-            file_type="parquet",
-            table_type="curated",
-            logger=logger,
+
+        arrow_table = _get_first_parquet_file(
+            curated_data_prefix=data_product_element.curated_data_prefix,
+            s3_client=s3_client,
         )
+
+        table_metadata, _ = schema_generator.generate_from_parquet_schema(
+            arrow_table=arrow_table,
+            table_name=data_product_element.curated_data_table.name,
+            database_name=data_product_element.curated_data_table.database,
+            table_location=data_product_element.curated_data_prefix.uri,
+        )
+
         glue_client.create_table(**table_metadata)
         refresh_table_partitions(database_name, table_name, athena_client=athena_client)
 

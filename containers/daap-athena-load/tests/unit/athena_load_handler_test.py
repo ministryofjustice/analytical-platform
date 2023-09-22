@@ -19,15 +19,18 @@ def test_handler_does_not_error(
         "athena_load_handler.create_curated_athena_table",
         autospec=True,
     )
+
     mocker.patch("athena_load_handler.create_raw_athena_table", autospec=True)
     mock_infer_schema = mocker.patch(
-        "athena_load_handler.infer_glue_schema", autospec=True
+        "athena_load_handler.GlueSchemaGenerator", autospec=True
+    ).return_value
+
+    mock_infer_schema.infer_from_raw_csv.return_value = (
+        {"DatabaseName": "data_products_raw", "TableInput": {"Name": "temp"}},
+        {"DatabaseName": "data_products_raw", "TableInput": {"Name": "temp"}},
     )
 
-    mock_infer_schema.return_value = (
-        {"DatabaseName": "data_products_raw", "TableInput": {"Name": "temp"}},
-        {"DatabaseName": "data_products_raw", "TableInput": {"Name": "temp"}},
-    )
+    mocker.patch("athena_load_handler.RemoteDataFile", autospec=True)
 
     athena_load_handler.handler(
         {"detail": {"bucket": {"name": bucket_name}, "object": {"key": key}}},

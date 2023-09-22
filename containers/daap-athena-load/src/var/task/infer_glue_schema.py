@@ -102,7 +102,7 @@ class GlueSchemaGenerator:
         table_location: str,
         has_headers: bool = True,
         sample_size_mb: float = 1.5,
-    ):
+    ) -> Tuple[dict, dict]:
         """
         Generate schema metadata by inferring the schema of a sample of raw data (CSV)
         """
@@ -139,7 +139,7 @@ class GlueSchemaGenerator:
                 "SerializationLibrary"
             ] = "org.apache.hadoop.hive.serde2.OpenCSVSerde"
 
-        return metadata_glue
+        return metadata_glue, _stringify_columns(metadata_glue)
 
     def generate_from_parquet_schema(
         self,
@@ -147,7 +147,7 @@ class GlueSchemaGenerator:
         table_name: str,
         database_name: str,
         table_location: str,
-    ):
+    ) -> Tuple[dict, dict]:
         """
         Generate schema metadata based on a curated parquet file.
         """
@@ -163,11 +163,13 @@ class GlueSchemaGenerator:
         )
         metadata_mojap.partitions = ["extraction_timestamp"]
 
-        return GlueConverter().generate_from_meta(
+        metadata_glue = GlueConverter().generate_from_meta(
             metadata_mojap,
             database_name=database_name,
             table_location=table_location,
         )
+
+        return metadata_glue, _stringify_columns(metadata_glue)
 
 
 def infer_glue_schema(
@@ -186,7 +188,7 @@ def infer_glue_schema(
     bucket, key = file_path
     file_key = file_path.uri
 
-    inferer = GlueSchemaGenerator(logger)
+    schema_generator = GlueSchemaGenerator(logger)
 
     if (file_type, table_type) not in (("parquet", "curated"), ("csv", "raw")):
         raise NotImplementedError()
@@ -196,7 +198,7 @@ def infer_glue_schema(
         obj = boto3.resource("s3").Object(bucket, key)
         bytes_stream = obj.get()["Body"]
 
-        metadata_glue = inferer.infer_from_raw_csv(
+        return schema_generator.infer_from_raw_csv(
             bytes_stream=bytes_stream,
             has_headers=has_headers,
             sample_size_mb=sample_size_mb,
@@ -204,10 +206,8 @@ def infer_glue_schema(
             database_name=database,
             table_location=os.path.dirname(file_key),
         )
-        metadata_glue_str = _stringify_columns(metadata_glue)
-        return metadata_glue, metadata_glue_str
 
-    if file_type == "parquet":
+    else:
         # We have passed in a prefix, and need to pick a specific file
         key = s3_client.list_objects_v2(Bucket=bucket, Prefix=key)["Contents"][0]["Key"]
         file_path = os.path.join("s3://", bucket, key)
@@ -219,11 +219,9 @@ def infer_glue_schema(
         )
 
         database_name, table_name = data_product_element.curated_data_table
-        metadata_glue = inferer.generate_from_parquet_schema(
+        return schema_generator.generate_from_parquet_schema(
             arrow_table=arrow_table,
             table_name=table_name,
             database_name=database_name,
             table_location=os.path.dirname(file_key),
         )
-        metadata_glue_str = _stringify_columns(metadata_glue)
-        return metadata_glue, metadata_glue_str

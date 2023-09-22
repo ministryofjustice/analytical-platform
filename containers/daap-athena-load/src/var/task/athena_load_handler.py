@@ -1,15 +1,25 @@
 import os
+from typing import BinaryIO
 
 import boto3
 from create_curated_athena_table import create_curated_athena_table
 from create_raw_athena_table import create_raw_athena_table
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import QueryTable, RawDataExtraction
-from infer_glue_schema import infer_glue_schema
+from data_platform_paths import BucketPath, QueryTable, RawDataExtraction
+from infer_glue_schema import GlueSchemaGenerator
 
 athena_client = boto3.client("athena")
 s3_client = boto3.client("s3")
 glue_client = boto3.client("glue")
+
+
+class RemoteDataFile:
+    def __init__(self, path: BucketPath):
+        self.path = path
+
+    def bytes_stream(self) -> BinaryIO:
+        obj = boto3.resource("s3").Object(*self.path)
+        return obj.get()["Body"]
 
 
 def handler(
@@ -37,8 +47,14 @@ def handler(
 
     logger.info(f"file is: {full_s3_path}")
 
-    metadata_types, metadata_str = infer_glue_schema(
-        extraction.path, data_product_element, logger=logger
+    database_name, table_name = data_product_element.raw_data_table_unique()
+    bytes_stream = RemoteDataFile(extraction.path)
+
+    metadata_types, metadata_str = GlueSchemaGenerator(logger).infer_from_raw_csv(
+        bytes_stream=bytes_stream,
+        table_name=table_name,
+        database_name=database_name,
+        table_location=extraction.path.parent,
     )
 
     temp_table_name = metadata_types["TableInput"]["Name"]
