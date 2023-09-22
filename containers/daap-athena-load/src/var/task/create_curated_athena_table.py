@@ -3,14 +3,14 @@ import time
 from botocore.exceptions import ClientError
 from create_raw_athena_table import create_glue_database
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import BucketPath, QueryTable
+from data_platform_paths import BucketPath, QueryTable, DataProductElement
 from infer_glue_schema import GlueSchemaGenerator
 import os
 import s3fs
 from pyarrow import parquet as pq
 
 
-def _get_first_parquet_file(
+def get_first_parquet_file(
     curated_data_prefix: BucketPath, s3_client
 ) -> pq.ParquetDataset:
     """
@@ -27,9 +27,7 @@ def _get_first_parquet_file(
     return pq.ParquetDataset(file_path, filesystem=s3, use_legacy_dataset=False)
 
 
-def _get_table_metadata(
-    glue_client, table_name: str, database_name: str
-) -> dict | None:
+def get_table_metadata(glue_client, table_name: str, database_name: str) -> dict | None:
     """
     Return the table metadata, or None if it doesn't exist
     """
@@ -41,6 +39,157 @@ def _get_table_metadata(
             return None
 
         raise
+
+
+def any_existing_files(s3_client, bucket: str, curated_prefix: str):
+    return bool(
+        s3_client.list_objects_v2(Bucket=bucket, Prefix=curated_prefix)["KeyCount"]
+    )
+
+
+class CuratedDataLoader:
+    def __init__(
+        self,
+        logger: DataPlatformLogger,
+        athena_client,
+        glue_client,
+        data_product_element: DataProductElement,
+    ):
+        self.logger = logger
+        self.athena_client = athena_client
+        self.glue_client = glue_client
+        self.schema_generator = GlueSchemaGenerator(logger)
+        self.data_product_element = data_product_element
+
+    def create_new_table(
+        self,
+        raw_data_table: QueryTable,
+        extraction_timestamp: str,
+        metadata: dict,
+    ):
+        """
+        Create a new table for a brand new data product
+        """
+        database_name, table_name = self.data_product_element.curated_data_table
+        curated_path = self.data_product_element.curated_data_prefix.uri
+
+        qid = start_query_execution_and_wait(
+            database_name,
+            sql_create_table_partition(
+                self.data_product_element.curated_data_table,
+                raw_data_table,
+                curated_path,
+                extraction_timestamp,
+                metadata,
+            ),
+            logger=self.logger,
+            athena_client=self.athena_client,
+        )
+        self.logger.info(f"Created {database_name}.{table_name}, using query id {qid}")
+
+    def unload_new_data(
+        self,
+        raw_data_table: QueryTable,
+        extraction_timestamp: str,
+        metadata: dict,
+    ):
+        """
+        Unload new data for the given extraction_timestamp.
+        """
+        database_name, table_name = self.data_product_element.curated_data_table
+        curated_path = self.data_product_element.curated_data_prefix.uri
+
+        # unload query to make partitioned data
+        qid = start_query_execution_and_wait(
+            raw_data_table.database,
+            sql_unload_table_partition(
+                extraction_timestamp,
+                raw_data_table,
+                curated_path,
+                metadata,
+            ),
+            logger=self.logger,
+            athena_client=self.athena_client,
+        )
+
+        self.logger.info(
+            "Updated table {0}.{1}, using query id {2}".format(
+                database_name, table_name, qid
+            )
+        )
+        refresh_table_partitions(
+            database_name, table_name, athena_client=self.athena_client
+        )
+
+    def unload_new_data_and_create_table(
+        self,
+        raw_data_table: QueryTable,
+        extraction_timestamp: str,
+        metadata: dict,
+    ):
+        """
+        Unload data for the given extraction_timestamp, and recreate
+        missing glue metadata for the table.
+        """
+        database_name, table_name = self.data_product_element.curated_data_table
+        curated_path = self.data_product_element.curated_data_prefix.uri
+
+        # unload query to make partitioned data
+        qid = start_query_execution_and_wait(
+            raw_data_table.database,
+            sql_unload_table_partition(
+                extraction_timestamp,
+                raw_data_table,
+                curated_path,
+                metadata,
+            ),
+            logger=self.logger,
+            athena_client=self.athena_client,
+        )
+        self.logger.info(f"created files for partition using query id {qid}")
+
+        arrow_table = get_first_parquet_file(
+            curated_data_prefix=self.data_product_element.curated_data_prefix,
+            s3_client=self.s3_client,
+        )
+
+        table_metadata, _ = self.schema_generator.generate_from_parquet_schema(
+            arrow_table=arrow_table,
+            table_name=self.data_product_element.curated_data_table.name,
+            database_name=self.data_product_element.curated_data_table.database,
+            table_location=self.data_product_element.curated_data_prefix.uri,
+        )
+
+        self.glue_client.create_table(**table_metadata)
+        refresh_table_partitions(
+            database_name, table_name, athena_client=self.athena_client
+        )
+
+    def recreate_table(
+        self,
+        data_product_element: DataProductElement,
+    ):
+        """
+        Recreate the table in glue, given that the partitions already exist.
+        """
+        arrow_table = get_first_parquet_file(
+            curated_data_prefix=data_product_element.curated_data_prefix,
+            s3_client=self.s3_client,
+        )
+
+        database_name, table_name = data_product_element.curated_data_table
+
+        table_metadata, _ = self.schema_generator.generate_from_parquet_schema(
+            arrow_table=arrow_table,
+            table_name=table_name,
+            database_name=database_name,
+            table_location=data_product_element.curated_data_prefix.uri,
+        )
+
+        self.glue_client.create_table(**table_metadata)
+        refresh_table_partitions(
+            database_name, table_name, athena_client=self.athena_client
+        )
 
 
 def create_curated_athena_table(
@@ -59,44 +208,13 @@ def create_curated_athena_table(
     Loads data as a string into the raw athena table, then casts
     it to it's inferred type in the curated table with a timestamp.
     """
-    database_name = data_product_element.curated_data_table.database
-    table_name = data_product_element.curated_data_table.name
-    curated_path = data_product_element.curated_data_prefix.uri
-    bucket = data_product_element.raw_data_prefix.bucket
+    database_name, table_name = data_product_element.curated_data_table
 
-    schema_generator = GlueSchemaGenerator(logger)
+    create_glue_database(glue_client, database_name, logger)
 
-    create_glue_database(glue_client, database_name, logger, bucket)
-
-    table_metadata = _get_table_metadata(
+    table_metadata = get_table_metadata(
         glue_client=glue_client, database_name=database_name, table_name=table_name
     )
-
-    if table_metadata is None:
-        curated_prefix = data_product_element.curated_data_prefix.key
-        existing_files = s3_client.list_objects_v2(
-            Bucket=bucket, Prefix=curated_prefix
-        )["KeyCount"]
-        if existing_files == 0:
-            # only want to run this query if no table or data exist in s3
-            qid = start_query_execution_and_wait(
-                database_name,
-                bucket,
-                sql_create_table_partition(
-                    data_product_element.curated_data_table,
-                    raw_data_table,
-                    curated_path,
-                    extraction_timestamp,
-                    metadata,
-                ),
-                logger=logger,
-                athena_client=athena_client,
-            )
-            logger.info(
-                f"This is a new data product. Created {database_name}.{table_name}, using query id {qid}"
-            )
-
-            return
 
     partition_file_exists = does_partition_file_exist(
         data_product_element.curated_data_prefix,
@@ -105,87 +223,54 @@ def create_curated_athena_table(
         s3_client=s3_client,
     )
 
-    if table_metadata and not partition_file_exists:
-        logger.info("table does already exist but partition for timestamp does not")
-        # unload query to make partitioned data
-        qid = start_query_execution_and_wait(
-            raw_data_table.database,
-            bucket,
-            sql_unload_table_partition(
-                extraction_timestamp,
-                raw_data_table,
-                curated_path,
-                metadata,
-            ),
-            logger=logger,
-            athena_client=athena_client,
-        )
+    any_files_exist = any_existing_files(
+        s3_client=s3_client,
+        bucket=data_product_element.curated_data_prefix.bucket,
+        curated_prefix=data_product_element.curated_data_prefix.key,
+    )
 
-        logger.info(
-            "Updated table {0}.{1}, using query id {2}".format(
-                database_name, table_name, qid
-            )
-        )
-        refresh_table_partitions(database_name, table_name, athena_client=athena_client)
+    curated_data_loader = CuratedDataLoader(
+        logger=logger,
+        athena_client=athena_client,
+        glue_client=glue_client,
+        data_product_element=data_product_element,
+    )
 
-    elif not table_metadata and partition_file_exists:
-        logger.info("partition data exists but glue table does not")
-
-        arrow_table = _get_first_parquet_file(
-            curated_data_prefix=data_product_element.curated_data_prefix,
-            s3_client=s3_client,
-        )
-
-        table_metadata, _ = schema_generator.generate_from_parquet_schema(
-            arrow_table=arrow_table,
-            table_name=data_product_element.curated_data_table.name,
-            database_name=data_product_element.curated_data_table.database,
-            table_location=data_product_element.curated_data_prefix.uri,
-        )
-
-        glue_client.create_table(**table_metadata)
-        refresh_table_partitions(database_name, table_name, athena_client=athena_client)
-    elif not table_metadata and not partition_file_exists:
-        logger.info("table and partition do not exist but other curated data do")
-        # unload query to make partitioned data
-        qid = start_query_execution_and_wait(
-            raw_data_table.database,
-            bucket,
-            sql_unload_table_partition(
-                extraction_timestamp,
-                raw_data_table,
-                curated_path,
-                metadata,
-            ),
-            logger=logger,
-            athena_client=athena_client,
-        )
-        logger.info(f"created files for partition using query id {qid}")
-
-        arrow_table = _get_first_parquet_file(
-            curated_data_prefix=data_product_element.curated_data_prefix,
-            s3_client=s3_client,
-        )
-
-        table_metadata, _ = schema_generator.generate_from_parquet_schema(
-            arrow_table=arrow_table,
-            table_name=data_product_element.curated_data_table.name,
-            database_name=data_product_element.curated_data_table.database,
-            table_location=data_product_element.curated_data_prefix.uri,
-        )
-
-        glue_client.create_table(**table_metadata)
-        refresh_table_partitions(database_name, table_name, athena_client=athena_client)
-
-    else:
+    if table_metadata and partition_file_exists:
         logger.info(
             "partition for extraction_timestamp and table already exists so nothing more to be done."
+        )
+    elif table_metadata:
+        logger.info("table does already exist but partition for timestamp does not")
+
+        curated_data_loader.unload_new_data(
+            raw_data_table=raw_data_table,
+            extraction_timestamp=extraction_timestamp,
+            metadata=metadata,
+        )
+    elif partition_file_exists:
+        logger.info("partition data exists but glue table does not")
+        curated_data_loader.recreate_table()
+    elif any_files_exist:
+        logger.info("table and partition do not exist but other curated data do")
+
+        curated_data_loader.unload_new_data_and_recreate_table(
+            raw_data_table=raw_data_table,
+            extraction_timestamp=extraction_timestamp,
+            metadata=metadata,
+        )
+    else:
+        logger.info("This is a new data product.")
+
+        curated_data_loader.create_new_table(
+            raw_data_table=raw_data_table,
+            extraction_timestamp=extraction_timestamp,
+            metadata=metadata,
         )
 
 
 def start_query_execution_and_wait(
     database_name: str,
-    data_bucket: str,
     sql: str,
     logger: DataPlatformLogger,
     athena_client,

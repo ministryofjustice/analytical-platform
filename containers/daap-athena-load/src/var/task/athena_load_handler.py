@@ -67,7 +67,6 @@ def handler(
         metadata_glue=metadata_str,
         logger=logger,
         glue_client=glue_client,
-        bucket=extraction.path.bucket,
     )
 
     # Load the raw string data into the raw tables

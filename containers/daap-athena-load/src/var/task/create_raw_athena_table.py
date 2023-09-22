@@ -3,17 +3,14 @@ from data_platform_logging import DataPlatformLogger
 
 
 def create_raw_athena_table(
-    metadata_glue: dict,
-    logger: DataPlatformLogger,
-    glue_client,
-    bucket,
+    metadata_glue: dict, logger: DataPlatformLogger, glue_client
 ) -> None:
     """
     Creates an empty athena table from the raw file pushed by
     a data producer for raw data.
     """
     database_name = metadata_glue["DatabaseName"]
-    create_glue_database(glue_client, database_name, logger, bucket)
+    create_glue_database(glue_client, database_name, logger)
 
     # Create raw data table, recreating it if necessary
     table_name = metadata_glue["TableInput"]["Name"]
@@ -25,7 +22,7 @@ def create_raw_athena_table(
     logger.info(f"created table {database_name}.{table_name}")
 
 
-def create_glue_database(glue_client, database_name, logger, bucket):
+def create_glue_database(glue_client, database_name, logger):
     """If a glue database doesn't exist, create a glue database"""
     try:
         glue_client.get_database(Name=database_name)
