@@ -121,16 +121,16 @@ def search_string_for_regex(string: str, regex: str) -> str:
 
 
 def extract_table_name_from_curated_path(string: str):
-    return search_string_for_regex(string=str, regex=TABLE_NAME)
+    return search_string_for_regex(string, regex=TABLE_NAME)
 
 
 def extract_database_name_from_curated_path(string: str):
-    return search_string_for_regex(string=str, regex=DATABASE_NAME)
+    return search_string_for_regex(string, regex=DATABASE_NAME)
 
 
 def extract_timestamp_from_curated_path(string: str):
     return "extraction_timestamp=" + search_string_for_regex(
-        string=str, regex=EXTRACTION_TIMESTAMP_REGEX
+        string, regex=EXTRACTION_TIMESTAMP_REGEX
     )
 
 
