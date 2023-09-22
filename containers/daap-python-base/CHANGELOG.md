@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.1] - 2023-09-22
 
-Moved some common functions from daap-resync-unprocessed-files container to base container
+Moved common functions from daap-resync-unprocessed-files
+container to base container
 
 ### Added
 `extract_table_name_from_curated_path`
