@@ -86,6 +86,90 @@ def _stringify_columns(metadata_glue: dict) -> dict:
     return metadata_glue_str
 
 
+class GlueSchemaGenerator:
+    """
+    Generate the glue schema from a data file
+    """
+
+    def __init__(self, logger: DataPlatformLogger):
+        self.logger = logger
+
+    def infer_from_raw_csv(
+        self,
+        bytes_stream: BinaryIO,
+        table_name: str,
+        database_name: str,
+        table_location: str,
+        has_headers: bool = True,
+        sample_size_mb: float = 1.5,
+    ):
+        """
+        Generate schema metadata by inferring the schema of a sample of raw data (CSV)
+        """
+        bytes_stream_final = csv_sample(
+            bytes_stream=bytes_stream,
+            sample_size_in_bytes=int(sample_size_mb * 1_000_000),
+            logger=self.logger,
+        )
+
+        # null_values has been set to an empty list as "N/A" was being read as null (in a numeric column), with
+        # type inferred as int but "N/A" persiting in the csv and so failing to be cast as an int.
+        # Empty list means nothing inferred as null other than null.
+        arrow_table = pa_csv.read_csv(
+            bytes_stream_final, convert_options=pa_csv.ConvertOptions(null_values=[])
+        )
+
+        ac = ArrowConverter()
+        metadata_mojap = ac.generate_to_meta(arrow_schema=arrow_table.schema)
+
+        _standardise_metadata(
+            metadata_mojap=metadata_mojap, table_name=table_name, file_type="csv"
+        )
+
+        gc = GlueConverter()
+        metadata_glue = gc.generate_from_meta(
+            metadata_mojap,
+            database_name=database_name,
+            table_location=table_location,
+        )
+
+        if has_headers:
+            metadata_glue["TableInput"]["Parameters"]["skip.header.line.count"] = "1"
+            metadata_glue["TableInput"]["StorageDescriptor"]["SerdeInfo"][
+                "SerializationLibrary"
+            ] = "org.apache.hadoop.hive.serde2.OpenCSVSerde"
+
+        return metadata_glue
+
+    def generate_from_parquet_schema(
+        self,
+        arrow_table: pq.ParquetDataset,
+        table_name: str,
+        database_name: str,
+        table_location: str,
+    ):
+        """
+        Generate schema metadata based on a curated parquet file.
+        """
+        ac = ArrowConverter()
+        metadata_mojap = ac.generate_to_meta(arrow_schema=arrow_table.schema)
+
+        _standardise_metadata(
+            metadata_mojap=metadata_mojap, table_name=table_name, file_type="parquet"
+        )
+
+        metadata_mojap.columns.append(
+            {"name": "extraction_timestamp", "type": "string"}
+        )
+        metadata_mojap.partitions = ["extraction_timestamp"]
+
+        return GlueConverter().generate_from_meta(
+            metadata_mojap,
+            database_name=database_name,
+            table_location=table_location,
+        )
+
+
 def infer_glue_schema(
     file_path: BucketPath,
     data_product_element: DataProductElement,
@@ -99,34 +183,31 @@ def infer_glue_schema(
     function infers and returns glue schema for csv and parquet files.
     schema are inferred using arrow
     """
-    table = (
-        data_product_element.curated_data_table
-        if table_type == "curated"
-        else data_product_element.raw_data_table_unique()
-    )
     bucket, key = file_path
     file_key = file_path.uri
 
+    inferer = GlueSchemaGenerator(logger)
+
+    if (file_type, table_type) not in (("parquet", "curated"), ("csv", "raw")):
+        raise NotImplementedError()
+
     if file_type == "csv":
-        # can infer schema on a sample of data, here we stream a csv as a bytes object from s3
-        # at the max size and then iterate over small chunk sizes to find a full line after
-        # the max sample size, which we can then read into pyarrow and infer schema.
+        database, table_name = data_product_element.raw_data_table_unique()
         obj = boto3.resource("s3").Object(bucket, key)
         bytes_stream = obj.get()["Body"]
 
-        bytes_stream_final = csv_sample(
+        metadata_glue = inferer.infer_from_raw_csv(
             bytes_stream=bytes_stream,
-            sample_size_in_bytes=int(sample_size_mb * 1_000_000),
-            logger=logger,
+            has_headers=has_headers,
+            sample_size_mb=sample_size_mb,
+            table_name=table_name,
+            database_name=database,
+            table_location=os.path.dirname(file_key),
         )
+        metadata_glue_str = _stringify_columns(metadata_glue)
+        return metadata_glue, metadata_glue_str
 
-        # null_values has been set to an empty list as "N/A" was being read as null (in a numeric column), with
-        # type inferred as int but "N/A" persiting in the csv and so failing to be cast as an int.
-        # Empty list means nothing inferred as null other than null.
-        arrow_table = pa_csv.read_csv(
-            bytes_stream_final, convert_options=pa_csv.ConvertOptions(null_values=[])
-        )
-    elif file_type == "parquet" and table_type == "curated":
+    if file_type == "parquet":
         # We have passed in a prefix, and need to pick a specific file
         key = s3_client.list_objects_v2(Bucket=bucket, Prefix=key)["Contents"][0]["Key"]
         file_path = os.path.join("s3://", bucket, key)
@@ -137,36 +218,12 @@ def infer_glue_schema(
             file_path, filesystem=s3, use_legacy_dataset=False
         )
 
-    arrow_schema = arrow_table.schema
-
-    ac = ArrowConverter()
-    gc = GlueConverter()
-    metadata_mojap = ac.generate_to_meta(arrow_schema=arrow_schema)
-
-    _standardise_metadata(
-        metadata_mojap=metadata_mojap, table_name=table.name, file_type=file_type
-    )
-
-    if table_type == "curated":
-        metadata_mojap.columns.append(
-            {"name": "extraction_timestamp", "type": "string"}
+        database_name, table_name = data_product_element.curated_data_table
+        metadata_glue = inferer.generate_from_parquet_schema(
+            arrow_table=arrow_table,
+            table_name=table_name,
+            database_name=database_name,
+            table_location=os.path.dirname(file_key),
         )
-        metadata_mojap.partitions = ["extraction_timestamp"]
-
-    database_name = table.database
-
-    metadata_glue = gc.generate_from_meta(
-        metadata_mojap,
-        database_name=database_name,
-        table_location=os.path.dirname(file_key),
-    )
-
-    if file_type == "csv" and has_headers:
-        metadata_glue["TableInput"]["Parameters"]["skip.header.line.count"] = "1"
-        metadata_glue["TableInput"]["StorageDescriptor"]["SerdeInfo"][
-            "SerializationLibrary"
-        ] = "org.apache.hadoop.hive.serde2.OpenCSVSerde"
-
-    metadata_glue_str = _stringify_columns(metadata_glue)
-
-    return metadata_glue, metadata_glue_str
+        metadata_glue_str = _stringify_columns(metadata_glue)
+        return metadata_glue, metadata_glue_str
