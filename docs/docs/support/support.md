@@ -27,8 +27,8 @@ To submit a support ticket you need a GitHub account.
 
 If you cannot access GitHub, use the following channels in the **Justice Digital** Slack workspace to ask for help:
 
- - **#analytical-platform-support**
- - **#ask-data-platform**
+- **#analytical-platform-support**
+- **#ask-data-platform**
 
 We will review your request and prioritise it accordingly.
 

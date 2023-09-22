@@ -18,11 +18,11 @@ example:
   - url: ../../tech-docs/diagrams/architecture-diagrams
     data:
       title: Diagrams
-      description: Visual representations of the Data Platform's architecture
+      description: Visual descriptions of the Data Platform's architecture
   - url: ../../tech-docs/infrastructure
     data:
       title: Infrastructure
       description: Descriptions of the Data Platform's infrastructure
 ---
 
-# Index
+## Index

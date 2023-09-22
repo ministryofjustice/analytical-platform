@@ -13,11 +13,9 @@ pagination:
   size: 10
 ---
 
-# Architecture Decision Records
+The Data Platform team use Architectural Decision Records (ADRs) to document our architecture choices while developing the Data Platform.
 
-This is a record of architectural decisions made by the Data Platform Team
-
-To understand how and why we record decisions, see [ADR-000](/documentation/adrs/adr-000-record-architecture-decisions.html)
+To learn more about how and why we use ADRs, see [ADR-000](/documentation/adrs/adr-000-record-architecture-decisions.html).
 
 **Statuses:**
 

@@ -13,8 +13,6 @@ The Data Platform is a data analysis platform currently in development at the Mi
 
 It will either integrate or replace the functionality of the [Analytical Platform](https://user-guidance.analytical-platform.service.justice.gov.uk/). We would find a suitable place for Analytical Platform users to migrate before making this decision.
 
-
-
 ## Reasons and benefits
 
 We are developing the Data Platform because the Analytical Platform caters to Data Analysts but does not scale to the needs of people who work with data in other ways.
@@ -22,8 +20,8 @@ We are developing the Data Platform because the Analytical Platform caters to Da
 Other reasons for developing the Data Platform are to:
 
 - meet the needs of Data Producers and Data Users – internal or external – to provide new ways of working with the Ministry of Justice's data:
-    - **Data Producers** includes Digital Product Owners, Service Owners and System Owners
-    - **Data Users** may perform any of: data analysis, data modelling, data science, management information (MI) reporting, performance reporting, statistics publication
+  - **Data Producers** includes Digital Product Owners, Service Owners and System Owners
+  - **Data Users** may perform any of: data analysis, data modelling, data science, management information (MI) reporting, performance reporting, statistics publication
 - make it easier to find, access and utilise data than is currently possible, to improve the cost and pace at which project teams can deliver while reducing data siloes
 - replace legacy technology that is costly
 - offer a single source of truth for entities that influence decisions across government, to ensure consistency, accuracy and traceability of our data
