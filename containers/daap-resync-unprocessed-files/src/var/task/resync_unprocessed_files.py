@@ -94,16 +94,16 @@ def handler(event, context):
 
 
 def get_data_product_pages(
-    bucket, data_product_prefix, s3_client=s3, log_bucket=log_bucket
+    bucket, data_product_prefix, page_size, s3_client=s3, log_bucket=log_bucket
 ) -> PageIterator:
     paginator = s3_client.get_paginator("list_objects_v2")
-    pages = paginator.paginate(
-        Bucket=bucket, Prefix=data_product_prefix, PaginationConfig={"MaxItems": 1}
-    )
-
+    pages = paginator.paginate(Bucket=bucket, Prefix=data_product_prefix)
+    print(len(list(pages)))
     # An empty page in the paginator only happens when no files exist
     for page in pages:
-        print(page["Contents"])
+        # print(page["Contents"])
+        print("-----------------------")
+
         if page["KeyCount"] == 0:
             error_text = f"No data product found for {data_product_prefix}"
             logger.error(error_text)
@@ -112,21 +112,16 @@ def get_data_product_pages(
     return pages
 
 
-def get_raw_data_unique_extraction_timestamps(raw_page: PageIterator) -> set:
+def get_raw_data_unique_extraction_timestamps(raw_pages: PageIterator) -> set:
     """
     return the unique slugs of data product, table and extraction timestamp
     designed for use with boto3's pageiterator and list_object_v2
     example key: `raw_data/data_product/table/extraction_timestamp=timestamp/file.csv`
     size > 0 because sometimes empty directories get listed in contents
     """
-    result_set = (
-        set(
-            "/".join(item["Key"].split("/")[1:-1])
-            for item in raw_page["Contents"]
-            if item["Size"] > 0
-        )
-        if "Contents" in raw_page
-        else set()
+    filtered_pages = raw_pages.search("Contents[?Size > `0`][]")
+    result_set = set(
+        "/".join(item["Key"].split("/")[1:-1]) for item in filtered_pages
     )
     return result_set
 
