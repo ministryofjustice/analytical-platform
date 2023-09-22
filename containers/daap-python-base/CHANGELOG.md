@@ -15,6 +15,7 @@ Moved common functions from daap-resync-unprocessed-files
 container to base container
 
 ### Added
+
 `extract_table_name_from_curated_path`
 `extract_database_name_from_curated_path`
 `extract_timestamp_from_curated_path`  functions
