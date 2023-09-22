@@ -26,6 +26,7 @@ def handler(event, context):
     data_product_to_recreate = event.get("data_product", "")
     raw_prefix = f"raw_data/{data_product_to_recreate}"
     curated_prefix = f"curated_data/database_name={data_product_to_recreate}"
+
     logger.info(f"Raw prefix: {raw_prefix}")
     logger.info(f"Curated prefix: {curated_prefix}")
     logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
@@ -96,9 +97,13 @@ def get_data_product_pages(
     bucket, data_product_prefix, s3_client=s3, log_bucket=log_bucket
 ) -> PageIterator:
     paginator = s3_client.get_paginator("list_objects_v2")
-    pages = paginator.paginate(Bucket=bucket, Prefix=data_product_prefix)
+    pages = paginator.paginate(
+        Bucket=bucket, Prefix=data_product_prefix, PaginationConfig={"MaxItems": 1}
+    )
+
     # An empty page in the paginator only happens when no files exist
     for page in pages:
+        print(page["Contents"])
         if page["KeyCount"] == 0:
             error_text = f"No data product found for {data_product_prefix}"
             logger.error(error_text)
@@ -107,18 +112,23 @@ def get_data_product_pages(
     return pages
 
 
-def get_raw_data_unique_extraction_timestamps(raw_pages: PageIterator) -> set:
+def get_raw_data_unique_extraction_timestamps(raw_page: PageIterator) -> set:
     """
     return the unique slugs of data product, table and extraction timestamp
     designed for use with boto3's pageiterator and list_object_v2
     example key: `raw_data/data_product/table/extraction_timestamp=timestamp/file.csv`
     size > 0 because sometimes empty directories get listed in contents
     """
-    return set(
-        "/".join(item["Key"].split("/")[1:-1])
-        for item in raw_pages.search("Contents")
-        if item["Size"] > 0
+    result_set = (
+        set(
+            "/".join(item["Key"].split("/")[1:-1])
+            for item in raw_page["Contents"]
+            if item["Size"] > 0
+        )
+        if "Contents" in raw_page
+        else set()
     )
+    return result_set
 
 
 def search_string_for_regex(string: str, regex: str) -> str:
