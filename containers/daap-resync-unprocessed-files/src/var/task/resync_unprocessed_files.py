@@ -155,23 +155,3 @@ def get_resync_keys(
     ]
     return raw_keys_to_resync
 
-
-def search_string_for_regex(string: str, regex: str) -> str:
-    """Search a string for a regex pattern and return the first result"""
-    database_name_search = re.search(regex, string)
-    if database_name_search:
-        return database_name_search.groups()[0]
-    else:
-        print(ValueError(f"{regex} not found in {string}"))
-
-
-def database_name_regex() -> str:
-    return """database_name=([^\/]*)\/"""  # noqa: W605
-
-
-def table_name_regex() -> str:
-    return """table_name=([^\/]*)\/"""  # noqa: W605
-
-
-def extraction_timestamp_regex() -> str:
-    return """(extraction_timestamp=[^\/]*)\/"""  # noqa: W605
