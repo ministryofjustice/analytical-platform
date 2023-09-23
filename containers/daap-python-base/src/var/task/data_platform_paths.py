@@ -27,10 +27,10 @@ EXTRACTION_TIMESTAMP_FORMAT = "%Y%m%dT%H%M%SZ"
 EXTRACTION_TIMESTAMP_REGEX = re.compile(
     r"^(.*)/(extraction_timestamp=)([0-9TZ]{1,16})/(.*)$"
 )
-DATABASE_NAME = re.compile(r"database_name=([^\/]*))\/")
+DATABASE_NAME = re.compile(r"database_name=([^\/]*)\/")
 TABLE_NAME = re.compile(r"table_name=([^\/]*)\/")
 
-# https://docs.aws.amazon.com/athena/latest/ug/tables-databases-columns-names.html
+
 MAX_IDENTIFIER_LENGTH = 255
 
 
