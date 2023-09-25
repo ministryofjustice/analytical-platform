@@ -1,7 +1,7 @@
 import copy
 import os
 from io import BytesIO
-from typing import Tuple, BinaryIO
+from typing import BinaryIO
 
 import boto3
 import s3fs
@@ -9,10 +9,47 @@ from data_platform_logging import DataPlatformLogger
 from data_platform_paths import BucketPath, DataProductElement
 from mojap_metadata.converters.arrow_converter import ArrowConverter
 from mojap_metadata.converters.glue_converter import GlueConverter
+from mojap_metadata.metadata.metadata import Metadata
 from pyarrow import csv as pa_csv
 from pyarrow import parquet as pq
 
 s3_client = boto3.client("s3")
+
+
+class InferredMetadata:
+    """
+    Wrapper around the glue metadata for a table
+    """
+
+    def __init__(self, metadata_glue: dict):
+        self.metadata = metadata_glue
+
+        self.database_name = metadata_glue["DatabaseName"]
+        self.table_name = metadata_glue["TableInput"]["Name"]
+
+        self.metadata_str = self._stringify_columns(metadata_glue)
+
+    def copy(self, database_name: str, table_name: str):
+        metadata = copy.deepcopy(self.metadata)
+        metadata["DatabaseName"] = database_name
+        metadata["TableInput"]["Name"] = table_name
+        return InferredMetadata(metadata)
+
+    @staticmethod
+    def _stringify_columns(metadata_glue: dict) -> dict:
+        """
+        Create a copy of the glue metadata where all columns are string type
+        """
+        metadata_glue_str = copy.deepcopy(metadata_glue)
+
+        for i, _ in enumerate(
+            metadata_glue_str["TableInput"]["StorageDescriptor"]["Columns"]
+        ):
+            metadata_glue_str["TableInput"]["StorageDescriptor"]["Columns"][i][
+                "Type"
+            ] = "string"
+
+        return metadata_glue_str
 
 
 def csv_sample(
@@ -53,38 +90,32 @@ def csv_sample(
     return BytesIO(read_bytes)
 
 
-def infer_glue_schema(
-    file_path: BucketPath,
-    data_product_element: DataProductElement,
-    logger: DataPlatformLogger,
-    file_type: str = "csv",
-    has_headers: bool = True,
-    sample_size_mb: float = 1.5,
-    table_type: str = "raw",
-) -> Tuple[dict, dict]:
+class GlueSchemaGenerator:
     """
-    function infers and returns glue schema for csv and parquet files.
-    schema are inferred using arrow
+    Generate the glue schema from a data file
     """
-    table = (
-        data_product_element.curated_data_table
-        if table_type == "curated"
-        else data_product_element.raw_data_table_unique()
-    )
-    bucket, key = file_path
-    file_key = file_path.uri
 
-    if file_type == "csv":
-        # can infer schema on a sample of data, here we stream a csv as a bytes object from s3
-        # at the max size and then iterate over small chunk sizes to find a full line after
-        # the max sample size, which we can then read into pyarrow and infer schema.
-        obj = boto3.resource("s3").Object(bucket, key)
-        bytes_stream = obj.get()["Body"]
+    def __init__(self, logger: DataPlatformLogger):
+        self.logger = logger
+        self.ac = ArrowConverter()
+        self.gc = GlueConverter()
 
+    def infer_from_raw_csv(
+        self,
+        bytes_stream: BinaryIO,
+        table_name: str,
+        database_name: str,
+        table_location: str,
+        has_headers: bool = True,
+        sample_size_mb: float = 1.5,
+    ) -> InferredMetadata:
+        """
+        Generate schema metadata by inferring the schema of a sample of raw data (CSV)
+        """
         bytes_stream_final = csv_sample(
             bytes_stream=bytes_stream,
             sample_size_in_bytes=int(sample_size_mb * 1_000_000),
-            logger=logger,
+            logger=self.logger,
         )
 
         # null_values has been set to an empty list as "N/A" was being read as null (in a numeric column), with
@@ -93,61 +124,133 @@ def infer_glue_schema(
         arrow_table = pa_csv.read_csv(
             bytes_stream_final, convert_options=pa_csv.ConvertOptions(null_values=[])
         )
-    elif file_type == "parquet" and table_type == "curated":
-        # We have passed in a prefix, and need to pick a specific file
-        key = s3_client.list_objects_v2(Bucket=bucket, Prefix=key)["Contents"][0]["Key"]
-        file_path = os.path.join("s3://", bucket, key)
 
-        s3 = s3fs.S3FileSystem()
+        metadata_mojap = self.ac.generate_to_meta(arrow_schema=arrow_table.schema)
 
-        arrow_table = pq.ParquetDataset(
-            file_path, filesystem=s3, use_legacy_dataset=False
+        self._standardise_metadata(
+            metadata_mojap=metadata_mojap, table_name=table_name, file_type="csv"
         )
 
-    arrow_schema = arrow_table.schema
+        metadata_glue = self.gc.generate_from_meta(
+            metadata_mojap,
+            database_name=database_name,
+            table_location=table_location,
+        )
 
-    ac = ArrowConverter()
-    gc = GlueConverter()
-    metadata_mojap = ac.generate_to_meta(arrow_schema=arrow_schema)
+        if has_headers:
+            metadata_glue["TableInput"]["Parameters"]["skip.header.line.count"] = "1"
+            metadata_glue["TableInput"]["StorageDescriptor"]["SerdeInfo"][
+                "SerializationLibrary"
+            ] = "org.apache.hadoop.hive.serde2.OpenCSVSerde"
 
-    metadata_mojap.name = table.name
-    metadata_mojap.file_format = file_type
-    metadata_mojap.column_names_to_lower(inplace=True)
+        return InferredMetadata(metadata_glue)
 
-    for col in metadata_mojap.columns:
-        if col["type"] == "null":
-            col["type"] = "string"
-        # no spaces or brackets are allowed in the column name
-        col["name"] = col["name"].replace(" ", "_").replace("(", "").replace(")", "")
+    def generate_from_parquet_schema(
+        self,
+        arrow_table: pq.ParquetDataset,
+        table_name: str,
+        database_name: str,
+        table_location: str,
+    ) -> InferredMetadata:
+        """
+        Generate schema metadata based on a curated parquet file.
+        """
+        metadata_mojap = self.ac.generate_to_meta(arrow_schema=arrow_table.schema)
 
-    if table_type == "curated":
+        self._standardise_metadata(
+            metadata_mojap=metadata_mojap, table_name=table_name, file_type="parquet"
+        )
+
         metadata_mojap.columns.append(
             {"name": "extraction_timestamp", "type": "string"}
         )
         metadata_mojap.partitions = ["extraction_timestamp"]
 
-    database_name = table.database
+        metadata_glue = self.gc.generate_from_meta(
+            metadata_mojap,
+            database_name=database_name,
+            table_location=table_location,
+        )
 
-    metadata_glue = gc.generate_from_meta(
-        metadata_mojap,
-        database_name=database_name,
-        table_location=os.path.dirname(file_key),
+        return InferredMetadata(metadata_glue)
+
+    def _standardise_metadata(
+        self, metadata_mojap: Metadata, table_name: str, file_type: str
+    ):
+        """
+        Standardise the inferred metadata by adding table name/file type and enforcing
+        naming conventions.
+        """
+        metadata_mojap.name = table_name
+        metadata_mojap.file_format = file_type
+        metadata_mojap.column_names_to_lower(inplace=True)
+
+        for col in metadata_mojap.columns:
+            if col["type"] == "null":
+                col["type"] = "string"
+            # no spaces or brackets are allowed in the column name
+            col["name"] = (
+                col["name"].replace(" ", "_").replace("(", "").replace(")", "")
+            )
+
+
+def infer_glue_schema_from_parquet(
+    file_path: BucketPath,
+    data_product_element: DataProductElement,
+    logger: DataPlatformLogger,
+    s3_client,
+) -> InferredMetadata:
+    """
+    function infers and returns glue schema for parquet files.
+    schema are inferred using arrow
+    """
+    inferer = GlueSchemaGenerator(logger)
+
+    # We have passed in a prefix, and need to pick a specific file
+    key = s3_client.list_objects_v2(Bucket=file_path.bucket, Prefix=file_path.key)[
+        "Contents"
+    ][0]["Key"]
+
+    s3 = s3fs.S3FileSystem()
+
+    arrow_table = pq.ParquetDataset(
+        BucketPath(file_path.bucket, key).uri,
+        filesystem=s3,
+        use_legacy_dataset=False,
     )
 
-    if file_type == "csv" and has_headers:
-        metadata_glue["TableInput"]["Parameters"]["skip.header.line.count"] = "1"
-        metadata_glue["TableInput"]["StorageDescriptor"]["SerdeInfo"][
-            "SerializationLibrary"
-        ] = "org.apache.hadoop.hive.serde2.OpenCSVSerde"
+    database_name, table_name = data_product_element.curated_data_table
+    return inferer.generate_from_parquet_schema(
+        arrow_table=arrow_table,
+        table_name=table_name,
+        database_name=database_name,
+        table_location=file_path.uri,
+    )
 
-    # want a schema version where all columns are string type
-    metadata_glue_str = copy.deepcopy(metadata_glue)
 
-    for i, _ in enumerate(
-        metadata_glue_str["TableInput"]["StorageDescriptor"]["Columns"]
-    ):
-        metadata_glue_str["TableInput"]["StorageDescriptor"]["Columns"][i][
-            "Type"
-        ] = "string"
+def infer_glue_schema_from_raw_csv(
+    file_path: BucketPath,
+    data_product_element: DataProductElement,
+    logger: DataPlatformLogger,
+    has_headers: bool = True,
+    sample_size_mb: float = 1.5,
+) -> InferredMetadata:
+    """
+    function infers and returns glue schema for csv
+    """
+    bucket, key = file_path
+    file_key = file_path.uri
+    inferer = GlueSchemaGenerator(logger)
 
-    return metadata_glue, metadata_glue_str
+    database, table_name = data_product_element.raw_data_table_unique()
+    obj = boto3.resource("s3").Object(bucket, key)
+    bytes_stream = obj.get()["Body"]
+
+    return inferer.infer_from_raw_csv(
+        bytes_stream=bytes_stream,
+        has_headers=has_headers,
+        sample_size_mb=sample_size_mb,
+        table_name=table_name,
+        database_name=database,
+        table_location=os.path.dirname(file_key),
+    )

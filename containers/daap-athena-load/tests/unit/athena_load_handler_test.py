@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock
 
 import athena_load_handler
+from infer_glue_schema import InferredMetadata
 from moto import mock_sts
 
 
@@ -21,12 +22,14 @@ def test_handler_does_not_error(
     )
     mocker.patch("athena_load_handler.create_raw_athena_table", autospec=True)
     mock_infer_schema = mocker.patch(
-        "athena_load_handler.infer_glue_schema", autospec=True
+        "athena_load_handler.infer_glue_schema_from_raw_csv", autospec=True
     )
 
-    mock_infer_schema.return_value = (
-        {"DatabaseName": "data_products_raw", "TableInput": {"Name": "temp"}},
-        {"DatabaseName": "data_products_raw", "TableInput": {"Name": "temp"}},
+    mock_infer_schema.return_value = InferredMetadata(
+        {
+            "DatabaseName": "data_products_raw",
+            "TableInput": {"Name": "temp", "StorageDescriptor": {"Columns": []}},
+        },
     )
 
     athena_load_handler.handler(
