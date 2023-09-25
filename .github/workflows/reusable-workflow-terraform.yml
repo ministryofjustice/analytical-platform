@@ -38,14 +38,14 @@ jobs:
         id: checkout
         uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
 
-      - name: Prepare Environment
-        id: prepare_environment
-        shell: bash
-        run: |
-          workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filter/terraform.yml | sed 's/.\{3\}$//')
-          export workingDirectory
+      # - name: Prepare Environment
+      #   id: prepare_environment
+      #   shell: bash
+      #   run: |
+      #     workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filter/terraform.yml | sed 's/.\{3\}$//')
+      #     export workingDirectory
 
-          echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
+      #     echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
 
       - name: Checkov
         if: github.ref != 'refs/heads/main'
