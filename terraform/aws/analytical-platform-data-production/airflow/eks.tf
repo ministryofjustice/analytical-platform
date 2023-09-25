@@ -192,7 +192,7 @@ resource "kubernetes_namespace" "kyverno" {
   timeouts {}
 }
 
-resource "kubernetes_namespace" "cluster-autoscaler-system" {
+resource "kubernetes_namespace" "cluster_autoscaler_system" {
   provider = kubernetes.dev-airflow-cluster
   metadata {
     name = "cluster-autoscaler-system"
@@ -204,6 +204,11 @@ resource "kubernetes_namespace" "cluster-autoscaler-system" {
     }
   }
   timeouts {}
+}
+
+moved {
+  from = kubernetes_namespace.cluster-autoscaler-system
+  to = kubernetes_namespace.cluster_autoscaler_system
 }
 
 ######################################
