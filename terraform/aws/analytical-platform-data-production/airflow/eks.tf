@@ -208,7 +208,7 @@ resource "kubernetes_namespace" "cluster_autoscaler_system" {
 
 moved {
   from = kubernetes_namespace.cluster-autoscaler-system
-  to = kubernetes_namespace.cluster_autoscaler_system
+  to   = kubernetes_namespace.cluster_autoscaler_system
 }
 
 ######################################
