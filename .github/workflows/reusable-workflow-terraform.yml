@@ -1,8 +1,5 @@
 ---
 on: # yamllint disable-line rule:truthy
-  pull_request:
-    branches:
-      - main
   workflow_call:
     inputs:
       component:
@@ -38,14 +35,14 @@ jobs:
         id: checkout
         uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
 
-      # - name: Prepare Environment
-      #   id: prepare_environment
-      #   shell: bash
-      #   run: |
-      #     workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filter/terraform.yml | sed 's/.\{3\}$//')
-      #     export workingDirectory
+      - name: Prepare Environment
+        id: prepare_environment
+        shell: bash
+        run: |
+          workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filter/terraform.yml | sed 's/.\{3\}$//')
+          export workingDirectory
 
-      #     echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
+          echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
 
       - name: Checkov
         if: github.ref != 'refs/heads/main'
@@ -64,13 +61,12 @@ jobs:
         id: terraform_static_analysis_trivy
         uses: aquasecurity/trivy-action@fbd16365eb88e12433951383f5e99bd901fc618f # v0.12.0
         with:
-          scan-type: fs
+          scan-type: repo
           ignore-unfixed: true
           format: sarif
           exit-code: '1'
-          output: trivy-results.sarif
           severity: CRITICAL,HIGH
-          skip-dirs: scripts/,containers/,devcontainer/
+          skip-dirs: containers/
 
       - name: Check for Static Analysis Override Label
         if: github.ref != 'refs/heads/main'
