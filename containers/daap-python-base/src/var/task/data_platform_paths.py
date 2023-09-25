@@ -128,9 +128,7 @@ def extract_database_name_from_curated_path(string: str):
 
 
 def extract_timestamp_from_curated_path(string: str):
-    return search_string_for_regex(
-        string, regex=EXTRACTION_TIMESTAMP_CURATED_REGEX
-    )
+    return search_string_for_regex(string, regex=EXTRACTION_TIMESTAMP_CURATED_REGEX)
 
 
 @dataclass
