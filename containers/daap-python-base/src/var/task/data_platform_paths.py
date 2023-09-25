@@ -17,8 +17,8 @@ import os
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import NamedTuple, Optional
 from uuid import UUID, uuid4
-from typing import Optional, NamedTuple
 
 import boto3
 

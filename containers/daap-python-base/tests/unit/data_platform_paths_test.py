@@ -2,18 +2,12 @@ import re
 import uuid
 from datetime import datetime
 
-from data_platform_paths import (
-    BucketPath,
-    DataProductConfig,
-    DataProductElement,
-    RawDataExtraction,
-    data_product_log_bucket_and_key,
-    get_curated_data_bucket,
-    get_landing_zone_bucket,
-    get_log_bucket,
-    get_metadata_bucket,
-    get_raw_data_bucket,
-)
+from data_platform_paths import (BucketPath, DataProductConfig,
+                                 DataProductElement, RawDataExtraction,
+                                 data_product_log_bucket_and_key,
+                                 get_curated_data_bucket,
+                                 get_landing_zone_bucket, get_log_bucket,
+                                 get_metadata_bucket, get_raw_data_bucket)
 from freezegun import freeze_time
 
 
