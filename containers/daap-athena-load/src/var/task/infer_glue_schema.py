@@ -4,7 +4,6 @@ from io import BytesIO
 from typing import BinaryIO
 
 import boto3
-import s3fs
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import BucketPath, DataProductElement
 from mojap_metadata.converters.arrow_converter import ArrowConverter
@@ -192,40 +191,6 @@ class GlueSchemaGenerator:
             col["name"] = (
                 col["name"].replace(" ", "_").replace("(", "").replace(")", "")
             )
-
-
-def infer_glue_schema_from_parquet(
-    file_path: BucketPath,
-    data_product_element: DataProductElement,
-    logger: DataPlatformLogger,
-    s3_client,
-) -> InferredMetadata:
-    """
-    function infers and returns glue schema for parquet files.
-    schema are inferred using arrow
-    """
-    inferer = GlueSchemaGenerator(logger)
-
-    # We have passed in a prefix, and need to pick a specific file
-    key = s3_client.list_objects_v2(Bucket=file_path.bucket, Prefix=file_path.key)[
-        "Contents"
-    ][0]["Key"]
-
-    s3 = s3fs.S3FileSystem()
-
-    arrow_table = pq.ParquetDataset(
-        BucketPath(file_path.bucket, key).uri,
-        filesystem=s3,
-        use_legacy_dataset=False,
-    )
-
-    database_name, table_name = data_product_element.curated_data_table
-    return inferer.generate_from_parquet_schema(
-        arrow_table=arrow_table,
-        table_name=table_name,
-        database_name=database_name,
-        table_location=file_path.uri,
-    )
 
 
 def infer_glue_schema_from_raw_csv(

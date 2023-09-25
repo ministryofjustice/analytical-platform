@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove unused argument from create_raw_athena_table
 - Ensure raw athena tables are deleted if there is an exception
 - Bump base image version
+- If curated table is missing when ingesting data for an existing data product,
+  we now throw a 500 error. This should not normally happen, and if it does
+  we can run reload_data_product to fix it.
 
 ## [1.1.4] 2023-09-21
 
