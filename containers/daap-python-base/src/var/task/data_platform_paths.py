@@ -13,6 +13,7 @@ Example for data product name "data_product", table name "table":
 
 from __future__ import annotations
 
+import logging
 import os
 import re
 from dataclasses import dataclass, field
@@ -113,12 +114,12 @@ def get_account_id() -> str:
     return boto3.client("sts").get_caller_identity()["Account"]
 
 
-def search_string_for_regex(string: str, regex: re.Pattern[str]) -> str:
+def search_string_for_regex(string: str, regex: re.Pattern[str]) -> str | None:
     """Search a string for a regex pattern and return the first result"""
     search_match = regex.search(string)
     if not search_match:
-        return (f"{regex} not found in {string}")
-    return search_match.group(0)
+        logging.info(f"{regex} not found in {string}")
+    return search_match.group(0) if search_match else None
 
 
 def extract_table_name_from_curated_path(string: str):

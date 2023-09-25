@@ -14,7 +14,6 @@ from data_platform_paths import (
     get_metadata_bucket,
     get_raw_data_bucket,
 )
-
 from freezegun import freeze_time
 
 

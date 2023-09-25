@@ -6,7 +6,6 @@ import botocore
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import DataProductConfig
 from dataengineeringutils3.s3 import get_filepaths_from_s3_folder, read_json_from_s3
-
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
