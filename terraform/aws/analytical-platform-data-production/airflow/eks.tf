@@ -73,11 +73,6 @@ resource "aws_security_group" "airflow_dev_cluster_node_security_group" {
   }
 }
 
-moved {
-  from = aws_security_group.airflow_dev_security_group
-  to   = aws_security_group.airflow_dev_cluster_additional_security_group
-}
-
 output "endpoint" {
   value = aws_eks_cluster.airflow_dev_eks_cluster.endpoint
 }
