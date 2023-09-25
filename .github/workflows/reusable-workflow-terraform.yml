@@ -61,12 +61,12 @@ jobs:
         id: terraform_static_analysis_trivy
         uses: aquasecurity/trivy-action@fbd16365eb88e12433951383f5e99bd901fc618f # v0.12.0
         with:
-          scan-type: repo
+          scan-type: config
           ignore-unfixed: true
+          output: 'trivy-results.sarif'
           format: sarif
           exit-code: '1'
-          severity: CRITICAL,HIGH
-          skip-dirs: containers/
+          severity: CRITICAL
 
       - name: Check for Static Analysis Override Label
         if: github.ref != 'refs/heads/main'
