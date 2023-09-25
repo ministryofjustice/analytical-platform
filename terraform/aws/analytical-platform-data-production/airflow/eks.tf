@@ -78,11 +78,6 @@ moved {
   to   = aws_security_group.airflow_dev_cluster_additional_security_group
 }
 
-import {
-  to = aws_security_group.airflow_dev_cluster_node_security_group
-  id = "sg-01930457ae391c7f0"
-}
-
 output "endpoint" {
   value = aws_eks_cluster.airflow_dev_eks_cluster.endpoint
 }
@@ -160,11 +155,6 @@ resource "kubernetes_namespace" "dev_kube2iam" {
   timeouts {}
 }
 
-import {
-  to = kubernetes_namespace.dev_kube2iam
-  id = "kube2iam-system"
-}
-
 resource "kubernetes_config_map" "dev_aws_auth_configmap" {
   provider = kubernetes.dev-airflow-cluster
   metadata {
@@ -181,11 +171,6 @@ resource "kubernetes_config_map" "dev_aws_auth_configmap" {
 
 }
 
-import {
-  to = kubernetes_config_map.dev_aws_auth_configmap
-  id = "kube-system/aws-auth"
-}
-
 resource "kubernetes_namespace" "dev_airflow" {
   provider = kubernetes.dev-airflow-cluster
   metadata {
@@ -200,10 +185,7 @@ resource "kubernetes_namespace" "dev_airflow" {
   }
   timeouts {}
 }
-import {
-  to = kubernetes_namespace.dev_airflow
-  id = "airflow"
-}
+
 resource "kubernetes_namespace" "kyverno" {
   provider = kubernetes.dev-airflow-cluster
   metadata {
@@ -213,10 +195,6 @@ resource "kubernetes_namespace" "kyverno" {
     }
   }
   timeouts {}
-}
-import {
-  to = kubernetes_namespace.kyverno
-  id = "kyverno"
 }
 
 resource "kubernetes_namespace" "cluster-autoscaler-system" {
@@ -232,13 +210,6 @@ resource "kubernetes_namespace" "cluster-autoscaler-system" {
   }
   timeouts {}
 }
-
-import {
-  to = kubernetes_namespace.cluster-autoscaler-system
-  id = "cluster-autoscaler-system"
-}
-
-
 
 ######################################
 ########### EKS PRODUCTION ###########
