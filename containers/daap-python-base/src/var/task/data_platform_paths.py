@@ -17,7 +17,7 @@ import os
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import NamedTuple, Optional
+from typing import NamedTuple
 from uuid import UUID, uuid4
 
 import boto3
@@ -113,10 +113,12 @@ def get_account_id() -> str:
     return boto3.client("sts").get_caller_identity()["Account"]
 
 
-def search_string_for_regex(string: str, regex: re.Pattern[str]) -> Optional[str]:
+def search_string_for_regex(string: str, regex: re.Pattern[str]) -> str:
     """Search a string for a regex pattern and return the first result"""
-    search_output = regex.search(string)
-    return search_output.groups()[0] if search_output else None
+    search_match = regex.search(string)
+    if not search_match:
+        return (f"{regex} not found in {string}")
+    return search_match.group(0)
 
 
 def extract_table_name_from_curated_path(string: str):
