@@ -136,7 +136,3 @@ resource "aws_iam_role" "airflow_prod_eks_role" {
   ]
 }
 
-import {
-  to = aws_iam_role.airflow_prod_eks_role
-  id = "airflow-prod-eksRole-role-de6b4f5"
-}
