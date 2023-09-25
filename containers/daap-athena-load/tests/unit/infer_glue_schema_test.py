@@ -1,13 +1,13 @@
 from datetime import datetime
+from io import BytesIO
 from textwrap import dedent
 from uuid import uuid4
-from io import BytesIO
 
 import pyarrow as pa
-from data_platform_paths import BucketPath
-from infer_glue_schema import infer_glue_schema, csv_sample
-from pyarrow import parquet as pq
 import pytest
+from data_platform_paths import BucketPath
+from infer_glue_schema import csv_sample, infer_glue_schema
+from pyarrow import parquet as pq
 
 
 @pytest.mark.parametrize(

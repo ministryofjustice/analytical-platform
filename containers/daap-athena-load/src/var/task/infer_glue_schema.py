@@ -1,7 +1,7 @@
 import copy
 import os
 from io import BytesIO
-from typing import Tuple, BinaryIO
+from typing import BinaryIO, Tuple
 
 import boto3
 import s3fs

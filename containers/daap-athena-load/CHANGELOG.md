@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.5] 2023-09-25
+
+### Changed
+
+- Refactoring of athena load handler
+
 ## [1.1.4] 2023-09-21
 
 ### Changed

@@ -1,12 +1,12 @@
+import os
 import time
 
+import s3fs
 from botocore.exceptions import ClientError
 from create_raw_athena_table import create_glue_database
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import BucketPath, QueryTable, DataProductElement
+from data_platform_paths import BucketPath, DataProductElement, QueryTable
 from infer_glue_schema import GlueSchemaGenerator
-import os
-import s3fs
 from pyarrow import parquet as pq
 
 
@@ -53,11 +53,13 @@ class CuratedDataLoader:
         logger: DataPlatformLogger,
         athena_client,
         glue_client,
+        s3_client,
         data_product_element: DataProductElement,
     ):
         self.logger = logger
         self.athena_client = athena_client
         self.glue_client = glue_client
+        self.s3_client = s3_client
         self.schema_generator = GlueSchemaGenerator(logger)
         self.data_product_element = data_product_element
 
@@ -121,7 +123,7 @@ class CuratedDataLoader:
             database_name, table_name, athena_client=self.athena_client
         )
 
-    def unload_new_data_and_create_table(
+    def unload_new_data_and_recreate_table(
         self,
         raw_data_table: QueryTable,
         extraction_timestamp: str,
@@ -167,23 +169,22 @@ class CuratedDataLoader:
 
     def recreate_table(
         self,
-        data_product_element: DataProductElement,
     ):
         """
         Recreate the table in glue, given that the partitions already exist.
         """
         arrow_table = get_first_parquet_file(
-            curated_data_prefix=data_product_element.curated_data_prefix,
+            curated_data_prefix=self.data_product_element.curated_data_prefix,
             s3_client=self.s3_client,
         )
 
-        database_name, table_name = data_product_element.curated_data_table
+        database_name, table_name = self.data_product_element.curated_data_table
 
         table_metadata, _ = self.schema_generator.generate_from_parquet_schema(
             arrow_table=arrow_table,
             table_name=table_name,
             database_name=database_name,
-            table_location=data_product_element.curated_data_prefix.uri,
+            table_location=self.data_product_element.curated_data_prefix.uri,
         )
 
         self.glue_client.create_table(**table_metadata)
@@ -233,6 +234,7 @@ def create_curated_athena_table(
         logger=logger,
         athena_client=athena_client,
         glue_client=glue_client,
+        s3_client=s3_client,
         data_product_element=data_product_element,
     )
 
