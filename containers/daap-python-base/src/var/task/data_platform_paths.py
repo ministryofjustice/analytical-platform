@@ -19,6 +19,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import NamedTuple
 from uuid import UUID, uuid4
+from typing import Optional
 
 import boto3
 
@@ -113,7 +114,7 @@ def get_account_id() -> str:
     return boto3.client("sts").get_caller_identity()["Account"]
 
 
-def search_string_for_regex(string: str, regex: re.Pattern[str]) -> str:
+def search_string_for_regex(string: str, regex: re.Pattern[str]) -> Optional[str]:
     """Search a string for a regex pattern and return the first result"""
     search_output = regex.search(string)
     return search_output.groups()[0] if search_output else None
