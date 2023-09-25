@@ -33,7 +33,7 @@ EXTRACTION_TIMESTAMP_CURATED_REGEX = re.compile(r"(extraction_timestamp=[^\/]*)\
 DATABASE_NAME_REGEX = re.compile(r"database_name=([^\/]*)\/")
 TABLE_NAME_REGEX = re.compile(r"table_name=([^\/]*)\/")
 
-
+# https://docs.aws.amazon.com/athena/latest/ug/tables-databases-columns-names.html
 MAX_IDENTIFIER_LENGTH = 255
 
 
