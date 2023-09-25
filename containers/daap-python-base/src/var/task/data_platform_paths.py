@@ -116,8 +116,7 @@ def get_account_id() -> str:
 def search_string_for_regex(string: str, regex: re.Pattern[str]) -> str:
     """Search a string for a regex pattern and return the first result"""
     search_output = regex.search(string)
-    if search_output:
-        return search_output.groups()[0]
+    return search_output.groups()[0] if search_output else None
 
 
 def extract_table_name_from_curated_path(string: str):
