@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2023-09-22
+
+Moved common functions from daap-resync-unprocessed-files
+container to base container
+
+### Added
+
+`extract_table_name_from_curated_path`
+`extract_database_name_from_curated_path`
+`extract_timestamp_from_curated_path`  functions
+
 ## [2.0.0] - 2023-09-15
 
 Many changes to `data_platform_paths` to separate out the concept of
