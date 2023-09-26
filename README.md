@@ -150,21 +150,17 @@ As above - preferably our Slack channel: `#data-platform` (or email `data-platfo
 
 (placeholder) -->
 
-## Editing and publishing the Technical Documentation
+## Editing and publishing the documentation
 
-The [published](https://technical-documentation.data-platform.service.justice.gov.uk/)
-documentation is created by editing `*.html.md.erb` files,
-found in the [docs source](docs/source/) folder.
+We use the [X-GOVUK Eleventy Plugin][https://x-govuk.github.io/govuk-eleventy-plugin/] to host our documentation and the Data Platform's front door.
 
-The syntax is Markdown, more details can be found [here](https://daringfireball.net/projects/markdown/).
+We write our documentation in Markdown syntax. For more information on Markdown, see [The Markdown Guide](https://www.markdownguide.org/).
 
-For guidance see the Tech Docs Template [Write your content](https://tdt-documentation.london.cloudapps.digital/write_docs/content/).
+While editing documentation files locally, you can start a Docker container that will use
+Middleman to act as a server hosting the web pages. See [preview docs](#preview-docs) for instructions.
 
-While editing the files locally, you can start a Docker container that will use
-Middleman to act as a server hosting the web pages. See [preview docs](#preview-docs).
-
-Every change should be reviewed in a pull request, no matter how minor.
-PR request reviewer/s should be enabled within the main branch protection
+You should submit a pull request for any changes you make, no matter how minor.
+Ensure the reviewer(s) you request are allowed within the main branch protection
 settings.
 
 Merging the changes to the `main` branch automatically publishes the
@@ -172,8 +168,14 @@ changes via GH Action. See [publishing](#publishing).
 
 ## Preview docs
 
-You can preview how your changes will look, if you've cloned this repository
-to your local machine, run this command:
+>We use Docker to track which versions of Node we are using to both build
+and run. Because of this, the Eleventy Plugin's built-in preview command 
+`npx eleventy --serve` does not work with our repository.
+To preview your documentation locally using Docker, 
+follow the instructions in this section.
+
+If you have installed Docker, you can preview how your changes will look 
+locally. To do so, run the following command:
 
 ```bash
 bash scripts/docs/docker.sh preview
@@ -185,12 +187,7 @@ open in your browser.
 Use `bash scripts/docs/docker.sh check` to compile
 the site to HTML and check the URLs are valid.
 
-This is only accessible on your computer, and won't be accessible to anyone
-else.
-
-For more details see the
-[tech-docs-github-pages-publisher](https://github.com/ministryofjustice/tech-docs-github-pages-publisher)
-repository.
+This is only accessible on your computer, no one else can access it.
 
 ## Publishing
 
