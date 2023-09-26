@@ -1,8 +1,8 @@
 import re
 import uuid
 from datetime import datetime
-import pytest
 
+import pytest
 from data_platform_paths import (
     DATABASE_NAME_REGEX,
     EXTRACTION_TIMESTAMP_CURATED_REGEX,
