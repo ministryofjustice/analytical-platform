@@ -2,7 +2,11 @@ import re
 import uuid
 from datetime import datetime
 
+import pytest
 from data_platform_paths import (
+    DATABASE_NAME_REGEX,
+    EXTRACTION_TIMESTAMP_CURATED_REGEX,
+    TABLE_NAME_REGEX,
     BucketPath,
     DataProductConfig,
     DataProductElement,
@@ -13,8 +17,14 @@ from data_platform_paths import (
     get_log_bucket,
     get_metadata_bucket,
     get_raw_data_bucket,
+    search_string_for_regex,
 )
 from freezegun import freeze_time
+
+curated_data_key = [
+    "curated_data/database_name=data_product/table_name=table/"
+    + "extraction_timestamp=timestamp/file.parquet"
+]
 
 
 def test_bucket_path_can_be_reassembled():
@@ -247,4 +257,27 @@ def test_data_product_log_bucket_and_key(monkeypatch):
     assert (
         log_bucket_path.key
         == "logs/json/lambda_name=top_test_lambda/data_product_name=delicious-data-product/date=2023-09-12/2023-09-12T00:00:00:000_log.json"  # noqa: E501
+    )
+
+
+@pytest.mark.parametrize("curated_data_key", curated_data_key)
+def test_extract_table_name_from_curated_path(curated_data_key):
+    assert search_string_for_regex(curated_data_key, TABLE_NAME_REGEX) == "table"
+
+
+@pytest.mark.parametrize("curated_data_key", curated_data_key)
+def test_extract_database_name_from_curated_path(curated_data_key):
+    assert (
+        search_string_for_regex(curated_data_key, regex=DATABASE_NAME_REGEX)
+        == "data_product"
+    )
+
+
+@pytest.mark.parametrize("curated_data_key", curated_data_key)
+def test_extract_timestamp_from_curated_path(curated_data_key):
+    assert (
+        search_string_for_regex(
+            curated_data_key, regex=EXTRACTION_TIMESTAMP_CURATED_REGEX
+        )
+        == "timestamp"
     )

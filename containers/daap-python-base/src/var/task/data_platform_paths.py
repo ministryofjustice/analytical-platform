@@ -28,7 +28,7 @@ EXTRACTION_TIMESTAMP_FORMAT = "%Y%m%dT%H%M%SZ"
 EXTRACTION_TIMESTAMP_REGEX = re.compile(
     r"^(.*)/(extraction_timestamp=)([0-9TZ]{1,16})/(.*)$"
 )
-EXTRACTION_TIMESTAMP_CURATED_REGEX = re.compile(r"(extraction_timestamp=[^\/]*)\/")
+EXTRACTION_TIMESTAMP_CURATED_REGEX = re.compile(r"extraction_timestamp=([^/]+)")
 
 DATABASE_NAME_REGEX = re.compile(r"database_name=([^\/]*)\/")
 TABLE_NAME_REGEX = re.compile(r"table_name=([^\/]*)\/")
@@ -119,7 +119,7 @@ def search_string_for_regex(string: str, regex: re.Pattern[str]) -> str | None:
     search_match = regex.search(string)
     if not search_match:
         logging.info(f"{regex} not found in {string}")
-    return search_match.group(0) if search_match else None
+    return search_match.groups()[0] if search_match else None
 
 
 def extract_table_name_from_curated_path(string: str):
