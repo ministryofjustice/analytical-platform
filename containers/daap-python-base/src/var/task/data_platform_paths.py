@@ -119,7 +119,7 @@ def search_string_for_regex(string: str, regex: re.Pattern[str]) -> str | None:
     search_match = regex.search(string)
     if not search_match:
         logging.info(f"{regex} not found in {string}")
-    return search_match.group()[0] if search_match else None
+    return search_match.groups()[0] if search_match else None
 
 
 def extract_table_name_from_curated_path(string: str):
