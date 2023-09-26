@@ -93,26 +93,26 @@ def test_data_product_element_config(monkeypatch):
     monkeypatch.setenv("METADATA_BUCKET", "bucket")
     monkeypatch.setenv("LANDING_ZONE_BUCKET", "bucket")
 
-    element = DataProductElement.load("some-table", "data-product")
+    element = DataProductElement.load("some_table", "data_product")
 
     raw_data_table = element.raw_data_table_unique()
 
     assert re.match(
-        r"some-table_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_raw",
+        r"some_table_[0-9a-f]{8}_[0-9a-f]{4}_[0-9a-f]{4}_[0-9a-f]{4}_[0-9a-f]{12}_raw",
         raw_data_table.name,
     )
     assert raw_data_table.database == "data_products_raw"
-    assert element.curated_data_table.name == "some-table"
-    assert element.curated_data_table.database == "data-product"
+    assert element.curated_data_table.name == "some_table"
+    assert element.curated_data_table.database == "data_product"
 
     assert element.raw_data_prefix == BucketPath(
         bucket="bucket",
-        key="raw_data/data-product/some-table/",
+        key="raw_data/data_product/some_table/",
     )
 
     assert element.curated_data_prefix == BucketPath(
         bucket="bucket",
-        key="curated_data/database_name=data-product/table_name=some-table/",
+        key="curated_data/database_name=data_product/table_name=some_table/",
     )
 
 
