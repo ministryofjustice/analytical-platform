@@ -4,7 +4,7 @@ from botocore.exceptions import ClientError
 from create_raw_athena_table import create_glue_database
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import BucketPath, QueryTable
-from infer_glue_schema import infer_glue_schema
+from infer_glue_schema import infer_glue_schema_from_parquet
 
 
 def create_curated_athena_table(
@@ -99,15 +99,14 @@ def create_curated_athena_table(
 
     elif not table_exists and partition_file_exists:
         logger.info("partition data exists but glue table does not")
-        table_metadata, _ = infer_glue_schema(
+        table_metadata = infer_glue_schema_from_parquet(
             data_product_element.curated_data_prefix,
             data_product_element,
-            file_type="parquet",
-            table_type="curated",
             logger=logger,
+            s3_client=s3_client,
         )
 
-        glue_client.create_table(**table_metadata)
+        glue_client.create_table(**table_metadata.metadata)
         refresh_table_partitions(database_name, table_name, athena_client=athena_client)
     elif not table_exists and not partition_file_exists:
         logger.info("table and partition do not exist but other curated data do")
@@ -125,14 +124,13 @@ def create_curated_athena_table(
             athena_client=athena_client,
         )
         logger.info(f"created files for partition using query id {qid}")
-        table_metadata, _ = infer_glue_schema(
+        table_metadata = infer_glue_schema_from_parquet(
             data_product_element.curated_data_prefix,
             data_product_element,
-            file_type="parquet",
-            table_type="curated",
             logger=logger,
+            s3_client=s3_client,
         )
-        glue_client.create_table(**table_metadata)
+        glue_client.create_table(**table_metadata.metadata)
         refresh_table_partitions(database_name, table_name, athena_client=athena_client)
 
     else:
