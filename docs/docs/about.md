@@ -5,7 +5,7 @@ layout: page
 title: About
 ---
 
->**Our vision is to transform data sharing at the Ministry of Justice, to streamline the delivery of our [Digital](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1064860/moj-digital-strategy-2025.pdf) and [Data](https://intranet.justice.gov.uk/documents/2022/08/moj-data-strategy.pdf/) strategies.**
+>**Our vision is to connect the right people, systems, and data to support our [Digital](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1064860/moj-digital-strategy-2025.pdf) and [Data](https://intranet.justice.gov.uk/documents/2022/08/moj-data-strategy.pdf/) strategies.**
 
 ## What is the Data Platform?
 
