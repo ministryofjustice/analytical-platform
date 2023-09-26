@@ -1,10 +1,17 @@
 import os
-import re
 
 import boto3
 from botocore.paginate import PageIterator
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import *
+from data_platform_paths import (
+    DataProductConfig,
+    extract_timestamp_from_curated_path,
+    extract_table_name_from_curated_path,
+    extract_database_name_from_curated_path,
+    get_raw_data_bucket,
+    get_curated_data_bucket,
+    get_log_bucket
+)
 
 s3 = boto3.client("s3")
 logger = DataPlatformLogger(
@@ -86,8 +93,6 @@ def get_data_product_pages(
     # print(len(list(pages)))
     # An empty page in the paginator only happens when no files exist
     for page in pages:
-        # print(page["Contents"])
-
         if page["KeyCount"] == 0:
             error_text = f"No data product found for {data_product_prefix}"
             logger.error(error_text)
@@ -119,19 +124,19 @@ def get_curated_unique_extraction_timestamps(curated_pages: PageIterator) -> set
     curated_table_timestamps = set()
     for item in curated_pages.search("Contents[?Size > `0`][]"):
 
-        data_product = search_string_for_regex(
-            string=item["Key"], regex=database_name_regex()
-        )
-        table = search_string_for_regex(string=item["Key"], regex=table_name_regex())
+        data_product = extract_database_name_from_curated_path(item["Key"])
 
-        extraction_timestamp = search_string_for_regex(
-            string=item["Key"], regex=extraction_timestamp_regex()
-        )
+        table = extract_table_name_from_curated_path(item["Key"])
+
+        extraction_timestamp = extract_timestamp_from_curated_path(item["Key"])
 
         if data_product and table and extraction_timestamp:
+            data_product=data_product.replace("database_name=","")
+            table=table.replace("table_name=","")
+            extraction_timestamp=extraction_timestamp.replace("extraction_timestamp=","").replace("\",")
             # Both sets need the same formatting to compare them
             curated_table_timestamps.add(
-                f"{data_product}/{table}/{extraction_timestamp}"
+                f"{data_product}{table}{extraction_timestamp}"
             )
     return curated_table_timestamps
 
@@ -143,8 +148,7 @@ def get_resync_keys(
     and not in the curated area
     """
     timestamps_to_resync = [
-        item for item in raw_table_timestamps
-        if item not in curated_table_timestamps
+        item for item in raw_table_timestamps if item not in curated_table_timestamps
     ]
 
     raw_keys_to_resync = [
@@ -154,4 +158,3 @@ def get_resync_keys(
         if timestamp in item["Key"]
     ]
     return raw_keys_to_resync
-
