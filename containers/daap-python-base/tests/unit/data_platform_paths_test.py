@@ -17,7 +17,7 @@ from data_platform_paths import (
     get_log_bucket,
     get_metadata_bucket,
     get_raw_data_bucket,
-    search_string_for_regex
+    search_string_for_regex,
 )
 from freezegun import freeze_time
 
