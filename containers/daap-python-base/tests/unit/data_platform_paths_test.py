@@ -4,8 +4,8 @@ from datetime import datetime
 import pytest
 
 from data_platform_paths import (
-    EXTRACTION_TIMESTAMP_CURATED_REGEX,
     DATABASE_NAME_REGEX,
+    EXTRACTION_TIMESTAMP_CURATED_REGEX,
     TABLE_NAME_REGEX,
     BucketPath,
     DataProductConfig,
