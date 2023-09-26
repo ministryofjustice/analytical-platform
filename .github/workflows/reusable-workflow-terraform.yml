@@ -80,7 +80,7 @@ jobs:
           trivy --version
 
           # Run the scanner in repo mode
-          trivy config --exit-code 1 --format sarif --output trivy-results.sarif --severity CRITICAL,HIGH,LOW,MEDIUM
+          trivy config --exit-code 1 --format sarif --output trivy-results.sarif --severity CRITICAL,HIGH,LOW,MEDIUM .
 
       - name: Check for Static Analysis Override Label
         if: github.ref != 'refs/heads/main'
