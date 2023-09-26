@@ -29,7 +29,7 @@ def create_curated_athena_table(
     bucket = data_product_element.raw_data_prefix.bucket
 
     table_exists = False
-    create_glue_database(glue_client, database_name, logger, bucket)
+    create_glue_database(glue_client, database_name, logger)
 
     try:
         table_metadata = glue_client.get_table(
