@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.3] - 2023-09-27
+
+Changed the name of the temporary raw table to replace dashes with underscores.
+
 ## [2.0.2] - 2023-09-26
 
 Changed the regular expression pattern to get more specific output
@@ -22,7 +26,7 @@ container to base container
 
 `extract_table_name_from_curated_path`
 `extract_database_name_from_curated_path`
-`extract_timestamp_from_curated_path`  functions
+`extract_timestamp_from_curated_path` functions
 
 ## [2.0.0] - 2023-09-15
 

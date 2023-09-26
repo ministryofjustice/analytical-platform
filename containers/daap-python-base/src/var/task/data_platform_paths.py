@@ -183,7 +183,7 @@ class DataProductElement:
         E.g. ('data_products_raw', 'some_element_3d95ff89-b063-484d-b510-53742d0a6a64_raw)
         """
         suffix = uuid4()
-        name = f"{self.name}_{suffix}_raw"
+        name = f"{self.name}_{suffix}_raw".replace("-", "_")
         if len(name) > MAX_IDENTIFIER_LENGTH:
             raise ValueError(f"Generated table name too long: {name}")
 
