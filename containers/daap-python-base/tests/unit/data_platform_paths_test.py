@@ -4,6 +4,9 @@ from datetime import datetime
 import pytest
 
 from data_platform_paths import (
+    EXTRACTION_TIMESTAMP_CURATED_REGEX,
+    DATABASE_NAME_REGEX,
+    TABLE_NAME_REGEX,
     BucketPath,
     DataProductConfig,
     DataProductElement,
@@ -14,10 +17,7 @@ from data_platform_paths import (
     get_log_bucket,
     get_metadata_bucket,
     get_raw_data_bucket,
-    search_string_for_regex,
-    EXTRACTION_TIMESTAMP_CURATED_REGEX,
-    DATABASE_NAME_REGEX,
-    TABLE_NAME_REGEX,
+    search_string_for_regex
 )
 from freezegun import freeze_time
 
