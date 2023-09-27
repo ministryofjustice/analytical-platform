@@ -5,12 +5,12 @@ from botocore.paginate import PageIterator
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import (
     DataProductConfig,
-    extract_timestamp_from_curated_path,
-    extract_table_name_from_curated_path,
     extract_database_name_from_curated_path,
-    get_raw_data_bucket,
+    extract_table_name_from_curated_path,
+    extract_timestamp_from_curated_path,
     get_curated_data_bucket,
     get_log_bucket,
+    get_raw_data_bucket,
 )
 
 s3 = boto3.client("s3")
@@ -55,7 +55,7 @@ def handler(event, context):
 
     # get data product has associated curated data
     curated_pages = get_data_product_pages(
-        Bucket=curated_data_bucket, data_product_prefix=curated_prefix
+        ucket=curated_data_bucket, data_product_prefix=curated_prefix
     )
 
     raw_table_timestamps = get_unique_extraction_timestamps(raw_pages)

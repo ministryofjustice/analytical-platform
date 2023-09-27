@@ -1,9 +1,9 @@
 import pytest
 from resync_unprocessed_files import (
-    get_data_product_pages,
-    get_unique_extraction_timestamps,
     get_curated_unique_extraction_timestamps,
+    get_data_product_pages,
     get_resync_keys,
+    get_unique_extraction_timestamps,
 )
 
 
@@ -42,14 +42,6 @@ def raw_data_bucket(s3_client, empty_raw_data_bucket, data_element):
         + "extraction_timestamp=timestamp1/file3.csv",
         Body="Test data in same extraction time stamp but different file",
     )
-    return bucket_name
-
-
-@pytest.fixture
-def empty_curated_data_bucket(s3_client, monkeypatch):
-    bucket_name = "curated"
-    s3_client.create_bucket(Bucket=bucket_name)
-    monkeypatch.setenv("CURATED_DATA_BUCKET", bucket_name)
     return bucket_name
 
 
@@ -102,7 +94,6 @@ def test_get_curated_unique_extraction_timestamps(
 
 
 def test_get_resync_keys(s3_client, data_element, raw_data_bucket, curated_data_bucket):
-
     raw_pages = get_data_product_pages(
         bucket=raw_data_bucket,
         data_product_prefix=data_element.raw_data_prefix.key,
