@@ -5,7 +5,7 @@ import data_platform_api_responses
 
 def test_format_response_json():
     formatted_response_json = data_platform_api_responses.format_response_json(
-        111, {"test": "test"}
+        111, json.dumps({"test": "test"})
     )
 
     assert formatted_response_json == {
