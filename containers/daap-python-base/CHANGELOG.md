@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.3] - 2023-09-27
+
+Added functions to standardise API JSON response formatting.
+
 ## [2.0.3] - 2023-09-27
 
 Changed the name of the temporary raw table to replace dashes with underscores.
