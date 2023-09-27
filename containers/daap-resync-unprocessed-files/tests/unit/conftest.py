@@ -2,7 +2,6 @@ import os
 import sys
 from dataclasses import dataclass
 from os.path import dirname, join
-from unittest.mock import MagicMock
 
 import boto3
 import pytest
