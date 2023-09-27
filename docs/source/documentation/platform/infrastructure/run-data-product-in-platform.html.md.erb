@@ -48,7 +48,7 @@ These logs are stored in another restricted-access logging bucket.
 
 Each of the lambda images are stored in a central Elastic Container Registry on the MoJ Modernisation Platform.
 
-![Data Product ingestion pipeline](../images/daap-data-flow-architecture.png "Data Product ingestion pipeline")
+![Data Product ingestion pipeline](../images/daap-data-flow-architecture.excalidraw.png "Data Product ingestion pipeline")
 
 
 ## Data Ingestion handling
@@ -58,7 +58,7 @@ Upon file transfer to the raw_data folder inside the data bucket an `aws.s3` `Ob
 This calls the [daap-athena-load lambda](https://github.com/ministryofjustice/data-platform/tree/main/containers/daap-athena-load),
 which creates raw and curated tables in the Glue Catalog.
 
-![Raw data processing via the daap-athena-load lambda](../images/daap-athena-load.png "Raw data processing via the daap-athena-load lambda")
+![Raw data processing via the daap-athena-load lambda](../images/daap-athena-load.excalidraw.png "Raw data processing via the daap-athena-load lambda")
 
 
 ### Assumptions and Risks
