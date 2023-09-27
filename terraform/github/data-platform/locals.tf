@@ -1,7 +1,7 @@
 locals {
   core_repos = [{ # Legacy Analytical Platform Internal Infrastructure Repos in the MOJ org
-      name        = "analytics-platform-infrastructure",
-      description = "Core Infrastructure Repo for Data Platform"
+    name        = "analytics-platform-infrastructure",
+    description = "Core Infrastructure Repo for Data Platform"
     },
     {
       name        = "ap-test-github-workflow",
