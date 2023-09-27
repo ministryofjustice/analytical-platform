@@ -31,7 +31,7 @@ def test_response_status_404():
     )
 
     assert response == {
-        "statusCode": 400,
+        "statusCode": 404,
         "headers": {"Content-Type": "application/json"},
         "body": json.dumps({"error": {"message": "something went wrong again"}}),
     }
