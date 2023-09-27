@@ -10,7 +10,7 @@ from data_platform_paths import (
     extract_database_name_from_curated_path,
     get_raw_data_bucket,
     get_curated_data_bucket,
-    get_log_bucket
+    get_log_bucket,
 )
 
 s3 = boto3.client("s3")
@@ -47,12 +47,13 @@ def handler(event, context):
     logger.info(f"Curated prefix: {curated_prefix}")
     logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
 
-    # Check data product has associated raw data
+    # get data product has associated raw data
     raw_pages = get_data_product_pages(
         bucket=raw_data_bucket,
         data_product_prefix=raw_prefix,
     )
 
+    # get data product has associated curated data
     curated_pages = get_data_product_pages(
         Bucket=curated_data_bucket, data_product_prefix=curated_prefix
     )
@@ -60,6 +61,7 @@ def handler(event, context):
     raw_table_timestamps = get_unique_extraction_timestamps(raw_pages)
     curated_table_timestamps = get_curated_unique_extraction_timestamps(curated_pages)
 
+    # compare and filter the raw files to sync
     raw_keys_to_resync = get_resync_keys(
         raw_table_timestamps, curated_table_timestamps, raw_pages
     )
@@ -86,11 +88,11 @@ def handler(event, context):
 def get_data_product_pages(
     bucket, data_product_prefix, s3_client=s3, log_bucket=log_bucket
 ) -> PageIterator:
-    """ """
+    """returns the list of data product that are available in the bucket"""
 
     paginator = s3_client.get_paginator("list_objects_v2")
     pages = paginator.paginate(Bucket=bucket, Prefix=data_product_prefix)
-    # print(len(list(pages)))
+
     # An empty page in the paginator only happens when no files exist
     for page in pages:
         if page["KeyCount"] == 0:
@@ -125,18 +127,13 @@ def get_curated_unique_extraction_timestamps(curated_pages: PageIterator) -> set
     for item in curated_pages.search("Contents[?Size > `0`][]"):
 
         data_product = extract_database_name_from_curated_path(item["Key"])
-
         table = extract_table_name_from_curated_path(item["Key"])
-
         extraction_timestamp = extract_timestamp_from_curated_path(item["Key"])
 
         if data_product and table and extraction_timestamp:
-            data_product=data_product.replace("database_name=","")
-            table=table.replace("table_name=","")
-            extraction_timestamp=extraction_timestamp.replace("extraction_timestamp=","").replace("\",")
             # Both sets need the same formatting to compare them
             curated_table_timestamps.add(
-                f"{data_product}{table}{extraction_timestamp}"
+                f"{data_product}/{table}/extraction_timestamp={extraction_timestamp}"
             )
     return curated_table_timestamps
 
@@ -144,8 +141,8 @@ def get_curated_unique_extraction_timestamps(curated_pages: PageIterator) -> set
 def get_resync_keys(
     raw_table_timestamps: set, curated_table_timestamps: set, raw_pages: PageIterator
 ) -> list:
-    """Find extraction timestamps in the raw area,
-    and not in the curated area
+    """
+    Find extraction timestamps in the raw area, and not in the curated area
     """
     timestamps_to_resync = [
         item for item in raw_table_timestamps if item not in curated_table_timestamps

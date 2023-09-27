@@ -101,8 +101,7 @@ def test_get_curated_unique_extraction_timestamps(
     }
 
 
-def test_get_resync_keys(s3_client, data_element, raw_data_bucket,
-                         curated_data_bucket):
+def test_get_resync_keys(s3_client, data_element, raw_data_bucket, curated_data_bucket):
 
     raw_pages = get_data_product_pages(
         bucket=raw_data_bucket,
