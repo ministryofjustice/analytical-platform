@@ -55,7 +55,7 @@ def handler(event, context):
 
     # get data product has associated curated data
     curated_pages = get_data_product_pages(
-        ucket=curated_data_bucket, data_product_prefix=curated_prefix
+        bucket=curated_data_bucket, data_product_prefix=curated_prefix
     )
 
     raw_table_timestamps = get_unique_extraction_timestamps(raw_pages)
@@ -125,7 +125,6 @@ def get_curated_unique_extraction_timestamps(curated_pages: PageIterator) -> set
     """
     curated_table_timestamps = set()
     for item in curated_pages.search("Contents[?Size > `0`][]"):
-
         data_product = extract_database_name_from_curated_path(item["Key"])
         table = extract_table_name_from_curated_path(item["Key"])
         extraction_timestamp = extract_timestamp_from_curated_path(item["Key"])
