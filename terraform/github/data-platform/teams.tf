@@ -43,7 +43,7 @@ locals {
     "tamsinforbes",
     "murad-ali-MoJ",
     "Gary-H9",
-    "mitchdawson1982",
+    "mitchdawson1982", # Mitch Dawson
     "bagg3rs" # Richard Baguley
   ]
 
@@ -129,7 +129,7 @@ locals {
     "jhpyke",
     "murad-ali-MoJ",
     "tamsinforbes",
-    "mitchdawson1982",
+    "mitchdawson1982", # Mitch Dawson
     "Gary-H9"
   ]
 
@@ -141,7 +141,8 @@ locals {
     "murdo-moj",
     "matmoore",
     "LavMatt",
-    "tom-webber"
+    "tom-webber",
+    "mitchdawson1982"  # Mitch Dawson
   ]
 
   data_platform_security_auditor_members = [
