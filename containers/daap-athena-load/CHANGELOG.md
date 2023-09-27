@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Refactor infer_glue_schema
+- Remove unused argument from create_raw_athena_table
+
 ## [1.1.4] 2023-09-21
 
 ### Changed

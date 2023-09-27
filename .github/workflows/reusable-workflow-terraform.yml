@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
 
       - name: Prepare Environment
         id: prepare_environment
@@ -47,7 +47,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@e98a6dbbcc04c837ed4d18d0f9c75516ed51fe29 # v12.2509.0
+        uses: bridgecrewio/checkov-action@209c195191cdc01f323831ea927c4a533264a0ff # v12.2510.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -169,7 +169,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
 
       - name: Prepare Environment
         id: prepare_environment

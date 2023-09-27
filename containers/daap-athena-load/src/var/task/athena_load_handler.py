@@ -5,7 +5,7 @@ from create_curated_athena_table import create_curated_athena_table
 from create_raw_athena_table import create_raw_athena_table
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import QueryTable, RawDataExtraction
-from infer_glue_schema import infer_glue_schema
+from infer_glue_schema import infer_glue_schema_from_raw_csv
 
 athena_client = boto3.client("athena")
 s3_client = boto3.client("s3")
@@ -37,21 +37,20 @@ def handler(
 
     logger.info(f"file is: {full_s3_path}")
 
-    metadata_types, metadata_str = infer_glue_schema(
+    inferred_metadata = infer_glue_schema_from_raw_csv(
         extraction.path, data_product_element, logger=logger
     )
 
-    temp_table_name = metadata_types["TableInput"]["Name"]
-    temp_database_name = metadata_types["DatabaseName"]
+    temp_table_name = inferred_metadata.table_name
+    temp_database_name = inferred_metadata.database_name
     logger.info(f"{temp_table_name=} {temp_database_name=}")
     logger.info(f"{extraction.timestamp=} {data_product_element.curated_data_table=}")
 
     # Create a table of all string-type columns, to load raw data into
     create_raw_athena_table(
-        metadata_glue=metadata_str,
+        metadata_glue=inferred_metadata.metadata_str,
         logger=logger,
         glue_client=glue_client,
-        bucket=extraction.path.bucket,
     )
 
     # Load the raw string data into the raw tables
@@ -62,7 +61,7 @@ def handler(
         data_product_element=data_product_element,
         raw_data_table=QueryTable(database=temp_database_name, name=temp_table_name),
         extraction_timestamp=extraction.timestamp.strftime("%Y%m%dT%H%M%SZ"),
-        metadata=metadata_types,
+        metadata=inferred_metadata.metadata,
         logger=logger,
         glue_client=glue_client,
         s3_client=s3_client,

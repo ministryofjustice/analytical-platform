@@ -2,7 +2,11 @@ import re
 import uuid
 from datetime import datetime
 
+import pytest
 from data_platform_paths import (
+    DATABASE_NAME_REGEX,
+    EXTRACTION_TIMESTAMP_CURATED_REGEX,
+    TABLE_NAME_REGEX,
     BucketPath,
     DataProductConfig,
     DataProductElement,
@@ -13,8 +17,14 @@ from data_platform_paths import (
     get_log_bucket,
     get_metadata_bucket,
     get_raw_data_bucket,
+    search_string_for_regex,
 )
 from freezegun import freeze_time
+
+curated_data_key = [
+    "curated_data/database_name=data_product/table_name=table/"
+    + "extraction_timestamp=timestamp/file.parquet"
+]
 
 
 def test_bucket_path_can_be_reassembled():
@@ -83,26 +93,26 @@ def test_data_product_element_config(monkeypatch):
     monkeypatch.setenv("METADATA_BUCKET", "bucket")
     monkeypatch.setenv("LANDING_ZONE_BUCKET", "bucket")
 
-    element = DataProductElement.load("some-table", "data-product")
+    element = DataProductElement.load("some_table", "data_product")
 
     raw_data_table = element.raw_data_table_unique()
 
     assert re.match(
-        r"some-table_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_raw",
+        r"some_table_[0-9a-f]{8}_[0-9a-f]{4}_[0-9a-f]{4}_[0-9a-f]{4}_[0-9a-f]{12}_raw",
         raw_data_table.name,
     )
     assert raw_data_table.database == "data_products_raw"
-    assert element.curated_data_table.name == "some-table"
-    assert element.curated_data_table.database == "data-product"
+    assert element.curated_data_table.name == "some_table"
+    assert element.curated_data_table.database == "data_product"
 
     assert element.raw_data_prefix == BucketPath(
         bucket="bucket",
-        key="raw_data/data-product/some-table/",
+        key="raw_data/data_product/some_table/",
     )
 
     assert element.curated_data_prefix == BucketPath(
         bucket="bucket",
-        key="curated_data/database_name=data-product/table_name=some-table/",
+        key="curated_data/database_name=data_product/table_name=some_table/",
     )
 
 
@@ -247,4 +257,27 @@ def test_data_product_log_bucket_and_key(monkeypatch):
     assert (
         log_bucket_path.key
         == "logs/json/lambda_name=top_test_lambda/data_product_name=delicious-data-product/date=2023-09-12/2023-09-12T00:00:00:000_log.json"  # noqa: E501
+    )
+
+
+@pytest.mark.parametrize("curated_data_key", curated_data_key)
+def test_extract_table_name_from_curated_path(curated_data_key):
+    assert search_string_for_regex(curated_data_key, TABLE_NAME_REGEX) == "table"
+
+
+@pytest.mark.parametrize("curated_data_key", curated_data_key)
+def test_extract_database_name_from_curated_path(curated_data_key):
+    assert (
+        search_string_for_regex(curated_data_key, regex=DATABASE_NAME_REGEX)
+        == "data_product"
+    )
+
+
+@pytest.mark.parametrize("curated_data_key", curated_data_key)
+def test_extract_timestamp_from_curated_path(curated_data_key):
+    assert (
+        search_string_for_regex(
+            curated_data_key, regex=EXTRACTION_TIMESTAMP_CURATED_REGEX
+        )
+        == "timestamp"
     )
