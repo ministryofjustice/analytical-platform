@@ -20,10 +20,6 @@ logger = DataPlatformLogger(
         "base_image_version": os.getenv("BASE_VERSION", "unknown"),
     }
 )
-s3_security_opts = {
-    "ACL": "bucket-owner-full-control",
-    "ServerSideEncryption": "AES256",
-}
 
 raw_data_bucket = get_raw_data_bucket()
 curated_data_bucket = get_curated_data_bucket()
@@ -45,7 +41,6 @@ def handler(event, context):
 
     logger.info(f"Raw prefix: {raw_prefix}")
     logger.info(f"Curated prefix: {curated_prefix}")
-    logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
 
     # get data product has associated raw data
     raw_pages = get_data_product_pages(
@@ -82,7 +77,6 @@ def handler(event, context):
         + "with {len(raw_keys_to_resync)} files"
     )
     logger.info(str(raw_keys_to_resync))
-    logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
 
 
 def get_data_product_pages(
@@ -98,7 +92,6 @@ def get_data_product_pages(
         if page["KeyCount"] == 0:
             error_text = f"No data product found for {data_product_prefix}"
             logger.error(error_text)
-            logger.write_log_dict_to_s3_json(bucket=log_bucket, **s3_security_opts)
             raise ValueError(error_text)
     return pages
 
