@@ -38,7 +38,7 @@ The arrival of structured data in the raw history folder triggers a ‘curation�
 which standardises the file type and data format before placing the data in the finalised ‘curated’ bucket folder.
 This curated data is the data that is surfaced as the data product, and is registered to the aws Glue catalogue.
 
-As part of the data flow, Data Product metadata must be passed as part of the request to register or amend a Data Product.
+As part of the request to register or amend a Data Product, the API user must provide Data Product metadata.
 This is processed, validated, and stored in a separate location to the data.
 This then integrates with OpenMetadata to update the metadata in the catalogue
 to reflect the changes made to the Data Product through this ingestion pipeline.
