@@ -77,9 +77,7 @@ def handler(event, context):
     logger.info(str(raw_keys_to_resync))
 
 
-def get_data_product_pages(
-    bucket, data_product_prefix, s3_client=s3
-) -> PageIterator:
+def get_data_product_pages(bucket, data_product_prefix, s3_client=s3) -> PageIterator:
     """returns the list of data product that are available in the bucket"""
 
     paginator = s3_client.get_paginator("list_objects_v2")
