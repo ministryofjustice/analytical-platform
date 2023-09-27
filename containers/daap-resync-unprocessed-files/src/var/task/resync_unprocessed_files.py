@@ -9,7 +9,6 @@ from data_platform_paths import (
     extract_table_name_from_curated_path,
     extract_timestamp_from_curated_path,
     get_curated_data_bucket,
-    get_log_bucket,
     get_raw_data_bucket,
 )
 
@@ -23,7 +22,6 @@ logger = DataPlatformLogger(
 
 raw_data_bucket = get_raw_data_bucket()
 curated_data_bucket = get_curated_data_bucket()
-log_bucket = get_log_bucket()
 athena_load_lambda = os.environ.get("ATHENA_LOAD_LAMBDA", "")
 
 
@@ -33,7 +31,7 @@ def handler(event, context):
     data_product = DataProductConfig(
         name=data_product_to_recreate,
         raw_data_bucket=raw_data_bucket,
-        curated_data_bucket=raw_data_bucket,
+        curated_data_bucket=curated_data_bucket,
     )
 
     raw_prefix = data_product.raw_data_prefix
@@ -74,13 +72,13 @@ def handler(event, context):
 
     logger.info(
         f"data product {data_product_to_recreate} resynced"
-        + "with {len(raw_keys_to_resync)} files"
+        + f"with {len(raw_keys_to_resync)} files"
     )
     logger.info(str(raw_keys_to_resync))
 
 
 def get_data_product_pages(
-    bucket, data_product_prefix, s3_client=s3, log_bucket=log_bucket
+    bucket, data_product_prefix, s3_client=s3
 ) -> PageIterator:
     """returns the list of data product that are available in the bucket"""
 
