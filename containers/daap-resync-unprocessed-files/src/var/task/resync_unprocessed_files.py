@@ -2,7 +2,6 @@ import json
 import os
 
 import boto3
-
 from botocore.paginate import PageIterator
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import (
