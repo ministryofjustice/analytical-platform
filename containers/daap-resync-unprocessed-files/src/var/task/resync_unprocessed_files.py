@@ -1,6 +1,7 @@
 import os
 
 import boto3
+import json
 from botocore.paginate import PageIterator
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import (
@@ -64,8 +65,10 @@ def handler(event, context):
     # If there are over 1000 files, the lambda will get jammed up
     aws_lambda = boto3.client("lambda")
     for key in raw_keys_to_resync:
-        payload = f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}},\
-        "object":{{"key":"{key}"}}}}}}'
+        payload = json.dumps(
+            {"detail": {"bucket": {"name": raw_data_bucket}, "object": {"key": key}}},
+            indent=4,
+        )
         aws_lambda.invoke(
             FunctionName=athena_load_lambda, InvocationType="Event", Payload=payload
         )
