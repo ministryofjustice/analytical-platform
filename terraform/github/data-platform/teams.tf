@@ -44,7 +44,7 @@ locals {
     "murad-ali-MoJ",
     "Gary-H9",
     "mitchdawson1982", # Mitch Dawson
-    "bagg3rs" # Richard Baguley
+    "bagg3rs"          # Richard Baguley
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
@@ -142,7 +142,7 @@ locals {
     "matmoore",
     "LavMatt",
     "tom-webber",
-    "mitchdawson1982"  # Mitch Dawson
+    "mitchdawson1982" # Mitch Dawson
   ]
 
   data_platform_security_auditor_members = [
