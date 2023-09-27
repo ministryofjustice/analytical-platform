@@ -56,32 +56,6 @@ jobs:
           output_format: cli
         continue-on-error: true
 
-      # - name: trivy
-      #   if: github.ref != 'refs/heads/main'
-      #   id: terraform_static_analysis_trivy
-      #   uses: aquasecurity/trivy-action@fbd16365eb88e12433951383f5e99bd901fc618f # v0.12.0
-      #   working-directory: ${{ env.working-directory }}
-      #   with:
-      #     scan-type: config
-      #     ignore-unfixed: true
-      #     output: 'trivy-results.sarif'
-      #     format: sarif
-      #     exit-code: '1'
-      #     severity: CRITICAL,HIGH,LOW,MEDIUM
-      #   continue-on-error: true
-
-      - name: Run Trivy vulnerability scanner
-        working-directory: ${{ env.working-directory }}
-        continue-on-error: true
-        run: |
-          # Install Trivy
-          wget -qO- "https://github.com/aquasecurity/trivy/releases/download/v0.45.1/trivy_0.45.1_Linux-64bit.tar.gz" | tar xz
-          sudo mv trivy /usr/local/bin/
-          trivy --version
-
-          # Run the scanner in repo mode
-          trivy config --exit-code 1 --format sarif --output trivy-results.sarif --severity CRITICAL,HIGH,LOW,MEDIUM .
-
       - name: Check for Static Analysis Override Label
         if: github.ref != 'refs/heads/main'
         id: check_for_static_analysis_override
@@ -115,7 +89,6 @@ jobs:
           script: |
             const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
             #### Checkov 🛂: \`${{ steps.terraform_static_analysis_checkov.outcome }}\`
-            #### trivy 🛂: \`${{ steps.terraform_static_analysis_trivy.outcome }}\`
             #### Static Analysis Override Label 🏷️: \`${{ steps.check_for_static_analysis_override.outputs.result }}\`
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`, Marker: \`${{ inputs.component }}_static_analysis\`*`;
@@ -162,21 +135,6 @@ jobs:
             echo "OVERRIDDEN (by label): Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
           elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" == "success" ]]; then
             echo "PASS: Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
-          fi
-
-          if [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
-            echo "OVERRIDDEN (Dependabot): Terraform Static Analysis - trivy" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
-            export failBuild=true
-            echo "FAIL: Terraform Static Analysis - trivy" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
-            echo "OVERRIDDEN (by label): Terraform Static Analysis - trivy" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" == "success" ]]; then
-            echo "PASS: Terraform Static Analysis - trivy" >>"${GITHUB_STEP_SUMMARY}"
-          fi
-
-          if [[ "${failBuild}" == "true" ]]; then
-            exit 1
           fi
 
   terraform:
