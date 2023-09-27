@@ -20,7 +20,7 @@ def test_handler_does_not_error(
         "athena_load_handler.create_curated_athena_table",
         autospec=True,
     )
-    mocker.patch("athena_load_handler.create_raw_athena_table", autospec=True)
+    mocker.patch("athena_load_handler.temporary_raw_athena_table", autospec=True)
     mock_infer_schema = mocker.patch(
         "athena_load_handler.infer_glue_schema_from_raw_csv", autospec=True
     )

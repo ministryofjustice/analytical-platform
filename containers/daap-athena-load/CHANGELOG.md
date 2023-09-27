@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Refactor infer_glue_schema
 - Remove unused argument from create_raw_athena_table
+- Ensure raw athena tables are deleted if there is an exception
+- Bump base image version
 
 ## [1.1.4] 2023-09-21
 
