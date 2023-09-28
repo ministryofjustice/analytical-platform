@@ -19,14 +19,17 @@ locals {
   general_members = [ # members of analytics-hq gh team
     "jacobwoffenden",
     "calumabarnett",
-    "SimonsMOJ",      # Simon Heron
-    "mshodge",        # Michael Hodges
-    "YvanMOJdigital", # Yvan Smith
-    "ChikC",          # Chike Chinukwue
-    "EO510",          # Eki Osehenye
-    "Braimah-L",      # Braimah Lat
-    "imkatiewatson",  # Katie Watson
-    "f-marry"         # Fabien Marry
+    "SimonsMOJ",        # Simon Heron
+    "mshodge",          # Michael Hodges
+    "YvanMOJdigital",   # Yvan Smith
+    "ChikC",            # Chike Chinukwue
+    "EO510",            # Eki Osehenye
+    "Braimah-L",        # Braimah Lat
+    "imkatiewatson",    # Katie Watson
+    "f-marry",          # Fabien Marry
+    "alex-vonfeldmann", # Alex von Feldmann
+    "gfowler-moj",      # Greg Fowler
+    "RNTjustice"        # Richard Trist
   ]
 
   # GitHub usernames for engineers who need full AWS access
@@ -34,15 +37,14 @@ locals {
   engineers = [ # analytical-platform and analytics-hq gh teams
     "ymao2",    # Yikang Mao
     "BrianEllwood",
-    "tom-webber",
     "Emterry", # Emma Terry
     "michaeljcollinsuk",
     "jhpyke",
     "tamsinforbes",
     "murad-ali-MoJ",
     "Gary-H9",
-    "mitchdawson1982",
-    "bagg3rs" # Richard Baguley
+    "mitchdawson1982", # Mitch Dawson
+    "bagg3rs"          # Richard Baguley
   ]
 
   tech_archs_maintainers = [ # maintainers of data-tech-archs gh group
@@ -127,8 +129,7 @@ locals {
     "jhpyke",
     "murad-ali-MoJ",
     "tamsinforbes",
-    "tom-webber",
-    "mitchdawson1982",
+    "mitchdawson1982", # Mitch Dawson
     "Gary-H9"
   ]
 
@@ -139,7 +140,9 @@ locals {
   data_platform_labs_members = [
     "murdo-moj",
     "matmoore",
-    "LavMatt"
+    "LavMatt",
+    "tom-webber",
+    "mitchdawson1982" # Mitch Dawson
   ]
 
   data_platform_security_auditor_members = [

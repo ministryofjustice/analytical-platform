@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
 
       - name: Prepare Environment
         id: prepare_environment
@@ -47,7 +47,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@91d83a10ac0ded65efb6b419accf0099665d2a9f # v12.2491.0
+        uses: bridgecrewio/checkov-action@b953daa7a2526d3bacb8646e3caac2822f9e49e5 # v12.2513.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -169,7 +169,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
 
       - name: Prepare Environment
         id: prepare_environment
@@ -182,7 +182,7 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@50ac8dd1e1b10d09dac7b8727528b91bed831ac0 # v3.0.2
+        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
@@ -190,7 +190,7 @@ jobs:
       - name: Assume GlobalGitHubActionAdmin Role
         if: github.ref != 'refs/heads/main'
         id: assume_global_github_action_admin_role
-        uses: aws-actions/configure-aws-credentials@50ac8dd1e1b10d09dac7b8727528b91bed831ac0 # v3.0.2
+        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
@@ -210,7 +210,7 @@ jobs:
       - name: Assume GlobalGitHubActionAccess Role
         if: github.ref != 'refs/heads/main'
         id: assume_global_github_action_access_role
-        uses: aws-actions/configure-aws-credentials@50ac8dd1e1b10d09dac7b8727528b91bed831ac0 # v3.0.2
+        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess

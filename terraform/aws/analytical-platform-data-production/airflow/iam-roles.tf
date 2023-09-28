@@ -76,7 +76,7 @@ resource "aws_iam_role" "airflow_dev_default_pod_role" {
 }
 
 resource "aws_iam_role" "airflow_dev_eks_role" {
-  name               = "airflow-dev-eksRole-role-211908c"
+  name               = var.dev_eks_role_name
   description        = "Allows EKS to manage clusters on your behalf."
   assume_role_policy = data.aws_iam_policy_document.airflow_dev_eks_assume_role_policy.json
   managed_policy_arns = [
@@ -126,3 +126,13 @@ resource "aws_iam_role" "airflow_prod_node_instance_role" {
     policy = data.aws_iam_policy_document.airflow_prod_node_instance_inline_role_policy.json
   }
 }
+
+resource "aws_iam_role" "airflow_prod_eks_role" {
+  name               = var.prod_eks_role_name
+  description        = "Allows EKS to manage clusters on your behalf."
+  assume_role_policy = data.aws_iam_policy_document.airflow_prod_eks_assume_role_policy.json
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  ]
+}
+

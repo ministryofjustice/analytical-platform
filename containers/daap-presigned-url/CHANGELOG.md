@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.3]
+
+### Changed
+
+- Use new version of base image paths module
+
+## [1.2.2] 2023-09-15
+
+### Changed
+
+- Use new version of base image logging module within `daap-presigned-url`
+
+## [1.2.1]
+
+### Changed
+
+- Use shared library to construct S3 paths
+
 ## [1.2.0]
 
 ### Changed

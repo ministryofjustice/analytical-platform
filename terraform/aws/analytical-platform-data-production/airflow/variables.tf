@@ -41,6 +41,15 @@ variable "transit_gateway_ids" {
   description = "Map of transit gateway names to ids"
 }
 
+##################################################
+# EKS
+##################################################
+
+variable "node_group_instance_types" {
+  type        = map(list(string))
+  description = "Map of node group labels to instance types"
+}
+
 ###################################################
 ############## Development Variables ##############
 ###################################################
@@ -50,17 +59,32 @@ variable "dev_vpc_cidr_block" {
   description = "CIDR range for the VPC"
 }
 
-variable "dev_eks_role_arn" {
+variable "dev_eks_role_name" {
   type        = string
-  description = "ARN of role used by EKS cluster for Airflow-Dev"
+  description = "Name of cluster role for Airflow-Dev"
 }
 
-variable "dev_cluster_sg_name" {
+variable "dev_eks_cluster_name" {
   type        = string
-  description = "Name of cluster security group for Airflow-Dev"
+  description = "Name of cluster for Airflow-Dev"
 }
 
-variable "dev_node_sg_id" {
+variable "dev_cluster_additional_sg_id" {
+  type        = string
+  description = "Name of cluster additional security group for Airflow-Dev"
+}
+
+variable "dev_cluster_additional_sg_name" {
+  type        = string
+  description = "Name of cluster additional security group for Airflow-Dev"
+}
+
+variable "dev_cluster_node_sg_id" {
+  type        = string
+  description = "ID of node security group for Airflow-Dev"
+}
+
+variable "dev_cluster_node_sg_name" {
   type        = string
   description = "ID of node security group for Airflow-Dev"
 }
@@ -84,14 +108,24 @@ variable "prod_vpc_cidr_block" {
   description = "CIDR range for the VPC"
 }
 
-variable "prod_eks_role_arn" {
+variable "prod_eks_role_name" {
   type        = string
-  description = "ARN of role used by EKS cluster for Airflow-Prod"
+  description = "Name of role used by EKS cluster for Airflow-Prod"
 }
 
-variable "prod_cluster_sg_name" {
+variable "prod_eks_cluster_name" {
   type        = string
-  description = "Name of cluster security group for Airflow-Prod"
+  description = "Name of cluster for Airflow-Prod"
+}
+
+variable "prod_cluster_additional_sg_id" {
+  type        = string
+  description = "Name of cluster additional security group for Airflow-Prod"
+}
+
+variable "prod_cluster_additional_sg_name" {
+  type        = string
+  description = "Name of cluster additional security group for Airflow-Prod"
 }
 
 variable "prod_node_sg_id" {

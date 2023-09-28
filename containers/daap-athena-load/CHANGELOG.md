@@ -9,6 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Refactor infer_glue_schema
+- Remove unused argument from create_raw_athena_table
+- Ensure raw athena tables are deleted if there is an exception
+- Bump base image version
+
+## [1.1.4] 2023-09-21
+
+### Changed
+
+- The temporary raw athena table is created with a unique name per invocation
+- Use new version of base image paths module
+
+## [1.1.4] 2023-09-15
+
+### Changed
+
+- Use new version of base image logging module within `daap-athena-load`
+
+## [1.1.3] 2023-09-13
+
+### Changed
+
+- Use `data_platform_paths` from the base image for s3 paths and athena table names
+
 ## [1.1.2] 2023-08-30
 
 ### Changed

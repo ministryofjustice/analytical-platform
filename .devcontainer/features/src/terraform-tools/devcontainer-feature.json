@@ -72,7 +72,10 @@
       "extensions": ["hashicorp.terraform", "Infracost.infracost"],
       "settings": {
         "editor.formatOnSave": true,
-        "editor.defaultFormatter": "hashicorp.terraform"
+        "editor.defaultFormatter": "hashicorp.terraform",
+        "files.associations": {
+          "*.yml.tftpl": "yaml"
+        }
       }
     }
   },

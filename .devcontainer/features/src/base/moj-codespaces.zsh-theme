@@ -40,14 +40,15 @@ __zsh_prompt() {
     # Kubernetes Context
     if command -v kubectl &> /dev/null; then
       PROMPT+='`\
-          if [[ "$( kubectl config get-contexts | grep "*" | awk "{ print $2 }" | cut -d"/" -f2 )" == *"development"* ]]; then \
-            echo -n "[ k8s: %{$fg[green]%}development%{$reset_color%} ] "; \
-          elif [[ "$( kubectl config get-contexts | grep "*" | awk "{ print $2 }" | cut -d"/" -f2 )" == *"github-actions-moj"* ]]; then \
-            echo -n "[ k8s: %{$fg[blue]%}github-actions-moj%{$reset_color%} ] "; \
-          elif [[ "$( kubectl config get-contexts | grep "*" | awk "{ print $2 }" | cut -d"/" -f2 )" == *"production"* ]]; then \
-            echo -n "[ k8s: %{$fg[red]%}production%{$reset_color%} ] "; \
-          elif [[ "$( kubectl config get-contexts | grep "*" | awk "{ print $2 }" | cut -d"/" -f2 )" == *"live.cloud-platform.service.justice.gov.uk"* ]]; then \
-            echo -n "[ k8s: %{$fg[red]%}cloud-platform-live%{$reset_color%} ] "; \
+          export KUBE_CURRENT_CONTEXT=$(kubectl config current-context 2>/dev/null); \
+          if [[ "${KUBE_CURRENT_CONTEXT}" == *"development"* ]]; then \
+            echo -n "[ k8s: %{$fg[green]%}${KUBE_CURRENT_CONTEXT}%{$reset_color%} ] "; \
+          elif [[ "${KUBE_CURRENT_CONTEXT}" == *"github-actions-moj"* ]]; then \
+            echo -n "[ k8s: %{$fg[blue]%}${KUBE_CURRENT_CONTEXT}%{$reset_color%} ] "; \
+          elif [[ "${KUBE_CURRENT_CONTEXT}" == *"production"* ]]; then \
+            echo -n "[ k8s: %{$fg[red]%}${KUBE_CURRENT_CONTEXT}%{$reset_color%} ] "; \
+          elif [[ "${KUBE_CURRENT_CONTEXT}" == *"live.cloud-platform.service.justice.gov.uk"* ]]; then \
+            echo -n "[ k8s: %{$fg[red]%}${KUBE_CURRENT_CONTEXT}%{$reset_color%} ] "; \
           fi`'
     fi
 
