@@ -10,13 +10,13 @@ weight: 15
 
 ## Data as a Product: Vision
 
-Each Data Product will require a [specification](https://github.com/ministryofjustice/data-platform-products/blob/main/data-products/_docs/product-specification.md) (still under refinement) alongside [other defined pieces of descriptive metadata captured at registration](https://github.com/ministryofjustice/data-platform-products/tree/main/data-products#defining-a-data-product).
+Each Data Product will require a specification ([example here](https://github.com/ministryofjustice/data-platform-products/blob/main/data-products/_docs/product-specification.md), still under refinement) alongside [other defined pieces of descriptive metadata captured at registration](https://github.com/ministryofjustice/data-platform-products/tree/main/data-products#defining-a-data-product).
 
 Data Products:
 
 * May be multi-component, e.g. consisting of multiple tables
 * Can consist of structured or unstructured data (or a combination)
-* Are controlled and updated by Data Owners, Data Stewards, and Data Custodians.
+* Are controlled and updated by Data Owners.
 * Include data metadata
 
 We want to design the Data Product management process around a user-facing API.
@@ -24,7 +24,7 @@ This API will allow users to register, update, and retrieve information about a 
 
 The data sent to this API as part of registering or updating a data product will flow through standard Data Lake zones: Landing -> Raw -> Curated.
 
-> Implementation: The architecture will be built in the `data-platform-development` aws account, a sandbox account within [MoJ's Modernisation Platform](https://user-guide.modernisation-platform.service.justice.gov.uk/#modernisation-platform), which is deployed within the [modernisation-platform-environments](https://github.com/ministryofjustice/modernisation-platform-environments) repository
+> Implementation: The infrastructure will be built in the Data Platform's [Modernisation Platform](https://user-guide.modernisation-platform.service.justice.gov.uk/#modernisation-platform) [environment(s)](https://github.com/ministryofjustice/modernisation-platform-environments).
 
 
 ## Data Flow
@@ -82,25 +82,22 @@ With this being used as a PoC it has quite a narrow scope and the following limi
 * An extraction_timestamp - used as the partition - is the only column added to the data during the curation step (conversion to parquet). There is no SCD2.
 * No schema changes can be made once a data product is created, users must create a new product
 
-### Athena vs. Glue
+
+### Notes
+
+#### Use of aws services
+
+##### Athena vs. Glue
 Athena is cheaper than using Glue for compute as you are charged for amount of data scanned per query ($5 per TB).
 Cost of lambda execution is also relatively inexpensive at $0.0000083 per second with 512 Mb memory.
 
 Initial testing has shown Athena as compute to be a lot quicker than using a Glue Job for moderately sized data.
 Further benchmarking is required as scale and complexity increases.
 
-### Notes
-
-#### Reporting tool
-
-Athena is one example to provide route to access the data.
-Various reporting tools can be attached later.
-
-#### Use of aws services
-
 ##### API Gateway
 
-API gateway is used to start the data ingestion process.
+API Gateway is used to host and manage our API endpoints.
+A user will interact with the API to initiate the product registration and data ingestion processes.
 
 ##### EventBridge
 
