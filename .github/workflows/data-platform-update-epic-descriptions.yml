@@ -4,10 +4,6 @@ on:
   issues:
     types: [labeled]
 
-concurrency:
-  group: update-epic-description
-  cancel-in-progress: false
-
 jobs:
   update_epic_description:
     runs-on: ubuntu-latest
@@ -17,9 +13,9 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const newIssueNumber = context.issue.number;
-            const newIssueTitle = context.issue.title;
-            const labelName = context.label.name;
+            const issueNumber = context.issue.number;
+            const issueTitle = context.issue.title;
+            const labelName = context.payload.label.name;
 
             // Check if the label applied is an Epic label
             if (!labelName.includes('(Epic #')) {
@@ -44,7 +40,7 @@ jobs:
             const epicBody = epic.data.body;
 
             // Amend the Epic description with a checkbox and link to the new issue
-            const newItemLink = `- [ ] [#${newIssueNumber}](${newIssueTitle})`;
+            const newItemLink = `- [ ] [#${issueNumber}](${issueTitle})`;
             const updatedDescription = `${epicBody}\n${newItemLink}`;
 
             // Update the Epic description
