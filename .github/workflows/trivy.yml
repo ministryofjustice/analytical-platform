@@ -23,8 +23,8 @@ jobs:
         scan-type: config
         scan-ref: HEAD
         ignore-unfixed: true
-        output: trivy-results.sarif
-        format: sarif
+        format: 'sarif'
+        output: 'trivy-results.sarif'
         exit-code: '1'
         severity: CRITICAL,HIGH,LOW,MEDIUM
       continue-on-error: true
@@ -33,16 +33,7 @@ jobs:
       id: debug
       run: ls -la
    
-    - name: Upload SARIF results
-      id: upload_sarif_results
-      uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.0
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
       with:
-          name: SARIF results
-          path: trivy-results.sarif
-          retention-days: 5
-
-    - name: Upload to CodeQL
-      id: upload_to_codeql
-      uses: github/codeql-action/upload-sarif@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.13.4
-      with:
-        sarif_file: trivy-results.sarif
+        sarif_file: 'trivy-results.sarif'
