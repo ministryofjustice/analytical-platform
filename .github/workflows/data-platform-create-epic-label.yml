@@ -3,6 +3,8 @@ name: Create Epic Label
 on:
   issues:
     types: [labeled]
+  workflow_dispatch:
+  pull_request:
 
 concurrency:
   group: create-epic-label
