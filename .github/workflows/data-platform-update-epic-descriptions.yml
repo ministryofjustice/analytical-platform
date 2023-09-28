@@ -13,9 +13,15 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            console.log("Starting script...");
+
             const issueNumber = context.issue.number;
             const issueTitle = context.issue.title;
             const labelName = context.payload.label.name;
+
+            console.log(`Issue Number: ${issueNumber}`);
+            console.log(`Issue Title: ${issueTitle}`);
+            console.log(`Label Name: ${labelName}`);
 
             // Check if the label applied is an Epic label
             if (!labelName.includes('(Epic #')) {
@@ -25,6 +31,7 @@ jobs:
 
             // Extract the Epic's issue number from the label name
             const epicNumber = labelName.match(/\(Epic #(\d+)\)/)[1];
+            console.log(`Epic Number Extracted: ${epicNumber}`);
 
             if (!epicNumber) {
               console.log('Could not determine the Epic issue number. Exiting...');
@@ -38,10 +45,15 @@ jobs:
               issue_number: epicNumber
             });
             const epicBody = epic.data.body;
+            console.log("Fetched Epic Body:");
+            console.log(epicBody);
 
             // Amend the Epic description with a checkbox and link to the new issue
-            const newItemLink = `- [ ] [#${issueNumber}](${issueTitle})`;
+            const newItemLink = `- [ ] [${issueTitle}](https://github.com/${context.repo.owner}/${context.repo.repo}/issues/${issueNumber})`;
+            console.log(`New Item Link: ${newItemLink}`);
             const updatedDescription = `${epicBody}\n${newItemLink}`;
+            console.log("Updated Description:");
+            console.log(updatedDescription);
 
             // Update the Epic description
             await github.rest.issues.update({
@@ -50,3 +62,4 @@ jobs:
               issue_number: epicNumber,
               body: updatedDescription
             });
+            console.log("Epic description updated successfully.");
