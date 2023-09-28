@@ -15,3 +15,4 @@ sbom-*
 .infracost
 __pycache__
 .github/path-filter/pytest.yml
+**/**datahub
