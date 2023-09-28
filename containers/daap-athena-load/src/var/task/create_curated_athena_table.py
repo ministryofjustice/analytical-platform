@@ -283,7 +283,7 @@ def create_curated_athena_table(
         )
         return
 
-    logger.info(
+    logger.error(
         f"{loader.curated_data_table} does not exist,"
         f" but files exist in {loader.curated_table_path}."
         " Run reload_data_product to recreate the data product before continuing."
