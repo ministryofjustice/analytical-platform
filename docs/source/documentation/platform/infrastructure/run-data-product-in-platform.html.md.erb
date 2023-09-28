@@ -1,48 +1,65 @@
 ---
 owner_slack: "#data-platform-notifications"
-title: Run data product in Data Platform (POC)
-last_reviewed_on: 2023-04-04
+title: Data as a Product in Data Platform (PoC)
+last_reviewed_on: 2023-09-27
 review_in: 6 months
 weight: 15
 ---
 
 # <%= current_page.data.title %>
 
-## Context
-We want a compute process that is scalable and event driven to run the data product. The data product will be sent to Data Platform for processing. After processing, the data should be available in a suitable format accessible to data consumers. The processing will include receiving raw data, applying transformations, cleansing and finally storing data in a correct location and format.
+## Data as a Product: Vision
 
-<strong>The architecture will be built in the `data-platform-development`, a sandbox account within MoJ's Modernisation Platform, which is deployed using the [modernisation-platform-environments](https://github.com/ministryofjustice/modernisation-platform-environments) repository</strong>
+Each Data Product will require a specification ([example here](https://github.com/ministryofjustice/data-platform-products/blob/main/data-products/_docs/product-specification.md), still under refinement) alongside [other defined pieces of descriptive metadata captured at registration](https://github.com/ministryofjustice/data-platform-products/tree/main/data-products#defining-a-data-product).
 
-## Data Producer Configuration Flow
+Data Products:
 
-![Data platform general diagram](../images/data-platform-configuration-flow.png "Data platform configuration Flow")
+* May be multi-component, e.g. consisting of multiple tables
+* Can consist of structured or unstructured data (or a combination)
+* Are controlled and updated by Data Owners.
+* Include data metadata
 
-**For now** - Data product configuration will be sent to the Data Platform S3 bucket via [GitHub Actions](https://github.com/ministryofjustice/data-platform-products/blob/main/.github/workflows/data-product-example-2-poc.yaml).
+We want to design the Data Product management process around a user-facing API.
+This API will allow users to register, update, and retrieve information about a Data Product.
 
-The data product configuration (Zip file) will be stored in the following structure:
-> `${DATA_PLATFORM_PRODUCTS}/code/${DATA_PLATFORM_PRODUCT_NAME}/${ZIPFILE}.zip`
+The data sent to this API as part of registering or updating a data product will flow through standard Data Lake zones: Landing -> Raw -> Curated.
 
-Event Bridge connection to bucket should be enabled. Once the file lands in the landing zone, S3 sends an event to Amazon Event Bridge whenever data events happen in the bucket. We will use Event Bridge rules to route events Object Created `PutObject` events to Lambda.
+> Implementation: The infrastructure will be built in the Data Platform's [Modernisation Platform](https://user-guide.modernisation-platform.service.justice.gov.uk/#modernisation-platform) [environment(s)](https://github.com/ministryofjustice/modernisation-platform-environments).
 
-Event bridge rule will trigger lambda. Lambda will be responsible to extract zip contents into
-> `${DATA_PLATFORM_PRODUCTS}/code/${DATA_PLATFORM_PRODUCT_NAME}/output-code
 
-## Data Flow Architecture
+## Data Flow
 
-![Data platform general diagram](../images/data-platform-data-flow.png "Data platform data Flow")
+Users with permissions to manage Data Products may register or amend data products.
+Registration, and some categories of amendments will involve ingestion of data using our data API.
+This API is backed by containerised lambdas that carry out each step of the event-driven data processing pipeline.
+Data will first go to a ‘landing’ bucket ahead of data validation.
+It is then moved to a ‘raw history’ bucket folder to retain a copy of the data.
+The arrival of structured data in the raw history folder triggers a ‘curation’ lambda
+which standardises the file type and data format before placing the data in the finalised ‘curated’ bucket folder.
+This curated data is the data that is surfaced as the data product, and is registered to the aws Glue catalogue.
 
-The data will be sent via an api, and will land into the data-platform-bucket
-> `${DATA_PLATFORM_PRODUCTS}/${DATA_PLATFORM_PRODUCT_NAME}/rawdata/extraction_timestamp/${SOMEDATA}.csv
+As part of the request to register or amend a Data Product, the API user must provide Data Product metadata.
+This is processed, validated, and stored in a separate location to the data.
+This then integrates with OpenMetadata to update the metadata in the catalogue
+to reflect the changes made to the Data Product through this ingestion pipeline.
 
-Once the file lands the landing zone, S3 sends events to Amazon EventBridge whenever certain events happen in the bucket. After EventBridge is enabled, all events below are sent to EventBridge.
-We will use EventBridge rules to route events Object Created putObject event to Lambda.
+Each of the pipeline stages outputs standardised logging for audit and debugging purposes.
+These logs are stored in another restricted-access logging bucket.
 
-Event Bridge rule will trigger Lambda. Lambda will start the Glue job responsible to run the data producer provided script, which in turn will create a parquet file and data catalogue.
->`${DATA_PLATFORM_PRODUCTS}/${DATA_PLATFORM_PRODUCT_NAME}/curateddata/extraction_timestamp/${SOMEDATA}.parquet
+Each of the lambda images are stored in a central Elastic Container Registry on the MoJ Modernisation Platform.
 
-The data catalogue entry will be updated, while transforming the data. Curated data will be accessible via Athena.
+![Data Product ingestion pipeline](../images/daap-data-flow-architecture.excalidraw.png "Data Product ingestion pipeline")
 
-Logging of errors will be setup in Lambda and Glue. In case of any error while running the code provided by the producers, notifications could be configured in the future (not currently in scope for this work).
+
+## Data Ingestion handling
+
+Upon file transfer to the raw_data folder inside the data bucket an `aws.s3` `Object Created`
+[EventBridge trigger is activated](https://github.com/ministryofjustice/modernisation-platform-environments/blob/main/terraform/environments/data-platform/triggers.tf).
+This calls the [daap-athena-load lambda](https://github.com/ministryofjustice/data-platform/tree/main/containers/daap-athena-load),
+which creates raw and curated tables in the Glue Catalog.
+
+![Raw data processing via the daap-athena-load lambda](../images/daap-athena-load.excalidraw.png "Raw data processing via the daap-athena-load lambda")
+
 
 ### Assumptions and Risks
 
@@ -54,28 +71,38 @@ The following are the assumptions and risks. This will be mitigated eventually.
 
 3. Access control to various tools and users are out of scope for this work.
 
+
+### Scope and Limitations
+
+With this being used as a PoC it has quite a narrow scope and the following limitations:
+
+* Raw data are a full-load snapshot at every upload.
+* Raw data are csv format.
+* Data producers cannot include transformations of the data.
+* An extraction_timestamp - used as the partition - is the only column added to the data during the curation step (conversion to parquet). There is no SCD2.
+* No schema changes can be made once a data product is created, users must create a new product
+
+
 ### Notes
 
-##### Bucket
+#### Use of aws services
 
-1. Users will be unaware that there is a bucket (Data Platform bucket), this is internal to the Data Platform.
+##### Athena vs. Glue
+Athena is cheaper than using Glue for compute as you are charged for amount of data scanned per query ($5 per TB).
+Cost of lambda execution is also relatively inexpensive at $0.0000083 per second with 512 Mb memory.
 
-2. There is only one bucket (Data Platform bucket). Everything else will be sub folders of the same bucket
+Initial testing has shown Athena as compute to be a lot quicker than using a Glue Job for moderately sized data.
+Further benchmarking is required as scale and complexity increases.
 
-##### Reporting tool
+##### API Gateway
 
-Athena is one example to provide route to access the data. Various reporting tools can be attached later.
+API Gateway is used to host and manage our API endpoints.
+A user will interact with the API to initiate the product registration and data ingestion processes.
 
-##### Event Bridge
+##### EventBridge
 
-We are not choosing Event Bridge to directly call Lambda for for following reasons:
+We are using EventBridge to kick off lambdas after each successive step of the data ingestion pipeline.
 
-1. Event Bridge to Glue needs a workflow setup. We cannot extract the full event in Glue script, only the name can be extracted. With Lambda, the whole event can be passed and we can extract the information needed to run the script.
+##### Lambda
 
-2. We need lambda to unpack the zip file.
-
-##### Script execution - Glue vs Lambda vs Containers
-
-1. We could use Lambda for computation but there are limitations in Lambda. The maximum time a function can run is 15 minutes, and the default timeout is 3 seconds. This makes Lambda unsuitable for long-running workloads. The payload for each invocation of a Lambda function is limited to 6 MB, and memory is limited to just under 3 GB.
-
-2. Docker containers can be deployed in ECR and run in a Fargate Cluster. This would enable us to run data products in various languages that may be unsupported by Glue. Further investigations may be required in the future.
+We are using containerised lambdas for each of the processing steps in the data ingestion pipeline.
