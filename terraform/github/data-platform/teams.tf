@@ -130,7 +130,8 @@ locals {
     "murad-ali-MoJ",
     "tamsinforbes",
     "mitchdawson1982", # Mitch Dawson
-    "Gary-H9"
+    "Gary-H9",
+    "ymao2"    # Yikang Mao
   ]
 
   data_platform_labs_maintainers = [
