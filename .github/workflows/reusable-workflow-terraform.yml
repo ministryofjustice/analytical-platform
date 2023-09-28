@@ -56,15 +56,6 @@ jobs:
           output_format: cli
         continue-on-error: true
 
-      - name: tfsec
-        if: github.ref != 'refs/heads/main'
-        id: terraform_static_analysis_tfsec
-        uses: aquasecurity/tfsec-action@b466648d6e39e7c75324f25d83891162a721f2d6 # v1.0.3
-        with:
-          working_directory: ${{ env.working-directory }}
-          additional_args: --no-colour --exclude-path ${{ env.working-directory }}/.terraform/modules --tfvars-file ${{ env.working-directory }}/terraform.tfvars
-        continue-on-error: true
-
       - name: Check for Static Analysis Override Label
         if: github.ref != 'refs/heads/main'
         id: check_for_static_analysis_override
@@ -98,7 +89,6 @@ jobs:
           script: |
             const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
             #### Checkov 🛂: \`${{ steps.terraform_static_analysis_checkov.outcome }}\`
-            #### tfsec 🛂: \`${{ steps.terraform_static_analysis_tfsec.outcome }}\`
             #### Static Analysis Override Label 🏷️: \`${{ steps.check_for_static_analysis_override.outputs.result }}\`
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`, Marker: \`${{ inputs.component }}_static_analysis\`*`;
@@ -145,17 +135,6 @@ jobs:
             echo "OVERRIDDEN (by label): Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
           elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" == "success" ]]; then
             echo "PASS: Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
-          fi
-
-          if [[ "${{ steps.terraform_static_analysis_tfsec.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
-            echo "OVERRIDDEN (Dependabot): Terraform Static Analysis - tfsec" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_tfsec.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
-            export failBuild=true
-            echo "FAIL: Terraform Static Analysis - tfsec" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_tfsec.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
-            echo "OVERRIDDEN (by label): Terraform Static Analysis - tfsec" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_tfsec.outcome }}" == "success" ]]; then
-            echo "PASS: Terraform Static Analysis - tfsec" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
           if [[ "${failBuild}" == "true" ]]; then

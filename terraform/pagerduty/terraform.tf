@@ -33,3 +33,4 @@ provider "aws" {
 provider "pagerduty" {
   token = data.aws_secretsmanager_secret_version.pagerduty_token.secret_string
 }
+
