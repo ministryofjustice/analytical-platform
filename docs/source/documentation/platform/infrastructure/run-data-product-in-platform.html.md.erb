@@ -10,19 +10,19 @@ weight: 15
 
 ## Data as a Product: Vision
 
-We want to design the Data Product management process around a user-facing API.
-This API will allow users to register, update, and retrieve information about a Data Product.
-
-The data sent to this API as part of registering or updating a data product will flow through standard Data Lake zones: Landing -> Raw -> Curated.
-
-Each Data Product will require a [specification](https://github.com/ministryofjustice/data-platform-products/blob/main/data-products/_docs/product-specification.md) (still under refinement) alongside [other definitions](https://github.com/ministryofjustice/data-platform-products/tree/main/data-products#defining-a-data-product).
+Each Data Product will require a [specification](https://github.com/ministryofjustice/data-platform-products/blob/main/data-products/_docs/product-specification.md) (still under refinement) alongside [other defined pieces of descriptive metadata captured at registration](https://github.com/ministryofjustice/data-platform-products/tree/main/data-products#defining-a-data-product).
 
 Data Products:
 
 * May be multi-component, e.g. consisting of multiple tables
-* Can consist of structured or unstructred data (or a combination)
+* Can consist of structured or unstructured data (or a combination)
 * Are controlled and updated by Data Owners, Data Stewards, and Data Custodians.
 * Include data metadata
+
+We want to design the Data Product management process around a user-facing API.
+This API will allow users to register, update, and retrieve information about a Data Product.
+
+The data sent to this API as part of registering or updating a data product will flow through standard Data Lake zones: Landing -> Raw -> Curated.
 
 > Implementation: The architecture will be built in the `data-platform-development` aws account, a sandbox account within [MoJ's Modernisation Platform](https://user-guide.modernisation-platform.service.justice.gov.uk/#modernisation-platform), which is deployed within the [modernisation-platform-environments](https://github.com/ministryofjustice/modernisation-platform-environments) repository
 
@@ -88,28 +88,6 @@ Cost of lambda execution is also relatively inexpensive at $0.0000083 per second
 
 Initial testing has shown Athena as compute to be a lot quicker than using a Glue Job for moderately sized data.
 Further benchmarking is required as scale and complexity increases.
-
-### Additional developments/ improvements
-
-* **Schema**
-    * (?) Improve schema inference.
-    * Infer csv properties on uploads
-        * e.g. delimiter, newline character, etc.
-        * request these parameters at time of upload?
-    * Read rows of csv data rather than a defined number of bytes of the file -
-    e.g. [s3 select_object_content](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/select_object_content.html) for 1000 lines
-    * Allow data producer to define explicit table schema and use this when given rather than inferring.
-    * Validate new data against existing schema for a given table.
-    * Get partitions to create from existing partition folders or from the schema
-        * (don’t just use MSCK REPAIR TABLE as this is less efficient)
-    * Read xMb of 1st parquet file into memory when inferring schema. This is only necessary if something has gone wrong and an existing table is not registered in glue.
-
-* **Transformation**
-    * Allow data producer to push some config to perform simple transformations on the raw data. Things like lists of columns to include or simple aggregate sql statements. This could be injected into the sql used by the lambda to produce a simply transformed version of the raw data product. Defining simple is another task in itself.
-
-* **Updates**
-    * Deal with non-full snapshots - will need to know if has primary key.
-    * Deal with CDC type loads, producing scd2 type database tables, where appropriate.
 
 ### Notes
 
