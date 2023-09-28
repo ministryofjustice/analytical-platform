@@ -4,6 +4,10 @@ on:
   issues:
     types: [labeled]
 
+concurrency:
+  group: update-epic-description
+  cancel-in-progress: false
+
 jobs:
   update_epic_description:
     runs-on: ubuntu-latest
@@ -40,6 +44,7 @@ jobs:
             const epicBody = epic.data.body;
 
             // Amend the Epic description with a checkbox and link to the new issue
+
             const newItemLink = `- [ ] [#${issueNumber}](${issueTitle})`;
             const updatedDescription = `${epicBody}\n${newItemLink}`;
 
