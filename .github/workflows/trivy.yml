@@ -16,20 +16,19 @@ jobs:
     permissions:
       issues: write
     steps:
+      - name: trivy
+        id: terraform_static_analysis_trivy
+        uses: aquasecurity/trivy-action@fbd16365eb88e12433951383f5e99bd901fc618f # v0.12.0
+        with:
+          scan-type: config
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          exit-code: '1'
+          severity: CRITICAL,HIGH,LOW,MEDIUM
+        continue-on-error: true
 
-    - name: trivy
-      id: terraform_static_analysis_trivy
-      uses: aquasecurity/trivy-action@fbd16365eb88e12433951383f5e99bd901fc618f # v0.12.0
-      with:
-        scan-type: config
-        ignore-unfixed: true
-        format: 'sarif'
-        output: 'trivy-results.sarif'
-        exit-code: '1'
-        severity: CRITICAL,HIGH,LOW,MEDIUM
-      continue-on-error: true
-
-    - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: 'trivy-results.sarif'
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
