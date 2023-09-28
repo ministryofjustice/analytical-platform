@@ -2,7 +2,6 @@ import os
 import sys
 from dataclasses import dataclass
 from os.path import dirname, join
-from unittest.mock import MagicMock
 
 import boto3
 import pytest
@@ -80,7 +79,7 @@ def data_product_element(monkeypatch):
 
 @pytest.fixture
 def logger():
-    return MagicMock(DataPlatformLogger)
+    return DataPlatformLogger()
 
 
 @pytest.fixture

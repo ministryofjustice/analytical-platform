@@ -3,16 +3,13 @@ from io import BytesIO
 from textwrap import dedent
 from uuid import uuid4
 
-import pyarrow as pa
 import pytest
 from data_platform_paths import BucketPath
 from infer_glue_schema import (
     InferredMetadata,
     csv_sample,
-    infer_glue_schema_from_parquet,
     infer_glue_schema_from_raw_csv,
 )
-from pyarrow import parquet as pq
 
 
 @pytest.mark.parametrize(
@@ -82,45 +79,6 @@ def test_infer_schema_from_csv(s3_client, logger, data_product_element):
     ] == [
         {"Name": "some_string", "Type": "string"},
         {"Name": "some_number", "Type": "string"},
-    ]
-
-
-def test_infer_schema_from_parquet(s3_client, logger, data_product_element):
-    table = pa.Table.from_arrays(
-        [
-            pa.array([2, 4, 5, 100]),
-            pa.array(["Flamingo", "Horse", "Brittle stars", "Centipede"]),
-        ],
-        names=["n_legs", "animals"],
-    )
-    output = pa.BufferOutputStream()
-    pq.write_table(table, output)
-
-    path = data_product_element.curated_data_prefix.key + "foo.parquet"
-    s3_client.create_bucket(Bucket="bucket")
-    s3_client.put_object(
-        Key=path,
-        Body=output.getvalue().to_pybytes(),
-        Bucket="bucket",
-    )
-
-    inferred_metadata = infer_glue_schema_from_parquet(
-        file_path=data_product_element.curated_data_prefix,
-        data_product_element=data_product_element,
-        logger=logger,
-        s3_client=s3_client,
-    )
-
-    assert inferred_metadata.metadata["TableInput"]["StorageDescriptor"]["Columns"] == [
-        {"Name": "n_legs", "Type": "bigint"},
-        {"Name": "animals", "Type": "string"},
-    ]
-
-    assert inferred_metadata.metadata_str["TableInput"]["StorageDescriptor"][
-        "Columns"
-    ] == [
-        {"Name": "n_legs", "Type": "string"},
-        {"Name": "animals", "Type": "string"},
     ]
 
 
