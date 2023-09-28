@@ -29,12 +29,9 @@ jobs:
         severity: CRITICAL,HIGH,LOW,MEDIUM
       continue-on-error: true
 
-    # - name: Upload SARIF
-    #   if: always()
-    #   id: upload_sarif
-    #   uses: github/codeql-action/upload-sarif@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.2.7
-    #   with:
-    #     sarif_file: trivy-results.sarif
+    - name: Upload SARIF
+      id: debug
+      run: ls -la
    
     - name: Upload SARIF results
       id: upload_sarif_results
