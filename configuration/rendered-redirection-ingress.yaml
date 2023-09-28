@@ -1,0 +1,251 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-redirection-ingress
+  namespace: data-platform-production
+  annotations:
+    external-dns.alpha.kubernetes.io/set-identifier: app-redirection-ingress-data-platform-production-green
+    external-dns.alpha.kubernetes.io/aws-weight: "100"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      if ($host ~* ^aqa-website\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://aqa-website.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^bentham-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://bentham-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^ccma-gold-scorecards-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://ccma-gold-scorecards-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^ccmbpt-analytics-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://ccmbpt-analytics-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^ccmbpt-guidance\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://ccmbpt-guidance.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^ccpt\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://ccpt.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^cjsm-email-traffic-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://cjsm-email-traffic-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^cjsm-monitoring\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://cjsm-monitoring.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^cjsm-networkanalysis\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://cjsm-networkanalysis.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^commuter-webapp-contracts\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://commuter-webapp-contracts.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^commuter-webapp-familyman\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://commuter-webapp-familyman.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^commuter-webapp-xhibit\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://commuter-webapp-xhibit.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^coroner-stat-tool-ext\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://coroner-stat-tool-ext.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^criminal-scenario-tool\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://criminal-scenario-tool.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^crown-flow-explorer\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://crown-flow-explorer.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^crown-sitting-days\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://crown-sitting-days.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^defcalc\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://defcalc.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^df-bid-shiny\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://df-bid-shiny.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^df-bid-shiny-acc\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://df-bid-shiny-acc.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^df-bid-shiny-pwb\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://df-bid-shiny-pwb.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^df-bid-shiny-ws\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://df-bid-shiny-ws.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^drug-conveyancing-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://drug-conveyancing-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^environ-surveillance-hub\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://environ-surveillance-hub.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^exit-survey-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://exit-survey-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^gifts-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://gifts-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^gifts-auth-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://gifts-auth-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^gifts-reporting-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://gifts-reporting-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^gold-scorecard-form\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://gold-scorecard-form.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^gpc-anomalies\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://gpc-anomalies.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^hlt-portal\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://hlt-portal.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^hmcts-ccpt\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://hmcts-ccpt.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^hmpps-hr-dashboard\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://hmpps-hr-dashboard.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^hr-policy-document-manager\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://hr-policy-document-manager.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^hr-policy-search-tool\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://hr-policy-search-tool.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^imb-fees-consultation\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://imb-fees-consultation.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^intel-app-homepage\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://intel-app-homepage.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^interventions-deploy\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://interventions-deploy.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^invoice-nlp-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://invoice-nlp-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^jdl-visulizer\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://jdl-visulizer.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^judicial-reviews-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://judicial-reviews-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^judicial-wm2\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://judicial-wm2.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^legal-aid-tools\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://legal-aid-tools.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^ltc-capabilites-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://ltc-capabilites-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^matrixbooking\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://matrix-booking.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^mlp-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://mlp-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^mmp-web-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://mmp-web-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^model-redevelopment-website\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://model-redevelopment-website.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^moj-officehub-locator-webapp\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://moj-officehub-locator-webapp.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^occupeye-shiny-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://occupeye-shiny-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^opg-lpa-dashboard\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://opg-lpa-dashboard.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^opg-mi-dashdemo\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://opg-mi-dashdemo.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^pay-gap-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://pay-gap-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^people-data-self-serve\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://people-data-self-serve.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      # if ($host ~* ^people-survey-dashboard\.apps\.alpha\.mojanalytics\.xyz$) {
+      #     return 301 https://people-survey-dashboard.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      # }
+      if ($host ~* ^people-survey-engagement-prediction-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://people-survey-engagement-prediction-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^people-survey-prediction-tool\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://people-survey-prediction-tool.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^pfg-dash-moj\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://pfg-dash-moj.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^pi-form\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://pi-form.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      # if ($host ~* ^pq-tool\.apps\.alpha\.mojanalytics\.xyz$) {
+      #     return 301 https://pq-tool.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      # }
+      if ($host ~* ^prison-estate-digital-map\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://prison-estate-digital-map.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^prison-network-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://prison-network-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^prison-visitor-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://prison-visitor-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^prisons-ready-reckoner-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://prisons-ready-reckoner-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^probation-mi-dashboard\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://probation-mi-dashboard.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^probation-recruitment-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://probation-recruitment-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^probation-staffing-model-dash-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://probation-staffing-model-dash-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^regime-dashboard\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://regime-dashboard.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^remuneration-tool-app\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://remuneration-tool-app.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^safety-diagnostic-tool\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://safety-diagnostic-tool.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^sat\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://sat.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^segmentation-tool\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://segmentation-tool.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^segmentation-tool-draft\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://segmentation-tool-draft.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^statistics-explorer\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://statistics-explorer.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^stats-web-analytics\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://stats-web-analytics.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+      if ($host ~* ^temperature-check\.apps\.alpha\.mojanalytics\.xyz$) {
+          return 301 https://temperature-check.apps.live.cloud-platform.service.justice.gov.uk$request_uri;
+      }
+spec:
+  ingressClassName: default
+  tls:
+  - hosts:
+    - "*.apps.alpha.mojanalytics.xyz"
+    secretName: apps-alpha-certificate
+  rules:
+  - host: "*.apps.alpha.mojanalytics.xyz"
+    http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: shutdown-service
+            port:
+              number: 80
