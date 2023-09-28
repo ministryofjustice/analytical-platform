@@ -1,0 +1,30 @@
+name: Create Epic Label
+
+on:
+  issues:
+    types: [labeled]
+
+concurrency:
+  group: create-epic-label
+  cancel-in-progress: false
+
+jobs:
+  create_epic_label:
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'Epic'  # This line ensures the job only runs for the 'Epic' label
+    steps:
+      - name: Check if Epic and Create Label
+        run: |
+          ISSUE_TITLE="${{ github.event.issue.title }}"
+          ISSUE_NUMBER="${{ github.event.issue.number }}"
+          LABEL_NAME="$ISSUE_TITLE (Epic #$ISSUE_NUMBER)"
+          COLOR=$(printf "%06x\n" $((RANDOM % 0xFFFFFF)))
+          EXISTING_LABELS=$(gh api repos/${{ github.repository }}/labels --jq '.[].name')
+
+          # Check if label already exists
+          if [[ $EXISTING_LABELS != *"$LABEL_NAME"* ]]; then
+            # Label doesn't exist, create it using gh
+            gh api repos/${{ github.repository }}/labels -X POST -f name="$LABEL_NAME" -f color="$COLOR"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
