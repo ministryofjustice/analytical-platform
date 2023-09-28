@@ -1,0 +1,56 @@
+name: Update Epic Description
+
+on:
+  issues:
+    types: [labeled]
+
+concurrency:
+  group: update-epic-description
+  cancel-in-progress: false
+
+jobs:
+  update_epic_description:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Amend Epic Description with New Item
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const newIssueNumber = context.issue.number;
+            const newIssueTitle = context.issue.title;
+            const labelName = context.label.name;
+
+            // Check if the label applied is an Epic label
+            if (!labelName.includes('(Epic #')) {
+              console.log('The applied label is not an Epic label. Exiting...');
+              return;
+            }
+
+            // Extract the Epic's issue number from the label name
+            const epicNumber = labelName.match(/\(Epic #(\d+)\)/)[1];
+
+            if (!epicNumber) {
+              console.log('Could not determine the Epic issue number. Exiting...');
+              return;
+            }
+
+            // Fetch the description of the Epic
+            const epic = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: epicNumber
+            });
+            const epicBody = epic.data.body;
+
+            // Amend the Epic description with a checkbox and link to the new issue
+            const newItemLink = `- [ ] [#${newIssueNumber}](${newIssueTitle})`;
+            const updatedDescription = `${epicBody}\n${newItemLink}`;
+
+            // Update the Epic description
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: epicNumber,
+              body: updatedDescription
+            });
