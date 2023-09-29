@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from io import BytesIO
 from textwrap import dedent
@@ -48,6 +49,7 @@ def test_csv_sample(test_input, expected, sample_size_in_bytes, logger):
 
 def test_infer_schema_from_csv(s3_client, logger, data_product_element):
     s3_client.create_bucket(Bucket="bucket")
+
     uuid_value = uuid4()
     path = data_product_element.raw_data_path(datetime(2023, 1, 1), uuid_value)
 
@@ -55,12 +57,13 @@ def test_infer_schema_from_csv(s3_client, logger, data_product_element):
         Key=path.key,
         Body=dedent(
             """
-            some_string,some_number
-            foo,123
-            bar,456
+            some_string,some_number,some_mix,some_bool,some_float
+            foo,123,1,true,1.2
+            bar,456,N/A,,1.4
+            ,456,N/A,,1.4
             """
         ),
-        Bucket="bucket",
+        Bucket=os.environ["BUCKET_NAME"],
     )
 
     inferred_metadata = infer_glue_schema_from_raw_csv(
@@ -72,6 +75,9 @@ def test_infer_schema_from_csv(s3_client, logger, data_product_element):
     assert inferred_metadata.metadata["TableInput"]["StorageDescriptor"]["Columns"] == [
         {"Name": "some_string", "Type": "string"},
         {"Name": "some_number", "Type": "bigint"},
+        {"Name": "some_mix", "Type": "string"},
+        {"Name": "some_bool", "Type": "boolean"},
+        {"Name": "some_float", "Type": "double"},
     ]
 
     assert inferred_metadata.metadata_str["TableInput"]["StorageDescriptor"][
@@ -79,6 +85,9 @@ def test_infer_schema_from_csv(s3_client, logger, data_product_element):
     ] == [
         {"Name": "some_string", "Type": "string"},
         {"Name": "some_number", "Type": "string"},
+        {"Name": "some_mix", "Type": "string"},
+        {"Name": "some_bool", "Type": "string"},
+        {"Name": "some_float", "Type": "string"},
     ]
 
 
