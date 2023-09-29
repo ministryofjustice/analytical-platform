@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Removed infer_glue_schema to daap-python-base image. This version won't
-work, but version 1.2.1 will shortly follow including new base image.
+  work, but version 1.2.1 will shortly follow including new base image.
+
 ## [1.1.5] 2023-09-26
 
 ### Changed
