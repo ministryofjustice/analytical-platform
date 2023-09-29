@@ -21,9 +21,9 @@ jobs:
       matrix:
         include:
           - pagerduty-schedule-id: P2IZGH3 # Analytical Platform
-            slack-channel: C58G63XK5 # analytical-platform
+            slack-channel: C04M8224WCV # data-platform-apps-and-tools
           - pagerduty-schedule-id: POE95CC # Data Platform
-            slack-channel: C04BRGD7KFH # data-platform-core-infrastructure-team
+            slack-channel: C04M8224WCV # data-platform-apps-and-tools
     steps:
       - name: Checkout
         id: checkout
