@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2023-09-29
+
+### Added 
+
+- infer_glue_schema module, moved from daap-athena-load lambda.
+
+### Changed
+
+- infer_glue_schema.GlueSchemaGenerator.infer_from_raw_csv
+null_values list in pyarrow's read_csv method change from an
+empty list to [""] which results in intended schema inference.
+
 ## [2.1.3] - 2023-09-27
 
 Added functions to standardise API JSON response formatting.
