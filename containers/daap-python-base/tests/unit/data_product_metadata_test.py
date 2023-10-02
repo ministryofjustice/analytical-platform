@@ -122,18 +122,20 @@ def test_valid_metadata(test_schema, expected_out, s3_client, region_name, monke
     bucket_name = "bucket"
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
     load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
-    md = DataProductMetadata(test_schema["name"], logging.getLogger())
-    md.validate(test_schema)
-    assert md.valid_metadata == expected_out
+    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
+        md = DataProductMetadata(test_schema["name"], logging.getLogger())
+        md.validate(test_schema)
+        assert md.valid_metadata == expected_out
 
 
 def test_write_json_to_s3(s3_client, region_name, monkeypatch):
     bucket_name = "bucket"
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
     load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
-    md = DataProductMetadata(test_schema_pass["name"], logging.getLogger())
-    md.validate(test_schema_pass)
-    md.write_json_to_s3()
+    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
+        md = DataProductMetadata(test_schema_pass["name"], logging.getLogger())
+        md.validate(test_schema_pass)
+        md.write_json_to_s3()
 
     response = s3_client.get_object(
         Bucket=bucket_name, Key="metadata/test_product/v1.0/metadata.json"
