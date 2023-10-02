@@ -36,10 +36,6 @@ TABLE_NAME_REGEX = re.compile(r"table_name=([^\/]*)\/")
 MAX_IDENTIFIER_LENGTH = 255
 
 
-class MetadataNotFoundError(BaseException):
-    pass
-
-
 class BucketPath(NamedTuple):
     """
     A path to an object in S3
