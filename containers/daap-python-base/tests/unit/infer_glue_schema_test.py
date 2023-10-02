@@ -96,8 +96,8 @@ def test_infer_schema_from_csv(s3_client, region_name, logger, data_product_elem
     ]
 
 
-def test_inferred_metadata(raw_data_table, raw_table_metadata):
-    with patch("infer_glue_schema.get_latest_version", lambda _: "v1.0"):
+def test_inferred_metadata(s3_client, raw_data_table, raw_table_metadata):
+    with patch("infer_glue_schema.s3_client", s3_client):
         result = InferredMetadata(raw_table_metadata)
 
     assert result.database_name == raw_data_table.database
@@ -105,8 +105,8 @@ def test_inferred_metadata(raw_data_table, raw_table_metadata):
     assert result.metadata == raw_table_metadata
 
 
-def test_copy_inferred_metadata(raw_table_metadata):
-    with patch("infer_glue_schema.get_latest_version", lambda _: "v1.0"):
+def test_copy_inferred_metadata(s3_client, raw_table_metadata):
+    with patch("infer_glue_schema.s3_client", s3_client):
         original = InferredMetadata(raw_table_metadata)
         result = original.copy(database_name="abc", table_name="def")
 

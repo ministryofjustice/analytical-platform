@@ -1,8 +1,8 @@
 import json
 import logging
-from unittest.mock import patch
 import urllib.request
 from tempfile import NamedTemporaryFile
+from unittest.mock import patch
 
 import data_product_metadata
 import pytest
