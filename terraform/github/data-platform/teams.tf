@@ -131,7 +131,8 @@ locals {
     "tamsinforbes",
     "mitchdawson1982", # Mitch Dawson
     "Gary-H9",
-    "ymao2"    # Yikang Mao
+    "ymao2", # Yikang Mao
+    "BrianEllwood"
   ]
 
   data_platform_labs_maintainers = [
