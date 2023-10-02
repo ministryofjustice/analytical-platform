@@ -32,11 +32,15 @@ def handler(event, context):
 
     def generate_response(
         response_code: int,
-        event,
+        event: dict,
         response_message: str = None,
         data_product_name: str = None,
         error: str = None,
     ) -> dict:
+        """
+        Generate a response to return to API Gateway that contains the response code,
+        and either a successful message or an error message
+        """
         response_body = {"input": event}
 
         if response_message:
@@ -102,8 +106,8 @@ def handler(event, context):
         response_code = 405
 
     response = generate_response(
-        response_code,
-        event,
+        response_code=response_code,
+        event=event,
         response_message=response_message,
         error=error,
         data_product_name=data_product_name,
