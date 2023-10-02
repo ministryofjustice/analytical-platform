@@ -71,9 +71,9 @@ def handler(event, context):
     try:
         data_product_name = body["metadata"]["name"]
     except KeyError:
-        logger.error("The name of the data product is missing from the metadata.")
         response_code = 400
         error = "Data product name is missing, it must be specified in the metadata against the 'name' key"  # noqa E501
+        logger.error(error)
         return generate_response(response_code, event, error=error)
 
     logger.add_extras({"data_product_name": data_product_name})
@@ -83,9 +83,9 @@ def handler(event, context):
     if not data_product_metadata.metadata_exists:
         data_product_metadata.validate(body["metadata"])
     else:
-        logger.error("Data Product metadata already exists for latest version")
         response_code = 409
-        error = "Your data product already has a version 1 registered metadata."  # noqa E501
+        error = f"Data Product {data_product_name} already has a version 1 registered metadata."  # noqa E501
+        logger.error(error)
 
     if data_product_metadata.valid_metadata:
         data_product_metadata.write_json_to_s3()
@@ -104,6 +104,7 @@ def handler(event, context):
     else:
         error = f"Sorry, {http_method} isn't allowed."
         response_code = 405
+        logger.error(error)
 
     response = generate_response(
         response_code=response_code,
