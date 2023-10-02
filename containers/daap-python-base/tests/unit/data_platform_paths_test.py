@@ -191,7 +191,7 @@ def test_data_product_config_metadata_path():
 
         assert path == BucketPath(
             bucket="a-bucket",
-            key="metadata/my-database/v1.0/metadata.json",
+            key="my-database/v1.0/metadata.json",
         )
 
 

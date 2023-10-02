@@ -7,7 +7,7 @@ Example for data product name "data_product", table name "table":
 - Raw data is stored at: raw/{data-product}/{version}/{table}/load_timestamp={load_timestamp}/data.ext
 - Curated data is stored at: curated/{data-product}/{version}/{table}/load_timestamp={load_timestamp}/data.ext
 - Athena table name for curated data is: data_product.table
-- Athena table name for raw data has the format: data_products_raw.table_data_3d95ff89-b063-484d-b510-53742d0a6a64_raw
+- Athena table name for raw data has the format: data_products_raw.table_data_3d95ff89_b063_484d_b510_53742d0a6a64_raw
 """
 
 from __future__ import annotations
@@ -308,7 +308,6 @@ class DataProductConfig:
         Path to the V1 metadata file
         """
         key = os.path.join(
-            "metadata",
             self.name,
             self.latest_version,
             "metadata.json",
