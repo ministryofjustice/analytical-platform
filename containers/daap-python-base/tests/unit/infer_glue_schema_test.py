@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 from io import BytesIO
 from textwrap import dedent
-from unittest.mock import patch
 from uuid import uuid4
 
 import pytest
@@ -48,12 +47,7 @@ def test_csv_sample(test_input, expected, sample_size_in_bytes, logger):
     assert output == expected
 
 
-def test_infer_schema_from_csv(s3_client, region_name, logger, data_product_element):
-    # s3_client.create_bucket(Bucket=os.environ["BUCKET_NAME"])
-    s3_client.create_bucket(
-        Bucket=os.environ["BUCKET_NAME"],
-        CreateBucketConfiguration={"LocationConstraint": region_name},
-    )
+def test_infer_schema_from_csv(s3_client, logger, data_product_element):
     uuid_value = uuid4()
     path = data_product_element.raw_data_path(datetime(2023, 1, 1), uuid_value)
 
@@ -70,12 +64,11 @@ def test_infer_schema_from_csv(s3_client, region_name, logger, data_product_elem
         Bucket=os.environ["BUCKET_NAME"],
     )
 
-    with patch("infer_glue_schema.get_latest_version", lambda _: "v1.0"):
-        inferred_metadata = infer_glue_schema_from_raw_csv(
-            file_path=BucketPath(path.bucket, path.key),
-            data_product_element=data_product_element,
-            logger=logger,
-        )
+    inferred_metadata = infer_glue_schema_from_raw_csv(
+        file_path=BucketPath(path.bucket, path.key),
+        data_product_element=data_product_element,
+        logger=logger,
+    )
 
     assert inferred_metadata.metadata["TableInput"]["StorageDescriptor"]["Columns"] == [
         {"Name": "some_string", "Type": "string"},
@@ -96,19 +89,17 @@ def test_infer_schema_from_csv(s3_client, region_name, logger, data_product_elem
     ]
 
 
-def test_inferred_metadata(s3_client, raw_data_table, raw_table_metadata):
-    with patch("infer_glue_schema.s3_client", s3_client):
-        result = InferredMetadata(raw_table_metadata)
+def test_inferred_metadata(raw_data_table, raw_table_metadata):
+    result = InferredMetadata(raw_table_metadata)
 
     assert result.database_name == raw_data_table.database
     assert result.table_name == raw_data_table.name
     assert result.metadata == raw_table_metadata
 
 
-def test_copy_inferred_metadata(s3_client, raw_table_metadata):
-    with patch("infer_glue_schema.s3_client", s3_client):
-        original = InferredMetadata(raw_table_metadata)
-        result = original.copy(database_name="abc", table_name="def")
+def test_copy_inferred_metadata(raw_table_metadata):
+    original = InferredMetadata(raw_table_metadata)
+    result = original.copy(database_name="abc", table_name="def")
 
     assert result.database_name == "abc"
     assert result.table_name == "def"
