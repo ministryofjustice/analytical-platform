@@ -30,6 +30,6 @@ def s3_client(region_name):
     Create a mock s3 client
     """
     with mock_s3():
-        client = boto3.client("s3", region_name=region_name)
+        client = boto3.client("s3", region_name="us-east-1")
 
         yield client

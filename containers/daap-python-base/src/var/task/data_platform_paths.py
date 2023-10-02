@@ -4,11 +4,10 @@ and the corresponding athena tables.
 
 Example for data product name "data_product", table name "table":
 
-- Raw data is stored at: raw_data/data_product/table/extraction_timestamp=timestamp/3d95ff89-...-53742d0a6a64
-- Curated data is stored at:
-  curated_data/database_name=data_product/table_name=table/extraction_timestamp=timestamp/file.parquet
+- Raw data is stored at: raw/{data-product}/{version}/{table}/load_timestamp={load_timestamp}/data.ext
+- Curated data is stored at: curated/{data-product}/{version}/{table}/load_timestamp={load_timestamp}/data.ext
 - Athena table name for curated data is: data_product.table
-- Athena table name for raw data has the format: data_products_raw.table_8ae7f9ee-7888-4b6a-b01f-8b8b0a537ad2_raw
+- Athena table name for raw data has the format: data_products_raw.table_data_3d95ff89-b063-484d-b510-53742d0a6a64_raw
 """
 
 from __future__ import annotations
@@ -23,18 +22,22 @@ from uuid import UUID, uuid4
 
 import boto3
 
+s3 = boto3.client("s3")
+
 RAW_DATABASE_NAME = "data_products_raw"
-EXTRACTION_TIMESTAMP_FORMAT = "%Y%m%dT%H%M%SZ"
-EXTRACTION_TIMESTAMP_REGEX = re.compile(
-    r"^(.*)/(extraction_timestamp=)([0-9TZ]{1,16})/(.*)$"
-)
-EXTRACTION_TIMESTAMP_CURATED_REGEX = re.compile(r"extraction_timestamp=([^/]+)")
+LOAD_TIMESTAMP_FORMAT = "%Y%m%dT%H%M%SZ"
+LOAD_TIMESTAMP_REGEX = re.compile(r"^(.*)/(load_timestamp=)([0-9TZ]{1,16})/(.*)$")
+LOAD_TIMESTAMP_CURATED_REGEX = re.compile(r"load_timestamp=([^/]+)")
 
 DATABASE_NAME_REGEX = re.compile(r"database_name=([^\/]*)\/")
 TABLE_NAME_REGEX = re.compile(r"table_name=([^\/]*)\/")
 
 # https://docs.aws.amazon.com/athena/latest/ug/tables-databases-columns-names.html
 MAX_IDENTIFIER_LENGTH = 255
+
+
+class MetadataNotFoundError(BaseException):
+    pass
 
 
 class BucketPath(NamedTuple):
@@ -131,7 +134,28 @@ def extract_database_name_from_curated_path(string: str):
 
 
 def extract_timestamp_from_curated_path(string: str):
-    return search_string_for_regex(string, regex=EXTRACTION_TIMESTAMP_CURATED_REGEX)
+    return search_string_for_regex(string, regex=LOAD_TIMESTAMP_CURATED_REGEX)
+
+
+def get_latest_version(data_product_name: str):
+    """Get the latest version of a data product, else return v1.0"""
+    metadata_bucket = get_metadata_bucket()
+    metadata_versions = s3.list_objects_v2(
+        Bucket=metadata_bucket, Prefix=data_product_name
+    )
+    # This is the case in which the data product is new.
+    if not metadata_versions.get("Contents"):
+        return "v1.0"
+
+    versions = [
+        version["Key"].split("/")[1]
+        for version in metadata_versions["Contents"]
+        if version["Size"] > 0
+    ]
+    versions.sort(key=lambda x: [int(y.replace("v", "")) for y in x.split(".")])
+    latest_version = versions[-1]
+
+    return latest_version
 
 
 @dataclass
@@ -153,25 +177,24 @@ class DataProductElement:
     def raw_data_prefix(self):
         """
         The path to the raw data in s3 up to and including the element name,
-        e.g. raw_data/my-data-product/some-element/
+        e.g. raw/{data-product}/{version}/{some_element}
         """
         return BucketPath(
             bucket=self.data_product.raw_data_bucket,
-            key=os.path.join("raw_data", self.data_product.name, self.name) + "/",
+            key=os.path.join(self.data_product.raw_data_prefix.key, self.name) + "/",
         )
 
     @property
     def curated_data_prefix(self):
         """
         The path to the curated data in s3 up to and including the element name,
-        e.g. curated_data/database_name=my-data-product/table_name=some-element/
+        e.g. curated/{data-product}/{version}/{some-element}/
         """
         return BucketPath(
             bucket=self.data_product.curated_data_bucket,
             key=os.path.join(
-                "curated_data",
-                f"database_name={self.data_product.name}",
-                f"table_name={self.name}",
+                self.data_product.curated_data_prefix.key,
+                self.name,
             )
             + "/",
         )
@@ -200,7 +223,7 @@ class DataProductElement:
     def raw_data_path(self, timestamp: datetime, uuid_value: UUID) -> BucketPath:
         """
         Path to the raw data extracted at a particular timestamp.
-        E.g. raw_data/my-data-product/some-element/extraction_timestamp=
+        E.g. raw_data/my-data-product/some-element/load_timestamp=
              20230101T000000Z/3d95ff89-b063-484d-b510-53742d0a6a64
         """
         return self.extraction_instance(timestamp, uuid_value).path
@@ -211,13 +234,13 @@ class DataProductElement:
         """
         Instance of the data extraction identified by uuid_value and timestamp.
         """
-        amz_date = timestamp.strftime(EXTRACTION_TIMESTAMP_FORMAT)
+        amz_date = timestamp.strftime(LOAD_TIMESTAMP_FORMAT)
 
         path = BucketPath(
             bucket=self.raw_data_prefix.bucket,
             key=os.path.join(
                 self.raw_data_prefix.key,
-                f"extraction_timestamp={amz_date}",
+                f"load_timestamp={amz_date}",
                 str(uuid_value),
             ),
         )
@@ -228,7 +251,8 @@ class DataProductElement:
 @dataclass
 class DataProductConfig:
     """
-    Configures the name, elements, S3 buckets, and related paths for a data product.
+    Configures the name, version, elements, S3 buckets, and related paths for a data
+    product.
 
     A data product may contain many `data product elements`. To construct
     paths for each one, call `.element()` with the name of the element.
@@ -240,30 +264,40 @@ class DataProductConfig:
     curated_data_bucket: str = field(default_factory=get_curated_data_bucket)
     metadata_bucket: str = field(default_factory=get_metadata_bucket)
 
+    def __post_init__(self):
+        self.latest_version = get_latest_version(self.name)
+
     @property
     def raw_data_prefix(self):
         """
         The path to the raw data in s3 excluding the element name,
-        e.g. raw_data/my-data-product/
+        e.g. raw/my-data-product/version/
         """
         return BucketPath(
             bucket=self.raw_data_bucket,
-            key=os.path.join("raw_data", self.name) + "/",
+            key=os.path.join("raw", self.name, self.latest_version) + "/",
+        )
+
+    @property
+    def landing_data_prefix(self):
+        """
+        The path to the raw data in s3 excluding the element name,
+        e.g. landing/my-data-product/version/
+        """
+        return BucketPath(
+            bucket=self.landing_zone_bucket,
+            key=os.path.join("landing", self.name, self.latest_version) + "/",
         )
 
     @property
     def curated_data_prefix(self):
         """
         The path to the curated data in s3 excluding the element name,
-        e.g. curated_data/database_name=my-data-product/
+        e.g. curated/my-data-product/version/
         """
         return BucketPath(
             bucket=self.curated_data_bucket,
-            key=os.path.join(
-                "curated_data",
-                f"database_name={self.name}",
-            )
-            + "/",
+            key=os.path.join("curated", self.name, self.latest_version) + "/",
         )
 
     def element(self, name):
@@ -280,7 +314,7 @@ class DataProductConfig:
         key = os.path.join(
             "metadata",
             self.name,
-            "v1.0",
+            self.latest_version,
             "metadata.json",
         )
         return BucketPath(bucket=self.metadata_bucket, key=key)
@@ -327,18 +361,18 @@ class RawDataExtraction:
         return self.element.data_product
 
     @staticmethod
-    def parse_extraction_timestamp(raw_data_key: str):
+    def parse_load_timestamp(raw_data_key: str):
         """
         Parse extraction timestamp from the raw data path
         """
-        match = EXTRACTION_TIMESTAMP_REGEX.match(raw_data_key)
+        match = LOAD_TIMESTAMP_REGEX.match(raw_data_key)
 
         if not match:
             raise ValueError(
-                "Table partition extraction_timestamp is not in the expected format"
+                "Table partition load_timestamp is not in the expected format"
             )
 
-        return datetime.strptime(match.group(3), EXTRACTION_TIMESTAMP_FORMAT)
+        return datetime.strptime(match.group(3), LOAD_TIMESTAMP_FORMAT)
 
     @staticmethod
     def parse_from_uri(raw_data_uri) -> RawDataExtraction:
@@ -353,7 +387,7 @@ class RawDataExtraction:
             data_product_name, raw_data_bucket=raw_data_file.bucket
         )
 
-        timestamp = RawDataExtraction.parse_extraction_timestamp(raw_data_file.key)
+        timestamp = RawDataExtraction.parse_load_timestamp(raw_data_file.key)
 
         return RawDataExtraction(
             element=data_product_config.element(table_name),
@@ -363,7 +397,8 @@ class RawDataExtraction:
 
 
 def data_product_log_bucket_and_key(
-    lambda_name: str | None = None, data_product_name: str | None = None
+    lambda_name: str | None = None,
+    data_product_name: str | None = None,
 ) -> BucketPath:
     """
     Generate the log file path based on lambda and data product name
