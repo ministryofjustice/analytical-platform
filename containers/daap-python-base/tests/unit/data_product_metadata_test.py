@@ -1,5 +1,6 @@
 import json
 import logging
+from unittest.mock import patch
 import urllib.request
 from tempfile import NamedTemporaryFile
 
@@ -100,15 +101,17 @@ def test_metadata_exist(s3_client, region_name, monkeypatch):
             tmp.name, bucket_name, "metadata/test_product/v1.0/metadata.json"
         )
 
-    md = DataProductMetadata(test_schema_pass["name"], logging.getLogger())
-    assert md.metadata_exists
+    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
+        md = DataProductMetadata(test_schema_pass["name"], logging.getLogger())
+        assert md.metadata_exists
 
 
 def test_metadata_does_not_exist(s3_client, region_name, monkeypatch):
     bucket_name = "bucket"
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
-    md = DataProductMetadata(test_schema_pass["name"], logging.getLogger())
-    assert not md.metadata_exists
+    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
+        md = DataProductMetadata(test_schema_pass["name"], logging.getLogger())
+        assert not md.metadata_exists
 
 
 validation_inputs = [(test_schema_pass, True), (test_schema_fail, False)]
