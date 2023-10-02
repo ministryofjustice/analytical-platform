@@ -25,7 +25,7 @@ time.tzset()
 
 @pytest.fixture
 def region_name():
-    return "us-east-1"
+    return "us-west-1"
 
 
 @pytest.fixture
