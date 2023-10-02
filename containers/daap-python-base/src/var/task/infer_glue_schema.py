@@ -117,11 +117,11 @@ class GlueSchemaGenerator:
             logger=self.logger,
         )
 
-        # null_values has been set to an empty list as "N/A" was being read as null (in a numeric column), with
+        # null_values has been set to an empty string as "N/A" was being read as null (in a numeric column), with
         # type inferred as int but "N/A" persiting in the csv and so failing to be cast as an int.
-        # Empty list means nothing inferred as null other than null.
+        # Empty string means nothing inferred as null other than null.
         arrow_table = pa_csv.read_csv(
-            bytes_stream_final, convert_options=pa_csv.ConvertOptions(null_values=[])
+            bytes_stream_final, convert_options=pa_csv.ConvertOptions(null_values=[""])
         )
 
         metadata_mojap = self.ac.generate_to_meta(arrow_schema=arrow_table.schema)
