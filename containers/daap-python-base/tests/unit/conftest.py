@@ -70,6 +70,7 @@ def raw_data_table(data_product_element):
 def data_product_element(s3_client, monkeypatch):
     monkeypatch.setenv("BUCKET_NAME", "test")
     with patch("data_platform_paths.s3", s3_client):
+        s3_client.create_bucket(Bucket=os.getenv("BUCKET_NAME"))
         element = DataProductElement.load(element_name="foo", data_product_name="bar")
     return element
 
