@@ -97,9 +97,7 @@ def test_metadata_exist(s3_client, region_name, monkeypatch):
         with open(tmp.name, "w", encoding="UTF-8") as f:
             f.write(file_text)
 
-        s3_client.upload_file(
-            tmp.name, bucket_name, "metadata/test_product/v1.0/metadata.json"
-        )
+        s3_client.upload_file(tmp.name, bucket_name, "test_product/v1.0/metadata.json")
 
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         md = DataProductMetadata(test_schema_pass["name"], logging.getLogger())
@@ -138,7 +136,7 @@ def test_write_json_to_s3(s3_client, region_name, monkeypatch):
         md.write_json_to_s3()
 
     response = s3_client.get_object(
-        Bucket=bucket_name, Key="metadata/test_product/v1.0/metadata.json"
+        Bucket=bucket_name, Key="test_product/v1.0/metadata.json"
     )
     data = response.get("Body").read().decode("utf-8")
     from_s3 = json.loads(data)
