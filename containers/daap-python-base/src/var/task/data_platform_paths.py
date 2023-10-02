@@ -277,7 +277,7 @@ class DataProductConfig:
     @property
     def landing_data_prefix(self):
         """
-        The path to the raw data in s3 excluding the element name,
+        The path to the landing data in s3 excluding the element name,
         e.g. landing/my-data-product/version/
         """
         return BucketPath(
