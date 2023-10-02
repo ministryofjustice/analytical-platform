@@ -1,6 +1,7 @@
 import re
 import uuid
 from datetime import datetime
+from unittest.mock import patch
 
 import pytest
 from data_platform_paths import (
@@ -13,15 +14,14 @@ from data_platform_paths import (
     RawDataExtraction,
     data_product_log_bucket_and_key,
     get_curated_data_bucket,
+    get_latest_version,
     get_landing_zone_bucket,
     get_log_bucket,
     get_metadata_bucket,
     get_raw_data_bucket,
     search_string_for_regex,
-    get_latest_version,
 )
 from freezegun import freeze_time
-from unittest.mock import patch
 
 curated_data_key = [
     "curated_data/database_name=data_product/table_name=table/"

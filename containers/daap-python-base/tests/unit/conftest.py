@@ -33,7 +33,12 @@ def s3_client(region_name):
     Create a mock s3 client
     """
     with mock_s3():
-        client = boto3.client("s3", region_name="us-east-1")
+        client = boto3.client(
+            "s3",
+            aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+            aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
+            region_name="us-east-1",
+        )
 
         yield client
 
