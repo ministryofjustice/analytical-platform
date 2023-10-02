@@ -2,6 +2,7 @@ import os
 import sys
 import time
 from os.path import dirname, join
+from unittest.mock import patch
 
 import boto3
 import pytest
@@ -68,7 +69,9 @@ def raw_data_table(data_product_element):
 @pytest.fixture
 def data_product_element(monkeypatch):
     monkeypatch.setenv("BUCKET_NAME", "test")
-    return DataProductElement.load(element_name="foo", data_product_name="bar")
+    with patch("get_latest_version", lambda _: "v1.0"):
+        element = DataProductElement.load(element_name="foo", data_product_name="bar")
+    return element
 
 
 @pytest.fixture
