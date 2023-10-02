@@ -90,12 +90,12 @@ def test_data_product_config_metadata_spec_prefix():
 
 
 def test_data_product_element_config(monkeypatch):
-    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
-        monkeypatch.setenv("RAW_DATA_BUCKET", "bucket")
-        monkeypatch.setenv("CURATED_DATA_BUCKET", "bucket")
-        monkeypatch.setenv("METADATA_BUCKET", "bucket")
-        monkeypatch.setenv("LANDING_ZONE_BUCKET", "bucket")
+    monkeypatch.setenv("RAW_DATA_BUCKET", "bucket")
+    monkeypatch.setenv("CURATED_DATA_BUCKET", "bucket")
+    monkeypatch.setenv("METADATA_BUCKET", "bucket")
+    monkeypatch.setenv("LANDING_ZONE_BUCKET", "bucket")
 
+    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         element = DataProductElement.load("some_table", "data_product")
 
         raw_data_table = element.raw_data_table_unique()
@@ -156,10 +156,10 @@ def test_data_product_config_get_element():
 
 
 def test_data_product_element_raw_data_path():
-    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
-        uuid_value = uuid.uuid4()
-        timestamp = datetime(2023, 9, 5, 16, 53)
+    uuid_value = uuid.uuid4()
+    timestamp = datetime(2023, 9, 5, 16, 53)
 
+    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         config = DataProductConfig(
             name="my-database",
             raw_data_bucket="a-bucket",
@@ -196,10 +196,10 @@ def test_data_product_config_metadata_path():
 
 
 def test_extraction_config():
-    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
-        uuid_value = uuid.uuid4()
-        timestamp = datetime(2023, 9, 5, 16, 53)
+    uuid_value = uuid.uuid4()
+    timestamp = datetime(2023, 9, 5, 16, 53)
 
+    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         config = DataProductConfig(
             name="my-database",
             raw_data_bucket="a-bucket",
@@ -222,16 +222,16 @@ def test_extraction_config():
 
 
 def test_extraction_config_parse_from_raw_uri(monkeypatch):
+    monkeypatch.setenv("CURATED_DATA_BUCKET", "bucket2")
+    monkeypatch.setenv("METADATA_BUCKET", "bucket3")
+    monkeypatch.setenv("LANDING_ZONE_BUCKET", "bucket4")
+
+    raw_data_uri = (
+        "s3://bucket1/raw/database-name/v1.0/table-name/load_timestamp=20230905T162700Z/"
+        + "7cf8e644-06af-47ce-8f5f-b53c22a35f2e"
+    )
+
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
-        monkeypatch.setenv("CURATED_DATA_BUCKET", "bucket2")
-        monkeypatch.setenv("METADATA_BUCKET", "bucket3")
-        monkeypatch.setenv("LANDING_ZONE_BUCKET", "bucket4")
-
-        raw_data_uri = (
-            "s3://bucket1/raw/database-name/v1.0/table-name/load_timestamp=20230905T162700Z/"
-            + "7cf8e644-06af-47ce-8f5f-b53c22a35f2e"
-        )
-
         config = RawDataExtraction.parse_from_uri(raw_data_uri)
 
         assert config.path == BucketPath(
