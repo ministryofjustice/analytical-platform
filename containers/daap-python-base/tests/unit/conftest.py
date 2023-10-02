@@ -67,9 +67,9 @@ def raw_data_table(data_product_element):
 
 
 @pytest.fixture
-def data_product_element(monkeypatch):
+def data_product_element(s3_client, monkeypatch):
     monkeypatch.setenv("BUCKET_NAME", "test")
-    with patch("get_latest_version", lambda _: "v1.0"):
+    with patch("data_platform_paths.s3", s3_client):
         element = DataProductElement.load(element_name="foo", data_product_name="bar")
     return element
 
