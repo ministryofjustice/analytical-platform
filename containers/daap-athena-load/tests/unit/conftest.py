@@ -85,25 +85,3 @@ def logger():
 @pytest.fixture
 def raw_data_table(data_product_element):
     return data_product_element.raw_data_table_unique()
-
-
-@pytest.fixture
-def raw_table_metadata(raw_data_table):
-    return {
-        "DatabaseName": raw_data_table.database,
-        "TableInput": {
-            "Name": raw_data_table.name,
-            "StorageDescriptor": {
-                "Columns": [
-                    {
-                        "Name": "col1",
-                        "Type": "type1",
-                    },
-                    {
-                        "Name": "col2",
-                        "Type": "type2",
-                    },
-                ]
-            },
-        },
-    }
