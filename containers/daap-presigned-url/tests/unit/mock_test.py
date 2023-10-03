@@ -26,11 +26,15 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
     )
 
     event = {
-        "queryStringParameters": {
-            "database": database,
-            "table": table,
-            "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
-        }
+        "pathParameters": {
+            "data-product-name": database,
+            "table-name": table,
+        },
+        "body": json.dumps(
+            {
+                "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
+            }
+        ),
     }
 
     response = handler(event, fake_context)
@@ -58,11 +62,15 @@ def test_dataproduct_does_not_exist(s3_client, fake_context, region_name, monkey
     )
 
     event = {
-        "queryStringParameters": {
-            "database": database,
-            "table": table,
-            "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
-        }
+        "pathParameters": {
+            "data-product-name": database,
+            "table-name": table,
+        },
+        "body": json.dumps(
+            {
+                "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
+            }
+        ),
     }
 
     response = handler(event, fake_context)
@@ -82,11 +90,15 @@ def test_invalid_params(s3_client, fake_context, region_name, monkeypatch):
     monkeypatch.setenv("BUCKET_NAME", bucket_name)
 
     event = {
-        "queryStringParameters": {
-            "database": None,
-            "table": None,
-            "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
-        }
+        "pathParameters": {
+            "data-product-name": None,
+            "table-name": None,
+        },
+        "body": json.dumps(
+            {
+                "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
+            }
+        ),
     }
 
     response = handler(event, fake_context)
@@ -95,5 +107,5 @@ def test_invalid_params(s3_client, fake_context, region_name, monkeypatch):
     assert response["statusCode"] == 400
     assert (
         body["error"]["message"]
-        == "Database or table is not convertible to string type."
+        == "Data product or table name is not convertible to string type."
     )
