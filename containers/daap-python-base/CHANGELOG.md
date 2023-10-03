@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2023-10-2
+
+### Added
+
+- landing_data_prefix method
+- get_latest_version function
+
+### Changed
+
+- Changed directory pathing structure to include version number and use load_timestamp
+
 ## [2.2.0] - 2023-09-29
 
 ### Added
