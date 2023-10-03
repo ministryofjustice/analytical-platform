@@ -51,6 +51,7 @@ class DataProductMetadata:
         self.metadata_bucket = bucket
         self.metadata_key = key
         self._check_if_metadata_exists()
+        self.valid_metadata = None
 
     def _check_if_metadata_exists(self) -> object:
         # establish whether metadata for data product already exists

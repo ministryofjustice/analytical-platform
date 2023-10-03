@@ -1,8 +1,18 @@
 import json
 import os
+from enum import Enum
 
 from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductMetadata
+
+
+class HTTPStatus(Enum):
+    SUCCESS = 200
+    CREATED = 201
+    BAD_REQUEST = 400
+    NOT_FOUND = 404
+    METHOD_NOT_ALLOWED = 405
+    CONFLICT = 409
 
 
 def handler(event, context):
@@ -66,12 +76,12 @@ def handler(event, context):
     data_product_name = None
 
     http_method = event.get("httpMethod")
-    body = event.get("body")
+    body = json.loads(event.get("body"))
 
     try:
         data_product_name = body["metadata"]["name"]
     except KeyError:
-        response_code = 400
+        response_code = HTTPStatus.BAD_REQUEST.value
         error = "Data product name is missing, it must be specified in the metadata against the 'name' key"  # noqa E501
         logger.error(error)
         return generate_response(response_code, event, error=error)
@@ -82,28 +92,28 @@ def handler(event, context):
 
     if not data_product_metadata.metadata_exists:
         data_product_metadata.validate(body["metadata"])
-    else:
-        response_code = 409
-        error = f"Data Product {data_product_name} already has a version 1 registered metadata."  # noqa E501
-        logger.error(error)
 
-    if data_product_metadata.valid_metadata:
-        data_product_metadata.write_json_to_s3()
-        response_code = 201
-        response_message = f"Data Product {data_product_name} was successfully created."
-        logger.info(response_message)
+        if data_product_metadata.valid_metadata:
+            data_product_metadata.write_json_to_s3()
+            response_code = HTTPStatus.CREATED.value
+            response_message = (
+                f"Data Product {data_product_name} was successfully created."
+            )
+            logger.info(response_message)
+        else:
+            response_code = HTTPStatus.BAD_REQUEST.value
+            error = f"Metadata failed validation with error: {data_product_metadata.error_traceback}"  # noqa E501
+            logger.error(error)
     else:
-        response_code = 400
-        error = (
-            f"Metadata failed validation with error: {data_product_metadata.error_traceback}",
-        )  # noqa E501
+        response_code = HTTPStatus.CONFLICT.value
+        error = f"Data Product {data_product_name} already has a version 1 registered metadata."  # noqa E501
         logger.error(error)
 
     if http_method == "POST":
         pass
     else:
         error = f"Sorry, {http_method} isn't allowed."
-        response_code = 405
+        response_code = HTTPStatus.METHOD_NOT_ALLOWED.value
         logger.error(error)
 
     response = generate_response(
