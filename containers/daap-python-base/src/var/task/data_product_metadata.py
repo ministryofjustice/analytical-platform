@@ -5,7 +5,8 @@ import boto3
 import botocore
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import DataProductConfig
-from dataengineeringutils3.s3 import get_filepaths_from_s3_folder, read_json_from_s3
+from dataengineeringutils3.s3 import (get_filepaths_from_s3_folder,
+                                      read_json_from_s3)
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
@@ -51,7 +52,7 @@ class DataProductMetadata:
         self.metadata_bucket = bucket
         self.metadata_key = key
         self._check_if_metadata_exists()
-        self.valid_metadata = None
+        self.valid_metadata = False
 
     def _check_if_metadata_exists(self) -> object:
         # establish whether metadata for data product already exists
