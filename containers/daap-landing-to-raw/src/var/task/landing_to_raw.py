@@ -2,7 +2,7 @@ import os
 
 import boto3
 from data_platform_logging import DataPlatformLogger, s3_security_opts
-from data_platform_paths import get_raw_data_bucket, RawDataExtraction
+from data_platform_paths import RawDataExtraction, get_raw_data_bucket
 
 s3 = boto3.client("s3")
 
