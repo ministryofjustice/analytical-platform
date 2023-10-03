@@ -2,6 +2,7 @@ import os
 import sys
 import time
 from os.path import dirname, join
+from unittest.mock import patch
 
 import boto3
 import pytest
@@ -27,13 +28,22 @@ def region_name():
     return "eu-west-1"
 
 
+@pytest.fixture(autouse=True)
+def set_env_vars(monkeypatch):
+    monkeypatch.setenv("RAW_DATA_BUCKET", "raw")
+    monkeypatch.setenv("CURATED_DATA_BUCKET", "curated")
+    monkeypatch.setenv("METADATA_BUCKET", "metadata")
+    monkeypatch.setenv("LANDING_ZONE_BUCKET", "landing")
+    monkeypatch.setenv("LOG_BUCKET", "logs")
+
+
 @pytest.fixture
 def s3_client(region_name):
     """
     Create a mock s3 client
     """
     with mock_s3():
-        client = boto3.client("s3", region_name=region_name)
+        client = boto3.client("s3", region_name="us-east-1")
 
         yield client
 
@@ -66,9 +76,12 @@ def raw_data_table(data_product_element):
 
 
 @pytest.fixture
-def data_product_element(monkeypatch):
-    monkeypatch.setenv("BUCKET_NAME", "test")
-    return DataProductElement.load(element_name="foo", data_product_name="bar")
+def data_product_element(s3_client, monkeypatch):
+    monkeypatch.setenv("METADATA_BUCKET", "test")
+    with patch("data_platform_paths.s3", s3_client):
+        s3_client.create_bucket(Bucket=os.getenv("METADATA_BUCKET"))
+        element = DataProductElement.load(element_name="foo", data_product_name="bar")
+    return element
 
 
 @pytest.fixture

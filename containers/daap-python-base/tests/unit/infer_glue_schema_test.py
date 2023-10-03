@@ -47,15 +47,11 @@ def test_csv_sample(test_input, expected, sample_size_in_bytes, logger):
     assert output == expected
 
 
-def test_infer_schema_from_csv(s3_client, region_name, logger, data_product_element):
-    # s3_client.create_bucket(Bucket=os.environ["BUCKET_NAME"])
-    s3_client.create_bucket(
-        Bucket=os.environ["BUCKET_NAME"],
-        CreateBucketConfiguration={"LocationConstraint": region_name},
-    )
+def test_infer_schema_from_csv(s3_client, logger, data_product_element):
     uuid_value = uuid4()
     path = data_product_element.raw_data_path(datetime(2023, 1, 1), uuid_value)
 
+    s3_client.create_bucket(Bucket=os.environ["RAW_DATA_BUCKET"])
     s3_client.put_object(
         Key=path.key,
         Body=dedent(
@@ -66,7 +62,7 @@ def test_infer_schema_from_csv(s3_client, region_name, logger, data_product_elem
             ,456,N/A,,1.4
             """
         ),
-        Bucket=os.environ["BUCKET_NAME"],
+        Bucket=os.environ["RAW_DATA_BUCKET"],
     )
 
     inferred_metadata = infer_glue_schema_from_raw_csv(
