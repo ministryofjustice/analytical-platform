@@ -34,6 +34,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   we now throw a 500 error. This should not normally happen, and if it does
   we can run reload_data_product to fix it.
 
+## [2.0.0] 2023-10-03
+
+### Changed
+
+- Use new base image with new pathing structure
+
 ## [1.1.4] 2023-09-21
 
 ### Changed
