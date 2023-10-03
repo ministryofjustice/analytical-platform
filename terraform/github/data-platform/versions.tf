@@ -2,11 +2,11 @@ terraform {
   required_version = "~> 1.0"
   required_providers {
     aws = {
-      version = "5.16.1"
+      version = "5.19.0"
       source  = "hashicorp/aws"
     }
     github = {
-      version = "5.26.0"
+      version = "5.39.0"
       source  = "integrations/github"
     }
     time = {
@@ -14,7 +14,7 @@ terraform {
       source  = "hashicorp/time"
     }
     http = {
-      version = "3.3.0"
+      version = "3.4.0"
       source  = "hashicorp/http"
     }
     null = {
