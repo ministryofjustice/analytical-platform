@@ -1,6 +1,7 @@
 import json
 import os
 from enum import Enum
+from typing import Optional
 
 from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductMetadata
@@ -43,9 +44,9 @@ def handler(event, context):
     def generate_response(
         response_code: int,
         event: dict,
-        response_message: str = None,
-        data_product_name: str = None,
-        error: str = None,
+        response_message: Optional[str] = None,
+        data_product_name: Optional[str] = None,
+        error: Optional[str] = None,
     ) -> dict:
         """
         Generate a response to return to API Gateway that contains the response code,
@@ -53,13 +54,13 @@ def handler(event, context):
         """
         response_body = {"input": event}
 
-        if response_message:
-            response_body.update({"message": response_message})
-        elif error:
+        if response_message is not None:
+            response_body.update({"message": response_message})  # type: ignore[dict-item]
+        elif error is not None:
             response_body.update({"error": {"message": error}})
 
         if data_product_name is not None:
-            response_body.update({"data_product_name": data_product_name})
+            response_body.update({"data_product_name": data_product_name})  # type: ignore[dict-item]
 
         response = {
             "statusCode": response_code,

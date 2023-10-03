@@ -23,7 +23,7 @@ def test_existing_metadata_definition_fail(fake_context):
         assert response["statusCode"] == 409
         assert (
             json.loads(response["body"])["error"]["message"]
-            == f"Data Product test already has a version 1 registered metadata."
+            == "Data Product test already has a version 1 registered metadata."
         )
 
 
@@ -65,5 +65,5 @@ def test_http_method_fail(fake_context):
         assert response["statusCode"] == 405
         assert (
             json.loads(response["body"])["error"]["message"]
-            == f"Sorry, GET isn't allowed."
+            == "Sorry, GET isn't allowed."
         )
