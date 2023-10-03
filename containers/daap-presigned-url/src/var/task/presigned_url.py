@@ -18,28 +18,31 @@ logger = DataPlatformLogger(
 
 
 def handler(event, context):
-    database = event["queryStringParameters"]["database"]
-    table = event["queryStringParameters"]["table"]
+    data_product_name = event["pathParameters"].get("data-product-name")
+    table_name = event["pathParameters"].get("table-name")
+    body = json.loads(event.body)
+    md5 = str(body.get("contentMD5"))
     amz_date = datetime.utcnow()
     formatted_date = amz_date.strftime("%Y%m%dT%H%M%SZ")
-    md5 = str(event["queryStringParameters"]["contentMD5"])
     uuid_value = uuid.uuid4()
 
-    if not isinstance(database, str) or not isinstance(table, str):
+    if not isinstance(data_product_name, str) or not isinstance(table_name, str):
         return {
             "statusCode": 400,
             "headers": {"Content-Type": "application/json"},
             "body": json.dumps(
                 {
                     "error": {
-                        "message": "Database or table is not"
+                        "message": "Data product or table name is not"
                         + " convertible to string type."
                     }
                 }
             ),
         }
 
-    element = DataProductElement.load(data_product_name=database, element_name=table)
+    element = DataProductElement.load(
+        data_product_name=data_product_name, element_name=table_name
+    )
     data_product = element.data_product
     raw_data_path = element.raw_data_path(timestamp=amz_date, uuid_value=uuid_value)
 
@@ -66,14 +69,14 @@ def handler(event, context):
     logger.add_extras(
         {
             "lambda_name": context.function_name,
-            "data_product_name": database,
-            "table_name": table,
+            "data_product_name": data_product_name,
+            "table_name": table_name,
         }
     )
 
     logger.info(f"s3 path: {raw_data_path}")
-    logger.info(f"database: {database}")
-    logger.info(f"table: {table}")
+    logger.info(f"data_product_name: {data_product_name}")
+    logger.info(f"table_name: {table_name}")
     logger.info(f"amz_date: {amz_date}")
     logger.info(f"md5: {md5}")
     logger.info(f"uuid_string: {uuid_value}")
