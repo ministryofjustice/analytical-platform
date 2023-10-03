@@ -6,6 +6,6 @@
     "role": "arn:aws:iam::013433889002:role/modernisation-platform-oidc-cicd",
     "account": "374269020027",
     "region": "eu-west-2",
-    "repository": "data-platform-landing-to-raw-ecr-repo"
+    "repository": "data-platform-landing-to-raw-lambda-ecr-repo"
   }
 }
