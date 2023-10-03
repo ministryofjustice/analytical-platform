@@ -19,6 +19,10 @@ locals {
     {
       name        = "data-platform-support",
       description = "Core Repository for Data Platform Support"
+    },
+    {
+      name        = "data-platform-user-guidance"
+      description = "Core Repository for Data Platform User Guidance"
     }
   ]
 
