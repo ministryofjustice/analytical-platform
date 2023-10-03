@@ -28,6 +28,15 @@ def region_name():
     return "eu-west-1"
 
 
+@pytest.fixture(autouse=True)
+def set_env_vars(monkeypatch):
+    monkeypatch.setenv("RAW_DATA_BUCKET", "raw")
+    monkeypatch.setenv("CURATED_DATA_BUCKET", "curated")
+    monkeypatch.setenv("METADATA_BUCKET", "metadata")
+    monkeypatch.setenv("LANDING_ZONE_BUCKET", "landing")
+    monkeypatch.setenv("LOG_BUCKET", "logs")
+
+
 @pytest.fixture
 def s3_client(region_name):
     """
@@ -68,9 +77,9 @@ def raw_data_table(data_product_element):
 
 @pytest.fixture
 def data_product_element(s3_client, monkeypatch):
-    monkeypatch.setenv("BUCKET_NAME", "test")
+    monkeypatch.setenv("METADATA_BUCKET", "test")
     with patch("data_platform_paths.s3", s3_client):
-        s3_client.create_bucket(Bucket=os.getenv("BUCKET_NAME"))
+        s3_client.create_bucket(Bucket=os.getenv("METADATA_BUCKET"))
         element = DataProductElement.load(element_name="foo", data_product_name="bar")
     return element
 

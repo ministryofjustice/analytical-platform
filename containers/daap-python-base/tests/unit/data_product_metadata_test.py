@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import urllib.request
 from tempfile import NamedTemporaryFile
 from unittest.mock import patch
@@ -56,8 +57,6 @@ def setup_bucket(name, s3_client, region_name, monkeypatch):
 
 
 def test_get_latest_metadata_spec_path(monkeypatch):
-    bucket_name = "bucket"
-    monkeypatch.setenv("BUCKET_NAME", bucket_name)
     monkeypatch.setattr(
         data_product_metadata,
         "get_filepaths_from_s3_folder",
@@ -67,13 +66,11 @@ def test_get_latest_metadata_spec_path(monkeypatch):
     path = data_product_metadata.get_data_product_metadata_spec_path()
     assert (
         path
-        == "s3://bucket/data_product_metadata_spec/v2.10/moj_data_product_metadata_spec.json"
+        == "s3://metadata/data_product_metadata_spec/v2.10/moj_data_product_metadata_spec.json"
     )
 
 
 def test_get_specific_metadata_spec_path(monkeypatch):
-    bucket_name = "bucket"
-    monkeypatch.setenv("BUCKET_NAME", bucket_name)
     monkeypatch.setattr(
         data_product_metadata,
         "get_filepaths_from_s3_folder",
@@ -83,12 +80,12 @@ def test_get_specific_metadata_spec_path(monkeypatch):
     path = data_product_metadata.get_data_product_metadata_spec_path("v1")
     assert (
         path
-        == "s3://bucket/data_product_metadata_spec/v1/moj_data_product_metadata_spec.json"
+        == "s3://metadata/data_product_metadata_spec/v1/moj_data_product_metadata_spec.json"
     )
 
 
 def test_metadata_exist(s3_client, region_name, monkeypatch):
-    bucket_name = "bucket"
+    bucket_name = os.getenv("METADATA_BUCKET")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
 
     # populate some folders & files to mock s3 bucket
@@ -105,7 +102,7 @@ def test_metadata_exist(s3_client, region_name, monkeypatch):
 
 
 def test_metadata_does_not_exist(s3_client, region_name, monkeypatch):
-    bucket_name = "bucket"
+    bucket_name = os.getenv("METADATA_BUCKET")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         md = DataProductMetadata(test_schema_pass["name"], logging.getLogger())
@@ -117,7 +114,7 @@ validation_inputs = [(test_schema_pass, True), (test_schema_fail, False)]
 
 @pytest.mark.parametrize("test_schema, expected_out", validation_inputs)
 def test_valid_metadata(test_schema, expected_out, s3_client, region_name, monkeypatch):
-    bucket_name = "bucket"
+    bucket_name = os.getenv("METADATA_BUCKET")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
     load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
@@ -127,7 +124,7 @@ def test_valid_metadata(test_schema, expected_out, s3_client, region_name, monke
 
 
 def test_write_json_to_s3(s3_client, region_name, monkeypatch):
-    bucket_name = "bucket"
+    bucket_name = os.getenv("METADATA_BUCKET")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
     load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):

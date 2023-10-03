@@ -1,4 +1,5 @@
 import json
+import os
 
 import pytest
 from data_platform_logging import DataPlatformLogger
@@ -43,7 +44,7 @@ def setup_logger(extra_input):
 @pytest.mark.parametrize("extra_input", extra_inputs)
 @freeze_time("2023-01-01")
 def test_stdout_info_log(extra_input, s3_client, region_name, capsys, monkeypatch):
-    bucket_name = "bucket"
+    bucket_name = os.getenv("LOG_BUCKET", "")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
 
     test_logger = setup_logger(extra_input)
@@ -55,7 +56,7 @@ def test_stdout_info_log(extra_input, s3_client, region_name, capsys, monkeypatc
 
 @freeze_time("2023-01-01")
 def test_stdout_warning_log(s3_client, region_name, capsys, monkeypatch):
-    bucket_name = "bucket"
+    bucket_name = os.getenv("LOG_BUCKET", "")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
 
     test_logger = DataPlatformLogger()
@@ -66,7 +67,7 @@ def test_stdout_warning_log(s3_client, region_name, capsys, monkeypatch):
 
 @freeze_time("2023-01-01")
 def test_stdout_debug_log(s3_client, region_name, capsys, monkeypatch):
-    bucket_name = "bucket"
+    bucket_name = os.getenv("LOG_BUCKET", "")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
 
     test_logger = DataPlatformLogger(level="DEBUG")
@@ -79,7 +80,7 @@ def test_stdout_debug_log(s3_client, region_name, capsys, monkeypatch):
 
 @freeze_time("2023-01-01")
 def test_stdout_error_log(s3_client, region_name, capsys, monkeypatch):
-    bucket_name = "bucket"
+    bucket_name = os.getenv("LOG_BUCKET", "")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
 
     test_logger = DataPlatformLogger()
@@ -115,7 +116,7 @@ def test__write_log_dict_to_json_s3(extra_input, s3_client, region_name, monkeyp
             "base_image_version": "test",
         },
     ]
-    bucket_name = "bucket"
+    bucket_name = os.getenv("LOG_BUCKET", "")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
 
     test_logger = setup_logger(extra_input)
@@ -124,7 +125,7 @@ def test__write_log_dict_to_json_s3(extra_input, s3_client, region_name, monkeyp
     test_logger.info("test message 2")
 
     response = s3_client.get_object(
-        Bucket="bucket", Key=test_logger.log_bucket_path.key
+        Bucket=bucket_name, Key=test_logger.log_bucket_path.key
     )
     data = response.get("Body").read().decode("utf-8")
     json_list = [json.loads(j) for j in data.split("\n") if j != ""]

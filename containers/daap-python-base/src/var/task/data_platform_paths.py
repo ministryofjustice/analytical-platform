@@ -137,7 +137,7 @@ def get_latest_version(data_product_name: str):
     """Get the latest version of a data product, else return v1.0"""
     metadata_bucket = get_metadata_bucket()
     metadata_versions = s3.list_objects_v2(
-        Bucket=metadata_bucket, Prefix=data_product_name
+        Bucket=metadata_bucket, Prefix=data_product_name + "/"
     )
     # This is the case in which the data product is new.
     if not metadata_versions.get("Contents"):

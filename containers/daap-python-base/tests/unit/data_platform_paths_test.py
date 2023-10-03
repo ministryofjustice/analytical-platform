@@ -53,34 +53,28 @@ def test_bucket_path_parent():
     assert path.parent.key == "path/to"
 
 
-def test_raw_data_bucket(monkeypatch):
-    monkeypatch.setenv("RAW_DATA_BUCKET", "a-bucket")
-    assert get_raw_data_bucket() == "a-bucket"
+def test_raw_data_bucket():
+    assert get_raw_data_bucket() == "raw"
 
 
-def test_curated_data_bucket(monkeypatch):
-    monkeypatch.setenv("CURATED_DATA_BUCKET", "a-bucket")
-    assert get_curated_data_bucket() == "a-bucket"
+def test_curated_data_bucket():
+    assert get_curated_data_bucket() == "curated"
 
 
-def test_landing_zone_bucket(monkeypatch):
-    monkeypatch.setenv("LANDING_ZONE_BUCKET", "a-bucket")
-    assert get_landing_zone_bucket() == "a-bucket"
+def test_landing_zone_bucket():
+    assert get_landing_zone_bucket() == "landing"
 
 
-def test_log_bucket(monkeypatch):
-    monkeypatch.setenv("LOG_BUCKET", "a-bucket")
-    assert get_log_bucket() == "a-bucket"
+def test_log_bucket():
+    assert get_log_bucket() == "logs"
 
 
-def test_metdata_bucket(monkeypatch):
-    monkeypatch.setenv("METADATA_BUCKET", "a-bucket")
-    assert get_metadata_bucket() == "a-bucket"
+def test_metadata_bucket():
+    assert get_metadata_bucket() == "metadata"
 
 
 def test_raw_data_bucket_defaults_to_old_environment_variable(monkeypatch):
-    monkeypatch.setenv("BUCKET_NAME", "a-bucket")
-    assert get_raw_data_bucket() == "a-bucket"
+    assert get_raw_data_bucket() == "raw"
 
 
 def test_data_product_config_metadata_spec_prefix():
@@ -90,11 +84,6 @@ def test_data_product_config_metadata_spec_prefix():
 
 
 def test_data_product_element_config(monkeypatch):
-    monkeypatch.setenv("RAW_DATA_BUCKET", "bucket")
-    monkeypatch.setenv("CURATED_DATA_BUCKET", "bucket")
-    monkeypatch.setenv("METADATA_BUCKET", "bucket")
-    monkeypatch.setenv("LANDING_ZONE_BUCKET", "bucket")
-
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         element = DataProductElement.load("some_table", "data_product")
 
@@ -109,12 +98,12 @@ def test_data_product_element_config(monkeypatch):
         assert element.curated_data_table.database == "data_product"
 
         assert element.raw_data_prefix == BucketPath(
-            bucket="bucket",
+            bucket="raw",
             key="raw/data_product/v1.0/some_table/",
         )
 
         assert element.curated_data_prefix == BucketPath(
-            bucket="bucket",
+            bucket="curated",
             key="curated/data_product/v1.0/some_table/",
         )
 
@@ -123,21 +112,21 @@ def test_data_product_config_path_prefixes():
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         config = DataProductConfig(
             name="my-database",
-            raw_data_bucket="raw-bucket",
-            curated_data_bucket="curated-bucket",
-            metadata_bucket="a-bucket",
-            landing_zone_bucket="landing-bucket",
+            raw_data_bucket="raw",
+            curated_data_bucket="curated",
+            metadata_bucket="metadata",
+            landing_zone_bucket="landing",
         )
 
         assert config.raw_data_prefix == BucketPath(
-            bucket="raw-bucket", key="raw/my-database/v1.0/"
+            bucket="raw", key="raw/my-database/v1.0/"
         )
         assert config.curated_data_prefix == BucketPath(
-            bucket="curated-bucket", key="curated/my-database/v1.0/"
+            bucket="curated", key="curated/my-database/v1.0/"
         )
 
         assert config.landing_data_prefix == BucketPath(
-            bucket="landing-bucket", key="landing/my-database/v1.0/"
+            bucket="landing", key="landing/my-database/v1.0/"
         )
 
 
@@ -145,10 +134,10 @@ def test_data_product_config_get_element():
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         config = DataProductConfig(
             name="my-database",
-            raw_data_bucket="a-bucket",
-            curated_data_bucket="a-bucket",
-            metadata_bucket="a-bucket",
-            landing_zone_bucket="a-bucket",
+            raw_data_bucket="raw",
+            curated_data_bucket="curated",
+            metadata_bucket="metadata",
+            landing_zone_bucket="landing",
         )
 
         element = config.element("some-table")
@@ -162,17 +151,17 @@ def test_data_product_element_raw_data_path():
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         config = DataProductConfig(
             name="my-database",
-            raw_data_bucket="a-bucket",
-            curated_data_bucket="a-bucket",
-            metadata_bucket="a-bucket",
-            landing_zone_bucket="a-bucket",
+            raw_data_bucket="raw",
+            curated_data_bucket="curated",
+            metadata_bucket="metadata",
+            landing_zone_bucket="landing",
         )
         element = config.element("some-table")
 
         path = element.raw_data_path(timestamp=timestamp, uuid_value=uuid_value)
 
         assert path == BucketPath(
-            bucket="a-bucket",
+            bucket="raw",
             key=f"raw/my-database/v1.0/some-table/load_timestamp=20230905T165300Z/{uuid_value}",
         )
 
@@ -181,16 +170,16 @@ def test_data_product_config_metadata_path():
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         config = DataProductConfig(
             name="my-database",
-            curated_data_bucket="a-bucket",
-            raw_data_bucket="a-bucket",
-            landing_zone_bucket="a-bucket",
-            metadata_bucket="a-bucket",
+            curated_data_bucket="curated",
+            raw_data_bucket="raw",
+            landing_zone_bucket="landing",
+            metadata_bucket="metadata",
         )
 
         path = config.metadata_path()
 
         assert path == BucketPath(
-            bucket="a-bucket",
+            bucket="metadata",
             key="my-database/v1.0/metadata.json",
         )
 
@@ -202,10 +191,10 @@ def test_extraction_config():
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         config = DataProductConfig(
             name="my-database",
-            raw_data_bucket="a-bucket",
-            curated_data_bucket="a-bucket",
-            landing_zone_bucket="a-bucket",
-            metadata_bucket="a-bucket",
+            raw_data_bucket="raw",
+            curated_data_bucket="curated",
+            landing_zone_bucket="landing",
+            metadata_bucket="metadata",
         )
 
         element = config.element("some-table")
@@ -216,7 +205,7 @@ def test_extraction_config():
 
         assert extraction.timestamp == timestamp
         assert extraction.path == BucketPath(
-            bucket="a-bucket",
+            bucket="raw",
             key=f"raw/my-database/v1.0/some-table/load_timestamp=20230905T165300Z/{uuid_value}",
         )
 
@@ -263,12 +252,11 @@ def test_data_product_metadata_spec_path():
 
 @freeze_time("2023-09-12")
 def test_data_product_log_bucket_and_key(monkeypatch):
-    monkeypatch.setenv("BUCKET_NAME", "a-bucket")
     log_bucket_path = data_product_log_bucket_and_key(
         "top_test_lambda", "delicious-data-product"
     )
 
-    assert log_bucket_path.bucket == "a-bucket"
+    assert log_bucket_path.bucket == "logs"
     assert (
         log_bucket_path.key
         == "logs/json/lambda_name=top_test_lambda/data_product_name=delicious-data-product/date=2023-09-12/2023-09-12T00:00:00:000_log.json"  # noqa: E501
