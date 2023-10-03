@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Added version to RawDataExtraction so table name is parsed correctly
+- Added version to RawDataExtraction so table name is parsed
+  correctly
 - Add a test case to check table is parsed correctly
 
 ## [3.0.0] - 2023-10-2
