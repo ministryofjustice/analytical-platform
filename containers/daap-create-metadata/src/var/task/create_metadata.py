@@ -88,6 +88,14 @@ def handler(event, context):
 
     logger.add_extras({"data_product_name": data_product_name})
 
+    if http_method == "POST":
+        pass
+    else:
+        error = f"Sorry, {http_method} isn't allowed."
+        response_code = HTTPStatus.METHOD_NOT_ALLOWED.value
+        logger.error(error)
+        return generate_response(response_code, event, error=error)
+
     data_product_metadata = DataProductMetadata(data_product_name, logger)
 
     if not data_product_metadata.metadata_exists:
@@ -107,13 +115,6 @@ def handler(event, context):
     else:
         response_code = HTTPStatus.CONFLICT.value
         error = f"Data Product {data_product_name} already has a version 1 registered metadata."  # noqa E501
-        logger.error(error)
-
-    if http_method == "POST":
-        pass
-    else:
-        error = f"Sorry, {http_method} isn't allowed."
-        response_code = HTTPStatus.METHOD_NOT_ALLOWED.value
         logger.error(error)
 
     response = generate_response(

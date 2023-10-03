@@ -16,8 +16,6 @@ def test_existing_metadata_definition_fail(fake_context):
     with patch("create_metadata.DataProductMetadata") as mock_metadata:
         mock_metadata.return_value.metadata_exists = True
         mock_metadata.return_value.valid_metadata = None
-        print(mock_metadata.return_value.validate_metadata)
-        print(bool(mock_metadata.return_value.validate_metadata))
         response = create_metadata.handler(
             {"httpMethod": "POST", "body": """{"metadata": {"name": "test"}}"""},
             context=fake_context,
@@ -53,4 +51,19 @@ def test_metadata_validation_fail(fake_context):
         assert (
             json.loads(response["body"])["error"]["message"]
             == f"Metadata failed validation with error: {mock_metadata.return_value.error_traceback}"
+        )
+
+
+def test_http_method_fail(fake_context):
+    with patch("create_metadata.DataProductMetadata") as mock_metadata:
+        mock_metadata.return_value.metadata_exists = False
+        mock_metadata.return_value.valid_metadata = True
+        response = create_metadata.handler(
+            {"httpMethod": "GET", "body": """{"metadata": {"name": "test"}}"""},
+            context=fake_context,
+        )
+        assert response["statusCode"] == 405
+        assert (
+            json.loads(response["body"])["error"]["message"]
+            == f"Sorry, GET isn't allowed."
         )
