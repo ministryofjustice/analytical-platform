@@ -376,7 +376,7 @@ class RawDataExtraction:
         """
         raw_data_file = BucketPath.from_uri(raw_data_uri)
 
-        _, data_product_name, table_name, *_rest = raw_data_file.key.split("/")
+        _, data_product_name, version, table_name, *_rest = raw_data_file.key.split("/")
 
         data_product_config = DataProductConfig(
             data_product_name, raw_data_bucket=raw_data_file.bucket
