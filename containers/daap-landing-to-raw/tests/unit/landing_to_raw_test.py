@@ -8,7 +8,7 @@ def test_handler(s3_client, fake_context):
         "detail": {
             "bucket": {"name": "landing"},
             "object": {
-                "key": "landing/data-product/v1.0/table/load_timestamp=123456789Z/data.csv"
+                "key": "landing/data-product/v1.0/table/load_timestamp=20150210T130000Z/data.csv"
             },
         }
     }
@@ -25,6 +25,6 @@ def test_handler(s3_client, fake_context):
         handler(test_event, fake_context)
 
         assert s3_client.get_object(
-            Key="raw/data-product/v1.0/table/load_timestamp=123456789Z/data.csv",
+            Key="raw/data-product/v1.0/table/load_timestamp=20150210T130000Z/data.csv",
             Bucket=destination_bucket,
         )

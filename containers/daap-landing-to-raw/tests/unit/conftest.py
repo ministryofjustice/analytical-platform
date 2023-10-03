@@ -40,6 +40,19 @@ def region_name():
     return "us-east-1"
 
 
+@pytest.fixture(autouse=True)
+def metadata_bucket(s3_client):
+    """The pathing objects check for the latest version of metadata
+    for a data product on instantiation"""
+    metadata_bucket_name = "metadata"
+    s3_client.create_bucket(Bucket=metadata_bucket_name)
+    s3_client.put_object(
+        Bucket=metadata_bucket_name,
+        Key="metadata/data-product/v1.0/metadata.json",
+        Body=r"{\"key\":\"value\"}",
+    )
+
+
 @pytest.fixture
 def s3_client(region_name):
     """
