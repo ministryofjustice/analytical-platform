@@ -7,6 +7,52 @@ from data_platform_paths import RawDataExtraction, get_raw_data_bucket
 s3 = boto3.client("s3")
 
 
+def type_is_compatable(registered_type: str, inferred_type: str) -> bool:
+    """
+    Validate a type inferred from the dataset is compatable with the schema.
+
+    This implementation adds some leniency for types that are different, but probably compatable.
+    For example: a `long` type is wider than an `integer` which is wider than `short` and `byte`.
+    It is always valid for the dataset to contain a narrower type than what is registered in the schema,
+    such as when the schema requires long but we detected integers.
+
+    We also allow some cases where the dataset has a wider type than is registered in the schema,
+    because this might be down to a data quality issue, which we don't want to address at this stage.
+    (i.e. for the purposes of schema validation, we consider all integral types interchangable,
+    and all floating-point types interchangable.)
+
+    For a full list of supported types, see the AWS athena documentation:
+    https://docs.aws.amazon.com/athena/latest/ug/data-types.html
+    """
+    if registered_type == inferred_type:
+        return True
+
+    match (registered_type, inferred_type):
+        case ("string", _):
+            return True
+        case ("timestamp", "date"):
+            return True
+        case (
+            "tinyint" | "smallint" | "int" | "integer" | "bigint",
+            "tinyint" | "smallint" | "int" | "integer" | "bigint",
+        ):
+            return True
+        case (
+            "float" | "double" | "decimal",
+            "float"
+            | "double"
+            | "decimal"
+            | "tinyint"
+            | "smallint"
+            | "int"
+            | "integer"
+            | "bigint",
+        ):
+            return True
+        case _:
+            return False
+
+
 def handler(event, context):
     raw_data_bucket = get_raw_data_bucket()
     bucket_name = event["detail"]["bucket"]["name"]
