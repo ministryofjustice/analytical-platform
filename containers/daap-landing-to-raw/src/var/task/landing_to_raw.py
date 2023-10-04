@@ -11,6 +11,19 @@ class DataInvalid(Exception):
     pass
 
 
+def extract_columns_from_schema(schema: dict) -> dict[str, str]:
+    """
+    Extract a dict of name -> type for each column in the schema.
+    """
+    try:
+        return {
+            column["Name"]: column["Type"]
+            for column in schema["TableInput"]["StorageDescriptor"]["Columns"]
+        }
+    except KeyError:
+        raise ValueError(f"Invalid schema: {schema}")
+
+
 def type_is_compatable(registered_type: str, inferred_type: str) -> bool:
     """
     Validate a type inferred from the dataset is compatable with the schema.

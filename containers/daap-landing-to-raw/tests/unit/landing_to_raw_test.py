@@ -6,6 +6,7 @@ from landing_to_raw import (
     type_is_compatable,
     validate_data_against_schema,
     DataInvalid,
+    extract_columns_from_schema,
 )
 
 
@@ -201,3 +202,25 @@ class TestValidateAgainstSchema:
                 registered_schema_columns=schema,
                 inferred_columns=dict(**schema, extra="integer"),
             )
+
+
+class TestExtractColumnsFromSchema:
+    def test_valid(self):
+        columns = extract_columns_from_schema(
+            {
+                "TableInput": {
+                    "StorageDescriptor": {
+                        "Columns": [
+                            {"Name": "foo", "Type": "string"},
+                            {"Name": "bar", "Type": "int"},
+                        ]
+                    }
+                }
+            }
+        )
+
+        assert columns == {"foo": "string", "bar": "int"}
+
+    def test_invalid(self):
+        with pytest.raises(ValueError):
+            extract_columns_from_schema({})
