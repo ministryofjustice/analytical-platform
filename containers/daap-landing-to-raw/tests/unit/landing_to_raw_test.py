@@ -1,7 +1,12 @@
 from unittest.mock import patch
 import pytest
 
-from landing_to_raw import handler, type_is_compatable
+from landing_to_raw import (
+    handler,
+    type_is_compatable,
+    validate_data_against_schema,
+    DataInvalid,
+)
 
 
 def test_handler(s3_client, fake_context):
@@ -165,3 +170,34 @@ def test_type_is_compatable(registered_type, inferred_type, expected):
         type_is_compatable(registered_type=registered_type, inferred_type=inferred_type)
         == expected
     )
+
+
+class TestValidateAgainstSchema:
+    @pytest.fixture
+    def schema(self):
+        return {"foo": "string", "bar": "int", "baz": "timestamp"}
+
+    def test_valid_match(self, schema):
+        validate_data_against_schema(
+            registered_schema_columns=schema, inferred_columns=schema
+        )
+
+    def test_lenient_match(self, schema):
+        validate_data_against_schema(
+            registered_schema_columns=schema,
+            inferred_columns={"foo": "int", "bar": "smallint", "baz": "date"},
+        )
+
+    def test_missing_columns(self, schema):
+        with pytest.raises(DataInvalid):
+            validate_data_against_schema(
+                registered_schema_columns=schema,
+                inferred_columns={"foo": "int", "bar": "smallint"},
+            )
+
+    def test_extra_columns(self, schema):
+        with pytest.raises(DataInvalid):
+            validate_data_against_schema(
+                registered_schema_columns=schema,
+                inferred_columns=dict(**schema, extra="integer"),
+            )

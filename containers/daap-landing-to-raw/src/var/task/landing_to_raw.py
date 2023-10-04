@@ -7,6 +7,10 @@ from data_platform_paths import RawDataExtraction, get_raw_data_bucket
 s3 = boto3.client("s3")
 
 
+class DataInvalid(Exception):
+    pass
+
+
 def type_is_compatable(registered_type: str, inferred_type: str) -> bool:
     """
     Validate a type inferred from the dataset is compatable with the schema.
@@ -51,6 +55,44 @@ def type_is_compatable(registered_type: str, inferred_type: str) -> bool:
             return True
         case _:
             return False
+
+
+def validate_data_against_schema(
+    registered_schema_columns: dict[str, str], inferred_columns: dict[str, str]
+):
+    """
+    Checks that a dataset has a valid set of column names and types.
+
+    This validation is intended to reject data early in the case where the entire dataset looks to be mismatched
+    to the schema. This indicates that something is wrong on the data prouducer's end, e.g. something went wrong
+    extracting from the source system, or the schema has changed, and the data producer needs to register a new
+    version. We do not care about row-level data quality checks at this stage.
+    """
+    registered_names = set(registered_schema_columns.keys())
+    actual_names = set(inferred_columns.keys())
+    missing_names = registered_names - actual_names
+    extra_names = actual_names - registered_names
+    if missing_names:
+        raise DataInvalid(
+            f"Columns do not match schema (missing: {missing_names}, extra: {extra_names})"
+        )
+    if extra_names:
+        raise DataInvalid(f"Columns do not match schema (extra: {extra_names})")
+
+    type_errors = []
+    for name in registered_names:
+        registered_type = registered_schema_columns[name]
+        inferred_type = inferred_columns[name]
+
+        if not type_is_compatable(
+            registered_type=registered_type, inferred_type=inferred_type
+        ):
+            type_errors.append(
+                f"{name} expected {registered_type}, got {inferred_type}"
+            )
+
+    if type_errors:
+        raise DataInvalid(f"Columns do not match schema ({', '.join(type_errors)})")
 
 
 def handler(event, context):
