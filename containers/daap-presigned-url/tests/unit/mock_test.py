@@ -22,7 +22,9 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
         CreateBucketConfiguration={"LocationConstraint": region_name},
     )
     s3_client.put_object(
-        Bucket=bucket_name, Key=f"metadata/{database}/v1.0/metadata.json", Body=""
+        Bucket=bucket_name,
+        Key=f"{database}/v1.0/metadata.json",
+        Body=json.dumps({"test": "test"}),
     )
 
     event = {
@@ -44,7 +46,7 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
     assert body["URL"]["url"] == "https://bucket.s3.amazonaws.com/"
     assert (
         body["URL"]["fields"]["key"]
-        == f"raw_data/database1/table1/load_timestamp=20230101T000000Z/{a_uuid}"
+        == f"raw/database1/v1.0/table1/load_timestamp=20230101T000000Z/{a_uuid}"
     )
 
 
