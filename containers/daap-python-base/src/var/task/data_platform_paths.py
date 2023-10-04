@@ -17,6 +17,7 @@ import os
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
 from typing import NamedTuple
 from uuid import UUID, uuid4
 
@@ -34,6 +35,29 @@ TABLE_NAME_REGEX = re.compile(r"table_name=([^\/]*)\/")
 
 # https://docs.aws.amazon.com/athena/latest/ug/tables-databases-columns-names.html
 MAX_IDENTIFIER_LENGTH = 255
+
+
+class MetadataTypes(Enum):
+    """
+    Class to identify different types of metadata.
+
+    data product metadata - relates to data of the data product as a whole. Can be 1 or more tables.
+
+    and
+
+    data product schema - relates to data describing a table within a data product
+    """
+    data_product_metadata: str = "metadata"
+    data_product_schema: str = "schema"
+
+    @classmethod
+    def _missing_(cls, value):
+        raise ValueError(
+                '%r is not a valid %s.  Valid types: %s' % (
+                    value,
+                    cls.__name__,
+                    ', '.join([repr(m.value) for m in cls]),
+                    ))
 
 
 class BucketPath(NamedTuple):
@@ -303,9 +327,9 @@ class DataProductConfig:
         """
         return DataProductElement(name=name, data_product=self)
 
-    def metadata_path(self):
+    def metadata_path(self) -> BucketPath:
         """
-        Path to the V1 metadata file
+        Path to the latest version of a data product metadata file
         """
         key = os.path.join(
             self.name,
@@ -314,32 +338,45 @@ class DataProductConfig:
         )
         return BucketPath(bucket=self.metadata_bucket, key=key)
 
+    def schema_path(self, table_name: str) -> BucketPath:
+        """
+        Path to the latest version schema file for a given table
+        """
+        key = os.path.join(
+            self.name,
+            self.latest_version,
+            table_name,
+            "schema.json",
+        )
+        return BucketPath(bucket=self.metadata_bucket, key=key)
+
     @staticmethod
-    def metadata_spec_prefix(bucket_name: str | None = None) -> BucketPath:
+    def specification_prefix(metadata_type: str, bucket_name: str | None = None) -> BucketPath:
         """
-        Path to the metadata spec files
+        Path to prefix of the schema or metadata specification json schema, before version
         """
+        spec_type = MetadataTypes(metadata_type)
         return BucketPath(
             bucket_name or get_metadata_bucket(),
             os.path.join(
-                "data_product_metadata_spec",
+                f"{spec_type.name}_spec",
             ),
         )
 
     @staticmethod
-    def metadata_spec_path(version: str, bucket_name: str | None = None) -> BucketPath:
+    def specification_path(metadata_type: str, version: str, bucket_name: str | None = None) -> BucketPath:
         """
-        Path to a metadata spec file
+        Full path to a schema or metadata specifciation json schema
         """
+        spec_type = MetadataTypes(metadata_type)
         return BucketPath(
             bucket_name if bucket_name else get_metadata_bucket(),
             os.path.join(
-                "data_product_metadata_spec",
+                f"{spec_type.name}_spec",
                 version,
-                "moj_data_product_metadata_spec.json",
+                f"moj_{spec_type.name}_spec.json",
             ),
         )
-
 
 @dataclass
 class RawDataExtraction:
