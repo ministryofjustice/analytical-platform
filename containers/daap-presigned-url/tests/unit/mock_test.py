@@ -44,7 +44,7 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
     assert body["URL"]["url"] == "https://bucket.s3.amazonaws.com/"
     assert (
         body["URL"]["fields"]["key"]
-        == f"raw_data/database1/table1/extraction_timestamp=20230101T000000Z/{a_uuid}"
+        == f"raw_data/database1/table1/load_timestamp=20230101T000000Z/{a_uuid}"
     )
 
 
