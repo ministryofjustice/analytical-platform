@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - removed database and table querystring parameters
-- created date-product-name & table-name variables from event body pathParameters
+- created data-product-name & table-name variables from event body pathParameters
 - created body variable from event.body json string
 - replaced references to database with data-product-name
 - replaced refferences to table with table-name
