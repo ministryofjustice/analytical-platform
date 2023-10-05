@@ -376,6 +376,32 @@ class DataProductConfig:
         )
         return BucketPath(bucket=self.metadata_bucket, key=key)
 
+    @staticmethod
+    def metadata_spec_prefix(bucket_name: str | None = None) -> BucketPath:
+        """
+        Path to the metadata spec files
+        """
+        return BucketPath(
+            bucket_name or get_metadata_bucket(),
+            os.path.join(
+                "data_product_metadata_spec",
+            ),
+        )
+
+    @staticmethod
+    def metadata_spec_path(version: str, bucket_name: str | None = None) -> BucketPath:
+        """
+        Path to a metadata spec file
+        """
+        return BucketPath(
+            bucket_name if bucket_name else get_metadata_bucket(),
+            os.path.join(
+                "data_product_metadata_spec",
+                version,
+                "moj_data_product_metadata_spec.json",
+            ),
+        )
+
 
 @dataclass
 class RawDataExtraction:
