@@ -11,6 +11,7 @@ from data_platform_paths import (
     BucketPath,
     DataProductConfig,
     DataProductElement,
+    JsonSchemaName,
     RawDataExtraction,
     data_product_log_bucket_and_key,
     get_curated_data_bucket,
@@ -20,6 +21,8 @@ from data_platform_paths import (
     get_metadata_bucket,
     get_raw_data_bucket,
     search_string_for_regex,
+    specification_path,
+    specification_prefix,
 )
 from freezegun import freeze_time
 
@@ -77,8 +80,8 @@ def test_raw_data_bucket_defaults_to_old_environment_variable(monkeypatch):
     assert get_raw_data_bucket() == "raw"
 
 
-def test_data_product_config_metadata_spec_prefix():
-    assert DataProductConfig.metadata_spec_prefix("bucket") == BucketPath(
+def test_data_product_config_specification_prefix():
+    assert specification_prefix(JsonSchemaName("metadata"), "bucket") == BucketPath(
         bucket="bucket", key="data_product_metadata_spec"
     )
 
@@ -240,9 +243,9 @@ def test_extraction_config_parse_from_raw_uri(monkeypatch):
         )
 
 
-def test_data_product_metadata_spec_path():
+def test_data_product_specification_path():
     version = "1"
-    path = DataProductConfig.metadata_spec_path(version, bucket_name="foo")
+    path = specification_path(JsonSchemaName("metadata"), version, bucket_name="foo")
 
     assert path == BucketPath(
         bucket="foo",
@@ -284,23 +287,25 @@ def test_extract_timestamp_from_curated_path(curated_data_key):
     )
 
 
-def test_get_latest_version(s3_client, monkeypatch):
+def test_get_latest_version(region_name, s3_client, monkeypatch):
     with patch("data_platform_paths.s3", s3_client):
-        monkeypatch.setenv("METADATA_BUCKET", "bucket")
-        s3_client.create_bucket(Bucket="bucket")
+        s3_client.create_bucket(
+            Bucket="metadata",
+            CreateBucketConfiguration={"LocationConstraint": region_name},
+        )
         # Old version
         s3_client.put_object(
-            Bucket="bucket", Key="data_product/v1.0/metadata.json", Body="hi"
+            Bucket="metadata", Key="data_product/v1.0/metadata.json", Body="hi"
         )
         s3_client.put_object(
-            Bucket="bucket", Key="data_product/v2.0/metadata.json", Body="hi"
+            Bucket="metadata", Key="data_product/v2.0/metadata.json", Body="hi"
         )
         s3_client.put_object(
-            Bucket="bucket", Key="data_product/v2.1/metadata.json", Body="hi"
+            Bucket="metadata", Key="data_product/v2.1/metadata.json", Body="hi"
         )
         # This file is empty and so should be ignored
         s3_client.put_object(
-            Bucket="bucket", Key="data_product/v5.1/metadata.json", Body=""
+            Bucket="metadata", Key="data_product/v5.1/metadata.json", Body=""
         )
         latest_version = get_latest_version("data_product")
         assert latest_version == "v2.1"
