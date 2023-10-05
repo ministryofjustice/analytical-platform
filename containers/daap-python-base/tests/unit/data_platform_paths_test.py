@@ -241,6 +241,8 @@ def test_extraction_config_parse_from_raw_uri(monkeypatch):
             metadata_bucket="bucket3",
             landing_zone_bucket="bucket4",
         )
+        assert config.element.data_product.name == "database-name"
+        assert config.element.curated_data_table.name == "table-name"
 
 
 def test_data_product_specification_path():

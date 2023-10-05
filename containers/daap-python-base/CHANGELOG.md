@@ -22,6 +22,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `JsonSchemaName` class, an enum to identify different types of metadata/schema paths.
 
+## [3.1.0] - 2023-10-2
+
+### Changed
+
+- Added version to `RawDataExtraction.parse_from_uri` so the
+  table name is parsed correctly
+- Add a test case to check table is parsed correctly
+
 ## [3.0.0] - 2023-10-2
 
 ### Added
@@ -42,8 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - infer_glue_schema.GlueSchemaGenerator.infer_from_raw_csv
-null_values list in pyarrow's read_csv method change from an
-empty list to [""] which results in intended schema inference.
+  null_values list in pyarrow's read_csv method change from an
+  empty list to [""] which results in intended schema inference.
 
 ## [2.1.3] - 2023-09-27
 
