@@ -8,6 +8,8 @@ on: # yamllint disable-line rule:truthy
     paths:
       - containers/daap-*/**
   push:
+    branches:
+      - main
     paths:
       - containers/daap-*/**
 
