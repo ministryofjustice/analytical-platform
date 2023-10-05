@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- removed datebase and table querystring parameters
+- removed database and table querystring parameters
 - created date-product-name & table-name variables from event body pathParameters
 - created body variable from event.body json string
 - replaced refferences to datebase with data-product-name
