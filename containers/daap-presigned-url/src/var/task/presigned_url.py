@@ -20,8 +20,7 @@ logger = DataPlatformLogger(
 def handler(event, context):
     data_product_name = event["pathParameters"].get("data-product-name")
     table_name = event["pathParameters"].get("table-name")
-    body = json.loads(event.get("body"))
-    md5 = str(body.get("contentMD5"))
+    md5 = str(event["body"].get("contentMD5"))
     amz_date = datetime.utcnow()
     formatted_date = amz_date.strftime("%Y%m%dT%H%M%SZ")
     uuid_value = uuid.uuid4()
