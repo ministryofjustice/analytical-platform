@@ -25,7 +25,7 @@ time.tzset()
 
 @pytest.fixture
 def region_name():
-    return "eu-west-1"
+    return "eu-west-2"
 
 
 @pytest.fixture(autouse=True)
@@ -43,7 +43,7 @@ def s3_client(region_name):
     Create a mock s3 client
     """
     with mock_s3():
-        client = boto3.client("s3", region_name="us-east-1")
+        client = boto3.client("s3", region_name=region_name)
 
         yield client
 
@@ -76,12 +76,15 @@ def raw_data_table(data_product_element):
 
 
 @pytest.fixture
-def data_product_element(s3_client, monkeypatch):
-    monkeypatch.setenv("METADATA_BUCKET", "test")
+def data_product_element(region_name, s3_client, monkeypatch):
+    # monkeypatch.setenv("METADATA_BUCKET", "metadata")
     with patch("data_platform_paths.s3", s3_client):
-        s3_client.create_bucket(Bucket=os.getenv("METADATA_BUCKET"))
+        s3_client.create_bucket(
+            Bucket=os.getenv("METADATA_BUCKET"),
+            CreateBucketConfiguration={"LocationConstraint": region_name},
+        )
         element = DataProductElement.load(element_name="foo", data_product_name="bar")
-    return element
+        return element
 
 
 @pytest.fixture

@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 2023-10-05
+
+### Added
+
+- `JsonSchemaName` class, an enum to identify different types of metadata/
+  schema paths.
+- `data_platform_paths.specification_path()` and
+  `data_platform_paths.specification_prefix()` and now deals with both
+  metadata and schema specification paths to json schema.
+
 ## [3.1.0] - 2023-10-2
 
 ### Changed
