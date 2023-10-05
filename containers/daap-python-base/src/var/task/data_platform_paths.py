@@ -47,20 +47,25 @@ class JsonSchemaName(Enum):
 
     data product schema - relates to data describing a table within a data product.
     """
+
     data_product_metadata: str = "metadata"
     data_product_schema: str = "schema"
 
     @classmethod
     def _missing_(cls, value):
         raise ValueError(
-                '%r is not a valid %s.  Valid types: %s' % (
-                    value,
-                    cls.__name__,
-                    ', '.join([repr(m.value) for m in cls]),
-                    ))
+            "%r is not a valid %s.  Valid types: %s"
+            % (
+                value,
+                cls.__name__,
+                ", ".join([repr(m.value) for m in cls]),
+            )
+        )
 
 
-def specification_prefix(spec_type: JsonSchemaName, bucket_name: str | None = None) -> BucketPath:
+def specification_prefix(
+    spec_type: JsonSchemaName, bucket_name: str | None = None
+) -> BucketPath:
     """
     Path to prefix of the schema or metadata specification json schema, before version.
     """
@@ -72,7 +77,9 @@ def specification_prefix(spec_type: JsonSchemaName, bucket_name: str | None = No
     )
 
 
-def specification_path(spec_type: JsonSchemaName, version: str, bucket_name: str | None = None) -> BucketPath:
+def specification_path(
+    spec_type: JsonSchemaName, version: str, bucket_name: str | None = None
+) -> BucketPath:
     """
     Full path to a schema or metadata specifciation json schema.
     """
