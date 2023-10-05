@@ -32,11 +32,9 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
             "data-product-name": database,
             "table-name": table,
         },
-        "body": json.dumps(
-            {
-                "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
-            }
-        ),
+        "body": {
+            "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
+        },
     }
 
     response = handler(event, fake_context)
@@ -68,11 +66,9 @@ def test_dataproduct_does_not_exist(s3_client, fake_context, region_name, monkey
             "data-product-name": database,
             "table-name": table,
         },
-        "body": json.dumps(
-            {
-                "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
-            }
-        ),
+        "body": {
+            "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
+        },
     }
 
     response = handler(event, fake_context)
@@ -96,11 +92,9 @@ def test_invalid_params(s3_client, fake_context, region_name, monkeypatch):
             "data-product-name": None,
             "table-name": None,
         },
-        "body": json.dumps(
-            {
-                "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
-            }
-        ),
+        "body": {
+            "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
+        },
     }
 
     response = handler(event, fake_context)
