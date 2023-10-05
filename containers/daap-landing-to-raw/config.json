@@ -1,6 +1,6 @@
 {
   "name": "daap-landing-to-raw",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "registry": "ecr",
   "ecr": {
     "role": "arn:aws:iam::013433889002:role/modernisation-platform-oidc-cicd",
