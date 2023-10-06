@@ -160,7 +160,7 @@ def test_metadata_exist(s3_client, region_name, monkeypatch):
 
         s3_client.upload_file(tmp.name, bucket_name, "test_product/v1.0/metadata.json")
 
-    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
+    with patch("data_platform_paths.s3", s3_client):
         md = DataProductMetadata(test_metadata_pass["name"], logging.getLogger())
         assert md.exists
 
