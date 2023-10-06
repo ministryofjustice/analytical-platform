@@ -6,11 +6,15 @@ from typing import Dict
 import boto3
 import botocore
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import (BucketPath, DataProductConfig, JsonSchemaName,
-                                 get_latest_version, specification_path,
-                                 specification_prefix)
-from dataengineeringutils3.s3 import (get_filepaths_from_s3_folder,
-                                      read_json_from_s3)
+from data_platform_paths import (
+    BucketPath,
+    DataProductConfig,
+    JsonSchemaName,
+    get_latest_version,
+    specification_path,
+    specification_prefix,
+)
+from dataengineeringutils3.s3 import get_filepaths_from_s3_folder, read_json_from_s3
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
@@ -172,13 +176,14 @@ class DataProductBaseJsonSchema:
     # compare old and new metadata/schema and use
     # logic to set version scale.
     # will need new path function to reflect new version number schema and metadatas 3 paths
-    def _classify_update(self) -> str:  # would be ("major, minor")
+    def _classify_update(self):
+        """infer type of increment to version, major/minor"""
         pass
 
     # this can be passed to a path function for schema and metadata that doesn't use latest version
     # Maybe this will be better suited outside of the class.
-    def _generate_new_version_number(self) -> str:
-
+    def _generate_new_version_number(self):
+        """generate a version number to pass to get path function"""
         pass
 
 
@@ -251,14 +256,15 @@ class DataProductSchema(DataProductBaseJsonSchema):
 
     def _get_parent_data_product_metadata(self) -> Dict:
         data_product_metadata_path = BucketPath.from_uri(
-            DataProductConfig(
-                name=self.data_product_name
-            ).metadata_path(version=self.data_product_version).uri
+            DataProductConfig(name=self.data_product_name)
+            .metadata_path(version=self.data_product_version)
+            .uri
         )
 
         metadata = read_json_from_s3(data_product_metadata_path)
 
         return metadata
+
 
 class DataProductMetadata(DataProductBaseJsonSchema):
     """
