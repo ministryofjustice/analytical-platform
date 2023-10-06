@@ -360,54 +360,36 @@ class DataProductConfig:
         """
         return DataProductElement(name=name, data_product=self)
 
-    def metadata_path(self) -> BucketPath:
+    def metadata_path(self, version: str | None = None) -> BucketPath:
         """
         Path to the latest version of a data product metadata file
         """
+
+        if version is None:
+            version = self.latest_version
+
         key = os.path.join(
             self.name,
-            self.latest_version,
+            version,
             "metadata.json",
         )
         return BucketPath(bucket=self.metadata_bucket, key=key)
 
-    def schema_path(self, table_name: str) -> BucketPath:
+    def schema_path(self, table_name: str, version: str | None = None) -> BucketPath:
         """
         Path to the latest version schema file for a given table
         """
+
+        if version is None:
+            version = self.latest_version
+
         key = os.path.join(
             self.name,
-            self.latest_version,
+            version,
             table_name,
             "schema.json",
         )
         return BucketPath(bucket=self.metadata_bucket, key=key)
-
-    @staticmethod
-    def metadata_spec_prefix(bucket_name: str | None = None) -> BucketPath:
-        """
-        Path to the metadata spec files
-        """
-        return BucketPath(
-            bucket_name or get_metadata_bucket(),
-            os.path.join(
-                "data_product_metadata_spec",
-            ),
-        )
-
-    @staticmethod
-    def metadata_spec_path(version: str, bucket_name: str | None = None) -> BucketPath:
-        """
-        Path to a metadata spec file
-        """
-        return BucketPath(
-            bucket_name if bucket_name else get_metadata_bucket(),
-            os.path.join(
-                "data_product_metadata_spec",
-                version,
-                "moj_data_product_metadata_spec.json",
-            ),
-        )
 
 
 @dataclass
