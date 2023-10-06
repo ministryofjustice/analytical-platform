@@ -41,51 +41,37 @@ def handler(event, context):
         }
     )
 
-    def generate_response(
-        response_code: int,
-        event: dict,
-        response_message: Optional[str] = None,
-        data_product_name: Optional[str] = None,
-        error: Optional[str] = None,
-    ) -> dict:
+    def format_response(response_code: int, event: dict, body_dict: dict) -> dict:
         """
-        Generate a response to return to API Gateway that contains the response code,
-        and either a successful message or an error message
+        Generate a response to return to API Gateway that contains the initial event,
+        response code, and contents of the response body
+        (i.e. body['message'] or body['error']['message'])
         """
         response_body = {"input": event}
-
-        if response_message is not None:
-            response_body.update({"message": response_message})  # type: ignore[dict-item]
-        elif error is not None:
-            response_body.update({"error": {"message": error}})
-
-        if data_product_name is not None:
-            response_body.update({"data_product_name": data_product_name})  # type: ignore[dict-item]
-
+        response_body.update(body_dict)
         response = {
             "statusCode": response_code,
             "headers": {"Content-Type": "application/json"},
             "body": json.dumps(response_body),
         }
-
         return response
 
     logger.info(f"event: {event}")
-    response_code = 200
-    response_message = None
-    error = None
+    response_code = HTTPStatus.SUCCESS.value
+    response_body = {}
     data_product_name = None
 
     http_method = event.get("httpMethod")
-    body = json.loads(event.get("body"))
+    event_body = json.loads(event.get("body"))
 
     try:
-        data_product_name = body["metadata"]["name"]
+        data_product_name = event_body["metadata"]["name"]
     except KeyError:
         response_code = HTTPStatus.BAD_REQUEST.value
         error = "Data product name is missing, it must be specified in the metadata against the 'name' key"  # noqa E501
+        response_body = {"error": {"message": error}}
         logger.error(error)
-        return generate_response(response_code, event, error=error)
+        return format_response(response_code, event, response_body)
 
     logger.add_extras({"data_product_name": data_product_name})
 
@@ -93,37 +79,35 @@ def handler(event, context):
         pass
     else:
         error = f"Sorry, {http_method} isn't allowed."
+        response_body = {"error": {"message": error}}
         response_code = HTTPStatus.METHOD_NOT_ALLOWED.value
         logger.error(error)
-        return generate_response(response_code, event, error=error)
+        return format_response(response_code, event, response_body)
 
     data_product_metadata = DataProductMetadata(data_product_name, logger)
 
     if not data_product_metadata.metadata_exists:
-        data_product_metadata.validate(body["metadata"])
+        data_product_metadata.validate(event_body["metadata"])
 
         if data_product_metadata.valid_metadata:
             data_product_metadata.write_json_to_s3()
             response_code = HTTPStatus.CREATED.value
-            response_message = (
-                f"Data Product {data_product_name} was successfully created."
-            )
-            logger.info(response_message)
+            message = f"Data Product {data_product_name} was successfully created."
+            response_body = {"message": message}
+            logger.info(response_body["message"])
         else:
             response_code = HTTPStatus.BAD_REQUEST.value
             error = f"Metadata failed validation with error: {data_product_metadata.error_traceback}"  # noqa E501
+            response_body = {"error": {"message": error}}
             logger.error(error)
     else:
         response_code = HTTPStatus.CONFLICT.value
         error = f"Data Product {data_product_name} already has a version 1 registered metadata."  # noqa E501
+        response_body = {"error": error}
         logger.error(error)
 
-    response = generate_response(
-        response_code=response_code,
-        event=event,
-        response_message=response_message,
-        error=error,
-        data_product_name=data_product_name,
+    response = format_response(
+        response_code=response_code, event=event, body_dict=response_body
     )
 
     logger.info(f"Response: {response}")
