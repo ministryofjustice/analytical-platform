@@ -15,7 +15,7 @@ jobs:
     if: github.event.label.name == 'Epic'
     steps:
       - name: Check if Epic and Create Label
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
