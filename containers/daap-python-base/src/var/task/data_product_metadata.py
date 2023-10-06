@@ -1,19 +1,16 @@
 import json
 import traceback
 from copy import deepcopy
+from typing import Dict
 
 import boto3
 import botocore
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import (
-    BucketPath,
-    DataProductConfig,
-    JsonSchemaName,
-    get_latest_version,
-    specification_path,
-    specification_prefix,
-)
-from dataengineeringutils3.s3 import get_filepaths_from_s3_folder, read_json_from_s3
+from data_platform_paths import (BucketPath, DataProductConfig, JsonSchemaName,
+                                 get_latest_version, specification_path,
+                                 specification_prefix)
+from dataengineeringutils3.s3 import (get_filepaths_from_s3_folder,
+                                      read_json_from_s3)
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
@@ -172,15 +169,16 @@ class DataProductBaseJsonSchema:
                 "Metadata must be validated before being written to s3."
             )
 
+    # compare old and new metadata/schema and use
+    # logic to set version scale.
+    # will need new path function to reflect new version number schema and metadatas 3 paths
     def _classify_update(self) -> str:  # would be ("major, minor")
-        # compare old and new metadata/schema and use
-        # logic to set version scale.
-        # will need new path function to reflect new version number schema and metadatas 3 paths
         pass
 
+    # this can be passed to a path function for schema and metadata that doesn't use latest version
+    # Maybe this will be better suited outside of the class.
     def _generate_new_version_number(self) -> str:
-        # this can be passed to a path function for schema and metadata that doesn't use latest version
-        # Maybe this will be better suited outside of the class.
+
         pass
 
 
@@ -226,9 +224,11 @@ class DataProductSchema(DataProductBaseJsonSchema):
         """
         if self.valid:
             glue_schema = deepcopy(glue_csv_table_input_template)
-
+            parent_metadata = self._get_parent_data_product_metadata()
             glue_schema["DatabaseName"] = self.data_product_name
             glue_schema["TableInput"]["Name"] = self.table_name
+            glue_schema["TableInput"]["Owner"] = parent_metadata["dataProductOwner"]
+            glue_schema["TableInput"]["Retention"] = parent_metadata["retentionPeriod"]
             glue_schema["TableInput"]["Description"] = self.data_pre_convert[
                 "TableDescription"
             ]
@@ -243,13 +243,22 @@ class DataProductSchema(DataProductBaseJsonSchema):
                 )
 
             self.data = glue_schema
-            # convert and add glue table input dict to self
             self.logger.info("Data Product schema converted to csv glue table input")
         else:
             self.logger.error("schema not validated before attempted conversion")
 
         return self
 
+    def _get_parent_data_product_metadata(self) -> Dict:
+        data_product_metadata_path = BucketPath.from_uri(
+            DataProductConfig(
+                name=self.data_product_name
+            ).metadata_path(version=self.data_product_version).uri
+        )
+
+        metadata = read_json_from_s3(data_product_metadata_path)
+
+        return metadata
 
 class DataProductMetadata(DataProductBaseJsonSchema):
     """
