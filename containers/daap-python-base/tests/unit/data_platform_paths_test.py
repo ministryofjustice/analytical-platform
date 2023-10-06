@@ -289,7 +289,7 @@ def test_extract_timestamp_from_curated_path(curated_data_key):
     )
 
 
-def test_get_latest_version(region_name, s3_client, monkeypatch):
+def test_get_latest_version(region_name, s3_client):
     with patch("data_platform_paths.s3", s3_client):
         s3_client.create_bucket(
             Bucket="metadata",
