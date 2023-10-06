@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2023-10-05
+
+### Changed
+
+- refactored `data_product_metadata.py` to have a base class and
+  two child classed for data product schema and metadata.
+- removed `DataProductConfig.metadata_spec_path()` and
+  `DataProductConfig.metadata_spec_prefix()` as are redundant now
+  `data_platform_paths.specification_path()` and
+  `data_platform_paths.specification_prefix()` exist
+
 ## [3.2.0] - 2023-10-05
 
 ### Added
