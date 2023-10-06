@@ -141,13 +141,13 @@
         }
       }
     },
-    "/register_data_product": {
+    "/data-product/register": {
       "post": {
         "tags": [
-          "register_data_product"
+          "register"
         ],
-        "summary": "Register metadata for a new data product you want to upload to the Data Platform.",
-        "description": "Registers the first version of your data product's metadata and enables you to proceed with uploading data.",
+        "summary": "Register (metadata for) a new Data Product that you want to upload to the Data Platform.",
+        "description": "Registers the first version of your Data Product (by submitting it's metadata)  and enables you to proceed with uploading data.",
         "operationId": "registerDataProduct",
         "requestBody": {
           "content": {
@@ -170,29 +170,59 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "successful operation",
+          "201": {
+            "description": "successfully created",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "example": {
-                    "data_product_name": "example_data_product",
-                    "message": "Data product metadata has been created."
+                    "message": "Data Product {data_product_name} was successfully created."
                   }
                 }
               }
             }
           },
           "400": {
-            "description": "unsuccessful operation",
+            "description": "bad request",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "example": {
-                    "data_product_name": "example_data_product",
-                    "message": "Your data product already has a version 1 registered metadata."
+                    "error": {
+                      "message": "Data product name is missing, it must be specified in the metadata  against the 'name' key"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "method not allowed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": {
+                      "message": "Sorry, GET isn't allowed."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": {
+                      "message": "Your data product already has a version 1 registered metadata."
+                    }
                   }
                 }
               }
@@ -300,7 +330,7 @@
           },
           "x-amz-credential": {
             "type": "string",
-            "example": "ASIAQGIFY4DVKJW2ZNKM/20230609/eu-west-2/s3/aws4_request"
+            "example": "AKIAIOSFODNN7EXAMPLE/20230609/eu-west-2/s3/aws4_request"
           },
           "x-amz-security-token": {
             "type": "string",
