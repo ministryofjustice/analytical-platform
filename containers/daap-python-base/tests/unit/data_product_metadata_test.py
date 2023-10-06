@@ -33,8 +33,6 @@ test_metadata_fail = {
 }
 
 test_schema_pass = {
-    # "DatabaseName": "test_pass_db",
-    # "TableName": "test_pass_tbl",
     "TableDescription": "table has schema to pass test",
     "Columns": [
         {
@@ -53,8 +51,6 @@ test_schema_pass = {
 }
 
 test_schema_fail = {
-    # "DatabaseName": "test_pass+db",
-    # "TableName": "test_pass_tbl",
     "TableDescription": "table has schema to pass test",
     "Columns": [
         {

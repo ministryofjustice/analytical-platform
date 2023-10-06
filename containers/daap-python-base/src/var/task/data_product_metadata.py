@@ -1,20 +1,17 @@
 import json
 import traceback
+from copy import deepcopy
 
 import boto3
 import botocore
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import (
-    BucketPath,
-    DataProductConfig,
-    JsonSchemaName,
-    specification_prefix,
-    specification_path,
-)
-from dataengineeringutils3.s3 import get_filepaths_from_s3_folder, read_json_from_s3
+from data_platform_paths import (BucketPath, DataProductConfig, JsonSchemaName,
+                                 get_latest_version, specification_path,
+                                 specification_prefix)
+from dataengineeringutils3.s3 import (get_filepaths_from_s3_folder,
+                                      read_json_from_s3)
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
-from copy import deepcopy
 
 s3_client = boto3.client("s3")
 
@@ -27,7 +24,7 @@ glue_csv_table_input_template = {
         "Retention": 0,
         "StorageDescriptor": {
             "Columns": [],  # add to this from schema passed by user in api request body
-            "Location": "",  # add to this once data land and timestamp generated, although could be top level bucket/data/product/version/table
+            "Location": "",  # noqa E501 add to this once data land and timestamp generated, although could be top level bucket/data/product/version/table
             "InputFormat": "org.apache.hadoop.mapred.TextInputFormat",
             "OutputFormat": "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat",
             "Compressed": False,
@@ -87,6 +84,11 @@ class DataProductBaseJsonSchema:
         self.exists = self._check_if_metadata_or_schema_exists(
             self.write_bucket, self.write_key, self.type
         )
+
+        if not self.exists:
+            self.data_product_version = "v1.0"
+        else:
+            self.data_product_version = get_latest_version(self.data_product_name)
 
     def _check_if_metadata_or_schema_exists(
         self, bucket: str, key: str, json_type: JsonSchemaName
@@ -166,13 +168,13 @@ class DataProductBaseJsonSchema:
                 "Metadata must be validated before being written to s3."
             )
 
-    def _classify_update() -> str:  # would be ("major, minor")
+    def _classify_update(self) -> str:  # would be ("major, minor")
         # compare old and new metadata/schema and use
         # logic to set version scale.
         # will need new path function to reflect new version number schema and metadatas 3 paths
         pass
 
-    def _generate_new_version_number() -> str:
+    def _generate_new_version_number(self) -> str:
         # this can be passed to a path function for schema and metadata that doesn't use latest version
         # Maybe this will be better suited outside of the class.
         pass
@@ -260,6 +262,6 @@ class DataProductMetadata(DataProductBaseJsonSchema):
             data_product_name, logger, JsonSchemaName("metadata"), bucket_path
         )
 
-    def add_auto_generated_metadata():
+    def add_auto_generated_metadata(self):
         """adds key value pairs to metadata that are not given by a user."""
         pass
