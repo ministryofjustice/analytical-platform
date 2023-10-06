@@ -102,7 +102,7 @@ def handler(event, context):
     else:
         response_code = HTTPStatus.CONFLICT.value
         error = f"Data Product {data_product_name} already has a version 1 registered metadata."  # noqa E501
-        response_body = {"error": error}
+        response_body = {"error": {"message": error}}
         logger.error(error)
 
     response = format_response(
