@@ -50,7 +50,7 @@ def handler(event, context):
         return {
             "statusCode": 400,
             "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"error": {"message": "file extension is invalid"}}),
+            "body": json.dumps({"error": {"message": "file extension is invalid."}}),
         }
 
     element = DataProductElement.load(

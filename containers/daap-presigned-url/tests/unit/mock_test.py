@@ -91,6 +91,32 @@ def test_dataproduct_does_not_exist(s3_client, fake_context, region_name, monkey
 
 
 @freeze_time("2023-01-01")
+def test_invalid_file_extension(fake_context):
+    database = "database1"
+    table = "table1"
+    filename = "testdata"
+
+    event = {
+        "pathParameters": {
+            "data-product-name": database,
+            "table-name": table,
+        },
+        "body": json.dumps(
+            {
+                "filename": filename,
+                "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
+            }
+        ),
+    }
+
+    response = handler(event, fake_context)
+    body = json.loads(response["body"])
+
+    assert response["statusCode"] == 400
+    assert body["error"]["message"] == "file extension is invalid."
+
+
+@freeze_time("2023-01-01")
 def test_invalid_params(s3_client, fake_context, region_name, monkeypatch):
     bucket_name = "bucket"
     monkeypatch.setattr(boto3, "client", lambda _name: s3_client)
