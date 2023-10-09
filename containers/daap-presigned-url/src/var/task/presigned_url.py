@@ -57,7 +57,9 @@ def handler(event, context):
         data_product_name=data_product_name, element_name=table_name
     )
     data_product = element.data_product
-    raw_data_path = element.raw_data_path(timestamp=amz_date, uuid_value=uuid_value)
+    raw_data_path = element.raw_data_path(
+        timestamp=amz_date, uuid_value=uuid_value, file_extension=file_extension
+    )
 
     fields = {
         "x-amz-server-side-encryption": "AES256",
