@@ -180,13 +180,13 @@ class DataProductBaseJsonSchema:
     # will need new path function to reflect new version number schema and metadatas 3 paths
     def _classify_update(self):
         """infer type of increment to version, major/minor"""
-        pass
+        raise NotImplementedError
 
     # this can be passed to a path function for schema and metadata that doesn't use latest version
     # Maybe this will be better suited outside of the class.
     def _generate_new_version_number(self):
         """generate a version number to pass to get path function"""
-        pass
+        raise NotImplementedError
 
 
 class DataProductSchema(DataProductBaseJsonSchema):
@@ -288,4 +288,4 @@ class DataProductMetadata(DataProductBaseJsonSchema):
 
     def add_auto_generated_metadata(self):
         """adds key value pairs to metadata that are not given by a user."""
-        pass
+        raise NotImplementedError
