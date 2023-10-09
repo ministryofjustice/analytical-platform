@@ -54,7 +54,9 @@ def handler(event, context):
 
         return response
 
-    def format_error_response(response_code: int, event: dict, message: dict) -> dict:
+    def format_error_response(
+        response_code: HTTPStatus, event: dict, message: str
+    ) -> dict:
         """
         Generate a response to return to API Gateway that contains the initial event,
         response code, and contents of the response body
