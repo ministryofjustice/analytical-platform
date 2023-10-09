@@ -22,22 +22,35 @@ def handler(event, context):
     table_name = event["pathParameters"].get("table-name")
     body = json.loads(event.get("body"))
     md5 = str(body.get("contentMD5"))
+    filename = event["body"].get("filename")
     amz_date = datetime.utcnow()
     formatted_date = amz_date.strftime("%Y%m%dT%H%M%SZ")
     uuid_value = uuid.uuid4()
 
-    if not isinstance(data_product_name, str) or not isinstance(table_name, str):
+    if (
+        not isinstance(data_product_name, str)
+        or not isinstance(table_name, str)
+        or not isinstance(filename, str)
+    ):
         return {
             "statusCode": 400,
             "headers": {"Content-Type": "application/json"},
             "body": json.dumps(
                 {
                     "error": {
-                        "message": "data product name or table name value are not"
+                        "message": "data product name, table name or filename are not"
                         + " convertible to string type."
                     }
                 }
             ),
+        }
+
+    file_extension = os.path.splitext(filename)[1]
+    if file_extension == "":
+        return {
+            "statusCode": 400,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps({"error": {"message": "file extension is invalid"}}),
         }
 
     element = DataProductElement.load(
