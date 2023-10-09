@@ -1,6 +1,6 @@
 {
   "name": "daap-create-metadata",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "registry": "ecr",
   "ecr": {
     "role": "arn:aws:iam::013433889002:role/modernisation-platform-oidc-cicd",

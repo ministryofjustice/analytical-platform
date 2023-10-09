@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 from dataclasses import dataclass
@@ -31,3 +32,22 @@ def fake_context():
     Emulate the context object passed
     """
     return FakeContext(function_name="some-function")
+
+
+@pytest.fixture
+def method():
+    return "POST"
+
+
+@pytest.fixture
+def body_content():
+    return {"metadata": {"name": "test_name"}}
+
+
+@pytest.fixture
+def fake_event(method, body_content):
+    return {
+        "httpMethod": method,
+        "headers": {"Content-Type": "application/json"},
+        "body": json.dumps(body_content),
+    }
