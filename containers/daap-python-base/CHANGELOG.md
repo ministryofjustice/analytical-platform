@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.0] - 2023-10-09
+
+### Changed
+- `element.raw_data_path` updated to accept the `file_extension` string type input parameter used to pass to
+  `element.extraction_instance`
+- `element.extraction_instance` updated to accept the `file_extension` string type input parameter used to build
+  the filepath with the file extension
+
 ## [3.2.0] - 2023-10-05
 
 ### Added
