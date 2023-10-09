@@ -1,7 +1,6 @@
 import json
 import os
 from enum import Enum
-from typing import Optional
 
 from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductMetadata
