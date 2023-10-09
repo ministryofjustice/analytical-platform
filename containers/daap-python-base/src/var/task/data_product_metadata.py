@@ -70,7 +70,7 @@ def get_data_product_specification_path(
     return path.uri
 
 
-class DataProductBaseJsonSchema:
+class BaseJsonSchema:
     """base class for operations on json type metadata and schema for data products"""
 
     def __init__(
@@ -189,7 +189,7 @@ class DataProductBaseJsonSchema:
         raise NotImplementedError
 
 
-class DataProductSchema(DataProductBaseJsonSchema):
+class DataProductSchema(BaseJsonSchema):
     """
     class to handle creation and updating of
     schema json files relating to data product tables
@@ -271,7 +271,7 @@ class DataProductSchema(DataProductBaseJsonSchema):
         return metadata
 
 
-class DataProductMetadata(DataProductBaseJsonSchema):
+class DataProductMetadata(BaseJsonSchema):
     """
     class to handle creation and updating of
     schema json files relating to data products as a whole
