@@ -23,7 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Perform empty string validation check for file_extension
 - Pass file_extension to `element.raw_data_path` method to build the file path with the file extension.
 - Defined the filename parameter in appropriate tests and passed the value into the event body dict
-- Pass filename as parameter in event body in appropriate tests 
+- Pass filename as parameter in event body in appropriate tests
+- Added `test_invalid_file_extension()` to test for the presence of a file extension on the filename parameter
+
 
 ## [1.2.4] 2023-10-03
 
