@@ -3,6 +3,7 @@ import logging
 import os
 import urllib.request
 from tempfile import NamedTemporaryFile
+from unittest import TestCase
 from unittest.mock import patch
 
 import data_product_metadata
@@ -33,39 +34,80 @@ test_metadata_fail = {
 }
 
 test_schema_pass = {
-    "TableDescription": "table has schema to pass test",
-    "Columns": [
+    "tableDescription": "table has schema to pass test",
+    "columns": [
         {
             "name": "col_1",
-            "data_type": "bigint",
+            "type": "bigint",
             "description": "ABCDEFGHIJKLMNOPQRSTUVWXY",
         },
-        {"name": "col_2", "data_type": "tinyint", "description": "ABCDEFGHIJKL"},
+        {"name": "col_2", "type": "tinyint", "description": "ABCDEFGHIJKL"},
         {
             "name": "col_3",
-            "data_type": "int",
+            "type": "int",
             "description": "ABCDEFGHIJKLMNOPQRSTUVWX",
         },
-        {"name": "col_4", "data_type": "smallint", "description": "ABCDEFGHIJKLMN"},
+        {"name": "col_4", "type": "smallint", "description": "ABCDEFGHIJKLMN"},
     ],
 }
 
 test_schema_fail = {
-    "TableDescription": "table has schema to pass test",
-    "Columns": [
+    "tableDescription": "table has schema to pass test",
+    "columns": [
         {
             "name": "col()()_1",
-            "data_type": "bigint",
+            "type": "bigint",
             "description": "ABCDEFGHIJKLMNOPQRSTUVWXY",
         },
-        {"name": "col_2", "data_type": "tinyint", "description": "ABCDEFGHIJKL"},
+        {"name": "col_2", "type": "tinyint", "description": "ABCDEFGHIJKL"},
         {
             "name": "col_3",
-            "data_type": "int",
+            "type": "int",
             "description": "ABCDEFGHIJKLMNOPQRSTUVWX",
         },
-        {"name": "col_4", "data_type": "smallint", "description": "ABCDEFGHIJKLMN"},
+        {"name": "col_4", "type": "smallint", "description": "ABCDEFGHIJKLMN"},
     ],
+}
+
+test_glue_table_input = {
+    "DatabaseName": "test_product",
+    "TableInput": {
+        "Description": "table has schema to pass test",
+        "Name": "test_table",
+        "Owner": "matthew.laverty@justice.gov.uk",
+        "Parameters": {"classification": "csv", "skip.header.line.count": "1"},
+        "PartitionKeys": [],
+        "StorageDescriptor": {
+            "BucketColumns": [],
+            "Columns": [
+                {
+                    "Name": "col_1",
+                    "Type": "bigint",
+                    "Comment": "ABCDEFGHIJKLMNOPQRSTUVWXY",
+                },
+                {"Name": "col_2", "Type": "tinyint", "Comment": "ABCDEFGHIJKL"},
+                {
+                    "Name": "col_3",
+                    "Type": "int",
+                    "Comment": "ABCDEFGHIJKLMNOPQRSTUVWX",
+                },
+                {"Name": "col_4", "Type": "smallint", "Comment": "ABCDEFGHIJKLMN"},
+            ],
+            "Compressed": False,
+            "InputFormat": "org.apache.hadoop.mapred.TextInputFormat",
+            "Location": "",
+            "NumberOfBuckets": -1,
+            "OutputFormat": "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat",
+            "Parameters": {},
+            "SerdeInfo": {
+                "Parameters": {"escape.delim": "\\", "field.delim": ","},
+                "SerializationLibrary": "org.apache.hadoop.hive.serde2.OpenCSVSerde",
+            },
+            "SortColumns": [],
+            "StoredAsSubDirectories": False,
+        },
+        "TableType": "EXTERNAL_TABLE",
+    },
 }
 
 
@@ -84,7 +126,7 @@ def load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client):
 
 def load_v1_schema_schema_to_mock_s3(bucket_name, s3_client):
     with urllib.request.urlopen(
-        "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/dpl-1194-create-table-schema/terraform/environments/data-platform/data-product-table-schema-json-schema/v1.0.0/moj_data_product_table_spec.json"  # noqa E501
+        "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-table-schema-json-schema/v1.0.0/moj_data_product_table_spec.json"  # noqa E501
     ) as url:
         data = json.load(url)
     json_data = json.dumps(data)
@@ -103,6 +145,15 @@ def setup_bucket(name, s3_client, region_name, monkeypatch):
     s3_client.create_bucket(
         Bucket=bucket_name,
         CreateBucketConfiguration={"LocationConstraint": region_name},
+    )
+
+
+def load_test_data_product_metadata(bucket_name, s3_client):
+    json_data = json.dumps(test_metadata_pass)
+    s3_client.put_object(
+        Body=json_data,
+        Bucket=bucket_name,
+        Key="test_product/v1.0/metadata.json",
     )
 
 
@@ -232,7 +283,6 @@ def test_write_json_to_s3(s3_client, region_name, monkeypatch):
 def test_does_data_product_metadata_exist(
     data_product_name, expected_output, s3_client, region_name, monkeypatch
 ):
-    # with patch("data_product_metadata.s3_client", s3_client):
     bucket_name = os.getenv("METADATA_BUCKET")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
 
@@ -245,9 +295,29 @@ def test_does_data_product_metadata_exist(
         s3_client.upload_file(tmp.name, bucket_name, "test_product/v1.0/metadata.json")
 
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
-        schema = DataProductSchema(data_product_name, "test_table", logging.getLogger())
+        schema = DataProductSchema(
+            data_product_name=data_product_name,
+            table_name="test_table",
+            logger=logging.getLogger(),
+        )
         assert schema.has_registered_data_product == expected_output
 
 
-def test_convert_schema_to_glue_table_input_csv():
-    pass
+def test_convert_schema_to_glue_table_input_csv(s3_client, region_name, monkeypatch):
+    bucket_name = os.getenv("METADATA_BUCKET")
+    setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
+    load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
+    load_test_data_product_metadata(bucket_name, s3_client)
+    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
+        schema = DataProductSchema(
+            data_product_name="test_product",
+            table_name="test_table",
+            logger=logging.getLogger(),
+        )
+
+        schema.validate(test_schema_pass)
+
+        schema.convert_schema_to_glue_table_input_csv()
+
+        # assert schema.data == test_glue_table_input
+        TestCase().assertDictEqual(test_glue_table_input, schema.data)

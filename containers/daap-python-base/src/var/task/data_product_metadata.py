@@ -26,7 +26,7 @@ glue_csv_table_input_template = {
         "Name": "",  # add to this from table name pulled from api path
         "Description": "",
         "Owner": "owner",
-        "Retention": 0,
+        # "Retention": 0,
         "StorageDescriptor": {
             "Columns": [],  # add to this from schema passed by user in api request body
             "Location": "",  # noqa E501 add to this once data land and timestamp generated, although could be top level bucket/data/product/version/table
@@ -92,8 +92,10 @@ class DataProductBaseJsonSchema:
 
         if not self.exists:
             self.data_product_version = "v1.0"
+            self.is_update = False
         else:
             self.data_product_version = get_latest_version(self.data_product_name)
+            self.is_update = True
 
     def _check_if_metadata_or_schema_exists(
         self, bucket: str, key: str, json_type: JsonSchemaName
@@ -123,7 +125,7 @@ class DataProductBaseJsonSchema:
         """
         validates a given dict of metadata against repsective json schema. This is used
         for both data product metadata and table schema validations.
-        on successful validation of dict object it is saved to the data_product_metadata
+        on successful validation of dict object it is saved to the class instance
         property which can be written to s3.
         """
         validate_against_jsonschema = read_json_from_s3(
@@ -233,16 +235,19 @@ class DataProductSchema(DataProductBaseJsonSchema):
             glue_schema["DatabaseName"] = self.data_product_name
             glue_schema["TableInput"]["Name"] = self.table_name
             glue_schema["TableInput"]["Owner"] = parent_metadata["dataProductOwner"]
-            glue_schema["TableInput"]["Retention"] = parent_metadata["retentionPeriod"]
+            if not parent_metadata.get("retentionPeriod", 0) == 0:
+                glue_schema["TableInput"]["Retention"] = parent_metadata.get(
+                    "retentionPeriod"
+                )
             glue_schema["TableInput"]["Description"] = self.data_pre_convert[
-                "TableDescription"
+                "tableDescription"
             ]
 
-            for col in self.data_pre_convert["Columns"]:
+            for col in self.data_pre_convert["columns"]:
                 glue_schema["TableInput"]["StorageDescriptor"]["Columns"].append(
                     {
                         "Name": col["name"],
-                        "Type": col["data_type"],
+                        "Type": col["type"],
                         "Comment": col["description"],
                     }
                 )
@@ -261,7 +266,7 @@ class DataProductSchema(DataProductBaseJsonSchema):
             .uri
         )
 
-        metadata = read_json_from_s3(data_product_metadata_path)
+        metadata = read_json_from_s3(data_product_metadata_path.uri)
 
         return metadata
 
