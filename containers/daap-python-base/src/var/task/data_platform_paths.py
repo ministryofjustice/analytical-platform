@@ -296,8 +296,7 @@ class DataProductElement:
             key=os.path.join(
                 self.raw_data_prefix.key,
                 f"load_timestamp={amz_date}",
-                str(uuid_value),
-                file_extension,
+                str(uuid_value) + file_extension,
             ),
         )
 
