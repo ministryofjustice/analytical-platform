@@ -10,7 +10,6 @@ from data_platform_paths import (
     BucketPath,
     DataProductConfig,
     JsonSchemaName,
-    get_latest_version,
     specification_path,
     specification_prefix,
 )
@@ -84,36 +83,40 @@ class BaseJsonSchema:
         self.logger = logger
         self.valid = False
         self.type = json_type
+        self.exists = self._check_exists()
         self.write_bucket = write_bucket_path.bucket
-        self.write_key = write_bucket_path.key
-        self.exists = self._check_if_metadata_or_schema_exists(
-            self.write_bucket, self.write_key, self.type
-        )
-
+        self.latest_version_key = write_bucket_path.key
         if not self.exists:
-            self.data_product_version = "v1.0"
-            self.is_update = False
-        else:
-            self.data_product_version = get_latest_version(self.data_product_name)
-            self.is_update = True
+            self.write_key = write_bucket_path.key
+        self.version = write_bucket_path.key.split("/")[1]
 
-    def _check_if_metadata_or_schema_exists(
-        self, bucket: str, key: str, json_type: JsonSchemaName
-    ) -> object:
+    def _check_exists(self) -> object:
+        if self.type == JsonSchemaName.data_product_schema:
+            bucket_path = BucketPath.from_uri(
+                DataProductConfig(name=self.data_product_name)
+                .schema_path(version="v1.0", table_name=self.table_name)
+                .uri
+            )
+        elif self.type == JsonSchemaName.data_product_metadata:
+            bucket_path = BucketPath.from_uri(
+                DataProductConfig(name=self.data_product_name)
+                .metadata_path(version="v1.0")
+                .uri
+            )
         # establish whether metadata for data product already exists
         try:
             # get head of object (if it exists)
-            s3_client.head_object(Bucket=bucket, Key=key)
+            s3_client.head_object(Bucket=bucket_path.bucket, Key=bucket_path.key)
         except botocore.exceptions.ClientError as e:
             if e.response["Error"]["Code"] == "404":
-                self.logger.info(f"No {json_type.value} exists for this data product")
+                self.logger.info(f"No {self.type.value} exists for this data product")
                 return False
             else:
                 self.logger.error(f"Uknown error - {e}")
                 raise Exception(f"Uknown error - {e}")
         else:
             self.logger.info(
-                f"version 1 of {json_type.value} already exists for this data product"
+                f"version 1 of {self.type.value} already exists for this data product"
             )
             return True
 
@@ -214,15 +217,11 @@ class DataProductSchema(BaseJsonSchema):
             self.has_registered_data_product = True
 
     def _does_data_product_metadata_exist(self):
-        """checks wheter data product for schema has metadata registered"""
-        data_product_metadata_path = BucketPath.from_uri(
-            DataProductConfig(name=self.data_product_name).metadata_path().uri
+        """checks whether data product for schema has metadata registered"""
+        metadata = DataProductMetadata(
+            data_product_name=self.data_product_name, logger=self.logger
         )
-        md_bucket = data_product_metadata_path.bucket
-        md_key = data_product_metadata_path.key
-        return self._check_if_metadata_or_schema_exists(
-            md_bucket, md_key, JsonSchemaName("metadata")
-        )
+        return metadata.exists
 
     def convert_schema_to_glue_table_input_csv(self):
         """
@@ -262,7 +261,7 @@ class DataProductSchema(BaseJsonSchema):
     def _get_parent_data_product_metadata(self) -> Dict:
         data_product_metadata_path = BucketPath.from_uri(
             DataProductConfig(name=self.data_product_name)
-            .metadata_path(version=self.data_product_version)
+            .metadata_path(version=self.version)
             .uri
         )
 
