@@ -362,7 +362,8 @@ class DataProductConfig:
 
     def metadata_path(self, version: str | None = None) -> BucketPath:
         """
-        Path to the latest version of a data product metadata file
+        Path to a version of a data product metadata file. If version omitted then
+        latest version path is returned
         """
 
         if version is None:
@@ -377,7 +378,8 @@ class DataProductConfig:
 
     def schema_path(self, table_name: str, version: str | None = None) -> BucketPath:
         """
-        Path to the latest version schema file for a given table
+        Path to a version of a schema file for a given table. If version omitted then
+        latest version path is returned
         """
 
         if version is None:
