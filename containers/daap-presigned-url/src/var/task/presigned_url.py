@@ -22,7 +22,7 @@ def handler(event, context):
     table_name = event["pathParameters"].get("table-name")
     body = json.loads(event.get("body"))
     md5 = str(body.get("contentMD5"))
-    filename = event["body"].get("filename")
+    filename = body.get("filename")
     amz_date = datetime.utcnow()
     formatted_date = amz_date.strftime("%Y%m%dT%H%M%SZ")
     uuid_value = uuid.uuid4()
