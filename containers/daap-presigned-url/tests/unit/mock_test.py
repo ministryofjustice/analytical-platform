@@ -1,5 +1,6 @@
 import json
 import uuid
+import os
 
 import boto3
 from freezegun import freeze_time
@@ -11,6 +12,7 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
     bucket_name = "bucket"
     database = "database1"
     table = "table1"
+    filename = "testdata.csv"
     a_uuid = uuid.uuid4()
     monkeypatch.setattr(boto3, "client", lambda _name: s3_client)
     monkeypatch.setenv("BUCKET_NAME", bucket_name)
@@ -32,9 +34,12 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
             "data-product-name": database,
             "table-name": table,
         },
-        "body": {
-            "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
-        },
+        "body": json.dumps(
+            {
+                "filename": filename,
+                "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
+            }
+        ),
     }
 
     response = handler(event, fake_context)
@@ -44,7 +49,7 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
     assert body["URL"]["url"] == "https://bucket.s3.amazonaws.com/"
     assert (
         body["URL"]["fields"]["key"]
-        == f"raw/database1/v1.0/table1/load_timestamp=20230101T000000Z/{a_uuid}"
+        == f"raw/database1/v1.0/table1/load_timestamp=20230101T000000Z/{a_uuid}{os.path.splitext(filename)[1]}"
     )
 
 
@@ -53,6 +58,7 @@ def test_dataproduct_does_not_exist(s3_client, fake_context, region_name, monkey
     bucket_name = "bucket"
     database = "database1"
     table = "table1"
+    filename = "testdata.csv"
     monkeypatch.setattr(boto3, "client", lambda _name: s3_client)
     monkeypatch.setenv("BUCKET_NAME", bucket_name)
 
@@ -66,9 +72,12 @@ def test_dataproduct_does_not_exist(s3_client, fake_context, region_name, monkey
             "data-product-name": database,
             "table-name": table,
         },
-        "body": {
-            "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
-        },
+        "body": json.dumps(
+            {
+                "filename": filename,
+                "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
+            }
+        ),
     }
 
     response = handler(event, fake_context)
@@ -92,9 +101,12 @@ def test_invalid_params(s3_client, fake_context, region_name, monkeypatch):
             "data-product-name": None,
             "table-name": None,
         },
-        "body": {
-            "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
-        },
+        "body": json.dumps(
+            {
+                "filename": None,
+                "contentMD5": "3f92d72f7e805b66db1ea0955e113198",
+            }
+        ),
     }
 
     response = handler(event, fake_context)
@@ -103,5 +115,5 @@ def test_invalid_params(s3_client, fake_context, region_name, monkeypatch):
     assert response["statusCode"] == 400
     assert (
         body["error"]["message"]
-        == "data product name or table name value are not convertible to string type."
+        == "data product name, table name or filename are not convertible to string type."
     )
