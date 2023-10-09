@@ -176,9 +176,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "example": {
-                    "message": "Data Product {data_product_name} was successfully created."
-                  }
+                  "example": {}
                 }
               }
             }

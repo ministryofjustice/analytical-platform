@@ -1,17 +1,10 @@
 import json
 import os
 from enum import Enum
+from http import HTTPMethod, HTTPStatus
 
 from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductMetadata
-
-
-class HTTPStatus(Enum):
-    SUCCESS = 200
-    CREATED = 201
-    BAD_REQUEST = 400
-    METHOD_NOT_ALLOWED = 405
-    CONFLICT = 409
 
 
 def handler(event, context):
@@ -39,24 +32,48 @@ def handler(event, context):
         }
     )
 
-    def format_response(response_code: int, event: dict, body_dict: dict) -> dict:
+    def format_response(
+        response_code: HTTPStatus, event: dict, body_dict: dict | None = None
+    ) -> dict:
         """
         Generate a response to return to API Gateway that contains the initial event,
         response code, and contents of the response body
         (i.e. body['message'] or body['error']['message'])
         """
-        response_body = {"input": event}
-        response_body.update(body_dict)
+        response_body = {}
+        if body_dict is not None:
+            response_body.update(body_dict)
         response = {
             "statusCode": response_code,
             "headers": {"Content-Type": "application/json"},
             "body": json.dumps(response_body),
         }
+
+        logger.debug(
+            f"code: {response_code}, response body: {body_dict}, input: {event}"
+        )
+
+        return response
+
+    def format_error_response(response_code: int, event: dict, message: dict) -> dict:
+        """
+        Generate a response to return to API Gateway that contains the initial event,
+        response code, and contents of the response body
+        (i.e. body['message'] or body['error']['message'])
+        """
+        response_body = {"error": {"message": message}}
+        response = {
+            "statusCode": response_code,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps(response_body),
+        }
+
+        logger.error(f"code: {response_code}, error message: {message}, input: {event}")
+
         return response
 
     logger.info(f"event: {event}")
-    response_code = HTTPStatus.SUCCESS.value
-    response_body = {}
+    response_code = HTTPStatus.OK
     data_product_name = None
 
     http_method = event.get("httpMethod")
@@ -65,22 +82,18 @@ def handler(event, context):
     try:
         data_product_name = event_body["metadata"]["name"]
     except KeyError:
-        response_code = HTTPStatus.BAD_REQUEST.value
-        error = "Data product name is missing, it must be specified in the metadata against the 'name' key"  # noqa E501
-        response_body = {"error": {"message": error}}
-        logger.error(error)
-        return format_response(response_code, event, response_body)
+        response_code = HTTPStatus.BAD_REQUEST
+        error_message = "Data product name is missing, it must be specified in the metadata against the 'name' key"  # noqa E501
+        return format_error_response(response_code, event, error_message)
 
     logger.add_extras({"data_product_name": data_product_name})
 
-    if http_method == "POST":
+    if http_method == HTTPMethod.POST:
         pass
     else:
-        error = f"Sorry, {http_method} isn't allowed."
-        response_body = {"error": {"message": error}}
-        response_code = HTTPStatus.METHOD_NOT_ALLOWED.value
-        logger.error(error)
-        return format_response(response_code, event, response_body)
+        error_message = f"Sorry, {http_method} isn't allowed."
+        response_code = HTTPStatus.METHOD_NOT_ALLOWED
+        return format_error_response(response_code, event, error_message)
 
     data_product_metadata = DataProductMetadata(data_product_name, logger)
 
@@ -89,24 +102,19 @@ def handler(event, context):
 
         if data_product_metadata.valid_metadata:
             data_product_metadata.write_json_to_s3()
-            response_code = HTTPStatus.CREATED.value
-            message = f"Data Product {data_product_name} was successfully created."
-            response_body = {"message": message}
-            logger.info(response_body["message"])
+            response_code = HTTPStatus.CREATED
+            response_body = None
         else:
-            response_code = HTTPStatus.BAD_REQUEST.value
-            error = f"Metadata failed validation with error: {data_product_metadata.error_traceback}"  # noqa E501
-            response_body = {"error": {"message": error}}
-            logger.error(error)
+            response_code = HTTPStatus.BAD_REQUEST
+            error_message = f"Metadata failed validation with error: {data_product_metadata.error_traceback}"  # noqa E501
+            return format_error_response(response_code, event, error_message)
     else:
-        response_code = HTTPStatus.CONFLICT.value
-        error = f"Data Product {data_product_name} already has a version 1 registered metadata."  # noqa E501
-        response_body = {"error": {"message": error}}
-        logger.error(error)
+        response_code = HTTPStatus.CONFLICT
+        error_message = f"Data Product {data_product_name} already has a version 1 registered metadata."  # noqa E501
+        return format_error_response(response_code, event, error_message)
 
     response = format_response(
         response_code=response_code, event=event, body_dict=response_body
     )
 
-    logger.info(f"Response: {response}")
     return response
