@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.5] 2023-10-09
 
 ### Changed
+
 - Deserialised event body parameter in handler
 - String validation error response message to include reference to filename
 - Filepath assertion to include file extension value
@@ -21,10 +22,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Perform String instance validation of filename
 - Define file_extension string type variable from filename using `os.path.splitext[1]`
 - Perform empty string validation check for file_extension
-- Pass file_extension to `element.raw_data_path` method to build the file path with the file extension.
-- Defined the filename parameter in appropriate tests and passed the value into the event body dict
+- Pass file_extension to `element.raw_data_path` method to build 
+  the file path with the file extension.
+- Defined the filename parameter in appropriate tests and pass 
+  the value into the event body dict
 - Pass filename as parameter in event body in appropriate tests
-- Added `test_invalid_file_extension()` to test for the presence of a file extension on the filename parameter
+- Added `test_invalid_file_extension()` to test for the presence of a file 
+  extension in the filename parameter
 
 
 ## [1.2.4] 2023-10-03

@@ -1,6 +1,6 @@
 import json
-import uuid
 import os
+import uuid
 
 import boto3
 from freezegun import freeze_time
