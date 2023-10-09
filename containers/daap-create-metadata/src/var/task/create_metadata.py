@@ -1,6 +1,5 @@
 import json
 import os
-from enum import Enum
 from http import HTTPMethod, HTTPStatus
 
 from data_platform_logging import DataPlatformLogger
