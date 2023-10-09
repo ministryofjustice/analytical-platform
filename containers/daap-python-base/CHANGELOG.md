@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `data_platform_paths.specification_path()` and
   `data_platform_paths.specification_prefix()` exist
 
+### Added
+
+- 403 error status code to `data_platform_api_responses.py`
+
 ## [3.2.0] - 2023-10-05
 
 ### Added
