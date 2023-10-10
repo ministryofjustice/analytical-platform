@@ -46,6 +46,12 @@ pip_install() {
   pip3 install --upgrade ${packages}
 }
 
+npm_install() {
+  local packages="${1}"
+
+  npm install --global ${packages}
+}
+
 ##################################################
 # Default
 ##################################################
