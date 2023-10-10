@@ -79,8 +79,11 @@ class BaseJsonSchema:
         json_type: JsonSchemaName,
         bucket_path: BucketPath,
         input_data: dict | None,
+        table_name: str | None = None,
     ):
         self.data_product_name = data_product_name
+        if table_name is not None:
+            self.table_name = table_name
         self.logger = logger
         self.valid = False
         self.type = json_type
@@ -213,10 +216,15 @@ class DataProductSchema(BaseJsonSchema):
         bucket_path = BucketPath.from_uri(
             DataProductConfig(name=data_product_name).schema_path(table_name).uri
         )
-        self.table_name = table_name
+        # self.table_name = table_name
 
         super().__init__(
-            data_product_name, logger, JsonSchemaName("schema"), bucket_path, input_data
+            data_product_name,
+            logger,
+            JsonSchemaName("schema"),
+            bucket_path,
+            input_data,
+            table_name,
         )
 
         if not self._does_data_product_metadata_exist():
