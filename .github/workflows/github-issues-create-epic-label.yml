@@ -23,7 +23,7 @@ jobs:
             const issueNumber = context.payload.issue.number;
             const labelName = `${issueTitle} (Epic #${issueNumber})`;
             const labels = context.payload.issue.labels;
-            const hasRequiredLabel = labels.some(label => label.name === "data-platform-apps-and-tools");
+            const hasRequiredLabel = labels.some(label => (label.name === "data-platform-apps-and-tools" || label.name === "data-platform-labs"));
 
             if (!hasRequiredLabel) {
               console.log("Issue does not have 'data-platform-apps-and-tools' label. Exiting...");
