@@ -4,6 +4,7 @@
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": { "configureZshAsDefaultShell": true },
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/node:1": {},
     "./features/src/base": {},
     "./features/src/aws-tools": {},
     "./features/src/cicd-tools": {},

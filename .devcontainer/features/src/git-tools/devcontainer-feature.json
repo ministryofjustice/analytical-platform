@@ -29,10 +29,15 @@
       "type": "boolean",
       "description": "Install Detect Secrets (https://github.com/Yelp/detect-secrets)",
       "default": true
+    },
+    "installGitmoji": {
+      "type": "boolean",
+      "description": "Install gitmoji (https://github.com/carloscuesta/gitmoji-cli)",
+      "default": true
     }
   },
   "mounts": [{ "source": "ministryofjustice-data-platform-devcontainer-gh", "target": "/home/vscode/.config/gh", "type": "volume" }],
-  "installsAfter": ["./features/src/base"],
+  "installsAfter": ["./features/src/base", "ghcr.io/devcontainers/features/node"],
   "customizations": {
     "vscode": {
       "extensions": ["EditorConfig.EditorConfig", "GitHub.copilot", "GitHub.copilot-chat", "GitHub.vscode-pull-request-github", "GitHub.vscode-github-actions", "ms-vsliveshare.vsliveshare"]

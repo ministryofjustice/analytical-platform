@@ -15,3 +15,7 @@ fi
 if [[ "${INSTALLDETECTSECRETS}" == "true" ]]; then
   bash $( dirname $0 )/install-detect-secrets.sh
 fi
+
+if [[ "${INSTALLGITMOJI}" == "true" ]]; then
+  bash $( dirname $0 )/install-gitmoji.sh
+fi
