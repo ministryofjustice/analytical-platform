@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.7] 2023-10-10
+
+### Changed
+
+- Bump base image to 2.2.0
+
+## [1.0.6] 2023-10-03
+
+### Changed
+
+- update lambda response codes to match [aws example](https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/python/example_code/lambda/lambda_handler_rest.py)
+
 ## [1.0.5] 2023-09-18
 
 ### Changed

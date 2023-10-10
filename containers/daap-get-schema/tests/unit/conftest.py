@@ -1,10 +1,11 @@
-import json
 import os
 import sys
 from dataclasses import dataclass
 from os.path import dirname, join
 
+import boto3
 import pytest
+from moto import mock_s3
 
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
 sys.path.append(
@@ -35,19 +36,8 @@ def fake_context():
 
 
 @pytest.fixture
-def method():
-    return "POST"
+def s3_client():
+    with mock_s3():
+        resource = boto3.client("s3", region_name="us-east-1")
 
-
-@pytest.fixture
-def body_content():
-    return {"metadata": {"name": "test_name"}}
-
-
-@pytest.fixture
-def fake_event(method, body_content):
-    return {
-        "httpMethod": method,
-        "headers": {"Content-Type": "application/json"},
-        "body": json.dumps(body_content),
-    }
+        yield resource

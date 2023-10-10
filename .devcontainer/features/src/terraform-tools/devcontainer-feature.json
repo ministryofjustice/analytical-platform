@@ -17,9 +17,9 @@
     },
     "terraformVersion": {
       "type": "string",
-      "description": "Terraform version",
+      "description": "Terraform version (Pinning to 1.5.7 while 1.6.1 is released)",
       "proposals": ["latest"],
-      "default": "latest"
+      "default": "1.5.7"
     },
     "installTerraformDocs": {
       "type": "boolean",

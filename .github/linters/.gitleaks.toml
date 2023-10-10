@@ -9,5 +9,6 @@ useDefault = true
 description = "global allow list"
 
 regexes = [
-  '''ASIAQGIFY4DVKJW2ZNKM'''
+  '''ASIAQGIFY4DVKJW2ZNKM''',
+  '''AKIAIOSFODNN7EXAMPLE''',
 ]

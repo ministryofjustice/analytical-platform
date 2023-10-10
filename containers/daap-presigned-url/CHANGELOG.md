@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.4] 2023-10-03
+
+### Changed
+
+- removed database and table querystring parameters
+- created data-product-name & table-name variables from event body pathParameters
+- created body variable from event.body json string
+- replaced references to database with data-product-name
+- replaced references to table with table-name
+
 ## [1.2.3]
 
 ### Changed

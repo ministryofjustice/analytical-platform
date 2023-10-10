@@ -1,4 +1,4 @@
-FROM ghcr.io/ministryofjustice/data-platform-daap-python-base:3.1.0
+FROM ghcr.io/ministryofjustice/data-platform-daap-python-base:3.2.0
 
 ARG VERSION
 
@@ -9,4 +9,4 @@ COPY src/var/task ${LAMDA_TASK_ROOT}
 RUN python -m pip install --no-cache-dir --upgrade pip==23.2.1 \
     && python -m pip install --no-cache-dir --requirement requirements.txt
 
-CMD ["presigned_url.handler"]
+CMD ["get_schema.handler"]
