@@ -35,7 +35,7 @@
   "installsAfter": ["./features/src/base"],
   "customizations": {
     "vscode": {
-      "extensions": ["EditorConfig.EditorConfig", "GitHub.copilot", "GitHub.copilot-chat", "GitHub.vscode-pull-request-github", "GitHub.vscode-github-actions"]
+      "extensions": ["EditorConfig.EditorConfig", "GitHub.copilot", "GitHub.copilot-chat", "GitHub.vscode-pull-request-github", "GitHub.vscode-github-actions", "ms-vsliveshare.vsliveshare"]
     }
   }
 }
