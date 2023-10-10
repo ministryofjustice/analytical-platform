@@ -202,7 +202,7 @@ def test_get_specific_metadata_spec_path(spec_type, expected_out):
 def test_metadata_exist(s3_client, region_name, monkeypatch):
     bucket_name = os.getenv("METADATA_BUCKET")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
-
+    load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
     # populate some folders & files to mock s3 bucket
     file_text = json.dumps(test_metadata_pass)
     with NamedTemporaryFile(delete=True, suffix=".json") as tmp:
@@ -212,15 +212,24 @@ def test_metadata_exist(s3_client, region_name, monkeypatch):
         s3_client.upload_file(tmp.name, bucket_name, "test_product/v1.0/metadata.json")
 
     with patch("data_platform_paths.s3", s3_client):
-        md = DataProductMetadata(test_metadata_pass["name"], logging.getLogger())
+        md = DataProductMetadata(
+            data_product_name=test_metadata_pass["name"],
+            logger=logging.getLogger(),
+            input_data=test_metadata_pass,
+        )
         assert md.exists
 
 
 def test_metadata_does_not_exist(s3_client, region_name, monkeypatch):
     bucket_name = os.getenv("METADATA_BUCKET")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
+    load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
-        md = DataProductMetadata(test_metadata_pass["name"], logging.getLogger())
+        md = DataProductMetadata(
+            test_metadata_pass["name"],
+            logging.getLogger(),
+            input_data=test_metadata_pass,
+        )
         assert not md.exists
 
 
@@ -235,8 +244,11 @@ def test_valid_metadata(
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
     load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
-        md = DataProductMetadata(test_metadata["name"], logging.getLogger())
-        md.validate(test_metadata)
+        md = DataProductMetadata(
+            test_metadata["name"],
+            logging.getLogger(),
+            input_data=test_metadata,
+        )
         assert md.valid == expected_out
 
 
@@ -248,13 +260,15 @@ def test_valid_schema(test_schema, expected_out, s3_client, region_name, monkeyp
     bucket_name = os.getenv("METADATA_BUCKET")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
     load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
+    load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
+    load_test_data_product_metadata(bucket_name, s3_client)
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         md = DataProductSchema(
             data_product_name="test_product",
             table_name="test_table",
             logger=logging.getLogger(),
+            input_data=test_schema,
         )
-        md.validate(test_schema)
         assert md.valid == expected_out
 
 
@@ -263,7 +277,11 @@ def test_write_json_to_s3(s3_client, region_name, monkeypatch):
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
     load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
-        md = DataProductMetadata(test_metadata_pass["name"], logging.getLogger())
+        md = DataProductMetadata(
+            test_metadata_pass["name"],
+            logging.getLogger(),
+            input_data=test_metadata_pass,
+        )
         md.validate(test_metadata_pass)
         md.write_json_to_s3()
 
@@ -285,20 +303,23 @@ def test_does_data_product_metadata_exist(
 ):
     bucket_name = os.getenv("METADATA_BUCKET")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
+    load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
+    load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
+    load_test_data_product_metadata(bucket_name, s3_client)
+    # # populate some folders & files to mock s3 bucket
+    # file_text = json.dumps(test_metadata_pass)
+    # with NamedTemporaryFile(delete=True, suffix=".json") as tmp:
+    #     with open(tmp.name, "w", encoding="UTF-8") as f:
+    #         f.write(file_text)
 
-    # populate some folders & files to mock s3 bucket
-    file_text = json.dumps(test_metadata_pass)
-    with NamedTemporaryFile(delete=True, suffix=".json") as tmp:
-        with open(tmp.name, "w", encoding="UTF-8") as f:
-            f.write(file_text)
-
-        s3_client.upload_file(tmp.name, bucket_name, "test_product/v1.0/metadata.json")
+    #     s3_client.upload_file(tmp.name, bucket_name, "test_product/v1.0/metadata.json")
 
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         schema = DataProductSchema(
             data_product_name=data_product_name,
             table_name="test_table",
             logger=logging.getLogger(),
+            input_data=test_schema_pass,
         )
         assert schema.has_registered_data_product == expected_output
 
@@ -307,15 +328,15 @@ def test_convert_schema_to_glue_table_input_csv(s3_client, region_name, monkeypa
     bucket_name = os.getenv("METADATA_BUCKET")
     setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
     load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
+    load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
     load_test_data_product_metadata(bucket_name, s3_client)
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         schema = DataProductSchema(
             data_product_name="test_product",
             table_name="test_table",
             logger=logging.getLogger(),
+            input_data=test_schema_pass,
         )
-
-        schema.validate(test_schema_pass)
 
         schema.convert_schema_to_glue_table_input_csv()
 
