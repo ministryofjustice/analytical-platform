@@ -1,6 +1,6 @@
 module "managed_grafana" {
   source  = "terraform-aws-modules/managed-service-grafana/aws"
-  version = "2.0.0"
+  version = "2.1.0"
 
   name = "open-metadata"
 
