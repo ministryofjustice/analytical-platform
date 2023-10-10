@@ -13,18 +13,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated `element.raw_data_path` to accept the `file_extension` string type 
+- Updated `element.raw_data_path` to accept the `file_extension` string type
   input parameter used to pass to `element.extraction_instance`
-- Updated `element.extraction_instance` to accept the `file_extension` string type 
-  input parameter used to build a filepath with the file extension
-- Updated `test_infer_schema_from_csv()` to define the `file_extension` string type 
-  variable required to pass to `data_product_element.raw_data_path()`
-- Updated `test_data_product_element_raw_data_path()` to define the `file_extension` string type 
-  variable required to pass to `element.raw_data_path()`.
-- Updated `test_data_product_element_raw_data_path()`, call to `element.raw_data_path()` 
-  now uses key word arguments.
-- Updated `test_extraction_config()`to define the `file_extension` string type 
-  variable required to pass to `element.extraction_instance()` to generate the file path.
+- Updated `element.extraction_instance` to accept the `file_extension`
+  string type input parameter used to build a filepath
+  with the file extension
+- Updated `test_infer_schema_from_csv()` to define the `file_extension`
+  string type variable required to pass
+  to `data_product_element.raw_data_path()`
+- Updated `test_data_product_element_raw_data_path()` to define the
+  `file_extension`string type variable required to pass
+  to `element.raw_data_path()`
+- Updated `test_data_product_element_raw_data_path()`,
+  call to `element.raw_data_path()` now uses key word arguments
+- Updated `test_extraction_config()`to define the `file_extension`
+  string type variable required to pass to `element.extraction_instance()`
+  to generate the file path
 
 ## [3.2.0] - 2023-10-05
 
