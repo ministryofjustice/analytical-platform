@@ -2,11 +2,11 @@ class DataInvalid(Exception):
     pass
 
 
-def type_is_compatable(registered_type: str, inferred_type: str) -> bool:
+def type_is_compatible(registered_type: str, inferred_type: str) -> bool:
     """
-    Validate a type inferred from the dataset is compatable with the schema.
+    Validate a type inferred from the dataset is compatible with the schema.
 
-    This implementation adds some leniency for types that are different, but probably compatable.
+    This implementation adds some leniency for types that are different, but probably compatible.
     For example: a `long` type is wider than an `integer` which is wider than `short` and `byte`.
     It is always valid for the dataset to contain a narrower type than what is registered in the schema,
     such as when the schema requires long but we detected integers.
@@ -75,7 +75,7 @@ def validate_data_against_schema(
         registered_type = registered_schema_columns[name]
         inferred_type = inferred_columns[name]
 
-        if not type_is_compatable(
+        if not type_is_compatible(
             registered_type=registered_type, inferred_type=inferred_type
         ):
             type_errors.append(

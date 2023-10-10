@@ -1,5 +1,5 @@
 import pytest
-from validation import DataInvalid, type_is_compatable, validate_data_against_schema
+from validation import DataInvalid, type_is_compatible, validate_data_against_schema
 
 
 @pytest.mark.parametrize(
@@ -131,9 +131,9 @@ from validation import DataInvalid, type_is_compatable, validate_data_against_sc
         ("date", "timestamp", False),
     ],
 )
-def test_type_is_compatable(registered_type, inferred_type, expected):
+def test_type_is_compatible(registered_type, inferred_type, expected):
     assert (
-        type_is_compatable(registered_type=registered_type, inferred_type=inferred_type)
+        type_is_compatible(registered_type=registered_type, inferred_type=inferred_type)
         == expected
     )
 
