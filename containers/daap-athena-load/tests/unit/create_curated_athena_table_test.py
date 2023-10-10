@@ -13,8 +13,7 @@ from data_platform_paths import BucketPath, QueryTable
 
 class TestCreateCuratedAthenaTable:
     @pytest.fixture(autouse=True)
-    def setup(self, s3_client, athena_client):
-        s3_client.create_bucket(Bucket="bucket")
+    def setup(self, athena_client):
         athena_client.create_work_group(Name="data_product_workgroup")
 
     @pytest.fixture
@@ -80,9 +79,9 @@ class TestCreateCuratedAthenaTable:
             DatabaseName=data_product_element.curated_data_table.database,
         )
         s3_client.put_object(
-            Bucket="bucket",
+            Bucket="data",
             Key=data_product_element.curated_data_prefix.key
-            + "extraction_timestamp=20230101T000000Z/partition.parquet",
+            + "load_timestamp=20230101T000000Z/partition.parquet",
             Body="",
         )
 
@@ -100,7 +99,7 @@ class TestCreateCuratedAthenaTable:
         function_kwargs,
     ):
         s3_client.put_object(
-            Bucket="bucket",
+            Bucket="data",
             Key=data_product_element.curated_data_prefix.key + "partition.parquet",
             Body="",
         )
@@ -174,14 +173,14 @@ class TestCuratedDataQueryBuilder:
 
 class TestDoesPartitionFileExist:
     def test_returns_true(self, s3_client, logger):
-        s3_client.create_bucket(Bucket="bucket")
+        s3_client.create_bucket(Bucket="test")
         s3_client.put_object(
-            Key="curated_data/db/table_name/foo.parquet", Body="", Bucket="bucket"
+            Key="curated_data/db/table_name/foo.parquet", Body="", Bucket="test"
         )
 
         assert not does_partition_file_exist(
             curated_data_prefix=BucketPath(
-                "bucket", "curated_data/database=db/table=table_name/"
+                "test", "curated_data/database=db/table=table_name/"
             ),
             timestamp="20230101T0000Z",
             logger=logger,
@@ -189,11 +188,11 @@ class TestDoesPartitionFileExist:
         )
 
     def test_returns_false(self, s3_client, logger):
-        s3_client.create_bucket(Bucket="bucket")
+        s3_client.create_bucket(Bucket="test")
 
         assert not does_partition_file_exist(
             curated_data_prefix=BucketPath(
-                "bucket", "curated_data/database=db/table=table_name/"
+                "test", "curated_data/database=db/table=table_name/"
             ),
             timestamp="20230101T0000Z",
             logger=logger,
