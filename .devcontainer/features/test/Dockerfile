@@ -1,4 +1,4 @@
-# hadolint global ignore=DL3008,DL3013
+# hadolint global ignore=DL3008,DL3013,DL4006
 
 FROM mcr.microsoft.com/devcontainers/base:ubuntu
 
