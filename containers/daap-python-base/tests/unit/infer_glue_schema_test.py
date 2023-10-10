@@ -51,6 +51,10 @@ def test_infer_schema_from_csv(region_name, s3_client, logger, data_product_elem
     uuid_value = uuid4()
     timestamp = datetime(2023, 1, 1)
     file_extension = ".csv"
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7a3b770c (:fire: Remove python base changes into seperate pr)
     path = data_product_element.raw_data_path(
         timestamp=timestamp, uuid_value=uuid_value, file_extension=file_extension
     )
