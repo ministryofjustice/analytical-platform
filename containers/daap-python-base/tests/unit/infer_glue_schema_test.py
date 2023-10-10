@@ -49,12 +49,7 @@ def test_csv_sample(test_input, expected, sample_size_in_bytes, logger):
 
 def test_infer_schema_from_csv(region_name, s3_client, logger, data_product_element):
     uuid_value = uuid4()
-    timestamp = datetime(2023, 1, 1)
-    file_extension = ".csv"
-
-    path = data_product_element.raw_data_path(
-        timestamp=timestamp, uuid_value=uuid_value, file_extension=file_extension
-    )
+    path = data_product_element.raw_data_path(datetime(2023, 1, 1), uuid_value)
 
     s3_client.create_bucket(
         Bucket=os.environ["RAW_DATA_BUCKET"],

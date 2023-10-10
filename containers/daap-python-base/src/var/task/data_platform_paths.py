@@ -273,18 +273,16 @@ class DataProductElement:
         """
         return QueryTable(database=self.data_product.name, name=self.name)
 
-    def raw_data_path(
-        self, timestamp: datetime, uuid_value: UUID, file_extension: str
-    ) -> BucketPath:
+    def raw_data_path(self, timestamp: datetime, uuid_value: UUID) -> BucketPath:
         """
         Path to the raw data extracted at a particular timestamp.
         E.g. raw_data/my-data-product/some-element/load_timestamp=
-             20230101T000000Z/3d95ff89-b063-484d-b510-53742d0a6a64.csv
+             20230101T000000Z/3d95ff89-b063-484d-b510-53742d0a6a64
         """
-        return self.extraction_instance(timestamp, uuid_value, file_extension).path
+        return self.extraction_instance(timestamp, uuid_value).path
 
     def extraction_instance(
-        self, timestamp: datetime, uuid_value: UUID, file_extension: str
+        self, timestamp: datetime, uuid_value: UUID
     ) -> RawDataExtraction:
         """
         Instance of the data extraction identified by uuid_value and timestamp.
@@ -296,7 +294,7 @@ class DataProductElement:
             key=os.path.join(
                 self.raw_data_prefix.key,
                 f"load_timestamp={amz_date}",
-                str(uuid_value) + file_extension,
+                str(uuid_value),
             ),
         )
 

@@ -150,7 +150,6 @@ def test_data_product_config_get_element():
 def test_data_product_element_raw_data_path():
     uuid_value = uuid.uuid4()
     timestamp = datetime(2023, 9, 5, 16, 53)
-    file_extension = ".csv"
 
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         config = DataProductConfig(
@@ -162,13 +161,11 @@ def test_data_product_element_raw_data_path():
         )
         element = config.element("some-table")
 
-        path = element.raw_data_path(
-            timestamp=timestamp, uuid_value=uuid_value, file_extension=file_extension
-        )
+        path = element.raw_data_path(timestamp=timestamp, uuid_value=uuid_value)
 
         assert path == BucketPath(
             bucket="raw",
-            key=f"raw/my-database/v1.0/some-table/load_timestamp=20230905T165300Z/{uuid_value}{file_extension}",
+            key=f"raw/my-database/v1.0/some-table/load_timestamp=20230905T165300Z/{uuid_value}",
         )
 
 
@@ -193,7 +190,6 @@ def test_data_product_config_metadata_path():
 def test_extraction_config():
     uuid_value = uuid.uuid4()
     timestamp = datetime(2023, 9, 5, 16, 53)
-    file_extension = ".csv"
 
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         config = DataProductConfig(
@@ -207,13 +203,13 @@ def test_extraction_config():
         element = config.element("some-table")
 
         extraction = element.extraction_instance(
-            uuid_value=uuid_value, timestamp=timestamp, file_extension=file_extension
+            uuid_value=uuid_value, timestamp=timestamp
         )
 
         assert extraction.timestamp == timestamp
         assert extraction.path == BucketPath(
             bucket="raw",
-            key=f"raw/my-database/v1.0/some-table/load_timestamp=20230905T165300Z/{uuid_value}{file_extension}",
+            key=f"raw/my-database/v1.0/some-table/load_timestamp=20230905T165300Z/{uuid_value}",
         )
 
 
