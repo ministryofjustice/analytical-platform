@@ -77,20 +77,24 @@ class BaseJsonSchema:
         data_product_name: str,
         logger: DataPlatformLogger,
         json_type: JsonSchemaName,
-        write_bucket_path: BucketPath,
+        bucket_path: BucketPath,
+        input_data: dict | None,
     ):
         self.data_product_name = data_product_name
         self.logger = logger
         self.valid = False
         self.type = json_type
-        self.exists = self._check_exists()
-        self.write_bucket = write_bucket_path.bucket
-        self.latest_version_key = write_bucket_path.key
+        self.exists = self._check_v1_exists()
+        self.write_bucket = bucket_path.bucket
+        self.latest_version_key = bucket_path.key
         if not self.exists:
-            self.write_key = write_bucket_path.key
-        self.version = write_bucket_path.key.split("/")[1]
+            self.write_key = bucket_path.key
+        self.version = bucket_path.key.split("/")[1]
+        if input_data is not None:
+            self.validate(input_data)
 
-    def _check_exists(self) -> object:
+    def _check_v1_exists(self) -> object:
+        "checks a v1.0 json file exists of the given input data"
         if self.type == JsonSchemaName.data_product_schema:
             bucket_path = BucketPath.from_uri(
                 DataProductConfig(name=self.data_product_name)
@@ -199,15 +203,20 @@ class DataProductSchema(BaseJsonSchema):
     """
 
     def __init__(
-        self, data_product_name: str, table_name: str, logger: DataPlatformLogger
+        self,
+        data_product_name: str,
+        table_name: str,
+        logger: DataPlatformLogger,
+        input_data,
     ):
+        # returns path of latest schema or v1 if it doesn't exist
         bucket_path = BucketPath.from_uri(
             DataProductConfig(name=data_product_name).schema_path(table_name).uri
         )
         self.table_name = table_name
 
         super().__init__(
-            data_product_name, logger, JsonSchemaName("schema"), bucket_path
+            data_product_name, logger, JsonSchemaName("schema"), bucket_path, input_data
         )
 
         if not self._does_data_product_metadata_exist():
@@ -219,7 +228,9 @@ class DataProductSchema(BaseJsonSchema):
     def _does_data_product_metadata_exist(self):
         """checks whether data product for schema has metadata registered"""
         metadata = DataProductMetadata(
-            data_product_name=self.data_product_name, logger=self.logger
+            data_product_name=self.data_product_name,
+            logger=self.logger,
+            input_data=None,
         )
         return metadata.exists
 
@@ -258,7 +269,7 @@ class DataProductSchema(BaseJsonSchema):
 
         return self
 
-    def _get_parent_data_product_metadata(self) -> Dict:
+    def _get_parent_data_product_metadata(self) -> Dict | None:
         data_product_metadata_path = BucketPath.from_uri(
             DataProductConfig(name=self.data_product_name)
             .metadata_path(version=self.version)
@@ -276,13 +287,20 @@ class DataProductMetadata(BaseJsonSchema):
     schema json files relating to data products as a whole
     """
 
-    def __init__(self, data_product_name: str, logger: DataPlatformLogger):
+    # returns path of latest metadata or v1 if it doesn't exist
+    def __init__(
+        self, data_product_name: str, logger: DataPlatformLogger, input_data: dict
+    ):
         bucket_path = BucketPath.from_uri(
             DataProductConfig(data_product_name).metadata_path().uri
         )
 
         super().__init__(
-            data_product_name, logger, JsonSchemaName("metadata"), bucket_path
+            data_product_name,
+            logger,
+            JsonSchemaName("metadata"),
+            bucket_path,
+            input_data,
         )
 
     def add_auto_generated_metadata(self):
