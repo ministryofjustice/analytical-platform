@@ -2,6 +2,7 @@ import json
 import os
 import uuid
 from datetime import datetime
+from pathlib import PurePath
 
 import boto3
 from data_platform_logging import DataPlatformLogger
@@ -45,7 +46,7 @@ def handler(event, context):
             ),
         }
 
-    file_extension = os.path.splitext(filename)[1]
+    file_extension = PurePath(filename).suffix
     if file_extension == "":
         return {
             "statusCode": 400,

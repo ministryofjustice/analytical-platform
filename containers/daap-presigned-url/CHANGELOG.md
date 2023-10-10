@@ -21,7 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Obtain filename from the event body in handler
 - Perform String instance validation of filename
-- Define file_extension string type variable from filename using `os.path.splitext[1]`
+- Define file_extension string type variable from filename using
+  `PurePath(filename).suffix`
 - Perform empty string validation check for file_extension
 - Pass file_extension to `element.raw_data_path` method to build
   the file path with the file extension.

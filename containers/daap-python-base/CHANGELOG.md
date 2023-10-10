@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `test_data_product_element_raw_data_path()` to define the
   `file_extension`string type variable required to pass
   to `element.raw_data_path()`
-- Updated `test_data_product_element_raw_data_path()`,
+- Updated `test_data_product_element_raw_data_path()`
   call to `element.raw_data_path()` now uses key word arguments
 - Updated `test_extraction_config()`to define the `file_extension`
   string type variable required to pass to `element.extraction_instance()`

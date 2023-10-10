@@ -1,6 +1,6 @@
 import json
-import os
 import uuid
+from pathlib import PurePath
 
 import boto3
 from freezegun import freeze_time
@@ -13,6 +13,7 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
     database = "database1"
     table = "table1"
     filename = "testdata.csv"
+    file_extension = PurePath(filename).suffix
     a_uuid = uuid.uuid4()
     monkeypatch.setattr(boto3, "client", lambda _name: s3_client)
     monkeypatch.setenv("BUCKET_NAME", bucket_name)
@@ -49,7 +50,7 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
     assert body["URL"]["url"] == "https://bucket.s3.amazonaws.com/"
     assert (
         body["URL"]["fields"]["key"]
-        == f"raw/database1/v1.0/table1/load_timestamp=20230101T000000Z/{a_uuid}{os.path.splitext(filename)[1]}"
+        == f"raw/database1/v1.0/table1/load_timestamp=20230101T000000Z/{a_uuid}{file_extension}"
     )
 
 
