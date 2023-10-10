@@ -19,7 +19,7 @@
       "type": "string",
       "description": "Terraform version",
       "proposals": ["latest"],
-      "default": "latest"
+      "default": "1.5.7" // Pinning at 1.5.7 until 1.6.1 is released
     },
     "installTerraformDocs": {
       "type": "boolean",
