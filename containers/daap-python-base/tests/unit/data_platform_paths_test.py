@@ -19,6 +19,7 @@ from data_platform_paths import (
     get_latest_version,
     get_log_bucket,
     get_metadata_bucket,
+    get_new_version,
     get_raw_data_bucket,
     search_string_for_regex,
     specification_path,
@@ -260,7 +261,7 @@ def test_data_product_specification_path():
 
 
 @freeze_time("2023-09-12")
-def test_data_product_log_bucket_and_key(monkeypatch):
+def test_data_product_log_bucket_and_key():
     log_bucket_path = data_product_log_bucket_and_key(
         "top_test_lambda", "delicious-data-product"
     )
@@ -315,3 +316,17 @@ def test_get_latest_version(region_name, s3_client):
         )
         latest_version = get_latest_version("data_product")
         assert latest_version == "v2.1"
+
+
+@pytest.mark.parametrize(
+    "version, increment, expected",
+    [
+        ("v1.0", "minor", "v1.1"),
+        ("v123.12", "minor", "v123.13"),
+        ("v1.0", "major", "v2.0"),
+        ("v123.12", "major", "v124.0"),
+    ],
+)
+def test_get_new_version(version, increment, expected):
+    version = get_new_version(version, increment)
+    assert version == expected
