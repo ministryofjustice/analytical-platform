@@ -55,7 +55,6 @@ def handler(event, context):
     logger.info(f"event: {event}")
 
     request_body = json.loads(event.get("body"))
-    request_body = event.get("body")
 
     http_method = event.get("httpMethod")
 
@@ -111,10 +110,10 @@ def handler(event, context):
                 logger=logger,
                 input_data=metadata_dict,
             ).write_json_to_s3(
-                DataProductConfig.metadata_path(data_product_name, "v1.0").key
+                DataProductConfig(data_product_name).metadata_path("v1.0").key
             )
             schema.write_json_to_s3(
-                DataProductConfig.schema_path(data_product_name, "v1.0").key
+                DataProductConfig(data_product_name).schema_path(table_name, "v1.0").key
             )
             msg = f"Schema for {table_name} has been created in the {data_product_name} data product"
             logger.info("Schema successfully created")
@@ -136,8 +135,8 @@ def handler(event, context):
             )
 
             schema_key = (
-                DataProductConfig(data_product_name)
-                .schema_path(table_name, new_version)
+                DataProductConfig(name=data_product_name)
+                .schema_path(table_name=table_name, version=new_version)
                 .key
             )
             metadata_key = (
