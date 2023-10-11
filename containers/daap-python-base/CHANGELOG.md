@@ -18,11 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - removed `DataProductConfig.metadata_spec_path()` and
   `DataProductConfig.metadata_spec_prefix()` as are redundant now
   `data_platform_paths.specification_path()` and
-  `data_platform_paths.specification_prefix()` exist
+  `data_platform_paths.specification_prefix()` exists in
+  `data_platform_paths`
 
 ### Added
 
 - 403 error status code to `data_platform_api_responses.py`
+- `get_new_version` function to `data_platform_paths``
 
 ## [3.3.0] - 2023-10-09
 

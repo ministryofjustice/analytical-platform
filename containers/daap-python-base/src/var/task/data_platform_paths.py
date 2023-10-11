@@ -93,6 +93,14 @@ def specification_path(
     )
 
 
+def get_new_version(version, increment_type):
+    if increment_type == "minor":
+        new_version = version.split(".")[0] + "." + str(int(version.split(".")[-1]) + 1)
+    elif increment_type == "major":
+        new_version = "v" + str(int(version.replace("v", "").split(".")[0]) + 1) + ".0"
+    return new_version
+
+
 class BucketPath(NamedTuple):
     """
     A path to an object in S3
