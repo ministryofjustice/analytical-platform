@@ -296,11 +296,7 @@ class DataProductElement:
             key=os.path.join(
                 self.raw_data_prefix.key,
                 f"load_timestamp={amz_date}",
-<<<<<<< HEAD
                 f"{str(uuid_value)}{file_extension}",
-=======
-                str(uuid_value) + file_extension,
->>>>>>> 7a3b770c (:fire: Remove python base changes into seperate pr)
             ),
         )
 
