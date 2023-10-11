@@ -47,7 +47,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@b953daa7a2526d3bacb8646e3caac2822f9e49e5 # v12.2513.0
+        uses: bridgecrewio/checkov-action@f6243e0bd0159652f2017c47743fbb7e36859d00 # v12.2526.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -59,7 +59,7 @@ jobs:
       - name: Check for Static Analysis Override Label
         if: github.ref != 'refs/heads/main'
         id: check_for_static_analysis_override
-        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+        uses: actions/github-script@211cb3fefb35a799baa5156f9321bb774fe56294 # v5.2.0
         with:
           result-encoding: string
           script: |
@@ -84,7 +84,7 @@ jobs:
       - name: Comment on Pull Request
         if: github.event_name == 'pull_request'
         id: comment
-        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+        uses: actions/github-script@211cb3fefb35a799baa5156f9321bb774fe56294 # v5.2.0
         with:
           script: |
             const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
@@ -161,7 +161,7 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
+        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
@@ -169,7 +169,7 @@ jobs:
       - name: Assume GlobalGitHubActionAdmin Role
         if: github.ref != 'refs/heads/main'
         id: assume_global_github_action_admin_role
-        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
+        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
@@ -189,7 +189,7 @@ jobs:
       - name: Assume GlobalGitHubActionAccess Role
         if: github.ref != 'refs/heads/main'
         id: assume_global_github_action_access_role
-        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
+        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
@@ -238,7 +238,7 @@ jobs:
       - name: Comment on Pull Request
         if: github.event_name == 'pull_request'
         id: comment
-        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+        uses: actions/github-script@211cb3fefb35a799baa5156f9321bb774fe56294 # v5.2.0
         with:
           script: |
             const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
@@ -302,7 +302,7 @@ jobs:
       - name: Automatic Approval for Dependabot
         if: (github.event_name == 'pull_request' && github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
         id: automatic_approval
-        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+        uses: actions/github-script@211cb3fefb35a799baa5156f9321bb774fe56294 # v5.2.0
         with:
           github-token: ${{ env.GITHUB_ROBOT_TOKEN }}
           script: |

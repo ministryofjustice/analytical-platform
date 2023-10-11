@@ -26,6 +26,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 403 error status code to `data_platform_api_responses.py`
 - `get_new_version` function to `data_platform_paths``
 
+## [3.3.1] - 2023-10-11
+
+### Changed
+
+- Bumped `urllib3` from 1.26.16 to 1.26.17
+
 ## [3.3.0] - 2023-10-09
 
 ### Changed

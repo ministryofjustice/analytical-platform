@@ -15,7 +15,7 @@ jobs:
     if: github.event.label.name == 'Epic'
     steps:
       - name: Check if Epic and Create Label
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -23,12 +23,6 @@ jobs:
             const issueNumber = context.payload.issue.number;
             const labelName = `${issueTitle} (Epic #${issueNumber})`;
             const labels = context.payload.issue.labels;
-            const hasRequiredLabel = labels.some(label => label.name === "data-platform-apps-and-tools");
-
-            if (!hasRequiredLabel) {
-              console.log("Issue does not have 'data-platform-apps-and-tools' label. Exiting...");
-              return;
-            }
 
             // Generate a random 6-digit hexadecimal color
             const randomColor = Math.floor(Math.random()*16777215).toString(16);
