@@ -19,6 +19,7 @@ logger = DataPlatformLogger(
 
 
 def handler(event, context):
+    logger.info(f"event: {event}")
     data_product_name = event["pathParameters"].get("data-product-name")
     table_name = event["pathParameters"].get("table-name")
     body = json.loads(event.get("body"))
