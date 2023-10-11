@@ -52,7 +52,10 @@ glue_csv_table_input_template = {
 def get_data_product_specification_path(
     spec_type: JsonSchemaName, version: None | str = None
 ) -> str:
-    """gets path for given version or latest version of metadata and schema json schema"""
+    """
+    Gets the specification path for the JSON schema that validates a data product metadata
+    or table schema. If a version is not specified, the latest JSON schema version is assumed.
+    """
 
     # if version is empty we get the latest version
     if version is None:
