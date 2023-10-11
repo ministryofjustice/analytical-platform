@@ -198,7 +198,7 @@ class DataProductSchema(BaseJsonSchema):
         data_product_name: str,
         table_name: str,
         logger: DataPlatformLogger,
-        input_data,
+        input_data: dict | None,
     ):
         # returns path of latest schema or v1 if it doesn't exist
         bucket_path = DataProductConfig(name=data_product_name).schema_path(table_name)
@@ -309,7 +309,7 @@ class DataProductMetadata(BaseJsonSchema):
         self,
         data_product_name: str,
         logger: DataPlatformLogger,
-        input_data: dict,
+        input_data: dict | None,
     ):
         bucket_path = DataProductConfig(data_product_name).metadata_path()
 
