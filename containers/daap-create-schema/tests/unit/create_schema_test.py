@@ -7,11 +7,6 @@ from unittest.mock import patch
 
 import pytest
 from create_schema import handler, s3_copy_folder_to_new_folder
-from data_platform_api_responses import (
-    response_status_200,
-    response_status_400,
-    response_status_403,
-)
 
 
 def load_v1_schema_schema_to_mock_s3(bucket_name, s3_client):

@@ -1,6 +1,6 @@
 import json
 import os
-from http import HTTPMethod, HTTPStatus
+from http import HTTPMethod
 
 import boto3
 from data_platform_api_responses import (
