@@ -87,29 +87,22 @@ class BaseJsonSchema:
         self.logger = logger
         self.valid = False
         self.type = json_type
-        self.exists = self._check_v1_exists()
+        self.exists = self._check_a_version_exists()
         self.write_bucket = bucket_path.bucket
         self.latest_version_key = bucket_path.key
-        if not self.exists:
-            self.write_key = bucket_path.key
         self.version = bucket_path.key.split("/")[1]
         if input_data is not None:
             self.validate(input_data)
 
-    def _check_v1_exists(self) -> object:
-        "checks a v1.0 json file exists of the given input data"
+    def _check_a_version_exists(self) -> object:
+        """checks a version of json file exists of the given input data"""
         if self.type == JsonSchemaName.data_product_schema:
-            bucket_path = BucketPath.from_uri(
-                DataProductConfig(name=self.data_product_name)
-                .schema_path(version="v1.0", table_name=self.table_name)
-                .uri
+            bucket_path = DataProductConfig(name=self.data_product_name).schema_path(
+                table_name=self.table_name
             )
+
         elif self.type == JsonSchemaName.data_product_metadata:
-            bucket_path = BucketPath.from_uri(
-                DataProductConfig(name=self.data_product_name)
-                .metadata_path(version="v1.0")
-                .uri
-            )
+            bucket_path = DataProductConfig(name=self.data_product_name).metadata_path()
         # establish whether metadata for data product already exists
         try:
             # get head of object (if it exists)
@@ -158,45 +151,40 @@ class BaseJsonSchema:
                 self.data_pre_convert = data_to_validate
         return self
 
-    def write_json_to_s3(self) -> None:
+    def write_json_to_s3(self, write_key: str) -> None:
         """
         writes validated metadata or schema json files to s3
         """
-
-        if "v1.0/" in self.write_key and self.exists:
-            self.logger.error("Cannot overwrite 1st version of metadata or schema")
-            return None
 
         if hasattr(self, "data") and self.valid:
             json_file = json.dumps(self.data)
             s3_client.put_object(
                 Body=json_file,
                 Bucket=self.write_bucket,
-                Key=self.write_key,
+                Key=write_key,
                 **{
                     "ACL": "bucket-owner-full-control",
                     "ServerSideEncryption": "AES256",
                 },
             )
-            self.logger.info(f"Data Product {self.type} written to s3")
+            self.logger.info(
+                f"Data Product {self.type} written to s3 at {self.write_bucket}/{write_key}"
+            )
         else:
             self.logger.error(f"{self.type} is not valid to write.")
             raise ValidationError(
                 "Metadata must be validated before being written to s3."
             )
 
-    # compare old and new metadata/schema and use
-    # logic to set version scale.
-    # will need new path function to reflect new version number schema and metadatas 3 paths
-    def _classify_update(self):
-        """infer type of increment to version, major/minor"""
-        raise NotImplementedError
-
-    # this can be passed to a path function for schema and metadata that doesn't use latest version
-    # Maybe this will be better suited outside of the class.
-    def _generate_new_version_number(self):
-        """generate a version number to pass to get path function"""
-        raise NotImplementedError
+    def load(self):
+        """loads the latest version of json file saved in s3"""
+        if self.exists:
+            self.latest_version_saved_data = read_json_from_s3(
+                f"s3://{self.write_bucket}/{self.latest_version_key}"
+            )
+        else:
+            self.logger.error("There is no metadata to load")
+        return self
 
 
 class DataProductSchema(BaseJsonSchema):
@@ -213,18 +201,15 @@ class DataProductSchema(BaseJsonSchema):
         input_data,
     ):
         # returns path of latest schema or v1 if it doesn't exist
-        bucket_path = BucketPath.from_uri(
-            DataProductConfig(name=data_product_name).schema_path(table_name).uri
-        )
-        # self.table_name = table_name
+        bucket_path = DataProductConfig(name=data_product_name).schema_path(table_name)
 
         super().__init__(
-            data_product_name,
-            logger,
-            JsonSchemaName("schema"),
-            bucket_path,
-            input_data,
-            table_name,
+            data_product_name=data_product_name,
+            logger=logger,
+            json_type=JsonSchemaName("schema"),
+            bucket_path=bucket_path,
+            input_data=input_data,
+            table_name=table_name,
         )
 
         if not self._does_data_product_metadata_exist():
@@ -232,6 +217,19 @@ class DataProductSchema(BaseJsonSchema):
             self.has_registered_data_product = False
         else:
             self.has_registered_data_product = True
+            self.parent_data_product_metadata = (
+                DataProductMetadata(
+                    data_product_name=self.data_product_name,
+                    logger=self.logger,
+                    input_data=None,
+                )
+                .load()
+                .latest_version_saved_data
+            )
+
+        self.parent_product_has_registered_schema = (
+            self._does_data_product_have_other_schema_registered()
+        )
 
     def _does_data_product_metadata_exist(self):
         """checks whether data product for schema has metadata registered"""
@@ -242,6 +240,19 @@ class DataProductSchema(BaseJsonSchema):
         )
         return metadata.exists
 
+    def _does_data_product_have_other_schema_registered(self):
+        """
+        the data product metadata needs a minor version increment if a table schema is added and
+        one or more schema already exist in the data product
+        """
+        if (
+            self.has_registered_data_product
+            and "schemas" in self.parent_data_product_metadata.keys()
+        ):
+            return True
+        else:
+            return False
+
     def convert_schema_to_glue_table_input_csv(self):
         """
         convert schema passed by user to glue table input so it can be used to create an athena table
@@ -249,7 +260,7 @@ class DataProductSchema(BaseJsonSchema):
         """
         if self.valid:
             glue_schema = deepcopy(glue_csv_table_input_template)
-            parent_metadata = self._get_parent_data_product_metadata()
+            parent_metadata = self.parent_data_product_metadata
             glue_schema["DatabaseName"] = self.data_product_name
             glue_schema["TableInput"]["Name"] = self.table_name
             glue_schema["TableInput"]["Owner"] = parent_metadata["dataProductOwner"]
@@ -278,11 +289,9 @@ class DataProductSchema(BaseJsonSchema):
         return self
 
     def _get_parent_data_product_metadata(self) -> Dict | None:
-        data_product_metadata_path = BucketPath.from_uri(
-            DataProductConfig(name=self.data_product_name)
-            .metadata_path(version=self.version)
-            .uri
-        )
+        data_product_metadata_path = DataProductConfig(
+            name=self.data_product_name
+        ).metadata_path(version=self.version)
 
         metadata = read_json_from_s3(data_product_metadata_path.uri)
 
@@ -297,18 +306,19 @@ class DataProductMetadata(BaseJsonSchema):
 
     # returns path of latest metadata or v1 if it doesn't exist
     def __init__(
-        self, data_product_name: str, logger: DataPlatformLogger, input_data: dict
+        self,
+        data_product_name: str,
+        logger: DataPlatformLogger,
+        input_data: dict,
     ):
-        bucket_path = BucketPath.from_uri(
-            DataProductConfig(data_product_name).metadata_path().uri
-        )
+        bucket_path = DataProductConfig(data_product_name).metadata_path()
 
         super().__init__(
-            data_product_name,
-            logger,
-            JsonSchemaName("metadata"),
-            bucket_path,
-            input_data,
+            data_product_name=data_product_name,
+            logger=logger,
+            json_type=JsonSchemaName("metadata"),
+            bucket_path=bucket_path,
+            input_data=input_data,
         )
 
     def add_auto_generated_metadata(self):
