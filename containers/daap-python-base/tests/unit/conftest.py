@@ -76,8 +76,7 @@ def raw_data_table(data_product_element):
 
 
 @pytest.fixture
-def data_product_element(region_name, s3_client, monkeypatch):
-    # monkeypatch.setenv("METADATA_BUCKET", "metadata")
+def data_product_element(region_name, s3_client):
     with patch("data_platform_paths.s3", s3_client):
         s3_client.create_bucket(
             Bucket=os.getenv("METADATA_BUCKET"),

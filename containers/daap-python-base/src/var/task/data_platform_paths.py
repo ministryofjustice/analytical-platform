@@ -93,6 +93,14 @@ def specification_path(
     )
 
 
+def get_new_version(version, increment_type):
+    if increment_type == "minor":
+        new_version = version.split(".")[0] + "." + str(int(version.split(".")[-1]) + 1)
+    elif increment_type == "major":
+        new_version = "v" + str(int(version.replace("v", "").split(".")[0]) + 1) + ".0"
+    return new_version
+
+
 class BucketPath(NamedTuple):
     """
     A path to an object in S3
@@ -362,54 +370,38 @@ class DataProductConfig:
         """
         return DataProductElement(name=name, data_product=self)
 
-    def metadata_path(self) -> BucketPath:
+    def metadata_path(self, version: str | None = None) -> BucketPath:
         """
-        Path to the latest version of a data product metadata file
+        Path to a version of a data product metadata file. If version omitted then
+        latest version path is returned
         """
+
+        if version is None:
+            version = self.latest_version
+
         key = os.path.join(
             self.name,
-            self.latest_version,
+            version,
             "metadata.json",
         )
         return BucketPath(bucket=self.metadata_bucket, key=key)
 
-    def schema_path(self, table_name: str) -> BucketPath:
+    def schema_path(self, table_name: str, version: str | None = None) -> BucketPath:
         """
-        Path to the latest version schema file for a given table
+        Path to a version of a schema file for a given table. If version omitted then
+        latest version path is returned
         """
+
+        if version is None:
+            version = self.latest_version
+
         key = os.path.join(
             self.name,
-            self.latest_version,
+            version,
             table_name,
             "schema.json",
         )
         return BucketPath(bucket=self.metadata_bucket, key=key)
-
-    @staticmethod
-    def metadata_spec_prefix(bucket_name: str | None = None) -> BucketPath:
-        """
-        Path to the metadata spec files
-        """
-        return BucketPath(
-            bucket_name or get_metadata_bucket(),
-            os.path.join(
-                "data_product_metadata_spec",
-            ),
-        )
-
-    @staticmethod
-    def metadata_spec_path(version: str, bucket_name: str | None = None) -> BucketPath:
-        """
-        Path to a metadata spec file
-        """
-        return BucketPath(
-            bucket_name if bucket_name else get_metadata_bucket(),
-            os.path.join(
-                "data_product_metadata_spec",
-                version,
-                "moj_data_product_metadata_spec.json",
-            ),
-        )
 
 
 @dataclass

@@ -18,6 +18,13 @@ def response_status_400(error) -> dict:
     return formatted_response
 
 
+def response_status_403(error) -> dict:
+    response_body = json.dumps({"error": {"message": error}})
+    formatted_response = format_response_json(403, response_body)
+
+    return formatted_response
+
+
 def response_status_404(error) -> dict:
     response_body = json.dumps({"error": {"message": error}})
     formatted_response = format_response_json(404, response_body)
