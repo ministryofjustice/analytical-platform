@@ -264,10 +264,10 @@ class DataProductSchema(BaseJsonSchema):
             glue_schema["DatabaseName"] = self.data_product_name
             glue_schema["TableInput"]["Name"] = self.table_name
             glue_schema["TableInput"]["Owner"] = parent_metadata["dataProductOwner"]
-            if not parent_metadata.get("retentionPeriod", 0) == 0:
-                glue_schema["TableInput"]["Retention"] = parent_metadata.get(
-                    "retentionPeriod"
-                )
+            # if not parent_metadata.get("retentionPeriod", 0) == 0:
+            glue_schema["TableInput"]["Retention"] = parent_metadata.get(
+                "retentionPeriod"
+            )
             glue_schema["TableInput"]["Description"] = self.data_pre_convert[
                 "tableDescription"
             ]

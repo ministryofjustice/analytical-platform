@@ -19,6 +19,7 @@ test_metadata_pass = {
     "dataProductOwnerDisplayName": "matt laverty",
     "email": "matthew.laverty@justice.gov.uk",
     "status": "draft",
+    "retentionPeriod": 3000,
     "dpiaRequired": False,
 }
 
@@ -30,6 +31,7 @@ test_metadata_with_schemas = {
     "dataProductOwnerDisplayName": "matt laverty",
     "email": "matthew.laverty@justice.gov.uk",
     "status": "draft",
+    "retentionPeriod": 3000,
     "dpiaRequired": False,
     "schemas": ["test_product"],
 }
@@ -87,6 +89,7 @@ test_glue_table_input = {
         "Description": "table has schema to pass test",
         "Name": "test_table",
         "Owner": "matthew.laverty@justice.gov.uk",
+        "Retention": 3000,
         "Parameters": {"classification": "csv", "skip.header.line.count": "1"},
         "PartitionKeys": [],
         "StorageDescriptor": {
