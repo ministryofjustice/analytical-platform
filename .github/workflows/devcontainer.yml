@@ -106,6 +106,9 @@ jobs:
     # needs: [test, test-scenarios]
     name: Build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .devcontainer
     steps:
       - name: Checkout
         id: checkout
@@ -121,5 +124,5 @@ jobs:
           devcontainer build \
             --push false \
             --platform linux/amd64 \
-            --workspace-folder .devcontainer \
+            --workspace-folder . \
             --image-name ghcr.io/ministryofjustice/data-platform-devcontainer \
