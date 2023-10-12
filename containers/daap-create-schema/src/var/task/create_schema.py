@@ -7,7 +7,6 @@ from data_platform_api_responses import (
     response_status_200,
     response_status_400,
     response_status_403,
-    response_status_404,
 )
 from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import DataProductConfig, get_latest_version, get_new_version
