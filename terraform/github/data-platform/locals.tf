@@ -23,6 +23,10 @@ locals {
     {
       name        = "data-platform-user-guidance"
       description = "Core Repository for Data Platform User Guidance"
+    },
+    {
+      name        = "data-platform-catalogue"
+      description = "Python library to integrate with the Data Platform Catalogue"
     }
   ]
 
