@@ -63,10 +63,12 @@ def validate_data_against_schema(
     actual_names = set(inferred_columns.keys())
     missing_names = registered_names - actual_names
     extra_names = actual_names - registered_names
-    if missing_names:
+    if missing_names and extra_names:
         raise DataInvalid(
             f"Columns do not match schema (missing: {missing_names}, extra: {extra_names})"
         )
+    if missing_names:
+        raise DataInvalid(f"Columns do not match schema (missing: {missing_names})")
     if extra_names:
         raise DataInvalid(f"Columns do not match schema (extra: {extra_names})")
 
