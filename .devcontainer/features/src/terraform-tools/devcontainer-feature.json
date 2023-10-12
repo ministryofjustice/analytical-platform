@@ -2,7 +2,7 @@
   "id": "terraform-tools",
   "version": "1.0.0",
   "name": "terraform-tools",
-  "description": "Terraform Tools - Terraform Switcher, Terraform Docs, hcl2json, tfsec, infracost",
+  "description": "Terraform Tools - Terraform Switcher, Terraform Docs, hcl2json, tfsec",
   "options": {
     "installTerraformSwitcher": {
       "type": "boolean",
@@ -17,9 +17,9 @@
     },
     "terraformVersion": {
       "type": "string",
-      "description": "Terraform version (Pinning to 1.5.7 while 1.6.1 is released)",
+      "description": "Terraform version",
       "proposals": ["latest"],
-      "default": "1.5.7"
+      "default": "latest"
     },
     "installTerraformDocs": {
       "type": "boolean",
@@ -53,23 +53,11 @@
       "description": "hcl2json version",
       "proposals": ["latest"],
       "default": "latest"
-    },
-    "installInfracost": {
-      "type": "boolean",
-      "description": "Install Infracost (https://github.com/infracost/infracost)",
-      "default": true
-    },
-    "infracostVersion": {
-      "type": "string",
-      "description": "Infracost version",
-      "proposals": ["latest"],
-      "default": "latest"
     }
   },
-  "mounts": [{ "source": "ministryofjustice-data-platform-devcontainer-infracost", "target": "/home/vscode/.config/infracost", "type": "volume" }],
   "customizations": {
     "vscode": {
-      "extensions": ["hashicorp.terraform", "Infracost.infracost"],
+      "extensions": ["hashicorp.terraform"],
       "settings": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "hashicorp.terraform",

@@ -12,7 +12,6 @@ env/
 sbom-*
 **/*.tfstate
 **/plan.json
-.infracost
 __pycache__
 .github/path-filter/pytest.yml
 .github/path-filter/containers.yml
