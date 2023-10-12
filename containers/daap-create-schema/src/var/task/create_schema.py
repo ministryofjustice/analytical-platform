@@ -7,6 +7,7 @@ from data_platform_api_responses import (
     response_status_200,
     response_status_400,
     response_status_403,
+    response_status_404,
 )
 from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import DataProductConfig, get_latest_version, get_new_version
@@ -88,19 +89,13 @@ def handler(event, context):
         logger.error("schema has no associated registered data product metadata.")
         return response_status_403(error_msg)
 
+    # Code below that handles verisoning of a data product will be moved to a central module eventually.
+
     # if schema already exist then we need to minor version increment to dataproduct metadata and schema
     if schema.valid:
         schema.convert_schema_to_glue_table_input_csv()
         if not schema.parent_product_has_registered_schema:
-            metadata_dict = (
-                DataProductMetadata(
-                    data_product_name=data_product_name,
-                    logger=logger,
-                    input_data=None,
-                )
-                .load()
-                .latest_version_saved_data
-            )
+            metadata_dict = schema.parent_data_product_metadata
             # metadata_with_schema = metadata_dict
             metadata_dict["schemas"] = [table_name]
 
@@ -144,15 +139,7 @@ def handler(event, context):
                 .metadata_path(version=new_version)
                 .key
             )
-            metadata_dict = (
-                DataProductMetadata(
-                    data_product_name=data_product_name,
-                    logger=logger,
-                    input_data=None,
-                )
-                .load()
-                .latest_version_saved_data
-            )
+            metadata_dict = schema.parent_data_product_metadata
             metadata_dict["schemas"].append(table_name)
             DataProductMetadata(
                 data_product_name=data_product_name,
