@@ -25,37 +25,28 @@ def load_v1_schema_schema_to_mock_s3(bucket_name, s3_client):
 def test_s3_copy_folder_to_new_folder(s3_client):
     bucket_name = os.environ["BUCKET_NAME"]
     s3_client.create_bucket(Bucket=bucket_name)
-
-    s3_client.put_object(
-        Body="b",
-        Bucket=bucket_name,
-        Key="somefolder/v1.0/somefile1.json",
-    )
-    s3_client.put_object(
-        Body="b",
-        Bucket=bucket_name,
-        Key="somefolder/v1.0/somefile2.json",
-    )
+    for key in ["somefolder/v1.0/somefile1.json", "somefolder/v1.0/somefile2.json"]:
+        s3_client.put_object(
+            Body="b",
+            Bucket=bucket_name,
+            Key=key,
+        )
+        s3_client.put_object(
+            Body="b",
+            Bucket=bucket_name,
+            Key=key,
+        )
     with patch("create_schema.s3_client", s3_client):
         s3_copy_folder_to_new_folder(
             bucket_name, "somefolder/v1.0/", "v1.0", "v1.1", logging.getLogger()
         )
 
-        try:
-            s3_client.get_object(
-                Bucket=bucket_name, Key="somefolder/v1.1/somefile1.json"
-            )
-            assert True
-        except Exception:
-            assert False
-
-        try:
-            s3_client.get_object(
-                Bucket=bucket_name, Key="somefolder/v1.1/somefile2.json"
-            )
-            assert True
-        except Exception:
-            assert False
+        for key in ["somefolder/v1.1/somefile1.json", "somefolder/v1.1/somefile2.json"]:
+            try:
+                s3_client.get_object(Bucket=bucket_name, Key=key)
+                assert True
+            except Exception:
+                assert False
 
 
 @pytest.mark.parametrize("method", [HTTPMethod.GET, HTTPMethod.PUT, HTTPMethod.DELETE])
