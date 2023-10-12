@@ -121,4 +121,5 @@ jobs:
           devcontainer build \
             --push false \
             --platform linux/amd64 \
+            --workspace-folder .devcontainer \
             --image-name ghcr.io/ministryofjustice/data-platform-devcontainer \
