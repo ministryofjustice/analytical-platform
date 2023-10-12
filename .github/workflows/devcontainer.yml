@@ -106,6 +106,10 @@ jobs:
     # needs: [test, test-scenarios]
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
     steps:
       - name: Checkout
         id: checkout
@@ -122,12 +126,20 @@ jobs:
       - name: Install devcontainer CLI
         id: install_devcontainer_cli
         run: npm install -g @devcontainers/cli@${{ env.DEVCONTAINER_CLI_VERSION }}
+
+      - name: Login to GitHub Container Registry
+        id: login_ghcr
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Build devcontainer
         id: build_devcontainer
         run: |
           devcontainer build \
-            --push false \
-            --platform "linux/amd64 linux/arm64" \
+            --push true \
+            --platform "linux/amd64,linux/arm64" \
             --workspace-folder . \
-            --image-name ghcr.io/ministryofjustice/data-platform-devcontainer \
+            --image-name ghcr.io/ministryofjustice/data-platform-devcontainer:latest \
