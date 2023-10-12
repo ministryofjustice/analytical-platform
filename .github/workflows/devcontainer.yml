@@ -106,9 +106,6 @@ jobs:
     # needs: [test, test-scenarios]
     name: Build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: .devcontainer
     steps:
       - name: Checkout
         id: checkout
