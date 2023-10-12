@@ -16,6 +16,10 @@
     "./features/src/sast-tools": {},
     "./features/src/terraform-tools": {}
   },
+  "containerEnv": {
+    "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}",
+    "GITHUB_USER": "${localEnv:GITHUB_USER}"
+  },
   "overrideFeatureInstallOrder": [
     "ghcr.io/devcontainers/features/common-utils",
     "./features/src/base"
