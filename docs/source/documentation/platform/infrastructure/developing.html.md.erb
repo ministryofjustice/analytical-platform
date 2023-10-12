@@ -26,6 +26,14 @@ Once we begin our journey to the monorepo, this should become redundant, but tha
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     ```
 
+- 1Password
+
+    [You will need to request access to 1Password via Operations Engineering](https://user-guide.operations-engineering.service.justice.gov.uk/documentation/services/1password.html#request-access).
+
+    ```bash
+    brew install 1password
+    ```
+
 - Docker
 
     ```bash
@@ -57,6 +65,14 @@ Once we begin our journey to the monorepo, this should become redundant, but tha
 ### Setup
 
 Your GPG and SSH agents are mounted from macOS, so GPG and SSH commands inside the container should work without any configuration updates.
+
+1. Follow 1Password's instructions on how to setup SSH keys and their SSH agent ([link](https://developer.1password.com/docs/ssh/get-started/))
+
+1. Permanently set `SSH_AUTH_SOCK` by adding the following to your `~/.zshrc` or `~/.bashrc` file
+
+    ```bash
+    export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+    ```
 
 1. Clone the Data Platform repository
 
