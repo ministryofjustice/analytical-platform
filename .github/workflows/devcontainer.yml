@@ -134,7 +134,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Build devcontainer
         id: build_devcontainer
         run: |
@@ -142,4 +142,4 @@ jobs:
             --push true \
             --platform "linux/amd64" \
             --workspace-folder . \
-            --image-name ghcr.io/ministryofjustice/data-platform-devcontainer:latest \
+            --image-name ghcr.io/ministryofjustice/data-platform-devcontainer:latest
