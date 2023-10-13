@@ -95,10 +95,9 @@ def handler(event, context):
         schema.convert_schema_to_glue_table_input_csv()
         if not schema.parent_product_has_registered_schema:
             metadata_dict = schema.parent_data_product_metadata
-            # metadata_with_schema = metadata_dict
             metadata_dict["schemas"] = [table_name]
 
-            # write v1 of metadata updated with registered schema, this is the only time we overwrite v1
+            # write v1.0 of metadata updated with registered schema, this is the only time we overwrite v1
             DataProductMetadata(
                 data_product_name=data_product_name,
                 logger=logger,

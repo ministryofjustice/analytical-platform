@@ -31,11 +31,7 @@ def test_s3_copy_folder_to_new_folder(s3_client):
             Bucket=bucket_name,
             Key=key,
         )
-        s3_client.put_object(
-            Body="b",
-            Bucket=bucket_name,
-            Key=key,
-        )
+
     with patch("create_schema.s3_client", s3_client):
         s3_copy_folder_to_new_folder(
             bucket_name, "somefolder/v1.0/", "v1.0", "v1.1", logging.getLogger()
