@@ -3,6 +3,7 @@ import os
 from http import HTTPMethod, HTTPStatus
 
 from data_platform_logging import DataPlatformLogger
+from data_platform_paths import DataProductConfig
 from data_product_metadata import DataProductMetadata
 
 
@@ -96,13 +97,14 @@ def handler(event, context):
         response_code = HTTPStatus.METHOD_NOT_ALLOWED
         return format_error_response(response_code, event, error_message)
 
-    data_product_metadata = DataProductMetadata(data_product_name, logger)
+    data_product_metadata = DataProductMetadata(
+        data_product_name, logger, event_body["metadata"]
+    )
 
-    if not data_product_metadata.metadata_exists:
-        data_product_metadata.validate(event_body["metadata"])
-
-        if data_product_metadata.valid_metadata:
-            data_product_metadata.write_json_to_s3()
+    if not data_product_metadata.exists:
+        if data_product_metadata.valid:
+            write_key = DataProductConfig(data_product_name).metadata_path("v1.0").key
+            data_product_metadata.write_json_to_s3(write_key)
             response_code = HTTPStatus.CREATED
             response_body = None
         else:
