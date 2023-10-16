@@ -78,6 +78,8 @@ resource "pagerduty_service_integration" "cloudwatch" {
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_cloudwatch_integration_key" {
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   count = var.enable_cloudwatch_integration ? 1 : 0
 
   name       = "${local.secretsmanager_prefix}/cloudwatch"
@@ -109,6 +111,8 @@ resource "pagerduty_service_integration" "cloudtrail" {
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_cloudtrail_integration_key" {
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   count = var.enable_cloudtrail_integration ? 1 : 0
 
   name       = "${local.secretsmanager_prefix}/cloudtrail"
@@ -140,6 +144,8 @@ resource "pagerduty_service_integration" "guardduty" {
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_guardduty_integration_key" {
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   count = var.enable_guardduty_integration ? 1 : 0
 
   name       = "${local.secretsmanager_prefix}/guardduty"
@@ -170,6 +176,8 @@ resource "pagerduty_service_integration" "health_dashboard" {
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_health_dashboard_integration_key" {
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   count = var.enable_health_dashboard_integration ? 1 : 0
 
   name       = "${local.secretsmanager_prefix}/health-dashboard"
@@ -201,6 +209,8 @@ resource "pagerduty_service_integration" "security_hub" {
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_security_hub_integration_key" {
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   count = var.enable_security_hub_integration ? 1 : 0
 
   name       = "${local.secretsmanager_prefix}/security-hub"
@@ -233,6 +243,8 @@ resource "pagerduty_service_integration" "email" {
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_email_integration_key" {
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   count = var.enable_email_integration ? 1 : 0
 
   name       = "${local.secretsmanager_prefix}/email"
@@ -263,6 +275,8 @@ resource "pagerduty_service_integration" "airflow" {
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_airflow_integration_key" {
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   count = var.enable_airflow_integration ? 1 : 0
 
   name       = "${local.secretsmanager_prefix}/airflow"
@@ -294,6 +308,8 @@ resource "pagerduty_service_integration" "alert_manager" {
 }
 
 resource "aws_secretsmanager_secret" "pagerduty_alert_manager_integration_key" {
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   count = var.enable_alert_manager_integration ? 1 : 0
 
   name       = "${local.secretsmanager_prefix}/alert-manager"
