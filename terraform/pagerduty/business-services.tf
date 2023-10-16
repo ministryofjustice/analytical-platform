@@ -1,24 +1,6 @@
 locals {
   business_services = [
     {
-      name             = "Analytical Platform"
-      description      = "To support data-driven decision-making by developing the best environment for high quality use of data"
-      point_of_contact = "#ask-analytical-platform"
-      team             = module.teams["Analytical Platform"].id
-      supporting_services = [
-        {
-          name = "Cloud Platform"
-          id   = data.pagerduty_business_service.cloud_platform.id
-          type = data.pagerduty_business_service.cloud_platform.type
-        },
-        {
-          name = "Modernisation Platform"
-          id   = data.pagerduty_business_service.modernisation_platform.id
-          type = data.pagerduty_business_service.modernisation_platform.type
-        }
-      ]
-    },
-    {
       name             = "Data Platform"
       description      = "Connecting the right people, systems, and data to improve justice outcomes"
       point_of_contact = "#ask-data-platform"
