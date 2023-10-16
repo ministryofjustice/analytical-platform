@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.5] 2023-10-16
+
+### Updated
+
+- Documentation for `/data-product/{data-product-name}/table/{table-name}/schema`
+  endpoint.
+
 ## [1.0.4] 2023-09-09
 
 ### Updated
