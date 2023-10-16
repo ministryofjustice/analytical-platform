@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "data-platform-catalogue"
+version = "0.1.0"
+description = "Library to integrate the MoJ data platform with the catalogue component."
+authors = ["MoJ Data Platform Team <data-platform-tech@digital.justice.gov.uk>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+openmetadata-ingestion = "^1.1.7.0"
+
+# 1.5.4 doesn't install for some reason. Either way it will be removed from the next release of the ingestion package.
+commonregex = "1.5.3"
+pytest = "^7.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
