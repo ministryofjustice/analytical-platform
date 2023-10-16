@@ -228,10 +228,119 @@
           }
         }
       }
+    },
+    "/data-product/{data-product-name}/table/{table-name}/schema": {
+      "post": {
+        "tags": [
+          "schema"
+        ],
+        "summary": "Register a schema (blueprint of your table) for a new table in your Data Product that you want to upload to the Data Platform.",
+        "description": "Registers the first version of your Data Product's table (by submitting its schema) and enables you to proceed with uploading data to it.",
+        "operationId": "registerTableSchema",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/registerTableSchema"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "data-product-name",
+            "required": true,
+            "example": "my_data_product",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The name of the data product you want to add a schema to. This needs to be a registered data product name."
+          },
+          {
+            "in": "path",
+            "name": "table-name",
+            "required": true,
+            "example": "table_1",
+            "schema": {
+              "type": "string",
+              "minimum": 1,
+              "maximum": 128
+            },
+            "description": "The name of the table to create schema for. Allows lowercase alphanumeric characters and \"_\"."
+          },
+          {
+            "in": "header",
+            "name": "authorizationToken",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "message": "Schema for {table-name} has been created in the {data-product-name} data product"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": {
+                      "message": "Data product name is missing, it must be specified in the metadata  against the 'name' key"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "method not allowed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": {
+                      "message": "Sorry, GET isn't allowed."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "registerTableSchema": {
+        "required": [
+          "schema"
+        ],
+        "type": "object",
+        "properties": {
+          "schema": {
+            "$ref": "#/components/schemas/dataProductSchemaSchema"
+          }
+        }
+      },
       "registerDataProduct": {
         "required": [
           "metadata"
@@ -244,7 +353,10 @@
         }
       },
       "dataProductMetadataSchema": {
-        "$ref": "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.0.0/moj_data_product_metadata_spec.json"
+        "$ref": "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.1.0/moj_data_product_metadata_spec.json"
+      },
+      "dataProductSchemaSchema": {
+        "$ref": "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-table-schema-json-schema/v1.0.0/moj_data_product_table_spec.json"
       },
       "UploadDataRequest": {
         "required": [
