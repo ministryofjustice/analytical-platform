@@ -234,7 +234,7 @@
         "tags": [
           "schema"
         ],
-        "summary": "Register a schema (blue print of your table) for a new table in your Data Product that you want to upload to the Data Platform.",
+        "summary": "Register a schema (blueprint of your table) for a new table in your Data Product that you want to upload to the Data Platform.",
         "description": "Registers the first version of your Data Product (by submitting it's metadata)  and enables you to proceed with uploading data.",
         "operationId": "registerTableSchema",
         "requestBody": {
