@@ -97,11 +97,10 @@ def handler(event, context):
                 }
             ),
         }
-    formatted_date = datetime.utcnow().strftime("%Y%m%d") + "T000000Z"
+
     fields = {
         "x-amz-server-side-encryption": "AES256",
         "x-amz-acl": "bucket-owner-full-control",
-        "x-amz-date": formatted_date,
         "Content-MD5": md5,
         "Content-Type": "binary/octet-stream",
     }
@@ -110,7 +109,6 @@ def handler(event, context):
     conditions = [
         {"x-amz-server-side-encryption": "AES256"},
         {"x-amz-acl": "bucket-owner-full-control"},
-        {"x-amz-date": formatted_date},
         {"Content-MD5": md5},
         ["starts-with", "$Content-MD5", ""],
         ["starts-with", "$Content-Type", ""],
