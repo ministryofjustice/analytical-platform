@@ -26,7 +26,6 @@ def handler(event, context):
     md5 = str(body.get("contentMD5"))
     filename = body.get("filename")
     amz_date = datetime.utcnow()
-    formatted_date = amz_date.strftime("%Y%m%dT%H%M%SZ")
     uuid_value = uuid.uuid4()
 
     if (
@@ -63,26 +62,6 @@ def handler(event, context):
         timestamp=amz_date, uuid_value=uuid_value, file_extension=file_extension
     )
 
-    fields = {
-        "x-amz-server-side-encryption": "AES256",
-        "x-amz-acl": "bucket-owner-full-control",
-        "x-amz-date": formatted_date,
-        "Content-MD5": md5,
-        "Content-Type": "binary/octet-stream",
-    }
-    # File upload is capped at 5GB per single upload so
-    # content-length-range is 5GB
-    conditions = [
-        {"x-amz-server-side-encryption": "AES256"},
-        {"x-amz-acl": "bucket-owner-full-control"},
-        {"x-amz-date": formatted_date},
-        {"Content-MD5": md5},
-        ["starts-with", "$Content-MD5", ""],
-        ["starts-with", "$Content-Type", ""],
-        ["starts-with", "$key", raw_data_path.key],
-        ["content-length-range", 0, 5000000000],
-    ]
-
     logger.add_extras(
         {
             "lambda_name": context.function_name,
@@ -118,6 +97,26 @@ def handler(event, context):
                 }
             ),
         }
+    formatted_date = datetime.utcnow().strftime("%Y%m%d") + "T000000Z"
+    fields = {
+        "x-amz-server-side-encryption": "AES256",
+        "x-amz-acl": "bucket-owner-full-control",
+        "x-amz-date": formatted_date,
+        "Content-MD5": md5,
+        "Content-Type": "binary/octet-stream",
+    }
+    # File upload is capped at 5GB per single upload so
+    # content-length-range is 5GB
+    conditions = [
+        {"x-amz-server-side-encryption": "AES256"},
+        {"x-amz-acl": "bucket-owner-full-control"},
+        {"x-amz-date": formatted_date},
+        {"Content-MD5": md5},
+        ["starts-with", "$Content-MD5", ""],
+        ["starts-with", "$Content-Type", ""],
+        ["starts-with", "$key", raw_data_path.key],
+        ["content-length-range", 0, 5000000000],
+    ]
 
     URL = s3.generate_presigned_post(
         Bucket=raw_data_path.bucket,
