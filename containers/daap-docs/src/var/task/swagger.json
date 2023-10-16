@@ -235,7 +235,7 @@
           "schema"
         ],
         "summary": "Register a schema (blueprint of your table) for a new table in your Data Product that you want to upload to the Data Platform.",
-        "description": "Registers the first version of your Data Product (by submitting it's metadata)  and enables you to proceed with uploading data.",
+        "description": "Registers the first version of your Data Product's table (by submitting it's schema) and enables you to proceed with uploading data to it.",
         "operationId": "registerTableSchema",
         "requestBody": {
           "content": {
