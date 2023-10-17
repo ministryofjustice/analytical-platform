@@ -14,7 +14,6 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "arn:aws:s3:::dbt-query-dump/*"
     ]
   }
-
   statement {
     sid    = "AthenaAccess"
     effect = "Allow"
@@ -24,11 +23,8 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "athena:StartQueryExecution",
       "athena:StopQueryExecution"
     ]
-    resources = [
-      "arn:aws:athena:*:${data.aws_caller_identity.session.account_id}:datacatalog/*"
-    ]
+    resources = ["arn:aws:athena:*:${data.aws_caller_identity.session.account_id}:datacatalog/*"]
   }
-
   statement {
     sid    = "GlueAccess"
     effect = "Allow"
