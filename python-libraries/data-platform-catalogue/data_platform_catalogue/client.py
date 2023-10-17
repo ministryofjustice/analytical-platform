@@ -4,9 +4,12 @@ from metadata.generated.schema.api.data.createDatabase import CreateDatabaseRequ
 from metadata.generated.schema.api.data.createDatabaseSchema import (
     CreateDatabaseSchemaRequest,
 )
+from metadata.generated.schema.api.data.createTable import CreateTableRequest
 from metadata.generated.schema.api.services.createDatabaseService import (
     CreateDatabaseServiceRequest,
 )
+from metadata.generated.schema.entity.data.table import Column
+from metadata.generated.schema.entity.data.table import DataType as OpenMetadataDataType
 from metadata.generated.schema.entity.services.connections.database.customDatabaseConnection import (
     CustomDatabaseConnection,
 )
@@ -21,12 +24,6 @@ from metadata.generated.schema.security.client.openMetadataJWTClientConfig impor
     OpenMetadataJWTClientConfig,
 )
 from metadata.ingestion.ometa.ometa_api import OpenMetadata
-
-from metadata.generated.schema.api.data.createTable import CreateTableRequest
-from metadata.generated.schema.entity.data.table import (
-    Column,
-    DataType as OpenMetadataDataType,
-)
 
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,5 @@
-from data_platform_catalogue.client import CatalogueClient
 import pytest
+from data_platform_catalogue.client import CatalogueClient
 
 
 class TestCatalogueClient:
