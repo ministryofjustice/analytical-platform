@@ -1,4 +1,5 @@
 module "create_a_derived_table_iam_role" {
+  #checkov:skip=CKV_AWS_358:Seems like a false positive?
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=62b8a16c73d8e4422cd81923e46948e8f4b5cf48" # v3.2.0
 
   role_name            = "create-a-derived-table"
