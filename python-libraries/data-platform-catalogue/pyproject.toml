@@ -12,6 +12,9 @@ openmetadata-ingestion = "^1.1.7.0"
 
 # 1.5.4 doesn't install for some reason. Either way it will be removed from the next release of the ingestion package.
 commonregex = "1.5.3"
+
+[tool.poetry.group.dev.dependencies]
+requests-mock = "^1.11.0"
 pytest = "^7.4.2"
 
 [build-system]
