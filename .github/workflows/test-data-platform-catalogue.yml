@@ -1,0 +1,48 @@
+name: Test Data Platform Catalogue package
+
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+    paths:
+      - python-libraries/data-platform-catalogue/**
+  push:
+    branches:
+      - main
+    paths:
+      - python-libraries/data-platform-catalogue/**
+
+jobs:
+  run_tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        python-version:
+          - "3.10"
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: poetry
+          cache-dependency-path: python-libraries/data-platform-catalogue/poetry.lock
+
+      - name: Install the project
+        run: |
+          poetry install
+        working-directory: python-libraries/data-platform-catalogue
+
+      - name: Run tests
+        run: |
+          poetry run pytest
+        working-directory: python-libraries/data-platform-catalogue
