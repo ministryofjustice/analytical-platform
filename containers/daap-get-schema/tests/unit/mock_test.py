@@ -36,6 +36,7 @@ class TestHandler:
         )
 
     def test_valid(
+        self,
         fake_context,
         data_product_name,
         table_name,
@@ -58,7 +59,7 @@ class TestHandler:
                 "statusCode": 200,
             }
 
-    def test_missing(fake_context):
+    def test_missing(self, fake_context):
         result = handler(
             {
                 "pathParameters": {
