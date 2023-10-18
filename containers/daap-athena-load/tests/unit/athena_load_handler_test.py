@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock
 
 import athena_load_handler
+from data_platform_paths import get_metadata_bucket
 from infer_glue_schema import InferredMetadata
 from moto import mock_sts
 
@@ -13,7 +14,10 @@ def test_handler_does_not_error(
     Test the handler doesn't error when passed valid input
     """
     bucket_name = "bucket"
-    key = "raw_data/data_product/table/extraction_timestamp=20230101T000000Z/file.csv"
+    key = "raw/data_product/table/load_timestamp=20230101T000000Z/file.csv"
+
+    s3_client.create_bucket(Bucket=get_metadata_bucket())
+    mocker.patch("data_platform_paths.s3", s3_client)
 
     # Patch all the helper methods to do nothing
     mocker.patch(
