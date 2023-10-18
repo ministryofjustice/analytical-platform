@@ -7,6 +7,13 @@ import boto3
 import pytest
 from moto import mock_athena, mock_glue, mock_s3
 
+os.environ["AWS_ACCESS_KEY_ID"] = "testing"
+os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
+os.environ["AWS_SECURITY_TOKEN"] = "testing"
+os.environ["AWS_SESSION_TOKEN"] = "testing"
+os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+os.environ["BUCKET_NAME"] = "bucket"
+
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
 sys.path.append(
     join(
@@ -16,13 +23,6 @@ sys.path.append(
 
 from data_platform_logging import DataPlatformLogger  # noqa E402
 from data_platform_paths import DataProductElement  # noqa E402
-
-os.environ["AWS_ACCESS_KEY_ID"] = "testing"
-os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
-os.environ["AWS_SECURITY_TOKEN"] = "testing"
-os.environ["AWS_SESSION_TOKEN"] = "testing"
-os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
-os.environ["BUCKET_NAME"] = "bucket"
 
 
 @dataclass
