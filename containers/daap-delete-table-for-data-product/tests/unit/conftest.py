@@ -1,0 +1,159 @@
+import os
+import sys
+from dataclasses import dataclass
+from os.path import dirname, join
+
+import boto3
+import pytest
+from moto import mock_athena, mock_glue, mock_s3
+
+sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
+sys.path.append(
+    join(
+        dirname(__file__), "../", "../", "../", "daap-python-base", "src", "var", "task"
+    )
+)
+
+from data_platform_logging import DataPlatformLogger  # noqa E402
+from data_platform_paths import DataProductElement  # noqa E402
+
+os.environ["AWS_ACCESS_KEY_ID"] = "testing"
+os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
+os.environ["AWS_SECURITY_TOKEN"] = "testing"
+os.environ["AWS_SESSION_TOKEN"] = "testing"
+os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+os.environ["BUCKET_NAME"] = "test"
+
+
+@pytest.fixture(autouse=True)
+def set_env_vars(monkeypatch):
+    monkeypatch.setenv("RAW_DATA_BUCKET", "raw")
+    monkeypatch.setenv("CURATED_DATA_BUCKET", "curated")
+    monkeypatch.setenv("METADATA_BUCKET", "metadata")
+    monkeypatch.setenv("LANDING_ZONE_BUCKET", "landing")
+    monkeypatch.setenv("LOG_BUCKET", "logs")
+
+
+@dataclass
+class FakeContext:
+    function_name: str
+
+
+@pytest.fixture
+def fake_context():
+    """
+    Emulate the context object passed
+    """
+    return FakeContext(function_name="some-function")
+
+
+@pytest.fixture
+def glue_client():
+    """
+    Create a mock glue catalogue
+    """
+    with mock_glue():
+        client = boto3.client("glue", region_name="us-east-1")
+
+        yield client
+
+
+@pytest.fixture
+def s3_client():
+    """
+    Create a mock s3 service
+    """
+    with mock_s3():
+        client = boto3.client("s3", region_name="us-east-1")
+
+        yield client
+
+
+@pytest.fixture
+def athena_client():
+    """
+    Create a mock athena service
+    """
+    with mock_athena():
+        client = boto3.client("athena", region_name="us-east-1")
+
+        yield client
+
+
+# @pytest.fixture
+# def data_product_element(monkeypatch):
+#     monkeypatch.setenv("BUCKET_NAME", "bucket")
+#     return DataProductElement.load(element_name="foo", data_product_name="bar")
+
+
+@pytest.fixture
+def logger():
+    return DataPlatformLogger()
+
+
+@pytest.fixture
+def raw_data_table(data_product_element):
+    return data_product_element.raw_data_table_unique()
+
+
+@pytest.fixture
+def region_name():
+    return "eu-west-1"
+
+
+@pytest.fixture
+def metadata_bucket():
+    return "metadata"
+
+
+@pytest.fixture
+def data_product_name():
+    return "data-product"
+
+
+@pytest.fixture
+def table_name():
+    return "table-name"
+
+
+@pytest.fixture
+def fake_data_product_name():
+    return "fake-data-product"
+
+
+@pytest.fixture
+def fake_table_name():
+    return "fake-table-name"
+
+
+@pytest.fixture
+def fake_data_product_event(fake_data_product_name, table_name):
+    return {
+        "headers": {"Content-Type": "application/json"},
+        "pathParameters": {
+            "data-product-name": fake_data_product_name,
+            "table-name": table_name,
+        },
+    }
+
+
+@pytest.fixture
+def fake_table_event(data_product_name, fake_table_name):
+    return {
+        "headers": {"Content-Type": "application/json"},
+        "pathParameters": {
+            "data-product-name": data_product_name,
+            "table-name": fake_table_name,
+        },
+    }
+
+
+@pytest.fixture
+def event(data_product_name, table_name):
+    return {
+        "headers": {"Content-Type": "application/json"},
+        "pathParameters": {
+            "data-product-name": data_product_name,
+            "table-name": table_name,
+        },
+    }
