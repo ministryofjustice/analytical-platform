@@ -63,8 +63,6 @@ def format_table_schema(glue_schema: dict) -> dict:
 
     return {
         "tableDescription": table_input.get("Description"),
-        # "owner": table_input.get("Owner"),
-        # "retention": table_input.get("Retention"),
         "columns": [
             {
                 "name": column["Name"],
