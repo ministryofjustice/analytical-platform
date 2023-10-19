@@ -139,6 +139,7 @@ jobs:
         id: build_devcontainer
         run: |
           devcontainer build \
+            --log-level trace \
             --no-cache true \
             --push true \
             --platform "linux/amd64" \
