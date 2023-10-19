@@ -141,14 +141,7 @@ jobs:
           devcontainer build \
             --log-level trace \
             --no-cache true \
-            --push false \
+            --push true \
             --platform "linux/amd64" \
             --workspace-folder . \
             --image-name ghcr.io/ministryofjustice/data-platform-devcontainer:latest
-
-      - name: Debug
-        id: debug
-        run: |
-          docker image ls
-
-          docker image inspect ghcr.io/ministryofjustice/data-platform-devcontainer:latest
