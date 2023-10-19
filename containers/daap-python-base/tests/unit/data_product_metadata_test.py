@@ -9,7 +9,11 @@ from unittest.mock import patch
 import data_product_metadata
 import pytest
 from data_platform_paths import JsonSchemaName
-from data_product_metadata import DataProductMetadata, DataProductSchema
+from data_product_metadata import (
+    DataProductMetadata,
+    DataProductSchema,
+    format_table_schema,
+)
 
 test_metadata_pass = {
     "name": "test_product",
@@ -393,3 +397,13 @@ def test_schema_parent_metadata_has_registered_schemas(
             input_data=test_schema_pass,
         )
         assert schema.parent_product_has_registered_schema == expected
+
+
+@pytest.mark.parametrize(
+    "glue_schema, expected",
+    [(test_glue_table_input, test_schema_pass)],
+)
+def test_format_table_schema(glue_schema, expected):
+    out_schema = format_table_schema(glue_schema)
+
+    assert out_schema == expected

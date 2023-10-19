@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2023-10-18
+
+### Changed
+
+- reformat schema on get using base `format_table_schema` function to return schema
+  matching input format rather than glue format
+
 ## [1.0.0]
 
 ### Added

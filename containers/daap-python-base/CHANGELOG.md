@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2023-10-18
+
+### Added
+
+- standalone `format_table_schema` function for converting glue schema to input schema
+  format
+
 ## [4.0.0] - 2023-10-05
 
 ### Changed
@@ -24,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - 403 error status code to `data_platform_api_responses.py`
-- `get_new_version` function to `data_platform_paths``
+- `get_new_version` function to `data_platform_paths`
 
 ## [3.3.1] - 2023-10-11
 

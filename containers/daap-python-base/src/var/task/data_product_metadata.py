@@ -49,6 +49,31 @@ glue_csv_table_input_template = {
 }
 
 
+def format_table_schema(glue_schema: dict) -> dict:
+    """reformats a glue table schema into the metadata ingestion specification.
+
+    Args:
+        glue_schema (dict): Schema in Glue-compatible format
+
+    Returns:
+        dict: Schema in original ingested metadata format
+    """
+    table_input = glue_schema["TableInput"]
+    columns = table_input["StorageDescriptor"]["Columns"]
+
+    return {
+        "tableDescription": table_input.get("Description"),
+        "columns": [
+            {
+                "name": column["Name"],
+                "type": column["Type"],
+                "description": column.get("Comment"),
+            }
+            for column in columns
+        ],
+    }
+
+
 def get_data_product_specification_path(
     spec_type: JsonSchemaName, version: None | str = None
 ) -> str:
