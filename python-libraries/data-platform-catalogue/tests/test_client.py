@@ -8,7 +8,7 @@ class TestCatalogueClient:
             "fullyQualifiedName": fqn,
             "id": "39b855e3-84a5-491e-b9a5-c411e626e340",
             "name": "foo",
-            "serviceType": "CustomDatabase",
+            "serviceType": "Glue",
         }
 
     def mock_database_response(self, fqn):
@@ -18,7 +18,7 @@ class TestCatalogueClient:
             "name": "foo",
             "service": {
                 "id": "39b855e3-84a5-491e-b9a5-c411e626e340",
-                "type": "CustomDatabase",
+                "type": "Glue",
             },
         }
 
@@ -29,7 +29,7 @@ class TestCatalogueClient:
             "name": "foo",
             "service": {
                 "id": "39b855e3-84a5-491e-b9a5-c411e626e340",
-                "type": "CustomDatabase",
+                "type": "Glue",
             },
             "database": {
                 "id": "39b855e3-84a5-491e-b9a5-c411e626e340",
@@ -44,7 +44,7 @@ class TestCatalogueClient:
             "name": "foo",
             "service": {
                 "id": "39b855e3-84a5-491e-b9a5-c411e626e340",
-                "type": "CustomDatabase",
+                "type": "Glue",
             },
             "database": {
                 "id": "39b855e3-84a5-491e-b9a5-c411e626e340",
@@ -77,17 +77,8 @@ class TestCatalogueClient:
         assert requests_mock.last_request.json() == {
             "name": "data-platform",
             "displayName": "Data platform",
-            "description": None,
-            "tags": None,
-            "serviceType": "CustomDatabase",
-            "connection": {
-                "config": {
-                    "type": "CustomDatabase",
-                    "sourcePythonClass": None,
-                    "connectionOptions": None,
-                }
-            },
-            "owner": None,
+            "serviceType": "Glue",
+            "connection": {"config": {}},
         }
         assert fqn == "some-service"
 

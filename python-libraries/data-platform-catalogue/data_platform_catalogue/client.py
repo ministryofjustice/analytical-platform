@@ -1,3 +1,4 @@
+import json
 import logging
 
 from metadata.generated.schema.api.data.createDatabase import CreateDatabaseRequest
@@ -5,19 +6,12 @@ from metadata.generated.schema.api.data.createDatabaseSchema import (
     CreateDatabaseSchemaRequest,
 )
 from metadata.generated.schema.api.data.createTable import CreateTableRequest
-from metadata.generated.schema.api.services.createDatabaseService import (
-    CreateDatabaseServiceRequest,
-)
 from metadata.generated.schema.entity.data.table import Column
 from metadata.generated.schema.entity.data.table import DataType as OpenMetadataDataType
-from metadata.generated.schema.entity.services.connections.database.customDatabaseConnection import (
-    CustomDatabaseConnection,
-)
 from metadata.generated.schema.entity.services.connections.metadata.openMetadataConnection import (
     OpenMetadataConnection,
 )
 from metadata.generated.schema.entity.services.databaseService import (
-    DatabaseConnection,
     DatabaseServiceType,
 )
 from metadata.generated.schema.security.client.openMetadataJWTClientConfig import (
@@ -81,17 +75,23 @@ class CatalogueClient:
 
         Returns the fully qualified name of the metadata object in the catalogue.
         """
-        create_service = CreateDatabaseServiceRequest(
-            name=name,
-            displayName=display_name,
-            serviceType=DatabaseServiceType.CustomDatabase,
-            connection=DatabaseConnection(
-                config=CustomDatabaseConnection(
-                    type="CustomDatabase",
-                )
-            ),
+        # Directly pass JSON as a workaround because in metadata.create_or_update won't let us pass
+        # an empty connection config if serviceType = Glue.
+        # This workaround can be removed when we update to OpenMetadata 1.2.0.
+        service = {
+            "name": name,
+            "displayName": display_name,
+            "serviceType": DatabaseServiceType.Glue.value,
+            "connection": {"config": {}},
+        }
+
+        logger.info(f"Creating {service}")
+
+        response = self.metadata.client.put(
+            "/services/databaseServices", data=json.dumps(service)
         )
-        return self._create_or_update_entity(create_service)
+
+        return response["fullyQualifiedName"]
 
     def create_or_update_database(self, name: str, service_fqn: str):
         """
@@ -131,7 +131,7 @@ class CatalogueClient:
         return self._create_or_update_entity(create_table)
 
     def _create_or_update_entity(self, data) -> str:
-        logger.info(f"Creating database {data.json()}")
+        logger.info(f"Creating {data.json()}")
         response = self.metadata.create_or_update(data=data)
         return response.dict()["fullyQualifiedName"]
 
