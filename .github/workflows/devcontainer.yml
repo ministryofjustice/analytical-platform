@@ -139,6 +139,7 @@ jobs:
         id: build_devcontainer
         run: |
           devcontainer build \
+            --no-cache true \
             --push true \
             --platform "linux/amd64" \
             --workspace-folder . \
