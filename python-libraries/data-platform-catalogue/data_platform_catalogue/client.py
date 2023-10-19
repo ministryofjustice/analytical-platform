@@ -71,7 +71,8 @@ class CatalogueClient:
     ) -> str:
         """
         Define a database service.
-        We have one service corresponding to the data platform itself.
+        We have one service representing the connection to the data platform's internal
+        glue catalogue.
 
         Returns the fully qualified name of the metadata object in the catalogue.
         """
@@ -96,7 +97,7 @@ class CatalogueClient:
     def create_or_update_database(self, name: str, service_fqn: str):
         """
         Define a database.
-        There should be one database per data product.
+        There should be one database per data platform catalogue.
         """
         create_db = CreateDatabaseRequest(
             name=name,
@@ -107,7 +108,7 @@ class CatalogueClient:
     def create_or_update_schema(self, name: str, database_fqn: str):
         """
         Define a database schema.
-        We have a single schema per database.
+        There should be one schema per data product.
         """
         create_schema = CreateDatabaseSchemaRequest(name=name, database=database_fqn)
         return self._create_or_update_entity(create_schema)
@@ -117,7 +118,7 @@ class CatalogueClient:
     ):
         """
         Define a table.
-        A data product may have many tables.
+        There can be many tables per data product.
         """
         columns = [
             Column(name=k, dataType=DATA_TYPE_MAPPING[v])
