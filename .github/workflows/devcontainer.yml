@@ -142,7 +142,7 @@ jobs:
             --log-level trace \
             --no-cache true \
             --push false \
-            --platform "linux/amd64,linux/arm64" \
+            --platform "linux/amd64" \
             --workspace-folder . \
             --image-name ghcr.io/ministryofjustice/data-platform-devcontainer:latest
 
