@@ -241,7 +241,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/registerTableSchema"
+                "$ref": "#/components/schemas/tableSchema"
               }
             }
           }
@@ -332,7 +332,7 @@
         ],
         "summary": "Get the latest schema for a table.",
         "description": "Returns a json object describing the table.",
-        "operationId": "getSchema",
+        "operationId": "getTableSchema",
         "parameters": [
           {
             "in": "path",
@@ -371,7 +371,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/registerTableSchema"
+                  "$ref": "#/components/schemas/tableSchema"
                 }
               }
             }
@@ -385,7 +385,7 @@
   },
   "components": {
     "schemas": {
-      "registerTableSchema": {
+      "tableSchema": {
         "required": [
           "schema"
         ],
