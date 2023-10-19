@@ -325,6 +325,61 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "get_schema"
+        ],
+        "summary": "Get the latest schema for a table.",
+        "description": "Returns a json object describing the table.",
+        "operationId": "getSchema",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "data-product-name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The name of the data product that contains the table schema. This needs to be a registered data product name."
+          },
+          {
+            "in": "path",
+            "name": "table-name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1,
+              "maximum": 128
+            },
+            "description": "The name of the table with the schema. Allows lowercase alphanumeric characters and \"_\"."
+          },
+          {
+            "in": "header",
+            "name": "authorizationToken",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation, response format https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/get_table.html",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/registerTableSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data product or table schema not found"
+          }
+        }
       }
     }
   },
