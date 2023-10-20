@@ -1,0 +1,51 @@
+---
+owner_slack: "#data-platform-notifications"
+title: ADR-006 Use GOV.UK Eleventy Plugin for user documentation and Data Platform front door
+last_reviewed_on: 2023-08-17
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+## Status
+
+✅ Accepted
+
+## Context
+
+Users, prospective users and stakeholders of the Data Platform need a way to start their user journeys onto the platform so that they can access and use it.
+
+We want to adhere to the GOV.UK design system in providing this, and make it as self-service as possible to streamline the user journeys and minimise reliance on support.
+
+## Decision
+
+We are proposing to use the [GOV.UK Eleventy Plugin](https://github.com/x-govuk/govuk-eleventy-plugin/tree/main) to host a 'front door' that provides user guidance and communications updates (eg. blog posts) for users, prospective users and stakeholders of the Data Platform.
+
+The front door is not the Data Platform itself, but an information portal that collates essential documentation and resources for using the Data Platform.
+
+For our information architecture, we are drawing inspiration from the [AWS documentation](https://docs.aws.amazon.com/).
+
+For our content design, we are drawing inspiration from [GOV.UK Pay](https://www.payments.service.gov.uk/) and [GOV.UK Notify](https://www.notifications.service.gov.uk/), though we must provide users the ability to search content from any page on the site.
+
+## Consequences
+
+### General consequences
+
+* We use the GOV.UK Eleventy Plugin to host all user-facing comms and documentation
+* We host the front door on a separate repository from the Data Platform itself
+* We host internal (ie. Data Platform team-facing) documentation on a separate site from the front door
+* Depending on how the Analytical Platform fits into the Data Platform, we may migrate the [Analytical Platform User Guidance](https://user-guidance.analytical-platform.service.justice.gov.uk/) into the front door
+
+### Advantages
+
+* Single source of truth for users that mitigates duplicating or fragmenting content
+* Uses [GOV.UK front end](https://design-system.service.gov.uk/) 
+* Compatible with [GOV.UK design system components](https://design-system.service.gov.uk/components/)
+* Lightweight markup tool
+* Flexible navigation can accommodate complex information architecture 
+* Includes page layouts for comms such as blog posts
+* Can preview changes locally before pushing to repository
+
+### Disadvantages
+
+* Limited support for GOV.UK Eleventy Plugin
