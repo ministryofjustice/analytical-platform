@@ -6,7 +6,7 @@ module "create_a_derived_table_iam_role" {
   role_name            = "create-a-derived-table"
   github_repositories  = ["moj-analytical-services/create-a-derived-table"]
   policy_arns          = [module.create_a_derived_table_iam_policy.arn]
-  max_session_duration = 7200
+  max_session_duration = 10800
 
   tags = var.tags
 }
