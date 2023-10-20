@@ -25,7 +25,10 @@ pip install ministryofjustice-data-platform-catalogue
 ## Example usage
 
 ```python
-from data_platform_catalogue import CatalogueClient
+from data_platform_catalogue import (
+  CatalogueClient, CatalogueMetadata,
+  DataProductMetadata, TableMetadata
+)
 
 client = CatalogueClient(
     jwt_token="***",
@@ -34,13 +37,32 @@ client = CatalogueClient(
 
 assert client.is_healthy()
 
-service_fqn = client.create_or_update_database_service(name="data_platform")
-database_fqn = client.create_or_update_database(name="all_data_products", service_fqn=service_fqn)
-schema_fqn = client.create_or_update_database(name="my_data_product", database_fqn=database_fqn)
 
-table_fqn = client.create_or_update_table(
-    name="my_table",
-    schema_fqn=schema_fqn,
-    column_types={"foo": "string", "bar": "int"}
+catalogue = CatalogueMetadata(
+  name = "data_platform",
+  description = "All data products hosted on the data platform",
 )
+
+data_product = DataProductMetadata(
+    name = "my_data_product",
+    description = "bla bla",
+    version = "v1.0.0",
+    owner = "7804c127-d677-4900-82f9-83517e51bb94",
+    email = "justice@justice.gov.uk",
+    retention_period_in_days = 365,
+    domain = "legal-aid",
+    dpia_required = False
+)
+
+table = TableMetadata(
+  name = "my_table",
+  description = "bla bla",
+  column_types = {"foo": "string", "bar": "int"},
+  retention_period_in_days = 365
+)
+
+service_fqn = client.create_or_update_database_service(name="data_platform")
+database_fqn = client.create_or_update_database(metadata=catalogue, service_fqn=service_fqn)
+schema_fqn = client.create_or_update_schema(metadata=data_product, database_fqn=database_fqn)
+table_fqn = client.create_or_update_table(metadata=table, schema_fqn=schema_fqn)
 ```

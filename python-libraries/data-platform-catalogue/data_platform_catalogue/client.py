@@ -17,7 +17,17 @@ from metadata.generated.schema.entity.services.databaseService import (
 from metadata.generated.schema.security.client.openMetadataJWTClientConfig import (
     OpenMetadataJWTClientConfig,
 )
+from metadata.generated.schema.type.basic import Duration
+from metadata.generated.schema.type.entityReference import EntityReference
+from metadata.generated.schema.type.tagLabel import (
+    LabelType,
+    State,
+    TagLabel,
+    TagSource,
+)
 from metadata.ingestion.ometa.ometa_api import OpenMetadata
+
+from .entities import CatalogueMetadata, DataProductMetadata, TableMetadata
 
 logger = logging.getLogger(__name__)
 
@@ -94,38 +104,48 @@ class CatalogueClient:
 
         return response["fullyQualifiedName"]
 
-    def create_or_update_database(self, name: str, service_fqn: str):
+    def create_or_update_database(self, metadata: CatalogueMetadata, service_fqn: str):
         """
         Define a database.
         There should be one database per data platform catalogue.
         """
         create_db = CreateDatabaseRequest(
-            name=name,
+            name=metadata.name,
+            description=metadata.description,
+            tags=self._generate_tags(metadata.tags),
             service=service_fqn,
         )
         return self._create_or_update_entity(create_db)
 
-    def create_or_update_schema(self, name: str, database_fqn: str):
+    def create_or_update_schema(self, metadata: DataProductMetadata, database_fqn: str):
         """
         Define a database schema.
         There should be one schema per data product.
         """
-        create_schema = CreateDatabaseSchemaRequest(name=name, database=database_fqn)
+        create_schema = CreateDatabaseSchemaRequest(
+            name=metadata.name,
+            description=metadata.description,
+            owner=EntityReference(id=metadata.owner, type="user"),
+            tags=self._generate_tags(metadata.tags),
+            retentionPeriod=self._generate_duration(metadata.retention_period_in_days),
+            database=database_fqn,
+        )
         return self._create_or_update_entity(create_schema)
 
-    def create_or_update_table(
-        self, name: str, column_types: dict[str, str], schema_fqn: str
-    ):
+    def create_or_update_table(self, metadata: TableMetadata, schema_fqn: str):
         """
         Define a table.
         There can be many tables per data product.
         """
         columns = [
             Column(name=k, dataType=DATA_TYPE_MAPPING[v])
-            for k, v in column_types.items()
+            for k, v in metadata.column_types.items()
         ]
         create_table = CreateTableRequest(
-            name=name,
+            name=metadata.name,
+            description=metadata.description,
+            retentionPeriod=self._generate_duration(metadata.retention_period_in_days),
+            tags=self._generate_tags(metadata.tags),
             databaseSchema=schema_fqn,
             columns=columns,
         )
@@ -159,3 +179,17 @@ class CatalogueClient:
         Delete a table.
         """
         raise NotImplementedError
+
+    def _generate_tags(self, tags: list[str]):
+        return [
+            TagLabel(
+                tagFQN=tag,
+                labelType=LabelType.Automated,
+                source=TagSource.Classification,
+                state=State.Confirmed,
+            )
+            for tag in tags
+        ]
+
+    def _generate_duration(self, duration_in_days: int):
+        return Duration.parse_obj(f"P{duration_in_days}D")
