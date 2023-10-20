@@ -63,7 +63,7 @@ jobs:
         with:
           scan-type: fs
           scan-ref: ${{ env.working-directory }}
-          vuln-type: vuln,config,secret
+          scanners: vuln,config,secret
           exit-code: 1
         continue-on-error: true
 
