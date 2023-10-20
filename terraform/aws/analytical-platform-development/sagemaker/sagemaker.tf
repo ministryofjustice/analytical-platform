@@ -35,18 +35,3 @@ import {
   to = aws_sagemaker_domain.studio_domain
   id = "d-7zzp0wnkxqkt"
 }
-
-# # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sagemaker_user_profile
-
-# resource "aws_sagemaker_user_profile" "example" {
-#   domain_id                      = aws_sagemaker_domain.studio_domain.id
-#   user_profile_name              = "example"
-#   single_sign_on_user_value      = "SSO_User_Name"
-#   single_sign_on_user_identifier = "UserName"
-
-#   user_settings {
-#     execution_role = aws_iam_role.sagemaker_studio_execution_role.arn
-#   }
-
-#   tags = tag.local
-# }

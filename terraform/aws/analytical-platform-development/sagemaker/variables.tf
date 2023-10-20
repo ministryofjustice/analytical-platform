@@ -6,7 +6,7 @@ variable "account_ids" {
 variable "auth_mode" {
   description = "The mode of authentication that members use to access the domain. Valid values are IAM and SSO"
   type        = string
-  default     = "SSO"
+  default     = "IAM"
 }
 
 variable "domain_name" {
