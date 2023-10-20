@@ -63,7 +63,6 @@ jobs:
         with:
           scan-type: config
           scan-ref: ${{ env.working-directory }}
-          # scanners: vuln,config,secret
           exit-code: 1
         continue-on-error: true
 
