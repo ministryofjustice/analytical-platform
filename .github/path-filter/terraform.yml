@@ -19,4 +19,5 @@ aws-analytical-platform-baseline: terraform/aws/analytical-platform/baseline/**
 aws-analytical-platform-oidc: terraform/aws/analytical-platform/oidc/**
 github-application-migration: terraform/github/application-migration/**
 github-data-platform: terraform/github/data-platform/**
+github-data-platform-2: terraform/github/data-platform-2/**
 pagerduty: terraform/pagerduty/**

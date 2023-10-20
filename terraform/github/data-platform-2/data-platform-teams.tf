@@ -1,5 +1,10 @@
 locals {
-  users_with_special_github_access = ["julialawrence"]
+  data_platform_all_teams_members = flatten([
+    for team_name, team_data in local.data_platform_teams : [
+      lookup(team_data, "members", [])
+    ]
+  ])
+
   data_platform_teams = {
     "data-platform-user-centered-design" = {
       name           = "data-platform-user-centered-design"
@@ -57,6 +62,9 @@ locals {
         "SimonsMOJ", # Simon Heron
       ]
     }
+  }
+
+  data_platform_cloud_platform_access_teams = {
     "data-platform-cloud-platform-development" = {
       name           = "data-platform-cloud-platform-development"
       description    = "Data Platform Cloud Platform Development"
@@ -81,11 +89,7 @@ locals {
       ]
     }
   }
-  data_platform_all_teams_members = flatten([
-    for team_name, team_data in local.data_platform_teams : [
-      lookup(team_data, "members", [])
-    ]
-  ])
+
   data_platform_apps_and_tools_teams = {
     "data-platform-apps-and-tools-airflow-users" = {
       name           = "data-platform-apps-and-tools-airflow-users"
@@ -107,6 +111,8 @@ locals {
       ]
     }
   }
+
+  users_with_special_github_access = ["julialawrence"]
 }
 
 # Parent Team
@@ -124,6 +130,19 @@ module "data_platform_teams" {
   source = "./modules/team"
 
   for_each = { for team in local.data_platform_teams : team.name => team }
+
+  name                             = each.value.name
+  description                      = each.value.description
+  parent_team_id                   = each.value.parent_team_id
+  members                          = each.value.members
+  users_with_special_github_access = local.users_with_special_github_access
+}
+
+# Cloud Platform Access Teams
+module "data_platform_cloud_platform_access_teams" {
+  source = "./modules/team"
+
+  for_each = { for team in local.data_platform_cloud_platform_access_teams : team.name => team }
 
   name                             = each.value.name
   description                      = each.value.description
