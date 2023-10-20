@@ -10,7 +10,7 @@ weight: 15
 
 ## Data as a Product: Vision
 
-Each Data Product will require a specification ([example here](https://github.com/ministryofjustice/data-platform-products/blob/main/data-products/_docs/product-specification.md), still under refinement) alongside [other defined pieces of descriptive metadata captured at registration](https://github.com/ministryofjustice/data-platform-products/tree/main/data-products#defining-a-data-product).
+Each Data Product will require a specification ([described here](/documentation/data-products/components/product-specification.html), still under refinement) alongside [other defined pieces of descriptive metadata captured at registration](/documentation/data-products#defining-a-data-product).
 
 Data Products:
 
@@ -23,6 +23,8 @@ We want to design the Data Product management process around a user-facing API.
 This API will allow users to register, update, and retrieve information about a Data Product.
 
 The data sent to this API as part of registering or updating a data product will flow through standard Data Lake zones: Landing -> Raw -> Curated.
+
+> **Note**
 
 > Implementation: The infrastructure will be built in the Data Platform's [Modernisation Platform](https://user-guide.modernisation-platform.service.justice.gov.uk/#modernisation-platform) [environment(s)](https://github.com/ministryofjustice/modernisation-platform-environments).
 
