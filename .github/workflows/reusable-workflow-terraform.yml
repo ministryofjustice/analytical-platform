@@ -70,7 +70,7 @@ jobs:
       - name: Check for Static Analysis Override Label
         if: github.ref != 'refs/heads/main'
         id: check_for_static_analysis_override
-        uses: actions/github-script@211cb3fefb35a799baa5156f9321bb774fe56294 # v5.2.0
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
           result-encoding: string
           script: |
@@ -95,7 +95,7 @@ jobs:
       - name: Comment on Pull Request
         if: github.event_name == 'pull_request'
         id: comment
-        uses: actions/github-script@211cb3fefb35a799baa5156f9321bb774fe56294 # v5.2.0
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
           script: |
             const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
@@ -147,6 +147,17 @@ jobs:
             echo "OVERRIDDEN (by label): Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
           elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" == "success" ]]; then
             echo "PASS: Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
+          fi
+
+          if [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+            echo "OVERRIDDEN (Dependabot): Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
+            export failBuild=true
+            echo "FAIL: Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
+            echo "OVERRIDDEN (by label): Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" == "success" ]]; then
+            echo "PASS: Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
           if [[ "${failBuild}" == "true" ]]; then
@@ -248,7 +259,7 @@ jobs:
       - name: Comment on Pull Request
         if: github.event_name == 'pull_request'
         id: comment
-        uses: actions/github-script@211cb3fefb35a799baa5156f9321bb774fe56294 # v5.2.0
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
           script: |
             const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
@@ -312,7 +323,7 @@ jobs:
       - name: Automatic Approval for Dependabot
         if: (github.event_name == 'pull_request' && github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
         id: automatic_approval
-        uses: actions/github-script@211cb3fefb35a799baa5156f9321bb774fe56294 # v5.2.0
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
           github-token: ${{ env.GITHUB_ROBOT_TOKEN }}
           script: |
