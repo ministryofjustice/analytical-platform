@@ -5,7 +5,7 @@ on:
       - "catalogue-v*.*.*"
 jobs:
   poetry-publish:
-    runs-on: [self-hosted, management-infrastructure]
+    runs-on: ubuntu-latest
     permissions:
       # IMPORTANT: this permission is mandatory for trusted publishing
       id-token: write
