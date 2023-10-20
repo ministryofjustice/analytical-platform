@@ -100,6 +100,7 @@ jobs:
           script: |
             const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
             #### Checkov 🛂: \`${{ steps.terraform_static_analysis_checkov.outcome }}\`
+            #### Trivy 🛂: \`${{ steps.terraform_static_analysis_trivy.outcome }}\`
             #### Static Analysis Override Label 🏷️: \`${{ steps.check_for_static_analysis_override.outputs.result }}\`
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`, Marker: \`${{ inputs.component }}_static_analysis\`*`;
