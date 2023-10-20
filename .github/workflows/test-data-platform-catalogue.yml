@@ -5,12 +5,12 @@ on: # yamllint disable-line rule:truthy
     branches:
       - main
     paths:
-      - python-libraries/data-platform-catalogue
+      - python-libraries/data-platform-catalogue/**
   push:
     branches:
       - main
     paths:
-      - python-libraries/data-platform-catalogue
+      - python-libraries/data-platform-catalogue/**
 
 jobs:
   run_tests:
