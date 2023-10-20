@@ -64,7 +64,7 @@ locals {
     }
   }
 
-  data_platform_cloud_platform_access_teams = {
+  data_platform_cloud_platform_teams = {
     "data-platform-cloud-platform-development" = {
       name           = "data-platform-cloud-platform-development"
       description    = "Data Platform Cloud Platform Development"
@@ -139,10 +139,10 @@ module "data_platform_teams" {
 }
 
 # Cloud Platform Access Teams
-module "data_platform_cloud_platform_access_teams" {
+module "data_platform_cloud_platform_teams" {
   source = "./modules/team"
 
-  for_each = { for team in local.data_platform_cloud_platform_access_teams : team.name => team }
+  for_each = { for team in local.data_platform_cloud_platform_teams : team.name => team }
 
   name                             = each.value.name
   description                      = each.value.description
