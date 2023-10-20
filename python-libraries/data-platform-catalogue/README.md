@@ -10,7 +10,7 @@ so that data products are discoverable.
 To install the package using `pip`, run:
 
 ```shell
-pip install data-platform-catalogue
+pip install ministryofjustice-data-platform-catalogue
 ```
 
 ## Topology

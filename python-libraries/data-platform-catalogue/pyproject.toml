@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "data-platform-catalogue"
+name = "ministryofjustice-data-platform-catalogue"
 version = "0.1.0"
 description = "Library to integrate the MoJ data platform with the catalogue component."
 authors = ["MoJ Data Platform Team <data-platform-tech@digital.justice.gov.uk>"]
