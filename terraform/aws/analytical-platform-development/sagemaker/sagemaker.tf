@@ -30,8 +30,3 @@ resource "aws_sagemaker_domain" "studio_domain" {
 
   # single_sign_on_managed_application_instance_id = "YOUR_SSO_APP_INSTANCE_ID"
 }
-
-import {
-  to = aws_sagemaker_domain.studio_domain
-  id = "d-7zzp0wnkxqkt"
-}
