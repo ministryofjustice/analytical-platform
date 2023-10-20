@@ -56,6 +56,17 @@ jobs:
           output_format: cli
         continue-on-error: true
 
+      - name: Trivy
+        if: github.ref != 'refs/heads/main'
+        id: terraform_static_analysis_trivy
+        uses: aquasecurity/trivy-action@fbd16365eb88e12433951383f5e99bd901fc618f # v0.12.0
+        with:
+          scan-type: fs
+          scan-ref: ${{ env.working-directory }}
+          vuln-type: vuln,config,secret
+          exit-code: 1
+        continue-on-error: true
+
       - name: Check for Static Analysis Override Label
         if: github.ref != 'refs/heads/main'
         id: check_for_static_analysis_override
