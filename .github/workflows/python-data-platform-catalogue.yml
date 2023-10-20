@@ -2,7 +2,7 @@ name: Release Data Platform Catalogue package on PyPi when tagged
 on:
   push:
     tags:
-      - "catalogue-v*.*.*"
+      - "python-library-data-platform-catalogue-v*.*.*"
 jobs:
   poetry-publish:
     runs-on: ubuntu-latest
