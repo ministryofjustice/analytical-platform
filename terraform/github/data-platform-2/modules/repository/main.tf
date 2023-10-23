@@ -7,6 +7,17 @@ resource "github_repository" "this" {
   topics      = var.topics
   visibility  = var.visibility
 
+  archived           = var.archived
+  archive_on_destroy = var.archive_on_destroy
+
+  dynamic "template" {
+    for_each = var.use_template ? [1] : []
+    content {
+      owner      = "ministryofjustice"
+      repository = "template-repository"
+    }
+  }
+
   has_discussions      = var.has_discussions
   has_downloads        = var.has_downloads
   has_issues           = var.has_issues
@@ -14,6 +25,8 @@ resource "github_repository" "this" {
   has_wiki             = var.has_wiki
   homepage_url         = var.homepage_url
   vulnerability_alerts = var.vulnerability_alerts
+
+  auto_init = var.auto_init
 
   allow_merge_commit   = var.allow_merge_commit
   merge_commit_title   = var.merge_commit_title
@@ -56,4 +69,34 @@ resource "github_repository" "this" {
       status = var.secret_scanning_push_protection_status
     }
   }
+}
+
+resource "github_repository_dependabot_security_updates" "this" {
+  repository = github_repository.this.id
+
+  enabled = var.dependabot_security_updates_enabled
+}
+
+resource "github_team_repository" "admin" {
+  for_each = var.access != null && var.access.admins != null ? { for team in var.access.admins : team => team } : {}
+
+  team_id    = each.value
+  repository = github_repository.this.name
+  permission = "admin"
+}
+
+resource "github_team_repository" "maintainers" {
+  for_each = var.access != null && var.access.maintainers != null ? { for team in var.access.maintainers : team => team } : {}
+
+  team_id    = each.value
+  repository = github_repository.this.name
+  permission = "maintain"
+}
+
+resource "github_team_repository" "pushers" {
+  for_each = var.access != null && var.access.pushers != null ? { for team in var.access.pushers : team => team } : {}
+
+  team_id    = each.value
+  repository = github_repository.this.name
+  permission = "push"
 }

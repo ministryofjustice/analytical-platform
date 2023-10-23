@@ -16,6 +16,21 @@ variable "visibility" {
   default = "public"
 }
 
+variable "archived" {
+  type    = bool
+  default = false
+}
+
+variable "archive_on_destroy" {
+  type    = bool
+  default = true
+}
+
+variable "use_template" {
+  type    = bool
+  default = true
+}
+
 variable "has_discussions" {
   type    = bool
   default = false
@@ -47,6 +62,11 @@ variable "homepage_url" {
 }
 
 variable "vulnerability_alerts" {
+  type    = bool
+  default = true
+}
+
+variable "auto_init" {
   type    = bool
   default = true
 }
@@ -130,4 +150,22 @@ variable "secret_scanning_status" {
 variable "secret_scanning_push_protection_status" {
   type    = string
   default = "enabled"
+}
+
+variable "dependabot_security_updates_enabled" {
+  type    = bool
+  default = true
+}
+
+variable "access" {
+  type = object({
+    admins      = optional(list(string))
+    maintainers = optional(list(string))
+    pushers     = optional(list(string))
+  })
+  default = {
+    admins      = []
+    maintainers = []
+    pushers     = []
+  }
 }

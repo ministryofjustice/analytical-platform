@@ -2,8 +2,9 @@ locals {
   data_platform_repositories = {
     "data-platform" = {
       name            = "data-platform"
-      description     = "Data Platform Core Repository"
+      description     = "Data Platform"
       topics          = ["ministryofjustice", "data-platform"]
+      use_template    = false
       has_discussions = true
       has_projects    = true
       homepage_url    = "https://technical-documentation.data-platform.service.justice.gov.uk"
@@ -14,6 +15,47 @@ locals {
           branch = "gh-pages"
           path   = "/docs"
         }
+      }
+      access = {
+        admins      = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        maintainers = [module.data_platform_teams["data-platform-labs"].id]
+        pushers     = [module.data_platform_team.id]
+      }
+    }
+    "data-platform-products" = {
+      name        = "data-platform-products"
+      description = "Data Platform Products"
+      topics      = ["ministryofjustice", "data-platform"]
+      access = {
+        admins      = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        maintainers = [module.data_platform_teams["data-platform-labs"].id]
+        pushers     = [module.data_platform_team.id]
+      }
+    }
+    "data-platform-support" = {
+      name        = "data-platform-support"
+      description = "Data Platform Support"
+      topics      = ["ministryofjustice", "data-platform"]
+      access = {
+        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
+      }
+    }
+    "data-platform-user-guidance" = {
+      name          = "data-platform-user-guidance"
+      description   = "Data Platform User Guidance"
+      topics        = ["ministryofjustice", "data-platform"]
+      pages_enabled = true
+      pages_configuration = {
+        cname = "data-platform.service.justice.gov.uk"
+        source = {
+          branch = "main"
+          path   = "/"
+        }
+      }
+      access = {
+        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
       }
     }
   }
@@ -29,6 +71,10 @@ module "data_platform_repositories" {
   topics      = lookup(each.value, "topics", [])
   visibility  = lookup(each.value, "visibility", "public")
 
+  archived           = lookup(each.value, "archived", false)
+  archive_on_destroy = lookup(each.value, "archive_on_destroy", true)
+
+  use_template         = lookup(each.value, "use_template", true)
   has_discussions      = lookup(each.value, "has_discussions", false)
   has_downloads        = lookup(each.value, "has_downloads", false)
   has_issues           = lookup(each.value, "has_issues", true)
@@ -36,6 +82,8 @@ module "data_platform_repositories" {
   has_wiki             = lookup(each.value, "has_wiki", false)
   homepage_url         = lookup(each.value, "homepage_url", "https://data-platform.service.justice.gov.uk")
   vulnerability_alerts = lookup(each.value, "vulnerability_alerts", true)
+
+  auto_init = lookup(each.value, "auto_init", true)
 
   allow_merge_commit   = lookup(each.value, "allow_merge_commit", false)
   merge_commit_title   = lookup(each.value, "merge_commit_title", "MERGE_MESSAGE")
@@ -56,4 +104,8 @@ module "data_platform_repositories" {
   advanced_security_status               = lookup(each.value, "advanced_security_status", "enabled")
   secret_scanning_status                 = lookup(each.value, "secret_scanning_status", "enabled")
   secret_scanning_push_protection_status = lookup(each.value, "secret_scanning_push_protection_status", "enabled")
+
+  dependabot_security_updates_enabled = lookup(each.value, "dependabot_security_updates_enabled", true)
+
+  access = lookup(each.value, "access", null)
 }
