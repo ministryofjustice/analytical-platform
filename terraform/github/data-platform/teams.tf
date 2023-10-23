@@ -113,10 +113,7 @@ locals {
     "sivabathina2"
   ]
 
-  data_engineering_aws_developer_members = [
-    "parminder-thindal-moj",
-    "moj-samuelweller"
-  ]
+  data_engineering_aws_developer_members = []
 
   data_platform_core_infrastructure_maintainers = [
     "bagg3rs", # Richard Baguley
