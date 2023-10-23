@@ -27,7 +27,8 @@ pip install ministryofjustice-data-platform-catalogue
 ```python
 from data_platform_catalogue import (
   CatalogueClient, CatalogueMetadata,
-  DataProductMetadata, TableMetadata
+  DataProductMetadata, TableMetadata,
+  CatalogueError
 )
 
 client = CatalogueClient(
@@ -61,8 +62,11 @@ table = TableMetadata(
   retention_period_in_days = 365
 )
 
-service_fqn = client.create_or_update_database_service(name="data_platform")
-database_fqn = client.create_or_update_database(metadata=catalogue, service_fqn=service_fqn)
-schema_fqn = client.create_or_update_schema(metadata=data_product, database_fqn=database_fqn)
-table_fqn = client.create_or_update_table(metadata=table, schema_fqn=schema_fqn)
+try:
+  service_fqn = client.create_or_update_database_service(name="data_platform")
+  database_fqn = client.create_or_update_database(metadata=catalogue, service_fqn=service_fqn)
+  schema_fqn = client.create_or_update_schema(metadata=data_product, database_fqn=database_fqn)
+  table_fqn = client.create_or_update_table(metadata=table, schema_fqn=schema_fqn)
+except CatalogueError:
+  print("oh no")
 ```

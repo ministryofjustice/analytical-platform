@@ -1,6 +1,7 @@
 import json
 import logging
 
+from http import HTTPStatus
 from metadata.generated.schema.api.data.createDatabase import CreateDatabaseRequest
 from metadata.generated.schema.api.data.createDatabaseSchema import (
     CreateDatabaseSchemaRequest,
@@ -25,7 +26,7 @@ from metadata.generated.schema.type.tagLabel import (
     TagLabel,
     TagSource,
 )
-from metadata.ingestion.ometa.ometa_api import OpenMetadata
+from metadata.ingestion.ometa.ometa_api import OpenMetadata, APIError
 
 from .entities import CatalogueMetadata, DataProductMetadata, TableMetadata
 
@@ -50,12 +51,28 @@ DATA_TYPE_MAPPING = {
 }
 
 
+class CatalogueError(Exception):
+    """
+    Base class for all errors.
+    """
+
+
+class ReferencedEntityMissing(CatalogueError):
+    """
+    A referenced entity (such as a user or tag) does not yet exist when
+    attempting to create a new metadata resource in the catalogue.
+    """
+
+
 class CatalogueClient:
     """
     Client for pushing metadata to the catalogue.
 
     Tables in the catalogue are arranged into the following hierarchy:
     DatabaseService -> Database -> Schema -> Table
+
+    If there is a problem communicating with the catalogue, methods will raise an instance of
+    CatalogueError.
     """
 
     def __init__(
@@ -153,7 +170,17 @@ class CatalogueClient:
 
     def _create_or_update_entity(self, data) -> str:
         logger.info(f"Creating {data.json()}")
-        response = self.metadata.create_or_update(data=data)
+
+        try:
+            response = self.metadata.create_or_update(data=data)
+        except APIError as exception:
+            if exception.status_code == HTTPStatus.NOT_FOUND:
+                raise ReferencedEntityMissing from exception
+            else:
+                raise CatalogueError from exception
+        except Exception as exception:
+            raise CatalogueError from exception
+
         return response.dict()["fullyQualifiedName"]
 
     def delete_database_service(self, fqn: str):

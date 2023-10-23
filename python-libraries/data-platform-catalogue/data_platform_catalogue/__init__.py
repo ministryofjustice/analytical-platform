@@ -1,4 +1,8 @@
-from .client import CatalogueClient  # noqa: F401
+from .client import (
+    CatalogueClient,
+    CatalogueError,
+    ReferencedEntityMissing,
+)  # noqa: F401
 from .entities import (
     CatalogueMetadata,
     DataProductMetadata,

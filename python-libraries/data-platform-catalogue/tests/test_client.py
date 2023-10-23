@@ -1,5 +1,5 @@
 import pytest
-from data_platform_catalogue.client import CatalogueClient
+from data_platform_catalogue.client import CatalogueClient, ReferencedEntityMissing
 from data_platform_catalogue.entities import (
     CatalogueMetadata,
     DataProductMetadata,
@@ -247,3 +247,15 @@ class TestCatalogueClient:
             "fileFormat": None,
         }
         assert fqn == "some-table"
+
+    def test_404_handling(self, client, requests_mock, table):
+        requests_mock.put(
+            "http://example.com/api/v1/tables",
+            status_code=404,
+            json={"code": "something", "message": "something"},
+        )
+
+        with pytest.raises(ReferencedEntityMissing):
+            client.create_or_update_table(
+                metadata=table, schema_fqn="data-platform.data-product.schema"
+            )
