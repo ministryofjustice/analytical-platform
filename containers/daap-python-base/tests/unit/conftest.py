@@ -10,9 +10,6 @@ from moto import mock_s3
 
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
 
-from data_platform_logging import DataPlatformLogger  # noqa E402
-from data_platform_paths import DataProductElement  # noqa E402
-
 os.environ["AWS_ACCESS_KEY_ID"] = "testing"
 os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
 os.environ["AWS_SECURITY_TOKEN"] = "testing"
@@ -21,6 +18,9 @@ os.environ["AWS_LAMBDA_FUNCTION_NAME"] = "test_lambda"
 os.environ["BUCKET_NAME"] = "bucket"
 os.putenv("TZ", "Europe/London")
 time.tzset()
+
+from data_platform_logging import DataPlatformLogger  # noqa E402
+from data_platform_paths import DataProductElement  # noqa E402
 
 
 @pytest.fixture
