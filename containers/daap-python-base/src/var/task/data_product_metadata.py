@@ -98,7 +98,20 @@ def get_data_product_specification_path(
 
 
 class BaseJsonSchema:
-    """base class for operations on json type metadata and schema for data products"""
+    """
+    Base class for operations on json type metadata and schema for data products.
+
+    Parameters:
+    - bucket_path should be the path to the latest version, or 1.0.0 if no version exists
+    - input_data is optional data to be validated and written
+
+    Attributes:
+    - exists: does *any* version of this schema exist?
+    - valid: is the input_data valid?
+    - version: the version string corresponding to the `bucket_path`
+    - write_bucket / latest_version_key: the bucket and key components of `bucket_path`, respectively
+    - latest_version_saved_data: the metadata stored at `bucket_path`
+    """
 
     def __init__(
         self,
@@ -118,6 +131,7 @@ class BaseJsonSchema:
         self.exists = self._check_a_version_exists()
         self.write_bucket = bucket_path.bucket
         self.latest_version_key = bucket_path.key
+        self.latest_version_saved_data = None
         self.version = bucket_path.key.split("/")[1]
         if input_data is not None:
             self.validate(input_data)
