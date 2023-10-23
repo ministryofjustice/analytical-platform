@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import json
 import traceback
 from copy import deepcopy
-from typing import Dict
+from enum import Enum
+from typing import Dict, NamedTuple
 
 import boto3
 import botocore
@@ -47,6 +50,29 @@ glue_csv_table_input_template = {
         "Parameters": {"classification": "csv", "skip.header.line.count": "1"},
     },
 }
+
+
+class Version(NamedTuple):
+    """
+    Helper object for manipulating version strings.
+    """
+
+    major: int
+    minor: int
+
+    def __str__(self):
+        return f"v{self.major}.{self.minor}"
+
+    @staticmethod
+    def parse(version_str) -> Version:
+        major, minor = [int(i) for i in version_str.lstrip("v").split(".")]
+        return Version(major, minor)
+
+    def increment_major(self) -> Version:
+        return Version(self.major + 1, self.minor)
+
+    def increment_minor(self) -> Version:
+        return Version(self.major, self.minor + 1)
 
 
 def format_table_schema(glue_schema: dict) -> dict:
@@ -95,6 +121,21 @@ def get_data_product_specification_path(
         path = specification_path(spec_type, version)
 
     return path.uri
+
+
+class UpdateType(Enum):
+    """
+    Whether a schema or data product update represents a major or minor update to the data product.
+
+    Minor updates are those which are backwards compatable, e.g. adding a new table.
+
+    Major updates are those which may require data consumers to update their code,
+    e.g. if tables or fields are removed.
+    """
+
+    Unchanged = 0
+    MinorUpdate = 1
+    MajorUpdate = 2
 
 
 class BaseJsonSchema:
@@ -162,6 +203,16 @@ class BaseJsonSchema:
             )
             return True
 
+    def generate_next_version_string(self, major: bool = False) -> str:
+        """
+        Generate the next version
+        """
+        current_version = Version.parse(self.version)
+        if major:
+            return str(current_version.increment_major())
+        else:
+            return str(current_version.increment_minor())
+
     def validate(
         self,
         data_to_validate: dict,
@@ -227,6 +278,25 @@ class BaseJsonSchema:
         else:
             self.logger.error("There is no metadata to load")
         return self
+
+    def changed_fields(self) -> set[str]:
+        """
+        Return a set of fields that have changed between the last load
+        and the input_data.
+        """
+        latest_version = self.latest_version_saved_data
+        new_version = self.data
+        if not latest_version or not new_version:
+            return set()
+
+        changed_fields = set()
+        for field in new_version:
+            if new_version[field] == latest_version[field]:
+                continue
+
+            changed_fields.add(field)
+
+        return changed_fields
 
 
 class DataProductSchema(BaseJsonSchema):
@@ -346,22 +416,71 @@ class DataProductMetadata(BaseJsonSchema):
     schema json files relating to data products as a whole
     """
 
-    # returns path of latest metadata or v1 if it doesn't exist
+    MINOR_UPDATE_FIELDS = {
+        "description",
+        "email",
+        "dataProductOwner",
+        "dataProductOwnerDisplayName",
+    }
+
     def __init__(
         self,
         data_product_name: str,
         logger: DataPlatformLogger,
         input_data: dict | None,
+        version: str | None = None,
     ):
-        bucket_path = DataProductConfig(data_product_name).metadata_path()
+        bucket_path = DataProductConfig(data_product_name).metadata_path(
+            version=version
+        )
 
         super().__init__(
+            json_type=JsonSchemaName("metadata"),
             data_product_name=data_product_name,
             logger=logger,
-            json_type=JsonSchemaName("metadata"),
             bucket_path=bucket_path,
             input_data=input_data,
         )
+
+    def create_new_version(self) -> DataProductMetadata | None:
+        """
+        Create a new version of the data product (minor update only for now)
+        """
+        if not self.valid:
+            return None
+
+        self.load()
+        state = self._detect_update_type()
+
+        if state == UpdateType.MinorUpdate:
+            new_version = self.generate_next_version_string()
+            new_metadata = DataProductMetadata(
+                data_product_name=self.data_product_name,
+                logger=self.logger,
+                input_data=self.data,
+                version=new_version,
+            )
+            new_metadata.write_json_to_s3(
+                DataProductConfig(self.data_product_name).metadata_path(new_version).key
+            )
+            return new_metadata
+
+        return None
+
+    def _detect_update_type(self) -> UpdateType:
+        """
+        Figure out whether changes to the input data represent a major or minor update.
+        """
+        if not self.exists or not self.valid:
+            return UpdateType.Unchanged
+
+        changed_fields = self.changed_fields()
+        if not changed_fields:
+            return UpdateType.Unchanged
+        if changed_fields.difference(self.MINOR_UPDATE_FIELDS):
+            return UpdateType.MajorUpdate
+        else:
+            return UpdateType.MinorUpdate
 
     def add_auto_generated_metadata(self):
         """adds key value pairs to metadata that are not given by a user."""

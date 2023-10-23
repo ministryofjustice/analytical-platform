@@ -9,11 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2023-10-23
+
+## Added
+
+- `DataProductMetadata.create_new_version` method
+
 ## Changed
 
 - Moved `format_error_response` into data_platform_api_responses
 - `format_response_json` now accepts a dict `body` argument instead of
   a json encoded `json_body` string
+- The `.write_json_to_s3` method of `DataProductMetadata`
+  and `DataProductSchema` no longer requires a path.
 
 ## [4.0.1] - 2023-10-18
 

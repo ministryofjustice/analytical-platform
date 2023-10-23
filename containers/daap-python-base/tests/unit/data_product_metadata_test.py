@@ -407,3 +407,44 @@ def test_format_table_schema(glue_schema, expected):
     out_schema = format_table_schema(glue_schema)
 
     assert out_schema == expected
+
+
+class TestDataProductUpload:
+    @pytest.fixture(autouse=True)
+    def setup(self, s3_client, region_name, monkeypatch):
+        bucket_name = os.getenv("METADATA_BUCKET")
+        setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
+        load_test_data_product_metadata(bucket_name, s3_client)
+        load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
+
+    def test_create_minor_version(
+        self,
+    ):
+        input_data = dict(**test_metadata_pass)
+        input_data["description"] = "New description"
+
+        loaded_metadata = DataProductMetadata(
+            test_metadata_pass["name"],
+            logging.getLogger(),
+            input_data=input_data,
+        )
+
+        new_metadata = loaded_metadata.create_new_version()
+
+        assert new_metadata.version == "v1.1"
+
+        assert new_metadata.load().latest_version_saved_data == input_data
+
+    def test_major_update_not_allowed_yet(self):
+        input_data = dict(**test_metadata_pass)
+        input_data["retentionPeriod"] = 100
+
+        loaded_metadata = DataProductMetadata(
+            test_metadata_pass["name"],
+            logging.getLogger(),
+            input_data=input_data,
+        )
+
+        new_metadata = loaded_metadata.create_new_version()
+
+        assert new_metadata is None
