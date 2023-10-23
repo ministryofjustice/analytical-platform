@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Changed
+
+- Moved `format_error_response` into data_platform_api_responses
+- `format_response_json` now accepts a dict `body` argument instead of
+  a json encoded `json_body` string
+
 ## [4.0.1] - 2023-10-18
 
 ### Added
