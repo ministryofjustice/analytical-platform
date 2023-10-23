@@ -2,9 +2,9 @@ resource "aws_sagemaker_domain" "studio_domain" {
   domain_name = var.domain_name
   auth_mode   = var.auth_mode
 
-  # default_space_settings {
-  #   execution_role = aws_iam_role.sagemaker_studio_execution_role.arn
-  # }
+  default_space_settings {
+    execution_role = aws_iam_role.sagemaker_studio_execution_role.arn
+  }
 
   default_user_settings {
     execution_role  = aws_iam_role.sagemaker_studio_execution_role.arn
