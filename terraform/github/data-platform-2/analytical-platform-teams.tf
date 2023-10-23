@@ -35,6 +35,31 @@ locals {
       ]
     }
   }
+
+  analytical_platform_modernisation_platform_teams = {
+    "analytical-platform-modernisation-platform-administrator" = {
+      name           = "analytical-platform-modernisation-platform-administrator"
+      description    = "Analytical Platform Modernisation Platform Administrator"
+      parent_team_id = module.analytical_platform_team.id
+      members = flatten([
+        local.data_platform_teams["data-platform-apps-and-tools"].members
+      ])
+    },
+    "analytical-platform-data-engineering-modernisation-platform-data-engineer" = {
+      name           = "analytical-platform-data-engineering-modernisation-platform-data-engineer"
+      description    = "Analytical Platform Data Engineering Modernisation Platform Data Engineer"
+      parent_team_id = module.analytical_platform_team.id
+      members = flatten([
+        # local.data_engineering_team_members
+      ])
+    }
+    "analytical-platform-data-engineering-modernisation-platform-developer" = {
+      name           = "analytical-platform-data-engineering-modernisation-platform-developer"
+      description    = "Analytical Platform Data Engineering Modernisation Platform Developer"
+      parent_team_id = module.analytical_platform_team.id
+      members        = flatten([])
+    }
+  }
 }
 
 module "analytical_platform_team" {
@@ -51,6 +76,19 @@ module "analytical_platform_teams" {
   source = "./modules/team"
 
   for_each = { for team in local.analytical_platform_teams : team.name => team }
+
+  name                             = each.value.name
+  description                      = each.value.description
+  parent_team_id                   = each.value.parent_team_id
+  members                          = each.value.members
+  users_with_special_github_access = local.users_with_special_github_access
+}
+
+# Modernisation Platform Access Teams
+module "analytical_platform_modernisation_platform_teams" {
+  source = "./modules/team"
+
+  for_each = { for team in local.analytical_platform_modernisation_platform_teams : team.name => team }
 
   name                             = each.value.name
   description                      = each.value.description

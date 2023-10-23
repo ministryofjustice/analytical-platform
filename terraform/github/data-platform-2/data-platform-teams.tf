@@ -144,7 +144,7 @@ locals {
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
-    },
+    }
   }
 
   data_platform_observability_platform_teams = {
