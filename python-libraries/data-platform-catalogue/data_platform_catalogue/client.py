@@ -1,7 +1,7 @@
 import json
 import logging
-
 from http import HTTPStatus
+
 from metadata.generated.schema.api.data.createDatabase import CreateDatabaseRequest
 from metadata.generated.schema.api.data.createDatabaseSchema import (
     CreateDatabaseSchemaRequest,
@@ -26,7 +26,7 @@ from metadata.generated.schema.type.tagLabel import (
     TagLabel,
     TagSource,
 )
-from metadata.ingestion.ometa.ometa_api import OpenMetadata, APIError
+from metadata.ingestion.ometa.ometa_api import APIError, OpenMetadata
 
 from .entities import CatalogueMetadata, DataProductMetadata, TableMetadata
 
