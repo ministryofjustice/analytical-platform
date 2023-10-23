@@ -1,0 +1,29 @@
+governance:
+  # data-controller - who ultimately owns / controls this data (this could be another govenment department)
+  data-controller: "moj"
+  review-after: "2023-12-31"
+  senior-information-risk-owner: "information.asset.owner@justice.gov.uk"
+  # Protective marking should be one of "Offical", "Official Sensitive", or "None" for published / publicly availble data.
+  # DO NOT SEND SECRET OR TOP SECRET DATA TO THE PLATFORM.
+  protective-marking: "None"
+
+  retention:
+    # retention-strategy: "date-uploaded", "data-date-key", or "forever"
+    retention-strategy: "forever"
+    # retention-unit: months or years
+    retention-unit: "years"
+    retention-value: 25
+
+  update-frequency:
+    # update-unit: days, weeks, months
+    update-unit: "months"
+    update-value: 3
+
+  lineage:
+    # E.g. HMCTS, HMPPS, LAA, OPG, HQ, ALB, OGD
+    organisational-unit: "HMPPS"
+    # Specify source OR parent-products
+    # for example Prison NOMIS, Delius, XHibit or a URL
+    source: "https://www.gov.uk/government/collections/offender-management-statistics-quarterly"
+    # If your data product is based on other data products, please specify their names here.
+    parent-products: ["parent_product", "other_parent_product"]

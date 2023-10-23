@@ -1,0 +1,21 @@
+specification:
+  name: "example_data_product"
+  # A good title and description will help users find your data
+  title: "Example Data Product"
+  description: "Example Data Product contains published prison population from 2001 to present"
+  # tags are an array of quoted strings to further aid discoverability - e.g. ["keyword1", "keyword2", "keyword3"]
+  product-tags: ["HMPPS", "prisons", "published data", "national statistics"]
+  value-proposition: "Regurlarly updated published prison population figures, useful for combining with other datasets for contextualisation"
+  # status: please specify draft, development, testing, production, sunset, retired
+  status: "production"
+  # limitations are optional, but you might want to tell users what they CAN'T do with this data
+  limitations:
+  # we recommend you version the data product. adding new data does not change the version, but changing the data definition should.
+
+  support:
+    # We require at least one method of contact - email, Slack channel or MS Teams (can be a team or individual's email address)
+    owner-email: "data-platform@digital.justice.gov.uk"
+    owner-ms-teams:
+    owner-slack-channel: "data-platform"
+    # If you have written supplementary guidance to that you wish to share on the Platform (SharePoint, GitHub, Confluence, Google doc...) add the URL here
+    product-guidance-url:

@@ -1,6 +1,10 @@
+> **NOTE**
+
+> Data transformations (and cleansing) are not currently captured as part of the Data Product metadata. We plan to capture this information, though the structure and content of these metadata may substantially change. This data may be captured as part of the lineage information for data processed using dbt-like tools.
+
 # Describing data cleansing
 
-When describing what has happened to your data before users get to interact with it, you should describe any data cleaning processes which you have used, either at a table or column level. Cleansing should be documented in the [`03-transformations.yml`](/documentation/data-products/example-data-product/03-transformations.yml) file in your data product definition folder.
+When describing what has happened to your data before users get to interact with it, you should describe any data cleaning processes which you have used, either at a table or column level. Cleansing should be documented in the [`transformations`](/documentation/data-products/example_data_product/03-transformations.yml) section of your data product metadata.
 
 See also our guidance on describing [transformations](data-transformation-definitions.html) your data may have applied to it.
 
@@ -8,7 +12,7 @@ See also our guidance on describing [transformations](data-transformation-defini
 
 These have been derived from the contributions made to the [Data Management Wiki](https://datamanagement.wiki/data_quality_management_system/data_cleansing). <!--Some of these contain US spellings - we also accept the UK equivalent (for example "normalisation" and "normalization" are both accepted).-->
 
-Please use the identifier (ID) for the cleaning types when populating your `03-transformations.yml` file.
+Please use the identifier (ID) for the cleaning types when populating your `transformations` section.
 
 | ID | Method | Description |
 | - | - | - |
@@ -30,7 +34,7 @@ Please use the identifier (ID) for the cleaning types when populating your `03-t
 
 ## Examples
 
-You have a table called `prison_releases` defined in `02-data-dictionary.yml` which contains anonymised, row-level data from a case management system about individuals released from prison. Since an individual can be "released" from more than one prison sentence at the same time, or because of data entry errors, the raw data may appear to, or actually, contain duplicates. You know your users only want a single record per release, so you choose to de-duplicate the data by deleting all but one instance of each duplicate. This is a table level cleaning process which would be documented in `03-transformations.yml` like this:
+You have a table called `prison_releases` defined in your Data Product's Table Schema which contains anonymised, row-level data from a case management system about individuals released from prison. Since an individual can be "released" from more than one prison sentence at the same time, or because of data entry errors, the raw data may appear to, or actually, contain duplicates. You know your users only want a single record per release, so you choose to de-duplicate the data by deleting all but one instance of each duplicate. This is a table level cleaning process which would be documented in `transformations` like this:
 
 ```yaml
 cleansing:
@@ -74,11 +78,11 @@ cleansing:
            description: "Replace data entry shorthand with expanded text (e.g. 'VL' => 'very late'); or 'unknown'"
 ```
 
-Our [example data product](/documentation/data-products/example-data-product) contains a few more examples.
+Our [example data product](/documentation/data-products/example_data_product) contains a few more examples.
 
 ### Data with no cleansing applied
 
-If your data has not undergone any cleansing, we suggest you explicitly inform users of this by adding `type: none` to make this clear to users. Otherwise we will assume there has been undocumented cleansing. An exception is made for tables [defined as reference data](/documentation/data-products/example-data-product/02-data-dictionary.yml#L67) - here we assume no cleansing has been applied if there is no cleansing specified.
+If your data has not undergone any cleansing, we suggest you explicitly inform users of this by adding `type: none` to make this clear to users. Otherwise we will assume there has been undocumented cleansing. An exception is made for tables [defined as reference data](/documentation/data-products/example_data_product/02-data-dictionary.yml#L67) - here we assume no cleansing has been applied if there is no cleansing specified.
 
 ## Considerations
 
@@ -96,4 +100,4 @@ If you wish to suggest additions or improvements to the cleansing types, please 
 
 [Index of documention for data product defintion](/documentation/data-products#defining-a-data-product)
 
-[Example data product](/documentation/data-products/example-data-product)
+[Example data product](/documentation/data-products/example_data_product)
