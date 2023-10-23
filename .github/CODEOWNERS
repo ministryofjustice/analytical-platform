@@ -4,3 +4,4 @@
 /containers/daap-* @ministryofjustice/data-platform-labs
 /scripts/simulated-data-producer/ @ministryofjustice/data-platform-labs
 /terraform/ @ministryofjustice/data-platform-core-infra
+/python-libraries/data-platform-catalogue/ @ministryofjustice/data-platform-labs
