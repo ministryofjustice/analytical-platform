@@ -1,5 +1,10 @@
 import pytest
-from data_platform_catalogue.client import CatalogueClient
+from data_platform_catalogue.client import CatalogueClient, ReferencedEntityMissing
+from data_platform_catalogue.entities import (
+    CatalogueMetadata,
+    DataProductMetadata,
+    TableMetadata,
+)
 
 
 class TestCatalogueClient:
@@ -58,6 +63,36 @@ class TestCatalogueClient:
         }
 
     @pytest.fixture
+    def catalogue(self):
+        return CatalogueMetadata(
+            name="data_platform",
+            description="All data products hosted on the data platform",
+        )
+
+    @pytest.fixture
+    def data_product(self):
+        return DataProductMetadata(
+            name="my_data_product",
+            description="bla bla",
+            version="v1.0.0",
+            owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+            email="justice@justice.gov.uk",
+            retention_period_in_days=365,
+            domain="legal-aid",
+            dpia_required=False,
+            tags=["test"],
+        )
+
+    @pytest.fixture
+    def table(self):
+        return TableMetadata(
+            name="my_table",
+            description="bla bla",
+            column_types={"foo": "string", "bar": "int"},
+            retention_period_in_days=365,
+        )
+
+    @pytest.fixture
     def client(self, requests_mock):
         requests_mock.get(
             "http://example.com/api/v1/system/version",
@@ -82,20 +117,20 @@ class TestCatalogueClient:
         }
         assert fqn == "some-service"
 
-    def test_create_database(self, client, requests_mock):
+    def test_create_database(self, client, requests_mock, catalogue):
         requests_mock.put(
             "http://example.com/api/v1/databases",
             json=self.mock_database_response("some-db"),
         )
 
         fqn = client.create_or_update_database(
-            name="data-product", service_fqn="data-platform"
+            metadata=catalogue, service_fqn="data-platform"
         )
         assert requests_mock.last_request.json() == {
-            "name": "data-product",
+            "name": "data_platform",
             "displayName": None,
-            "description": None,
-            "tags": None,
+            "description": "All data products hosted on the data platform",
+            "tags": [],
             "owner": None,
             "service": "data-platform",
             "default": False,
@@ -105,41 +140,59 @@ class TestCatalogueClient:
         }
         assert fqn == "some-db"
 
-    def test_create_schema(self, client, requests_mock):
+    def test_create_schema(self, client, requests_mock, data_product):
         requests_mock.put(
             "http://example.com/api/v1/databaseSchemas",
             json=self.mock_schema_response("some-schema"),
         )
 
-        fqn = client.create_or_update_schema(name="schema", database_fqn="data-product")
+        fqn = client.create_or_update_schema(
+            metadata=data_product, database_fqn="data-product"
+        )
         assert requests_mock.last_request.json() == {
-            "name": "schema",
+            "name": "my_data_product",
             "displayName": None,
-            "description": None,
-            "owner": None,
+            "description": "bla bla",
+            "owner": {
+                "deleted": None,
+                "description": None,
+                "displayName": None,
+                "fullyQualifiedName": None,
+                "href": None,
+                "id": "2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+                "name": None,
+                "type": "user",
+            },
             "database": "data-product",
-            "tags": None,
-            "retentionPeriod": None,
+            "tags": [
+                {
+                    "description": None,
+                    "href": None,
+                    "labelType": "Automated",
+                    "source": "Classification",
+                    "state": "Confirmed",
+                    "tagFQN": "test",
+                }
+            ],
+            "retentionPeriod": "P365D",
             "extension": None,
             "sourceUrl": None,
         }
         assert fqn == "some-schema"
 
-    def test_create_table(self, client, requests_mock):
+    def test_create_table(self, client, requests_mock, table):
         requests_mock.put(
             "http://example.com/api/v1/tables",
             json=self.mock_table_response("some-table"),
         )
 
         fqn = client.create_or_update_table(
-            name="table",
-            schema_fqn="data-platform.data-product.schema",
-            column_types={"foo": "string", "bar": "int"},
+            metadata=table, schema_fqn="data-platform.data-product.schema"
         )
         assert requests_mock.last_request.json() == {
-            "name": "table",
+            "name": "my_table",
             "displayName": None,
-            "description": None,
+            "description": "bla bla",
             "tableType": None,
             "columns": [
                 {
@@ -186,11 +239,23 @@ class TestCatalogueClient:
             "tableProfilerConfig": None,
             "owner": None,
             "databaseSchema": "data-platform.data-product.schema",
-            "tags": None,
+            "tags": [],
             "viewDefinition": None,
-            "retentionPeriod": None,
+            "retentionPeriod": "P365D",
             "extension": None,
             "sourceUrl": None,
             "fileFormat": None,
         }
         assert fqn == "some-table"
+
+    def test_404_handling(self, client, requests_mock, table):
+        requests_mock.put(
+            "http://example.com/api/v1/tables",
+            status_code=404,
+            json={"code": "something", "message": "something"},
+        )
+
+        with pytest.raises(ReferencedEntityMissing):
+            client.create_or_update_table(
+                metadata=table, schema_fqn="data-platform.data-product.schema"
+            )
