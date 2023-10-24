@@ -150,15 +150,15 @@ class BaseJsonSchema:
     Base class for operations on json type metadata and schema for data products.
 
     Parameters:
-    - bucket_path should be the path to the latest version, or 1.0.0 if no version exists
+    - latest_version_path should be the path to the latest version, or 1.0.0 if no version exists
     - input_data is optional data to be validated and written
 
     Attributes:
     - exists: does *any* version of this schema exist?
     - valid: is the input_data valid?
-    - version: the version string corresponding to the `bucket_path`
-    - write_bucket / latest_version_key: the bucket and key components of `bucket_path`, respectively
-    - latest_version_saved_data: the metadata stored at `bucket_path`
+    - version: the version string corresponding to the `latest_version_path`
+    - write_bucket / latest_version_key: the bucket and key components of `latest_version_path`, respectively
+    - latest_version_saved_data: the metadata stored at `latest_version_path`
     """
 
     def __init__(
@@ -166,7 +166,7 @@ class BaseJsonSchema:
         data_product_name: str,
         logger: DataPlatformLogger,
         json_type: JsonSchemaName,
-        bucket_path: BucketPath,
+        latest_version_path: BucketPath,
         input_data: dict | None,
         table_name: str | None = None,
     ):
@@ -177,10 +177,10 @@ class BaseJsonSchema:
         self.valid = False
         self.type = json_type
         self.exists = self._check_a_version_exists()
-        self.write_bucket = bucket_path.bucket
-        self.latest_version_key = bucket_path.key
+        self.write_bucket = latest_version_path.bucket
+        self.latest_version_key = latest_version_path.key
         self.latest_version_saved_data = None
-        self.version = bucket_path.key.split("/")[1]
+        self.version = latest_version_path.key.split("/")[1]
         if input_data is not None:
             self.validate(input_data)
 
@@ -320,13 +320,15 @@ class DataProductSchema(BaseJsonSchema):
         input_data: dict | None,
     ):
         # returns path of latest schema or v1 if it doesn't exist
-        bucket_path = DataProductConfig(name=data_product_name).schema_path(table_name)
+        latest_version_path = DataProductConfig(name=data_product_name).schema_path(
+            table_name
+        )
 
         super().__init__(
             data_product_name=data_product_name,
             logger=logger,
             json_type=JsonSchemaName("schema"),
-            bucket_path=bucket_path,
+            latest_version_path=latest_version_path,
             input_data=input_data,
             table_name=table_name,
         )
@@ -442,17 +444,14 @@ class DataProductMetadata(BaseJsonSchema):
         data_product_name: str,
         logger: DataPlatformLogger,
         input_data: dict | None,
-        version: str | None = None,
     ):
-        bucket_path = DataProductConfig(data_product_name).metadata_path(
-            version=version
-        )
+        latest_version_path = DataProductConfig(data_product_name).metadata_path()
 
         super().__init__(
             json_type=JsonSchemaName("metadata"),
             data_product_name=data_product_name,
             logger=logger,
-            bucket_path=bucket_path,
+            latest_version_path=latest_version_path,
             input_data=input_data,
         )
 
