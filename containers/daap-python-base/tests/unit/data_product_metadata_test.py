@@ -13,6 +13,7 @@ from data_product_metadata import (
     DataProductMetadata,
     DataProductSchema,
     InvalidUpdate,
+    VersionCreator,
     format_table_schema,
 )
 
@@ -176,6 +177,15 @@ def load_test_data_product_metadata(
         Body=json_data,
         Bucket=bucket_name,
         Key="test_product/v1.0/metadata.json",
+    )
+
+
+def load_test_schema(bucket_name, s3_client, schema=test_glue_table_input):
+    json_data = json.dumps(schema)
+    s3_client.put_object(
+        Body=json_data,
+        Bucket=bucket_name,
+        Key="test_product/v1.0/test_table/schema.json",
     )
 
 
@@ -410,41 +420,65 @@ def test_format_table_schema(glue_schema, expected):
     assert out_schema == expected
 
 
-class TestDataProductUpload:
+class TestVersionCreator:
     @pytest.fixture(autouse=True)
     def setup(self, s3_client, region_name, monkeypatch):
-        bucket_name = os.getenv("METADATA_BUCKET")
-        setup_bucket(bucket_name, s3_client, region_name, monkeypatch)
-        load_test_data_product_metadata(bucket_name, s3_client)
-        load_v1_metadata_schema_to_mock_s3(bucket_name, s3_client)
+        self.s3_client = s3_client
+        self.bucket_name = os.getenv("METADATA_BUCKET")
+        setup_bucket(self.bucket_name, s3_client, region_name, monkeypatch)
+        load_test_data_product_metadata(self.bucket_name, s3_client)
+        load_v1_metadata_schema_to_mock_s3(self.bucket_name, s3_client)
+        load_v1_schema_schema_to_mock_s3(self.bucket_name, self.s3_client)
 
-    def test_create_minor_version(
+    def assert_has_keys(self, keys):
+        contents = self.s3_client.list_objects_v2(
+            Bucket=self.bucket_name, Prefix=f'{test_metadata_pass["name"]}/v1.1'
+        )["Contents"]
+        actual = {i["Key"] for i in contents}
+
+        assert actual == keys
+
+    def test_creates_minor_version(
         self,
     ):
         input_data = dict(**test_metadata_pass)
         input_data["description"] = "New description"
 
-        loaded_metadata = DataProductMetadata(
-            test_metadata_pass["name"],
-            logging.getLogger(),
-            input_data=input_data,
+        version_creator = VersionCreator(
+            test_metadata_pass["name"], logging.getLogger()
         )
 
-        new_metadata = loaded_metadata.create_new_version()
+        version = version_creator.update_metadata(input_data)
 
-        assert new_metadata.version == "v1.1"
+        assert version == "v1.1"
+        self.assert_has_keys({"test_product/v1.1/metadata.json"})
 
-        assert new_metadata.load().latest_version_saved_data == input_data
+    def test_copies_schemas(self):
+        load_test_schema(self.bucket_name, self.s3_client)
+
+        input_data = dict(**test_metadata_pass)
+        input_data["description"] = "New description"
+
+        version_creator = VersionCreator(
+            test_metadata_pass["name"], logging.getLogger()
+        )
+
+        version_creator.update_metadata(input_data)
+
+        self.assert_has_keys(
+            {
+                "test_product/v1.1/metadata.json",
+                "test_product/v1.1/test_table/schema.json",
+            }
+        )
 
     def test_cannot_update_name(self):
         input_data = dict(**test_metadata_pass)
         input_data["name"] = "new name"
 
-        loaded_metadata = DataProductMetadata(
-            test_metadata_pass["name"],
-            logging.getLogger(),
-            input_data=input_data,
+        version_creator = VersionCreator(
+            test_metadata_pass["name"], logging.getLogger()
         )
 
         with pytest.raises(InvalidUpdate):
-            loaded_metadata.create_new_version()
+            version_creator.update_metadata(input_data)

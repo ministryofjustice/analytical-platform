@@ -8,7 +8,7 @@ from typing import Dict, NamedTuple
 
 import boto3
 import botocore
-from data_platform_logging import DataPlatformLogger
+from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import (
     BucketPath,
     DataProductConfig,
@@ -455,29 +455,7 @@ class DataProductMetadata(BaseJsonSchema):
             input_data=input_data,
         )
 
-    def create_new_version(self) -> DataProductMetadata:
-        """
-        Create a new version of the data product
-        """
-        if not self.valid:
-            raise InvalidUpdate()
-
-        self.load()
-        state = self._detect_update_type()
-        self.logger.info(f"Update type {state}")
-
-        if state != UpdateType.MinorUpdate:
-            raise InvalidUpdate(state)
-
-        self.version = self.generate_next_version_string()
-        self.latest_version_key = (
-            DataProductConfig(self.data_product_name).metadata_path(self.version).key
-        )
-        self.write_json_to_s3(self.latest_version_key)
-
-        return self
-
-    def _detect_update_type(self) -> UpdateType:
+    def detect_update_type(self) -> UpdateType:
         """
         Figure out whether changes to the input data represent a major or minor update.
         """
@@ -495,3 +473,83 @@ class DataProductMetadata(BaseJsonSchema):
     def add_auto_generated_metadata(self):
         """adds key value pairs to metadata that are not given by a user."""
         raise NotImplementedError
+
+
+class VersionCreator:
+    """
+    Service to create new versions of a data product when metadata or schema are updated.
+    """
+
+    def __init__(self, data_product_name, logger: DataPlatformLogger):
+        self.data_product_config = DataProductConfig(name=data_product_name)
+        self.logger = logger
+
+    def update_metadata(self, input_data) -> str:
+        """
+        Create a new version with updated metadata.
+        """
+        metadata = DataProductMetadata(
+            data_product_name=self.data_product_config.name,
+            logger=self.logger,
+            input_data=input_data,
+        ).load()
+        if not metadata.valid:
+            raise InvalidUpdate()
+
+        state = metadata.detect_update_type()
+        self.logger.info(f"Update type {state}")
+
+        if state != UpdateType.MinorUpdate:
+            raise InvalidUpdate(state)
+
+        latest_version = metadata.version
+        new_version = metadata.generate_next_version_string()
+        self._copy_from_previous_version(
+            latest_version=latest_version, new_version=new_version
+        )
+
+        latest_version_key = self.data_product_config.metadata_path(new_version).key
+        metadata.write_json_to_s3(latest_version_key)
+
+        return new_version
+
+    def _copy_from_previous_version(self, latest_version, new_version):
+        bucket, source_folder = self.data_product_config.metadata_path(
+            latest_version
+        ).parent
+
+        s3_copy_folder_to_new_folder(
+            bucket=bucket,
+            source_folder=source_folder,
+            latest_version=latest_version,
+            new_version=new_version,
+            logger=self.logger,
+        )
+
+
+def s3_copy_folder_to_new_folder(
+    bucket, source_folder, latest_version, new_version, logger
+):
+    """
+    Recurisvely copy a folder, replacing {latest_version} with {new_version}
+    """
+    paginator = s3_client.get_paginator("list_objects_v2")
+    page_iterator = paginator.paginate(
+        Bucket=bucket,
+        Prefix=source_folder,
+    )
+    keys_to_copy = []
+    try:
+        for page in page_iterator:
+            keys_to_copy += [item["Key"] for item in page["Contents"]]
+    except KeyError as e:
+        logger.error(f"metadata for folder is empty but shouldn't be: {e}")
+    for key in keys_to_copy:
+        copy_source = {"Bucket": bucket, "Key": key}
+        destination_key = key.replace(latest_version, new_version)
+        s3_client.copy(
+            CopySource=copy_source,
+            Bucket=bucket,
+            Key=destination_key,
+            ExtraArgs=s3_security_opts,
+        )
