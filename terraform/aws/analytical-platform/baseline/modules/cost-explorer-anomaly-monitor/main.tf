@@ -34,6 +34,7 @@ resource "aws_kms_key" "ce_anomaly_monitor" {
 resource "aws_kms_alias" "ce_anomaly_monitor" {
   name          = "alias/cost-explorer-anomaly-monitor"
   target_key_id = aws_kms_key.ce_anomaly_monitor.key_id
+  provider = aws.target
 }
 
 resource "aws_kms_key_policy" "ce_anomaly_monitor" {
