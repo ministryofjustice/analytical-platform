@@ -45,7 +45,7 @@ resource "aws_kms_key" "guardduty_findings" {
 }
 
 resource "aws_kms_alias" "guardduty_findings" {
-  name          = "alias/guard-duty-key"
+  name          = "alias/guardduty-findings"
   target_key_id = aws_kms_key.guardduty_findings.key_id
 }
 
