@@ -136,6 +136,7 @@ class UpdateType(Enum):
     Unchanged = 0
     MinorUpdate = 1
     MajorUpdate = 2
+    NotAllowed = 3
 
 
 class BaseJsonSchema:
@@ -416,11 +417,18 @@ class DataProductMetadata(BaseJsonSchema):
     schema json files relating to data products as a whole
     """
 
-    MINOR_UPDATE_FIELDS = {
+    UPDATABLE_FIELDS = {
         "description",
         "email",
         "dataProductOwner",
         "dataProductOwnerDisplayName",
+        "domain",
+        "status",
+        "dpiaRequired",
+        "retentionPeriod",
+        "dataProductMaintainer",
+        "dataProductMaintainerDisplayName",
+        "tags",
     }
 
     def __init__(
@@ -451,6 +459,7 @@ class DataProductMetadata(BaseJsonSchema):
 
         self.load()
         state = self._detect_update_type()
+        self.logger.info(f"Update type {state}")
 
         if state == UpdateType.MinorUpdate:
             new_version = self.generate_next_version_string()
@@ -472,13 +481,13 @@ class DataProductMetadata(BaseJsonSchema):
         Figure out whether changes to the input data represent a major or minor update.
         """
         if not self.exists or not self.valid:
-            return UpdateType.Unchanged
+            return UpdateType.NotAllowed
 
         changed_fields = self.changed_fields()
         if not changed_fields:
             return UpdateType.Unchanged
-        if changed_fields.difference(self.MINOR_UPDATE_FIELDS):
-            return UpdateType.MajorUpdate
+        if changed_fields.difference(self.UPDATABLE_FIELDS):
+            return UpdateType.NotAllowed
         else:
             return UpdateType.MinorUpdate
 

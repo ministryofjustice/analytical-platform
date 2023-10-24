@@ -435,9 +435,9 @@ class TestDataProductUpload:
 
         assert new_metadata.load().latest_version_saved_data == input_data
 
-    def test_major_update_not_allowed_yet(self):
+    def test_cannot_update_name(self):
         input_data = dict(**test_metadata_pass)
-        input_data["retentionPeriod"] = 100
+        input_data["name"] = "new name"
 
         loaded_metadata = DataProductMetadata(
             test_metadata_pass["name"],
