@@ -26,6 +26,8 @@ RUN groupadd \
     && mkdir --parents ${CONTAINER_HOME} \
     && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} ${CONTAINER_HOME}
 
+COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} src/usr/local/bin/actions-runner-utils /usr/local/bin/actions-runner-utils
+
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
       ca-certificates \
@@ -34,8 +36,13 @@ RUN apt-get update \
     && curl --location "https://github.com/actions/runner/releases/download/v${ACTIONS_RUNNER_VERSION}/actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" \
       --output "actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" \
     && echo "${ACTIONS_RUNNER_PKG_SHA}"  "actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" | /usr/bin/sha256sum --check \
-    && tar --extract --gzip --file="actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" --directory="${CONTAINER_HOME}"
+    && tar --extract --gzip --file="actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" --directory="${CONTAINER_HOME}" \
+    && chmod +x /usr/local/bin/actions-runner-utils/*.sh
+
+COPY src/actions-runner/.env ${CONTAINER_HOME}/.env
 
 USER ${CONTAINER_USER}
 
 WORKDIR ${CONTAINER_HOME}
+
+ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/actions-runner-utils/entrypoint.sh"]
