@@ -303,6 +303,26 @@ class DataProductElement:
         """
         return self.extraction_instance(timestamp, uuid_value, file_extension).path
 
+    def landing_data_path(
+        self, timestamp: datetime, uuid_value: UUID, file_extension: str
+    ) -> BucketPath:
+        """
+        Path to the landing bucket location where a data file will be put
+        with a presigned url, for the file to be copied to raw and deleted.
+        """
+        amz_date = timestamp.strftime(LOAD_TIMESTAMP_FORMAT)
+
+        path = BucketPath(
+            bucket=self.landing_data_prefix.bucket,
+            key=os.path.join(
+                self.landing_data_prefix.key,
+                f"load_timestamp={amz_date}",
+                f"{str(uuid_value)}{file_extension}",
+            ),
+        )
+
+        return path
+
     def extraction_instance(
         self, timestamp: datetime, uuid_value: UUID, file_extension: str
     ) -> RawDataExtraction:

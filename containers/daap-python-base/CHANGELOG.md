@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 
 - `DataProductElement.landing_data_prefix` attribute
+- `DataProductElement.landing_data_path` method
 
 ## [5.0.0] - 2023-10-23
 

@@ -178,6 +178,31 @@ def test_data_product_element_raw_data_path():
         )
 
 
+def test_data_product_element_raw_data_path():
+    uuid_value = uuid.uuid4()
+    timestamp = datetime(2023, 9, 5, 16, 53)
+    file_extension = ".csv"
+
+    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
+        config = DataProductConfig(
+            name="my-database",
+            raw_data_bucket="raw",
+            curated_data_bucket="curated",
+            metadata_bucket="metadata",
+            landing_zone_bucket="landing",
+        )
+        element = config.element("some-table")
+
+        path = element.landing_data_path(
+            timestamp=timestamp, uuid_value=uuid_value, file_extension=file_extension
+        )
+
+        assert path == BucketPath(
+            bucket="landing",
+            key=f"landing/my-database/v1.0/some-table/load_timestamp=20230905T165300Z/{uuid_value}{file_extension}",
+        )
+
+
 def test_data_product_config_metadata_path():
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         config = DataProductConfig(
