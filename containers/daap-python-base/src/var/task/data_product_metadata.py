@@ -456,7 +456,7 @@ class DataProductMetadata(BaseJsonSchema):
             input_data=input_data,
         )
 
-    def create_new_version(self) -> DataProductMetadata | None:
+    def create_new_version(self) -> DataProductMetadata:
         """
         Create a new version of the data product
         """
