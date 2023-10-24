@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import json
 import traceback
 from copy import deepcopy
-from typing import Dict
+from enum import Enum
+from typing import Dict, NamedTuple
 
 import boto3
 import botocore
@@ -47,6 +50,35 @@ glue_csv_table_input_template = {
         "Parameters": {"classification": "csv", "skip.header.line.count": "1"},
     },
 }
+
+
+class Version(NamedTuple):
+    """
+    Helper object for manipulating version strings.
+    """
+
+    major: int
+    minor: int
+
+    def __str__(self):
+        return f"v{self.major}.{self.minor}"
+
+    @staticmethod
+    def parse(version_str) -> Version:
+        major, minor = [int(i) for i in version_str.lstrip("v").split(".")]
+        return Version(major, minor)
+
+    def increment_major(self) -> Version:
+        return Version(self.major + 1, self.minor)
+
+    def increment_minor(self) -> Version:
+        return Version(self.major, self.minor + 1)
+
+
+class InvalidUpdate(Exception):
+    """
+    Exception thrown when an update cannot be applied to a data product or schema
+    """
 
 
 def format_table_schema(glue_schema: dict) -> dict:
@@ -97,15 +129,44 @@ def get_data_product_specification_path(
     return path.uri
 
 
+class UpdateType(Enum):
+    """
+    Whether a schema or data product update represents a major or minor update to the data product.
+
+    Minor updates are those which are backwards compatable, e.g. adding a new table.
+
+    Major updates are those which may require data consumers to update their code,
+    e.g. if tables or fields are removed.
+    """
+
+    Unchanged = 0
+    MinorUpdate = 1
+    MajorUpdate = 2
+    NotAllowed = 3
+
+
 class BaseJsonSchema:
-    """base class for operations on json type metadata and schema for data products"""
+    """
+    Base class for operations on json type metadata and schema for data products.
+
+    Parameters:
+    - latest_version_path should be the path to the latest version, or 1.0.0 if no version exists
+    - input_data is optional data to be validated and written
+
+    Attributes:
+    - exists: does *any* version of this schema exist?
+    - valid: is the input_data valid?
+    - version: the version string corresponding to the `latest_version_path`
+    - write_bucket / latest_version_key: the bucket and key components of `latest_version_path`, respectively
+    - latest_version_saved_data: the metadata stored at `latest_version_path`
+    """
 
     def __init__(
         self,
         data_product_name: str,
         logger: DataPlatformLogger,
         json_type: JsonSchemaName,
-        bucket_path: BucketPath,
+        latest_version_path: BucketPath,
         input_data: dict | None,
         table_name: str | None = None,
     ):
@@ -116,9 +177,10 @@ class BaseJsonSchema:
         self.valid = False
         self.type = json_type
         self.exists = self._check_a_version_exists()
-        self.write_bucket = bucket_path.bucket
-        self.latest_version_key = bucket_path.key
-        self.version = bucket_path.key.split("/")[1]
+        self.write_bucket = latest_version_path.bucket
+        self.latest_version_key = latest_version_path.key
+        self.latest_version_saved_data = None
+        self.version = latest_version_path.key.split("/")[1]
         if input_data is not None:
             self.validate(input_data)
 
@@ -147,6 +209,16 @@ class BaseJsonSchema:
                 f"version 1 of {self.type.value} already exists for this data product"
             )
             return True
+
+    def generate_next_version_string(self, major: bool = False) -> str:
+        """
+        Generate the next version
+        """
+        current_version = Version.parse(self.version)
+        if major:
+            return str(current_version.increment_major())
+        else:
+            return str(current_version.increment_minor())
 
     def validate(
         self,
@@ -214,6 +286,25 @@ class BaseJsonSchema:
             self.logger.error("There is no metadata to load")
         return self
 
+    def changed_fields(self) -> set[str]:
+        """
+        Return a set of fields that have changed between the last load
+        and the input_data.
+        """
+        latest_version = self.latest_version_saved_data
+        new_version = self.data
+        if not latest_version or not new_version:
+            return set()
+
+        changed_fields = set()
+        for field in new_version:
+            if new_version[field] == latest_version[field]:
+                continue
+
+            changed_fields.add(field)
+
+        return changed_fields
+
 
 class DataProductSchema(BaseJsonSchema):
     """
@@ -229,13 +320,15 @@ class DataProductSchema(BaseJsonSchema):
         input_data: dict | None,
     ):
         # returns path of latest schema or v1 if it doesn't exist
-        bucket_path = DataProductConfig(name=data_product_name).schema_path(table_name)
+        latest_version_path = DataProductConfig(name=data_product_name).schema_path(
+            table_name
+        )
 
         super().__init__(
             data_product_name=data_product_name,
             logger=logger,
             json_type=JsonSchemaName("schema"),
-            bucket_path=bucket_path,
+            latest_version_path=latest_version_path,
             input_data=input_data,
             table_name=table_name,
         )
@@ -332,22 +425,72 @@ class DataProductMetadata(BaseJsonSchema):
     schema json files relating to data products as a whole
     """
 
-    # returns path of latest metadata or v1 if it doesn't exist
+    UPDATABLE_FIELDS = {
+        "description",
+        "email",
+        "dataProductOwner",
+        "dataProductOwnerDisplayName",
+        "domain",
+        "status",
+        "dpiaRequired",
+        "retentionPeriod",
+        "dataProductMaintainer",
+        "dataProductMaintainerDisplayName",
+        "tags",
+    }
+
     def __init__(
         self,
         data_product_name: str,
         logger: DataPlatformLogger,
         input_data: dict | None,
     ):
-        bucket_path = DataProductConfig(data_product_name).metadata_path()
+        latest_version_path = DataProductConfig(data_product_name).metadata_path()
 
         super().__init__(
+            json_type=JsonSchemaName("metadata"),
             data_product_name=data_product_name,
             logger=logger,
-            json_type=JsonSchemaName("metadata"),
-            bucket_path=bucket_path,
+            latest_version_path=latest_version_path,
             input_data=input_data,
         )
+
+    def create_new_version(self) -> DataProductMetadata:
+        """
+        Create a new version of the data product
+        """
+        if not self.valid:
+            raise InvalidUpdate()
+
+        self.load()
+        state = self._detect_update_type()
+        self.logger.info(f"Update type {state}")
+
+        if state != UpdateType.MinorUpdate:
+            raise InvalidUpdate(state)
+
+        self.version = self.generate_next_version_string()
+        self.latest_version_key = (
+            DataProductConfig(self.data_product_name).metadata_path(self.version).key
+        )
+        self.write_json_to_s3(self.latest_version_key)
+
+        return self
+
+    def _detect_update_type(self) -> UpdateType:
+        """
+        Figure out whether changes to the input data represent a major or minor update.
+        """
+        if not self.exists or not self.valid:
+            return UpdateType.NotAllowed
+
+        changed_fields = self.changed_fields()
+        if not changed_fields:
+            return UpdateType.Unchanged
+        if changed_fields.difference(self.UPDATABLE_FIELDS):
+            return UpdateType.NotAllowed
+        else:
+            return UpdateType.MinorUpdate
 
     def add_auto_generated_metadata(self):
         """adds key value pairs to metadata that are not given by a user."""
