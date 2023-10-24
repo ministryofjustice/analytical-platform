@@ -101,6 +101,11 @@ def test_data_product_element_config(monkeypatch):
         assert element.curated_data_table.name == "some_table"
         assert element.curated_data_table.database == "data_product"
 
+        assert element.landing_data_prefix == BucketPath(
+            bucket="landing",
+            key="landing/data_product/v1.0/some_table/",
+        )
+
         assert element.raw_data_prefix == BucketPath(
             bucket="raw",
             key="raw/data_product/v1.0/some_table/",

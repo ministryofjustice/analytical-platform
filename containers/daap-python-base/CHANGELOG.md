@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.0] - 2023-10-24
+
+## Added
+
+- `DataProductElement.landing_data_prefix` attribute
+
 ## [5.0.0] - 2023-10-23
 
 ## Added

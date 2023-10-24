@@ -235,6 +235,18 @@ class DataProductElement:
         return DataProductElement(data_product=data_product, name=element_name)
 
     @property
+    def landing_data_prefix(self):
+        """
+        The path to the raw data in s3 up to and including the element name,
+        e.g. landing/{data-product}/{version}/{some_element}
+        """
+        return BucketPath(
+            bucket=self.data_product.landing_zone_bucket,
+            key=os.path.join(self.data_product.landing_data_prefix.key, self.name)
+            + "/",
+        )
+
+    @property
     def raw_data_prefix(self):
         """
         The path to the raw data in s3 up to and including the element name,
