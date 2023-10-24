@@ -71,6 +71,12 @@ class TestHandler:
                 Bucket=destination_bucket,
             )
 
+        with pytest.raises(ClientError):
+            s3_client.get_object(
+                Key="landing/data-product/v1.0/table/load_timestamp=20150210T130000Z/data.csv",
+                Bucket=landing_bucket,
+            )
+
     def test_invalid_file(
         self, s3_client, destination_bucket, landing_bucket, fake_context
     ):
