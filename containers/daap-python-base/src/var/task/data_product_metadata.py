@@ -75,6 +75,12 @@ class Version(NamedTuple):
         return Version(self.major, self.minor + 1)
 
 
+class InvalidUpdate(Exception):
+    """
+    Exception thrown when an update cannot be applied to a data product or schema
+    """
+
+
 def format_table_schema(glue_schema: dict) -> dict:
     """reformats a glue table schema into the metadata ingestion specification.
 
@@ -452,29 +458,25 @@ class DataProductMetadata(BaseJsonSchema):
 
     def create_new_version(self) -> DataProductMetadata | None:
         """
-        Create a new version of the data product (minor update only for now)
+        Create a new version of the data product
         """
         if not self.valid:
-            return None
+            raise InvalidUpdate()
 
         self.load()
         state = self._detect_update_type()
         self.logger.info(f"Update type {state}")
 
-        if state == UpdateType.MinorUpdate:
-            new_version = self.generate_next_version_string()
-            new_metadata = DataProductMetadata(
-                data_product_name=self.data_product_name,
-                logger=self.logger,
-                input_data=self.data,
-                version=new_version,
-            )
-            new_metadata.write_json_to_s3(
-                DataProductConfig(self.data_product_name).metadata_path(new_version).key
-            )
-            return new_metadata
+        if state != UpdateType.MinorUpdate:
+            raise InvalidUpdate(state)
 
-        return None
+        self.version = self.generate_next_version_string()
+        self.latest_version_key = (
+            DataProductConfig(self.data_product_name).metadata_path(self.version).key
+        )
+        self.write_json_to_s3(self.latest_version_key)
+
+        return self
 
     def _detect_update_type(self) -> UpdateType:
         """

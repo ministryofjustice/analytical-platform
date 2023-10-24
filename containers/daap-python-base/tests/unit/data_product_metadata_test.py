@@ -12,6 +12,7 @@ from data_platform_paths import JsonSchemaName
 from data_product_metadata import (
     DataProductMetadata,
     DataProductSchema,
+    InvalidUpdate,
     format_table_schema,
 )
 
@@ -445,6 +446,5 @@ class TestDataProductUpload:
             input_data=input_data,
         )
 
-        new_metadata = loaded_metadata.create_new_version()
-
-        assert new_metadata is None
+        with pytest.raises(InvalidUpdate):
+            loaded_metadata.create_new_version()
