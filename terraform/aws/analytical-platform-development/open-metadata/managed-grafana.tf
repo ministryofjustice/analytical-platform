@@ -58,9 +58,9 @@ resource "aws_grafana_workspace_api_key" "automation_key" {
 
 resource "grafana_team" "data_platform" {
   name = "data-platform"
-  members = [
-    "jacobwoffenden@digital.justice.gov.uk"
-  ]
+  team_sync {
+    groups = ["86d22284-20f1-7083-0e1d-f7f69408e038"]
+  }
 }
 
 resource "grafana_data_source" "prometheus" {
