@@ -1,5 +1,4 @@
 .env
-!containers/actions-runner/src/actions-runner/.env
 *.terraform/
 coverage/
 venv/

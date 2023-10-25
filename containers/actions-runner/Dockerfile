@@ -39,8 +39,6 @@ RUN apt-get update \
     && tar --extract --gzip --file="actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" --directory="${CONTAINER_HOME}" \
     && chmod +x /usr/local/bin/actions-runner-utils/*.sh
 
-COPY src/actions-runner/.env ${CONTAINER_HOME}/.env
-
 USER ${CONTAINER_USER}
 
 WORKDIR ${CONTAINER_HOME}

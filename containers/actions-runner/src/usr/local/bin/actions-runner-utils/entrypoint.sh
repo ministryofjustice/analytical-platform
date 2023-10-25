@@ -4,9 +4,14 @@ ACTIONS_RUNNER_DIRECTORY="/actions-runner"
 
 echo "Configuring runner"
 
+if [[ -z "${RUNNER_NAME_PREFIX}" ]]; then
+  RUNNER_NAME="${RUNNER_NAME}"
+else
+  RUNNER_NAME="${RUNNER_NAME_PREFIX}-$(hostname)"
+fi
+
 bash "${ACTIONS_RUNNER_DIRECTORY}/config.sh" \
   --unattended \
-  --ephemeral  \
   --disableupdate \
   --url "${REPO_URL}" \
   --token "${REPO_TOKEN}" \
