@@ -178,7 +178,7 @@ def test_data_product_element_raw_data_path():
         )
 
 
-def test_data_product_element_raw_data_path():
+def test_data_product_element_landing_data_path():
     uuid_value = uuid.uuid4()
     timestamp = datetime(2023, 9, 5, 16, 53)
     file_extension = ".csv"

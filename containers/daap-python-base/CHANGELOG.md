@@ -11,18 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.1.0] - 2023-10-24
 
-## Added
+### Added
 
 - `DataProductElement.landing_data_prefix` attribute
 - `DataProductElement.landing_data_path` method
 
 ## [5.0.0] - 2023-10-23
 
-## Added
+### Added
 
 - `DataProductMetadata.create_new_version` method
 
-## Changed
+### Changed
 
 - Moved `format_error_response` into data_platform_api_responses
 - `format_response_json` now accepts a dict `body` argument instead of
