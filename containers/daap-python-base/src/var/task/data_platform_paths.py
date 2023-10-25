@@ -235,6 +235,18 @@ class DataProductElement:
         return DataProductElement(data_product=data_product, name=element_name)
 
     @property
+    def landing_data_prefix(self):
+        """
+        The path to the raw data in s3 up to and including the element name,
+        e.g. landing/{data-product}/{version}/{some_element}
+        """
+        return BucketPath(
+            bucket=self.data_product.landing_zone_bucket,
+            key=os.path.join(self.data_product.landing_data_prefix.key, self.name)
+            + "/",
+        )
+
+    @property
     def raw_data_prefix(self):
         """
         The path to the raw data in s3 up to and including the element name,
@@ -290,6 +302,26 @@ class DataProductElement:
              20230101T000000Z/3d95ff89-b063-484d-b510-53742d0a6a64.csv
         """
         return self.extraction_instance(timestamp, uuid_value, file_extension).path
+
+    def landing_data_path(
+        self, timestamp: datetime, uuid_value: UUID, file_extension: str
+    ) -> BucketPath:
+        """
+        Path to the landing bucket location where a data file will be put
+        with a presigned url, for the file to be copied to raw and deleted.
+        """
+        amz_date = timestamp.strftime(LOAD_TIMESTAMP_FORMAT)
+
+        path = BucketPath(
+            bucket=self.landing_data_prefix.bucket,
+            key=os.path.join(
+                self.landing_data_prefix.key,
+                f"load_timestamp={amz_date}",
+                f"{str(uuid_value)}{file_extension}",
+            ),
+        )
+
+        return path
 
     def extraction_instance(
         self, timestamp: datetime, uuid_value: UUID, file_extension: str
