@@ -93,7 +93,6 @@ def logger():
     return DataPlatformLogger()
 
 
-@pytest.fixture
 def load_v1_metadata_schema_to_mock_s3(s3_client):
     with urllib.request.urlopen(
         "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.0.0/moj_data_product_metadata_spec.json"  # noqa E501
@@ -107,7 +106,6 @@ def load_v1_metadata_schema_to_mock_s3(s3_client):
     )
 
 
-@pytest.fixture
 def load_v1_schema_schema_to_mock_s3(s3_client):
     with urllib.request.urlopen(
         "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-table-schema-json-schema/v1.0.0/moj_data_product_table_spec.json"  # noqa E501
@@ -129,5 +127,8 @@ def metadata_bucket(s3_client, region_name):
         Bucket=bucket_name,
         CreateBucketConfiguration={"LocationConstraint": region_name},
     )
+
+    load_v1_metadata_schema_to_mock_s3(s3_client)
+    load_v1_schema_schema_to_mock_s3(s3_client)
 
     return bucket_name

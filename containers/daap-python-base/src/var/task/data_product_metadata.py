@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import traceback
 from copy import deepcopy
-from typing import Dict, NamedTuple
+from typing import Dict
 
 import boto3
 import botocore
@@ -49,29 +49,6 @@ glue_csv_table_input_template = {
         "Parameters": {"classification": "csv", "skip.header.line.count": "1"},
     },
 }
-
-
-class Version(NamedTuple):
-    """
-    Helper object for manipulating version strings.
-    """
-
-    major: int
-    minor: int
-
-    def __str__(self):
-        return f"v{self.major}.{self.minor}"
-
-    @staticmethod
-    def parse(version_str) -> Version:
-        major, minor = [int(i) for i in version_str.lstrip("v").split(".")]
-        return Version(major, minor)
-
-    def increment_major(self) -> Version:
-        return Version(self.major + 1, self.minor)
-
-    def increment_minor(self) -> Version:
-        return Version(self.major, self.minor + 1)
 
 
 def format_table_schema(glue_schema: dict) -> dict:
@@ -186,16 +163,6 @@ class BaseJsonSchema:
                 f"version 1 of {self.type.value} already exists for this data product"
             )
             return True
-
-    def generate_next_version_string(self, major: bool = False) -> str:
-        """
-        Generate the next version
-        """
-        current_version = Version.parse(self.version)
-        if major:
-            return str(current_version.increment_major())
-        else:
-            return str(current_version.increment_minor())
 
     def validate(
         self,

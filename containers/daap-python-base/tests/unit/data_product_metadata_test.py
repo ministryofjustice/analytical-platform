@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 from tempfile import NamedTemporaryFile
 from unittest import TestCase
 from unittest.mock import patch
@@ -193,7 +192,7 @@ def test_get_specific_metadata_spec_path(spec_type, expected_out):
 
 class TestDataProductMetadata:
     @pytest.fixture(autouse=True)
-    def setup(self, metadata_bucket, load_v1_metadata_schema_to_mock_s3):
+    def setup(self, metadata_bucket):
         self.bucket_name = metadata_bucket
 
     def test_metadata_exist(self, s3_client):
@@ -272,12 +271,7 @@ class TestDataProductMetadata:
 
 class TestDataProductSchema:
     @pytest.fixture(autouse=True)
-    def setup(
-        self,
-        metadata_bucket,
-        load_v1_schema_schema_to_mock_s3,
-        load_v1_metadata_schema_to_mock_s3,
-    ):
+    def setup(self, metadata_bucket):
         self.bucket_name = metadata_bucket
 
     validation_schema_inputs = [(test_schema_pass, True), (test_schema_fail, False)]
