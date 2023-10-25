@@ -14,6 +14,12 @@ module "managed_grafana" {
   data_sources              = ["CLOUDWATCH", "PROMETHEUS"]
   notification_destinations = ["SNS"]
 
+  configuration = jsonencode({
+    unifiedAlerting = {
+      enabled = true
+    }
+  })
+
   role_associations = {
     "ADMIN" = {
       "group_ids" = ["86d22284-20f1-7083-0e1d-f7f69408e038"] # data-platform-core-infra
@@ -52,4 +58,40 @@ resource "aws_grafana_workspace_api_key" "automation_key" {
 
 resource "grafana_team" "data_platform" {
   name = "data-platform"
+  members = [
+    "jacobwoffenden@digital.justice.gov.uk"
+  ]
+}
+
+resource "grafana_data_source" "prometheus" {
+  type       = "prometheus"
+  name       = "Amazon Managed Prometheus"
+  is_default = true
+  url        = "https://aps-workspaces.eu-west-2.amazonaws.com/workspaces/${module.managed_prometheus.workspace_id}"
+
+  json_data_encoded = jsonencode({
+    httpMethod    = "POST"
+    sigV4Auth     = true
+    sigV4AuthType = "ec2_iam_role"
+    sigV4Region   = data.aws_region.current.name
+  })
+}
+
+resource "grafana_data_source" "cloudwatch" {
+  type = "cloudwatch"
+  name = "Amazon CloudWatch"
+
+  json_data_encoded = jsonencode({
+    authType      = "ec2_iam_role"
+    defaultRegion = data.aws_region.current.name
+  })
+}
+
+resource "grafana_data_source_permission" "cloudwatch" {
+  datasource_id = grafana_data_source.cloudwatch.id
+
+  permissions {
+    team_id    = grafana_team.data_platform.id
+    permission = "Query"
+  }
 }
