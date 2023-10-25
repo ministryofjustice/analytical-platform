@@ -1,6 +1,8 @@
+import json
 import os
 import sys
 import time
+import urllib
 from os.path import dirname, join
 from unittest.mock import patch
 
@@ -89,3 +91,43 @@ def data_product_element(region_name, s3_client):
 @pytest.fixture
 def logger():
     return DataPlatformLogger()
+
+
+@pytest.fixture
+def load_v1_metadata_schema_to_mock_s3(s3_client):
+    with urllib.request.urlopen(
+        "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.0.0/moj_data_product_metadata_spec.json"  # noqa E501
+    ) as url:
+        data = json.load(url)
+    json_data = json.dumps(data)
+    s3_client.put_object(
+        Body=json_data,
+        Bucket=os.environ["METADATA_BUCKET"],
+        Key="data_product_metadata_spec/v1.0.0/moj_data_product_metadata_spec.json",
+    )
+
+
+@pytest.fixture
+def load_v1_schema_schema_to_mock_s3(s3_client):
+    with urllib.request.urlopen(
+        "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-table-schema-json-schema/v1.0.0/moj_data_product_table_spec.json"  # noqa E501
+    ) as url:
+        data = json.load(url)
+    json_data = json.dumps(data)
+    s3_client.put_object(
+        Body=json_data,
+        Bucket=os.environ["METADATA_BUCKET"],
+        Key="data_product_schema_spec/v1.0.0/moj_data_product_schema_spec.json",
+    )
+
+
+@pytest.fixture
+def metadata_bucket(s3_client, region_name):
+    bucket_name = os.environ["METADATA_BUCKET"]
+
+    s3_client.create_bucket(
+        Bucket=bucket_name,
+        CreateBucketConfiguration={"LocationConstraint": region_name},
+    )
+
+    return bucket_name
