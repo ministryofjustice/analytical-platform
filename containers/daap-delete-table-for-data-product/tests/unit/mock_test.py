@@ -13,6 +13,7 @@ class TestHandler:
         self,
         event,
         fake_context,
+        table_name,
         s3_client,
         create_schema,
         create_glue_table,
@@ -22,7 +23,10 @@ class TestHandler:
         response = delete_table.handler(event=event, context=fake_context)
 
         assert response["statusCode"] == HTTPStatus.OK
-        assert json.loads(response["body"])["message"] == f"OK"
+        assert (
+            json.loads(response["body"])["error"]["message"]
+            == f"Successfully deleted table '{table_name}' and raw & curated data files"
+        )
 
     def test_metadata_fail(
         self, s3_client, create_metadata_bucket, event, fake_context, data_product_name

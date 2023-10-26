@@ -1,12 +1,13 @@
 import json
 import os
 
+from http import HTTPStatus
+
 import boto3
 from botocore.exceptions import ClientError
 
 from data_platform_api_responses import (
-    response_status_200,
-    response_status_400,
+    format_error_response,
 )
 from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import (
@@ -83,7 +84,7 @@ def handler(event, context):
             f"Could not locate metadata for data product: {data_product_name}."
         )
         logger.error(error_message)
-        return response_status_400(error_message)
+        return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
 
     table_schema = DataProductSchema(
         data_product_name=data_product_name,
@@ -96,7 +97,7 @@ def handler(event, context):
     if not table_schema.exists:
         error_message = f"Could not locate valid schema for table: {table_name}."
         logger.error(error_message)
-        return response_status_400(error_message)
+        return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
 
     # Attempt deletion of the glue table
     try:
@@ -108,7 +109,7 @@ def handler(event, context):
         else:
             error_message = f"Unexpected ClientError: {e.response['Error']['Code']}"
             logger.error(error_message)
-        return response_status_400(error_message)
+        return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
     else:
         glue_client.delete_table(DatabaseName=data_product_name, Name=table_name)
 
@@ -124,4 +125,6 @@ def handler(event, context):
     # Delete curated files
     s3_recursive_delete(bucket=curated_bucket, prefix=element.curated_data_prefix.key)
 
-    return response_status_200("OK")
+    msg = f"Successfully deleted table '{table_name}' and raw & curated data files"
+    logger.info(msg)
+    return format_error_response(HTTPStatus.OK, event, msg)
