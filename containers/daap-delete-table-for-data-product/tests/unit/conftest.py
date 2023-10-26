@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 from dataclasses import dataclass
@@ -80,20 +81,14 @@ def athena_client():
         yield client
 
 
-# @pytest.fixture
-# def data_product_element(monkeypatch):
-#     monkeypatch.setenv("BUCKET_NAME", "bucket")
-#     return DataProductElement.load(element_name="foo", data_product_name="bar")
-
-
 @pytest.fixture
 def logger():
     return DataPlatformLogger()
 
 
-@pytest.fixture
-def raw_data_table(data_product_element):
-    return data_product_element.raw_data_table_unique()
+# @pytest.fixture
+# def raw_data_table(data_product_element):
+#     return data_product_element.raw_data_table_unique()
 
 
 @pytest.fixture
@@ -101,9 +96,9 @@ def region_name():
     return "eu-west-1"
 
 
-@pytest.fixture
-def metadata_bucket():
-    return "metadata"
+@pytest.fixture(autouse=True)
+def create_metadata_bucket(s3_client):
+    s3_client.create_bucket(Bucket=os.environ.get("METADATA_BUCKET", "metadata"))
 
 
 @pytest.fixture
@@ -117,38 +112,6 @@ def table_name():
 
 
 @pytest.fixture
-def fake_data_product_name():
-    return "fake-data-product"
-
-
-@pytest.fixture
-def fake_table_name():
-    return "fake-table-name"
-
-
-@pytest.fixture
-def fake_data_product_event(fake_data_product_name, table_name):
-    return {
-        "headers": {"Content-Type": "application/json"},
-        "pathParameters": {
-            "data-product-name": fake_data_product_name,
-            "table-name": table_name,
-        },
-    }
-
-
-@pytest.fixture
-def fake_table_event(data_product_name, fake_table_name):
-    return {
-        "headers": {"Content-Type": "application/json"},
-        "pathParameters": {
-            "data-product-name": data_product_name,
-            "table-name": fake_table_name,
-        },
-    }
-
-
-@pytest.fixture
 def event(data_product_name, table_name):
     return {
         "headers": {"Content-Type": "application/json"},
@@ -157,3 +120,33 @@ def event(data_product_name, table_name):
             "table-name": table_name,
         },
     }
+
+
+@pytest.fixture
+def create_glue_database(glue_client, data_product_name):
+    glue_client.create_database(DatabaseInput={"Name": data_product_name})
+
+
+@pytest.fixture
+def create_glue_table(create_glue_database, glue_client, data_product_name, table_name):
+    glue_client.create_table(
+        DatabaseName=data_product_name, TableInput={"Name": table_name}
+    )
+
+
+@pytest.fixture
+def create_metadata(s3_client, data_product_name):
+    s3_client.put_object(
+        Bucket=os.environ.get("METADATA_BUCKET", "metadata"),
+        Key=f"{data_product_name}/v1.0/metadata.json",
+        Body=json.dumps({"test": "test"}),
+    )
+
+
+@pytest.fixture
+def create_schema(create_metadata, s3_client, data_product_name, table_name):
+    s3_client.put_object(
+        Bucket=os.environ.get("METADATA_BUCKET", "metadata"),
+        Key=f"{data_product_name}/v1.0/{table_name}/schema.json",
+        Body=json.dumps({"test": "test"}),
+    )

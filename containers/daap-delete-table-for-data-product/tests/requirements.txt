@@ -2,3 +2,6 @@
 moto==4.2.2
 pytest==7.4.1
 freezegun==1.2.2
+dataengineeringutils3==1.4.3
+jsonschema==4.17.3
+pyparsing===3.1.1

@@ -12,10 +12,7 @@ from data_platform_api_responses import (
 )
 from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import (
-    DataProductConfig,
     DataProductElement,
-    get_latest_version,
-    get_new_version,
 )
 from data_product_metadata import DataProductMetadata, DataProductSchema
 
@@ -99,7 +96,6 @@ def handler(event, context):
         logger.error(error_message)
         return response_status_400(error_message)
 
-    return response_status_200("OK")
     # Attempt deletion of the glue table
     try:
         table = glue_client.get_table(DatabaseName=data_product_name, Name=table_name)
@@ -110,9 +106,11 @@ def handler(event, context):
         else:
             error_message = f"Unexpected ClientError: {e.response['Error']['Code']}"
             logger.error(error_message)
-
         return response_status_400(error_message)
+    else:
+        glue_client.delete_table(DatabaseName=data_product_name, Name=table_name)
 
+    return response_status_200("OK")
     # Proceed to delete the raw data
     element = DataProductElement.load(
         table_name=table_name, data_product_name=data_product_name
