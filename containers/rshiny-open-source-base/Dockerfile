@@ -1,3 +1,5 @@
+# hadolint global ignore=DL3008
+
 ARG r=4.1.3
 FROM rocker/r-ver:${r}
 
@@ -34,8 +36,8 @@ RUN apt-get update -y && \
 RUN apt-get clean && rm -rf /var/lib/apt/lists/
 
 # Shiny runs as 'shiny' user, adjust app directory permissions
-ADD shiny-server.conf /etc/shiny-server/shiny-server.conf
-ADD shiny-server.sh /usr/bin/shiny-server.sh
+COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
+COPY shiny-server.sh /usr/bin/shiny-server.sh
 
 # Patch the shiny server to allow custom headers
 RUN sed -i 's/createWebSocketClient(pathInfo)/createWebSocketClient(pathInfo, conn.headers)/' /opt/shiny-server/lib/proxy/sockjs.js
