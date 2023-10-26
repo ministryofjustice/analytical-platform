@@ -18,5 +18,5 @@ def gather_env_vars_to_renv_file():
             file_hanelder.write("\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     gather_env_vars_to_renv_file()
