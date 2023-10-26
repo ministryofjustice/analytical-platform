@@ -15,6 +15,8 @@ ENV CONTAINER_USER="runner" \
     ACTIONS_RUNNER_VERSION="2.311.0" \
     ACTIONS_RUNNER_PKG_SHA="29fc8cf2dab4c195bb147384e7e2c94cfd4d4022c793b346a6175435265aa278"
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 RUN groupadd \
       --gid ${CONTAINER_GID} \
       --system \
@@ -30,9 +32,11 @@ COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} src/usr/local/bin/actions-runn
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
-      ca-certificates \
-      curl \
-      libicu-dev \
+      ca-certificates=20230311ubuntu0.22.04.1 \
+      curl=7.81.0-1ubuntu1.14 \
+      libicu-dev=70.1-2 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
     && curl --location "https://github.com/actions/runner/releases/download/v${ACTIONS_RUNNER_VERSION}/actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" \
       --output "actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" \
     && echo "${ACTIONS_RUNNER_PKG_SHA}"  "actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" | /usr/bin/sha256sum --check \
