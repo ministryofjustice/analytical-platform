@@ -1,0 +1,21 @@
+---
+owner_slack: "#data-platform-notifications"
+title: DNS
+last_reviewed_on: 2023-10-25
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+Our DNS domain (data-platform.service.justice.gov.uk) is delegated to AWS Route 53 in our Modernisation Platform account. This is delegated [here](https://github.com/ministryofjustice/dns-iac/blob/main/terraform/service.justice.gov.uk.tf#L973-L983)
+
+We then delegate subdomains to each of our accounts:
+
+- data-platform.service.justice.gov.uk (data-platform-production)
+  - apps-tools.data-platform.service.justice.gov.uk (data-platform-apps-and-tools-production)
+  - development.data-platform.service.justice.gov.uk (data-platform-development)
+    - apps-tools.development.data-platform.service.justice.gov.uk (data-platform-apps-and-tools-development)
+  - preproduction.data-platform.service.justice.gov.uk (data-platform-preproduction)
+  - test.data-platform.service.justice.gov.uk (data-platform-test)
+
+This is maintained [here](https://github.com/ministryofjustice/modernisation-platform-environments/blob/main/terraform/environments/data-platform/infra_route53.tf)
