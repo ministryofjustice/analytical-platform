@@ -7,8 +7,6 @@ from botocore.exceptions import ClientError
 from data_platform_api_responses import (
     response_status_200,
     response_status_400,
-    response_status_403,
-    response_status_404,
 )
 from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import (
@@ -16,32 +14,42 @@ from data_platform_paths import (
 )
 from data_product_metadata import DataProductMetadata, DataProductSchema
 
+logger = DataPlatformLogger(
+    extra={
+        "image_version": os.getenv("VERSION", "unknown"),
+        "base_image_version": os.getenv("BASE_VERSION", "unknown"),
+    }
+)
+
 s3_client = boto3.client("s3")
 glue_client = boto3.client("glue")
 athena_client = boto3.client("athena")
 
 
-def delete_all_files_from_folder(bucket: str, prefix: str, logger: DataPlatformLogger):
-    """Delete all files in a bucket for a given prefix"""
-
+def s3_recursive_delete(bucket, prefix) -> None:
+    """Delete all files from a prefix in s3"""
     paginator = s3_client.get_paginator("list_objects_v2")
-    page_iterator = paginator.paginate(Bucket=bucket, Prefix=prefix.key)
-    results = []
-    for page in page_iterator:
-        results.extend(page.get("Contents"))
-    logger.info(f"number of files to delete {len(results)}")
+    pages = paginator.paginate(Bucket=bucket, Prefix=prefix)
 
-    n = 0
-    CHUNK = 1000
-    while n < len(results):
-        files = results[n : n + CHUNK]
-        objects = [{"Key": f["Key"]} for f in files]
-        response = s3_client.delete_objects(Bucket=bucket, Delete={"Objects": objects})
-        deleted = response.get("Deleted", [])
-        errors = response.get("Errors", [])
-        logger.info(f"number of files deleted {len(deleted)}")
-        logger.info(f"number of deletion errors {len(errors)}")
-        n += CHUNK
+    delete_us: dict = dict(Objects=[])
+    for item in pages.search("Contents"):
+        if item is None:
+            continue
+
+        delete_us["Objects"].append(dict(Key=item["Key"]))
+
+        # delete once aws limit reached
+        if len(delete_us["Objects"]) >= 1000:
+            s3_client.delete_objects(Bucket=bucket, Delete=delete_us)
+            delete_us = dict(Objects=[])
+            logger.info(f"deleted 1000 data files from {prefix}")
+
+    # delete remaining
+    if len(delete_us["Objects"]):
+        number_of_files = len(delete_us["Objects"])
+        s3_client.delete_objects(Bucket=bucket, Delete=delete_us)
+        logger.info(f"deleted {number_of_files} data files from {prefix}")
+        print(f"deleted {number_of_files} data files from {prefix}")
 
 
 def handler(event, context):
