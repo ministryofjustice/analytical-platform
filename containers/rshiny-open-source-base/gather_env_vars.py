@@ -1,8 +1,8 @@
 import os
 
+
 R_ENV_FILE_NAME = "/srv/shiny-server/.Renviron"
 R_ENV_FILE_NAME1 = "/home/shiny/.Renviron"
-
 
 
 def gather_env_vars_to_renv_file():
