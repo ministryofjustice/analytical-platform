@@ -106,8 +106,8 @@ class VersionCreator:
         self._copy_from_previous_version(
             latest_version=latest_version, new_version=new_version
         )
-        latest_version_key = self.data_product_config.metadata_path(new_version).key
-        metadata.write_json_to_s3(latest_version_key)
+        new_version_key = self.data_product_config.metadata_path(new_version).key
+        metadata.write_json_to_s3(new_version_key)
 
         return new_version
 
