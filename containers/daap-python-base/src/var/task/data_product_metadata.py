@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import traceback
 from copy import deepcopy
@@ -98,14 +100,27 @@ def get_data_product_specification_path(
 
 
 class BaseJsonSchema:
-    """base class for operations on json type metadata and schema for data products"""
+    """
+    Base class for operations on json type metadata and schema for data products.
+
+    Parameters:
+    - latest_version_path should be the path to the latest version, or 1.0.0 if no version exists
+    - input_data is optional data to be validated and written
+
+    Attributes:
+    - exists: does *any* version of this schema exist?
+    - valid: is the input_data valid?
+    - version: the version string corresponding to the `latest_version_path`
+    - write_bucket / latest_version_key: the bucket and key components of `latest_version_path`, respectively
+    - latest_version_saved_data: the metadata stored at `latest_version_path`
+    """
 
     def __init__(
         self,
         data_product_name: str,
         logger: DataPlatformLogger,
         json_type: JsonSchemaName,
-        bucket_path: BucketPath,
+        latest_version_path: BucketPath,
         input_data: dict | None,
         table_name: str | None = None,
     ):
@@ -116,9 +131,10 @@ class BaseJsonSchema:
         self.valid = False
         self.type = json_type
         self.exists = self._check_a_version_exists()
-        self.write_bucket = bucket_path.bucket
-        self.latest_version_key = bucket_path.key
-        self.version = bucket_path.key.split("/")[1]
+        self.write_bucket = latest_version_path.bucket
+        self.latest_version_key = latest_version_path.key
+        self.latest_version_saved_data = None
+        self.version = latest_version_path.key.split("/")[1]
         if input_data is not None:
             self.validate(input_data)
 
@@ -214,6 +230,25 @@ class BaseJsonSchema:
             self.logger.error("There is no metadata to load")
         return self
 
+    def changed_fields(self) -> set[str]:
+        """
+        Return a set of fields that have changed between the last load
+        and the input_data.
+        """
+        latest_version = self.latest_version_saved_data
+        new_version = self.data
+        if not latest_version or not new_version:
+            return set()
+
+        changed_fields = set()
+        for field in new_version:
+            if new_version[field] == latest_version[field]:
+                continue
+
+            changed_fields.add(field)
+
+        return changed_fields
+
 
 class DataProductSchema(BaseJsonSchema):
     """
@@ -229,13 +264,15 @@ class DataProductSchema(BaseJsonSchema):
         input_data: dict | None,
     ):
         # returns path of latest schema or v1 if it doesn't exist
-        bucket_path = DataProductConfig(name=data_product_name).schema_path(table_name)
+        latest_version_path = DataProductConfig(name=data_product_name).schema_path(
+            table_name
+        )
 
         super().__init__(
             data_product_name=data_product_name,
             logger=logger,
             json_type=JsonSchemaName("schema"),
-            bucket_path=bucket_path,
+            latest_version_path=latest_version_path,
             input_data=input_data,
             table_name=table_name,
         )
@@ -332,20 +369,19 @@ class DataProductMetadata(BaseJsonSchema):
     schema json files relating to data products as a whole
     """
 
-    # returns path of latest metadata or v1 if it doesn't exist
     def __init__(
         self,
         data_product_name: str,
         logger: DataPlatformLogger,
         input_data: dict | None,
     ):
-        bucket_path = DataProductConfig(data_product_name).metadata_path()
+        latest_version_path = DataProductConfig(data_product_name).metadata_path()
 
         super().__init__(
+            json_type=JsonSchemaName("metadata"),
             data_product_name=data_product_name,
             logger=logger,
-            json_type=JsonSchemaName("metadata"),
-            bucket_path=bucket_path,
+            latest_version_path=latest_version_path,
             input_data=input_data,
         )
 
