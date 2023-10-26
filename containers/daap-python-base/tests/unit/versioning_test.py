@@ -96,3 +96,12 @@ class TestVersionCreator:
 
         with pytest.raises(InvalidUpdate):
             version_creator.update_metadata(input_data)
+
+    def test_cannot_update_product_that_does_not_exist(self):
+        input_data = dict(**test_metadata)
+        input_data["description"] = "New description"
+
+        version_creator = VersionCreator("does_not_exist", logging.getLogger())
+
+        with pytest.raises(InvalidUpdate):
+            version_creator.update_metadata(input_data)

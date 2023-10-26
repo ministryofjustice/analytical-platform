@@ -92,7 +92,7 @@ class VersionCreator:
             logger=self.logger,
             input_data=input_data,
         ).load()
-        if not metadata.valid:
+        if not metadata.valid or not metadata.exists:
             raise InvalidUpdate()
 
         state = metadata_update_type(metadata)
