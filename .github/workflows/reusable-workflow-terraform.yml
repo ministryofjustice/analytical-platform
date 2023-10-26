@@ -35,6 +35,10 @@ jobs:
         id: checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
+      - name: Build path-filters file
+        id: build_path_filters
+        run: bash scripts/path-filter/configuration-generator.sh terraform
+
       - name: Prepare Environment
         id: prepare_environment
         shell: bash
@@ -148,6 +152,10 @@ jobs:
       - name: Checkout
         id: checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Build path-filters file
+        id: build_path_filters
+        run: bash scripts/path-filter/configuration-generator.sh terraform
 
       - name: Prepare Environment
         id: prepare_environment
