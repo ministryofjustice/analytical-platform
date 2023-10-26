@@ -20,11 +20,9 @@ logger = DataPlatformLogger(
 
 def handler(event, context):
     data_product_name = event["pathParameters"].get("data-product-name")
-    table_name = event["pathParameters"].get("table-name")
     logger.add_extras(
         {
             "data_product_name": data_product_name,
-            "table_name": table_name,
         }
     )
     logger.info(f"event: {event}")
