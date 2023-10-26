@@ -57,6 +57,6 @@ RUN chmod +x /usr/bin/shiny-server.sh
 
 RUN chown 998:998 /etc/profile
 
-EXPOSE 7999
+EXPOSE 9999
 
 CMD ["/usr/bin/shiny-server.sh"]
