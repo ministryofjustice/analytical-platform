@@ -106,3 +106,20 @@ def test_schema_not_valid(fake_event, fake_context, s3_client):
     assert json.loads(response["body"])["error"]["message"][:65] == (
         "schema for test_t has failed validation with the following error:"
     )
+
+
+@pytest.mark.parametrize("bad_value", ("💩", "", "____", "a" * 129))
+def test_schema_name_not_valid(bad_value, fake_event, fake_context, s3_client):
+    event = fake_event | {
+        "pathParameters": {"data-product-name": "test_p", "table-name": bad_value}
+    }
+
+    response = handler(
+        event=event,
+        context=fake_context,
+    )
+
+    assert (
+        json.loads(response["body"])["error"]["message"]
+        == r"Table name must match regex \A[a-zA-Z][a-zA-Z0-9_]{1,127}\Z"
+    )
