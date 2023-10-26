@@ -10,7 +10,6 @@ def body_content():
     return {"metadata": {"description": "bar"}}
 
 
-@pytest.fixture
 def fake_event(body_content):
     return {
         "httpMethod": "POST",
@@ -20,17 +19,51 @@ def fake_event(body_content):
     }
 
 
-def test_handler(s3_client, fake_event, fake_context):
+def test_success(s3_client, body_content, fake_context):
     s3_client.put_object(
-        Body=json.dumps({"description": "test_p"}),
+        Body=json.dumps({"name": "foo", "description": "test_p"}),
         Bucket="test",
         Key="test_p/v1.0/metadata.json",
     )
 
-    response = handler(fake_event, fake_context)
+    response = handler(fake_event(body_content), fake_context)
 
     assert response == {
         "body": json.dumps({"version": "v1.1"}),
         "statusCode": HTTPStatus.OK,
+        "headers": {"Content-Type": "application/json"},
+    }
+
+
+def test_invalid_body(s3_client, fake_context):
+    s3_client.put_object(
+        Body=json.dumps({"name": "foo", "description": "test_p"}),
+        Bucket="test",
+        Key="test_p/v1.0/metadata.json",
+    )
+
+    response = handler(fake_event({}), fake_context)
+
+    assert response == {
+        "body": json.dumps(
+            {"error": {"message": "Body JSON must contain a metadata object"}}
+        ),
+        "statusCode": HTTPStatus.BAD_REQUEST,
+        "headers": {"Content-Type": "application/json"},
+    }
+
+
+def test_invalid_update(s3_client, fake_context):
+    s3_client.put_object(
+        Body=json.dumps({"name": "foo", "description": "test_p"}),
+        Bucket="test",
+        Key="test_p/v1.0/metadata.json",
+    )
+
+    response = handler(fake_event({"metadata": {"name": "abc"}}), fake_context)
+
+    assert response == {
+        "body": json.dumps({"error": {"message": "Update not allowed"}}),
+        "statusCode": HTTPStatus.BAD_REQUEST,
         "headers": {"Content-Type": "application/json"},
     }
