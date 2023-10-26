@@ -30,11 +30,10 @@ fi
 echo "Configuring runner"
 bash "${ACTIONS_RUNNER_DIRECTORY}/config.sh" \
   --unattended \
-  --ephemeral \
   --disableupdate \
   --url "https://github.com/${GITHUB_REPOSITORY}" \
   --token "${REPO_TOKEN}" \
-  --name "${RUNNER_NAME}-$(hostname)" \
+  --name "$(hostname)" \
   --labels "${RUNNER_LABELS}"
 
 echo "Starting runner"
