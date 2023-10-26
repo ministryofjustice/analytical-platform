@@ -86,9 +86,9 @@ def logger():
     return DataPlatformLogger()
 
 
-# @pytest.fixture
-# def raw_data_table(data_product_element):
-#     return data_product_element.raw_data_table_unique()
+@pytest.fixture
+def data_product_element(data_product_name, table_name):
+    return DataProductElement.load(table_name, data_product_name)
 
 
 @pytest.fixture
@@ -99,6 +99,16 @@ def region_name():
 @pytest.fixture(autouse=True)
 def create_metadata_bucket(s3_client):
     s3_client.create_bucket(Bucket=os.environ.get("METADATA_BUCKET", "metadata"))
+
+
+@pytest.fixture
+def create_raw_bucket(s3_client):
+    s3_client.create_bucket(Bucket=os.environ.get("RAW_BUCKET", "raw"))
+
+
+@pytest.fixture
+def create_curated_bucket(s3_client):
+    s3_client.create_bucket(Bucket=os.getenv("CURATED_DATA_BUCKET"))
 
 
 @pytest.fixture
@@ -123,18 +133,6 @@ def event(data_product_name, table_name):
 
 
 @pytest.fixture
-def create_glue_database(glue_client, data_product_name):
-    glue_client.create_database(DatabaseInput={"Name": data_product_name})
-
-
-@pytest.fixture
-def create_glue_table(create_glue_database, glue_client, data_product_name, table_name):
-    glue_client.create_table(
-        DatabaseName=data_product_name, TableInput={"Name": table_name}
-    )
-
-
-@pytest.fixture
 def create_metadata(s3_client, data_product_name):
     s3_client.put_object(
         Bucket=os.environ.get("METADATA_BUCKET", "metadata"),
@@ -150,3 +148,37 @@ def create_schema(create_metadata, s3_client, data_product_name, table_name):
         Key=f"{data_product_name}/v1.0/{table_name}/schema.json",
         Body=json.dumps({"test": "test"}),
     )
+
+
+@pytest.fixture
+def create_glue_database(glue_client, data_product_name):
+    glue_client.create_database(DatabaseInput={"Name": data_product_name})
+
+
+@pytest.fixture
+def create_glue_table(create_glue_database, glue_client, data_product_name, table_name):
+    glue_client.create_table(
+        DatabaseName=data_product_name, TableInput={"Name": table_name}
+    )
+
+
+@pytest.fixture
+def create_raw_data(s3_client, create_raw_bucket, data_product_name, table_name):
+    for i in range(10):
+        s3_client.put_object(
+            Bucket=os.environ.get("RAW_BUCKET", "raw"),
+            Key=f"raw/{data_product_name}/v1.0/{table_name}/raw-file-{str(i)}.json",
+            Body=json.dumps({"content": f"{i}"}),
+        )
+
+
+@pytest.fixture
+def create_curated_data(
+    s3_client, create_curated_bucket, data_product_name, table_name
+):
+    for i in range(10):
+        s3_client.put_object(
+            Bucket=os.getenv("CURATED_DATA_BUCKET"),
+            Key=f"curated/{data_product_name}/v1.0/{table_name}/curated-file-{str(i)}.json",
+            Body=json.dumps({"content": f"{i}"}),
+        )
