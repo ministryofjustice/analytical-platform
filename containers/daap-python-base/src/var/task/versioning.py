@@ -174,7 +174,7 @@ def schema_update_type(data_product_schema: DataProductSchema) -> tuple[UpdateTy
     changed_fields = data_product_schema.changed_fields()
 
     if "columns" in changed_fields:
-        column_changes = data_product_schema._detect_column_differences()
+        column_changes = data_product_schema.detect_column_differences_in_new_version()
 
         if any([column_changes["removed_columns"], column_changes["types_changed"]]):
             update_type = UpdateType.MajorUpdate

@@ -338,7 +338,7 @@ class DataProductSchema(BaseJsonSchema):
 
         return metadata
 
-    def _detect_column_differences(self):
+    def detect_column_differences_in_new_version(self):
         """to detect types of changes in updated schema columns"""
 
         types_changed = set()
