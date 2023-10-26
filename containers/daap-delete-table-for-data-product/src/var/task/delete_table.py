@@ -69,16 +69,10 @@ def handler(event, context):
 
     data_product_name = event["pathParameters"].get("data-product-name")
     table_name = event["pathParameters"].get("table-name")
-    logger = DataPlatformLogger(
-        extra={
-            "image_version": os.getenv("VERSION", "unknown"),
-            "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-            "data_product_name": data_product_name,
-            "table_name": table_name,
-            "lambda_name": context.function_name,
-        }
-    )
 
+    logger.add_extras(
+        {"data_product_name": data_product_name, "table_name": table_name}
+    )
     logger.info(f"event: {event}")
 
     data_product_metadata = DataProductMetadata(
@@ -106,7 +100,7 @@ def handler(event, context):
 
     # Attempt deletion of the glue table
     try:
-        table = glue_client.get_table(DatabaseName=data_product_name, Name=table_name)
+        glue_client.get_table(DatabaseName=data_product_name, Name=table_name)
     except ClientError as e:
         if e.response["Error"]["Code"] == "EntityNotFoundException":
             error_message = f"Could not locate glue table '{table_name}' in database '{data_product_name}'"
@@ -118,18 +112,16 @@ def handler(event, context):
     else:
         glue_client.delete_table(DatabaseName=data_product_name, Name=table_name)
 
-    return response_status_200("OK")
     # Proceed to delete the raw data
     element = DataProductElement.load(
-        table_name=table_name, data_product_name=data_product_name
+        element_name=table_name, data_product_name=data_product_name
     )
+
     raw_bucket = element.data_product.raw_data_bucket
+    curated_bucket = element.data_product.curated_data_bucket
+    # Delete raw files
+    s3_recursive_delete(bucket=raw_bucket, prefix=element.raw_data_prefix.key)
+    # Delete curated files
+    s3_recursive_delete(bucket=curated_bucket, prefix=element.curated_data_prefix.key)
 
-    # List the files in the raw bucket for the table_element prefix
-    raw_files = s3_client.list_objects_v2(
-        Bucket=raw_bucket, Prefix=element.raw_data_prefix.key
-    )
-    raw_files_to_delete = [{"Key": f["Key"]} for f in raw_files.get("Contents", [])]
-    delete_object = {"Objects": raw_files_to_delete}
-
-    raw_delete = s3_client.delete_objects(Bucket=raw_bucket, Delete=delete_object)
+    return response_status_200("OK")
