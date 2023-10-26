@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.2.0] - 2023-10-25
+
+Added new versioning module.
+
+### Added
+
+- Extracted `VersionCreator` from `DataProductMetadata`. This class operates
+  on both metadata and schemas in the metadata bucket.
+- Moved `s3_copy_folder_to_new_folder` utility from `create_schema` lambda.
+- All schemas are preserved from the previous version when updating
+  metadata.
+
 ## [5.1.0] - 2023-10-24
 
 ### Added

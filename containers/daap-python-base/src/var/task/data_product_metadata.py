@@ -3,8 +3,7 @@ from __future__ import annotations
 import json
 import traceback
 from copy import deepcopy
-from enum import Enum
-from typing import Dict, NamedTuple
+from typing import Dict
 
 import boto3
 import botocore
@@ -50,35 +49,6 @@ glue_csv_table_input_template = {
         "Parameters": {"classification": "csv", "skip.header.line.count": "1"},
     },
 }
-
-
-class Version(NamedTuple):
-    """
-    Helper object for manipulating version strings.
-    """
-
-    major: int
-    minor: int
-
-    def __str__(self):
-        return f"v{self.major}.{self.minor}"
-
-    @staticmethod
-    def parse(version_str) -> Version:
-        major, minor = [int(i) for i in version_str.lstrip("v").split(".")]
-        return Version(major, minor)
-
-    def increment_major(self) -> Version:
-        return Version(self.major + 1, self.minor)
-
-    def increment_minor(self) -> Version:
-        return Version(self.major, self.minor + 1)
-
-
-class InvalidUpdate(Exception):
-    """
-    Exception thrown when an update cannot be applied to a data product or schema
-    """
 
 
 def format_table_schema(glue_schema: dict) -> dict:
@@ -127,22 +97,6 @@ def get_data_product_specification_path(
         path = specification_path(spec_type, version)
 
     return path.uri
-
-
-class UpdateType(Enum):
-    """
-    Whether a schema or data product update represents a major or minor update to the data product.
-
-    Minor updates are those which are backwards compatable, e.g. adding a new table.
-
-    Major updates are those which may require data consumers to update their code,
-    e.g. if tables or fields are removed.
-    """
-
-    Unchanged = 0
-    MinorUpdate = 1
-    MajorUpdate = 2
-    NotAllowed = 3
 
 
 class BaseJsonSchema:
@@ -209,16 +163,6 @@ class BaseJsonSchema:
                 f"version 1 of {self.type.value} already exists for this data product"
             )
             return True
-
-    def generate_next_version_string(self, major: bool = False) -> str:
-        """
-        Generate the next version
-        """
-        current_version = Version.parse(self.version)
-        if major:
-            return str(current_version.increment_major())
-        else:
-            return str(current_version.increment_minor())
 
     def validate(
         self,
@@ -425,20 +369,6 @@ class DataProductMetadata(BaseJsonSchema):
     schema json files relating to data products as a whole
     """
 
-    UPDATABLE_FIELDS = {
-        "description",
-        "email",
-        "dataProductOwner",
-        "dataProductOwnerDisplayName",
-        "domain",
-        "status",
-        "dpiaRequired",
-        "retentionPeriod",
-        "dataProductMaintainer",
-        "dataProductMaintainerDisplayName",
-        "tags",
-    }
-
     def __init__(
         self,
         data_product_name: str,
@@ -454,43 +384,6 @@ class DataProductMetadata(BaseJsonSchema):
             latest_version_path=latest_version_path,
             input_data=input_data,
         )
-
-    def create_new_version(self) -> DataProductMetadata:
-        """
-        Create a new version of the data product
-        """
-        if not self.valid:
-            raise InvalidUpdate()
-
-        self.load()
-        state = self._detect_update_type()
-        self.logger.info(f"Update type {state}")
-
-        if state != UpdateType.MinorUpdate:
-            raise InvalidUpdate(state)
-
-        self.version = self.generate_next_version_string()
-        self.latest_version_key = (
-            DataProductConfig(self.data_product_name).metadata_path(self.version).key
-        )
-        self.write_json_to_s3(self.latest_version_key)
-
-        return self
-
-    def _detect_update_type(self) -> UpdateType:
-        """
-        Figure out whether changes to the input data represent a major or minor update.
-        """
-        if not self.exists or not self.valid:
-            return UpdateType.NotAllowed
-
-        changed_fields = self.changed_fields()
-        if not changed_fields:
-            return UpdateType.Unchanged
-        if changed_fields.difference(self.UPDATABLE_FIELDS):
-            return UpdateType.NotAllowed
-        else:
-            return UpdateType.MinorUpdate
 
     def add_auto_generated_metadata(self):
         """adds key value pairs to metadata that are not given by a user."""
