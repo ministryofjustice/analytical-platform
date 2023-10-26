@@ -1,0 +1,17 @@
+---
+replicas: 1
+
+image:
+  repository: ghcr.io/ministryofjustice/data-platform-actions-runner
+  tag: 0.0.5
+
+github:
+  organisation:
+  repository:
+  token:
+
+runner:
+  labels:
+
+irsa:
+  roleArn:
