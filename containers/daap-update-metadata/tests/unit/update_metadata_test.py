@@ -67,3 +67,15 @@ def test_invalid_update(s3_client, fake_context):
         "statusCode": HTTPStatus.BAD_REQUEST,
         "headers": {"Content-Type": "application/json"},
     }
+
+
+def test_invalid_data_product(s3_client, fake_context):
+    response = handler(
+        fake_event({"metadata": {"name": "does-not-exist"}}), fake_context
+    )
+
+    assert response == {
+        "body": json.dumps({"error": {"message": "Update not allowed"}}),
+        "statusCode": HTTPStatus.BAD_REQUEST,
+        "headers": {"Content-Type": "application/json"},
+    }
