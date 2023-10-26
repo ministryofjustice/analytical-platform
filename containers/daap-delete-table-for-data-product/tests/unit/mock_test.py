@@ -1,10 +1,7 @@
 import json
 import os
-
 from http import HTTPStatus
 
-import boto3
-import pytest
 import delete_table
 
 

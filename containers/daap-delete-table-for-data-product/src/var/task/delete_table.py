@@ -1,18 +1,11 @@
-import json
 import os
-
 from http import HTTPStatus
 
 import boto3
 from botocore.exceptions import ClientError
-
-from data_platform_api_responses import (
-    format_error_response,
-)
-from data_platform_logging import DataPlatformLogger, s3_security_opts
-from data_platform_paths import (
-    DataProductElement,
-)
+from data_platform_api_responses import format_error_response
+from data_platform_logging import DataPlatformLogger
+from data_platform_paths import DataProductElement
 from data_product_metadata import DataProductMetadata, DataProductSchema
 
 logger = DataPlatformLogger(
