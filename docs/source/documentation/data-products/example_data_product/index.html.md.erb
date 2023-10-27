@@ -12,8 +12,9 @@ review_in: 6 months
 [Data Product governance](/documentation/data-products/components/data-product-governance.html)
 
 ```yaml
-<%= File.read("/app/source/documentation/data-products/example_data_product/specification.yml") %>
-<%= File.read("/app/source/documentation/data-products/example_data_product/governance.yml") %>
+
+<%= File.read(File.expand_path('../specification.yml', __FILE__)) %>
+<%= File.read(File.expand_path('../governance.yml', __FILE__)) %>
 ```
 
 ## Table Schema
@@ -21,7 +22,7 @@ review_in: 6 months
 [Data dictionary guidance](/documentation/data-products/components/data-dictionary-definitions.html)
 
 ```yaml
-<%= File.read("/app/source/documentation/data-products/example_data_product/data-dictionary.yml") %>
+<%= File.read(File.expand_path('../data-dictionary.yml', __FILE__)) %>
 ```
 
 ## transformations
