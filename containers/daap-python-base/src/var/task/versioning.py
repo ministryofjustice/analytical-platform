@@ -94,7 +94,7 @@ class VersionCreator:
             logger=self.logger,
             input_data=input_data,
         ).load()
-        if not metadata.valid or not metadata.exists:
+        if not metadata.valid:
             raise InvalidUpdate()
 
         state = metadata_update_type(metadata)
@@ -105,7 +105,9 @@ class VersionCreator:
 
         latest_version = metadata.version
         new_version = str(Version.parse(latest_version).increment_minor())
-        self._copy_from_previous_version(latest_version=latest_version, new_version=new_version)
+        self._copy_from_previous_version(
+            latest_version=latest_version, new_version=new_version
+        )
         new_version_key = self.data_product_config.metadata_path(new_version).key
         metadata.write_json_to_s3(new_version_key)
 
@@ -131,14 +133,22 @@ class VersionCreator:
 
         latest_version = schema.version
         new_version = generate_next_version_string(schema.version, state)
-        self._copy_from_previous_version(latest_version=latest_version, new_version=new_version)
-        new_version_key = DataProductConfig(schema.data_product_name).schema_path(table_name, new_version).key
+        self._copy_from_previous_version(
+            latest_version=latest_version, new_version=new_version
+        )
+        new_version_key = (
+            DataProductConfig(schema.data_product_name)
+            .schema_path(table_name, new_version)
+            .key
+        )
         schema.convert_schema_to_glue_table_input_csv()
         schema.write_json_to_s3(new_version_key)
         return new_version, changes
 
     def _copy_from_previous_version(self, latest_version, new_version):
-        bucket, source_folder = self.data_product_config.metadata_path(latest_version).parent
+        bucket, source_folder = self.data_product_config.metadata_path(
+            latest_version
+        ).parent
 
         s3_copy_folder_to_new_folder(
             bucket=bucket,
@@ -149,7 +159,7 @@ class VersionCreator:
         )
 
 
-def metadata_update_type(data_product_metadata) -> UpdateType:
+def metadata_update_type(data_product_metadata: DataProductMetadata) -> UpdateType:
     """
     Figure out whether changes to the metadata represent a valid update
     """
@@ -165,7 +175,9 @@ def metadata_update_type(data_product_metadata) -> UpdateType:
         return UpdateType.MinorUpdate
 
 
-def schema_update_type(data_product_schema: DataProductSchema) -> tuple[UpdateType, dict]:
+def schema_update_type(
+    data_product_schema: DataProductSchema,
+) -> tuple[UpdateType, dict]:
     """
     Figure out whether changes to the input data represent a major or minor schema update
     and return the changes as a dict, e.g.
@@ -181,7 +193,9 @@ def schema_update_type(data_product_schema: DataProductSchema) -> tuple[UpdateTy
 
         if any([column_changes["removed_columns"], column_changes["types_changed"]]):
             update_type = UpdateType.MajorUpdate
-        elif any([column_changes["added_columns"], column_changes["descriptions_changed"]]):
+        elif any(
+            [column_changes["added_columns"], column_changes["descriptions_changed"]]
+        ):
             update_type = UpdateType.MinorUpdate
         elif not any(
             [
@@ -203,15 +217,22 @@ def schema_update_type(data_product_schema: DataProductSchema) -> tuple[UpdateTy
     # notification process is developed
     if not update_type == UpdateType.Unchanged:
         changed_fields.remove("columns")
-        non_column_changed_fields = [field for field in changed_fields] if changed_fields else None
+        non_column_changed_fields = (
+            [field for field in changed_fields] if changed_fields else None
+        )
         all_schema_changes = {
-            data_product_schema.table_name: {"columns": column_changes, "non_column_fields": non_column_changed_fields}
+            data_product_schema.table_name: {
+                "columns": column_changes,
+                "non_column_fields": non_column_changed_fields,
+            }
         }
 
     return update_type, all_schema_changes
 
 
-def s3_copy_folder_to_new_folder(bucket, source_folder, latest_version, new_version, logger):
+def s3_copy_folder_to_new_folder(
+    bucket, source_folder, latest_version, new_version, logger
+):
     """
     Recurisvely copy a folder, replacing {latest_version} with {new_version}
     """
@@ -237,7 +258,9 @@ def s3_copy_folder_to_new_folder(bucket, source_folder, latest_version, new_vers
         )
 
 
-def generate_next_version_string(version: str, update_type: UpdateType = UpdateType.MinorUpdate) -> str:
+def generate_next_version_string(
+    version: str, update_type: UpdateType = UpdateType.MinorUpdate
+) -> str:
     """
     Generate the next version
     """
