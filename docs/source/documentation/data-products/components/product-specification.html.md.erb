@@ -1,0 +1,188 @@
+> **NOTE**
+
+> these pages are *primarily* for internal audiences rather than users of the Data Platform;
+we will host user-facing documentation separately.
+
+# Data Product specification
+
+Use the [`specification`](/documentation/data-products/example_data_product/specification.yml) section in your Data Product YAML definition file to provide a name, title and description for your Data Product, and tags to help users find it. If you wish, you can also write a short value proposition outling *why* the product exists and what data analysis or visualisation might arise from it. In general, the `specification` section contains information that users of the data will see.
+
+You must also provide contact information for the product.
+
+## Example
+
+<!-- (Alpha) -->
+```yaml
+name: example_data_product
+description: Example Data Product contains published prison population from 2001 to present
+status: string (enum)
+```
+
+
+<!-- (Beta)
+```yaml
+specification:
+  name: example_data_product
+  title: Example Data Product
+  description: Example Data Product contains published prison population from 2001 to present
+  product-tags: [
+    "HMPPS", "prisons", "published data", "national statistics"
+  ]
+  value-proposition: Regurlarly updated published prison population figures, useful for combining with other datasets for contextualisation
+  status: production
+  limitations:
+
+  support:
+    channels:
+      email: data.product.owner@digital.justice.gov.uk
+      ms-teams:
+      slack-channel: data-product-team
+    product-guidance-url:
+```
+-->
+
+<!-- (Later)
+```yaml
+specification:
+  name: example_data_product
+  title: Example Data Product
+  description: Example Data Product contains published prison population from 2001 to present
+  product-tags: [
+    "HMPPS", "prisons", "published data", "national statistics"
+  ]
+  value-proposition: Regurlarly updated published prison population figures, useful for combining with other datasets for contextualisation
+  status: production
+  allow-derived-products: false
+  limitations:
+  product-type: dataset
+
+  management:
+    owner:
+      aad-group: owner_group
+      github-team: owner-team
+    maintainers:
+      data-product:
+        - aad-group: dp_maintainer_group
+          github-team: maintainer-team
+      data-assets:
+        - aad-group: example_table_group
+          github-team: example-table-team
+
+  support:
+    channels:
+      email: data.product.owner@digital.justice.gov.uk
+      ms-teams:
+      slack-channel: data-product-team
+    product-guidance-url:
+```
+-->
+
+## Notes
+
+### Naming and tagging
+
+<!-- (Alpha) -->
+The product's `name` must be reasonably short, and unique - we currently check for uniqueness when Data Product requests are created.
+
+You must only use alphanumeric characters or underscores. Don't use spaces - spaces will be replaced with underscores.
+
+<!-- (Beta/Later) -->
+<!--
+The product `title` should be the human-readable version of the name. Keep it short but meaningful. Data Product titles should be unique, since:
+
+- Users may see it listed in a directory of products, and multiple instances of the same title are confusing
+- Users may know a Data Product title well enough to search for it directly
+-->
+
+The product `description` can be longer, give more information and will help users find your data.
+
+> NOTE: the `product-version` attribute is not yet documented here. This will be automatically incremented when the Data Product is updated. Versioning logic will be clearly documented, but in brief breaking changes will constitute Major version bumps (`v1.0` -> `v2.0`), where backwards-compatible changes and updates will be Minor version bumps (`v1.0` -> `v1.1`).
+
+<!-- (Beta/Later) -->
+<!--
+`product-tags` are an array of quoted strings to further aid discoverability (think of them as search keywords).
+-->
+
+<!-- (Later) -->
+<!--
+### Management access
+
+Using the `management` attribute, you must supply the names of groups of users who will have permisson to manage this Data Product.
+
+The levels of management access are:
+
+- `owner` - the owner is responsible for the usage of the Data Product
+- `maintainer: data-product` - Able to update properties of the Data Product
+- `maintainer: data-assets` - Able to update properties of data assets within the Data Product
+
+To assign membership to one of these management levels use either (or both) of the following:
+
+- `aad-group` - the name of a Azure Active Directory (AAD) security group
+- `github-team` - the name of a GitHub team
+
+Note these are **groups** of users, not the name of an individual.
+
+-->
+
+### Product status
+
+- `status`: use one of the following to indicate to users the status of the data:
+  - `draft`
+  - `development`
+  - `testing`
+  - `production`
+  - `sunset`
+  - `retired`
+
+Most Data Products will be tagged as `production` - the other statuses will flag to users that special handling is required. If `status` is omitted, we assume it is `production`.
+
+<!-- (Later) -->
+<!--
+- `allow-derived-products` - typically `true` (and `true` if not supplied), but in some cases you may not wish derived products to be created. If the product status attribute is "production", you may be asked to justify disallowing derived products as we want to encourage data reuse. -->
+
+<!-- (Beta) -->
+<!-- ### Contact information
+
+You must supply at least one of the following contact `support` `channels` to indicate ownership of the Data Product (either email, MS Teams channel or Slack channel):
+
+- `support: channels: email`
+- `support: channels: ms-teams`
+- `support: channels: slack-channel`
+
+If the preferred contact method is email, please provide a group address or shared mailbox rather than an individual's address.
+
+Important notifications about your Data Product are sent to the supplied address, so please ensure it is monitored. -->
+
+<!-- (Later) -->
+<!--
+### Product type
+
+The `type` attributes must be one of the following:
+
+- `dataset`
+- `raw-data`
+- `data-enhanced-product`
+- `derived-data`
+- `reports`
+- `analytic-view`
+- `automated-decsion-making`
+
+We would expect most Data Products to be of type `dataset`, `raw-data`, or `data-enhanced-product` (the latter typically being a Data Product derived from another Data Product). The other types are typically outputs _from_ Data Products, but in some cases you may wish to supply derived or calculated data - for example if the analytics or processing is not currently hosted on the Data Platform.
+-->
+
+<!-- (Beta) -->
+<!-- ### Optional attributes
+
+Most of the attributes outlined above are required, however:
+
+- `limitations` is optional free text which tells users about what they _can't_ or _shouldn't_ do with this data. If your Data Product has undergone a Data Protection Impact Assesment (DPIA) which highlights inappropriate use cases, you should list those here.
+  - > NOTE: if your Data Product is still in development, or has draft status, please flag this using the `status` attribute described below
+- `product-guidance-url` is optional - if this is provided the data catalogue can link to your supplementary guidance (for example a SharePoint page or Google doc)
+-->
+
+
+## Further reading
+
+[Index of documention for Data Product defintion](/documentation/data-products#defining-a-data-product)
+
+[Example Data Product](/documentation/data-products/example_data_product)

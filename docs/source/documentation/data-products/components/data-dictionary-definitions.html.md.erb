@@ -1,0 +1,49 @@
+
+> **NOTE**
+
+> these pages are *primarily* for internal audiences rather than users of the Data Platform;
+we will host user-facing documentation separately.
+
+# Data dictionary
+
+A data dictionary is used to contextualise the purpose and structure of a dataset for the users of a dataset. For structured data it contains column names, types and descriptions for each column of a table.
+
+This descriptive data is captured as part of each Table Schema in a Data Product.
+
+## Example
+
+In general, a column will have the following attributes:
+
+- `name`
+- `type`
+- `description`
+
+The following Table Schema defines one table called "population_by_offence", with five columns - "row_id", "offence_code", "offence, "date", and "population".
+
+
+```yaml
+---
+tableDescription: Prison population by offence.
+columns:
+- name: row_id
+  type: int
+  description: primary key for this table. auto-incrementing integer
+- name: offence_code
+  type: string
+  description: code for the offence type
+- name: offence
+  type: string
+  description: offence type name
+- name: date
+  type: date
+  description: month for aggregation of prison population by offence
+- name: population
+  type: int
+  description: number of prisoners with that offence_code at the start of that month
+```
+
+## Further reading
+
+[Index of documention for data product defintion](/documentation/data-products#defining-a-data-product)
+
+[Example data product](/documentation/data-products/example_data_product)
