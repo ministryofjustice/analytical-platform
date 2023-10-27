@@ -4,7 +4,7 @@
 
 # Describing data cleansing
 
-When describing what has happened to your data before users get to interact with it, you should describe any data cleaning processes which you have used, either at a table or column level. Cleansing should be documented in the [`transformations`](/documentation/data-products/example_data_product/03-transformations.yml) section of your data product metadata.
+When describing what has happened to your data before users get to interact with it, you should describe any data cleaning processes which you have used, either at a table or column level. Cleansing should be documented in the [`transformations`](/documentation/data-products/example_data_product/transformations.yml) section of your data product metadata.
 
 See also our guidance on describing [transformations](data-transformation-definitions.html) your data may have applied to it.
 
@@ -82,7 +82,7 @@ Our [example data product](/documentation/data-products/example_data_product) co
 
 ### Data with no cleansing applied
 
-If your data has not undergone any cleansing, we suggest you explicitly inform users of this by adding `type: none` to make this clear to users. Otherwise we will assume there has been undocumented cleansing. An exception is made for tables [defined as reference data](/documentation/data-products/example_data_product/02-data-dictionary.yml#L67) - here we assume no cleansing has been applied if there is no cleansing specified.
+If your data has not undergone any cleansing, we suggest you explicitly inform users of this by adding `type: none` to make this clear to users. Otherwise we will assume there has been undocumented cleansing. An exception is made for tables [defined as reference data](/documentation/data-products/example_data_product/data-dictionary.yml#L67) - here we assume no cleansing has been applied if there is no cleansing specified.
 
 ## Considerations
 
@@ -90,7 +90,7 @@ Wherever possible, it is better to have clean data captured at source. If you ar
 
 <!--## Template generation
 
-Our roadmap contains plans for tools to aid in template generation - for example generating a skeleton `03-transformations.yml` given a `02-data-dictionary.yml` as input.-->
+Our roadmap contains plans for tools to aid in template generation - for example generating a skeleton `transformations.yml` given a `data-dictionary.yml` as input.-->
 
 ## Suggesting changes
 
