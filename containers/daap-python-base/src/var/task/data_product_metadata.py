@@ -133,7 +133,6 @@ class BaseJsonSchema:
         self.exists = self._check_a_version_exists()
         self.write_bucket = latest_version_path.bucket
         self.latest_version_key = latest_version_path.key
-        self.latest_version_saved_data = None
         self.version = latest_version_path.key.split("/")[1]
         if input_data is not None:
             self.validate(input_data)

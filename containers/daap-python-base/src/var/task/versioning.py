@@ -184,7 +184,7 @@ def schema_update_type(
         {table_name: {columns:{...}, non_column_fields: {...}}}
     """
     if not data_product_schema.exists or not data_product_schema.valid:
-        return UpdateType.NotAllowed
+        return UpdateType.NotAllowed, {}
 
     changed_fields = data_product_schema.changed_fields()
 

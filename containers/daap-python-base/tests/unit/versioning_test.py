@@ -90,9 +90,9 @@ class TestVersionCreator:
         )
 
     def assert_has_keys(self, keys, version):
-        contents = self.s3_client.list_objects_v2(Bucket=self.bucket_name, Prefix=f"{test_metadata['name']}/{version}")[
-            "Contents"
-        ]
+        contents = self.s3_client.list_objects_v2(
+            Bucket=self.bucket_name, Prefix=f"{test_metadata['name']}/{version}"
+        )["Contents"]
         actual = {i["Key"] for i in contents}
 
         assert actual == keys
@@ -118,8 +118,12 @@ class TestVersionCreator:
         )
 
         input_data = copy.deepcopy(test_schema)
-        input_data["tableDescription"] = "table has schema to pass test and an extra column"
-        input_data["columns"].append({"name": "col_5", "type": "smallint", "description": "JKJK"})
+        input_data[
+            "tableDescription"
+        ] = "table has schema to pass test and an extra column"
+        input_data["columns"].append(
+            {"name": "col_5", "type": "smallint", "description": "JKJK"}
+        )
 
         version_creator = VersionCreator(test_metadata["name"], logging.getLogger())
 
@@ -137,7 +141,13 @@ class TestVersionCreator:
                 "non_column_fields": ["tableDescription"],
             }
         }
-        self.assert_has_keys({"test_product/v1.1/metadata.json", "test_product/v1.1/test_table/schema.json"}, "v1.1")
+        self.assert_has_keys(
+            {
+                "test_product/v1.1/metadata.json",
+                "test_product/v1.1/test_table/schema.json",
+            },
+            "v1.1",
+        )
 
     def test_creates_major_version_schema(self, s3_client):
         s3_client.put_object(
@@ -165,7 +175,13 @@ class TestVersionCreator:
                 "non_column_fields": None,
             }
         }
-        self.assert_has_keys({"test_product/v2.0/metadata.json", "test_product/v2.0/test_table/schema.json"}, "v2.0")
+        self.assert_has_keys(
+            {
+                "test_product/v2.0/metadata.json",
+                "test_product/v2.0/test_table/schema.json",
+            },
+            "v2.0",
+        )
 
     def test_copies_schemas(self, s3_client):
         s3_client.put_object(
