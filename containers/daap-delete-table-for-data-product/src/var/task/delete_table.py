@@ -27,6 +27,22 @@ def s3_recursive_delete(bucket, prefix) -> None:
     bucket.objects.filter(Prefix=prefix).delete()
 
 
+def delete_glue_table(data_product_name, table_name, event):
+    """Attempts to locate and delete a glue table for the given data product"""
+    try:
+        glue_client.get_table(DatabaseName=data_product_name, Name=table_name)
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "EntityNotFoundException":
+            error_message = f"Could not locate glue table '{table_name}' in database '{data_product_name}'"
+            logger.error(error_message)
+        else:
+            error_message = f"Unexpected ClientError: {e.response['Error']['Code']}"
+            logger.error(error_message)
+        return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
+    else:
+        glue_client.delete_table(DatabaseName=data_product_name, Name=table_name)
+
+
 def handler(event, context):
     """
     Handles requests that are passed through the Amazon API Gateway data-product/ REST API endpoint.
@@ -74,18 +90,11 @@ def handler(event, context):
         return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
 
     # Attempt deletion of the glue table
-    try:
-        glue_client.get_table(DatabaseName=data_product_name, Name=table_name)
-    except ClientError as e:
-        if e.response["Error"]["Code"] == "EntityNotFoundException":
-            error_message = f"Could not locate glue table '{table_name}' in database '{data_product_name}'"
-            logger.error(error_message)
-        else:
-            error_message = f"Unexpected ClientError: {e.response['Error']['Code']}"
-            logger.error(error_message)
-        return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
-    else:
-        glue_client.delete_table(DatabaseName=data_product_name, Name=table_name)
+    glue_error = delete_glue_table(
+        data_product_name=data_product_name, table_name=table_name, event=event
+    )
+    if glue_error is not None:
+        return glue_error
 
     # Proceed to delete the raw data
     element = DataProductElement.load(
