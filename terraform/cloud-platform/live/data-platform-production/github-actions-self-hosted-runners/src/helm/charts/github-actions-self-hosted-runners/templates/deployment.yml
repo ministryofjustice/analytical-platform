@@ -25,7 +25,10 @@ spec:
             - name: GITHUB_REPOSITORY
               value: {{ .Values.github.organisation }}/{{ .Values.github.repository }}
             - name: GITHUB_TOKEN
-              value: {{ .Values.github.token }}
+              valueFrom:
+                secretKeyRef:
+                  name: gha-shr-{{ template "github.repoShorthand" }}-{{ .Values.github.repository }}
+                  key: token
             - name: RUNNER_LABELS
               value: {{ .Values.runner.labels }}
           resources:

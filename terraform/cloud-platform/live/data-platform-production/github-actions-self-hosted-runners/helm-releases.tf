@@ -1,5 +1,5 @@
 ##################################################
-# create-a-derived-table
+# moj-analytical-services/create-a-derived-table
 ##################################################
 
 data "aws_secretsmanager_secret" "github_actions_self_hosted_runner_create_a_derived_table" {
@@ -44,4 +44,3 @@ resource "helm_release" "github_actions_self_hosted_runners_create_a_derived_tab
     value = "moj-cloud-platform"
   }
 }
-
