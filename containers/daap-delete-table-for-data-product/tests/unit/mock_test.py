@@ -80,7 +80,7 @@ class TestHandler:
             Bucket=bucket,
             Prefix=data_product_element.raw_data_prefix.key,
         )
-        assert len(pre_delete_file_count.get("Contents", [])) == 10
+        assert pre_delete_file_count.get("KeyCount") == 10
 
         # Call the handler
         delete_table.handler(event=event, context=fake_context)
@@ -90,7 +90,7 @@ class TestHandler:
             Bucket=bucket,
             Prefix=data_product_element.raw_data_prefix.key,
         )
-        assert len(post_delete_file_count.get("Contents", [])) == 0
+        assert post_delete_file_count.get("KeyCount") == 0
 
     def test_deletion_of_curated_files(
         self,
@@ -111,7 +111,7 @@ class TestHandler:
             Bucket=bucket,
             Prefix=data_product_element.curated_data_prefix.key,
         )
-        assert len(pre_delete_file_count.get("Contents", [])) == 10
+        assert pre_delete_file_count.get("KeyCount") == 10
 
         # Call the handler
         delete_table.handler(event=event, context=fake_context)
@@ -121,4 +121,4 @@ class TestHandler:
             Bucket=bucket,
             Prefix=data_product_element.curated_data_prefix.key,
         )
-        assert len(post_delete_file_count.get("Contents", [])) == 0
+        assert post_delete_file_count.get("KeyCount") == 0
