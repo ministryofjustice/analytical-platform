@@ -15,15 +15,15 @@ sys.path.append(
     )
 )
 
-from data_platform_logging import DataPlatformLogger  # noqa E402
-from data_platform_paths import DataProductElement  # noqa E402
-
 os.environ["AWS_ACCESS_KEY_ID"] = "testing"
 os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
 os.environ["AWS_SECURITY_TOKEN"] = "testing"
 os.environ["AWS_SESSION_TOKEN"] = "testing"
 os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
 os.environ["BUCKET_NAME"] = "test"
+
+from data_platform_logging import DataPlatformLogger  # noqa E402
+from data_platform_paths import DataProductElement  # noqa E402
 
 
 @pytest.fixture(autouse=True)
@@ -96,14 +96,14 @@ def region_name():
     return "eu-west-1"
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def create_metadata_bucket(s3_client):
-    s3_client.create_bucket(Bucket=os.environ.get("METADATA_BUCKET", "metadata"))
+    s3_client.create_bucket(Bucket=os.getenv("METADATA_BUCKET"))
 
 
 @pytest.fixture
 def create_raw_bucket(s3_client):
-    s3_client.create_bucket(Bucket=os.environ.get("RAW_BUCKET", "raw"))
+    s3_client.create_bucket(Bucket=os.getenv("RAW_DATA_BUCKET"))
 
 
 @pytest.fixture
@@ -133,7 +133,7 @@ def event(data_product_name, table_name):
 
 
 @pytest.fixture
-def create_metadata(s3_client, data_product_name):
+def create_metadata(s3_client, create_metadata_bucket, data_product_name):
     s3_client.put_object(
         Bucket=os.environ.get("METADATA_BUCKET", "metadata"),
         Key=f"{data_product_name}/v1.0/metadata.json",
@@ -144,7 +144,7 @@ def create_metadata(s3_client, data_product_name):
 @pytest.fixture
 def create_schema(create_metadata, s3_client, data_product_name, table_name):
     s3_client.put_object(
-        Bucket=os.environ.get("METADATA_BUCKET", "metadata"),
+        Bucket=os.getenv("METADATA_BUCKET"),
         Key=f"{data_product_name}/v1.0/{table_name}/schema.json",
         Body=json.dumps({"test": "test"}),
     )
@@ -166,7 +166,7 @@ def create_glue_table(create_glue_database, glue_client, data_product_name, tabl
 def create_raw_data(s3_client, create_raw_bucket, data_product_name, table_name):
     for i in range(10):
         s3_client.put_object(
-            Bucket=os.environ.get("RAW_BUCKET", "raw"),
+            Bucket=os.getenv("RAW_DATA_BUCKET"),
             Key=f"raw/{data_product_name}/v1.0/{table_name}/raw-file-{str(i)}.json",
             Body=json.dumps({"content": f"{i}"}),
         )
