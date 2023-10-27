@@ -2,9 +2,10 @@ import os
 import sys
 from dataclasses import dataclass
 from os.path import dirname, join
+from unittest.mock import Mock
 
 import pytest
-from unittest.mock import Mock
+
 
 
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
@@ -14,8 +15,12 @@ sys.path.append(
     )
 )
 
+os.environ["AWS_ACCESS_KEY_ID"] = "testing"
+os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
+os.environ["AWS_SECURITY_TOKEN"] = "testing"
+os.environ["AWS_SESSION_TOKEN"] = "testing"
 os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
-os.environ["BUCKET_NAME"] = "test"
+os.environ["BUCKET_NAME"] = "bucket"
 
 
 @dataclass
