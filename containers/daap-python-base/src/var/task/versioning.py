@@ -167,7 +167,9 @@ def metadata_update_type(data_product_metadata) -> UpdateType:
 
 def schema_update_type(data_product_schema: DataProductSchema) -> tuple[UpdateType, dict]:
     """
-    Figure out whether changes to the input data represent a major or minor schema update.
+    Figure out whether changes to the input data represent a major or minor schema update
+    and return the changes as a dict, e.g.
+        {table_name: {columns:{...}, non_column_fields: {...}}}
     """
     if not data_product_schema.exists or not data_product_schema.valid:
         return UpdateType.NotAllowed
