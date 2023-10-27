@@ -4,7 +4,7 @@ ACTIONS_RUNNER_DIRECTORY="/actions-runner"
 
 echo "Runner parameters:"
 echo "  Repository: ${GITHUB_REPOSITORY}"
-echo "  Runner Name: ${RUNNER_NAME}"
+echo "  Runner Name: $(hostname)"
 echo "  Runner Labels: ${RUNNER_LABELS}"
 
 echo "Obtaining registration token"

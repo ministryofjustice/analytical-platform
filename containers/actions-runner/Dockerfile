@@ -24,6 +24,7 @@ RUN groupadd \
     && useradd \
       --uid ${CONTAINER_UID} \
       --gid ${CONTAINER_GROUP} \
+      --create-home \
       ${CONTAINER_USER} \
     && mkdir --parents ${CONTAINER_HOME} \
     && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} ${CONTAINER_HOME}
@@ -36,6 +37,7 @@ RUN apt-get update \
       curl=7.81.0-1ubuntu1.14 \
       jq=1.6-2.1ubuntu3 \
       libicu-dev=70.1-2 \
+      lsb-release=11.1.0ubuntu4 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && curl --location "https://github.com/actions/runner/releases/download/v${ACTIONS_RUNNER_VERSION}/actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" \
