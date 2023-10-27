@@ -64,7 +64,6 @@ def format_athena_results_to_table(results):
 
     # Data rows
     headers= [value for header_dict in results['ResultSet']['Rows'][0]['Data'] for value in header_dict.values()]
-    print(headers)
     column_widths = {header: len(header) for header in headers}
 
     # Data rows
@@ -120,5 +119,5 @@ def handler(event,context,athena_client=athena_client):
     logger.info(log_message)
 
     return format_response_json(
-        status_code=HTTPStatus.OK, json_body=formated_result
+        status_code=HTTPStatus.OK, body=formated_result
     )

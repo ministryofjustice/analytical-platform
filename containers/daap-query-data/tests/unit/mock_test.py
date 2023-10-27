@@ -1,7 +1,4 @@
 from query_data import handler
-from unittest.mock import Mock
-import pytest
-import boto3
 
 
 def test_query_athena(athena_client, fake_context):
@@ -61,5 +58,5 @@ def test_query_athena(athena_client, fake_context):
     )
 
     processed_results = result["body"]
-    expected_results = "| Header1      | Header2      | Header2Longerone |\n| Row 1 Data 1 | Row 1 Data 2 | 20231023T144052Z |\n| Row 2 Data 1 | Row 2 Data 2 | 20231024T144052Z |\n| Row 3 Data 1 | Row 3 Data 2 | 20231025T144052Z |\n"
+    expected_results = '"| Header1      | Header2      | Header2Longerone |\\n| Row 1 Data 1 | Row 1 Data 2 | 20231023T144052Z |\\n| Row 2 Data 1 | Row 2 Data 2 | 20231024T144052Z |\\n| Row 3 Data 1 | Row 3 Data 2 | 20231025T144052Z |\\n"'
     assert processed_results == expected_results
