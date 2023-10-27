@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   class in data_product_metadata.
 - `generate_next_version_string` function to versioning module.
 
+## [5.2.1] - 2023-10-26
+
+### Changed
+
+- `VersionCreator` should handle the case where the data product doesn't exist
+
 ## [5.2.0] - 2023-10-25
 
 Added new versioning module.
