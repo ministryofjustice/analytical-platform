@@ -9,7 +9,7 @@ from typing import NamedTuple
 import boto3
 from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import DataProductConfig
-from data_product_metadata import DataProductMetadata
+from data_product_metadata import DataProductMetadata, DataProductSchema
 
 s3_client = boto3.client("s3")
 
@@ -50,6 +50,8 @@ UPDATABLE_METADATA_FIELDS = {
     "dataProductMaintainerDisplayName",
     "tags",
 }
+
+MINOR_UPDATE_SCHEMA_FIELDS = {"tableDescription"}
 
 
 class UpdateType(Enum):
@@ -102,7 +104,7 @@ class VersionCreator:
             raise InvalidUpdate(state)
 
         latest_version = metadata.version
-        new_version = str(Version.parse(latest_version).increment_minor())
+        new_version = generate_next_version_string(latest_version, state)
         self._copy_from_previous_version(
             latest_version=latest_version, new_version=new_version
         )
@@ -110,6 +112,41 @@ class VersionCreator:
         metadata.write_json_to_s3(new_version_key)
 
         return new_version
+
+    def update_schema(self, input_data: dict, table_name: str):
+        """
+        Create a new version with updated schema.
+        """
+        schema = DataProductSchema(
+            data_product_name=self.data_product_config.name,
+            table_name=table_name,
+            input_data=input_data,
+            logger=self.logger,
+        ).load()
+
+        if not schema.valid:
+            raise InvalidUpdate()
+
+        state, changes = schema_update_type(schema)
+        self.logger.info(f"Update type {state}")
+        if not state == UpdateType.Unchanged:
+            self.logger.info(f"Changes to schema: {changes}")
+
+            latest_version = schema.version
+            new_version = generate_next_version_string(schema.version, state)
+            self._copy_from_previous_version(
+                latest_version=latest_version, new_version=new_version
+            )
+            new_version_key = (
+                DataProductConfig(schema.data_product_name)
+                .schema_path(table_name, new_version)
+                .key
+            )
+            schema.convert_schema_to_glue_table_input_csv()
+            schema.write_json_to_s3(new_version_key)
+            return new_version, changes
+        else:
+            raise InvalidUpdate()
 
     def _copy_from_previous_version(self, latest_version, new_version):
         bucket, source_folder = self.data_product_config.metadata_path(
@@ -125,7 +162,7 @@ class VersionCreator:
         )
 
 
-def metadata_update_type(data_product_metadata) -> UpdateType:
+def metadata_update_type(data_product_metadata: DataProductMetadata) -> UpdateType:
     """
     Figure out whether changes to the metadata represent a valid update
     """
@@ -139,6 +176,74 @@ def metadata_update_type(data_product_metadata) -> UpdateType:
         return UpdateType.NotAllowed
     else:
         return UpdateType.MinorUpdate
+
+
+def schema_update_type(
+    data_product_schema: DataProductSchema,
+) -> tuple[UpdateType, dict]:
+    """
+    Figure out whether changes to the input data represent a major or minor schema update
+    and return the changes as a dict, e.g.
+        {table_name: {columns:{...}, non_column_fields: {...}}}
+    """
+    if not data_product_schema.exists or not data_product_schema.valid:
+        return UpdateType.NotAllowed, {}
+
+    changed_fields = data_product_schema.changed_fields()
+
+    if "columns" in changed_fields:
+        column_changes = data_product_schema.detect_column_differences_in_new_version()
+
+        if any([column_changes["removed_columns"], column_changes["types_changed"]]):
+            update_type = UpdateType.MajorUpdate
+        elif any(
+            [column_changes["added_columns"], column_changes["descriptions_changed"]]
+        ):
+            update_type = UpdateType.MinorUpdate
+        elif not any(
+            [
+                column_changes["removed_columns"],
+                column_changes["types_changed"],
+                column_changes["added_columns"],
+                column_changes["descriptions_changed"],
+            ]
+        ):
+            update_type = UpdateType.Unchanged
+    else:
+        column_changes = {
+            "removed_columns": None,
+            "added_columns": None,
+            "types_changed": None,
+            "descriptions_changed": None,
+        }
+        if not changed_fields:
+            update_type = UpdateType.Unchanged
+        elif changed_fields.intersection(MINOR_UPDATE_SCHEMA_FIELDS):
+            update_type = UpdateType.MinorUpdate
+
+    # could be returned and used to form notification of change to consumers of data when the
+    # notification process is developed
+    if not update_type == UpdateType.Unchanged:
+        if "columns" in changed_fields:
+            changed_fields.remove("columns")
+        non_column_changed_fields = (
+            [field for field in changed_fields] if changed_fields else None
+        )
+        all_schema_changes = {
+            data_product_schema.table_name: {
+                "columns": column_changes,
+                "non_column_fields": non_column_changed_fields,
+            }
+        }
+    else:
+        all_schema_changes = {
+            data_product_schema.table_name: {
+                "columns": column_changes,
+                "non_column_fields": None,
+            }
+        }
+
+    return update_type, all_schema_changes
 
 
 def s3_copy_folder_to_new_folder(
@@ -167,3 +272,18 @@ def s3_copy_folder_to_new_folder(
             Key=destination_key,
             ExtraArgs=s3_security_opts,
         )
+
+
+def generate_next_version_string(
+    version: str, update_type: UpdateType = UpdateType.MinorUpdate
+) -> str:
+    """
+    Generate the next version
+    """
+    current_version = Version.parse(version)
+    if update_type == UpdateType.MajorUpdate:
+        return str(current_version.increment_major())
+    elif update_type == UpdateType.MinorUpdate:
+        return str(current_version.increment_minor())
+    else:
+        return version
