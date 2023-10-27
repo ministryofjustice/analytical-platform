@@ -338,8 +338,12 @@ class DataProductSchema(BaseJsonSchema):
 
         return metadata
 
-    def detect_column_differences_in_new_version(self):
-        """to detect types of changes in updated schema columns"""
+    def detect_column_differences_in_new_version(self) -> dict:
+        """
+        Detects and returns what has changed comparing the latest saved version of
+        schema with an updated version that has passed validation but not yet been
+        converted to a glue table input (is available at self.data_pre_convert)
+        """
 
         types_changed = set()
         descriptions_changed = set()
@@ -349,7 +353,6 @@ class DataProductSchema(BaseJsonSchema):
         new_col_list = self.data_pre_convert["columns"]
 
         old_col_dict = {col["name"]: {"type": col["type"], "description": col["description"]} for col in old_col_list}
-
         new_col_dict = {col["name"]: {"type": col["type"], "description": col["description"]} for col in new_col_list}
 
         old_col_names = set(old_col_dict.keys())
@@ -360,7 +363,6 @@ class DataProductSchema(BaseJsonSchema):
 
         # check each column in old schema against column in new schema for type or description
         # changes, if old column exists in new columns
-
         types_changed = {
             old_col
             for old_col in old_col_dict
