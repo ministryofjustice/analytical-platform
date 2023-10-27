@@ -76,7 +76,9 @@ def format_table_schema(glue_schema: dict) -> dict:
     }
 
 
-def get_data_product_specification_path(spec_type: JsonSchemaName, version: None | str = None) -> str:
+def get_data_product_specification_path(
+    spec_type: JsonSchemaName, version: None | str = None
+) -> str:
     """
     Gets the specification path for the JSON schema that validates a data product metadata
     or table schema. If a version is not specified, the latest JSON schema version is assumed.
@@ -85,7 +87,9 @@ def get_data_product_specification_path(spec_type: JsonSchemaName, version: None
     # if version is empty we get the latest version
     if version is None:
         file_paths = get_filepaths_from_s3_folder(specification_prefix(spec_type).uri)
-        versions = list({i for p in file_paths for i in p.split("/") if i.startswith("v")})
+        versions = list(
+            {i for p in file_paths for i in p.split("/") if i.startswith("v")}
+        )
         versions.sort(key=lambda x: [int(y.replace("v", "")) for y in x.split(".")])
         latest_version = versions[-1]
         path = specification_path(spec_type, latest_version)
@@ -137,7 +141,9 @@ class BaseJsonSchema:
     def _check_a_version_exists(self) -> object:
         """checks a version of json file exists of the given input data"""
         if self.type == JsonSchemaName.data_product_schema:
-            bucket_path = DataProductConfig(name=self.data_product_name).schema_path(table_name=self.table_name)
+            bucket_path = DataProductConfig(name=self.data_product_name).schema_path(
+                table_name=self.table_name
+            )
 
         elif self.type == JsonSchemaName.data_product_metadata:
             bucket_path = DataProductConfig(name=self.data_product_name).metadata_path()
@@ -153,7 +159,9 @@ class BaseJsonSchema:
                 self.logger.error(f"Uknown error - {e}")
                 raise Exception(f"Uknown error - {e}")
         else:
-            self.logger.info(f"version 1 of {self.type.value} already exists for this data product")
+            self.logger.info(
+                f"version 1 of {self.type.value} already exists for this data product"
+            )
             return True
 
     def validate(
@@ -174,7 +182,9 @@ class BaseJsonSchema:
             validate(instance=data_to_validate, schema=validate_against_jsonschema)
         except ValidationError:
             self.error_traceback = traceback.format_exc()
-            self.logger.error(f"{self.type} has failed validation with error: {self.error_traceback}")
+            self.logger.error(
+                f"{self.type} has failed validation with error: {self.error_traceback}"
+            )
             self.valid = False
         else:
             self.logger.info(f"{self.type} has passed validation")
@@ -201,15 +211,21 @@ class BaseJsonSchema:
                     "ServerSideEncryption": "AES256",
                 },
             )
-            self.logger.info(f"Data Product {self.type} written to s3 at {self.write_bucket}/{write_key}")
+            self.logger.info(
+                f"Data Product {self.type} written to s3 at {self.write_bucket}/{write_key}"
+            )
         else:
             self.logger.error(f"{self.type} is not valid to write.")
-            raise ValidationError("Metadata must be validated before being written to s3.")
+            raise ValidationError(
+                "Metadata must be validated before being written to s3."
+            )
 
     def load(self):
         """loads the latest version of json file saved in s3"""
         if self.exists:
-            self.latest_version_saved_data = read_json_from_s3(f"s3://{self.write_bucket}/{self.latest_version_key}")
+            self.latest_version_saved_data = read_json_from_s3(
+                f"s3://{self.write_bucket}/{self.latest_version_key}"
+            )
         else:
             self.logger.error("There is no metadata to load")
         return self
@@ -253,7 +269,9 @@ class DataProductSchema(BaseJsonSchema):
         input_data: dict | None,
     ):
         # returns path of latest schema or v1 if it doesn't exist
-        latest_version_path = DataProductConfig(name=data_product_name).schema_path(table_name)
+        latest_version_path = DataProductConfig(name=data_product_name).schema_path(
+            table_name
+        )
 
         super().__init__(
             data_product_name=data_product_name,
@@ -279,7 +297,9 @@ class DataProductSchema(BaseJsonSchema):
                 .latest_version_saved_data
             )
 
-        self.parent_product_has_registered_schema = self._does_data_product_have_other_schema_registered()
+        self.parent_product_has_registered_schema = (
+            self._does_data_product_have_other_schema_registered()
+        )
 
     def _does_data_product_metadata_exist(self):
         """checks whether data product for schema has metadata registered"""
@@ -295,7 +315,10 @@ class DataProductSchema(BaseJsonSchema):
         the data product metadata needs a minor version increment if a table schema is added and
         one or more schema already exist in the data product
         """
-        if self.has_registered_data_product and "schemas" in self.parent_data_product_metadata.keys():
+        if (
+            self.has_registered_data_product
+            and "schemas" in self.parent_data_product_metadata.keys()
+        ):
             return True
         else:
             return False
@@ -312,8 +335,12 @@ class DataProductSchema(BaseJsonSchema):
             glue_schema["TableInput"]["Name"] = self.table_name
             glue_schema["TableInput"]["Owner"] = parent_metadata["dataProductOwner"]
             # if not parent_metadata.get("retentionPeriod", 0) == 0:
-            glue_schema["TableInput"]["Retention"] = parent_metadata.get("retentionPeriod")
-            glue_schema["TableInput"]["Description"] = self.data_pre_convert["tableDescription"]
+            glue_schema["TableInput"]["Retention"] = parent_metadata.get(
+                "retentionPeriod"
+            )
+            glue_schema["TableInput"]["Description"] = self.data_pre_convert[
+                "tableDescription"
+            ]
 
             for col in self.data_pre_convert["columns"]:
                 glue_schema["TableInput"]["StorageDescriptor"]["Columns"].append(
@@ -332,7 +359,9 @@ class DataProductSchema(BaseJsonSchema):
         return self
 
     def _get_parent_data_product_metadata(self) -> Dict | None:
-        data_product_metadata_path = DataProductConfig(name=self.data_product_name).metadata_path(version=self.version)
+        data_product_metadata_path = DataProductConfig(
+            name=self.data_product_name
+        ).metadata_path(version=self.version)
 
         metadata = read_json_from_s3(data_product_metadata_path.uri)
 
@@ -352,8 +381,14 @@ class DataProductSchema(BaseJsonSchema):
         old_col_list = format_table_schema(self.latest_version_saved_data)["columns"]
         new_col_list = self.data_pre_convert["columns"]
 
-        old_col_dict = {col["name"]: {"type": col["type"], "description": col["description"]} for col in old_col_list}
-        new_col_dict = {col["name"]: {"type": col["type"], "description": col["description"]} for col in new_col_list}
+        old_col_dict = {
+            col["name"]: {"type": col["type"], "description": col["description"]}
+            for col in old_col_list
+        }
+        new_col_dict = {
+            col["name"]: {"type": col["type"], "description": col["description"]}
+            for col in new_col_list
+        }
 
         old_col_names = set(old_col_dict.keys())
         new_col_names = set(new_col_dict.keys())
@@ -373,13 +408,16 @@ class DataProductSchema(BaseJsonSchema):
             old_col
             for old_col in old_col_dict
             if new_col_dict.get(old_col) is not None
-            and not old_col_dict[old_col]["description"] == new_col_dict[old_col]["description"]
+            and not old_col_dict[old_col]["description"]
+            == new_col_dict[old_col]["description"]
         }
 
         changes["removed_columns"] = removed_columns if removed_columns else None
         changes["added_columns"] = added_columns if added_columns else None
         changes["types_changed"] = types_changed if types_changed else None
-        changes["descriptions_changed"] = descriptions_changed if descriptions_changed else None
+        changes["descriptions_changed"] = (
+            descriptions_changed if descriptions_changed else None
+        )
 
         return changes
 
