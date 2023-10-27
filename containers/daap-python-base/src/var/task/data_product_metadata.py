@@ -373,8 +373,8 @@ class DataProductSchema(BaseJsonSchema):
         converted to a glue table input (is available at self.data_pre_convert)
         """
 
-        types_changed = set()
-        descriptions_changed = set()
+        types_changed = []
+        descriptions_changed = []
         changes = {}
 
         old_col_list = format_table_schema(self.latest_version_saved_data)["columns"]
@@ -392,24 +392,24 @@ class DataProductSchema(BaseJsonSchema):
         old_col_names = set(old_col_dict.keys())
         new_col_names = set(new_col_dict.keys())
 
-        added_columns = new_col_names - old_col_names
-        removed_columns = old_col_names - new_col_names
+        added_columns = list(new_col_names - old_col_names)
+        removed_columns = list(old_col_names - new_col_names)
 
         # check each column in old schema against column in new schema for type or description
         # changes, if old column exists in new columns
-        types_changed = {
+        types_changed = [
             old_col
             for old_col in old_col_dict
             if new_col_dict.get(old_col) is not None
             and not old_col_dict[old_col]["type"] == new_col_dict[old_col]["type"]
-        }
-        descriptions_changed = {
+        ]
+        descriptions_changed = [
             old_col
             for old_col in old_col_dict
             if new_col_dict.get(old_col) is not None
             and not old_col_dict[old_col]["description"]
             == new_col_dict[old_col]["description"]
-        }
+        ]
 
         changes["removed_columns"] = removed_columns if removed_columns else None
         changes["added_columns"] = added_columns if added_columns else None

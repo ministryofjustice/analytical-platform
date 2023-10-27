@@ -134,7 +134,7 @@ class TestVersionCreator:
             "test_table": {
                 "columns": {
                     "removed_columns": None,
-                    "added_columns": {"col_5"},
+                    "added_columns": ["col_5"],
                     "types_changed": None,
                     "descriptions_changed": None,
                 },
@@ -167,7 +167,7 @@ class TestVersionCreator:
         assert changes == {
             "test_table": {
                 "columns": {
-                    "removed_columns": {"col_1"},
+                    "removed_columns": ["col_1"],
                     "added_columns": None,
                     "types_changed": None,
                     "descriptions_changed": None,
