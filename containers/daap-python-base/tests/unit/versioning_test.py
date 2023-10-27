@@ -1,6 +1,7 @@
 import copy
 import json
 import logging
+from typing import Any
 
 import pytest
 from versioning import InvalidUpdate, VersionCreator
@@ -17,7 +18,7 @@ test_metadata = {
     "dpiaRequired": False,
 }
 
-test_schema = {
+test_schema: dict[str, Any] = {
     "tableDescription": "table has schema to pass test",
     "columns": [
         {
