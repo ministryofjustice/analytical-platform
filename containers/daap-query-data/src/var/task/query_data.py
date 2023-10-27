@@ -7,7 +7,6 @@ import botocore
 from data_platform_api_responses import format_response_json
 from data_platform_logging import DataPlatformLogger
 
-
 athena_client = boto3.client("athena")
 
 
