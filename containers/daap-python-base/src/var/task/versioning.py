@@ -127,6 +127,7 @@ class VersionCreator:
 
         state, changes = schema_update_type(schema)
         self.logger.info(f"Update type {state}")
+        self.logger.info(f"Changes to schema: {changes}")
 
         latest_version = schema.version
         new_version = generate_next_version_string(schema.version, state)
