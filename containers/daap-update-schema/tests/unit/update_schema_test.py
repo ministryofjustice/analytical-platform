@@ -155,7 +155,7 @@ def test_invalid_update(s3_client, fake_context):
     )
 
     with patch("versioning.DataProductSchema") as mock_schema:
-        mock_schema.return_value.valid = False
+        mock_schema.return_value.load().valid = False
         response = handler(fake_event({"schema": {"name": "abc"}}), fake_context)
 
     assert response == {
