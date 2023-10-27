@@ -104,7 +104,7 @@ class VersionCreator:
             raise InvalidUpdate(state)
 
         latest_version = metadata.version
-        new_version = str(Version.parse(latest_version).increment_minor())
+        new_version = generate_next_version_string(latest_version, state)
         self._copy_from_previous_version(
             latest_version=latest_version, new_version=new_version
         )
