@@ -1,4 +1,4 @@
-FROM ghcr.io/ministryofjustice/data-platform-daap-python-base:3.3.0
+FROM ghcr.io/ministryofjustice/data-platform-daap-python-base:5.1.0
 
 ARG VERSION
 

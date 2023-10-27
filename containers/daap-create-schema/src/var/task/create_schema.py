@@ -1,18 +1,31 @@
 import json
 import os
-from http import HTTPMethod
+import re
+from http import HTTPMethod, HTTPStatus
 
 import boto3
-from data_platform_api_responses import (
-    response_status_200,
-    response_status_400,
-    response_status_403,
-)
+from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import DataProductConfig, get_latest_version, get_new_version
 from data_product_metadata import DataProductMetadata, DataProductSchema
 
 s3_client = boto3.client("s3")
+
+
+TABLE_NAME_REGEX = re.compile(r"\A[a-zA-Z][a-zA-Z0-9_]{1,127}\Z")
+
+
+def is_valid_table_name(value: str | None) -> bool:
+    """
+    Ensure that the name consists of alphanumeric characters and underscores,
+    and is no more than 128 characters. The athena limit is 255 characters,
+    so this leaves plenty of room to append suffixes to names of temporary tables
+    when processing raw data.
+    """
+    if value is None:
+        return False
+
+    return bool(TABLE_NAME_REGEX.match(value))
 
 
 def s3_copy_folder_to_new_folder(
@@ -43,6 +56,14 @@ def s3_copy_folder_to_new_folder(
 def handler(event, context):
     data_product_name = event["pathParameters"].get("data-product-name")
     table_name = event["pathParameters"].get("table-name")
+
+    if not is_valid_table_name(table_name):
+        return format_error_response(
+            HTTPStatus.BAD_REQUEST,
+            event=event,
+            message=f"Table name must match regex {TABLE_NAME_REGEX.pattern}",
+        )
+
     logger = DataPlatformLogger(
         extra={
             "image_version": os.getenv("VERSION", "unknown"),
@@ -61,7 +82,9 @@ def handler(event, context):
     if not http_method == HTTPMethod.POST:
         error_message = f"Sorry, {http_method} isn't allowed."
         logger.error(f"error message: {error_message}, input: {event}")
-        return response_status_400(error_message)
+        return format_error_response(
+            HTTPStatus.BAD_REQUEST, event=event, message=error_message
+        )
 
     schema = DataProductSchema(
         data_product_name=data_product_name,
@@ -77,7 +100,9 @@ def handler(event, context):
             "table then please choose a different name for it."
         )
         logger.error("create schema called where v1 already exists.")
-        return response_status_403(error_msg)
+        return format_error_response(
+            HTTPStatus.FORBIDDEN, event=event, message=error_msg
+        )
 
     if not schema.has_registered_data_product:
         error_msg = (
@@ -86,7 +111,9 @@ def handler(event, context):
             " endpoint."
         )
         logger.error("schema has no associated registered data product metadata.")
-        return response_status_403(error_msg)
+        return format_error_response(
+            HTTPStatus.FORBIDDEN, event=event, message=error_msg
+        )
 
     # Code below that handles verisoning of a data product will be moved to a central module eventually.
 
@@ -110,7 +137,7 @@ def handler(event, context):
             )
             msg = f"Schema for {table_name} has been created in the {data_product_name} data product"
             logger.info("Schema successfully created")
-            return response_status_200(msg)
+            return format_response_json(HTTPStatus.OK, {"message": msg})
         else:
             # write to next minor version increment
             latest_version = get_latest_version(data_product_name=data_product_name)
@@ -147,7 +174,9 @@ def handler(event, context):
             schema.write_json_to_s3(write_key=schema_key)
             msg = f"Schema for {table_name} has been created in the {data_product_name} data product"
             logger.info("Schema successfully created")
-            return response_status_200(msg)
+            return format_response_json({"message": msg})
     else:
         error_msg = f"schema for {table_name} has failed validation with the following error: {schema.error_traceback}"
-        return response_status_400(error_msg)
+        return format_error_response(
+            HTTPStatus.BAD_REQUEST, event=event, message=error_msg
+        )
