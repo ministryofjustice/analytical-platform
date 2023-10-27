@@ -129,21 +129,24 @@ class VersionCreator:
 
         state, changes = schema_update_type(schema)
         self.logger.info(f"Update type {state}")
-        self.logger.info(f"Changes to schema: {changes}")
+        if not state == UpdateType.Unchanged:
+            self.logger.info(f"Changes to schema: {changes}")
 
-        latest_version = schema.version
-        new_version = generate_next_version_string(schema.version, state)
-        self._copy_from_previous_version(
-            latest_version=latest_version, new_version=new_version
-        )
-        new_version_key = (
-            DataProductConfig(schema.data_product_name)
-            .schema_path(table_name, new_version)
-            .key
-        )
-        schema.convert_schema_to_glue_table_input_csv()
-        schema.write_json_to_s3(new_version_key)
-        return new_version, changes
+            latest_version = schema.version
+            new_version = generate_next_version_string(schema.version, state)
+            self._copy_from_previous_version(
+                latest_version=latest_version, new_version=new_version
+            )
+            new_version_key = (
+                DataProductConfig(schema.data_product_name)
+                .schema_path(table_name, new_version)
+                .key
+            )
+            schema.convert_schema_to_glue_table_input_csv()
+            schema.write_json_to_s3(new_version_key)
+            return new_version, changes
+        else:
+            raise InvalidUpdate()
 
     def _copy_from_previous_version(self, latest_version, new_version):
         bucket, source_folder = self.data_product_config.metadata_path(
@@ -206,17 +209,23 @@ def schema_update_type(
             ]
         ):
             update_type = UpdateType.Unchanged
-
-    if update_type == UpdateType.Unchanged:
+    else:
+        column_changes = {
+            "removed_columns": None,
+            "added_columns": None,
+            "types_changed": None,
+            "descriptions_changed": None,
+        }
         if not changed_fields:
             update_type = UpdateType.Unchanged
-        if not changed_fields.difference(MINOR_UPDATE_SCHEMA_FIELDS):
+        elif changed_fields.intersection(MINOR_UPDATE_SCHEMA_FIELDS):
             update_type = UpdateType.MinorUpdate
 
     # could be returned and used to form notification of change to consumers of data when the
     # notification process is developed
     if not update_type == UpdateType.Unchanged:
-        changed_fields.remove("columns")
+        if "columns" in changed_fields:
+            changed_fields.remove("columns")
         non_column_changed_fields = (
             [field for field in changed_fields] if changed_fields else None
         )
@@ -224,6 +233,13 @@ def schema_update_type(
             data_product_schema.table_name: {
                 "columns": column_changes,
                 "non_column_fields": non_column_changed_fields,
+            }
+        }
+    else:
+        all_schema_changes = {
+            data_product_schema.table_name: {
+                "columns": column_changes,
+                "non_column_fields": None,
             }
         }
 
@@ -267,5 +283,7 @@ def generate_next_version_string(
     current_version = Version.parse(version)
     if update_type == UpdateType.MajorUpdate:
         return str(current_version.increment_major())
-    else:
+    elif update_type == UpdateType.MinorUpdate:
         return str(current_version.increment_minor())
+    else:
+        return version
