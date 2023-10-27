@@ -6,8 +6,6 @@ from unittest.mock import Mock
 
 import pytest
 
-
-
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
 sys.path.append(
     join(
