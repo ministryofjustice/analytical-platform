@@ -1,6 +1,8 @@
+import json
 import os
 import sys
 import time
+import urllib
 from os.path import dirname, join
 from unittest.mock import patch
 
@@ -10,9 +12,6 @@ from moto import mock_s3
 
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
 
-from data_platform_logging import DataPlatformLogger  # noqa E402
-from data_platform_paths import DataProductElement  # noqa E402
-
 os.environ["AWS_ACCESS_KEY_ID"] = "testing"
 os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
 os.environ["AWS_SECURITY_TOKEN"] = "testing"
@@ -21,6 +20,9 @@ os.environ["AWS_LAMBDA_FUNCTION_NAME"] = "test_lambda"
 os.environ["BUCKET_NAME"] = "bucket"
 os.putenv("TZ", "Europe/London")
 time.tzset()
+
+from data_platform_logging import DataPlatformLogger  # noqa E402
+from data_platform_paths import DataProductElement  # noqa E402
 
 
 @pytest.fixture
@@ -89,3 +91,44 @@ def data_product_element(region_name, s3_client):
 @pytest.fixture
 def logger():
     return DataPlatformLogger()
+
+
+def load_v1_metadata_schema_to_mock_s3(s3_client):
+    with urllib.request.urlopen(
+        "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.0.0/moj_data_product_metadata_spec.json"  # noqa E501
+    ) as url:
+        data = json.load(url)
+    json_data = json.dumps(data)
+    s3_client.put_object(
+        Body=json_data,
+        Bucket=os.environ["METADATA_BUCKET"],
+        Key="data_product_metadata_spec/v1.0.0/moj_data_product_metadata_spec.json",
+    )
+
+
+def load_v1_schema_schema_to_mock_s3(s3_client):
+    with urllib.request.urlopen(
+        "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-table-schema-json-schema/v1.0.0/moj_data_product_table_spec.json"  # noqa E501
+    ) as url:
+        data = json.load(url)
+    json_data = json.dumps(data)
+    s3_client.put_object(
+        Body=json_data,
+        Bucket=os.environ["METADATA_BUCKET"],
+        Key="data_product_schema_spec/v1.0.0/moj_data_product_schema_spec.json",
+    )
+
+
+@pytest.fixture
+def metadata_bucket(s3_client, region_name):
+    bucket_name = os.environ["METADATA_BUCKET"]
+
+    s3_client.create_bucket(
+        Bucket=bucket_name,
+        CreateBucketConfiguration={"LocationConstraint": region_name},
+    )
+
+    load_v1_metadata_schema_to_mock_s3(s3_client)
+    load_v1_schema_schema_to_mock_s3(s3_client)
+
+    return bucket_name

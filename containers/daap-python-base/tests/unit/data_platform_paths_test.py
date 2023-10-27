@@ -101,6 +101,11 @@ def test_data_product_element_config(monkeypatch):
         assert element.curated_data_table.name == "some_table"
         assert element.curated_data_table.database == "data_product"
 
+        assert element.landing_data_prefix == BucketPath(
+            bucket="landing",
+            key="landing/data_product/v1.0/some_table/",
+        )
+
         assert element.raw_data_prefix == BucketPath(
             bucket="raw",
             key="raw/data_product/v1.0/some_table/",
@@ -170,6 +175,31 @@ def test_data_product_element_raw_data_path():
         assert path == BucketPath(
             bucket="raw",
             key=f"raw/my-database/v1.0/some-table/load_timestamp=20230905T165300Z/{uuid_value}{file_extension}",
+        )
+
+
+def test_data_product_element_landing_data_path():
+    uuid_value = uuid.uuid4()
+    timestamp = datetime(2023, 9, 5, 16, 53)
+    file_extension = ".csv"
+
+    with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
+        config = DataProductConfig(
+            name="my-database",
+            raw_data_bucket="raw",
+            curated_data_bucket="curated",
+            metadata_bucket="metadata",
+            landing_zone_bucket="landing",
+        )
+        element = config.element("some-table")
+
+        path = element.landing_data_path(
+            timestamp=timestamp, uuid_value=uuid_value, file_extension=file_extension
+        )
+
+        assert path == BucketPath(
+            bucket="landing",
+            key=f"landing/my-database/v1.0/some-table/load_timestamp=20230905T165300Z/{uuid_value}{file_extension}",
         )
 
 

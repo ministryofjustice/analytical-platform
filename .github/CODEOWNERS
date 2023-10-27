@@ -1,6 +1,7 @@
-/.devcontainer/ @ministryofjustice/data-platform-core-infra
-/.github/ @ministryofjustice/data-platform-core-infra
-/containers/ @ministryofjustice/data-platform-core-infra
+/.devcontainer/ @ministryofjustice/data-platform-apps-and-tools
+/.github/ @ministryofjustice/data-platform-apps-and-tools
+/containers/ @ministryofjustice/data-platform-apps-and-tools
 /containers/daap-* @ministryofjustice/data-platform-labs
 /scripts/simulated-data-producer/ @ministryofjustice/data-platform-labs
-/terraform/ @ministryofjustice/data-platform-core-infra
+/terraform/ @ministryofjustice/data-platform-apps-and-tools
+/python-libraries/data-platform-catalogue/ @ministryofjustice/data-platform-labs

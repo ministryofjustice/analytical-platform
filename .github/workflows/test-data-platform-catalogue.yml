@@ -30,7 +30,13 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Install Poetry
+        id: install_poetry
+        run: |
+          curl -sSL "https://install.python-poetry.org" | python3 -
+          echo "${HOME}/.poetry/bin" >>"${GITHUB_PATH}"
 
       - name: Set up Python ${{ matrix.python-version }}
         id: setup_python
@@ -39,12 +45,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: poetry
           cache-dependency-path: python-libraries/data-platform-catalogue/poetry.lock
-
-      - name: Install Poetry
-        id: install_poetry
-        run: |
-          curl -sSL "https://install.python-poetry.org" | python3 -
-          echo "${HOME}/.poetry/bin" >>"${GITHUB_PATH}"
 
       - name: Poetry install
         id: poetry_install

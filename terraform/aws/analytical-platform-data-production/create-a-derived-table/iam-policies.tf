@@ -11,7 +11,22 @@ data "aws_iam_policy_document" "create_a_derived_table" {
     ]
     resources = [
       "arn:aws:s3:::mojap-derived-tables/*",
-      "arn:aws:s3:::dbt-query-dump/*"
+      "arn:aws:s3:::mojap-derived-tables",
+      "arn:aws:s3:::dbt-query-dump/*",
+      "arn:aws:s3:::dbt-query-dump",
+    ]
+  }
+  statement {
+    sid    = "DataAccess"
+    effect = "Allow"
+    actions = [
+      "s3:List*",
+      "s3:GetObject*",
+      "s3:GetBucket*"
+    ]
+    resources = [
+      "arn:aws:s3:::*",
+      "arn:aws:s3:::*/*"
     ]
   }
   statement {
@@ -23,26 +38,34 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "athena:StartQueryExecution",
       "athena:StopQueryExecution"
     ]
-    resources = ["arn:aws:athena:*:${data.aws_caller_identity.session.account_id}:datacatalog/*"]
+    resources = [
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-production"]}:datacatalog/*",
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-production"]}:workgroup/*"
+    ]
   }
   statement {
     sid    = "GlueAccess"
     effect = "Allow"
     actions = [
-      "glue:GetDatabase*",
-      "glue:CreateDatabase",
-      "glue:DeleteDatabase",
-      "glue:CreateTable",
+      "glue:Get*",
       "glue:DeleteTable",
-      "glue:CreatePartition",
+      "glue:DeleteSchema",
       "glue:DeletePartition",
+      "glue:DeleteDatabase",
+      "glue:UpdateTable",
+      "glue:UpdateSchema",
+      "glue:UpdatePartition",
+      "glue:UpdateDatabase",
+      "glue:CreateTable",
       "glue:CreateSchema",
-      "glue:DeleteSchema"
+      "glue:CreatePartition",
+      "glue:CreateDatabase"
     ]
     resources = [
-      "arn:aws:glue:*:${data.aws_caller_identity.session.account_id}:schema/*",
-      "arn:aws:glue:*:${data.aws_caller_identity.session.account_id}:database/*",
-      "arn:aws:glue:*:${data.aws_caller_identity.session.account_id}:table/*/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:schema/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:database/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:table/*/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:catalog"
     ]
   }
 }
