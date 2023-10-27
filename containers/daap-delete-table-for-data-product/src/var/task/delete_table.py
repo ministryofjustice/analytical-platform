@@ -16,34 +16,15 @@ logger = DataPlatformLogger(
 )
 
 s3_client = boto3.client("s3")
+s3_resource = boto3.resource("s3")
 glue_client = boto3.client("glue")
 athena_client = boto3.client("athena")
 
 
 def s3_recursive_delete(bucket, prefix) -> None:
     """Delete all files from a prefix in s3"""
-    paginator = s3_client.get_paginator("list_objects_v2")
-    pages = paginator.paginate(Bucket=bucket, Prefix=prefix)
-
-    delete_us: dict = dict(Objects=[])
-    for item in pages.search("Contents"):
-        if item is None:
-            continue
-
-        delete_us["Objects"].append(dict(Key=item["Key"]))
-
-        # delete once aws limit reached
-        if len(delete_us["Objects"]) >= 1000:
-            s3_client.delete_objects(Bucket=bucket, Delete=delete_us)
-            delete_us = dict(Objects=[])
-            logger.info(f"deleted 1000 data files from {prefix}")
-
-    # delete remaining
-    if len(delete_us["Objects"]):
-        number_of_files = len(delete_us["Objects"])
-        s3_client.delete_objects(Bucket=bucket, Delete=delete_us)
-        logger.info(f"deleted {number_of_files} data files from {prefix}")
-        print(f"deleted {number_of_files} data files from {prefix}")
+    bucket = s3_resource.Bucket(bucket)
+    bucket.objects.filter(Prefix=prefix).delete()
 
 
 def handler(event, context):
@@ -111,12 +92,13 @@ def handler(event, context):
         element_name=table_name, data_product_name=data_product_name
     )
 
-    raw_bucket = element.data_product.raw_data_bucket
-    curated_bucket = element.data_product.curated_data_bucket
-    # Delete raw files
-    s3_recursive_delete(bucket=raw_bucket, prefix=element.raw_data_prefix.key)
-    # Delete curated files
-    s3_recursive_delete(bucket=curated_bucket, prefix=element.curated_data_prefix.key)
+    s3_recursive_delete(
+        bucket=element.data_product.raw_data_bucket, prefix=element.raw_data_prefix.key
+    )
+    s3_recursive_delete(
+        bucket=element.data_product.curated_data_bucket,
+        prefix=element.curated_data_prefix.key,
+    )
 
     msg = f"Successfully deleted table '{table_name}' and raw & curated data files"
     logger.info(msg)
