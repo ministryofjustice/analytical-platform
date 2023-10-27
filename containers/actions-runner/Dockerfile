@@ -35,6 +35,7 @@ RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
       ca-certificates=20230311ubuntu0.22.04.1 \
       curl=7.81.0-1ubuntu1.14 \
+      git=1:2.34.1-1ubuntu1.10 \
       jq=1.6-2.1ubuntu3 \
       libicu-dev=70.1-2 \
       lsb-release=11.1.0ubuntu4 \
