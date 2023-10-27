@@ -1,11 +1,12 @@
 import boto3
-from botocore.exceptions import ClientError
-import json
-from data_platform_api_responses import format_response_json, response_status_404
-from data_platform_logging import DataPlatformLogger
-from http import HTTPStatus
+import botocore
 import os
 import time
+from http import HTTPStatus
+
+from data_platform_api_responses import format_response_json, response_status_404
+from data_platform_logging import DataPlatformLogger
+
 
 
 athena_client = boto3.client('athena')
@@ -25,7 +26,7 @@ def start_query_execution_and_wait(
                 QueryExecutionContext={"Database": database_name},
                 WorkGroup="data_product_workgroup",
             )
-        except ClientError as e:
+        except botocore.exceptions.ClientError as e:
             if e.response["Error"]["Code"] == "InvalidRequestException":
                 raise ValueError(e)
             else:
