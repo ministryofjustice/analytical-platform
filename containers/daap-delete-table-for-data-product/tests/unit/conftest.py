@@ -133,21 +133,32 @@ def event(data_product_name, table_name):
 
 
 @pytest.fixture
-def create_metadata(s3_client, create_metadata_bucket, data_product_name):
-    s3_client.put_object(
-        Bucket=os.environ.get("METADATA_BUCKET", "metadata"),
-        Key=f"{data_product_name}/v1.0/metadata.json",
-        Body=json.dumps({"test": "test"}),
-    )
+def data_product_versions():
+    return {"v1.0", "v1.1", "v1.2"}
 
 
 @pytest.fixture
-def create_schema(create_metadata, s3_client, data_product_name, table_name):
-    s3_client.put_object(
-        Bucket=os.getenv("METADATA_BUCKET"),
-        Key=f"{data_product_name}/v1.0/{table_name}/schema.json",
-        Body=json.dumps({"test": "test"}),
-    )
+def create_metadata(
+    s3_client, create_metadata_bucket, data_product_name, data_product_versions
+):
+    for version in data_product_versions:
+        s3_client.put_object(
+            Bucket=os.environ.get("METADATA_BUCKET", "metadata"),
+            Key=f"{data_product_name}/{version}/metadata.json",
+            Body=json.dumps({"test": version}),
+        )
+
+
+@pytest.fixture
+def create_schema(
+    create_metadata, s3_client, data_product_name, table_name, data_product_versions
+):
+    for version in data_product_versions:
+        s3_client.put_object(
+            Bucket=os.getenv("METADATA_BUCKET"),
+            Key=f"{data_product_name}/{version}/{table_name}/schema.json",
+            Body=json.dumps({"test": version}),
+        )
 
 
 @pytest.fixture
@@ -163,22 +174,30 @@ def create_glue_table(create_glue_database, glue_client, data_product_name, tabl
 
 
 @pytest.fixture
-def create_raw_data(s3_client, create_raw_bucket, data_product_name, table_name):
-    for i in range(10):
-        s3_client.put_object(
-            Bucket=os.getenv("RAW_DATA_BUCKET"),
-            Key=f"raw/{data_product_name}/v1.0/{table_name}/raw-file-{str(i)}.json",
-            Body=json.dumps({"content": f"{i}"}),
-        )
+def create_raw_data(
+    s3_client, create_raw_bucket, data_product_name, table_name, data_product_versions
+):
+    for version in data_product_versions:
+        for i in range(10):
+            s3_client.put_object(
+                Bucket=os.getenv("RAW_DATA_BUCKET"),
+                Key=f"raw/{data_product_name}/{version}/{table_name}/raw-file-{str(i)}.json",
+                Body=json.dumps({"content": f"{i}"}),
+            )
 
 
 @pytest.fixture
 def create_curated_data(
-    s3_client, create_curated_bucket, data_product_name, table_name
+    s3_client,
+    create_curated_bucket,
+    data_product_name,
+    table_name,
+    data_product_versions,
 ):
-    for i in range(10):
-        s3_client.put_object(
-            Bucket=os.getenv("CURATED_DATA_BUCKET"),
-            Key=f"curated/{data_product_name}/v1.0/{table_name}/curated-file-{str(i)}.json",
-            Body=json.dumps({"content": f"{i}"}),
-        )
+    for version in data_product_versions:
+        for i in range(10):
+            s3_client.put_object(
+                Bucket=os.getenv("CURATED_DATA_BUCKET"),
+                Key=f"curated/{data_product_name}/{version}/{table_name}/curated-file-{str(i)}.json",
+                Body=json.dumps({"content": f"{i}"}),
+            )

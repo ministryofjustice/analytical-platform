@@ -5,7 +5,7 @@ import boto3
 from botocore.exceptions import ClientError
 from data_platform_api_responses import format_error_response
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import DataProductElement
+from data_platform_paths import DataProductElement, get_metadata_bucket
 from data_product_metadata import DataProductMetadata, DataProductSchema
 
 logger = DataPlatformLogger(
@@ -21,13 +21,67 @@ glue_client = boto3.client("glue")
 athena_client = boto3.client("athena")
 
 
-def s3_recursive_delete(bucket, prefix) -> None:
+def get_all_versions(data_product_name: str) -> list[str]:
+    """Gets all versions of a given data product"""
+    metadata_bucket = get_metadata_bucket()
+    metadata_versions = s3_client.list_objects_v2(
+        Bucket=metadata_bucket, Prefix=data_product_name + "/"
+    )
+    # This is the case in which the data product is new.
+    if not metadata_versions.get("Contents"):
+        return ["v1.0"]
+
+    versions = [
+        version["Key"].split("/")[1]
+        for version in metadata_versions["Contents"]
+        if version["Size"] > 0
+    ]
+
+    return versions
+
+
+def generate_all_element_version_prefixes(
+    path_prefix: str, data_product_name: str, table_name: str
+) -> list[str]:
+    """Generates element prefixes for all data product versions"""
+    data_product_versions = get_all_versions(data_product_name)
+    element_prefixes = []
+
+    for version in data_product_versions:
+        element_prefixes.append(
+            f"{path_prefix}/{data_product_name}/{version}/{table_name}/"
+        )
+
+    return element_prefixes
+
+
+def delete_all_element_version_data_files(data_product_name: str, table_name: str):
+    """Deletes raw and curated data for all element versions"""
+    # Proceed to delete the raw data
+    element = DataProductElement.load(
+        element_name=table_name, data_product_name=data_product_name
+    )
+    raw_prefixes = generate_all_element_version_prefixes(
+        "raw", data_product_name, table_name
+    )
+    curated_prefixes = generate_all_element_version_prefixes(
+        "curated", data_product_name, table_name
+    )
+
+    s3_recursive_delete(element.data_product.raw_data_bucket, raw_prefixes)
+    s3_recursive_delete(element.data_product.curated_data_bucket, curated_prefixes)
+
+
+def s3_recursive_delete(bucket_name: str, prefixes: list[str]) -> None:
     """Delete all files from a prefix in s3"""
-    bucket = s3_resource.Bucket(bucket)
-    bucket.objects.filter(Prefix=prefix).delete()
+    bucket = s3_resource.Bucket(bucket_name)
+    for prefix in prefixes:
+        bucket.objects.filter(Prefix=prefix).delete()
 
 
-def delete_glue_table(data_product_name, table_name, event):
+def delete_glue_table(
+    data_product_name: str, table_name: str, event: dict
+) -> str | None:
     """Attempts to locate and delete a glue table for the given data product"""
     try:
         glue_client.get_table(DatabaseName=data_product_name, Name=table_name)
@@ -41,6 +95,7 @@ def delete_glue_table(data_product_name, table_name, event):
         return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
     else:
         glue_client.delete_table(DatabaseName=data_product_name, Name=table_name)
+    return
 
 
 def handler(event, context):
@@ -96,17 +151,9 @@ def handler(event, context):
     if glue_error is not None:
         return glue_error
 
-    # Proceed to delete the raw data
-    element = DataProductElement.load(
-        element_name=table_name, data_product_name=data_product_name
-    )
-
-    s3_recursive_delete(
-        bucket=element.data_product.raw_data_bucket, prefix=element.raw_data_prefix.key
-    )
-    s3_recursive_delete(
-        bucket=element.data_product.curated_data_bucket,
-        prefix=element.curated_data_prefix.key,
+    # Delete a given elements raw and curated data for all versions of the data product
+    delete_all_element_version_data_files(
+        data_product_name=data_product_name, table_name=table_name
     )
 
     msg = f"Successfully deleted table '{table_name}' and raw & curated data files"

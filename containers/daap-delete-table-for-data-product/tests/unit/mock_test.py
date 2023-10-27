@@ -71,26 +71,29 @@ class TestHandler:
         create_raw_data,
         create_curated_data,
         s3_client,
-        data_product_element,
+        data_product_name,
+        table_name,
+        data_product_versions,
     ):
-        bucket = os.environ.get("RAW_BUCKET", "raw")
-
-        # Check that we have 10 files the bucket
-        pre_delete_file_count = s3_client.list_objects_v2(
-            Bucket=bucket,
-            Prefix=data_product_element.raw_data_prefix.key,
-        )
-        assert pre_delete_file_count.get("KeyCount") == 10
+        bucket = os.getenv("RAW_DATA_BUCKET")
+        for version in data_product_versions:
+            prefix = f"raw/{data_product_name}/{version}/{table_name}/"
+            response = s3_client.list_objects_v2(
+                Bucket=bucket,
+                Prefix=prefix,
+            )
+            assert response.get("KeyCount") == 10
 
         # Call the handler
         delete_table.handler(event=event, context=fake_context)
 
-        # Check that we no longer have the files in the bucket
-        post_delete_file_count = s3_client.list_objects_v2(
-            Bucket=bucket,
-            Prefix=data_product_element.raw_data_prefix.key,
-        )
-        assert post_delete_file_count.get("KeyCount") == 0
+        for version in data_product_versions:
+            prefix = f"raw/{data_product_name}/{version}/{table_name}/"
+            response = s3_client.list_objects_v2(
+                Bucket=bucket,
+                Prefix=prefix,
+            )
+            assert response.get("KeyCount") == 0
 
     def test_deletion_of_curated_files(
         self,
@@ -102,23 +105,27 @@ class TestHandler:
         create_raw_data,
         create_curated_data,
         s3_client,
-        data_product_element,
+        data_product_name,
+        table_name,
+        data_product_versions,
     ):
-        bucket = os.environ.get("CURATED_DATA_BUCKET", "curated")
+        bucket = os.getenv("CURATED_DATA_BUCKET")
 
-        # Check that we have 10 files the bucket
-        pre_delete_file_count = s3_client.list_objects_v2(
-            Bucket=bucket,
-            Prefix=data_product_element.curated_data_prefix.key,
-        )
-        assert pre_delete_file_count.get("KeyCount") == 10
+        for version in data_product_versions:
+            prefix = f"curated/{data_product_name}/{version}/{table_name}/"
+            response = s3_client.list_objects_v2(
+                Bucket=bucket,
+                Prefix=prefix,
+            )
+            assert response.get("KeyCount") == 10
 
         # Call the handler
         delete_table.handler(event=event, context=fake_context)
 
-        # Check that we no longer have the files in the bucket
-        post_delete_file_count = s3_client.list_objects_v2(
-            Bucket=bucket,
-            Prefix=data_product_element.curated_data_prefix.key,
-        )
-        assert post_delete_file_count.get("KeyCount") == 0
+        for version in data_product_versions:
+            prefix = f"curated/{data_product_name}/{version}/{table_name}/"
+            response = s3_client.list_objects_v2(
+                Bucket=bucket,
+                Prefix=prefix,
+            )
+            assert response.get("KeyCount") == 0
