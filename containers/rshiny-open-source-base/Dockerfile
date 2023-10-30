@@ -35,14 +35,15 @@ RUN apt-get update -y && \
 # APT Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/
 
-# Shiny runs as 'shiny' user, adjust app directory permissions
 COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
 COPY shiny-server.sh /usr/bin/shiny-server.sh
+COPY gather_env_vars.py .
 
 # Patch the shiny server to allow custom headers
 RUN sed -i 's/createWebSocketClient(pathInfo)/createWebSocketClient(pathInfo, conn.headers)/' /opt/shiny-server/lib/proxy/sockjs.js
 RUN sed -i "s/'referer'/'referer', 'cookie', 'user_email'/" /opt/shiny-server/node_modules/sockjs/lib/transport.js
 
+# Shiny runs as 'shiny' user, adjust app directory permissions
 RUN groupmod -g 998 shiny
 RUN usermod -u 998 -g 998 shiny
 RUN chown -R 998:998 .
