@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.1] - 2023-10-26
+
+### Changed
+
+- urllib updated to 1.26.18
+
 ## [5.3.0] - 2023-10-27
 
 ### Added
