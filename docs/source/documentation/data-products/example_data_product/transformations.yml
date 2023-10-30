@@ -1,0 +1,22 @@
+---
+# Specify and describe any transformations or cleansing the data has undergone.
+# The types of cleansing we recognise are described in our documentation.
+population_by_offence:
+  cleansing:
+    type: "none"
+  transformations:
+    type: "none"
+population_by_age:
+  cleansing:
+    type: "none"
+  transformations:
+    type: "none"
+population_by_prison:
+  cleansing:
+    type: "none"
+    columns:
+      Prison:
+        - type: "standardisation"
+          description: "Prison names can be inconsistent between systems and publications, so we have replaced prison names with the standard set"
+  transformations:
+    type: "none"

@@ -1,0 +1,8 @@
+name: example_data_product
+# A good title and description will help users find your data
+description: >
+  Example Data Product contains published prison population from 2001
+  to present
+# status: please specify one of:
+# draft, development, testing, production, sunset, retired
+status: production

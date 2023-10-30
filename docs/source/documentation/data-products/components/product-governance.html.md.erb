@@ -1,0 +1,213 @@
+> **NOTE**
+
+> these pages are *primarily* for internal audiences rather than users of the Data Platform;
+we will host user-facing documentation separately.
+
+# Defining Data Product governance
+
+Use the [`governance`](/documentation/data-products/example_data_product/governance.yml) section in your Data Product YAML definition file to indicate to users, and to the Data Platform itself, how the data should be handled, and where it has come from. A correctly specficied set of governance attributes gives you and platform users confidence in handling and using the data.
+
+## Example
+
+<!-- (Alpha) -->
+```yaml
+domain: HMPPS
+dataProductOwner: data.product.owner.name@justice.gov.uk
+dataProductOwnerDisplayName: Data Product Owner
+dpiaRequired: false
+email: data.product.owner.name@justice.gov.uk
+retentionPeriod: 400
+```
+
+<!-- (Beta) -->
+<!--
+```yaml
+governance:
+  ownership:
+    data-controller: moj
+    owner:
+      email: data.product.owner.name@justice.gov.uk
+      name: Data Product Owner
+  dpia-required: false
+  protective-marking: None
+  retention-period: 400
+
+  lineage:
+    organisational-unit: HMPPS
+```
+-->
+
+<!-- (Later) -->
+<!--
+```yaml
+governance:
+  ownership:
+    data-controller: moj
+    owners:
+      data-product:
+        email: data.product.owner.name@justice.gov.uk
+        name: Data Product Owner
+      information-risk:
+        email: information.asset.owner.name@justice.gov.uk
+        name: Information Risk Owner
+    maintainers:
+      data-product:
+        email: data.product.owner.name@justice.gov.uk
+        name: Data Product Owner
+      data-assets:
+        email: data.asset.owner.name@justice.gov.uk
+        name: Data Asset Owner
+  dpia-required: false
+  dpia-reference:
+  protective-marking: None
+
+  retention:
+    period: 13
+    unit: months
+    review-every:
+      period: 6
+      unit: months
+
+  update:
+    period: 4
+    unit: weeks
+
+  lineage:
+    organisational-unit: HMPPS
+    source: example_external_source_database
+    parent-products:
+```
+-->
+## Notes
+
+### Ownership and handling attributes
+
+<!-- (Alpha) -->
+- `dataProductOwner` - the email address of the owner for this Data Product.
+- `dataProductOwnerDisplayName` - display name of the owner for this Data Product.
+- `dpiaRequired` - `true` or `false`
+
+<!-- (Beta) -->
+<!--
+- `ownership: data-controller` - the Data Controller as pertains to the Data Protection Act. This will commonly be "moj" but could be another entity.
+- `ownership: owner: email` - the email address of the owner for this Data Product.
+- `ownership: owner: name` - display name of the owner for this Data Product.
+- `dpia-required` - `true` or `false`
+- `protective-marking` - one of "Official", "Official Sensitive", or "None" (for published data).
+-->
+
+<!-- (Later) -->
+<!--
+- `ownership: owners: data-product` - name and email address of the owner for this Data Product.
+- `ownership: owners: information-risk` - name and email address of the risk-owner for this Data Product.
+- `ownership: maintainers: data-product` - names and email addresses of the maintainers of this Data Product.
+- `ownership: maintainers: data-assets` - names and email addresses of the maintainers of the data assets for this Data Product.
+- `ownership: owner: name` - display name of the owner for this Data Product.
+- `dpia-reference` - Reference number for associated DPIA
+- `retention: review-every` - period of time between governance information reviews. Data Products owners will be notified of this review window using the contact information supplied in the [Data Product specification](product-specification.html).
+- `retention: review-every: period` - integer amount of `unit`s of time
+- `retention: review-every: unit` - one of: "days", "weeks", "months"
+-->
+
+
+> **DO NOT SEND SECRET OR TOP SECRET DATA TO THE PLATFORM.**
+
+### Data retention
+
+<!-- (Alpha) -->
+You should indicate to the platform how long the data should be kept before removal using the `retentionPeriod` field.
+
+- `retentionPeriod` - number of days before the data is removed from the platform based on the date the Data Product was added to the platform
+
+For example: `retentionPeriod: 400` is implemented as _"delete any data older than 400 days, based on when the data was added to the Platform"_.
+
+You can specify `0` for data which is allowed to be kept indefinitely - for example anonymised management information or published statistics.
+
+Data Products owners will be notified of retention policies being applied using the contact information supplied in the [Data Product specification](product-specification.html).
+
+<!-- (Beta) -->
+<!--
+You should indicate to the platform how long the data should be kept before removal using the `retention-period` field.
+
+- `retention-period` - number of days before the data is removed from the platform based on the date the Data Product was added to the platform
+
+For example:
+
+```yaml
+governance:
+  retention-period: 400
+```
+
+This is implemented as _"delete any data older than 400 days, based on when the data was added to the Platform"_.
+
+You can specify `0` for data which is allowed to be kept indefinitely - for example anonymised management information or published statistics.
+
+Data Products owners will be notified of retention policies being applied using the contact information supplied in the [Data Product specification](product-specification.html).
+-->
+
+<!-- (Later) -->
+<!--
+The retention period indicates to the platform how long the data should be kept before removal using the `retention` fields. It is based on the date & time the data was added to the platform.
+
+- `retention: period` - integer amount of `unit`s of time
+- `retention: unit` - one of: "months", "years"
+
+For example:
+
+```yaml
+governance:
+  retention:
+    period: 13
+    unit: months
+```
+
+This is implemented as _"delete any data older than 13 months, based on when the data was added to the Platform"_.
+
+You can specify a period of `0` for data which is allowed to be kept indefinitely - for example anonymised management information or published statistics.
+
+Data Products owners will be notified of retention policies being applied using the contact information supplied in the `governance: ownership: maintainers: data-product` and `specification: support`.
+
+### Data updates
+
+You should indicate to the platform, and to users, how frequently the data will be updated using the `update` attributes. This requires two values:
+
+- `update: periods` - integer amount of `unit`s of time
+- `update: unit` - one of: "days", "weeks", "months"
+
+Example:
+
+```yaml
+update:
+  periods: 4
+  unit: "weeks"
+```
+
+Would be implemented as _"new data will be supplied every four weeks"_. We don't support multiples of years, but a dataset with annual updates can be specified as having a 12 month update cycle.
+
+If a data update cycle is missed, Data Product owners will be notified via the contact information supplied in the `governance: ownership: maintainers: data-product` and `specification: support`. -->
+
+### Data lineage
+
+<!-- (Alpha) -->
+It is important to users of the data that they know where it has come from. This is the purpose of the lineage attribute:
+
+- `domain` - defines at a high level which part of the organisation the data has come from. Must be one of: "HMCTS", "HMPPS", "LAA", "OPG", "HQ"
+
+<!-- (Beta) -->
+<!-- It is important to users of the data that they know where it has come from. This is the purpose of the `lineage` collection of attributes.
+
+- `lineage: organisational-unit` - defines at a high level which part of the organisation the data has come from. Must be one of: "HMCTS", "HMPPS", "LAA", "OPG", "HQ" -->
+<!-- (Later)
+- `lineage: source` - the detailed source of the data. Can be a system such as "NOMIS" or "XHIBIT" or the URL of a statistical publication
+- `lineage: parent-products` - if your Data Product is based on one of more other Data Products, please specify their names here. (The Data Product `name` field as it appears in the list of data platform product folders, not the user-friendly title of the product).
+
+Note if `parent-product` is supplied then `source` is ignored.
+-->
+
+### Other attributes
+
+## Further reading
+
+[Index of documention for Data Product defintion](/documentation/data-products#defining-a-data-product)
+
+[Example Data Product](/documentation/data-products/example_data_product)
