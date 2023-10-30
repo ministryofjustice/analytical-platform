@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3]
+
+- Add packages installed by previous base shiny image
+
 ## [1.0.2]
 
 - Install packages required by r-spatial
