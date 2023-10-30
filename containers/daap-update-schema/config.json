@@ -1,5 +1,5 @@
 {
-    "name": "daap-update-metadata",
+    "name": "daap-update-schema",
     "version": "1.0.0",
     "registry": "ecr",
     "ecr": {
