@@ -4,9 +4,15 @@ from http import HTTPStatus
 import boto3
 from botocore.exceptions import ClientError
 from data_platform_api_responses import format_error_response
-from data_platform_logging import DataPlatformLogger
-from data_platform_paths import DataProductElement, get_metadata_bucket
+from data_platform_logging import DataPlatformLogger, s3_security_opts
+from data_platform_paths import (
+    DataProductElement,
+    get_metadata_bucket,
+    get_new_version,
+    DataProductConfig,
+)
 from data_product_metadata import DataProductMetadata, DataProductSchema
+from versioning import s3_copy_folder_to_new_folder
 
 logger = DataPlatformLogger(
     extra={
@@ -22,7 +28,7 @@ athena_client = boto3.client("athena")
 
 
 def get_all_versions(data_product_name: str) -> list[str]:
-    """Gets all versions of a given data product"""
+    """Returns all versions of a given data product"""
     metadata_bucket = get_metadata_bucket()
     metadata_versions = s3_client.list_objects_v2(
         Bucket=metadata_bucket, Prefix=data_product_name + "/"
@@ -36,8 +42,13 @@ def get_all_versions(data_product_name: str) -> list[str]:
         for version in metadata_versions["Contents"]
         if version["Size"] > 0
     ]
+    versions.sort(key=lambda x: [int(y.replace("v", "")) for y in x.split(".")])
 
     return versions
+
+
+def get_latest_version(data_product_name: str) -> str:
+    return get_all_versions(data_product_name=data_product_name)[-1]
 
 
 def generate_all_element_version_prefixes(
@@ -155,6 +166,28 @@ def handler(event, context):
     delete_all_element_version_data_files(
         data_product_name=data_product_name, table_name=table_name
     )
+
+    latest_version = get_latest_version(data_product_name)
+    new_version = get_new_version(latest_version, "major")
+    logger.info(f"latest version: {latest_version}, new version: {new_version}")
+
+    # Metadata Path "data-product-name/version/metadata.json"
+    # Schema Path "data-product-name/version/table-name/schema.json"
+    metadata_prefix = f"{data_product_name}/{latest_version}/"
+    metadata_bucket = get_metadata_bucket()
+
+    # Copy metadata and schema files from the current version
+    # to the new version
+    s3_copy_folder_to_new_folder(
+        metadata_bucket, metadata_prefix, latest_version, new_version, logger
+    )
+    # Get the latest version of the schema
+    schema_path = DataProductConfig(name=data_product_name).schema_path(table_name)
+
+    # Delete the schema for the table we wish to remove
+    s3_client.delete_object(Bucket=metadata_bucket, Key=schema_path.key)
+
+    # Investigate how to reload the athena table data ?
 
     msg = f"Successfully deleted table '{table_name}' and raw & curated data files"
     logger.info(msg)

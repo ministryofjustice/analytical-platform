@@ -201,3 +201,8 @@ def create_curated_data(
                 Key=f"curated/{data_product_name}/{version}/{table_name}/curated-file-{str(i)}.json",
                 Body=json.dumps({"content": f"{i}"}),
             )
+
+
+@pytest.fixture
+def regenerate_schema_data(create_schema):
+    pass

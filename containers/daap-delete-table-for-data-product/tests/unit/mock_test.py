@@ -129,3 +129,36 @@ class TestHandler:
                 Prefix=prefix,
             )
             assert response.get("KeyCount") == 0
+
+    def test_major_version_update_of_metadata(
+        self,
+        s3_client,
+        event,
+        fake_context,
+        logger,
+        create_schema,
+        create_glue_table,
+        create_raw_data,
+        create_curated_data,
+        data_product_name,
+        table_name,
+    ):
+        # Call the handler
+        response = delete_table.handler(event=event, context=fake_context)
+        bucket = os.getenv("METADATA_BUCKET")
+
+        # Check that v2.0 of metadata.json exists.
+        metadata_prefix = f"{data_product_name}/v2.0/metadata.json"
+        response = s3_client.list_objects_v2(
+            Bucket=bucket,
+            Prefix=metadata_prefix,
+        )
+        assert response.get("KeyCount") == 1
+
+        # Check the deletion of v2.0 schema.json
+        schema_prefix = f"{data_product_name}/v2.0/{table_name}/schema.json"
+        response = s3_client.list_objects_v2(
+            Bucket=bucket,
+            Prefix=schema_prefix,
+        )
+        assert response.get("KeyCount") == 0
