@@ -29,8 +29,11 @@ RUN apt-get update -y && \
   python3-venv \
   python3-dev \
   libxml2-dev \
-  libssl-dev
-
+  libssl-dev \
+  libudunits2-dev \
+  libgdal-dev \
+  libgeos-dev \
+  libproj-dev
 
 # APT Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/
