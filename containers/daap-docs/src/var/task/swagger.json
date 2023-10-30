@@ -275,7 +275,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["version"],
+                  "required": [
+                    "version"
+                  ],
                   "properties": {
                     "version": {
                       "type": "string",
@@ -406,7 +408,7 @@
       },
       "get": {
         "tags": [
-          "get_schema"
+          "schema"
         ],
         "summary": "Get the latest schema for a table.",
         "description": "Returns a json object describing the table.",
@@ -456,6 +458,104 @@
           },
           "404": {
             "description": "Data product or table schema not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "schema"
+        ],
+        "summary": "Update a schema (blueprint of your table) for an existing table in your Data Product.",
+        "description": "Use this to update the schema of your Data Product's existing tables. This will include when you want to add/remove columns, update descriptions of tables/columns and change data types of columns.",
+        "operationId": "updateTableSchema",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/tableSchema"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "data-product-name",
+            "required": true,
+            "example": "my_data_product",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The name of the data product you want to add a schema to. This needs to be a registered data product name."
+          },
+          {
+            "in": "path",
+            "name": "table-name",
+            "required": true,
+            "example": "table_1",
+            "schema": {
+              "type": "string",
+              "minimum": 1,
+              "maximum": 128
+            },
+            "description": "The name of the table to create schema for. Allows lowercase alphanumeric characters and \"_\". This needs to be an existing table."
+          },
+          {
+            "in": "header",
+            "name": "authorizationToken",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "message": {
+                      "version": "v1.1",
+                      "changes": {
+                        "example_table": {
+                          "columns": {
+                            "removed_columns": "None",
+                            "added_columns": [
+                              "col2"
+                            ],
+                            "types_changed": "None",
+                            "descriptions_changed": "None"
+                          },
+                          "non_column_fields": [
+                            "tableDescription"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": {
+                      "message": "Body JSON must contain a schema object"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
