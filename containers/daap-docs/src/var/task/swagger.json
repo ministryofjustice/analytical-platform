@@ -487,7 +487,7 @@
               "type": "string",
               "minimum": 1
             },
-            "description": "The name of the data product you want to add a schema to. This needs to be a registered data product name."
+            "description": "The name of the data product the schema belongs to. This needs to be a registered data product name."
           },
           {
             "in": "path",
@@ -499,7 +499,7 @@
               "minimum": 1,
               "maximum": 128
             },
-            "description": "The name of the table to create schema for. Allows lowercase alphanumeric characters and \"_\". This needs to be an existing table."
+            "description": "The name of the table to update schema for. This needs to be an existing table."
           },
           {
             "in": "header",
