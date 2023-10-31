@@ -56,7 +56,7 @@ def handler(
             .load()
             .latest_version_saved_data
         )
-    except:
+    except Exception:
         logger.info(
             f"no existing table schema found in S3 for {table_name=} {data_product_name=}"
         )
