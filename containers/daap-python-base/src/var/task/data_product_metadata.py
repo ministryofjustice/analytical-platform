@@ -133,7 +133,6 @@ class BaseJsonSchema:
         self.exists = self._check_a_version_exists()
         self.write_bucket = latest_version_path.bucket
         self.latest_version_key = latest_version_path.key
-        self.latest_version_saved_data = None
         self.version = latest_version_path.key.split("/")[1]
         if input_data is not None:
             self.validate(input_data)
@@ -235,8 +234,13 @@ class BaseJsonSchema:
         Return a set of fields that have changed between the last load
         and the input_data.
         """
-        latest_version = self.latest_version_saved_data
-        new_version = self.data
+        if self.type == JsonSchemaName.data_product_schema:
+            latest_version = format_table_schema(self.latest_version_saved_data)
+            new_version = self.data_pre_convert
+        else:
+            latest_version = self.latest_version_saved_data
+            new_version = self.data
+
         if not latest_version or not new_version:
             return set()
 
@@ -361,6 +365,60 @@ class DataProductSchema(BaseJsonSchema):
         metadata = read_json_from_s3(data_product_metadata_path.uri)
 
         return metadata
+
+    def detect_column_differences_in_new_version(self) -> dict:
+        """
+        Detects and returns what has changed comparing the latest saved version of
+        schema with an updated version that has passed validation but not yet been
+        converted to a glue table input (is available at self.data_pre_convert)
+        """
+
+        types_changed = []
+        descriptions_changed = []
+        changes = {}
+
+        old_col_list = format_table_schema(self.latest_version_saved_data)["columns"]
+        new_col_list = self.data_pre_convert["columns"]
+
+        old_col_dict = {
+            col["name"]: {"type": col["type"], "description": col["description"]}
+            for col in old_col_list
+        }
+        new_col_dict = {
+            col["name"]: {"type": col["type"], "description": col["description"]}
+            for col in new_col_list
+        }
+
+        old_col_names = set(old_col_dict.keys())
+        new_col_names = set(new_col_dict.keys())
+
+        added_columns = list(new_col_names - old_col_names)
+        removed_columns = list(old_col_names - new_col_names)
+
+        # check each column in old schema against column in new schema for type or description
+        # changes, if old column exists in new columns
+        types_changed = [
+            old_col
+            for old_col in old_col_dict
+            if new_col_dict.get(old_col) is not None
+            and not old_col_dict[old_col]["type"] == new_col_dict[old_col]["type"]
+        ]
+        descriptions_changed = [
+            old_col
+            for old_col in old_col_dict
+            if new_col_dict.get(old_col) is not None
+            and not old_col_dict[old_col]["description"]
+            == new_col_dict[old_col]["description"]
+        ]
+
+        changes["removed_columns"] = removed_columns if removed_columns else None
+        changes["added_columns"] = added_columns if added_columns else None
+        changes["types_changed"] = types_changed if types_changed else None
+        changes["descriptions_changed"] = (
+            descriptions_changed if descriptions_changed else None
+        )
+
+        return changes
 
 
 class DataProductMetadata(BaseJsonSchema):
