@@ -10,11 +10,11 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.22.0"
+      version = "5.23.0"
     }
     github = {
       source  = "integrations/github"
-      version = "5.40.0"
+      version = "5.41.0"
     }
   }
   required_version = "~> 1.5"
@@ -36,5 +36,12 @@ provider "aws" {
 
 provider "github" {
   owner = "ministryofjustice"
+  token = data.aws_secretsmanager_secret_version.github_token.secret_string
+}
+
+
+provider "github" {
+  alias = "moj-analytical-services"
+  owner = "moj-analytical-services"
   token = data.aws_secretsmanager_secret_version.github_token.secret_string
 }
