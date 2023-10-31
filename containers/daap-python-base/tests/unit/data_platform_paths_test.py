@@ -99,7 +99,7 @@ def test_data_product_element_config(monkeypatch):
         )
         assert raw_data_table.database == "data_products_raw"
         assert element.curated_data_table.name == "some_table"
-        assert element.curated_data_table.database == "data_product"
+        assert element.curated_data_table.database == "data_product_v1"
 
         assert element.landing_data_prefix == BucketPath(
             bucket="landing",

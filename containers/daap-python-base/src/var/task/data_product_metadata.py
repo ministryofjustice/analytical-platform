@@ -327,6 +327,10 @@ class DataProductSchema(BaseJsonSchema):
         convert schema passed by user to glue table input so it can be used to create an athena table
         from csv with headers.
         """
+        # limits: https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-catalog-tables.html#aws-glue-api-catalog-tables-Column
+        glue_comment_char_limit = 255
+        glue_desc_char_limit = 2048
+
         if self.valid:
             glue_schema = deepcopy(glue_csv_table_input_template)
             parent_metadata = self.parent_data_product_metadata
@@ -337,16 +341,16 @@ class DataProductSchema(BaseJsonSchema):
             glue_schema["TableInput"]["Retention"] = parent_metadata.get(
                 "retentionPeriod"
             )
-            glue_schema["TableInput"]["Description"] = self.data_pre_convert[
-                "tableDescription"
-            ]
+            glue_schema["TableInput"][
+                "Description"
+            ] = f"{self.data_pre_convert['tableDescription']:.{glue_desc_char_limit}}"
 
             for col in self.data_pre_convert["columns"]:
                 glue_schema["TableInput"]["StorageDescriptor"]["Columns"].append(
                     {
                         "Name": col["name"],
                         "Type": col["type"],
-                        "Comment": col["description"],
+                        "Comment": f"{col['description']:.{glue_comment_char_limit}}",
                     }
                 )
 
