@@ -50,7 +50,7 @@ def start_query_execution_and_wait(
 
 def format_athena_results_to_table(results):
     # Format the results into a table string
-    if not results:
+    if not results or len(results["ResultSet"]["Rows"]) <= 1:
         return "No data to display"
 
     table = ""
