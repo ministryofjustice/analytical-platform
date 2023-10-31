@@ -9,6 +9,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.1] - 2023-10-26
+
+### Changed
+
+- urllib updated to 1.26.18
+
+## [5.3.0] - 2023-10-27
+
+### Added
+
+- `update_schema` and `schema_update_type` methods to the `VersionCreator`
+  class in versioning.
+- `detect_column_differences_in_new_version` method to the `DataProductSchema`
+  class in data_product_metadata.
+- `generate_next_version_string` function to versioning module.
+
+## [5.2.1] - 2023-10-26
+
+### Changed
+
+- `VersionCreator` should handle the case where the data product doesn't exist
+
+## [5.2.0] - 2023-10-25
+
+Added new versioning module.
+
+### Added
+
+- Extracted `VersionCreator` from `DataProductMetadata`. This class operates
+  on both metadata and schemas in the metadata bucket.
+- Moved `s3_copy_folder_to_new_folder` utility from `create_schema` lambda.
+- All schemas are preserved from the previous version when updating
+  metadata.
+
+## [5.1.0] - 2023-10-24
+
+### Added
+
+- `DataProductElement.landing_data_prefix` attribute
+- `DataProductElement.landing_data_path` method
+
+## [5.0.0] - 2023-10-23
+
+### Added
+
+- `DataProductMetadata.create_new_version` method
+
+### Changed
+
+- Moved `format_error_response` into data_platform_api_responses
+- `format_response_json` now accepts a dict `body` argument instead of
+  a json encoded `json_body` string
+- The `.write_json_to_s3` method of `DataProductMetadata`
+  and `DataProductSchema` no longer requires a path.
+
+## [4.0.1] - 2023-10-18
+
+### Added
+
+- standalone `format_table_schema` function for converting glue schema to input schema
+  format
+
 ## [4.0.0] - 2023-10-05
 
 ### Changed
@@ -24,7 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - 403 error status code to `data_platform_api_responses.py`
-- `get_new_version` function to `data_platform_paths``
+- `get_new_version` function to `data_platform_paths`
 
 ## [3.3.1] - 2023-10-11
 

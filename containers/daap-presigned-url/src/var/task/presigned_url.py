@@ -58,7 +58,7 @@ def handler(event, context):
         data_product_name=data_product_name, element_name=table_name
     )
     data_product = element.data_product
-    raw_data_path = element.raw_data_path(
+    landing_data_path = element.landing_data_path(
         timestamp=amz_date, uuid_value=uuid_value, file_extension=file_extension
     )
 
@@ -70,7 +70,7 @@ def handler(event, context):
         }
     )
 
-    logger.info(f"s3 path: {raw_data_path}")
+    logger.info(f"s3 path: {landing_data_path}")
     logger.info(f"data_product_name: {data_product_name}")
     logger.info(f"table_name: {table_name}")
     logger.info(f"amz_date: {amz_date}")
@@ -112,13 +112,13 @@ def handler(event, context):
         {"Content-MD5": md5},
         ["starts-with", "$Content-MD5", ""],
         ["starts-with", "$Content-Type", ""],
-        ["starts-with", "$key", raw_data_path.key],
+        ["starts-with", "$key", landing_data_path.key],
         ["content-length-range", 0, 5000000000],
     ]
 
     URL = s3.generate_presigned_post(
-        Bucket=raw_data_path.bucket,
-        Key=raw_data_path.key,
+        Bucket=landing_data_path.bucket,
+        Key=landing_data_path.key,
         Fields=fields,
         Conditions=conditions,
         ExpiresIn=200,

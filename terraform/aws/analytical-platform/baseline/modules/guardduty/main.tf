@@ -44,6 +44,13 @@ resource "aws_kms_key" "guardduty_findings" {
   enable_key_rotation = true
 }
 
+resource "aws_kms_alias" "guardduty_findings" {
+  provider = aws.target
+
+  name          = "alias/guardduty-findings"
+  target_key_id = aws_kms_key.guardduty_findings.key_id
+}
+
 resource "aws_kms_key_policy" "guardduty_findings" {
   provider = aws.target
 

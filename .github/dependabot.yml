@@ -15,7 +15,7 @@ updates:
       prefix: "github-actions"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "docker"
     directory: "containers/alpine-base"
     schedule:
@@ -26,7 +26,7 @@ updates:
       prefix: "docker"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "docker"
     directory: "containers/kubectl"
     schedule:
@@ -37,7 +37,7 @@ updates:
       prefix: "docker"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "docker"
     directory: "containers/rshiny-3.5.3"
     schedule:
@@ -48,7 +48,7 @@ updates:
       prefix: "docker"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "docker"
     directory: "containers/rshiny-3.6.3"
     schedule:
@@ -59,7 +59,7 @@ updates:
       prefix: "docker"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "docker"
     directory: "containers/rshiny-4.0.5"
     schedule:
@@ -70,7 +70,7 @@ updates:
       prefix: "docker"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "docker"
     directory: "containers/rshiny-4.1.3"
     schedule:
@@ -81,7 +81,7 @@ updates:
       prefix: "docker"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "docker"
     directory: "containers/rshiny-4.2.2"
     schedule:
@@ -92,7 +92,7 @@ updates:
       prefix: "docker"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "docker"
     directory: "containers/rstudio"
     schedule:
@@ -103,7 +103,7 @@ updates:
       prefix: "docker"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "docker"
     directory: "containers/ubuntu-base"
     schedule:
@@ -114,7 +114,7 @@ updates:
       prefix: "docker"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "pip"
     directory: "scripts/pagerduty/rota-to-slack"
     schedule:
@@ -125,7 +125,7 @@ updates:
       prefix: "pip"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
     directory: "terraform/application-migration"
     schedule:
@@ -136,128 +136,7 @@ updates:
       prefix: "terraform"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-data-engineering-production/10ds"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-data-production/airflow"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-data-production/artifact-repos"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-data-production/kops"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-data-production/rds-s3-exports"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-data-production/s3-glue-crawler"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-development/cluster"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-development/control-panel-message-broker"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-development/open-metadata"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-management-production/cluster"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-production/cluster"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform/baseline"
     schedule:
@@ -268,7 +147,139 @@ updates:
       prefix: "terraform"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-data-engineering-production/10ds"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-data-production/airflow"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-data-production/artifact-repos"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-data-production/control-panel-message-broker"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-data-production/create-a-derived-table"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-data-production/kops"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-data-production/rds-s3-exports"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-data-production/s3-glue-crawler"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-development/cluster"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-development/control-panel-message-broker"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-development/open-metadata"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-management-production/cluster"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform/oidc"
     schedule:
@@ -279,7 +290,18 @@ updates:
       prefix: "terraform"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-production/cluster"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
     directory: "terraform/github/application-migration"
     schedule:
@@ -290,7 +312,7 @@ updates:
       prefix: "terraform"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
     directory: "terraform/github/data-platform"
     schedule:
@@ -301,7 +323,7 @@ updates:
       prefix: "terraform"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
     directory: "terraform/pagerduty"
     schedule:
@@ -312,4 +334,4 @@ updates:
       prefix: "terraform"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"

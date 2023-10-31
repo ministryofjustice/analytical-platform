@@ -50,7 +50,7 @@ def test_success(s3_client, fake_context, region_name, monkeypatch):
     assert body["URL"]["url"] == "https://bucket.s3.amazonaws.com/"
     assert (
         body["URL"]["fields"]["key"]
-        == f"raw/database1/v1.0/table1/load_timestamp=20230101T000000Z/{a_uuid}{file_extension}"
+        == f"landing/database1/v1.0/table1/load_timestamp=20230101T000000Z/{a_uuid}{file_extension}"
     )
 
 

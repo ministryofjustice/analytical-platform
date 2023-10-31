@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import traceback
 from copy import deepcopy
@@ -49,6 +51,31 @@ glue_csv_table_input_template = {
 }
 
 
+def format_table_schema(glue_schema: dict) -> dict:
+    """reformats a glue table schema into the metadata ingestion specification.
+
+    Args:
+        glue_schema (dict): Schema in Glue-compatible format
+
+    Returns:
+        dict: Schema in original ingested metadata format
+    """
+    table_input = glue_schema["TableInput"]
+    columns = table_input["StorageDescriptor"]["Columns"]
+
+    return {
+        "tableDescription": table_input.get("Description"),
+        "columns": [
+            {
+                "name": column["Name"],
+                "type": column["Type"],
+                "description": column.get("Comment"),
+            }
+            for column in columns
+        ],
+    }
+
+
 def get_data_product_specification_path(
     spec_type: JsonSchemaName, version: None | str = None
 ) -> str:
@@ -73,14 +100,27 @@ def get_data_product_specification_path(
 
 
 class BaseJsonSchema:
-    """base class for operations on json type metadata and schema for data products"""
+    """
+    Base class for operations on json type metadata and schema for data products.
+
+    Parameters:
+    - latest_version_path should be the path to the latest version, or 1.0.0 if no version exists
+    - input_data is optional data to be validated and written
+
+    Attributes:
+    - exists: does *any* version of this schema exist?
+    - valid: is the input_data valid?
+    - version: the version string corresponding to the `latest_version_path`
+    - write_bucket / latest_version_key: the bucket and key components of `latest_version_path`, respectively
+    - latest_version_saved_data: the metadata stored at `latest_version_path`
+    """
 
     def __init__(
         self,
         data_product_name: str,
         logger: DataPlatformLogger,
         json_type: JsonSchemaName,
-        bucket_path: BucketPath,
+        latest_version_path: BucketPath,
         input_data: dict | None,
         table_name: str | None = None,
     ):
@@ -91,9 +131,9 @@ class BaseJsonSchema:
         self.valid = False
         self.type = json_type
         self.exists = self._check_a_version_exists()
-        self.write_bucket = bucket_path.bucket
-        self.latest_version_key = bucket_path.key
-        self.version = bucket_path.key.split("/")[1]
+        self.write_bucket = latest_version_path.bucket
+        self.latest_version_key = latest_version_path.key
+        self.version = latest_version_path.key.split("/")[1]
         if input_data is not None:
             self.validate(input_data)
 
@@ -189,6 +229,30 @@ class BaseJsonSchema:
             self.logger.error("There is no metadata to load")
         return self
 
+    def changed_fields(self) -> set[str]:
+        """
+        Return a set of fields that have changed between the last load
+        and the input_data.
+        """
+        if self.type == JsonSchemaName.data_product_schema:
+            latest_version = format_table_schema(self.latest_version_saved_data)
+            new_version = self.data_pre_convert
+        else:
+            latest_version = self.latest_version_saved_data
+            new_version = self.data
+
+        if not latest_version or not new_version:
+            return set()
+
+        changed_fields = set()
+        for field in new_version:
+            if new_version[field] == latest_version[field]:
+                continue
+
+            changed_fields.add(field)
+
+        return changed_fields
+
 
 class DataProductSchema(BaseJsonSchema):
     """
@@ -204,13 +268,15 @@ class DataProductSchema(BaseJsonSchema):
         input_data: dict | None,
     ):
         # returns path of latest schema or v1 if it doesn't exist
-        bucket_path = DataProductConfig(name=data_product_name).schema_path(table_name)
+        latest_version_path = DataProductConfig(name=data_product_name).schema_path(
+            table_name
+        )
 
         super().__init__(
             data_product_name=data_product_name,
             logger=logger,
             json_type=JsonSchemaName("schema"),
-            bucket_path=bucket_path,
+            latest_version_path=latest_version_path,
             input_data=input_data,
             table_name=table_name,
         )
@@ -300,6 +366,60 @@ class DataProductSchema(BaseJsonSchema):
 
         return metadata
 
+    def detect_column_differences_in_new_version(self) -> dict:
+        """
+        Detects and returns what has changed comparing the latest saved version of
+        schema with an updated version that has passed validation but not yet been
+        converted to a glue table input (is available at self.data_pre_convert)
+        """
+
+        types_changed = []
+        descriptions_changed = []
+        changes = {}
+
+        old_col_list = format_table_schema(self.latest_version_saved_data)["columns"]
+        new_col_list = self.data_pre_convert["columns"]
+
+        old_col_dict = {
+            col["name"]: {"type": col["type"], "description": col["description"]}
+            for col in old_col_list
+        }
+        new_col_dict = {
+            col["name"]: {"type": col["type"], "description": col["description"]}
+            for col in new_col_list
+        }
+
+        old_col_names = set(old_col_dict.keys())
+        new_col_names = set(new_col_dict.keys())
+
+        added_columns = list(new_col_names - old_col_names)
+        removed_columns = list(old_col_names - new_col_names)
+
+        # check each column in old schema against column in new schema for type or description
+        # changes, if old column exists in new columns
+        types_changed = [
+            old_col
+            for old_col in old_col_dict
+            if new_col_dict.get(old_col) is not None
+            and not old_col_dict[old_col]["type"] == new_col_dict[old_col]["type"]
+        ]
+        descriptions_changed = [
+            old_col
+            for old_col in old_col_dict
+            if new_col_dict.get(old_col) is not None
+            and not old_col_dict[old_col]["description"]
+            == new_col_dict[old_col]["description"]
+        ]
+
+        changes["removed_columns"] = removed_columns if removed_columns else None
+        changes["added_columns"] = added_columns if added_columns else None
+        changes["types_changed"] = types_changed if types_changed else None
+        changes["descriptions_changed"] = (
+            descriptions_changed if descriptions_changed else None
+        )
+
+        return changes
+
 
 class DataProductMetadata(BaseJsonSchema):
     """
@@ -307,20 +427,19 @@ class DataProductMetadata(BaseJsonSchema):
     schema json files relating to data products as a whole
     """
 
-    # returns path of latest metadata or v1 if it doesn't exist
     def __init__(
         self,
         data_product_name: str,
         logger: DataPlatformLogger,
         input_data: dict | None,
     ):
-        bucket_path = DataProductConfig(data_product_name).metadata_path()
+        latest_version_path = DataProductConfig(data_product_name).metadata_path()
 
         super().__init__(
+            json_type=JsonSchemaName("metadata"),
             data_product_name=data_product_name,
             logger=logger,
-            json_type=JsonSchemaName("metadata"),
-            bucket_path=bucket_path,
+            latest_version_path=latest_version_path,
             input_data=input_data,
         )
 

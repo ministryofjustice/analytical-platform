@@ -153,7 +153,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/registerDataProduct"
+                "$ref": "#/components/schemas/dataProductMetadata"
               }
             }
           }
@@ -229,6 +229,84 @@
         }
       }
     },
+    "/data-product/{data-product-name}": {
+      "post": {
+        "tags": [
+          "update_metadata"
+        ],
+        "summary": "Update (metadata for) an existing Data Product.",
+        "description": "Creates a new minor version of the data product with updated metadata.",
+        "operationId": "updateDataProduct",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dataProductMetadata"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorizationToken",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "data-product-name",
+            "required": true,
+            "example": "my_data_product",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The name of the data product you want to add a schema to. This needs to be a registered data product name."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["version"],
+                  "properties": {
+                    "version": {
+                      "type": "string",
+                      "example": "1.1"
+                    }
+                  },
+                  "example": {
+                    "version": "1.1"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": {
+                      "message": "Data product name is missing, it must be specified in the metadata  against the 'name' key"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/data-product/{data-product-name}/table/{table-name}/schema": {
       "post": {
         "tags": [
@@ -241,7 +319,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/registerTableSchema"
+                "$ref": "#/components/schemas/tableSchema"
               }
             }
           }
@@ -325,12 +403,67 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "get_schema"
+        ],
+        "summary": "Get the latest schema for a table.",
+        "description": "Returns a json object describing the table.",
+        "operationId": "getTableSchema",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "data-product-name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The name of the data product that contains the table schema. This needs to be a registered data product name."
+          },
+          {
+            "in": "path",
+            "name": "table-name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1,
+              "maximum": 128
+            },
+            "description": "The name of the table with the schema. Allows lowercase alphanumeric characters and \"_\"."
+          },
+          {
+            "in": "header",
+            "name": "authorizationToken",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation, response format https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/get_table.html",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tableSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data product or table schema not found"
+          }
+        }
       }
     }
   },
   "components": {
     "schemas": {
-      "registerTableSchema": {
+      "tableSchema": {
         "required": [
           "schema"
         ],
@@ -341,7 +474,7 @@
           }
         }
       },
-      "registerDataProduct": {
+      "dataProductMetadata": {
         "required": [
           "metadata"
         ],

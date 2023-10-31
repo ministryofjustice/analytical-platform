@@ -6,6 +6,7 @@
     "**/.github/workflows/documentation.yml",
     "**/containers/daap-docs/src/var/task/swagger.json",
     "**/containers/daap-*/tests/**",
+    "**/python-libraries/**/tests/**",
     "**/.github/workflows/reusable-workflow-terraform.yml"
   ],
   "reporters": ["consoleFull"],

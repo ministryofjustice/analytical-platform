@@ -86,3 +86,5 @@ def handler(event, context):
         Key=destination_key,
         ExtraArgs=s3_security_opts,
     )
+
+    s3.delete_object(Bucket=bucket_name, Key=file_key)

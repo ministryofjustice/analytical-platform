@@ -22,11 +22,11 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Run analysis
         id: run_analysis
-        uses: ossf/scorecard-action@08b4669551908b1024bb425080c797723083c031 # v2.2.0
+        uses: ossf/scorecard-action@0864cf19026789058feabb7e87baa5f140aac736 # v2.3.1
         with:
           repo_token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
           results_file: results.sarif
