@@ -29,7 +29,17 @@ RUN apt-get update -y && \
   python3-venv \
   python3-dev \
   libxml2-dev \
-  libssl-dev
+  libssl-dev \
+  libudunits2-dev \
+  libgdal-dev \
+  libgeos-dev \
+  libproj-dev\
+  gdal-bin \
+  git \
+  libssl-dev \
+  libsqlite3-dev \
+  python3-boto \
+  xtail
 
 
 # APT Cleanup
