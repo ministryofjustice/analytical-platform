@@ -72,17 +72,6 @@ def s3_client():
 
 
 @pytest.fixture
-def s3_resource():
-    """
-    Create a mock s3 service
-    """
-    with mock_s3():
-        resource = boto3.resource("s3", region_name="us-east-1")
-
-        yield resource
-
-
-@pytest.fixture
 def athena_client():
     """
     Create a mock athena service
