@@ -152,6 +152,101 @@ variable "secret_scanning_push_protection_status" {
   default = "enabled"
 }
 
+variable "branch_protection_allows_deletions" {
+  type    = bool
+  default = false
+}
+
+variable "branch_protection_enforce_admins" {
+  type    = bool
+  default = true
+}
+
+variable "branch_protection_force_push_bypassers" {
+  type    = list(string)
+  default = []
+}
+
+variable "branch_protection_push_restrictions" {
+  type    = list(string)
+  default = []
+}
+
+variable "branch_protection_require_signed_commits" {
+  type    = bool
+  default = false
+}
+
+variable "branch_protection_required_linear_history" {
+  type    = bool
+  default = false
+}
+
+variable "branch_protection_require_conversation_resolution" {
+  type    = bool
+  default = true
+}
+
+variable "branch_protection_allows_force_pushes" {
+  type    = bool
+  default = false
+}
+
+variable "branch_protection_blocks_creations" {
+  type    = bool
+  default = false
+}
+
+variable "branch_protection_lock_branch" {
+  type    = bool
+  default = false
+}
+
+variable "branch_protection_required_pull_request_reviews_dismiss_stale_reviews" {
+  type    = bool
+  default = true
+}
+
+variable "branch_protection_required_pull_request_reviews_restrict_dismissals" {
+  type    = bool
+  default = false
+}
+
+variable "branch_protection_required_pull_request_reviews_dismissal_restrictions" {
+  type    = list(string)
+  default = []
+}
+
+variable "branch_protection_required_pull_request_reviews_pull_request_bypassers" {
+  type    = list(string)
+  default = []
+}
+
+variable "branch_protection_required_pull_request_reviews_require_code_owner_reviews" {
+  type    = bool
+  default = true
+}
+
+variable "branch_protection_required_pull_request_reviews_require_last_push_approval" {
+  type    = bool
+  default = true
+}
+
+variable "branch_protection_required_pull_request_reviews_required_approving_review_count" {
+  type    = number
+  default = 1
+}
+
+variable "branch_protection_required_status_checks_strict" {
+  type    = bool
+  default = true
+}
+
+variable "branch_protection_required_status_checks_contexts" {
+  type    = list(string)
+  default = []
+}
+
 variable "dependabot_security_updates_enabled" {
   type    = bool
   default = true

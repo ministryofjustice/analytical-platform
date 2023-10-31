@@ -107,5 +107,25 @@ module "data_platform_repositories" {
 
   dependabot_security_updates_enabled = lookup(each.value, "dependabot_security_updates_enabled", true)
 
+  branch_protection_allows_deletions                                              = lookup(each.value, "branch_protection_allows_deletions", false)
+  branch_protection_enforce_admins                                                = lookup(each.value, "branch_protection_enforce_admins", true)
+  branch_protection_force_push_bypassers                                          = lookup(each.value, "branch_protection_force_push_bypassers", [])
+  branch_protection_push_restrictions                                             = lookup(each.value, "branch_protection_push_restrictions", [])
+  branch_protection_require_signed_commits                                        = lookup(each.value, "branch_protection_require_signed_commits", false)
+  branch_protection_required_linear_history                                       = lookup(each.value, "branch_protection_required_linear_history", false)
+  branch_protection_require_conversation_resolution                               = lookup(each.value, "branch_protection_require_conversation_resolution", true)
+  branch_protection_allows_force_pushes                                           = lookup(each.value, "branch_protection_allows_force_pushes", false)
+  branch_protection_blocks_creations                                              = lookup(each.value, "branch_protection_blocks_creations", false)
+  branch_protection_lock_branch                                                   = lookup(each.value, "branch_protection_lock_branch", false)
+  branch_protection_required_pull_request_reviews_dismiss_stale_reviews           = lookup(each.value, "branch_protection_required_pull_request_reviews_dismiss_stale_reviews", true)
+  branch_protection_required_pull_request_reviews_restrict_dismissals             = lookup(each.value, "branch_protection_required_pull_request_reviews_restrict_dismissals", false)
+  branch_protection_required_pull_request_reviews_dismissal_restrictions          = lookup(each.value, "branch_protection_required_pull_request_reviews_dismissal_restrictions", [])
+  branch_protection_required_pull_request_reviews_pull_request_bypassers          = lookup(each.value, "branch_protection_required_pull_request_reviews_pull_request_bypassers", [])
+  branch_protection_required_pull_request_reviews_require_code_owner_reviews      = lookup(each.value, "branch_protection_required_pull_request_reviews_require_code_owner_reviews", true)
+  branch_protection_required_pull_request_reviews_require_last_push_approval      = lookup(each.value, "branch_protection_required_pull_request_reviews_require_last_push_approval", true)
+  branch_protection_required_pull_request_reviews_required_approving_review_count = lookup(each.value, "branch_protection_required_pull_request_reviews_required_approving_review_count", 1)
+  branch_protection_required_status_checks_strict                                 = lookup(each.value, "branch_protection_required_status_checks_strict", true)
+  branch_protection_required_status_checks_contexts                               = lookup(each.value, "branch_protection_required_status_checks_contexts", [])
+
   access = lookup(each.value, "access", null)
 }

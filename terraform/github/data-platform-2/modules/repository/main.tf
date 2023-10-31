@@ -71,6 +71,37 @@ resource "github_repository" "this" {
   }
 }
 
+resource "github_branch_protection" "this" {
+  repository_id = github_repository.this.id
+  pattern       = "main"
+
+  allows_deletions                = var.branch_protection_allows_deletions
+  enforce_admins                  = var.branch_protection_enforce_admins
+  force_push_bypassers            = var.branch_protection_force_push_bypassers
+  push_restrictions               = var.branch_protection_push_restrictions
+  require_signed_commits          = var.branch_protection_require_signed_commits
+  required_linear_history         = var.branch_protection_required_linear_history
+  require_conversation_resolution = var.branch_protection_require_conversation_resolution
+  allows_force_pushes             = var.branch_protection_allows_force_pushes
+  blocks_creations                = var.branch_protection_blocks_creations
+  lock_branch                     = var.branch_protection_lock_branch
+
+  required_pull_request_reviews {
+    dismiss_stale_reviews           = var.branch_protection_required_pull_request_reviews_dismiss_stale_reviews
+    restrict_dismissals             = var.branch_protection_required_pull_request_reviews_restrict_dismissals
+    dismissal_restrictions          = var.branch_protection_required_pull_request_reviews_dismissal_restrictions
+    pull_request_bypassers          = var.branch_protection_required_pull_request_reviews_pull_request_bypassers
+    require_code_owner_reviews      = var.branch_protection_required_pull_request_reviews_require_code_owner_reviews
+    require_last_push_approval      = var.branch_protection_required_pull_request_reviews_require_last_push_approval
+    required_approving_review_count = var.branch_protection_required_pull_request_reviews_required_approving_review_count
+  }
+
+  required_status_checks {
+    strict   = var.branch_protection_required_status_checks_strict
+    contexts = var.branch_protection_required_status_checks_contexts
+  }
+}
+
 resource "github_repository_dependabot_security_updates" "this" {
   repository = github_repository.this.id
 
