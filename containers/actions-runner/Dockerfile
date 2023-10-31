@@ -45,7 +45,8 @@ RUN apt-get update \
       --output "actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" \
     && echo "${ACTIONS_RUNNER_PKG_SHA}"  "actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" | /usr/bin/sha256sum --check \
     && tar --extract --gzip --file="actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz" --directory="${CONTAINER_HOME}" \
-    && chmod +x /usr/local/bin/actions-runner-utils/*.sh
+    && chmod +x /usr/local/bin/actions-runner-utils/*.sh \
+    && rm --force "actions-runner-linux-x64-${ACTIONS_RUNNER_VERSION}.tar.gz"
 
 USER ${CONTAINER_USER}
 
