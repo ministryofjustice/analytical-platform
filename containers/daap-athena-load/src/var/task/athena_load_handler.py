@@ -5,6 +5,7 @@ from create_curated_athena_table import create_curated_athena_table
 from create_raw_athena_table import temporary_raw_athena_table
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import QueryTable, RawDataExtraction
+from data_product_metadata import DataProductSchema
 from infer_glue_schema import infer_glue_schema_from_raw_csv
 
 athena_client = boto3.client("athena")
@@ -26,12 +27,15 @@ def handler(
     extraction = RawDataExtraction.parse_from_uri(full_s3_path)
     data_product_element = extraction.element
 
+    data_product_name = data_product_element.curated_data_table.database
+    table_name = data_product_element.curated_data_table.name
+
     logger = DataPlatformLogger(
         extra={
             "image_version": os.getenv("VERSION", "unknown"),
             "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-            "data_product_name": data_product_element.curated_data_table.database,
-            "table_name": data_product_element.curated_data_table.name,
+            "data_product_name": data_product_name,
+            "table_name": table_name,
         }
     )
 
@@ -40,6 +44,23 @@ def handler(
     inferred_metadata = infer_glue_schema_from_raw_csv(
         extraction.path, data_product_element, logger=logger
     )
+
+    try:
+        table_schema = (
+            DataProductSchema(
+                data_product_name=data_product_name,
+                table_name=table_name,
+                logger=logger,
+                input_data=None,
+            )
+            .load()
+            .latest_version_saved_data
+        )
+    except:
+        logger.info(
+            f"no existing table schema found in S3 for {table_name=} {data_product_name=}"
+        )
+        table_schema = inferred_metadata.metadata
 
     temp_table_name = inferred_metadata.table_name
     temp_database_name = inferred_metadata.database_name
@@ -62,7 +83,7 @@ def handler(
                 database=temp_database_name, name=temp_table_name
             ),
             extraction_timestamp=extraction.timestamp.strftime("%Y%m%dT%H%M%SZ"),
-            metadata=inferred_metadata.metadata,
+            metadata=table_schema,
             logger=logger,
             glue_client=glue_client,
             s3_client=s3_client,
