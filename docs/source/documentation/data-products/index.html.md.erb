@@ -1,0 +1,71 @@
+---
+owner_slack: "#data-platform-notifications"
+title: Data Platform Data Products
+last_reviewed_on: 2023-10-19
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+Here you will find documentation describing the concept of a Data Product within the [Data Platform](/documentation/).
+
+> **NOTE**
+
+> these pages are *primarily* for internal audiences rather than users of the Data Platform;
+we will host user-facing documentation separately.
+
+## Definition
+
+Put simply, a Data Product is a dataset or group of datasets **together with metadata that describes that data**.
+This will include descriptors and guidance on the usage of the data,
+as well as governance information regarding the ownership and retention period of the data within the platform.
+
+## Purpose
+
+A Data Product exists to help customers effectively find, understand, and responsibly use data,
+as well as help administration and management of that data within the platform.
+
+A Data Product is created and owned by a Data Product Owner, a person with comprehensive domain knowledge.
+The Data Product Owner is not part of the Data Platform team,
+they are people that operate on different teams and they have a system that contains data that they would like to share.
+This is because it is essential to know a domain before creating a Data Product,
+and it would be impossible for the Data Platform teams to have deep knowledge of every domain that uses the platform.
+
+## Goals
+
+Our goals are:
+
+- Make data easily discoverable by users who wish to use that data.
+We do this by encouraging the owners of Data Products to supply high quality [metadata](https://en.wikipedia.org/wiki/Metadata)
+- Make it easier for us to provide governance for data,
+for example by identfying owners, protective markings and retention periods.
+- Make data more usable, whatever the purpose, by applying product thinking to our data,
+and clearly describing the lineage and transformations of our Data Products
+
+## Defining a Data Product
+
+> **IMPORTANT**
+
+> The structure and usage of these metadata definitions are likely to change substantially throughout development
+
+A Data Product will have a unique name, and is defined in code: YAML or JSON
+(we show YAML in these docs, as it is a more human-readable format).
+The code representation of the Data Product is referred to as Data Product Metadata (data *about* the data), and is currently captured in a single file.
+
+This file contains the following sections:
+
+| Section name | Purpose | Documentation |
+| - | - | - |
+| `specification` | Aids data discoverability by providing a name, description and tags for a Data Product. It also contains contact details of the Data Product owner. | [Data Product specification](components/product-specification.html) |
+| `governance` | Contains protective marking, retention period, expected update frequency and data lineage. | [Defining product governance](components/product-governance.html) |
+| `data-dictionary` | Contains the column defintions comprising the Data Product, along with type information and user-friendly names. | [Data dictionary guidance](components/data-dictionary-definitions.html) |
+
+Sections of metadata that we plan to capture within a Data Product, but are not yet implemented:
+
+| File name | Purpose | Documentation |
+| - | - | - |
+| `transformations` | Describes the [cleaning](components/data-cleansing-definitions.html) and [transformation](components/data-transformation-definitions.html) data will undergo before it is made available to consumers. | [Cleaning](components/data-cleansing-definitions.html) and [transformation](components/data-transformation-definitions.html) |
+
+## Example Data Product
+
+[Example Data Product](example_data_product/index.html)

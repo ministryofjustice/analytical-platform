@@ -1,0 +1,11 @@
+{
+    "name": "daap-query-data",
+    "version": "1.0.0",
+    "registry": "ecr",
+    "ecr": {
+        "role": "arn:aws:iam::013433889002:role/modernisation-platform-oidc-cicd",
+        "account": "374269020027",
+        "region": "eu-west-2",
+        "repository": "data-platform-query-data-lambda-ecr-repo"
+    }
+}

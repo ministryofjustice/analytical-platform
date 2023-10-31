@@ -1,0 +1,41 @@
+---
+owner_slack: "#data-platform-notifications"
+title: Example Data Product
+last_reviewed_on: 2023-10-19
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+> **NOTE**
+
+> these pages are *primarily* for internal audiences rather than users of the Data Platform;
+we will host user-facing documentation separately.
+
+[Data Product specification](/documentation/data-products/components/product-specification.html)
+
+[Data Product governance](/documentation/data-products/components/product-governance.html)
+
+```yaml
+
+<%= File.read(File.expand_path('../specification.yml', __FILE__)) %>
+<%= File.read(File.expand_path('../governance.yml', __FILE__)) %>
+```
+
+## Table Schema
+
+[Data dictionary guidance](/documentation/data-products/components/data-dictionary-definitions.html)
+
+```yaml
+<%= File.read(File.expand_path('../data-dictionary.yml', __FILE__)) %>
+```
+
+## transformations
+
+[Data transformation definitions](/documentation/data-products/components/data-transformation-definitions.html)
+
+[Data cleansing definitions](/documentation/data-products/components/data-cleansing-definitions.html)
+
+## Further reading
+
+[Index of documention for Data Product defintion](/documentation/data-products#defining-a-data-product)
