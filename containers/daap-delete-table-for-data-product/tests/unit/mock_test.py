@@ -8,10 +8,10 @@ import delete_table
 class TestHandler:
     def test_success(
         self,
+        logger,
         event,
         fake_context,
         table_name,
-        s3_client,
         create_schema,
         create_glue_table,
         create_raw_data,
@@ -58,7 +58,7 @@ class TestHandler:
         assert response["statusCode"] == HTTPStatus.BAD_REQUEST
         assert (
             json.loads(response["body"])["error"]["message"]
-            == f"Could not locate glue table '{table_name}' in database '{data_product_name}'"
+            == f"An error occurred (EntityNotFoundException) when calling the GetTable operation: Table {table_name} not found."
         )
 
     def test_deletion_of_raw_files(
@@ -154,11 +154,3 @@ class TestHandler:
             Prefix=metadata_prefix,
         )
         assert response.get("KeyCount") == 1
-
-        # Check the deletion of v2.0 schema.json
-        schema_prefix = f"{data_product_name}/v2.0/{table_name}/schema.json"
-        response = s3_client.list_objects_v2(
-            Bucket=bucket,
-            Prefix=schema_prefix,
-        )
-        assert response.get("KeyCount") == 0

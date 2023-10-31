@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import urllib
 from dataclasses import dataclass
 from os.path import dirname, join
 
@@ -68,6 +69,17 @@ def s3_client():
         client = boto3.client("s3", region_name="us-east-1")
 
         yield client
+
+
+@pytest.fixture
+def s3_resource():
+    """
+    Create a mock s3 service
+    """
+    with mock_s3():
+        resource = boto3.resource("s3", region_name="us-east-1")
+
+        yield resource
 
 
 @pytest.fixture
@@ -139,14 +151,32 @@ def data_product_versions():
 
 @pytest.fixture
 def create_metadata(
-    s3_client, create_metadata_bucket, data_product_name, data_product_versions
+    s3_client,
+    create_metadata_bucket,
+    data_product_name,
+    data_product_versions,
+    table_name,
 ):
     for version in data_product_versions:
         s3_client.put_object(
-            Bucket=os.environ.get("METADATA_BUCKET", "metadata"),
+            Bucket=os.getenv("METADATA_BUCKET"),
             Key=f"{data_product_name}/{version}/metadata.json",
-            Body=json.dumps({"test": version}),
+            Body=json.dumps(
+                {
+                    "name": "test_product1",
+                    "description": "testing",
+                    "domain": "MoJ",
+                    "dataProductOwner": "matthew.laverty@justice.gov.uk",
+                    "dataProductOwnerDisplayName": "matt laverty",
+                    "email": "matthew.laverty@justice.gov.uk",
+                    "status": "draft",
+                    "dpiaRequired": False,
+                    "retentionPeriod": 3000,
+                    "schemas": [table_name],
+                }
+            ),
         )
+    load_v1_metadata_schema_to_mock_s3(s3_client)
 
 
 @pytest.fixture
@@ -201,6 +231,19 @@ def create_curated_data(
                 Key=f"curated/{data_product_name}/{version}/{table_name}/curated-file-{str(i)}.json",
                 Body=json.dumps({"content": f"{i}"}),
             )
+
+
+def load_v1_metadata_schema_to_mock_s3(s3_client):
+    with urllib.request.urlopen(
+        "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.1.0/moj_data_product_metadata_spec.json"  # noqa E501
+    ) as url:
+        data = json.load(url)
+    json_data = json.dumps(data)
+    s3_client.put_object(
+        Body=json_data,
+        Bucket=os.environ["METADATA_BUCKET"],
+        Key="data_product_metadata_spec/v1.0.0/moj_data_product_metadata_spec.json",
+    )
 
 
 @pytest.fixture
