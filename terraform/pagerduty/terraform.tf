@@ -10,11 +10,11 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.22.0"
+      version = "5.23.1"
     }
     pagerduty = {
       source  = "pagerduty/pagerduty"
-      version = "3.0.3"
+      version = "3.1.0"
     }
   }
 }

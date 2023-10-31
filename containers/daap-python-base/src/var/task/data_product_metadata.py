@@ -3,8 +3,7 @@ from __future__ import annotations
 import json
 import traceback
 from copy import deepcopy
-from enum import Enum
-from typing import Dict, NamedTuple
+from typing import Dict
 
 import boto3
 import botocore
@@ -50,35 +49,6 @@ glue_csv_table_input_template = {
         "Parameters": {"classification": "csv", "skip.header.line.count": "1"},
     },
 }
-
-
-class Version(NamedTuple):
-    """
-    Helper object for manipulating version strings.
-    """
-
-    major: int
-    minor: int
-
-    def __str__(self):
-        return f"v{self.major}.{self.minor}"
-
-    @staticmethod
-    def parse(version_str) -> Version:
-        major, minor = [int(i) for i in version_str.lstrip("v").split(".")]
-        return Version(major, minor)
-
-    def increment_major(self) -> Version:
-        return Version(self.major + 1, self.minor)
-
-    def increment_minor(self) -> Version:
-        return Version(self.major, self.minor + 1)
-
-
-class InvalidUpdate(Exception):
-    """
-    Exception thrown when an update cannot be applied to a data product or schema
-    """
 
 
 def format_table_schema(glue_schema: dict) -> dict:
@@ -129,22 +99,6 @@ def get_data_product_specification_path(
     return path.uri
 
 
-class UpdateType(Enum):
-    """
-    Whether a schema or data product update represents a major or minor update to the data product.
-
-    Minor updates are those which are backwards compatable, e.g. adding a new table.
-
-    Major updates are those which may require data consumers to update their code,
-    e.g. if tables or fields are removed.
-    """
-
-    Unchanged = 0
-    MinorUpdate = 1
-    MajorUpdate = 2
-    NotAllowed = 3
-
-
 class BaseJsonSchema:
     """
     Base class for operations on json type metadata and schema for data products.
@@ -179,7 +133,6 @@ class BaseJsonSchema:
         self.exists = self._check_a_version_exists()
         self.write_bucket = latest_version_path.bucket
         self.latest_version_key = latest_version_path.key
-        self.latest_version_saved_data = None
         self.version = latest_version_path.key.split("/")[1]
         if input_data is not None:
             self.validate(input_data)
@@ -209,16 +162,6 @@ class BaseJsonSchema:
                 f"version 1 of {self.type.value} already exists for this data product"
             )
             return True
-
-    def generate_next_version_string(self, major: bool = False) -> str:
-        """
-        Generate the next version
-        """
-        current_version = Version.parse(self.version)
-        if major:
-            return str(current_version.increment_major())
-        else:
-            return str(current_version.increment_minor())
 
     def validate(
         self,
@@ -291,8 +234,13 @@ class BaseJsonSchema:
         Return a set of fields that have changed between the last load
         and the input_data.
         """
-        latest_version = self.latest_version_saved_data
-        new_version = self.data
+        if self.type == JsonSchemaName.data_product_schema:
+            latest_version = format_table_schema(self.latest_version_saved_data)
+            new_version = self.data_pre_convert
+        else:
+            latest_version = self.latest_version_saved_data
+            new_version = self.data
+
         if not latest_version or not new_version:
             return set()
 
@@ -418,26 +366,66 @@ class DataProductSchema(BaseJsonSchema):
 
         return metadata
 
+    def detect_column_differences_in_new_version(self) -> dict:
+        """
+        Detects and returns what has changed comparing the latest saved version of
+        schema with an updated version that has passed validation but not yet been
+        converted to a glue table input (is available at self.data_pre_convert)
+        """
+
+        types_changed = []
+        descriptions_changed = []
+        changes = {}
+
+        old_col_list = format_table_schema(self.latest_version_saved_data)["columns"]
+        new_col_list = self.data_pre_convert["columns"]
+
+        old_col_dict = {
+            col["name"]: {"type": col["type"], "description": col["description"]}
+            for col in old_col_list
+        }
+        new_col_dict = {
+            col["name"]: {"type": col["type"], "description": col["description"]}
+            for col in new_col_list
+        }
+
+        old_col_names = set(old_col_dict.keys())
+        new_col_names = set(new_col_dict.keys())
+
+        added_columns = list(new_col_names - old_col_names)
+        removed_columns = list(old_col_names - new_col_names)
+
+        # check each column in old schema against column in new schema for type or description
+        # changes, if old column exists in new columns
+        types_changed = [
+            old_col
+            for old_col in old_col_dict
+            if new_col_dict.get(old_col) is not None
+            and not old_col_dict[old_col]["type"] == new_col_dict[old_col]["type"]
+        ]
+        descriptions_changed = [
+            old_col
+            for old_col in old_col_dict
+            if new_col_dict.get(old_col) is not None
+            and not old_col_dict[old_col]["description"]
+            == new_col_dict[old_col]["description"]
+        ]
+
+        changes["removed_columns"] = removed_columns if removed_columns else None
+        changes["added_columns"] = added_columns if added_columns else None
+        changes["types_changed"] = types_changed if types_changed else None
+        changes["descriptions_changed"] = (
+            descriptions_changed if descriptions_changed else None
+        )
+
+        return changes
+
 
 class DataProductMetadata(BaseJsonSchema):
     """
     class to handle creation and updating of
     schema json files relating to data products as a whole
     """
-
-    UPDATABLE_FIELDS = {
-        "description",
-        "email",
-        "dataProductOwner",
-        "dataProductOwnerDisplayName",
-        "domain",
-        "status",
-        "dpiaRequired",
-        "retentionPeriod",
-        "dataProductMaintainer",
-        "dataProductMaintainerDisplayName",
-        "tags",
-    }
 
     def __init__(
         self,
@@ -454,43 +442,6 @@ class DataProductMetadata(BaseJsonSchema):
             latest_version_path=latest_version_path,
             input_data=input_data,
         )
-
-    def create_new_version(self) -> DataProductMetadata:
-        """
-        Create a new version of the data product
-        """
-        if not self.valid:
-            raise InvalidUpdate()
-
-        self.load()
-        state = self._detect_update_type()
-        self.logger.info(f"Update type {state}")
-
-        if state != UpdateType.MinorUpdate:
-            raise InvalidUpdate(state)
-
-        self.version = self.generate_next_version_string()
-        self.latest_version_key = (
-            DataProductConfig(self.data_product_name).metadata_path(self.version).key
-        )
-        self.write_json_to_s3(self.latest_version_key)
-
-        return self
-
-    def _detect_update_type(self) -> UpdateType:
-        """
-        Figure out whether changes to the input data represent a major or minor update.
-        """
-        if not self.exists or not self.valid:
-            return UpdateType.NotAllowed
-
-        changed_fields = self.changed_fields()
-        if not changed_fields:
-            return UpdateType.Unchanged
-        if changed_fields.difference(self.UPDATABLE_FIELDS):
-            return UpdateType.NotAllowed
-        else:
-            return UpdateType.MinorUpdate
 
     def add_auto_generated_metadata(self):
         """adds key value pairs to metadata that are not given by a user."""
