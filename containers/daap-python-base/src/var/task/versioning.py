@@ -8,7 +8,11 @@ from typing import NamedTuple
 
 import boto3
 from data_platform_logging import DataPlatformLogger, s3_security_opts
-from data_platform_paths import DataProductConfig, delete_all_element_version_data_files
+from data_platform_paths import (
+    DataProductConfig,
+    delete_all_element_version_data_files,
+    get_metadata_bucket,
+)
 from data_product_metadata import DataProductMetadata, DataProductSchema
 from glue_utils import delete_glue_table
 
@@ -36,7 +40,7 @@ class Version(NamedTuple):
         return Version(self.major, self.minor + 1)
 
 
-MINOR_UPDATABLE_METADATA_FIELDS = {
+UPDATABLE_METADATA_FIELDS = {
     "description",
     "email",
     "dataProductOwner",
@@ -49,8 +53,6 @@ MINOR_UPDATABLE_METADATA_FIELDS = {
     "dataProductMaintainerDisplayName",
     "tags",
 }
-
-MAJOR_UPDATABLE_METADATA_FIELDS = {"schemas"}
 
 MINOR_UPDATE_SCHEMA_FIELDS = {"tableDescription"}
 
@@ -86,75 +88,85 @@ class VersionCreator:
         self.data_product_config = DataProductConfig(name=data_product_name)
         self.logger = logger
 
-    def update_metadata_remove_schema(self, input_data) -> str:
-        """Handles removing a schema from a data product.
-        Creates a new metdata schema from the input data, copies existing
-        schema files to the new version, and deletes the associated Glue table."""
-        print(f"data product config name : {self.data_product_config.name}")
-        metadata = DataProductMetadata(
-            data_product_name=self.data_product_config.name,
-            logger=self.logger,
-            input_data=input_data,
-        ).load()
+    def update_metadata_remove_schemas(self, schema_list: list[str]) -> str:
+        """Handles removing schema(s) for a data product."""
+        s3_client = boto3.client("s3")
 
-        # Validate input data
-        if not metadata.valid:
-            message = f"metadata is invalid: {input_data}"
-            raise InvalidUpdate(message)
-
-        state = metadata_update_type(metadata)
-        self.logger.info(f"Update type {state}")
-
-        result, current_metadata = self._validate_major_update_remove_schema(input_data)
-        if not result:
-            # Indicates an invalid update
-            message = "number of new schemas not equal to 1"
-            raise InvalidUpdate(message)
-
-        current_schemas = current_metadata.get("schemas")
+        current_metadata = (
+            DataProductMetadata(
+                data_product_name=self.data_product_config.name,
+                logger=self.logger,
+                input_data=None,
+            )
+            .load()
+            .latest_version_saved_data
+        )
+        current_schemas = current_metadata.get("schemas", [])
         self.logger.info(f"Current schemas: {current_schemas}")
 
-        table_name = list(
-            set(current_schemas).difference(set(input_data.get("schemas")))
-        )[0]
+        valid_schemas_to_delete = all(
+            schema in schema_list for schema in current_schemas
+        )
+        if not valid_schemas_to_delete:
+            error = f"Invalid schemas found in schema_list: {schema_list}"
+            self.logger(error)
+            raise InvalidUpdate(error)
 
-        # Handle Glue table delete
-        delete_glue_table(
+        self.logger.info(f"schemas to delete: {schema_list}")
+        for schema in schema_list:
+            # Delete the Glue table
+            delete_glue_table(
+                data_product_name=self.data_product_config.name,
+                table_name=schema,
+                logger=self.logger,
+            )
+
+            # Delete a given elements raw and curated data for all versions of the data product
+            delete_all_element_version_data_files(
+                data_product_name=self.data_product_config.name, table_name=schema
+            )
+
+        current_metadata["schemas"] = [
+            schema for schema in current_schemas if schema not in schema_list
+        ]
+        updated_metadata = DataProductMetadata(
             data_product_name=self.data_product_config.name,
-            table_name=table_name,
             logger=self.logger,
+            input_data=current_metadata,
+        ).load()
+
+        if not updated_metadata.valid:
+            error = f"updated metadata validation failed"
+            self.logger.error(error)
+            raise InvalidUpdate(error)
+
+        latest_version = updated_metadata.version
+        new_version = generate_next_version_string(
+            latest_version, UpdateType.MajorUpdate
         )
 
-        # Delete a given elements raw and curated data for all versions of the data product
-        delete_all_element_version_data_files(
-            data_product_name=self.data_product_config.name, table_name=table_name
-        )
-
-        # Get the current version of the schema path
-        schema_path = DataProductConfig(name=self.data_product_config.name).schema_path(
-            table_name
-        )
-        s3_client = boto3.client("s3")
-        # Delete the schema for the table we wish to remove before the folders are copied
-        s3_client.delete_object(Bucket=schema_path.bucket, Key=schema_path.key)
-
-        latest_version = metadata.version
-        new_version = generate_next_version_string(latest_version, state)
         source_folder = f"{self.data_product_config.name}/{latest_version}/"
-
-        # Copy metadata and schema files from the current version
-        # to the new version
+        # Copy files to the new version
         s3_copy_folder_to_new_folder(
-            schema_path.bucket,
+            updated_metadata.write_bucket,
             source_folder,
             latest_version,
             new_version,
             self.logger,
         )
-        # Generate the metadata path for the new version
+        # Remove schema files that we no longer require in this version
+        for schema in schema_list:
+            # Get the current version of the schema path
+            schema_path = DataProductConfig(
+                name=self.data_product_config.name
+            ).schema_path(table_name=schema, version=new_version)
+            # Delete the schema.json file for the table we have removed
+            s3_client.delete_object(Bucket=schema_path.bucket, Key=schema_path.key)
+
+        # Get the metadata path for the new version
         new_version_key = self.data_product_config.metadata_path(new_version).key
         # Overwite the copied metadata.json file with the updated parameters
-        metadata.write_json_to_s3(new_version_key)
+        updated_metadata.write_json_to_s3(new_version_key)
 
         return new_version
 
@@ -173,18 +185,8 @@ class VersionCreator:
         state = metadata_update_type(metadata)
         self.logger.info(f"Update type {state}")
 
-        result, _ = self._validate_major_update_add_schema(input_data)
-
-        # Check for Type.MajorUpdate adding a schema
-        if state == UpdateType.MajorUpdate and not result:
-            # Indicates an invalid update
+        if state != UpdateType.MinorUpdate:
             raise InvalidUpdate(state)
-
-        # Change the state to minor
-
-        # Create Glue table
-
-        # Copy schema files to the new version
 
         latest_version = metadata.version
         new_version = generate_next_version_string(latest_version, state)
@@ -195,39 +197,6 @@ class VersionCreator:
         metadata.write_json_to_s3(new_version_key)
 
         return new_version
-
-    def _validate_major_update_add_schema(self, input_data) -> bool:
-        current_metadata = (
-            DataProductMetadata(
-                data_product_name=self.data_product_config.name,
-                logger=self.logger,
-                input_data=None,
-            )
-            .load()
-            .latest_version_saved_data
-        )
-        schemas = current_metadata.get("schemas", [])
-        # Validate we are adding a single schema rather than removing
-        if len(set(input_data.get("schemas")).difference(set(schemas))) == 1:
-            self.logger.info("Number of new schemas to be added is 1")
-            return True, current_metadata
-        return False, current_metadata
-
-    def _validate_major_update_remove_schema(self, input_data) -> bool:
-        current_metadata = (
-            DataProductMetadata(
-                data_product_name=self.data_product_config.name,
-                logger=self.logger,
-                input_data=None,
-            )
-            .load()
-            .latest_version_saved_data
-        )
-        schemas = current_metadata.get("schemas", [])
-        # Validate we are removing a single schema rather than adding
-        if len(set(schemas).difference(set(input_data.get("schemas")))) == 1:
-            return True, current_metadata
-        return False, current_metadata
 
     def update_schema(self, input_data: dict, table_name: str):
         """
@@ -286,16 +255,11 @@ def metadata_update_type(data_product_metadata: DataProductMetadata) -> UpdateTy
         return UpdateType.NotAllowed
 
     changed_fields = data_product_metadata.changed_fields()
-    print(f"changed_fields: {changed_fields}")
     if not changed_fields:
         return UpdateType.Unchanged
-    # Schema changes
-    if not changed_fields.difference(MAJOR_UPDATABLE_METADATA_FIELDS):
-        return UpdateType.MajorUpdate
-    elif changed_fields.difference(MINOR_UPDATABLE_METADATA_FIELDS):
+    if changed_fields.difference(UPDATABLE_METADATA_FIELDS):
         return UpdateType.NotAllowed
     else:
-        # Minor changes
         return UpdateType.MinorUpdate
 
 
