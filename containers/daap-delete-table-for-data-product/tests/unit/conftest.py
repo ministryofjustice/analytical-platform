@@ -231,7 +231,7 @@ def load_v1_metadata_schema_to_mock_s3(s3_client):
     s3_client.put_object(
         Body=json_data,
         Bucket=os.environ["METADATA_BUCKET"],
-        Key="data_product_metadata_spec/v1.0.0/moj_data_product_metadata_spec.json",
+        Key="data_product_metadata_spec/v1.1.0/moj_data_product_metadata_spec.json",
     )
 
 
