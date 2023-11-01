@@ -1,58 +1,77 @@
 locals {
-  data_platform_repositories = {
-    "data-platform" = {
-      name            = "data-platform"
-      description     = "Data Platform"
-      topics          = ["ministryofjustice", "data-platform"]
-      use_template    = false
-      has_discussions = true
-      has_projects    = true
-      homepage_url    = "https://technical-documentation.data-platform.service.justice.gov.uk"
-      pages_enabled   = true
-      pages_configuration = {
-        cname = "technical-documentation.data-platform.service.justice.gov.uk"
-        source = {
-          branch = "gh-pages"
-          path   = "/docs"
-        }
-      }
-      access = {
-        admins      = [module.data_platform_teams["data-platform-apps-and-tools"].id]
-        maintainers = [module.data_platform_teams["data-platform-labs"].id]
-        pushers     = [module.data_platform_team.id]
-      }
-    }
-    "data-platform-products" = {
-      name        = "data-platform-products"
-      description = "Data Platform Products"
-      topics      = ["ministryofjustice", "data-platform"]
-      access = {
-        admins      = [module.data_platform_teams["data-platform-apps-and-tools"].id]
-        maintainers = [module.data_platform_teams["data-platform-labs"].id]
-        pushers     = [module.data_platform_team.id]
-      }
-    }
-    "data-platform-support" = {
-      name        = "data-platform-support"
-      description = "Data Platform Support"
-      topics      = ["ministryofjustice", "data-platform"]
+  analytical_platform_repositories = {
+    "analytics-platform-infrastructure" = {
+      name                                   = "analytics-platform-infrastructure"
+      description                            = "Analytical Platform Infrastructure"
+      topics                                 = ["ministryofjustice", "analytical-platform"]
+      visibility                             = "internal"
+      archived                               = true
+      use_template                           = false
+      advanced_security_status               = "disabled"
+      secret_scanning_status                 = "disabled"
+      secret_scanning_push_protection_status = "disabled"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
     }
-    "data-platform-user-guidance" = {
-      name          = "data-platform-user-guidance"
-      description   = "Data Platform User Guidance"
-      topics        = ["ministryofjustice", "data-platform"]
-      pages_enabled = true
-      pages_configuration = {
-        cname = "data-platform.service.justice.gov.uk"
-        source = {
-          branch = "main"
-          path   = "/"
-        }
+    "analytics-platform-helm-charts" = {
+      name                                   = "analytics-platform-helm-charts"
+      description                            = "Analytical Platform Helm Charts"
+      topics                                 = ["ministryofjustice", "analytical-platform"]
+      visibility                             = "internal"
+      use_template                           = false
+      has_issues                             = false
+      advanced_security_status               = "disabled"
+      secret_scanning_status                 = "disabled"
+      secret_scanning_push_protection_status = "disabled"
+      access = {
+        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
       }
+    }
+    "analytics-platform-rshiny" = {
+      name         = "analytics-platform-rshiny"
+      description  = "Analytical Platform RShiny Container"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      use_template = false
+      has_issues   = false
+      access = {
+        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
+      }
+    }
+    "analytics-platform-control-panel" = {
+      name                                   = "analytics-platform-control-panel"
+      description                            = "Analytical Platform Control Panel"
+      topics                                 = ["ministryofjustice", "analytical-platform"]
+      visibility                             = "internal"
+      use_template                           = false
+      homepage_url                           = "https://controlpanel.services.analytical-platform.service.justice.gov.uk"
+      advanced_security_status               = "disabled"
+      secret_scanning_status                 = "disabled"
+      secret_scanning_push_protection_status = "disabled"
+      access = {
+        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
+      }
+    }
+    "analytics-platform-control-panel-public" = {
+      name         = "analytics-platform-control-panel-public"
+      description  = "Analytical Platform Control Panel Public"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      use_template = false
+      access = {
+        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
+      }
+    }
+    "analytics-platform-ops" = {
+      name         = "analytics-platform-ops"
+      description  = "Analytical Platform Ops"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      archived     = true
+      use_template = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
@@ -61,10 +80,10 @@ locals {
   }
 }
 
-module "data_platform_repositories" {
+module "analytical_platform_repositories" {
   source = "./modules/repository"
 
-  for_each = { for repository in local.data_platform_repositories : repository.name => repository }
+  for_each = { for repository in local.analytical_platform_repositories : repository.name => repository }
 
   name        = each.value.name
   description = each.value.description
