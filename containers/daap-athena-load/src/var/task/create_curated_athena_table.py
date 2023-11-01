@@ -311,7 +311,7 @@ def does_partition_file_exist(
         for page in page_iterator:
             response += page["Contents"]
     except KeyError as e:
-        logger.error(
+        logger.info(
             f"No {e} key found at data product curated path – the database"
             " doesn't exist and will be created"
         )
