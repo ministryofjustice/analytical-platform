@@ -206,7 +206,7 @@ class TestDataProductMetadata:
                 tmp.name, self.bucket_name, "test_product/v1.0/metadata.json"
             )
 
-        with patch("data_platform_paths.s3", s3_client):
+        with patch("data_platform_paths.s3_client", s3_client):
             md = DataProductMetadata(
                 data_product_name=test_metadata_pass["name"],
                 logger=logging.getLogger(),

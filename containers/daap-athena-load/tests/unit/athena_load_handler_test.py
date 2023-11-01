@@ -17,7 +17,7 @@ def test_handler_does_not_error(
     key = "raw/data_product/table/load_timestamp=20230101T000000Z/file.csv"
 
     s3_client.create_bucket(Bucket=get_metadata_bucket())
-    mocker.patch("data_platform_paths.s3", s3_client)
+    mocker.patch("data_platform_paths.s3_client", s3_client)
 
     # Patch all the helper methods to do nothing
     mocker.patch(
