@@ -314,9 +314,8 @@ class DataProductSchema(BaseJsonSchema):
         the data product metadata needs a minor version increment if a table schema is added and
         one or more schema already exist in the data product
         """
-        if (
-            self.has_registered_data_product
-            and "schemas" in self.parent_data_product_metadata.keys()
+        if self.has_registered_data_product and self.parent_data_product_metadata.get(
+            "schemas"
         ):
             return True
         else:
