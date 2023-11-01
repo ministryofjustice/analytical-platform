@@ -316,7 +316,7 @@ def does_partition_file_exist(
             " doesn't exist and will be created"
         )
 
-    ts_exists = any(f"extraction_timestamp={timestamp}" in i["Key"] for i in response)
-    logger.info(f"extraction_timestamp={timestamp} exists = {ts_exists}")
+    ts_exists = any(f"load_timestamp={timestamp}" in i["Key"] for i in response)
+    logger.info(f"load_timestamp={timestamp} exists = {ts_exists}")
 
     return ts_exists

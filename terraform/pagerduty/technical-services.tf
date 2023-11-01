@@ -3,7 +3,7 @@ locals {
     {
       name              = "Analytical Platform"
       description       = "Generic alerts for the Analytical Platform"
-      escalation_policy = module.escalation_policies["Analytical Platform"].id
+      escalation_policy = module.escalation_policies["Data Platform"].id
       auto_pause_notifications_parameters = [
         {
           enabled = true

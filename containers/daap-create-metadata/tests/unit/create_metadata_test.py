@@ -28,18 +28,19 @@ def test_existing_metadata_definition_fail(fake_event, fake_context):
 
 def test_metadata_creation_pass(fake_event, fake_context):
     with patch("create_metadata.DataProductMetadata") as mock_metadata:
-        mock_metadata.return_value.metadata_exists = False
-        mock_metadata.return_value.valid_metadata = True
+        mock_metadata.return_value.exists = False
+        mock_metadata.return_value.valid = True
+        with patch("create_metadata.DataProductConfig") as mock_key:
+            mock_key.return_value.metadata_path.key = "somekey"
+            response = create_metadata.handler(event=fake_event, context=fake_context)
 
-        response = create_metadata.handler(event=fake_event, context=fake_context)
-
-        assert response["statusCode"] == HTTPStatus.CREATED
+            assert response["statusCode"] == HTTPStatus.CREATED
 
 
 def test_metadata_validation_fail(fake_event, fake_context):
     with patch("create_metadata.DataProductMetadata") as mock_metadata:
-        mock_metadata.return_value.metadata_exists = False
-        mock_metadata.return_value.valid_metadata = False
+        mock_metadata.return_value.exists = False
+        mock_metadata.return_value.valid = False
         mock_metadata.return_value.error_traceback = "testing"
 
         response = create_metadata.handler(event=fake_event, context=fake_context)
@@ -54,8 +55,8 @@ def test_metadata_validation_fail(fake_event, fake_context):
 @pytest.mark.parametrize("method", [HTTPMethod.GET, HTTPMethod.PUT, HTTPMethod.DELETE])
 def test_http_method_fail(fake_event, fake_context, method):
     with patch("create_metadata.DataProductMetadata") as mock_metadata:
-        mock_metadata.return_value.metadata_exists = False
-        mock_metadata.return_value.valid_metadata = True
+        mock_metadata.return_value.exists = False
+        mock_metadata.return_value.valid = True
 
         response = create_metadata.handler(event=fake_event, context=fake_context)
 

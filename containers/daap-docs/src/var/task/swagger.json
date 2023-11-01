@@ -153,7 +153,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/registerDataProduct"
+                "$ref": "#/components/schemas/dataProductMetadata"
               }
             }
           }
@@ -228,11 +228,253 @@
           }
         }
       }
+    },
+    "/data-product/{data-product-name}": {
+      "post": {
+        "tags": [
+          "update_metadata"
+        ],
+        "summary": "Update (metadata for) an existing Data Product.",
+        "description": "Creates a new minor version of the data product with updated metadata.",
+        "operationId": "updateDataProduct",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dataProductMetadata"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorizationToken",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "data-product-name",
+            "required": true,
+            "example": "my_data_product",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The name of the data product you want to add a schema to. This needs to be a registered data product name."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["version"],
+                  "properties": {
+                    "version": {
+                      "type": "string",
+                      "example": "1.1"
+                    }
+                  },
+                  "example": {
+                    "version": "1.1"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": {
+                      "message": "Data product name is missing, it must be specified in the metadata  against the 'name' key"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data-product/{data-product-name}/table/{table-name}/schema": {
+      "post": {
+        "tags": [
+          "schema"
+        ],
+        "summary": "Register a schema (blueprint of your table) for a new table in your Data Product that you want to upload to the Data Platform.",
+        "description": "Registers the first version of your Data Product's table (by submitting its schema) and enables you to proceed with uploading data to it.",
+        "operationId": "registerTableSchema",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/tableSchema"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "data-product-name",
+            "required": true,
+            "example": "my_data_product",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The name of the data product you want to add a schema to. This needs to be a registered data product name."
+          },
+          {
+            "in": "path",
+            "name": "table-name",
+            "required": true,
+            "example": "table_1",
+            "schema": {
+              "type": "string",
+              "minimum": 1,
+              "maximum": 128
+            },
+            "description": "The name of the table to create schema for. Allows lowercase alphanumeric characters and \"_\"."
+          },
+          {
+            "in": "header",
+            "name": "authorizationToken",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "message": "Schema for {table-name} has been created in the {data-product-name} data product"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": {
+                      "message": "Data product name is missing, it must be specified in the metadata  against the 'name' key"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "method not allowed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": {
+                      "message": "Sorry, GET isn't allowed."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "get_schema"
+        ],
+        "summary": "Get the latest schema for a table.",
+        "description": "Returns a json object describing the table.",
+        "operationId": "getTableSchema",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "data-product-name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The name of the data product that contains the table schema. This needs to be a registered data product name."
+          },
+          {
+            "in": "path",
+            "name": "table-name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1,
+              "maximum": 128
+            },
+            "description": "The name of the table with the schema. Allows lowercase alphanumeric characters and \"_\"."
+          },
+          {
+            "in": "header",
+            "name": "authorizationToken",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation, response format https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/get_table.html",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tableSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data product or table schema not found"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "registerDataProduct": {
+      "tableSchema": {
+        "required": [
+          "schema"
+        ],
+        "type": "object",
+        "properties": {
+          "schema": {
+            "$ref": "#/components/schemas/dataProductSchemaSchema"
+          }
+        }
+      },
+      "dataProductMetadata": {
         "required": [
           "metadata"
         ],
@@ -244,7 +486,10 @@
         }
       },
       "dataProductMetadataSchema": {
-        "$ref": "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.0.0/moj_data_product_metadata_spec.json"
+        "$ref": "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.1.0/moj_data_product_metadata_spec.json"
+      },
+      "dataProductSchemaSchema": {
+        "$ref": "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-table-schema-json-schema/v1.0.0/moj_data_product_table_spec.json"
       },
       "UploadDataRequest": {
         "required": [

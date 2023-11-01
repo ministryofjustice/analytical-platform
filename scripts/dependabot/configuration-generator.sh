@@ -21,7 +21,7 @@ updates:
       prefix: "github-actions"
       include: "scope"
     reviewers:
-      - "ministryofjustice/data-platform-core-infra"
+      - "ministryofjustice/data-platform-apps-and-tools"
 EOL
 
 for ecosystem in docker pip terraform; do
@@ -65,7 +65,7 @@ for ecosystem in docker pip terraform; do
     printf "      prefix: \"%s\"\n" "${ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
     printf "      include: \"scope\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
     printf "    reviewers:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      - \"ministryofjustice/data-platform-core-infra\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+    printf "      - \"ministryofjustice/data-platform-apps-and-tools\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
 
   done
 

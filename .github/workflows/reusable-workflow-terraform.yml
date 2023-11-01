@@ -33,7 +33,11 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Build path-filters file
+        id: build_path_filters
+        run: bash scripts/path-filter/configuration-generator.sh terraform
 
       - name: Prepare Environment
         id: prepare_environment
@@ -47,12 +51,11 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@f6243e0bd0159652f2017c47743fbb7e36859d00 # v12.2526.0
+        uses: bridgecrewio/checkov-action@97aba41cade0724966fe1c6fb70dbf4f36c3bb22 # v12.2554.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
           quiet: true
-          download_external_modules: true
           output_format: cli
         continue-on-error: true
 
@@ -148,7 +151,11 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Build path-filters file
+        id: build_path_filters
+        run: bash scripts/path-filter/configuration-generator.sh terraform
 
       - name: Prepare Environment
         id: prepare_environment
@@ -196,11 +203,9 @@ jobs:
 
       - name: Set up Terraform
         id: setup_terraform
-        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+        uses: hashicorp/setup-terraform@a1502cd9e758c50496cc9ac5308c4843bcd56d36 # v3.0.0
         with:
-          # terraform_version: ${{ inputs.terraform-version }}
-          # Pinning at 1.5.7 until 1.6.1 is released
-          terraform_version: 1.5.7
+          terraform_version: ${{ inputs.terraform-version }}
 
       - name: Prepare Terraform
         id: terraform_prepare

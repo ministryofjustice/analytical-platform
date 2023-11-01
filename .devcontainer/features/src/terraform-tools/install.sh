@@ -15,7 +15,3 @@ fi
 if [[ "${INSTALLTFSEC}" == "true" ]]; then
   bash $( dirname $0 )/install-tfsec.sh
 fi
-
-if [[ "${INSTALLINFRACOST}" == "true" ]]; then
-  bash $( dirname $0 )/install-infracost.sh
-fi

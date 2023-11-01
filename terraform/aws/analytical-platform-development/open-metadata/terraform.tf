@@ -14,7 +14,7 @@ terraform {
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "5.17.0"
+      version = "5.23.0"
     }
     helm = {
       source  = "hashicorp/helm"
@@ -27,6 +27,10 @@ terraform {
     random = {
       source  = "hashicorp/random"
       version = "3.5.1"
+    }
+    grafana = {
+      source  = "grafana/grafana"
+      version = "2.4.0"
     }
   }
   required_version = "~> 1.5"
@@ -83,4 +87,9 @@ provider "kubernetes" {
     command     = "bash"
     args        = ["../../../../scripts/eks/terraform-authentication.sh", data.aws_caller_identity.current.account_id, module.eks.cluster_name]
   }
+}
+
+provider "grafana" {
+  url  = "https://${module.managed_grafana.workspace_endpoint}"
+  auth = aws_grafana_workspace_api_key.automation_key.key
 }
