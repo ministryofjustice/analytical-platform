@@ -2,11 +2,9 @@ import os
 from http import HTTPStatus
 
 import boto3
-from botocore.exceptions import ClientError
 from data_platform_api_responses import format_error_response
-from data_platform_logging import DataPlatformLogger, s3_security_opts
+from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductMetadata, DataProductSchema
-from glue_utils import delete_glue_table
 from versioning import VersionCreator, InvalidUpdate
 
 logger = DataPlatformLogger(
@@ -66,19 +64,17 @@ def handler(event, context):
         logger.error(error_message)
         return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
 
-    metadata = data_product_metadata.load().latest_version_saved_data
-    metadata["schemas"].remove(table_name)
-
     version_creator = VersionCreator(data_product_name=data_product_name, logger=logger)
     try:
-        result = version_creator.update_metadata_remove_schema(input_data=metadata)
+        new_version = version_creator.update_metadata_remove_schemas(
+            schema_list=[table_name]
+        )
     except InvalidUpdate as e:
-        error_message = f"Invalid Update : {str(e)}"
-        logger.error(error_message)
-        return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
+        return format_error_response(HTTPStatus.BAD_REQUEST, event, str(e))
     except ValueError as e:
         return format_error_response(HTTPStatus.BAD_REQUEST, event, str(e))
     else:
-        msg = f"Successfully deleted table '{table_name}' and raw & curated data files"
+        msg = f"Success removed table '{table_name}'"
+        msg += f", data files and generated new matadata version '{new_version}'"
         logger.info(msg)
         return format_error_response(HTTPStatus.OK, event, msg)
