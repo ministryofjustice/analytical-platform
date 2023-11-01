@@ -71,7 +71,10 @@ resource "github_repository" "this" {
   }
 }
 
+#tfsec:ignore:AVD-GIT-0004:The team has agreed that we don't need to sign commits
 resource "github_branch_protection" "this" {
+  #checkov:skip=CKV_GIT_5:The team has agreed that having 2 approvers will slow velocity
+
   repository_id = github_repository.this.id
   pattern       = "main"
 
