@@ -1,8 +1,5 @@
-from http import HTTPStatus
-
 import boto3
 from botocore.exceptions import ClientError
-from data_platform_api_responses import format_error_response
 from data_platform_logging import DataPlatformLogger
 
 
