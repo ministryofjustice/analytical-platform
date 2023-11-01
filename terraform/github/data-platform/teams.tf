@@ -110,7 +110,8 @@ locals {
     "AntFMoJ",  # Anthony Fitzroy
     "tomholt1", # Tom Holt
     "lalithanagarur",
-    "sivabathina2"
+    "sivabathina2",
+    "kraihanmoj"
   ]
 
   data_engineering_aws_developer_members = [
