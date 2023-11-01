@@ -7,12 +7,12 @@ review_in: 6 months
 
 # <%= current_page.data.title %>
 
-There is a lot of technical tooling we use in developing the Analytical and Data Platforms.
+There is a lot of technical tooling we use in developing the Analytical and Data Platforms
 
-To ease the onboarding process, we have created a [dev container](https://containers.dev/) that contains all the tools you need to get up and running.
+To ease the onboarding process, we have created a [dev container](https://containers.dev/) that contains all the tools you need to get up and running
 
-This implementation of the dev container is designed to have repositories cloned into it under the persistent workspace `/home/vscode/workspace`.
-Once we begin our journey to the monorepo, this should become redundant, but that means that right now, it is not intended to use this with GitHub Codespaces, but its still possible.
+This implementation of the dev container is designed to have repositories cloned into it under the persistent workspace `/home/vscode/workspace`
+Once we begin our journey to the monorepo, this should become redundant, but that means that right now, it is not intended to use this with GitHub Codespaces, but its still possible
 
 ## Getting Started
 
@@ -64,7 +64,9 @@ Once we begin our journey to the monorepo, this should become redundant, but tha
 
 ### Setup
 
-Your GPG and SSH agents are mounted from macOS, so GPG and SSH commands inside the container should work without any configuration updates.
+Your GPG and SSH agents are mounted from macOS, so GPG and SSH commands inside the container should work without any configuration updates
+
+> We recommend using 1Password to manage your SSH keys, and this document will reflect that
 
 1. Follow 1Password's instructions on how to setup SSH keys and their SSH agent ([link](https://developer.1password.com/docs/ssh/get-started/))
 
@@ -108,7 +110,7 @@ Your GPG and SSH agents are mounted from macOS, so GPG and SSH commands inside t
 
 1. Run `Dev Container: Reopen in Container`
 
-1. Wait for the container to build, it may take 5 to 10 minutes.
+1. Wait for the container to build, it may take 5 to 10 minutes
 
 1. Open a new terminal window in Visual Studio Code using `Control-Shift-Backtick`
 
@@ -163,13 +165,13 @@ When new functionality is added you will need to rebuild the container, to do th
 
 ## Tools
 
-Tools are bundled into features that focus on one area of functionality, e.g. AWS, Kubernetes, and Terraform.
+Tools are bundled into features that focus on one area of functionality, e.g. AWS, Kubernetes, and Terraform
 
-You can find the features [here](https://github.com/ministryofjustice/data-platform/tree/main/.devcontainer/features/src)
+You can find the full feature list [here](https://github.com/ministryofjustice/data-platform/tree/main/.devcontainer/features/src), but documentation on a select few can be found below
 
 ### Pre-Commit
 
-We use [pre-commit](https://pre-commit.com/) to run checks on our code before it is committed.
+We use [pre-commit](https://pre-commit.com/) to run checks on our code before it is committed
 
 Once you've cloned the Data Platform repository, you can install the pre-commit hooks using the following command:
 
@@ -179,19 +181,19 @@ pre-commit install
 
 ### EditorConfig
 
-We use [EditorConfig](https://editorconfig.org/) to maintain consistent coding styles between different editors and IDEs.
+We use [EditorConfig](https://editorconfig.org/) to maintain consistent coding styles between different editors and IDEs
 
 ### AWS Vault
 
-Our AWS accounts are accessed using AWS IAM Identity Center. A curated AWS configuration file is provided as part of the AWS feature.
+Our AWS accounts are accessed using AWS IAM Identity Center. A curated AWS configuration file is provided as part of the AWS feature
 
 You can see the configuration file [here](https://github.com/ministryofjustice/data-platform/blob/main/.devcontainer/features/src/aws-tools/src/home/vscode/.aws/config)
 
-In its current form, it only offers `AdministratorAccess` level access (if you have access to it), but we hope to add more granular access in the future.
+In its current form, it only offers `AdministratorAccess` level access (if you have access to it), but we hope to add more granular access in the future
 
 ### Kubernetes
 
-We host our own EKS clusters in Analytical Platform. A curated Kubernetes configuration file is provided as part of the Kubernetes feature.
+We host our own EKS clusters in the Analytical and Data Platforms. A curated Kubernetes configuration file is provided as part of the Kubernetes feature
 
 You can see the configuration file [here](https://github.com/ministryofjustice/data-platform/blob/main/.devcontainer/features/src/kubernetes-tools/src/home/vscode/.kube/config)
 
