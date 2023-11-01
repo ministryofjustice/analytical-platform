@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.2] - 2023-11-1
+
+### Added
+
+- `get_all_versions` to return all product version
+- `generate_all_element_version_prefixes` creates s3 prefixes for all
+  raw and curated data versions for an element
+- `delete_all_element_version_data_files` removes all raw and curated 
+  data versions for an element
+- `s3_recursive_delete` deletes all files for a prefix
+- `glue_utils.delete_glue_table` utility for deleting a glue table
+- `update_metadata_remove_schemas` to VersionCreator to handle
+  removing schemas, data and tables and uplifting metadata and schema versions
+
+### Changed
+
+- renamed client variable from `s3` to `s3_client`
+- `get_latest_version` now calls `get_all_versions` and returns the last element
+- `DataProductSchema._does_data_product_have_other_schema_registered` now
+  checks the truthiness of the `schemas` list, rather than the presence
+  of the `schemas` key
+
 ## [5.3.1] - 2023-10-26
 
 ### Changed
