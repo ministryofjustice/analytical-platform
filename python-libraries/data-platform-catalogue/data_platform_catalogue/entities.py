@@ -52,7 +52,7 @@ class DataProductMetadata:
 class TableMetadata:
     name: str
     description: str
-    column_details: list[tuple]
+    column_details: dict
     retention_period_in_days: int
     tags: list[str] = field(default_factory=list)
 
