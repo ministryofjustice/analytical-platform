@@ -324,7 +324,7 @@ class DataProductSchema(BaseJsonSchema):
         convert schema passed by user to glue table input so it can be used to create an athena table
         from csv with headers.
         """
-        # limits: https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-catalog-tables.html#aws-glue-api-catalog-tables-Column
+        # noqa E501  limits: https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-catalog-tables.html#aws-glue-api-catalog-tables-Column
         glue_comment_char_limit = 255
         glue_desc_char_limit = 2048
 
