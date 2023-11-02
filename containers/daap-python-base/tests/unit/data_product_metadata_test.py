@@ -13,6 +13,8 @@ from data_product_metadata import (
     format_table_schema,
 )
 
+TestCase.maxDiff = None
+
 test_metadata_pass = {
     "name": "test_product",
     "description": "just testing the metadata json validation/registration",
@@ -92,7 +94,7 @@ test_glue_table_input = {
         "Name": "test_table",
         "Owner": "matthew.laverty@justice.gov.uk",
         "Retention": 3000,
-        "Parameters": {"classification": "csv", "skip.header.line.count": "1"},
+        "Parameters": {},
         "PartitionKeys": [],
         "StorageDescriptor": {
             "BucketColumns": [],
@@ -111,15 +113,12 @@ test_glue_table_input = {
                 {"Name": "col_4", "Type": "smallint", "Comment": "ABCDEFGHIJKLMN"},
             ],
             "Compressed": False,
-            "InputFormat": "org.apache.hadoop.mapred.TextInputFormat",
+            "InputFormat": "",
             "Location": "",
             "NumberOfBuckets": -1,
-            "OutputFormat": "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat",
+            "OutputFormat": "",
             "Parameters": {},
-            "SerdeInfo": {
-                "Parameters": {"escape.delim": "\\", "field.delim": ","},
-                "SerializationLibrary": "org.apache.hadoop.hive.serde2.OpenCSVSerde",
-            },
+            "SerdeInfo": {},
             "SortColumns": [],
             "StoredAsSubDirectories": False,
         },

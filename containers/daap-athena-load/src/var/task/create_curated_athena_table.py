@@ -65,9 +65,9 @@ class CuratedDataQueryBuilder:
         self, raw_table: QueryTable, curated_table: QueryTable, timestamp: str
     ) -> str:
         """
-        if the table and data do not exist in curated this
-        will create initial table and parition in glue and file
-        in s3
+        For use if the curated table does not exist in the glue catalog.
+        This uses a CTAS query to create the table and partitions in the glue catalog
+        and associate this table with the parquet in s3 created from the raw data.
         """
         partition_sql = f"""
             CREATE TABLE {curated_table.database}.{curated_table.name}

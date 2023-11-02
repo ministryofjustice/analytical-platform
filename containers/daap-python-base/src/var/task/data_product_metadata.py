@@ -26,19 +26,16 @@ glue_csv_table_input_template = {
     "TableInput": {
         "Name": "",  # add to this from table name pulled from api path
         "Description": "",
-        "Owner": "owner",
+        "Owner": "",
         # "Retention": 0,
         "StorageDescriptor": {
             "Columns": [],  # add to this from schema passed by user in api request body
             "Location": "",  # noqa E501 add to this once data land and timestamp generated, although could be top level bucket/data/product/version/table
-            "InputFormat": "org.apache.hadoop.mapred.TextInputFormat",
-            "OutputFormat": "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat",
+            "InputFormat": "",
+            "OutputFormat": "",
             "Compressed": False,
             "NumberOfBuckets": -1,
-            "SerdeInfo": {
-                "SerializationLibrary": "org.apache.hadoop.hive.serde2.OpenCSVSerde",
-                "Parameters": {"field.delim": ",", "escape.delim": "\\"},
-            },
+            "SerdeInfo": {},
             "BucketColumns": [],
             "SortColumns": [],
             "Parameters": {},
@@ -46,7 +43,7 @@ glue_csv_table_input_template = {
         },
         "PartitionKeys": [],
         "TableType": "EXTERNAL_TABLE",
-        "Parameters": {"classification": "csv", "skip.header.line.count": "1"},
+        "Parameters": {},
     },
 }
 
