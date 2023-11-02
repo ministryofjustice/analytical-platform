@@ -1,5 +1,13 @@
+import logging
+from io import BytesIO
+
 import pytest
-from validation import DataInvalid, type_is_compatible, validate_data_against_schema
+from validation import (
+    DataInvalid,
+    type_is_compatible,
+    validate_csv_format,
+    validate_data_against_schema,
+)
 
 
 @pytest.mark.parametrize(
@@ -167,3 +175,35 @@ class TestValidateAgainstSchema:
                 registered_schema_columns=schema,
                 inferred_columns=dict(**schema, extra="integer"),
             )
+
+
+class TestValidateCsvFormat:
+    @pytest.mark.parametrize(
+        "valid",
+        [
+            b"""a,b,c
+abc,def,ghi
+zzz,yyy,\"x y z\""""
+        ],
+    )
+    def test_valid_csv(self, valid):
+        stream = BytesIO(valid)
+        validate_csv_format(stream, logging.getLogger())
+
+    @pytest.mark.parametrize(
+        "invalid",
+        [
+            b"""a,b,c
+abc,def,ghi
+abc,def,"g
+h
+i"
+        """,
+            b'a,b,c\n1,2,3\n"this\nis\na\nmulti\nline\nvalue",5,6',
+        ],
+    )
+    def test_invalid_csv(self, invalid):
+        stream = BytesIO(invalid)
+
+        with pytest.raises(DataInvalid):
+            validate_csv_format(stream, logging.getLogger())

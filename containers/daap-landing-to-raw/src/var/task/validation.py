@@ -1,3 +1,11 @@
+from typing import BinaryIO
+
+import pyarrow.compute as pc
+import pyarrow.csv as csv
+from data_platform_logging import DataPlatformLogger
+from pyarrow.lib import StringArray
+
+
 class DataInvalid(Exception):
     pass
 
@@ -86,3 +94,30 @@ def validate_data_against_schema(
 
     if type_errors:
         raise DataInvalid(f"Columns do not match schema ({', '.join(type_errors)})")
+
+
+def validate_csv_format(input_stream: BinaryIO, logger: DataPlatformLogger):
+    """
+    Ensure the CSV does not contain newlines. Such embedded newlines are
+    not supported by OpenCSVSerde so we would be unable to load the data
+    via athena.
+    For performance reasons, this uses a streaming reader and only scans the
+    first ~1.5MB of the dataset.
+    """
+    try:
+        streaming_reader = csv.open_csv(
+            input_stream,
+            read_options=csv.ReadOptions(block_size=1_500_000),
+            parse_options=csv.ParseOptions(newlines_in_values=False),
+        )
+        chunk = streaming_reader.read_next_batch()
+        for i, column in enumerate(chunk):
+            if type(column) is StringArray:
+                problems = column.filter(pc.match_substring(column, "\n"))
+                if problems:
+                    error_message = f"Column {i} has embedded newlines"
+                    logger.info(error_message)
+                    raise DataInvalid(f"Column {i} has embedded newlines")
+
+    except Exception as e:
+        raise DataInvalid("Unable to read CSV for validation") from e
