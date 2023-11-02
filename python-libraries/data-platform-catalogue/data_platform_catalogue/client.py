@@ -2,6 +2,9 @@ import json
 import logging
 from http import HTTPStatus
 
+from metadata.generated.schema.api.createEventPublisherJob import (
+    CreateEventPublisherJob,
+)
 from metadata.generated.schema.api.data.createDatabase import CreateDatabaseRequest
 from metadata.generated.schema.api.data.createDatabaseSchema import (
     CreateDatabaseSchemaRequest,
@@ -15,6 +18,7 @@ from metadata.generated.schema.entity.services.connections.metadata.openMetadata
 from metadata.generated.schema.entity.services.databaseService import (
     DatabaseServiceType,
 )
+from metadata.generated.schema.entity.teams.user import User
 from metadata.generated.schema.security.client.openMetadataJWTClientConfig import (
     OpenMetadataJWTClientConfig,
 )
@@ -153,10 +157,16 @@ class CatalogueClient:
         """
         Define a table.
         There can be many tables per data product.
+        columns are extpected to be a list of dicts in the format
+            {"name": "column1", "type": "string", "description": "just an example"}
         """
         columns = [
-            Column(name=k, dataType=DATA_TYPE_MAPPING[v])
-            for k, v in metadata.column_types.items()
+            Column(
+                name=column["name"],
+                dataType=DATA_TYPE_MAPPING[column["type"]],
+                description=column["description"],
+            )
+            for column in metadata.column_details
         ]
         create_table = CreateTableRequest(
             name=metadata.name,
@@ -182,6 +192,15 @@ class CatalogueClient:
             raise CatalogueError from exception
 
         return response.dict()["fullyQualifiedName"]
+
+    def get_user_id(self, user_email: str):
+        """
+        returns the user id from openmetadata when given a user's email
+        """
+        username = user_email.split("@")[0]
+        user_id = self.metadata.get_by_name(entity=User, fqn=username).id
+
+        return user_id
 
     def delete_database_service(self, fqn: str):
         """
