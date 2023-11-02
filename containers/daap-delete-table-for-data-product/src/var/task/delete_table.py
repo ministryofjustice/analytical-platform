@@ -5,7 +5,7 @@ import boto3
 from data_platform_api_responses import format_error_response
 from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductMetadata, DataProductSchema
-from versioning import VersionCreator, InvalidUpdate
+from versioning import InvalidUpdate, VersionCreator
 
 logger = DataPlatformLogger(
     extra={

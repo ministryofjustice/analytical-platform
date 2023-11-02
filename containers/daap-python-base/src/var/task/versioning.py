@@ -11,7 +11,6 @@ from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import (
     DataProductConfig,
     delete_all_element_version_data_files,
-    get_metadata_bucket,
 )
 from data_product_metadata import DataProductMetadata, DataProductSchema
 from glue_utils import delete_glue_table
@@ -105,11 +104,11 @@ class VersionCreator:
         self.logger.info(f"Current schemas: {current_schemas}")
 
         valid_schemas_to_delete = all(
-            schema in schema_list for schema in current_schemas
+            schema in current_schemas for schema in schema_list
         )
         if not valid_schemas_to_delete:
             error = f"Invalid schemas found in schema_list: {schema_list}"
-            self.logger(error)
+            self.logger.error(error)
             raise InvalidUpdate(error)
 
         self.logger.info(f"schemas to delete: {schema_list}")
@@ -136,7 +135,7 @@ class VersionCreator:
         ).load()
 
         if not updated_metadata.valid:
-            error = f"updated metadata validation failed"
+            error = "updated metadata validation failed"
             self.logger.error(error)
             raise InvalidUpdate(error)
 
@@ -144,6 +143,7 @@ class VersionCreator:
         new_version = generate_next_version_string(
             latest_version, UpdateType.MajorUpdate
         )
+        self.logger.info(f"new version: {new_version}")
 
         source_folder = f"{self.data_product_config.name}/{latest_version}/"
         # Copy files to the new version

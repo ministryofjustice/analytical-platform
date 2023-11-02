@@ -1,9 +1,13 @@
 import copy
 import json
 import logging
+import os
 from typing import Any
 
+
 import pytest
+from botocore.exceptions import ClientError
+from unittest.mock import patch
 from versioning import InvalidUpdate, VersionCreator
 
 test_metadata = {
@@ -16,6 +20,19 @@ test_metadata = {
     "status": "draft",
     "retentionPeriod": 3000,
     "dpiaRequired": False,
+}
+
+test_metadata_with_schemas = {
+    "name": "test_product",
+    "description": "just testing the metadata json validation/registration",
+    "domain": "MoJ",
+    "dataProductOwner": "matthew.laverty@justice.gov.uk",
+    "dataProductOwnerDisplayName": "matt laverty",
+    "email": "matthew.laverty@justice.gov.uk",
+    "status": "draft",
+    "retentionPeriod": 3000,
+    "dpiaRequired": False,
+    "schemas": ["schema0", "schema1", "schema2"],
 }
 
 test_schema: dict[str, Any] = {
@@ -339,3 +356,182 @@ class TestVersionCreator:
 
         with pytest.raises(InvalidUpdate):
             version_creator.update_metadata(input_data)
+
+
+class TestUpdateMetadataRemoveSchema:
+    @pytest.fixture(autouse=True)
+    def setup(
+        self,
+        metadata_bucket,
+        s3_client,
+        glue_client,
+        create_glue_database,
+        data_product_name,
+        data_product_versions,
+    ):
+        self.bucket_name = metadata_bucket
+        for version in data_product_versions:
+            s3_client.put_object(
+                Body=json.dumps(test_metadata_with_schemas),
+                Bucket=self.bucket_name,
+                Key=f"{data_product_name}/{version}/metadata.json",
+            )
+        for i in range(3):
+            for version in data_product_versions:
+                s3_client.put_object(
+                    Body=json.dumps(test_schema),
+                    Bucket=self.bucket_name,
+                    Key=f"{data_product_name}/{version}/schema{i}/schema.json",
+                )
+        glue_client.create_table(
+            DatabaseName=data_product_name, TableInput={"Name": "schema0"}
+        )
+
+    def test_success(
+        self, s3_client, create_raw_and_curated_data, data_product_name, glue_client
+    ):
+        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        schema_list = ["schema0"]
+        with patch("glue_utils.glue_client", glue_client):
+            version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+            schema_prefix = f"{data_product_name}/v2.0/metadata.json"
+            response = s3_client.list_objects_v2(
+                Bucket=self.bucket_name,
+                Prefix=schema_prefix,
+            )
+        assert response.get("KeyCount") == 1
+
+    def test_invalid_schemas(self, data_product_name):
+        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        schema_list = ["schema3", "schema4"]
+
+        with pytest.raises(InvalidUpdate) as exc:
+            version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+        assert (
+            str(exc.value)
+            == "Invalid schemas found in schema_list: ['schema3', 'schema4']"
+        )
+
+    def test_glue_table_not_found(
+        self, s3_client, create_raw_and_curated_data, data_product_name, glue_client
+    ):
+        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        schema_list = ["schema0", "schema1"]
+        with patch("glue_utils.glue_client", glue_client):
+            with pytest.raises(ValueError) as exc:
+                version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+                assert (
+                    str(exc.value)
+                    == f"An error occurred (EntityNotFoundException) when\
+                        calling the GetTable operation: Database {data_product_name} not found."
+                )
+
+    def test_schema_glue_table_deleted(
+        self, s3_client, create_raw_and_curated_data, data_product_name, glue_client
+    ):
+        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        schema_list = ["schema0"]
+        with patch("glue_utils.glue_client", glue_client):
+            table = glue_client.get_table(
+                DatabaseName=data_product_name, Name=f"{schema_list[0]}"
+            )
+            assert table["ResponseMetadata"]["HTTPStatusCode"] == 200
+            assert table["Table"]["Name"] == schema_list[0]
+
+            with pytest.raises(ClientError) as exc:
+                # Call the handler
+                version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+
+                table = glue_client.get_table(
+                    DatabaseName=data_product_name, Name=f"{schema_list[0]})"
+                )
+            assert exc.value.response["Error"]["Code"] == "EntityNotFoundException"
+
+    def test_data_files_deleted(
+        self,
+        s3_client,
+        create_raw_and_curated_data,
+        data_product_name,
+        glue_client,
+        data_product_versions,
+    ):
+        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        schema_list = ["schema0"]
+        with patch("glue_utils.glue_client", glue_client):
+            # Validate we have the required number of files
+            for version in data_product_versions:
+                curated_prefix = f"curated/{data_product_name}/{version}/schema0/"
+                response = s3_client.list_objects_v2(
+                    Bucket=os.getenv("CURATED_DATA_BUCKET"),
+                    Prefix=curated_prefix,
+                )
+                assert response.get("KeyCount") == 10
+
+                raw_prefix = f"raw/{data_product_name}/{version}/schema0/"
+                response = s3_client.list_objects_v2(
+                    Bucket=os.getenv("RAW_DATA_BUCKET"),
+                    Prefix=raw_prefix,
+                )
+                assert response.get("KeyCount") == 10
+
+            # Call the handler
+            version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+
+            # Validate files are deleted
+            for version in data_product_versions:
+                curated_prefix = f"curated/{data_product_name}/{version}/schema0/"
+                response = s3_client.list_objects_v2(
+                    Bucket=os.getenv("CURATED_DATA_BUCKET"),
+                    Prefix=curated_prefix,
+                )
+                assert response.get("KeyCount") == 0
+
+                raw_prefix = f"raw/{data_product_name}/{version}/schema0/"
+                response = s3_client.list_objects_v2(
+                    Bucket=os.getenv("RAW_DATA_BUCKET"),
+                    Prefix=raw_prefix,
+                )
+                assert response.get("KeyCount") == 0
+
+    def test_deleted_schema_files_removed_from_new_version(
+        self,
+        s3_client,
+        create_raw_and_curated_data,
+        data_product_name,
+        glue_client,
+        data_product_versions,
+    ):
+        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        schema_list = ["schema0"]
+
+        with patch("glue_utils.glue_client", glue_client):
+            # Call the handler
+            version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+            schema_prefix = f"{data_product_name}/v2.0/{schema_list[0]}/schema.json"
+            response = s3_client.list_objects_v2(
+                Bucket=self.bucket_name,
+                Prefix=schema_prefix,
+            )
+            assert response.get("KeyCount") == 0
+
+    def test_validate_other_schemas_are_upversioned(
+        self,
+        s3_client,
+        create_raw_and_curated_data,
+        data_product_name,
+        glue_client,
+        data_product_versions,
+    ):
+        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        schema_list = ["schema0"]
+
+        with patch("glue_utils.glue_client", glue_client):
+            # Call the handler
+            version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+            for i in range(1, 3):
+                schema_prefix = f"{data_product_name}/v2.0/schema{i}/schema.json"
+                response = s3_client.list_objects_v2(
+                    Bucket=self.bucket_name,
+                    Prefix=schema_prefix,
+                )
+                assert response.get("KeyCount") == 1

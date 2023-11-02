@@ -22,7 +22,7 @@ class TestHandler:
         assert response["statusCode"] == HTTPStatus.OK
         assert (
             json.loads(response["body"])["error"]["message"]
-            == f"Success removed table 'table-name', data files and generated new matadata version 'v2.0'"
+            == "Success removed table 'table-name', data files and generated new matadata version 'v2.0'"
         )
 
     def test_metadata_fail(
@@ -58,7 +58,8 @@ class TestHandler:
         assert response["statusCode"] == HTTPStatus.BAD_REQUEST
         assert (
             json.loads(response["body"])["error"]["message"]
-            == f"An error occurred (EntityNotFoundException) when calling the GetTable operation: Table {table_name} not found."
+            == f"An error occurred (EntityNotFoundException) \
+                when calling the GetTable operation: Table {table_name} not found."
         )
 
     def test_deletion_of_raw_files(
@@ -144,7 +145,6 @@ class TestHandler:
         table_name,
         data_product_versions,
     ):
-        latest_version = list(data_product_versions)[-1]
         # Call the handler
         response = delete_table.handler(event=event, context=fake_context)
         bucket = os.getenv("METADATA_BUCKET")
