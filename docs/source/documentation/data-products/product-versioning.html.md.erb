@@ -1,0 +1,39 @@
+---
+owner_slack: "#data-platform-notifications"
+title: Data Product Versioning
+last_reviewed_on: 2023-11-02
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+
+Each Data Product will be versioned, with the first version released at `v1.0`. Versions include a major version and a minor version.
+
+### What utility does versioning give the data consumer?
+
+Data consumers are made aware of changes to Data Products through versioning.
+
+> Data consumers must update the major version of a Data Product in any code/tools which they use themselves, as major version changes could cause downstream processes consuming a Data Product to break.
+
+## Criteria for major vs. minor version increments
+
+Changes to Data Products shouldn't happen very often.
+All Data Product owners want to avoid their users having to update their products to bump the major version of a consumed Data Product too often, and also avoid users having to make choices about if a change is a breaking change or not.
+
+### Minor version increment criteria
+
+If all of the changes to your Data Product meet these criteria, then the minor version will be incremented:
+
+* Add whole new data asset schema - For example: adding an additional table to a Data Product
+* Add new metadata field at the Data Product level - For example: adding a new keyword tag or changing the description of a Data Product
+* Adding a column to a table
+* Descriptions added or updated for a table or existing column in a table (change to descriptive metadata for a data asset)
+
+All other changes will result in a major version increment. For example the following will all result in a major version bump:
+
+* Updating the column type for an existing column in a data asset
+* Deleting a column for an existing column in a data asset
+* Deleting/removing a table (data asset) from a Data Product
+
+Where possible we aim to infer the type of version (major/minor) increment required, based on the type of change being made.

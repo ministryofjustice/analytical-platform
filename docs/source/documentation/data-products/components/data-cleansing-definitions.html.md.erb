@@ -1,3 +1,9 @@
+---
+owner_slack: "#data-platform-notifications"
+title: Describing data cleaning
+last_reviewed_on: 2023-10-19
+review_in: 6 months
+---
 
 > **NOTE**
 
@@ -8,7 +14,7 @@ we will host user-facing documentation separately.
 
 > Data transformations (and cleansing) are not currently captured as part of the Data Product metadata. We plan to capture this information, though the structure and content of these metadata may substantially change. This data may be captured as part of the lineage information for data processed using dbt-like tools.
 
-# Describing data cleansing
+# <%= current_page.data.title %>
 
 When describing what has happened to your data before users get to interact with it, you should describe any data cleaning processes which you have used, either at a table or column level. Cleansing should be documented in the [`transformations`](/documentation/data-products/example_data_product/transformations.yml) section of your data product metadata.
 
@@ -97,10 +103,6 @@ Wherever possible, it is better to have clean data captured at source. If you ar
 <!--## Template generation
 
 Our roadmap contains plans for tools to aid in template generation - for example generating a skeleton `transformations.yml` given a `data-dictionary.yml` as input.-->
-
-## Suggesting changes
-
-If you wish to suggest additions or improvements to the cleansing types, please [follow our guidance](https://github.com/ministryofjustice/data-platform-products) on submitting a pull request.
 
 ## Further reading
 

@@ -1,7 +1,7 @@
 ---
 owner_slack: "#data-platform-notifications"
 title: Data Platform Data Products
-last_reviewed_on: 2023-10-19
+last_reviewed_on: 2023-11-02
 review_in: 6 months
 ---
 
@@ -69,3 +69,17 @@ Sections of metadata that we plan to capture within a Data Product, but are not 
 ## Example Data Product
 
 [Example Data Product](example_data_product/index.html)
+
+## Using a Data Product
+
+### Altering a Data Product
+
+Over time you may need to update your Data Product. This may come though adding data assets to the Product, removing depricated data assets, changes to the data assets themselves (such as column changes or additions in structured data), or altering the descriptive metadata of the Data Product itself.
+
+To communicate these changes in the Data Product to your users, and to maintain ongoing compatibility, changes to your Data Product (or the data assets associated with it) will automatically increment the version of your Data Product.
+
+In general, backwards-compatible changes like *adding* a data asset will mean a minor increment in the version number (i.e. `v1.0` -> `v1.1`), and backwards-incompatible changes like *deleting* a data asset will mean a major increment in the version number (i.e. `v1.3` -> `v2.0`). More information can be found on the [Data Product Versioning](product-versioning.html) page.
+
+> For structured data, each major version will be associated with its own database. i.e. `example_data_product_v1.example_table` would be used for all minor versions `v1.x`, and `example_data_product_v1.example_table` would be used for all minor versions `v2.x`.
+
+> Users of your data will need to update their pipelines if they wish to use the latest version of a Data Product after a major version increment.

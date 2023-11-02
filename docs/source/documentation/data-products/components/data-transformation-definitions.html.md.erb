@@ -1,3 +1,10 @@
+---
+owner_slack: "#data-platform-notifications"
+title: Describing data transformations
+last_reviewed_on: 2023-10-19
+review_in: 6 months
+---
+
 > **NOTE**
 
 > these pages are *primarily* for internal audiences rather than users of the Data Platform;
@@ -7,7 +14,7 @@ we will host user-facing documentation separately.
 
 > Data transformations are not currently captured as part of the Data Product metadata. We plan to capture this information, though the structure and content of these metadata may substantially change. This data may be captured as part of the lineage information for data processed using dbt-like tools.
 
-# Describing data transformations
+# <%= current_page.data.title %>
 
 When describing what has happened to your data before users get to interact with it, you should describe any data transformations you have used. Transforms should be documented in the [`transformations`](/documentation/data-products/example_data_product/transformations.yml) section of your Data Product metadata.
 

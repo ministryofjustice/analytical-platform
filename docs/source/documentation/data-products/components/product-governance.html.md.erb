@@ -1,9 +1,16 @@
+---
+owner_slack: "#data-platform-notifications"
+title: Defining Data Product Governance
+last_reviewed_on: 2023-10-19
+review_in: 6 months
+---
+
 > **NOTE**
 
 > these pages are *primarily* for internal audiences rather than users of the Data Platform;
 we will host user-facing documentation separately.
 
-# Defining Data Product governance
+# <%= current_page.data.title %>
 
 Use the [`governance`](/documentation/data-products/example_data_product/governance.yml) section in your Data Product YAML definition file to indicate to users, and to the Data Platform itself, how the data should be handled, and where it has come from. A correctly specficied set of governance attributes gives you and platform users confidence in handling and using the data.
 
@@ -15,7 +22,19 @@ domain: HMPPS
 dataProductOwner: data.product.owner.name@justice.gov.uk
 dataProductOwnerDisplayName: Data Product Owner
 dpiaRequired: false
-email: data.product.owner.name@justice.gov.uk
+retentionPeriod: 400
+```
+
+including all ptional fields:
+```yaml
+domain: HMPPS
+dataProductOwner: data.product.owner.name@justice.gov.uk
+dataProductOwnerDisplayName: Data Product Owner
+dataProductMaintainer: data.product.maintainer.name@justice.gov.uk
+dataProductMaintainerDisplayName: Data Product Maintainer
+dpiaRequired: false
+dpiaLocation: s3://data-platform-data/civil-courts-data/v1/
+tags: {"Sandbox": "True"}
 retentionPeriod: 400
 ```
 
@@ -82,6 +101,7 @@ governance:
 
 ### Ownership and handling attributes
 
+#### required
 <!-- (Alpha) -->
 - `dataProductOwner` - the email address of the owner for this Data Product.
 - `dataProductOwnerDisplayName` - display name of the owner for this Data Product.
@@ -109,6 +129,13 @@ governance:
 - `retention: review-every: unit` - one of: "days", "weeks", "months"
 -->
 
+
+<!-- (Alpha) -->
+#### optional:
+
+- `dpiaLocation` - location of the DPIA document associated with the Data Product
+- `dataProductMaintainer` - Secondary party who is able to approve DPIA access requests, but who may or may not be legally responsible for the data
+- `dataProductMaintainerDisplayName` - display name of the maintainer for this Data Product
 
 > **DO NOT SEND SECRET OR TOP SECRET DATA TO THE PLATFORM.**
 
