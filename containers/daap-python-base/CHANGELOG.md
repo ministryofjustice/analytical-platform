@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `get_all_versions` to return all product version
 - `generate_all_element_version_prefixes` creates s3 prefixes for all
   raw and curated data versions for an element
-- `delete_all_element_version_data_files` removes all raw and curated 
+- `delete_all_element_version_data_files` removes all raw and curated
   data versions for an element
 - `s3_recursive_delete` deletes all files for a prefix
 - `glue_utils.delete_glue_table` utility for deleting a glue table

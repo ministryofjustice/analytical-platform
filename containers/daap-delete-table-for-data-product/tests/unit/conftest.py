@@ -94,7 +94,7 @@ def data_product_element(data_product_name, table_name):
 
 @pytest.fixture
 def region_name():
-    return "eu-west-1"
+    return "us-east-1"
 
 
 @pytest.fixture

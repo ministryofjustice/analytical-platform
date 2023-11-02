@@ -21,5 +21,7 @@ def delete_glue_table(
             logger.error(error_message)
             raise ValueError(e)
     else:
-        glue_client.delete_table(DatabaseName=data_product_name, Name=table_name)
-        logger.info(f"{table_name} table deleted")
+        result = glue_client.delete_table(
+            DatabaseName=data_product_name, Name=table_name
+        )
+        return result

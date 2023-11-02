@@ -3,11 +3,10 @@ import json
 import logging
 import os
 from typing import Any
-
+from unittest.mock import patch
 
 import pytest
 from botocore.exceptions import ClientError
-from unittest.mock import patch
 from versioning import InvalidUpdate, VersionCreator
 
 test_metadata = {
@@ -422,8 +421,8 @@ class TestUpdateMetadataRemoveSchema:
                 version_creator.update_metadata_remove_schemas(schema_list=schema_list)
                 assert (
                     str(exc.value)
-                    == f"An error occurred (EntityNotFoundException) when\
-                        calling the GetTable operation: Database {data_product_name} not found."
+                    == f"An error occurred (EntityNotFoundException)\
+                        when calling the GetTable operation: Database {data_product_name} not found."
                 )
 
     def test_schema_glue_table_deleted(
@@ -445,7 +444,9 @@ class TestUpdateMetadataRemoveSchema:
                 table = glue_client.get_table(
                     DatabaseName=data_product_name, Name=f"{schema_list[0]})"
                 )
+            print(exc.value.response["Error"]["Message"])
             assert exc.value.response["Error"]["Code"] == "EntityNotFoundException"
+            assert f"{schema_list[0]}" in exc.value.response["Error"]["Message"]
 
     def test_data_files_deleted(
         self,

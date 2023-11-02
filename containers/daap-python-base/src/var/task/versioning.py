@@ -8,10 +8,7 @@ from typing import NamedTuple
 
 import boto3
 from data_platform_logging import DataPlatformLogger, s3_security_opts
-from data_platform_paths import (
-    DataProductConfig,
-    delete_all_element_version_data_files,
-)
+from data_platform_paths import DataProductConfig, delete_all_element_version_data_files
 from data_product_metadata import DataProductMetadata, DataProductSchema
 from glue_utils import delete_glue_table
 
@@ -114,11 +111,12 @@ class VersionCreator:
         self.logger.info(f"schemas to delete: {schema_list}")
         for schema in schema_list:
             # Delete the Glue table
-            delete_glue_table(
+            result = delete_glue_table(
                 data_product_name=self.data_product_config.name,
                 table_name=schema,
                 logger=self.logger,
             )
+            self.logger.info(str(result))
 
             # Delete a given elements raw and curated data for all versions of the data product
             delete_all_element_version_data_files(

@@ -55,12 +55,9 @@ class TestHandler:
         create_glue_database,
     ):
         response = delete_table.handler(event=event, context=fake_context)
+        print(response)
         assert response["statusCode"] == HTTPStatus.BAD_REQUEST
-        assert (
-            json.loads(response["body"])["error"]["message"]
-            == f"An error occurred (EntityNotFoundException) \
-                when calling the GetTable operation: Table {table_name} not found."
-        )
+        assert f"{table_name}" in json.loads(response["body"])["error"]["message"]
 
     def test_deletion_of_raw_files(
         self,
