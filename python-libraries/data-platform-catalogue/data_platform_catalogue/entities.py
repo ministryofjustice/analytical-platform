@@ -69,7 +69,6 @@ class TableMetadata:
         Then populates a TableMetadata object with the given data.
         """
 
-        # columns: list =
         new_metadata = TableMetadata(
             name=table_name,
             description=metadata.get("tableDescription", "Not provided"),
