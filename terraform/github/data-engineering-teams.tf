@@ -36,6 +36,7 @@ locals {
     "lalithanagarur",     # Lalitha Nagarur
     "sivabathina2",       # Siva Bathina
     "hemeshpatel-moj",    # Hemesh Patel
+    "kraihanmoj",         # Khristiania Raihan
   ]
 }
 
