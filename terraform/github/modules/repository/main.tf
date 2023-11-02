@@ -1,91 +1,136 @@
-locals {
-  base_topics   = ["data-platform", "civil-service"]
-  module_topics = ["terraform-module"]
-  topics        = var.type == "core" ? local.base_topics : concat(local.base_topics, local.module_topics)
-}
+#tfsec:ignore:AVD-GIT-0001:Ministry of Justice follow GOV.UK Service Manual guidance on coding in the open (https://www.gov.uk/service-manual/technology/making-source-code-open-and-reusable)
+resource "github_repository" "this" {
+  #checkov:skip=CKV_GIT_1:Ministry of Justice follow GOV.UK Service Manual guidance on coding in the open (https://www.gov.uk/service-manual/technology/making-source-code-open-and-reusable)
 
-# Repository basics
-resource "github_repository" "default" {
-  #ts:skip=AC_GITHUB_0002 Disabling privateRepoEnabled check as we have a valid use case for public repos
-  name                   = var.name
-  description            = join(" • ", [var.description, "This repository is defined and managed in Terraform"])
-  homepage_url           = var.homepage_url
-  visibility             = var.visibility
-  has_issues             = true
-  has_projects           = true
-  has_wiki               = var.type == "core" ? true : false
-  has_downloads          = true
-  has_discussions        = var.name == "data-platform" ? true : false
-  is_template            = var.type == "template" ? true : false
-  allow_merge_commit     = var.type == "app" ? true : false # Temp fix for app-migration setup
-  allow_squash_merge     = true
-  allow_rebase_merge     = true
-  delete_branch_on_merge = true
-  auto_init              = false
-  archived               = false
-  archive_on_destroy     = var.archive_on_destroy
-  vulnerability_alerts   = true
-  topics                 = concat(local.topics, var.topics)
+  name        = var.name
+  description = join(" • ", [var.description, "This repository is defined and managed in Terraform"])
+  topics      = var.topics
+  visibility  = var.visibility
 
-  template {
-    owner      = "ministryofjustice"
-    repository = var.template_repo
+  archived           = var.archived
+  archive_on_destroy = var.archive_on_destroy
+
+  dynamic "template" {
+    for_each = var.use_template ? [1] : []
+    content {
+      owner      = "ministryofjustice"
+      repository = "template-repository"
+    }
   }
 
-  # The `pages.source` block doesn't support dynamic blocks in GitHub provider version 4.3.2,
-  # so we ignore the changes so it doesn't try to revert repositories that have manually set
-  # their pages configuration.
-  lifecycle {
-    ignore_changes = [template, pages]
+  has_discussions      = var.has_discussions
+  has_downloads        = var.has_downloads
+  has_issues           = var.has_issues
+  has_projects         = var.has_projects
+  has_wiki             = var.has_wiki
+  homepage_url         = var.homepage_url
+  vulnerability_alerts = var.vulnerability_alerts
+
+  auto_init = var.auto_init
+
+  allow_merge_commit   = var.allow_merge_commit
+  merge_commit_title   = var.merge_commit_title
+  merge_commit_message = var.merge_commit_message
+
+  allow_squash_merge          = var.allow_squash_merge
+  squash_merge_commit_title   = var.squash_merge_commit_title
+  squash_merge_commit_message = var.squash_merge_commit_message
+
+  allow_update_branch    = var.allow_update_branch
+  allow_auto_merge       = var.allow_auto_merge
+  allow_rebase_merge     = var.allow_rebase_merge
+  delete_branch_on_merge = var.delete_branch_on_merge
+
+  dynamic "pages" {
+    for_each = var.pages_enabled ? [1] : []
+    content {
+      build_type = "workflow"
+      cname      = var.pages_configuration.cname
+      source {
+        branch = var.pages_configuration.source.branch
+        path   = var.pages_configuration.source.path
+      }
+    }
+  }
+
+  security_and_analysis {
+    dynamic "advanced_security" {
+      for_each = var.visibility == "private" || var.visibility == "internal" ? [1] : []
+      content {
+        status = var.advanced_security_status
+      }
+    }
+
+    secret_scanning {
+      status = var.secret_scanning_status
+    }
+
+    secret_scanning_push_protection {
+      status = var.secret_scanning_push_protection_status
+    }
   }
 }
 
-resource "github_branch_protection" "default" {
-  count = var.type == "app" ? 0 : 1 # Temp fix for app-migration setup
+#tfsec:ignore:AVD-GIT-0004:The team has agreed that we don't need to sign commits
+resource "github_branch_protection" "this" {
+  #checkov:skip=CKV_GIT_5:The team has agreed that having 2 approvers will slow velocity
 
-  repository_id  = github_repository.default.id
-  pattern        = "main"
-  enforce_admins = true
-  #checkov:skip=CKV_GIT_6:"Following discussions with other teams we will not be enforcing signed commits currently"
-  #tfsec:ignore:github-branch_protections-require_signed_commits
-  require_signed_commits = var.require_signed_commits
+  repository_id = github_repository.this.id
+  pattern       = "main"
+
+  allows_deletions                = var.branch_protection_allows_deletions
+  enforce_admins                  = var.branch_protection_enforce_admins
+  force_push_bypassers            = var.branch_protection_force_push_bypassers
+  push_restrictions               = var.branch_protection_push_restrictions
+  require_signed_commits          = var.branch_protection_require_signed_commits
+  required_linear_history         = var.branch_protection_required_linear_history
+  require_conversation_resolution = var.branch_protection_require_conversation_resolution
+  allows_force_pushes             = var.branch_protection_allows_force_pushes
+  blocks_creations                = var.branch_protection_blocks_creations
+  lock_branch                     = var.branch_protection_lock_branch
+
+  required_pull_request_reviews {
+    dismiss_stale_reviews           = var.branch_protection_required_pull_request_reviews_dismiss_stale_reviews
+    restrict_dismissals             = var.branch_protection_required_pull_request_reviews_restrict_dismissals
+    dismissal_restrictions          = var.branch_protection_required_pull_request_reviews_dismissal_restrictions
+    pull_request_bypassers          = var.branch_protection_required_pull_request_reviews_pull_request_bypassers
+    require_code_owner_reviews      = var.branch_protection_required_pull_request_reviews_require_code_owner_reviews
+    require_last_push_approval      = var.branch_protection_required_pull_request_reviews_require_last_push_approval
+    required_approving_review_count = var.branch_protection_required_pull_request_reviews_required_approving_review_count
+  }
 
   required_status_checks {
-    strict   = true
-    contexts = var.required_checks
-  }
-
-  #checkov:skip=CKV_GIT_5:"moj branch protection guidelines do not require 2 reviews"
-  required_pull_request_reviews {
-    dismiss_stale_reviews           = true
-    require_code_owner_reviews      = true
-    required_approving_review_count = 1
-    require_last_push_approval      = true
+    strict   = var.branch_protection_required_status_checks_strict
+    contexts = var.branch_protection_required_status_checks_contexts
   }
 }
 
-resource "github_repository_tag_protection" "default" {
-  count = var.type == "app" ? 0 : 1 # apps will not have tag protection
+resource "github_repository_dependabot_security_updates" "this" {
+  repository = github_repository.this.id
 
-  repository = github_repository.default.id
-  pattern    = "*"
+  enabled = var.dependabot_security_updates_enabled
 }
 
-# Secrets
-resource "github_actions_secret" "default" {
-  #checkov:skip=CKV_GIT_4:Although secrets are provided in plaintext, they are encrypted at rest
-  for_each        = var.secrets
-  repository      = github_repository.default.id
-  secret_name     = each.key
-  plaintext_value = each.value
+resource "github_team_repository" "admin" {
+  for_each = var.access != null && var.access.admins != null ? { for team in var.access.admins : team => team } : {}
+
+  team_id    = each.value
+  repository = github_repository.this.name
+  permission = "admin"
 }
 
-resource "github_repository_environment" "default" {
-  for_each    = var.environments
-  environment = each.value
-  repository  = github_repository.default.name
-  deployment_branch_policy {
-    protected_branches     = each.value == "prod" ? true : false
-    custom_branch_policies = each.value == "prod" ? false : true
-  }
+resource "github_team_repository" "maintainers" {
+  for_each = var.access != null && var.access.maintainers != null ? { for team in var.access.maintainers : team => team } : {}
+
+  team_id    = each.value
+  repository = github_repository.this.name
+  permission = "maintain"
+}
+
+resource "github_team_repository" "pushers" {
+  for_each = var.access != null && var.access.pushers != null ? { for team in var.access.pushers : team => team } : {}
+
+  team_id    = each.value
+  repository = github_repository.this.name
+  permission = "push"
 }

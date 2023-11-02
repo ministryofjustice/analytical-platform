@@ -19,7 +19,10 @@ locals {
       access = {
         admins      = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         maintainers = [module.data_platform_teams["data-platform-labs"].id]
-        pushers     = [module.data_platform_team.id]
+        pushers = [
+          module.data_platform_team.id,
+          module.data_engineering_team.id
+        ]
       }
     }
     "data-platform-products" = {
