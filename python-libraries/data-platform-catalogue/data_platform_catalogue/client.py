@@ -154,7 +154,7 @@ class CatalogueClient:
         """
         Define a table.
         There can be many tables per data product.
-        columns are extpected to be a list of dicts in the format
+        columns are expected to be a list of dicts in the format
             {"name": "column1", "type": "string", "description": "just an example"}
         """
         columns = [
