@@ -7,6 +7,7 @@ locals {
       visibility                             = "internal"
       archived                               = true
       use_template                           = false
+      vulnerability_alerts                   = false
       advanced_security_status               = "disabled"
       secret_scanning_status                 = "disabled"
       secret_scanning_push_protection_status = "disabled"
@@ -67,11 +68,15 @@ locals {
       }
     }
     "analytics-platform-ops" = {
-      name         = "analytics-platform-ops"
-      description  = "Analytical Platform Ops"
-      topics       = ["ministryofjustice", "analytical-platform"]
-      archived     = true
-      use_template = false
+      name                                   = "analytics-platform-ops"
+      description                            = "Analytical Platform Ops"
+      topics                                 = ["ministryofjustice", "analytical-platform"]
+      archived                               = true
+      use_template                           = false
+      vulnerability_alerts                   = false
+      advanced_security_status               = "disabled"
+      secret_scanning_status                 = "disabled"
+      secret_scanning_push_protection_status = "disabled"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]

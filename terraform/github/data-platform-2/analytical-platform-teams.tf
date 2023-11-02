@@ -37,27 +37,110 @@ locals {
   }
 
   analytical_platform_modernisation_platform_teams = {
-    "analytical-platform-modernisation-platform-administrator" = {
-      name           = "analytical-platform-modernisation-platform-administrator"
-      description    = "Analytical Platform Modernisation Platform Administrator"
+    /* Analytical Platform */
+    "analytical-platform-development-modernisation-platform-administrator" = {
+      name           = "analytical-platform-development-modernisation-platform-administrator"
+      description    = "Analytical Platform Development Modernisation Platform Administrator"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
     },
-    "analytical-platform-data-engineering-modernisation-platform-data-engineer" = {
-      name           = "analytical-platform-data-engineering-modernisation-platform-data-engineer"
-      description    = "Analytical Platform Data Engineering Modernisation Platform Data Engineer"
+    "analytical-platform-production-modernisation-platform-administrator" = {
+      name           = "analytical-platform-production-modernisation-platform-administrator"
+      description    = "Analytical Platform Production Modernisation Platform Administrator"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
-        # local.data_engineering_team_members
+        local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
-    }
-    "analytical-platform-data-engineering-modernisation-platform-developer" = {
-      name           = "analytical-platform-data-engineering-modernisation-platform-developer"
-      description    = "Analytical Platform Data Engineering Modernisation Platform Developer"
+    },
+    /* Analytical Platform Data */
+    "analytical-platform-data-development-modernisation-platform-administrator" = {
+      name           = "analytical-platform-data-development-modernisation-platform-administrator"
+      description    = "Analytical Platform Data Development Modernisation Platform Administrator"
+      parent_team_id = module.analytical_platform_team.id
+      members = flatten([
+        local.data_platform_teams["data-platform-apps-and-tools"].members
+      ])
+    },
+    "analytical-platform-data-development-modernisation-platform-data-engineer" = {
+      name           = "analytical-platform-data-development-modernisation-platform-data-engineer"
+      description    = "Analytical Platform Data Development Modernisation Platform Data Engineer"
       parent_team_id = module.analytical_platform_team.id
       members        = flatten([])
+    },
+    "analytical-platform-data-production-modernisation-platform-administrator" = {
+      name           = "analytical-platform-data-production-modernisation-platform-administrator"
+      description    = "Analytical Platform Data Production Modernisation Platform Administrator"
+      parent_team_id = module.analytical_platform_team.id
+      members = flatten([
+        local.data_platform_teams["data-platform-apps-and-tools"].members
+      ])
+    },
+    "analytical-platform-data-production-modernisation-platform-data-engineer" = {
+      name           = "analytical-platform-data-production-modernisation-platform-data-engineer"
+      description    = "Analytical Platform Data Production Modernisation Platform Data Engineer"
+      parent_team_id = module.analytical_platform_team.id
+      members        = flatten([])
+    },
+    /* Analytical Platform Data Engineering */
+    "analytical-platform-data-engineering-sandboxa-modernisation-platform-administrator" = {
+      name           = "analytical-platform-data-engineering-sandboxa-modernisation-platform-administrator"
+      description    = "Analytical Platform Data Engineering SandboxA Modernisation Platform Administrator"
+      parent_team_id = module.analytical_platform_team.id
+      members = flatten([
+        local.data_platform_teams["data-platform-apps-and-tools"].members
+      ])
+    },
+    "analytical-platform-data-engineering-sandboxa-modernisation-platform-data-engineer" = {
+      name           = "analytical-platform-data-engineering-sandboxa-modernisation-platform-data-engineer"
+      description    = "Analytical Platform Data Engineering SandboxA Modernisation Platform Data Engineer"
+      parent_team_id = module.analytical_platform_team.id
+      members        = flatten([])
+    },
+    "analytical-platform-data-engineering-sandboxa-modernisation-platform-developer" = {
+      name           = "analytical-platform-data-engineering-sandboxa-modernisation-platform-developer"
+      description    = "Analytical Platform Data Engineering SandboxA Modernisation Platform Developer"
+      parent_team_id = module.analytical_platform_team.id
+      members        = flatten([])
+    },
+    "analytical-platform-data-engineering-production-modernisation-platform-administrator" = {
+      name           = "analytical-platform-data-engineering-production-modernisation-platform-administrator"
+      description    = "Analytical Platform Data Engineering Production Modernisation Platform Administrator"
+      parent_team_id = module.analytical_platform_team.id
+      members = flatten([
+        local.data_platform_teams["data-platform-apps-and-tools"].members
+      ])
+    },
+    "analytical-platform-data-engineering-production-modernisation-platform-data-engineer" = {
+      name           = "analytical-platform-data-engineering-production-modernisation-platform-data-engineer"
+      description    = "Analytical Platform Data Engineering Production Modernisation Platform Data Engineer"
+      parent_team_id = module.analytical_platform_team.id
+      members        = flatten([])
+    },
+    "analytical-platform-data-engineering-production-modernisation-platform-developer" = {
+      name           = "analytical-platform-data-engineering-production-modernisation-platform-developer"
+      description    = "Analytical Platform Data Engineering Production Modernisation Platform Developer"
+      parent_team_id = module.analytical_platform_team.id
+      members        = flatten([])
+    },
+    /* Analytical Platform Landing */
+    "analytical-platform-landing-production-modernisation-platform-administrator" = {
+      name           = "analytical-platform-landing-production-modernisation-platform-administrator"
+      description    = "Analytical Platform Landing Development Modernisation Platform Administrator"
+      parent_team_id = module.analytical_platform_team.id
+      members = flatten([
+        local.data_platform_teams["data-platform-apps-and-tools"].members
+      ])
+    },
+    /* Analytical Platform Management */
+    "analytical-platform-management-production-modernisation-platform-administrator" = {
+      name           = "analytical-platform-management-production-modernisation-platform-administrator"
+      description    = "Analytical Platform Management Development Modernisation Platform Administrator"
+      parent_team_id = module.analytical_platform_team.id
+      members = flatten([
+        local.data_platform_teams["data-platform-apps-and-tools"].members
+      ])
     }
   }
 }
