@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -21,9 +22,7 @@ class DataProductMetadata:
     tags: list[str] = field(default_factory=list)
 
     @staticmethod
-    def from_data_product_metadata_dict(
-        metadata: dict, version, owner_id: str | None = None
-    ):
+    def from_data_product_metadata_dict(metadata: dict, version, owner_id: str):
         """
         Expects a dict containing data product metatdata information as per the
         required fields in the json schema at
@@ -52,13 +51,13 @@ class DataProductMetadata:
 class TableMetadata:
     name: str
     description: str
-    column_details: dict
-    retention_period_in_days: int
+    column_details: list
+    retention_period_in_days: int | None
     tags: list[str] = field(default_factory=list)
 
     @staticmethod
     def from_data_product_schema_dict(
-        metadata: dict, table_name, retention_period: int | None = None
+        metadata: dict[str, Any], table_name, retention_period: int | None = None
     ):
         """
         Expects a dict containing data product table schema information as per the
@@ -69,10 +68,12 @@ class TableMetadata:
 
         Then populates a TableMetadata object with the given data.
         """
+
+        # columns: list =
         new_metadata = TableMetadata(
             name=table_name,
             description=metadata.get("tableDescription", "Not provided"),
-            column_details=metadata.get("columns"),
+            column_details=metadata.get("columns", []),
             retention_period_in_days=retention_period,
             tags=metadata.get("tags", {}),
         )

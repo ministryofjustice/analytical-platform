@@ -234,5 +234,8 @@ class CatalogueClient:
             for tag in tags
         ]
 
-    def _generate_duration(self, duration_in_days: int):
-        return Duration.parse_obj(f"P{duration_in_days}D")
+    def _generate_duration(self, duration_in_days: int | None):
+        if duration_in_days is None:
+            return None
+        else:
+            return Duration.parse_obj(f"P{duration_in_days}D")
