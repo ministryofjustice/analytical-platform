@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - update Dockerfile COPY command fixing `LAMBDA_TASK_ROOT` typo
 
-## [2.0.0] - 2023-11-6
+## [2.0.0] - 2023-11-2
 
 ### Removed
 
@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `s3_recursive_delete` moved to base
 - `glue_utils.delete_glue_table` moved to base
 
-## [1.0.1] 2023-11-6
+## [1.0.1]
 
 ### Changed
 
