@@ -141,6 +141,15 @@ locals {
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
+    },
+    /* MI Platform */
+    "mi-platform-development-modernisation-platform-administrator" = {
+      name           = "mi-platform-development-modernisation-platform-administrator"
+      description    = "MI Platform Development Modernisation Platform Administrator"
+      parent_team_id = module.analytical_platform_team.id
+      members = flatten([
+        local.data_platform_teams["data-platform-apps-and-tools"].members
+      ])
     }
   }
 }
