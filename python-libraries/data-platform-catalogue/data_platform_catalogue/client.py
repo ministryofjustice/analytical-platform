@@ -2,9 +2,6 @@ import json
 import logging
 from http import HTTPStatus
 
-from metadata.generated.schema.api.createEventPublisherJob import (
-    CreateEventPublisherJob,
-)
 from metadata.generated.schema.api.data.createDatabase import CreateDatabaseRequest
 from metadata.generated.schema.api.data.createDatabaseSchema import (
     CreateDatabaseSchemaRequest,
