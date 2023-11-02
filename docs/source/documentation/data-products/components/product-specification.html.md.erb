@@ -23,9 +23,17 @@ You must also provide contact information for the product.
 name: example_data_product
 description: Example Data Product contains published prison population from 2001 to present
 status: production
-email: data.product.maintainer@justice.gov.uk
+email: data.product.contact@justice.gov.uk
 ```
 
+including optional fields:
+```yaml
+name: example_data_product
+description: Example Data Product contains published prison population from 2001 to present
+status: production
+email: data.product.contact@justice.gov.uk
+tags: {"Sandbox": "True"}
+```
 
 <!-- (Beta)
 ```yaml
@@ -42,7 +50,7 @@ specification:
 
   support:
     channels:
-      email: data.product.owner@digital.justice.gov.uk
+      email: data.product.contact@digital.justice.gov.uk
       ms-teams:
       slack-channel: data-product-team
     product-guidance-url:
@@ -78,7 +86,7 @@ specification:
 
   support:
     channels:
-      email: data.product.owner@digital.justice.gov.uk
+      email: data.product.contact@digital.justice.gov.uk
       ms-teams:
       slack-channel: data-product-team
     product-guidance-url:

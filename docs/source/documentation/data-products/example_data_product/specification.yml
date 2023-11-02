@@ -6,3 +6,5 @@ description: >
 # status: please specify one of:
 # draft, development, testing, production, sunset, retired
 status: production
+email: data.product.contact@justice.gov.uk
+tags: {"Sandbox": "True"}
