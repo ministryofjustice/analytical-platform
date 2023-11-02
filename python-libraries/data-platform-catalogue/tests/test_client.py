@@ -62,6 +62,12 @@ class TestCatalogueClient:
             "columns": [],
         }
 
+    def mock_user_response(self, fqn):
+        return {
+            "email": "justice@justice.gov.uk",
+            "id": "39b855e3-84a5-491e-b9a5-c411e626e340",
+        }
+
     @pytest.fixture
     def catalogue(self):
         return CatalogueMetadata(
@@ -88,7 +94,10 @@ class TestCatalogueClient:
         return TableMetadata(
             name="my_table",
             description="bla bla",
-            column_types={"foo": "string", "bar": "int"},
+            column_details=[
+                {"name": "foo", "type": "string", "description": "a"},
+                {"name": "bar", "type": "int", "description": "b"},
+            ],
             retention_period_in_days=365,
         )
 
@@ -204,7 +213,7 @@ class TestCatalogueClient:
                     "precision": None,
                     "scale": None,
                     "dataTypeDisplay": None,
-                    "description": None,
+                    "description": "a",
                     "fullyQualifiedName": None,
                     "tags": None,
                     "constraint": None,
@@ -223,7 +232,7 @@ class TestCatalogueClient:
                     "precision": None,
                     "scale": None,
                     "dataTypeDisplay": None,
-                    "description": None,
+                    "description": "b",
                     "fullyQualifiedName": None,
                     "tags": None,
                     "constraint": None,
@@ -259,3 +268,16 @@ class TestCatalogueClient:
             client.create_or_update_table(
                 metadata=table, schema_fqn="data-platform.data-product.schema"
             )
+
+    def test_get_user_id(self, requests_mock, client):
+        requests_mock.get(
+            "http://example.com/api/v1/users/name/justice",
+            json={
+                "email": "justice@justice.gov.uk",
+                "name": "justice",
+                "id": "39b855e3-84a5-491e-b9a5-c411e626e340",
+            },
+        )
+        user_id = client.get_user_id("justice@justice.gov.uk")
+
+        assert "39b855e3-84a5-491e-b9a5-c411e626e340" in str(user_id)
