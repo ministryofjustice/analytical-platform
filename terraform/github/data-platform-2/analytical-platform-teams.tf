@@ -67,7 +67,9 @@ locals {
       name           = "analytical-platform-data-development-modernisation-platform-data-engineer"
       description    = "Analytical Platform Data Development Modernisation Platform Data Engineer"
       parent_team_id = module.analytical_platform_team.id
-      members        = flatten([])
+      members = flatten([
+        local.data_engineering_team_members
+      ])
     },
     "analytical-platform-data-production-modernisation-platform-administrator" = {
       name           = "analytical-platform-data-production-modernisation-platform-administrator"
@@ -81,7 +83,9 @@ locals {
       name           = "analytical-platform-data-production-modernisation-platform-data-engineer"
       description    = "Analytical Platform Data Production Modernisation Platform Data Engineer"
       parent_team_id = module.analytical_platform_team.id
-      members        = flatten([])
+      members = flatten([
+        local.data_engineering_team_members
+      ])
     },
     /* Analytical Platform Data Engineering */
     "analytical-platform-data-engineering-sandboxa-modernisation-platform-administrator" = {
@@ -89,14 +93,17 @@ locals {
       description    = "Analytical Platform Data Engineering SandboxA Modernisation Platform Administrator"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
-        local.data_platform_teams["data-platform-apps-and-tools"].members
+        local.data_platform_teams["data-platform-apps-and-tools"].members,
+        local.data_engineering_team_members
       ])
     },
     "analytical-platform-data-engineering-sandboxa-modernisation-platform-data-engineer" = {
       name           = "analytical-platform-data-engineering-sandboxa-modernisation-platform-data-engineer"
       description    = "Analytical Platform Data Engineering SandboxA Modernisation Platform Data Engineer"
       parent_team_id = module.analytical_platform_team.id
-      members        = flatten([])
+      members = flatten([
+        local.data_engineering_team_members
+      ])
     },
     "analytical-platform-data-engineering-sandboxa-modernisation-platform-developer" = {
       name           = "analytical-platform-data-engineering-sandboxa-modernisation-platform-developer"
@@ -116,7 +123,9 @@ locals {
       name           = "analytical-platform-data-engineering-production-modernisation-platform-data-engineer"
       description    = "Analytical Platform Data Engineering Production Modernisation Platform Data Engineer"
       parent_team_id = module.analytical_platform_team.id
-      members        = flatten([])
+      members = flatten([
+        local.data_engineering_team_members
+      ])
     },
     "analytical-platform-data-engineering-production-modernisation-platform-developer" = {
       name           = "analytical-platform-data-engineering-production-modernisation-platform-developer"
