@@ -35,6 +35,10 @@ jobs:
         id: checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
+      - name: Build path-filters file
+        id: build_path_filters
+        run: bash scripts/path-filter/configuration-generator.sh terraform
+
       - name: Prepare Environment
         id: prepare_environment
         shell: bash
@@ -47,7 +51,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@6046f68b25a89365d643ead750fa624be5cad488 # v12.2548.0
+        uses: bridgecrewio/checkov-action@97aba41cade0724966fe1c6fb70dbf4f36c3bb22 # v12.2554.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -149,6 +153,10 @@ jobs:
         id: checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
+      - name: Build path-filters file
+        id: build_path_filters
+        run: bash scripts/path-filter/configuration-generator.sh terraform
+
       - name: Prepare Environment
         id: prepare_environment
         shell: bash
@@ -195,7 +203,7 @@ jobs:
 
       - name: Set up Terraform
         id: setup_terraform
-        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+        uses: hashicorp/setup-terraform@a1502cd9e758c50496cc9ac5308c4843bcd56d36 # v3.0.0
         with:
           terraform_version: ${{ inputs.terraform-version }}
 

@@ -1,0 +1,94 @@
+---
+owner_slack: "#data-platform-notifications"
+title: GitHub Actions Self-Hosted Runners
+last_reviewed_on: 2023-10-31
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+There are certain scenarios where we may need to run GitHub Actions workflows that are not on GitHub's managed infrastructure, for example:
+
+- A repository that contains sensitive data that cannot be made public
+
+To facilitate this, we can offer a self-hosted runner that runs on [MoJ's Cloud Platform](https://user-guide.cloud-platform.service.justice.gov.uk)
+
+## How to request a self-hosted runner
+
+_TBC_, but generally on a case-by-case basis. Please contact the [Data Platform team](https://moj.enterprise.slack.com/archives/C04VBJTKY58)
+
+## How to prepare a self-hosted runner
+
+The intended audience for section is the Data Platform Apps and Tools Team
+
+1. Login to GitHub using the Data Platform Robot account (credentials are [1Password](https://start.1password.com/open/i?a=WEXD5VMFTVBH7LG7FFDWUV7MC4&v=tahmy4wjhm2zr2ld5qbqxl4ufi&i=5kszssdbqto3kakijll25flaje&h=ministryofjustice.1password.eu))
+
+1. Create a repository scoped fine-grained access token with the following permissions:
+
+  - Read access to metadata
+  - Read and Write access to administration
+
+1. Create a new Secrets Manager secret in analytical-platform-management-production eu-west-2 called `github/actions/self-hosted-runner/${REPOSITORY_NAME}`
+
+1. Create a new entry in `terraform/cloud-platform/live/data-platform-production/github-actions-self-hosted-runners/helm-releases.tf`, replacing `${GITHUB_ORGANISATION}` and `${GITHUB_REPOSITORY}` with the appropriate values:
+
+    ```hcl
+    ##################################################
+    # ${GITHUB_ORGANISATION}/${GITHUB_REPOSITORY}
+    ##################################################
+
+    data "aws_secretsmanager_secret" "github_actions_self_hosted_runner_${GITHUB_REPOSITORY}" {
+      provider = aws.analytical-platform-management-production
+
+      name = "github/actions/self-hosted-runner/${GITHUB_REPOSITORY}"
+    }
+
+    data "aws_secretsmanager_secret_version" "github_actions_self_hosted_runner_${GITHUB_REPOSITORY}" {
+      provider = aws.analytical-platform-management-production
+
+      secret_id = data.aws_secretsmanager_secret.github_actions_self_hosted_runner_${GITHUB_REPOSITORY}.id
+    }
+
+    resource "helm_release" "github_actions_self_hosted_runners_${GITHUB_REPOSITORY}" {
+      name      = "gha-shr-${GITHUB_REPOSITORY}"
+      chart     = "./src/helm/charts/github-actions-self-hosted-runners"
+      namespace = "data-platform-production"
+
+      set {
+        name  = "github.organisation"
+        value = "${GITHUB_ORGANISATION}"
+      }
+
+      set {
+        name  = "github.repository"
+        value = "${GITHUB_REPOSITORY}"
+      }
+
+      set {
+        name  = "github.token"
+        value = data.aws_secretsmanager_secret_version.github_actions_self_hosted_runner_${GITHUB_REPOSITORY}.secret_string
+      }
+
+      set {
+        name  = "irsa.roleArn"
+        value = "arn:aws:iam::593291632749:role/${GITHUB_REPOSITORY}"
+      }
+
+      set {
+        name  = "runner.labels"
+        value = "moj-cloud-platform"
+      }
+    }
+    ```
+
+1. Deploy the changes using the normal pull request process
+
+## How to use a self-hosted runner
+
+When a self-hosted runner is deployed, it will automatically register itself with GitHub. You can see the runner in the repository's settings
+
+To consume it in a workflow, add the following to the workflow's `runs-on` section:
+
+```yaml
+runs-on: [self-hosted, moj-cloud-platform]
+```

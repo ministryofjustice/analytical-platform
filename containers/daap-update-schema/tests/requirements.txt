@@ -1,0 +1,4 @@
+-r ../src/var/task/requirements.txt
+-r ../../daap-python-base/src/var/task/requirements.txt
+pytest==7.4.1
+moto==4.2.2

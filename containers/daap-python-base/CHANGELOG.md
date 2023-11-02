@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - curated data table database name includes suffix of major version string e.g. "_v1"
 - remove csv-specific values from template glue metadata
 
+## [5.3.1] - 2023-10-26
+
+### Changed
+
+- urllib updated to 1.26.18
+
 ## [5.3.0] - 2023-10-27
 
 ### Added
