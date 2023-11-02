@@ -26,9 +26,19 @@ variable "archive_on_destroy" {
   default = true
 }
 
+variable "is_template" {
+  type    = bool
+  default = false
+}
+
 variable "use_template" {
   type    = bool
   default = true
+}
+
+variable "template_repository" {
+  type    = string
+  default = "template-repository"
 }
 
 variable "has_discussions" {
@@ -150,6 +160,11 @@ variable "secret_scanning_status" {
 variable "secret_scanning_push_protection_status" {
   type    = string
   default = "enabled"
+}
+
+variable "branch_protection_pattern" {
+  type    = string
+  default = "main"
 }
 
 variable "branch_protection_allows_deletions" {

@@ -10,11 +10,13 @@ resource "github_repository" "this" {
   archived           = var.archived
   archive_on_destroy = var.archive_on_destroy
 
+  is_template = var.is_template
+
   dynamic "template" {
     for_each = var.use_template ? [1] : []
     content {
       owner      = "ministryofjustice"
-      repository = "template-repository"
+      repository = var.template_repository
     }
   }
 
@@ -76,7 +78,7 @@ resource "github_branch_protection" "this" {
   #checkov:skip=CKV_GIT_5:The team has agreed that having 2 approvers will slow velocity
 
   repository_id = github_repository.this.id
-  pattern       = "main"
+  pattern       = var.branch_protection_pattern
 
   allows_deletions                = var.branch_protection_allows_deletions
   enforce_admins                  = var.branch_protection_enforce_admins

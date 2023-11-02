@@ -61,6 +61,26 @@ locals {
       members = [
         "SimonsMOJ", # Simon Heron
       ]
+    },
+    /* Legacy */
+    "data-platform-core-infra" = {
+      name           = "data-platform-core-infra"
+      description    = "Data Platform Core Infrastructure"
+      parent_team_id = module.data_platform_team.id
+      members = [
+        "bagg3rs",           # Richard Baguley
+        "AlexVilela",        # Alex Vilela
+        "julialawrence",     # Julia Lawrence
+        "jhpyke",            # Jacob Hamblin-Pyke
+        "jacobwoffenden",    # Jacob Woffenden
+        "Gary-H9",           # Gary Henderson
+        "Emterry",           # Emma Terry
+        "ymao2",             # Yikang Mao
+        "michaeljcollinsuk", # Michael Collins
+        "BrianEllwood",      # Brian Ellwood
+        "murad-ali-MoJ",     # Murad Ali
+        "EO510",             # Eki Osehenye
+      ]
     }
   }
 

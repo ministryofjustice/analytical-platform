@@ -60,7 +60,27 @@ locals {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
+    },
+    "data-platform-app-template" = {
+      name                                   = "data-platform-app-template"
+      description                            = "Data Platform App Template"
+      topics                                 = ["ministryofjustice", "data-platform"]
+      visibility                             = "internal"
+      is_template                            = true
+      advanced_security_status               = "disabled"
+      secret_scanning_status                 = "disabled"
+      secret_scanning_push_protection_status = "disabled"
+      access = {
+        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
+      }
     }
+    /*
+      Data Platform Repositories that could be managed in code:
+        - data-platform-terraform-modularisation-spike
+        - data-platform-django-proof-of-concept
+        - data-platform-projects-test
+    */
   }
 }
 
@@ -77,7 +97,10 @@ module "data_platform_repositories" {
   archived           = lookup(each.value, "archived", false)
   archive_on_destroy = lookup(each.value, "archive_on_destroy", true)
 
+  is_template = lookup(each.value, "is_template", false)
+
   use_template         = lookup(each.value, "use_template", true)
+  template_repository  = lookup(each.value, "template_repository", "template-repository")
   has_discussions      = lookup(each.value, "has_discussions", false)
   has_downloads        = lookup(each.value, "has_downloads", false)
   has_issues           = lookup(each.value, "has_issues", true)
@@ -110,6 +133,7 @@ module "data_platform_repositories" {
 
   dependabot_security_updates_enabled = lookup(each.value, "dependabot_security_updates_enabled", true)
 
+  branch_protection_pattern                                                       = lookup(each.value, "branch_protection_pattern", "main")
   branch_protection_allows_deletions                                              = lookup(each.value, "branch_protection_allows_deletions", false)
   branch_protection_enforce_admins                                                = lookup(each.value, "branch_protection_enforce_admins", true)
   branch_protection_force_push_bypassers                                          = lookup(each.value, "branch_protection_force_push_bypassers", [])
