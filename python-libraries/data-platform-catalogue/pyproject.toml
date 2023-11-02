@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ministryofjustice-data-platform-catalogue"
-version = "0.1.1"
+version = "0.2.1"
 description = "Library to integrate the MoJ data platform with the catalogue component."
 authors = ["MoJ Data Platform Team <data-platform-tech@digital.justice.gov.uk>"]
 license = "MIT"
@@ -9,7 +9,9 @@ packages = [{ include = "data_platform_catalogue" }]
 
 [tool.poetry.dependencies]
 python = "^3.10.0"
-openmetadata-ingestion = "^1.1.7.0"
+# pinned to this version as was installing a later vesion and giving errors, seems a breaking
+# change introduced inadvertently
+openmetadata-ingestion = "1.1.7.0"
 
 # 1.5.4 doesn't install for some reason. Either way it will be removed from the next release of the ingestion package.
 commonregex = "1.5.3"
