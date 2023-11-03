@@ -106,6 +106,7 @@ def handler(event, context, athena_client=athena_client):
     )
 
     query = f'SELECT * FROM "{data_product_name}"."{table_name}" LIMIT 10'
+
     logger.info(f"'{query}' execution in progress")
 
     response = athena_client.start_query_execution(QueryString=query)
@@ -115,11 +116,13 @@ def handler(event, context, athena_client=athena_client):
 
     formated_result = format_athena_results_to_table(athena_results)
 
-    log_message = (
-        formated_result
-        if formated_result == "No data to display"
-        else "Results fetched successfully"
-    )
-    logger.info(log_message)
+    if formated_result == "No data to display":
+        logger.info(formated_result)
+        return format_response_json(
+            status_code=HTTPStatus.NOT_FOUND,
+            body=formated_result,
+        )
+
+    logger.info("Results fetched successfully")
 
     return format_response_json(status_code=HTTPStatus.OK, body=formated_result)

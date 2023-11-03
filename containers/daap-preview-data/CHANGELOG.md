@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2023-11-03
+
+### Changed
+
+- Changed the name of ecr repository to push image
+
 ## [1.0.0]
 
 ### Added

@@ -9,4 +9,4 @@ COPY src/var/task ${LAMDA_TASK_ROOT}
 RUN python -m pip install --no-cache-dir --upgrade pip==23.2.1 \
     && python -m pip install --no-cache-dir --requirement requirements.txt
 
-CMD ["query_data.handler"]
+CMD ["preview_data.handler"]
