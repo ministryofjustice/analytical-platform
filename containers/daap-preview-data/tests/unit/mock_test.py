@@ -1,4 +1,4 @@
-from query_data import handler
+from preview_data import handler
 
 
 def test_query_athena_with_results(athena_client, fake_context):
