@@ -3,14 +3,14 @@ terraform {
     acl            = "private"
     bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "ap/prod/kops/terraform.tfstate"
+    key            = "aws/analytical-platform-data-production/openmetadata/terraform.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.24.0"
+      version = "5.23.1"
     }
   }
   required_version = "~> 1.5"
