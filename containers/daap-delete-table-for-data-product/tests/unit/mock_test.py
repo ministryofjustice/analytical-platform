@@ -21,8 +21,8 @@ class TestHandler:
 
         assert response["statusCode"] == HTTPStatus.OK
         assert (
-            json.loads(response["body"])["error"]["message"]
-            == "Success removed table 'table-name', data files and generated new matadata version 'v2.0'"
+            json.loads(response["body"])["message"]
+            == "Successfully removed table 'table-name', data files and generated new matadata version 'v2.0'"
         )
 
     def test_metadata_fail(

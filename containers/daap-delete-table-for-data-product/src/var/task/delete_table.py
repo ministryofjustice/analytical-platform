@@ -77,4 +77,4 @@ def handler(event, context):
         msg = f"Successfully removed table '{table_name}'"
         msg += f", data files and generated new matadata version '{new_version}'"
         logger.info(msg)
-        return format_response_json(HTTPStatus.OK,  {"message": msg})
+        return format_response_json(HTTPStatus.OK, {"message": msg})
