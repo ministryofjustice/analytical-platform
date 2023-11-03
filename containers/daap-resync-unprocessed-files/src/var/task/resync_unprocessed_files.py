@@ -28,6 +28,7 @@ athena_load_lambda = os.environ.get("ATHENA_LOAD_LAMBDA", "")
 
 def handler(event, context):
     data_product_to_recreate = event.get("data_product", "")
+    logger.add_extras({"data_product_name": data_product_to_recreate})
 
     data_product = DataProductConfig(
         name=data_product_to_recreate,
