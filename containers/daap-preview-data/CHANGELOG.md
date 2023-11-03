@@ -13,8 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Changed the name of ecr repo to push image
-- Added logic to check if data product exists
+- Changed the name of ecr repository to push image
 
 ## [1.0.0]
 
