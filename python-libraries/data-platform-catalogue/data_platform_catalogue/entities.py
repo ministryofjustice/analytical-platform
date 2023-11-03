@@ -33,15 +33,15 @@ class DataProductMetadata:
         Then populates a DataProductMetadata object with the given data.
         """
         new_metadata = DataProductMetadata(
-            name=metadata.get("name", "Not provided"),
-            description=metadata.get("description", "Not provided"),
+            name=metadata["name"],
+            description=metadata["description"],
             version=version,
             owner=owner_id,
-            email=metadata.get("email", "Not provided"),
-            retention_period_in_days=metadata.get("retentionPeriod", "Not provided"),
-            domain=metadata.get("domain", "Not provided"),
-            dpia_required=metadata.get("dpiaRequired", "Not provided"),
-            tags=metadata.get("tags", {}),
+            email=metadata["email"],
+            retention_period_in_days=metadata["retentionPeriod"],
+            domain=metadata["domain"],
+            dpia_required=metadata["dpiaRequired"],
+            tags=metadata.get("tags", []),
         )
 
         return new_metadata
@@ -71,10 +71,10 @@ class TableMetadata:
 
         new_metadata = TableMetadata(
             name=table_name,
-            description=metadata.get("tableDescription", "Not provided"),
-            column_details=metadata.get("columns", []),
+            description=metadata["tableDescription"],
+            column_details=metadata["columns"],
             retention_period_in_days=retention_period,
-            tags=metadata.get("tags", {}),
+            tags=metadata.get("tags", []),
         )
 
         return new_metadata
