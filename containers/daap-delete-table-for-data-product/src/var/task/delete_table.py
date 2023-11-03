@@ -2,7 +2,7 @@ import os
 from http import HTTPStatus
 
 import boto3
-from data_platform_api_responses import format_error_response
+from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductMetadata, DataProductSchema
 from versioning import InvalidUpdate, VersionCreator
@@ -74,7 +74,7 @@ def handler(event, context):
     except ValueError as e:
         return format_error_response(HTTPStatus.BAD_REQUEST, event, str(e))
     else:
-        msg = f"Success removed table '{table_name}'"
+        msg = f"Successfully removed table '{table_name}'"
         msg += f", data files and generated new matadata version '{new_version}'"
         logger.info(msg)
-        return format_error_response(HTTPStatus.OK, event, msg)
+        return format_response_json(HTTPStatus.OK,  {"message": msg})
