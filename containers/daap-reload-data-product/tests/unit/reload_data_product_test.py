@@ -4,6 +4,14 @@ from reload_data_product import get_data_product_pages, handler, s3_recursive_de
 
 
 @pytest.fixture
+def empty_metadata_bucket(s3_client, monkeypatch):
+    bucket_name = "metadata"
+    s3_client.create_bucket(Bucket=bucket_name)
+    monkeypatch.setenv("METADATA_BUCKET", bucket_name)
+    return bucket_name
+
+
+@pytest.fixture
 def empty_curated_data_bucket(s3_client, monkeypatch):
     bucket_name = "curated"
     s3_client.create_bucket(Bucket=bucket_name)
@@ -37,7 +45,9 @@ def empty_raw_data_bucket(s3_client, monkeypatch):
 
 
 @pytest.fixture
-def data_product(empty_raw_data_bucket, empty_curated_data_bucket):
+def data_product(
+    empty_raw_data_bucket, empty_curated_data_bucket, empty_metadata_bucket
+):
     return DataProductConfig(
         "foo", raw_data_bucket=raw_data_bucket, curated_data_bucket=curated_data_bucket
     )
@@ -89,8 +99,8 @@ def test_get_data_product_pages(s3_client, raw_data_bucket, data_product):
     )
     assert len(pages) == 1
     assert {i["Key"] for i in pages[0]["Contents"]} == {
-        "raw_data/foo/bar/abc",
-        "raw_data/foo/bar/baz",
+        "raw/foo/v1.0/bar/abc",
+        "raw/foo/v1.0/bar/baz",
     }
 
 
@@ -153,13 +163,13 @@ def test_handler_invokes_lambda_for_each_raw_file(
     do_nothing_lambda_client.invoke.assert_any_call(
         FunctionName="athena_load_lambda",
         InvocationType="Event",
-        Payload=f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}}, "object":{{"key":"raw_data/foo/bar/abc"}}}}}}',
+        Payload=f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}}, "object":{{"key":"raw/foo/v1.0/bar/abc"}}}}}}',
     )
 
     do_nothing_lambda_client.invoke.assert_any_call(
         FunctionName="athena_load_lambda",
         InvocationType="Event",
-        Payload=f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}}, "object":{{"key":"raw_data/foo/bar/baz"}}}}}}',
+        Payload=f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}}, "object":{{"key":"raw/foo/v1.0/bar/baz"}}}}}}',
     )
 
 
