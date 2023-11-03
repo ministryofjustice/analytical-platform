@@ -74,6 +74,15 @@ locals {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
+    },
+    "data-platform-control-panel" = {
+      name        = "data-platform-control-panel"
+      description = "Data Platform Control Panel"
+      topics      = ["ministryofjustice", "data-platform"]
+      access = {
+        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
+      }
     }
     /*
       Data Platform Repositories that could be managed in code:
