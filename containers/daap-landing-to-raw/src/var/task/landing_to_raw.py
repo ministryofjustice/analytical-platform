@@ -43,7 +43,7 @@ def handler(event, context):
         extra={
             "image_version": os.getenv("VERSION", "unknown"),
             "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-            "data_product": config.element.data_product.name,
+            "data_product_name": config.element.data_product.name,
             "table": config.element.curated_data_table.name,
         }
     )
