@@ -59,6 +59,8 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "glue:CreateTable",
       "glue:CreateSchema",
       "glue:CreatePartition",
+      "glue:CreatePartitionIndex",
+      "glue:BatchCreatePartition",
       "glue:CreateDatabase"
     ]
     resources = [
