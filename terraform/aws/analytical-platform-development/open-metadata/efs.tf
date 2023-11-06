@@ -3,7 +3,7 @@ module "efs" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/efs/aws"
-  version = "1.3.0"
+  version = "1.3.1"
 
   name          = "open-metadata"
   encrypted     = false
