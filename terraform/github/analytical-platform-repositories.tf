@@ -55,11 +55,14 @@ locals {
       }
     }
     "analytics-platform-control-panel-public" = {
-      name         = "analytics-platform-control-panel-public"
-      description  = "Analytical Platform Control Panel Public"
-      topics       = ["ministryofjustice", "analytical-platform"]
-      archived     = true
-      use_template = false
+      name                                   = "analytics-platform-control-panel-public"
+      description                            = "Analytical Platform Control Panel Public"
+      topics                                 = ["ministryofjustice", "analytical-platform"]
+      archived                               = true
+      use_template                           = false
+      advanced_security_status               = "disabled"
+      secret_scanning_status                 = "disabled"
+      secret_scanning_push_protection_status = "disabled"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
