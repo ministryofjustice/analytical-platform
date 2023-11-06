@@ -111,7 +111,7 @@ locals {
     "tomholt1", # Tom Holt
     "lalithanagarur",
     "sivabathina2",
-    "pricemg"   # Matt Price
+    "pricemg" # Matt Price
   ]
 
   data_engineering_aws_developer_members = [
