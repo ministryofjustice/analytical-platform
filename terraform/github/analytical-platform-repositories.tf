@@ -43,15 +43,12 @@ locals {
       }
     }
     "analytics-platform-control-panel" = {
-      name                                   = "analytics-platform-control-panel"
-      description                            = "Analytical Platform Control Panel"
-      topics                                 = ["ministryofjustice", "analytical-platform"]
-      visibility                             = "internal"
-      use_template                           = false
-      homepage_url                           = "https://controlpanel.services.analytical-platform.service.justice.gov.uk"
-      advanced_security_status               = "disabled"
-      secret_scanning_status                 = "disabled"
-      secret_scanning_push_protection_status = "disabled"
+      name         = "analytics-platform-control-panel"
+      description  = "Analytical Platform Control Panel"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      visibility   = "public"
+      use_template = false
+      homepage_url = "https://controlpanel.services.analytical-platform.service.justice.gov.uk"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
@@ -61,6 +58,7 @@ locals {
       name         = "analytics-platform-control-panel-public"
       description  = "Analytical Platform Control Panel Public"
       topics       = ["ministryofjustice", "analytical-platform"]
+      archived     = true
       use_template = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]

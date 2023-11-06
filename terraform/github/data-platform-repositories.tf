@@ -76,9 +76,10 @@ locals {
       }
     },
     "data-platform-control-panel" = {
-      name        = "data-platform-control-panel"
-      description = "Data Platform Control Panel"
-      topics      = ["ministryofjustice", "data-platform"]
+      name                                              = "data-platform-control-panel"
+      description                                       = "Data Platform Control Panel"
+      topics                                            = ["ministryofjustice", "data-platform"]
+      branch_protection_required_status_checks_contexts = ["Super-Linter"]
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
