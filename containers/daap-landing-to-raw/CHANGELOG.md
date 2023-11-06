@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0]
+
+### Changes
+
+- Reject CSVs with embedded newlines. We are currently unable to process these
+  CSVs, so the ingestion fails in the athena load step. This changes ensures
+  that we handle the failure gracefully until we implement a solution (e.g.
+  preprocessing the data).
+
 ## [1.2.0]
 
 - Delete file from landing after copying it to raw

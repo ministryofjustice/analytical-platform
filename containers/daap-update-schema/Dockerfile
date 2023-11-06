@@ -6,4 +6,4 @@ ENV VERSION="${VERSION}"
 
 COPY src/var/task ${LAMDA_TASK_ROOT}
 
-CMD ["update_metadata.handler"]
+CMD ["update_schema.handler"]

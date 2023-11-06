@@ -59,6 +59,8 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "glue:CreateTable",
       "glue:CreateSchema",
       "glue:CreatePartition",
+      "glue:CreatePartitionIndex",
+      "glue:BatchCreatePartition",
       "glue:CreateDatabase"
     ]
     resources = [
@@ -74,7 +76,7 @@ module "create_a_derived_table_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.30.0"
+  version = "5.30.1"
 
   name_prefix = "create-a-derived-table"
 

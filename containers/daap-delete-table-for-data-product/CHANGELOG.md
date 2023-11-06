@@ -20,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `delete_all_element_version_data_files` moved to base
 - `s3_recursive_delete` moved to base
 - `glue_utils.delete_glue_table` moved to base
+=======
+## [1.0.1]
+
+### Changed
+
+- Updated repository name in config.json
 
 ## [1.0.0]
 
