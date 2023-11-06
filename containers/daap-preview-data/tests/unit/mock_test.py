@@ -138,7 +138,6 @@ def test_query_athena_with_results(
 def test_query_athena_without_results(
     metadata_content, body_content, fake_context, athena_client
 ):
-
     # Mock the get_query_results method
     athena_client.get_query_results.return_value = {
         "ResultSet": {
