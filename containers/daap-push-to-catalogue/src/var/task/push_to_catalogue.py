@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 
@@ -8,6 +9,8 @@ from data_platform_catalogue import TableMetadata
 
 
 def handler(event, context):
+    # can't use daap-python-base as it's python 3.11 and need 3.10 for
+    # data_platform_catalogue, hence we can't use DataPlatformLogger here
     logger = logging.getLogger()
     metadata = event["metadata"]
     version = event["version"]
@@ -17,17 +20,19 @@ def handler(event, context):
     logger.info(event)
 
     secrets_client = boto3.client("secretsmanager")
-    jwt_secret = secrets_client.get_secret_value(
-        SecretId=os.getenv("OPENMETADATA_JWT_SECRET_ARN")
+    jwt_secret = json.loads(
+        secrets_client.get_secret_value(
+            SecretId=os.getenv("OPENMETADATA_JWT_SECRET_ARN")
+        )["SecretString"]
     )
     token = jwt_secret["token"]
     openmetadata_client = CatalogueClient(
         jwt_token=token,
         api_uri=os.getenv("OPENMETADATA_DEV_API_URL"),
     )
-    user_id = openmetadata_client.get_user_id(metadata["dataProductOwner"])
 
     if table_name is None:
+        user_id = openmetadata_client.get_user_id(metadata["dataProductOwner"])
         data_product = omdProductMetadata.from_data_product_metadata_dict(
             metadata=metadata, version=version, owner_id=user_id
         )
