@@ -1,0 +1,2 @@
+boto3==1.28.9
+ministryofjustice-data-platform-catalogue==0.2.0
