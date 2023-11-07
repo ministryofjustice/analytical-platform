@@ -27,7 +27,8 @@ def handler(
     extraction = RawDataExtraction.parse_from_uri(full_s3_path)
     data_product_element = extraction.element
 
-    data_product_name = data_product_element.curated_data_table.database
+    data_product_name = data_product_element.data_product.name
+    database_name = data_product_element.curated_data_table.database
     table_name = data_product_element.curated_data_table.name
 
     logger = DataPlatformLogger(
