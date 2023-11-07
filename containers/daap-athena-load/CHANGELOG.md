@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- update Dockerfile COPY command fixing `LAMBDA_TASK_ROOT` typo
+
 ### Changed
 
 - Updated log level from error to info when table is first created
