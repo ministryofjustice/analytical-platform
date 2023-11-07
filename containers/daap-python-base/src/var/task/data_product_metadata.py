@@ -26,19 +26,16 @@ glue_csv_table_input_template = {
     "TableInput": {
         "Name": "",  # add to this from table name pulled from api path
         "Description": "",
-        "Owner": "owner",
+        "Owner": "",
         # "Retention": 0,
         "StorageDescriptor": {
             "Columns": [],  # add to this from schema passed by user in api request body
             "Location": "",  # noqa E501 add to this once data land and timestamp generated, although could be top level bucket/data/product/version/table
-            "InputFormat": "org.apache.hadoop.mapred.TextInputFormat",
-            "OutputFormat": "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat",
+            "InputFormat": "",
+            "OutputFormat": "",
             "Compressed": False,
             "NumberOfBuckets": -1,
-            "SerdeInfo": {
-                "SerializationLibrary": "org.apache.hadoop.hive.serde2.OpenCSVSerde",
-                "Parameters": {"field.delim": ",", "escape.delim": "\\"},
-            },
+            "SerdeInfo": {},
             "BucketColumns": [],
             "SortColumns": [],
             "Parameters": {},
@@ -46,7 +43,7 @@ glue_csv_table_input_template = {
         },
         "PartitionKeys": [],
         "TableType": "EXTERNAL_TABLE",
-        "Parameters": {"classification": "csv", "skip.header.line.count": "1"},
+        "Parameters": {},
     },
 }
 
@@ -134,6 +131,7 @@ class BaseJsonSchema:
         self.write_bucket = latest_version_path.bucket
         self.latest_version_key = latest_version_path.key
         self.version = latest_version_path.key.split("/")[1]
+        self.database_name = self.data_product_name + "_" + self.version.split(".")[0]
         if input_data is not None:
             self.validate(input_data)
 
@@ -327,26 +325,30 @@ class DataProductSchema(BaseJsonSchema):
         convert schema passed by user to glue table input so it can be used to create an athena table
         from csv with headers.
         """
+        # noqa E501  limits: https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-catalog-tables.html#aws-glue-api-catalog-tables-Column
+        glue_comment_char_limit = 255
+        glue_desc_char_limit = 2048
+
         if self.valid:
             glue_schema = deepcopy(glue_csv_table_input_template)
             parent_metadata = self.parent_data_product_metadata
-            glue_schema["DatabaseName"] = self.data_product_name
+            glue_schema["DatabaseName"] = self.database_name
             glue_schema["TableInput"]["Name"] = self.table_name
             glue_schema["TableInput"]["Owner"] = parent_metadata["dataProductOwner"]
             # if not parent_metadata.get("retentionPeriod", 0) == 0:
             glue_schema["TableInput"]["Retention"] = parent_metadata.get(
                 "retentionPeriod"
             )
-            glue_schema["TableInput"]["Description"] = self.data_pre_convert[
-                "tableDescription"
-            ]
+            glue_schema["TableInput"][
+                "Description"
+            ] = f"{self.data_pre_convert['tableDescription']:.{glue_desc_char_limit}}"
 
             for col in self.data_pre_convert["columns"]:
                 glue_schema["TableInput"]["StorageDescriptor"]["Columns"].append(
                     {
                         "Name": col["name"],
                         "Type": col["type"],
-                        "Comment": col["description"],
+                        "Comment": f"{col['description']:.{glue_comment_char_limit}}",
                     }
                 )
 

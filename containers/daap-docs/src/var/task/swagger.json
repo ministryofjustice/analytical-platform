@@ -18,38 +18,46 @@
     }
   ],
   "paths": {
-    "/upload_data": {
+    "/data-product/{data-product-name}/table/{table-name}/upload": {
       "get": {
         "tags": [
-          "upload_data"
+          "Upload Data"
         ],
         "summary": "Get a presigned url to upload some data to an existing data product.",
         "description": "Returns a presigned url to post data to.",
         "operationId": "uploadData",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadDataRequest"
+              }
+            }
+          }
+        },
         "parameters": [
           {
-            "in": "query",
-            "name": "database",
+            "in": "path",
+            "name": "data-product-name",
             "required": true,
+            "example": "my_data_product",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The name of the data product for the table you wish to delete. This needs to be a registered data product name."
           },
           {
-            "in": "query",
-            "name": "table",
+            "in": "path",
+            "name": "table-name",
             "required": true,
+            "example": "table_1",
             "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "contentMD5",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "minimum": 1,
+              "maximum": 128
+            },
+            "description": "The name of the table you wish to delete. Allows lowercase alphanumeric characters and \"_\"."
           },
           {
             "in": "header",
@@ -73,10 +81,70 @@
             }
           },
           "400": {
-            "description": "Invalid Inputs supplied"
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deleteTable"
+                },
+                "examples": {
+                  "Not string inputs": {
+                    "summary": "Inputs not convertible to type string",
+                    "value": {
+                      "statusCode": "400",
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "body": {
+                        "error": {
+                          "message": "data product name, table name or filename are not convertible to string type."
+                        }
+                      }
+                    }
+                  },
+                  "File extension is invalid": {
+                    "summary": "File extension is invalid",
+                    "value": {
+                      "statusCode": "400",
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "body": {
+                        "error": {
+                          "message": "file extension is invalid."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Data Product not found"
+            "description": "not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deleteTable"
+                },
+                "examples": {
+                  "Data product registration not found": {
+                    "summary": "Data product registration not found",
+                    "value": {
+                      "statusCode": "404",
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "body": {
+                        "error": {
+                          "message": "Data product registration relating to database not found."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -86,14 +154,14 @@
         ]
       }
     },
-    "/get_glue_metadata": {
+    "/data-product/{data-product-name}/table/{table-name}/preview": {
       "get": {
         "tags": [
-          "get_glue_metadata"
+          "data"
         ],
-        "summary": "Get metadata for a specified table in a specified Glue database",
-        "description": "Returns a json object with all the metadata available for the specified database and table",
-        "operationId": "getGlueMetadata",
+        "summary": "Preview a small sample records from a data product table.",
+        "description": "Returns a small subset of 10 records.",
+        "operationId": "preview",
         "parameters": [
           {
             "in": "query",
@@ -123,28 +191,42 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation, response format https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/get_table.html",
+            "description": "Successful response",
             "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
+              "text/plain": {
+                "examples": {
+                  "example1": {
+                    "summary": "Preview data",
+                    "value": "| Header1      | Header2      | Header2Longerone |\n| Row 1 Data 1 | Row 1 Data 2 | 20231023T144052Z |\n| Row 2 Data 1 | Row 2 Data 2 | 20231024T144052Z |\n| Row 3 Data 1 | Row 3 Data 2 | 20231025T144052Z |\n"
+                  },
+                  "example_2": {
+                    "summary": "Data product not found",
+                    "value": "No data to display"
+                  }
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid Inputs supplied"
-          },
-          "404": {
-            "description": "Glue database and/or table not found"
+            "description": "Error response",
+            "content": {
+              "text/plain": {
+                "example": "Data Product does not exist"
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
       }
     },
     "/data-product/register": {
       "post": {
         "tags": [
-          "register"
+          "dataproduct"
         ],
         "summary": "Register (metadata for) a new Data Product that you want to upload to the Data Platform.",
         "description": "Registers the first version of your Data Product (by submitting it's metadata)  and enables you to proceed with uploading data.",
@@ -232,7 +314,7 @@
     "/data-product/{data-product-name}": {
       "post": {
         "tags": [
-          "update_metadata"
+          "dataproduct"
         ],
         "summary": "Update (metadata for) an existing Data Product.",
         "description": "Creates a new minor version of the data product with updated metadata.",
@@ -559,6 +641,133 @@
           }
         }
       }
+    },
+    "/data-product/{data-product-name}/table/{table-name}": {
+      "delete": {
+        "tags": [
+          "delete table"
+        ],
+        "summary": "Delete a table and associated raw and curated data registered to an existing data product.",
+        "operationId": "deleteTable",
+        "description": "Deletes the Glue table, raw and curated data for all versions and issues a major version increase.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "data-product-name",
+            "required": true,
+            "example": "my_data_product",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The name of the data product for the table you wish to delete. This needs to be a registered data product name."
+          },
+          {
+            "in": "path",
+            "name": "table-name",
+            "required": true,
+            "example": "table_1",
+            "schema": {
+              "type": "string",
+              "minimum": 1,
+              "maximum": 128
+            },
+            "description": "The name of the table you wish to delete. Allows lowercase alphanumeric characters and \"_\"."
+          },
+          {
+            "in": "header",
+            "name": "authorizationToken",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "message": "Successfully deleted table 'table_name' and raw & curated data files"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deleteTable"
+                },
+                "examples": {
+                  "Glue: Table Not Found": {
+                    "summary": "Glue: Table Not Found",
+                    "value": {
+                      "statusCode": "400",
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "body": {
+                        "error": {
+                          "message": "Could not locate glue table 'table_name' in database 'data_product_name"
+                        }
+                      }
+                    }
+                  },
+                  "Glue: Unexpected ClientError": {
+                    "summary": "Glue: Unexpected ClientError",
+                    "value": {
+                      "statusCode": "400",
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "body": {
+                        "error": {
+                          "message": "Unexpected ClientError: "
+                        }
+                      }
+                    }
+                  },
+                  "InvalidUpdate: Invalid schemas found in schema list": {
+                    "summary": "InvalidUpdate: Invalid schemas found in schema list",
+                    "value": {
+                      "statusCode": "400",
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "body": {
+                        "error": {
+                          "message": "Invalid schemas found in schema_list: {schema_list}"
+                        }
+                      }
+                    }
+                  },
+                  "InvalidUpdate: Updated metadata validation failed": {
+                    "summary": "InvalidUpdate: Updated metadata validation failed",
+                    "value": {
+                      "statusCode": "400",
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "body": {
+                        "error": {
+                          "message": "updated metadata validation failed"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -599,13 +808,9 @@
         ],
         "type": "object",
         "properties": {
-          "database": {
+          "filename": {
             "type": "string",
-            "example": "example_prison_data_product"
-          },
-          "table": {
-            "type": "string",
-            "example": "adjudications"
+            "example": "data_upload.csv"
           },
           "contentMD5": {
             "type": "string",
