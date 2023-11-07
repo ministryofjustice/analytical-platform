@@ -248,6 +248,11 @@ class DataProductElement:
     name: str
     data_product: DataProductConfig
 
+    @property
+    def database_name(self) -> str:
+        latest_major_version = self.data_product.latest_version.split(".")[0]
+        return self.data_product.name + "_" + latest_major_version
+
     @staticmethod
     def load(element_name, data_product_name):
         data_product = DataProductConfig(name=data_product_name)
@@ -308,9 +313,9 @@ class DataProductElement:
     def curated_data_table(self):
         """
         The name of the athena table for the data product element.
-        E.g. ('my_data_product', 'some_element')
+        E.g. ('my_data_product_v1', 'some_element')
         """
-        return QueryTable(database=self.data_product.name, name=self.name)
+        return QueryTable(database=self.database_name, name=self.name)
 
     def raw_data_path(
         self, timestamp: datetime, uuid_value: UUID, file_extension: str

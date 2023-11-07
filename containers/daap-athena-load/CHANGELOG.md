@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] 2023-11-02
+
+### Updated
+
+- load handler attempts to load existing schema for creation of the curated table,
+  falling back to inferred metadata if none is found
+- curated database name includes major version
+
 ## [1.2.4] 2023-11-6
 
 ### Changed

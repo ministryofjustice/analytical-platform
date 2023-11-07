@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.4.0] - 2023-11-02
+
+### Updated
+
+- Data Product `database_name` property added;
+  includes suffix of major version string e.g. "_v1"
+- remove csv-specific values from template glue metadata
+
 ## [5.3.2] - 2023-11-1
 
 ### Added
