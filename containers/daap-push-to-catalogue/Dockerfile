@@ -4,7 +4,7 @@ ARG VERSION
 
 ENV BASE_VERSION="${VERSION}"
 
-COPY src/var/task ${LAMDA_TASK_ROOT}
+COPY src/var/task ${LAMBDA_TASK_ROOT}
 
 RUN yum update --assumeyes \
     && yum clean all \
