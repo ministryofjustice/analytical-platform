@@ -180,23 +180,14 @@ jobs:
           load: true
           tags: ${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
 
-      # - name: Scan Image
-      #   id: scan_image
-      #   uses: aquasecurity/trivy-action@f78e9ecf42a1271402d4f484518b9313235990e1 # v0.13.1
-      #   with:
-      #     image-ref: ${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
-      #     exit-code: 1
-      #     format: sarif
-      #     output: trivy-results.sarif
-      #     severity: CRITICAL
-
-      - name: Scan Image (DEBUG)
-        id: scan_image_debug
-        uses: aquasecurity/trivy-action@f78e9ecf42a1271402d4f484518b9313235990e1 # v0.13.1
+      - name: Scan Image
+        id: scan_image
+        uses: aquasecurity/trivy-action@2b6a709cf9c4025c5438138008beaddbb02086f0 # v0.14.0
         with:
           image-ref: ${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
           exit-code: 1
           format: table
+          # output: trivy-results.sarif
           severity: CRITICAL
 
       # - name: Upload SARIF
