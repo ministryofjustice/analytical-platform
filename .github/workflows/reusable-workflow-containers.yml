@@ -190,6 +190,15 @@ jobs:
           output: trivy-results.sarif
           severity: CRITICAL
 
+      - name: Scan Image (DEBUG)
+        id: scan_image_debug
+        uses: aquasecurity/trivy-action@f78e9ecf42a1271402d4f484518b9313235990e1 # v0.13.1
+        with:
+          image-ref: ${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
+          exit-code: 1
+          format: table
+          severity: CRITICAL
+
       - name: Upload SARIF
         if: always()
         id: upload_sarif
