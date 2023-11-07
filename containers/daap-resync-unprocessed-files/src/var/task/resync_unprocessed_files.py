@@ -6,9 +6,6 @@ from botocore.paginate import PageIterator
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import (
     DataProductConfig,
-    extract_database_name_from_curated_path,
-    extract_table_name_from_curated_path,
-    extract_timestamp_from_curated_path,
     get_curated_data_bucket,
     get_raw_data_bucket,
 )
@@ -28,6 +25,7 @@ athena_load_lambda = os.environ.get("ATHENA_LOAD_LAMBDA", "")
 
 def handler(event, context):
     data_product_to_recreate = event.get("data_product", "")
+    logger.add_extras({"data_product_name": data_product_to_recreate})
 
     data_product = DataProductConfig(
         name=data_product_to_recreate,
@@ -35,8 +33,8 @@ def handler(event, context):
         curated_data_bucket=curated_data_bucket,
     )
 
-    raw_prefix = data_product.raw_data_prefix
-    curated_prefix = data_product.curated_data_prefix
+    raw_prefix = data_product.raw_data_prefix.key
+    curated_prefix = data_product.curated_data_prefix.key
 
     logger.info(f"Raw prefix: {raw_prefix}")
     logger.info(f"Curated prefix: {curated_prefix}")
@@ -52,8 +50,8 @@ def handler(event, context):
         bucket=curated_data_bucket, data_product_prefix=curated_prefix
     )
 
-    raw_table_timestamps = get_unique_extraction_timestamps(raw_pages)
-    curated_table_timestamps = get_curated_unique_extraction_timestamps(curated_pages)
+    raw_table_timestamps = get_unique_load_timestamps(raw_pages)
+    curated_table_timestamps = get_unique_load_timestamps(curated_pages)
 
     # compare and filter the raw files to sync
     raw_keys_to_resync = get_resync_keys(
@@ -95,11 +93,11 @@ def get_data_product_pages(bucket, data_product_prefix, s3_client=s3) -> PageIte
     return pages
 
 
-def get_unique_extraction_timestamps(pages: PageIterator) -> set:
+def get_unique_load_timestamps(pages: PageIterator) -> set:
     """
-    return the unique slugs of data product, table and extraction timestamp
+    return the unique slugs of data product, table and load timestamp
     designed for use with boto3's pageiterator and list_object_v2
-    example key: `key = "raw_data/data_product/table/extraction_timestamp=timestamp/file.csv`
+    example key: `key = "raw/data_product/v1.0/table/load_timestamp=timestamp/file.csv`
     size > 0 because sometimes empty directories get listed in contents
     """
     filtered_pages = pages.search("Contents[?Size > `0`][]")
@@ -107,33 +105,11 @@ def get_unique_extraction_timestamps(pages: PageIterator) -> set:
     return result_set
 
 
-def get_curated_unique_extraction_timestamps(curated_pages: PageIterator) -> set:
-    """
-    return the unique slugs of data product, table and extraction timestamp
-    designed for use with boto3's pageiterator and list_object_v2
-    example key: `key = "curated_data/database_name=data_product/table_name=table"
-    + "/extraction_timestamp=timestamp/file.parquet`
-    size > 0 because sometimes empty directories get listed in contents
-    """
-    curated_table_timestamps = set()
-    for item in curated_pages.search("Contents[?Size > `0`][]"):
-        data_product = extract_database_name_from_curated_path(item["Key"])
-        table = extract_table_name_from_curated_path(item["Key"])
-        extraction_timestamp = extract_timestamp_from_curated_path(item["Key"])
-
-        if data_product and table and extraction_timestamp:
-            # Both sets need the same formatting to compare them
-            curated_table_timestamps.add(
-                f"{data_product}/{table}/extraction_timestamp={extraction_timestamp}"
-            )
-    return curated_table_timestamps
-
-
 def get_resync_keys(
     raw_table_timestamps: set, curated_table_timestamps: set, raw_pages: PageIterator
 ) -> list:
     """
-    Find extraction timestamps in the raw area, and not in the curated area
+    Find load timestamps in the raw area, and not in the curated area
     """
     timestamps_to_resync = [
         item for item in raw_table_timestamps if item not in curated_table_timestamps
