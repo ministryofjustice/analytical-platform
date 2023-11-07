@@ -1,14 +1,8 @@
-import sys
 from unittest.mock import patch
 
 import pytest
 from data_platform_catalogue import CatalogueClient, CatalogueError
-
-sys.path.append("../../src/var/task")
-
 from push_to_catalogue import handler
-
-# CatalogueClient = Mock()
 
 
 def mock_service_response(fqn):
