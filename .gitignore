@@ -17,3 +17,4 @@ __pycache__
 .github/path-filter/containers.yml
 .github/path-filter/terraform.yml
 **/**datahub
+.coverage
