@@ -29,6 +29,13 @@ class FakeContext:
     function_name: str
 
 
+@pytest.fixture(autouse=True)
+def empty_metadata_bucket(s3_client):
+    bucket_name = os.environ["BUCKET_NAME"]
+    s3_client.create_bucket(Bucket=bucket_name)
+    return bucket_name
+
+
 @pytest.fixture
 def fake_context():
     """
