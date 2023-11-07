@@ -131,6 +131,7 @@ class BaseJsonSchema:
         self.write_bucket = latest_version_path.bucket
         self.latest_version_key = latest_version_path.key
         self.version = latest_version_path.key.split("/")[1]
+        self.database_name = self.data_product_name + "_" + self.version.split(".")[0]
         if input_data is not None:
             self.validate(input_data)
 
@@ -331,7 +332,7 @@ class DataProductSchema(BaseJsonSchema):
         if self.valid:
             glue_schema = deepcopy(glue_csv_table_input_template)
             parent_metadata = self.parent_data_product_metadata
-            glue_schema["DatabaseName"] = self.data_product_name
+            glue_schema["DatabaseName"] = self.database_name
             glue_schema["TableInput"]["Name"] = self.table_name
             glue_schema["TableInput"]["Owner"] = parent_metadata["dataProductOwner"]
             # if not parent_metadata.get("retentionPeriod", 0) == 0:

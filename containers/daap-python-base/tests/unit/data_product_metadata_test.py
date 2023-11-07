@@ -88,7 +88,7 @@ test_schema_fail = {
 }
 
 test_glue_table_input = {
-    "DatabaseName": "test_product",
+    "DatabaseName": "test_product_v1",
     "TableInput": {
         "Description": "table has schema to pass test",
         "Name": "test_table",
