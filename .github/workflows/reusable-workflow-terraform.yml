@@ -62,7 +62,7 @@ jobs:
       - name: Trivy
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_trivy
-        uses: aquasecurity/trivy-action@fbd16365eb88e12433951383f5e99bd901fc618f # v0.12.0
+        uses: aquasecurity/trivy-action@2b6a709cf9c4025c5438138008beaddbb02086f0 # v0.14.0
         with:
           scan-type: config
           scan-ref: ${{ env.working-directory }}
