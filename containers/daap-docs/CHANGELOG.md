@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.10] 2023-11-07
+
+### Added
+
+- Documentation for `DELETE /data-product/{data-product-name}/table/{table-name}`
+
+### Changed
+
+- Documentation for `POST /data-product/{data-product-name}/table/{table-name}/upload`
+
 ## [1.0.9] 2023-11-06
 
 ### Added
