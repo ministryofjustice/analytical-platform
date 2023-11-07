@@ -13,3 +13,4 @@ rpds-py==0.10.0
 s3transfer==0.6.2
 six==1.16.0
 urllib3==1.26.18
+structlog==23.2.0
