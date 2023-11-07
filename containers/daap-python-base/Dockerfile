@@ -6,13 +6,13 @@ ENV BASE_VERSION="${VERSION}"
 
 COPY src/var/task ${LAMBDA_TASK_ROOT}
 
-RUN yum update --assumeyes \
+RUN yum update --security --assumeyes \
     && yum clean all \
     && rm -rf /var/cache/yum
 
 RUN python -m pip install --no-cache-dir --upgrade pip==23.3.1 \
     && python -m pip install --no-cache-dir --requirement requirements.txt
 
-ONBUILD RUN yum update --assumeyes \
+ONBUILD RUN yum update --security --assumeyes \
             && yum clean all \
             && rm -rf /var/cache/yum
