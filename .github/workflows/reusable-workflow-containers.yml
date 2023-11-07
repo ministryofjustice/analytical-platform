@@ -186,16 +186,16 @@ jobs:
         with:
           image-ref: ${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
           exit-code: 1
-          format: table
-          # output: trivy-results.sarif
+          format: sarif
+          output: trivy-results.sarif
           severity: CRITICAL
 
-      # - name: Upload SARIF
-      #   if: always()
-      #   id: upload_sarif
-      #   uses: github/codeql-action/upload-sarif@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.2.7
-      #   with:
-      #     sarif_file: trivy-results.sarif
+      - name: Upload SARIF
+        if: always()
+        id: upload_sarif
+        uses: github/codeql-action/upload-sarif@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.2.7
+        with:
+          sarif_file: trivy-results.sarif
 
   build-push-dockerhub:
     if: (github.ref == 'refs/heads/main') && (needs.prepare-environment.outputs.registry == 'dockerhub')
