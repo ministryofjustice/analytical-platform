@@ -1,5 +1,5 @@
 import sys
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 import pytest
 from data_platform_catalogue import CatalogueClient, CatalogueError
