@@ -4,8 +4,9 @@ from http import HTTPStatus
 
 import boto3
 import botocore
-from data_platform_api_responses import format_response_json
+from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger
+from data_product_metadata import DataProductSchema
 
 athena_client = boto3.client("athena")
 
@@ -105,21 +106,43 @@ def handler(event, context, athena_client=athena_client):
         },
     )
 
+    dataproduct_exists = DataProductSchema(
+        data_product_name=data_product_name,
+        table_name=table_name,
+        logger=logger,
+        input_data=None,
+    ).exists
+
+    if not dataproduct_exists:
+        logger.error("Data product does not exists.")
+        return format_error_response(
+            response_code=HTTPStatus.BAD_REQUEST,
+            event=event,
+            message="Data product does not exists",
+        )
+
     query = f'SELECT * FROM "{data_product_name}"."{table_name}" LIMIT 10'
+
     logger.info(f"'{query}' execution in progress")
 
-    response = athena_client.start_query_execution(QueryString=query)
-    athena_results = athena_client.get_query_results(
-        QueryExecutionId=response["QueryExecutionId"]
+    query_id = start_query_execution_and_wait(
+        athena_client=athena_client,
+        database_name=data_product_name,
+        sql=query,
+        logger=logger,
     )
+
+    athena_results = athena_client.get_query_results(QueryExecutionId=query_id)
 
     formated_result = format_athena_results_to_table(athena_results)
 
-    log_message = (
-        formated_result
-        if formated_result == "No data to display"
-        else "Results fetched successfully"
-    )
-    logger.info(log_message)
+    if formated_result == "No data to display":
+        logger.info(formated_result)
+        return format_response_json(
+            status_code=HTTPStatus.NOT_FOUND,
+            body=formated_result,
+        )
+
+    logger.info("Results fetched successfully")
 
     return format_response_json(status_code=HTTPStatus.OK, body=formated_result)
