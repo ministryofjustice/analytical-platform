@@ -21,7 +21,7 @@
     "/upload_data": {
       "get": {
         "tags": [
-          "upload_data"
+          "data"
         ],
         "summary": "Get a presigned url to upload some data to an existing data product.",
         "description": "Returns a presigned url to post data to.",
@@ -86,14 +86,14 @@
         ]
       }
     },
-    "/get_glue_metadata": {
+    "/data-product/{data-product-name}/table/{table-name}/preview": {
       "get": {
         "tags": [
-          "get_glue_metadata"
+          "data"
         ],
-        "summary": "Get metadata for a specified table in a specified Glue database",
-        "description": "Returns a json object with all the metadata available for the specified database and table",
-        "operationId": "getGlueMetadata",
+        "summary": "Preview a small sample records from a data product table.",
+        "description": "Returns a small subset of 10 records.",
+        "operationId": "preview",
         "parameters": [
           {
             "in": "query",
@@ -123,28 +123,42 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation, response format https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/get_table.html",
+            "description": "Successful response",
             "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
+              "text/plain": {
+                "examples": {
+                  "example1": {
+                    "summary": "Preview data",
+                    "value": "| Header1      | Header2      | Header2Longerone |\n| Row 1 Data 1 | Row 1 Data 2 | 20231023T144052Z |\n| Row 2 Data 1 | Row 2 Data 2 | 20231024T144052Z |\n| Row 3 Data 1 | Row 3 Data 2 | 20231025T144052Z |\n"
+                  },
+                  "example_2": {
+                    "summary": "Data product not found",
+                    "value": "No data to display"
+                  }
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid Inputs supplied"
-          },
-          "404": {
-            "description": "Glue database and/or table not found"
+            "description": "Error response",
+            "content": {
+              "text/plain": {
+                "example": "Data Product does not exist"
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
       }
     },
     "/data-product/register": {
       "post": {
         "tags": [
-          "register"
+          "dataproduct"
         ],
         "summary": "Register (metadata for) a new Data Product that you want to upload to the Data Platform.",
         "description": "Registers the first version of your Data Product (by submitting it's metadata)  and enables you to proceed with uploading data.",
@@ -232,7 +246,7 @@
     "/data-product/{data-product-name}": {
       "post": {
         "tags": [
-          "update_metadata"
+          "dataproduct"
         ],
         "summary": "Update (metadata for) an existing Data Product.",
         "description": "Creates a new minor version of the data product with updated metadata.",
