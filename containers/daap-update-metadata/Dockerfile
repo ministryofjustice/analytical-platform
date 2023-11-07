@@ -4,6 +4,6 @@ ARG VERSION
 
 ENV VERSION="${VERSION}"
 
-COPY src/var/task ${LAMDA_TASK_ROOT}
+COPY src/var/task ${LAMBDA_TASK_ROOT}
 
 CMD ["update_metadata.handler"]
