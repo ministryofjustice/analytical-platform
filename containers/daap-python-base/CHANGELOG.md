@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.0.0] - 2023-11-07
+
+### Changed
+
+- Adds `ONBUILD` for downstream images
+
 ## [5.4.0] - 2023-11-02
 
 ### Updated
