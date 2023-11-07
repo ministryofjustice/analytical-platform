@@ -1,11 +1,11 @@
 # organisational unit the data belongs within
 # e.g. HMCTS, HMPPS, LAA, OPG, HQ, ALB, OGD
 domain: "HMPPS"
-# email of the Data Product owner
 dataProductOwner: data.product.owner.name@justice.gov.uk
-# Display name of the Data Product owner
 dataProductOwnerDisplayName: Data Product Owner
-dpiaRequired: false
-# email of the Data Product owner (redundant)
-email: data.product.owner.name@justice.gov.uk
+dataProductMaintainer: data.product.maintainer.name@justice.gov.uk
+dataProductMaintainerDisplayName: Data Product Maintainer
 retentionPeriod: 400
+dpiaRequired: false
+dpiaLocation: s3://data-platform-data/civil-courts-data/v1/
+tags: {"Sandbox": "True"}
