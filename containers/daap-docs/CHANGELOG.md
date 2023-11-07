@@ -9,9 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.9] 2023-11-06
+
+### Added
+
+- Documentation for `GET /data-product/{data-product-name}/table/{table-name}/preview`
+
+## [1.0.8] 2023-10-25
+
+### Added
+
+- Documentation for `PUT /data-product/{data-product-name}/table/{table-name}/schema`
+
 ## [1.0.7] 2023-10-25
 
-## Added
+### Added
 
 - Documentation for `PUT /data-product/{data-product-name}`
 

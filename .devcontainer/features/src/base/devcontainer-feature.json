@@ -3,5 +3,14 @@
   "version": "1.0.0",
   "name": "base",
   "description": "Dev Container Base",
-  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
+  "installsAfter": ["ghcr.io/devcontainers/features/common-utils"],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "files.associations": {
+          "*.md.erb": "markdown"
+        }
+      }
+    }
+  }
 }
