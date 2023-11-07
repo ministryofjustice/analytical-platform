@@ -19,7 +19,7 @@
   ],
   "paths": {
     "/data-product/{data-product-name}/table/{table-name}/upload": {
-      "get": {
+      "post": {
         "tags": [
           "Upload Data"
         ],
@@ -84,9 +84,6 @@
             "description": "bad request",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/deleteTable"
-                },
                 "examples": {
                   "Not string inputs": {
                     "summary": "Inputs not convertible to type string",
@@ -124,9 +121,6 @@
             "description": "not found",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/deleteTable"
-                },
                 "examples": {
                   "Data product registration not found": {
                     "summary": "Data product registration not found",
@@ -702,9 +696,6 @@
             "description": "bad request",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/deleteTable"
-                },
                 "examples": {
                   "Glue: Table Not Found": {
                     "summary": "Glue: Table Not Found",
@@ -802,8 +793,7 @@
       },
       "UploadDataRequest": {
         "required": [
-          "database",
-          "table",
+          "filename",
           "contentMD5"
         ],
         "type": "object",
