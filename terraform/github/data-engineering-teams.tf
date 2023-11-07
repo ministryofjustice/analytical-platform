@@ -37,7 +37,8 @@ locals {
     "sivabathina2",       # Siva Bathina
     "hemeshpatel-moj",    # Hemesh Patel
     "kraihanmoj",         # Khristiania Raihan
-    "andrewc-moj",        # Andrew Craik
+    "andrewc-moj",        # Andrew Craik,
+    "pricemg",            # Matthew Price
   ]
 }
 
@@ -46,6 +47,16 @@ module "data_engineering_team" {
 
   name                             = "data-engineering"
   description                      = "Data Engineering"
+  members                          = local.data_engineering_team_members
+  parent_team_id                   = data.github_team.data_and_analytics_engineering.id
+  users_with_special_github_access = local.users_with_special_github_access
+}
+
+module "data_engineering_aws_team" {
+  source = "./modules/team"
+
+  name                             = "data-engineering-aws"
+  description                      = "Data Engineering AWS"
   members                          = local.data_engineering_team_members
   parent_team_id                   = data.github_team.data_and_analytics_engineering.id
   users_with_special_github_access = local.users_with_special_github_access
