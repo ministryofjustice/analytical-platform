@@ -2,11 +2,9 @@ import os
 from http import HTTPStatus
 
 import boto3
-from botocore.exceptions import ClientError
 from data_platform_api_responses import format_error_response
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import DataProductElement, get_metadata_bucket
-from data_product_metadata import DataProductMetadata, DataProductSchema
+from data_product_metadata import DataProductMetadata
 
 logger = DataPlatformLogger(
     extra={
@@ -56,3 +54,5 @@ def handler(event, context):
     # Delete all associated schemas
 
     # Delete all data associated with the data product i.e. prexif = raw/data
+
+    # Delete all data associated with
