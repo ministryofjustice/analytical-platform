@@ -30,6 +30,8 @@ def handler(
     athena_load_lambda=os.environ.get("ATHENA_LOAD_LAMBDA", ""),
 ):
     data_product_name = event.get("data_product", "")
+    logger.add_extras({"data_product_name": data_product_name})
+
     data_product = DataProductConfig(name=data_product_name)
     raw_prefix = data_product.raw_data_prefix.key
     raw_data_bucket = data_product.raw_data_bucket

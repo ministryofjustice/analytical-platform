@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - update Dockerfile COPY command fixing `LAMBDA_TASK_ROOT` typo
 
+## [1.3.0] 2023-11-02
+
+### Updated
+
+- load handler attempts to load existing schema for creation of the curated table,
+  falling back to inferred metadata if none is found
+- curated database name includes major version
+
 ### Changed
 
 - Updated log level from error to info when table is first created
