@@ -14,9 +14,7 @@ def handler(event, context):
     structlog.configure(
         processors=[
             structlog.processors.EventRenamer(to="message"),
-            structlog.processors.TimeStamper(
-                fmt="%Y-%m-%d %H:%M:%S", key="date_time"
-            ),
+            structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S", key="date_time"),
             structlog.processors.add_log_level,
             structlog.processors.dict_tracebacks,
             structlog.processors.CallsiteParameterAdder(
@@ -31,7 +29,9 @@ def handler(event, context):
     data_product_name = event["data_product_name"]
     table_name = event.get("table_name")
 
-    logger = structlog.get_logger(data_product_name=data_product_name, table_name=table_name)
+    logger = structlog.get_logger(
+        data_product_name=data_product_name, table_name=table_name
+    )
     logger.info(f"input_event: {event}")
 
     secrets_client = boto3.client("secretsmanager")
