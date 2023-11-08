@@ -23,7 +23,6 @@ def handler(event, context):
         structlog.processors.dict_tracebacks,
         structlog.processors.CallsiteParameterAdder(
             parameters={structlog.processors.CallsiteParameter.FUNC_NAME},
-            additional_ignores=["data_platform_logging"],
         ),
         structlog.processors.JSONRenderer(),
     ],
