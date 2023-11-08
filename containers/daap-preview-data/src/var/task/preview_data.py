@@ -4,11 +4,18 @@ from http import HTTPStatus
 
 import boto3
 import botocore
-from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductSchema
 
 athena_client = boto3.client("athena")
+
+
+def format_plain_text_response(body: str, status_code: HTTPStatus) -> dict:
+    return {
+        "body": body,
+        "status_code": status_code,
+        "headers": {"Content-Type": "text/plain"},
+    }
 
 
 def start_query_execution_and_wait(
@@ -115,10 +122,8 @@ def handler(event, context, athena_client=athena_client):
 
     if not dataproduct_exists:
         logger.error("Data product does not exists.")
-        return format_error_response(
-            response_code=HTTPStatus.BAD_REQUEST,
-            event=event,
-            message="Data product does not exists",
+        return format_plain_text_response(
+            "Data product does not exist", HTTPStatus.NOT_FOUND
         )
 
     query = f'SELECT * FROM "{data_product_name}"."{table_name}" LIMIT 10'
@@ -138,11 +143,8 @@ def handler(event, context, athena_client=athena_client):
 
     if formated_result == "No data to display":
         logger.info(formated_result)
-        return format_response_json(
-            status_code=HTTPStatus.NOT_FOUND,
-            body=formated_result,
-        )
+        return format_plain_text_response(formated_result, HTTPStatus.NOT_FOUND)
 
     logger.info("Results fetched successfully")
 
-    return format_response_json(status_code=HTTPStatus.OK, body=formated_result)
+    return format_plain_text_response(formated_result, HTTPStatus.OK)
