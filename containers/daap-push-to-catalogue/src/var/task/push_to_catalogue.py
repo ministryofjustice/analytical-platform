@@ -13,7 +13,6 @@ def handler(event, context):
     # can't use daap-python-base as it's python 3.11 and need 3.10 for
     # data_platform_catalogue, hence we can't use DataPlatformLogger here
     structlog.configure(
-    wrapper_class=structlog.make_filtering_bound_logger(logging.INFO),
     processors=[
         structlog.processors.EventRenamer(to="message"),
         structlog.processors.TimeStamper(
@@ -33,7 +32,7 @@ def handler(event, context):
     data_product_name = event["data_product_name"]
     table_name = event.get("table_name")
 
-    logger = structlog.get_logger(**{"data_product_name":data_product_name, "table_name": table_name})
+    logger = structlog.get_logger(data_product_name=data_product_name, table_name=table_name)
     logger.info(f"input_event: {event}")
 
     secrets_client = boto3.client("secretsmanager")
