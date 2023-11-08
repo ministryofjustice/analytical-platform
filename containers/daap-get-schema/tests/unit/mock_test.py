@@ -1,4 +1,5 @@
 import json
+from http import HTTPStatus
 from unittest.mock import patch
 
 import pytest
@@ -56,15 +57,18 @@ class TestHandler:
             assert result == {
                 "body": json.dumps(out_schema),
                 "headers": {"Content-Type": "application/json"},
-                "statusCode": 200,
+                "statusCode": HTTPStatus.OK,
             }
 
     def test_missing(self, fake_context):
+        data_product_name = "abc"
+        table_name = "def"
+
         result = handler(
             {
                 "pathParameters": {
-                    "data-product-name": "abc",
-                    "table-name": "def",
+                    "data-product-name": data_product_name,
+                    "table-name": table_name,
                 }
             },
             fake_context,
@@ -74,10 +78,10 @@ class TestHandler:
             "body": json.dumps(
                 {
                     "error": {
-                        "message": "Schema not found for data product 'abc', table 'def'"
+                        "message": f"no existing table schema found in S3 for {table_name=} {data_product_name=}"
                     }
                 }
             ),
             "headers": {"Content-Type": "application/json"},
-            "statusCode": 404,
+            "statusCode": HTTPStatus.NOT_FOUND,
         }
