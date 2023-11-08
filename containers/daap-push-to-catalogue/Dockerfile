@@ -10,7 +10,7 @@ RUN yum update --assumeyes \
     && yum clean all \
     && rm --recursive --force /var/cache/yum
 
-RUN python -m pip install --no-cache-dir --upgrade pip==23.2.1 \
+RUN python -m pip install --no-cache-dir --upgrade pip==23.3.1 \
     && python -m pip install --no-cache-dir --requirement requirements.txt
 
 CMD ["push_to_catalogue.handler"]
