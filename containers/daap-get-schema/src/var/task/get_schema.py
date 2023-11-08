@@ -1,13 +1,9 @@
-import json
 import os
 from http import HTTPStatus
 
-import botocore
-from data_platform_api_responses import format_response_json, response_status_404
+from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import DataProductConfig
-from data_product_metadata import format_table_schema
-from dataengineeringutils3.s3 import read_json_from_s3
+from data_product_metadata import DataProductSchema, format_table_schema
 
 
 def handler(event, context):
@@ -23,21 +19,22 @@ def handler(event, context):
         },
     )
 
-    config = DataProductConfig(data_product_name)
-    schema_path = config.schema_path(table_name)
-
     try:
-        registered_glue_schema = read_json_from_s3(schema_path.uri)
-    except botocore.exceptions.ClientError as e:
-        if e.response["Error"]["Code"] == "NoSuchKey":
-            message = f"Schema not found for data product '{data_product_name}', table '{table_name}'"
-            logger.error(f"{message} ({schema_path.uri})")
-            return response_status_404(message)
-        else:
-            raise
+        registered_glue_schema = (
+            DataProductSchema(
+                data_product_name=data_product_name,
+                table_name=table_name,
+                logger=logger,
+                input_data=None,
+            )
+            .load()
+            .latest_version_saved_data
+        )
+    except Exception:
+        message = f"no existing table schema found in S3 for {table_name=} {data_product_name=}"
+        logger.info(message)
+        return format_error_response(HTTPStatus.NOT_FOUND, event, message)
 
     registered_schema = format_table_schema(registered_glue_schema)
 
-    return format_response_json(
-        status_code=HTTPStatus.OK, json_body=json.dumps(registered_schema)
-    )
+    return format_response_json(status_code=HTTPStatus.OK, body=registered_schema)
