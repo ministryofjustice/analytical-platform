@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2023-11-08
+
+### Changed
+
+- Fix malformed response format
+
 ## [2.0.0] - 2023-11-08
 
 ### Changed

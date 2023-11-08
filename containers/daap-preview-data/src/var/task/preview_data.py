@@ -13,7 +13,7 @@ athena_client = boto3.client("athena")
 def format_plain_text_response(body: str, status_code: HTTPStatus) -> dict:
     return {
         "body": body,
-        "status_code": status_code,
+        "statusCode": status_code,
         "headers": {"Content-Type": "text/plain"},
     }
 
