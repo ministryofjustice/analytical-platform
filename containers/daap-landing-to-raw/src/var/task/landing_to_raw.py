@@ -43,7 +43,7 @@ def handler(event, context):
         extra={
             "image_version": os.getenv("VERSION", "unknown"),
             "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-            "data_product": config.element.data_product.name,
+            "data_product_name": config.element.data_product.name,
             "table": config.element.curated_data_table.name,
         }
     )
@@ -77,9 +77,6 @@ def handler(event, context):
                 inferred_columns=inferred_columns,
                 registered_schema_columns=registered_schema_columns,
             )
-            logger.info("Checking for unprocessable CSV rows")
-            validate_format(bucket_name=bucket_name, file_key=file_key, logger=logger)
-            logger.info("Continuing with ingestion")
         except DataInvalid:
             logger.error(f"{file_key} invalid; moving to fail location", exc_info=True)
             s3.copy(
@@ -90,6 +87,20 @@ def handler(event, context):
             )
             return
 
+    logger.info("Checking for unprocessable CSV rows")
+    try:
+        validate_format(bucket_name=bucket_name, file_key=file_key, logger=logger)
+    except DataInvalid:
+        logger.error(f"{file_key} invalid; moving to fail location", exc_info=True)
+        s3.copy(
+            CopySource=copy_source,
+            Bucket=raw_data_bucket,
+            Key=fail_key,
+            ExtraArgs=s3_security_opts,
+        )
+        return
+
+    logger.info("Continuing with ingestion")
     s3.copy(
         CopySource=copy_source,
         Bucket=raw_data_bucket,
