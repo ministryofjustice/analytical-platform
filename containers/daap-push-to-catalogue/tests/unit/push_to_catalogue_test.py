@@ -37,8 +37,8 @@ def test_successful_request_data_product(secrets_client, fake_context):
         mock_client.return_value.get_user_id.return_value = (
             "39b855e3-84a5-491e-b9a5-c411e626e340"
         )
-        mock_client.return_value.create_or_update_schema.return_value = (
-            "data_plaform.data_platform.foo"
+        mock_client.return_value.create_or_update_database.return_value = (
+            "data_plaform.foo"
         )
 
         response = handler(
@@ -51,9 +51,7 @@ def test_successful_request_data_product(secrets_client, fake_context):
             context=fake_context,
         )
 
-        assert response == {
-            "catalogue_message": "data_plaform.data_platform.foo pushed to catalogue"
-        }
+        assert response == {"catalogue_message": "data_plaform.foo pushed to catalogue"}
 
 
 def test_unsuccessful_request_data_product(secrets_client, fake_context):
@@ -78,7 +76,7 @@ def test_unsuccessful_request_data_product(secrets_client, fake_context):
         mock_client.return_value.get_user_id.return_value = (
             "39b855e3-84a5-491e-b9a5-c411e626e340"
         )
-        mock_client.return_value.create_or_update_schema.side_effect = CatalogueError
+        mock_client.return_value.create_or_update_database.side_effect = CatalogueError
         response = handler(
             event={
                 "data_product_name": "foo2",
@@ -104,7 +102,7 @@ def test_successful_request_table(secrets_client, fake_context):
 
     with patch("push_to_catalogue.CatalogueClient") as mock_client:
         mock_client.return_value.create_or_update_table.return_value = (
-            "data_plaform.data_platform.foo.table"
+            "data_plaform.foo.Tables.table"
         )
 
         response = handler(
@@ -118,7 +116,7 @@ def test_successful_request_table(secrets_client, fake_context):
         )
 
         assert response == {
-            "catalogue_message": "data_plaform.data_platform.foo.table pushed to catalogue"
+            "catalogue_message": "data_plaform.foo.Tables.table pushed to catalogue"
         }
 
 

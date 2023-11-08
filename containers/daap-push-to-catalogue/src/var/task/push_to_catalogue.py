@@ -13,9 +13,9 @@ def handler(event, context):
     # data_platform_catalogue, hence we can't use DataPlatformLogger here
     logger = logging.getLogger()
     metadata = event["metadata"]
-    version = event["version"]
+    version = event.get("version")
     data_product_name = event["data_product_name"]
-    table_name = event["table_name"]
+    table_name = event.get("table_name")
 
     logger.info(event)
 
@@ -31,14 +31,29 @@ def handler(event, context):
         api_uri=os.getenv("OPENMETADATA_DEV_API_URL"),
     )
 
+    if not openmetadata_client.is_healthy():
+        logger.error("error in push of table metadata to catalogue")
+        return {
+            "catalogue_error": f"Problem establishing connection to openmetadata for {data_product_name}."
+        }
     if table_name is None:
         user_id = openmetadata_client.get_user_id(metadata["dataProductOwner"])
         data_product = omdProductMetadata.from_data_product_metadata_dict(
             metadata=metadata, version=version, owner_id=user_id
         )
+        # We now want to create a generic schema level in openmetadata as below
+        metadata["name"] = "Tables"
+        metadata["description"] = f"All the tables contained within {data_product.name}"
+        data_product_schema = omdProductMetadata.from_data_product_metadata_dict(
+            metadata=metadata, version="v1.0", owner_id=user_id
+        )
         try:
-            schema_fqn = openmetadata_client.create_or_update_schema(
-                metadata=data_product, database_fqn="data_platform.data_platform"
+            database_fqn = openmetadata_client.create_or_update_database(
+                metadata=data_product, service_fqn="data_platform"
+            )
+            # create the generic schema level
+            openmetadata_client.create_or_update_schema(
+                metadata=data_product_schema, database_fqn=database_fqn
             )
 
         except CatalogueError:
@@ -48,16 +63,15 @@ def handler(event, context):
             }
             return response_body
         else:
-            response_body = {"catalogue_message": f"{schema_fqn} pushed to catalogue"}
+            response_body = {"catalogue_message": f"{database_fqn} pushed to catalogue"}
             return response_body
     else:
-        schema_fqn = f"data_platform.data_platform.{data_product_name}"
         table = TableMetadata.from_data_product_schema_dict(
             metadata=metadata, table_name=table_name
         )
         try:
             table_fqn = openmetadata_client.create_or_update_table(
-                metadata=table, schema_fqn=schema_fqn
+                metadata=table, schema_fqn=f"data_platform.{data_product_name}.Tables"
             )
         except CatalogueError:
             logger.error("error in push of table metadata to catalogue")
