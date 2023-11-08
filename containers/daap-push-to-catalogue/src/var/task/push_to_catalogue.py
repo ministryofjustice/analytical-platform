@@ -1,9 +1,8 @@
 import json
-import structlog
-import logging
 import os
 
 import boto3
+import structlog
 from data_platform_catalogue import CatalogueClient, CatalogueError
 from data_platform_catalogue import DataProductMetadata as omdProductMetadata
 from data_platform_catalogue import TableMetadata
@@ -13,19 +12,19 @@ def handler(event, context):
     # can't use daap-python-base as it's python 3.11 and need 3.10 for
     # data_platform_catalogue, hence we can't use DataPlatformLogger here
     structlog.configure(
-    processors=[
-        structlog.processors.EventRenamer(to="message"),
-        structlog.processors.TimeStamper(
-            fmt="%Y-%m-%d %H:%M:%S", key="date_time"
-        ),
-        structlog.processors.add_log_level,
-        structlog.processors.dict_tracebacks,
-        structlog.processors.CallsiteParameterAdder(
-            parameters={structlog.processors.CallsiteParameter.FUNC_NAME},
-        ),
-        structlog.processors.JSONRenderer(),
-    ],
-)
+        processors=[
+            structlog.processors.EventRenamer(to="message"),
+            structlog.processors.TimeStamper(
+                fmt="%Y-%m-%d %H:%M:%S", key="date_time"
+            ),
+            structlog.processors.add_log_level,
+            structlog.processors.dict_tracebacks,
+            structlog.processors.CallsiteParameterAdder(
+                parameters={structlog.processors.CallsiteParameter.FUNC_NAME},
+            ),
+            structlog.processors.JSONRenderer(),
+        ],
+    )
 
     metadata = event["metadata"]
     version = event.get("version")
@@ -98,5 +97,3 @@ def handler(event, context):
         else:
             response_body = {"catalogue_message": f"{table_fqn} pushed to catalogue"}
             return response_body
-
-
