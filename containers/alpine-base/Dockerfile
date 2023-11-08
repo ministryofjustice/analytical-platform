@@ -1,4 +1,4 @@
-FROM docker.io/alpine:3.18.3
+FROM docker.io/alpine:3.18.4
 
 LABEL org.opencontainers.image.vendor="Ministry of Justice" \
       org.opencontainers.image.authors="Data Platform" \
