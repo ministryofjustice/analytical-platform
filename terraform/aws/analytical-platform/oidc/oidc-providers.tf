@@ -152,7 +152,7 @@ module "analytical_platform_data_production_github_oidc_provider" {
 
   role_name              = "github-actions-ecr-oidc-dummy"
   additional_permissions = data.aws_iam_policy_document.analytical_platform_data_production_github_oidc_provider.json
-  github_repositories    = [format("ministryofjustice/%s:*", "data-platform-dummy-repo")]
+  github_repositories    = [format("ministryofjustice/%s:*", "data-platform-dummy-repo", "ap-rshiny-notesbook")]
 
   tags_prefix = "data-platform"
   tags_common = var.tags
