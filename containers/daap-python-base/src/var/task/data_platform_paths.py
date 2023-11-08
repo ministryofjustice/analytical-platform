@@ -24,7 +24,6 @@ from uuid import UUID, uuid4
 import boto3
 
 s3_client = boto3.client("s3")
-s3_resource = boto3.resource("s3")
 
 RAW_DATABASE_NAME = "data_products_raw"
 LOAD_TIMESTAMP_FORMAT = "%Y%m%dT%H%M%SZ"
@@ -237,30 +236,6 @@ def generate_all_element_version_prefixes(
         )
 
     return element_prefixes
-
-
-def delete_all_element_version_data_files(data_product_name: str, table_name: str):
-    """Deletes raw and curated data for all element versions"""
-    # Proceed to delete the raw data
-    element = DataProductElement.load(
-        element_name=table_name, data_product_name=data_product_name
-    )
-    raw_prefixes = generate_all_element_version_prefixes(
-        "raw", data_product_name, table_name
-    )
-    curated_prefixes = generate_all_element_version_prefixes(
-        "curated", data_product_name, table_name
-    )
-
-    s3_recursive_delete(element.data_product.raw_data_bucket, raw_prefixes)
-    s3_recursive_delete(element.data_product.curated_data_bucket, curated_prefixes)
-
-
-def s3_recursive_delete(bucket_name: str, prefixes: list[str]) -> None:
-    """Delete all files from a prefix in s3"""
-    bucket = s3_resource.Bucket(bucket_name)
-    for prefix in prefixes:
-        bucket.objects.filter(Prefix=prefix).delete()
 
 
 @dataclass

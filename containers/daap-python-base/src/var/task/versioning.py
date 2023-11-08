@@ -8,7 +8,11 @@ from typing import NamedTuple
 
 import boto3
 from data_platform_logging import DataPlatformLogger, s3_security_opts
-from data_platform_paths import DataProductConfig, delete_all_element_version_data_files
+from data_platform_paths import (
+    DataProductConfig,
+    DataProductElement,
+    generate_all_element_version_prefixes,
+)
 from data_product_metadata import DataProductMetadata, DataProductSchema
 from glue_utils import delete_glue_table
 
@@ -371,3 +375,28 @@ def generate_next_version_string(
         return str(current_version.increment_minor())
     else:
         return version
+
+
+def delete_all_element_version_data_files(data_product_name: str, table_name: str):
+    """Deletes raw and curated data for all element versions"""
+    # Proceed to delete the raw data
+    element = DataProductElement.load(
+        element_name=table_name, data_product_name=data_product_name
+    )
+    raw_prefixes = generate_all_element_version_prefixes(
+        "raw", data_product_name, table_name
+    )
+    curated_prefixes = generate_all_element_version_prefixes(
+        "curated", data_product_name, table_name
+    )
+
+    s3_recursive_delete(element.data_product.raw_data_bucket, raw_prefixes)
+    s3_recursive_delete(element.data_product.curated_data_bucket, curated_prefixes)
+
+
+def s3_recursive_delete(bucket_name: str, prefixes: list[str]) -> None:
+    """Delete all files from a prefix in s3"""
+    s3_resource = boto3.resource("s3")
+    bucket = s3_resource.Bucket(bucket_name)
+    for prefix in prefixes:
+        bucket.objects.filter(Prefix=prefix).delete()
