@@ -23,7 +23,7 @@ from uuid import UUID, uuid4
 
 import boto3
 
-s3 = boto3.client("s3")
+s3_client = boto3.client("s3")
 
 RAW_DATABASE_NAME = "data_products_raw"
 LOAD_TIMESTAMP_FORMAT = "%Y%m%dT%H%M%SZ"
@@ -198,15 +198,15 @@ def extract_timestamp_from_curated_path(string: str):
     return search_string_for_regex(string, regex=LOAD_TIMESTAMP_CURATED_REGEX)
 
 
-def get_latest_version(data_product_name: str):
-    """Get the latest version of a data product, else return v1.0"""
+def get_all_versions(data_product_name: str) -> list[str]:
+    """Returns all versions of a given data product"""
     metadata_bucket = get_metadata_bucket()
-    metadata_versions = s3.list_objects_v2(
+    metadata_versions = s3_client.list_objects_v2(
         Bucket=metadata_bucket, Prefix=data_product_name + "/"
     )
     # This is the case in which the data product is new.
     if not metadata_versions.get("Contents"):
-        return "v1.0"
+        return ["v1.0"]
 
     versions = [
         version["Key"].split("/")[1]
@@ -214,9 +214,28 @@ def get_latest_version(data_product_name: str):
         if version["Size"] > 0
     ]
     versions.sort(key=lambda x: [int(y.replace("v", "")) for y in x.split(".")])
-    latest_version = versions[-1]
 
-    return latest_version
+    return versions
+
+
+def get_latest_version(data_product_name: str) -> str:
+    return get_all_versions(data_product_name=data_product_name)[-1]
+
+
+def generate_all_element_version_prefixes(
+    path_prefix: str, data_product_name: str, table_name: str
+) -> list[str]:
+    """Generates element prefixes for all data product versions"""
+
+    data_product_versions = get_all_versions(data_product_name)
+    element_prefixes = []
+
+    for version in data_product_versions:
+        element_prefixes.append(
+            f"{path_prefix}/{data_product_name}/{version}/{table_name}/"
+        )
+
+    return element_prefixes
 
 
 @dataclass

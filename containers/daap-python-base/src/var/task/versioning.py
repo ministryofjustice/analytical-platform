@@ -8,10 +8,13 @@ from typing import NamedTuple
 
 import boto3
 from data_platform_logging import DataPlatformLogger, s3_security_opts
-from data_platform_paths import DataProductConfig
+from data_platform_paths import (
+    DataProductConfig,
+    DataProductElement,
+    generate_all_element_version_prefixes,
+)
 from data_product_metadata import DataProductMetadata, DataProductSchema
-
-s3_client = boto3.client("s3")
+from glue_utils import delete_glue_table
 
 
 class Version(NamedTuple):
@@ -31,7 +34,7 @@ class Version(NamedTuple):
         return Version(major, minor)
 
     def increment_major(self) -> Version:
-        return Version(self.major + 1, self.minor)
+        return Version(self.major + 1, 0)
 
     def increment_minor(self) -> Version:
         return Version(self.major, self.minor + 1)
@@ -84,6 +87,90 @@ class VersionCreator:
     def __init__(self, data_product_name, logger: DataPlatformLogger):
         self.data_product_config = DataProductConfig(name=data_product_name)
         self.logger = logger
+
+    def update_metadata_remove_schemas(self, schema_list: list[str]) -> str:
+        """Handles removing schema(s) for a data product."""
+        s3_client = boto3.client("s3")
+
+        current_metadata = (
+            DataProductMetadata(
+                data_product_name=self.data_product_config.name,
+                logger=self.logger,
+                input_data=None,
+            )
+            .load()
+            .latest_version_saved_data
+        )
+        current_schemas = current_metadata.get("schemas", [])
+        self.logger.info(f"Current schemas: {current_schemas}")
+
+        valid_schemas_to_delete = all(
+            schema in current_schemas for schema in schema_list
+        )
+        if not valid_schemas_to_delete:
+            error = f"Invalid schemas found in schema_list: {schema_list}"
+            self.logger.error(error)
+            raise InvalidUpdate(error)
+
+        self.logger.info(f"schemas to delete: {schema_list}")
+        for schema in schema_list:
+            # Delete the Glue table
+            result = delete_glue_table(
+                data_product_name=self.data_product_config.name,
+                table_name=schema,
+                logger=self.logger,
+            )
+            self.logger.info(str(result))
+
+            # Delete a given elements raw and curated data for all versions of the data product
+            delete_all_element_version_data_files(
+                data_product_name=self.data_product_config.name, table_name=schema
+            )
+
+        current_metadata["schemas"] = [
+            schema for schema in current_schemas if schema not in schema_list
+        ]
+        updated_metadata = DataProductMetadata(
+            data_product_name=self.data_product_config.name,
+            logger=self.logger,
+            input_data=current_metadata,
+        ).load()
+
+        if not updated_metadata.valid:
+            error = "updated metadata validation failed"
+            self.logger.error(error)
+            raise InvalidUpdate(error)
+
+        latest_version = updated_metadata.version
+        new_version = generate_next_version_string(
+            latest_version, UpdateType.MajorUpdate
+        )
+        self.logger.info(f"new version: {new_version}")
+
+        source_folder = f"{self.data_product_config.name}/{latest_version}/"
+        # Copy files to the new version
+        s3_copy_folder_to_new_folder(
+            updated_metadata.write_bucket,
+            source_folder,
+            latest_version,
+            new_version,
+            self.logger,
+        )
+        # Remove schema files that we no longer require in this version
+        for schema in schema_list:
+            # Get the current version of the schema path
+            schema_path = DataProductConfig(
+                name=self.data_product_config.name
+            ).schema_path(table_name=schema, version=new_version)
+            # Delete the schema.json file for the table we have removed
+            s3_client.delete_object(Bucket=schema_path.bucket, Key=schema_path.key)
+
+        # Get the metadata path for the new version
+        new_version_key = self.data_product_config.metadata_path(new_version).key
+        # Overwite the copied metadata.json file with the updated parameters
+        updated_metadata.write_json_to_s3(new_version_key)
+
+        return new_version
 
     def update_metadata(self, input_data) -> str:
         """
@@ -252,6 +339,7 @@ def s3_copy_folder_to_new_folder(
     """
     Recurisvely copy a folder, replacing {latest_version} with {new_version}
     """
+    s3_client = boto3.client("s3")
     paginator = s3_client.get_paginator("list_objects_v2")
     page_iterator = paginator.paginate(
         Bucket=bucket,
@@ -287,3 +375,28 @@ def generate_next_version_string(
         return str(current_version.increment_minor())
     else:
         return version
+
+
+def delete_all_element_version_data_files(data_product_name: str, table_name: str):
+    """Deletes raw and curated data for all element versions"""
+    # Proceed to delete the raw data
+    element = DataProductElement.load(
+        element_name=table_name, data_product_name=data_product_name
+    )
+    raw_prefixes = generate_all_element_version_prefixes(
+        "raw", data_product_name, table_name
+    )
+    curated_prefixes = generate_all_element_version_prefixes(
+        "curated", data_product_name, table_name
+    )
+
+    s3_recursive_delete(element.data_product.raw_data_bucket, raw_prefixes)
+    s3_recursive_delete(element.data_product.curated_data_bucket, curated_prefixes)
+
+
+def s3_recursive_delete(bucket_name: str, prefixes: list[str]) -> None:
+    """Delete all files from a prefix in s3"""
+    s3_resource = boto3.resource("s3")
+    bucket = s3_resource.Bucket(bucket_name)
+    for prefix in prefixes:
+        bucket.objects.filter(Prefix=prefix).delete()

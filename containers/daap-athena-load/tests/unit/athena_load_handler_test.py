@@ -18,7 +18,7 @@ def fake_event():
 @pytest.fixture()
 def load_handler_prerequisites(mocker, s3_client):
     s3_client.create_bucket(Bucket=get_metadata_bucket())
-    mocker.patch("data_platform_paths.s3", s3_client)
+    mocker.patch("data_platform_paths.s3_client", s3_client)
 
     # Patch all the helper methods to do nothing
     mocker.patch(
