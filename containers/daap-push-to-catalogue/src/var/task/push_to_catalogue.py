@@ -1,4 +1,5 @@
 import json
+import structlog
 import logging
 import os
 
@@ -11,13 +12,30 @@ from data_platform_catalogue import TableMetadata
 def handler(event, context):
     # can't use daap-python-base as it's python 3.11 and need 3.10 for
     # data_platform_catalogue, hence we can't use DataPlatformLogger here
-    logger = logging.getLogger()
+    structlog.configure(
+    wrapper_class=structlog.make_filtering_bound_logger(logging.INFO),
+    processors=[
+        structlog.processors.EventRenamer(to="message"),
+        structlog.processors.TimeStamper(
+            fmt="%Y-%m-%d %H:%M:%S", key="date_time"
+        ),
+        structlog.processors.add_log_level,
+        structlog.processors.dict_tracebacks,
+        structlog.processors.CallsiteParameterAdder(
+            parameters={structlog.processors.CallsiteParameter.FUNC_NAME},
+            additional_ignores=["data_platform_logging"],
+        ),
+        structlog.processors.JSONRenderer(),
+    ],
+)
+
     metadata = event["metadata"]
     version = event.get("version")
     data_product_name = event["data_product_name"]
     table_name = event.get("table_name")
 
-    logger.info(event)
+    logger = structlog.get_logger(**{"data_product_name":data_product_name, "table_name": table_name})
+    logger.info(f"input_event: {event}")
 
     secrets_client = boto3.client("secretsmanager")
     jwt_secret = json.loads(
@@ -82,3 +100,5 @@ def handler(event, context):
         else:
             response_body = {"catalogue_message": f"{table_fqn} pushed to catalogue"}
             return response_body
+
+
