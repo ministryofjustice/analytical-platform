@@ -3,7 +3,7 @@
 ##################################################
 
 account_ids = {
-  data-platform-apps-and-tools-production   = "096705367497"                    
+  data-platform-apps-and-tools-production   = "096705367497"                   
   analytical-platform-management-production = "042130406152"
 }
 

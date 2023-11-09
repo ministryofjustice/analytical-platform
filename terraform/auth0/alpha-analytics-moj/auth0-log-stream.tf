@@ -8,4 +8,3 @@ resource "auth0_log_stream" "aws_eventbridge_alpha_analytics_moj" {
     aws_region     = data.aws_region.current.name
   }
 }
-   
