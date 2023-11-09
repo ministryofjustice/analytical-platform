@@ -21,7 +21,7 @@
     "/data-product/{data-product-name}/table/{table-name}/upload": {
       "post": {
         "tags": [
-          "Upload Data"
+          "data"
         ],
         "summary": "Get a presigned url to upload some data to an existing data product.",
         "description": "Returns a presigned url to post data to.",
@@ -143,7 +143,7 @@
         },
         "security": [
           {
-            "api_key": []
+            "authorizationToken": []
           }
         ]
       }
@@ -212,7 +212,7 @@
         },
         "security": [
           {
-            "api_key": []
+            "authorizationToken": []
           }
         ]
       }
@@ -302,11 +302,16 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       }
     },
     "/data-product/{data-product-name}": {
-      "post": {
+      "put": {
         "tags": [
           "dataproduct"
         ],
@@ -382,7 +387,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       }
     },
     "/data-product/{data-product-name}/table/{table-name}/schema": {
@@ -480,7 +490,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       },
       "get": {
         "tags": [
@@ -535,7 +550,12 @@
           "404": {
             "description": "Data product or table schema not found"
           }
-        }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -633,13 +653,18 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       }
     },
     "/data-product/{data-product-name}/table/{table-name}": {
       "delete": {
         "tags": [
-          "delete table"
+          "data"
         ],
         "summary": "Delete a table and associated raw and curated data registered to an existing data product.",
         "operationId": "deleteTable",
@@ -757,7 +782,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       }
     }
   },
@@ -898,9 +928,9 @@
       }
     },
     "securitySchemes": {
-      "api_key": {
+      "authorizationToken": {
         "type": "apiKey",
-        "name": "api_key",
+        "name": "authorizationToken",
         "in": "header"
       }
     }

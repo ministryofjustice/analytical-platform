@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - update Dockerfile COPY command fixing `LAMBDA_TASK_ROOT` typo
 
+## [1.0.12] 2023-11-09
+
+### Changed
+
+- apiKey security schema reference to authorizationToken
+- upload data and delete table are now grouped under data
+- update metadata is now a put request
+
 ## [1.0.11] 2023-11-07
 
 ### Changed
