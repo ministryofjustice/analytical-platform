@@ -2,9 +2,34 @@ import json
 import os
 from http import HTTPMethod, HTTPStatus
 
+import boto3
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import DataProductConfig
 from data_product_metadata import DataProductMetadata
+
+
+def push_to_catalogue(
+    metadata: dict,
+    version: str,
+    data_product_name: str,
+    table_name: str | None = None,
+):
+    lambda_client = boto3.client("lambda")
+
+    catalogue_input = {
+        "metadata": metadata,
+        "version": version,
+        "data_product_name": data_product_name,
+        "table_name": table_name,
+    }
+
+    catalogue_response = lambda_client.invoke(
+        FunctionName=os.getenv("ARN_FOR_CATALOGUE_LAMBDA"),
+        InvocationType="RequestResponse",
+        Payload=json.dumps(catalogue_input),
+    )
+
+    return catalogue_response
 
 
 def handler(event, context):
@@ -106,7 +131,9 @@ def handler(event, context):
             write_key = DataProductConfig(data_product_name).metadata_path("v1.0").key
             data_product_metadata.write_json_to_s3(write_key)
             response_code = HTTPStatus.CREATED
-            response_body = None
+            response_body = {
+                "message": f"{data_product_name} registered in the data platform"
+            }
         else:
             response_code = HTTPStatus.BAD_REQUEST
             error_message = f"Metadata failed validation with error: {data_product_metadata.error_traceback}"  # noqa E501
@@ -116,8 +143,16 @@ def handler(event, context):
         error_message = f"Data Product {data_product_name} already has a version 1 registered metadata."  # noqa E501
         return format_error_response(response_code, event, error_message)
 
+    catalogue_response = push_to_catalogue(
+        metadata=data_product_metadata.data,
+        version="v1.0",
+        data_product_name=data_product_name,
+    )
+
     response = format_response(
-        response_code=response_code, event=event, body_dict=response_body
+        response_code=response_code,
+        event=event,
+        body_dict={**response_body, **catalogue_response},
     )
 
     return response
