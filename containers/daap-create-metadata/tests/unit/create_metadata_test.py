@@ -32,9 +32,17 @@ def test_metadata_creation_pass(fake_event, fake_context):
         mock_metadata.return_value.valid = True
         with patch("create_metadata.DataProductConfig") as mock_key:
             mock_key.return_value.metadata_path.key = "somekey"
-            response = create_metadata.handler(event=fake_event, context=fake_context)
+            with patch("create_metadata.push_to_catalogue") as mock_push:
+                mock_push.return_value = {"catalogue_message": "success"}
+                response = create_metadata.handler(
+                    event=fake_event, context=fake_context
+                )
 
-            assert response["statusCode"] == HTTPStatus.CREATED
+                assert response["statusCode"] == HTTPStatus.CREATED
+                assert json.loads(response["body"]) == {
+                    "message": "test_name registered in the data platform",
+                    "catalogue_message": "success",
+                }
 
 
 def test_metadata_validation_fail(fake_event, fake_context):
