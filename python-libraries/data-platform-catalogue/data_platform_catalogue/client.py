@@ -122,7 +122,9 @@ class CatalogueClient:
 
         return response["fullyQualifiedName"]
 
-    def create_or_update_database(self, metadata: CatalogueMetadata, service_fqn: str):
+    def create_or_update_database(
+        self, metadata: CatalogueMetadata | DataProductMetadata, service_fqn: str
+    ):
         """
         Define a database.
         There should be one database per data platform catalogue.
@@ -132,6 +134,7 @@ class CatalogueClient:
             description=metadata.description,
             tags=self._generate_tags(metadata.tags),
             service=service_fqn,
+            owner=EntityReference(id=metadata.owner, type="user"),
         )
         return self._create_or_update_entity(create_db)
 
