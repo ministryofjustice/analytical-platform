@@ -21,7 +21,7 @@
     "/data-product/{data-product-name}/table/{table-name}/upload": {
       "get": {
         "tags": [
-          "Upload Data"
+          "data"
         ],
         "summary": "Get a presigned url to upload some data to an existing data product.",
         "description": "Returns a presigned url to post data to.",
@@ -84,9 +84,6 @@
             "description": "bad request",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/deleteTable"
-                },
                 "examples": {
                   "Not string inputs": {
                     "summary": "Inputs not convertible to type string",
@@ -124,9 +121,6 @@
             "description": "not found",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/deleteTable"
-                },
                 "examples": {
                   "Data product registration not found": {
                     "summary": "Data product registration not found",
@@ -149,7 +143,7 @@
         },
         "security": [
           {
-            "api_key": []
+            "authorizationToken": []
           }
         ]
       }
@@ -218,7 +212,7 @@
         },
         "security": [
           {
-            "api_key": []
+            "authorizationToken": []
           }
         ]
       }
@@ -308,7 +302,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       }
     },
     "/data-product/{data-product-name}": {
@@ -388,7 +387,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       }
     },
     "/data-product/{data-product-name}/table/{table-name}/schema": {
@@ -486,7 +490,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       },
       "get": {
         "tags": [
@@ -541,7 +550,12 @@
           "404": {
             "description": "Data product or table schema not found"
           }
-        }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -639,13 +653,18 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       }
     },
     "/data-product/{data-product-name}/table/{table-name}": {
       "delete": {
         "tags": [
-          "delete table"
+          "data"
         ],
         "summary": "Delete a table and associated raw and curated data registered to an existing data product.",
         "operationId": "deleteTable",
@@ -702,9 +721,6 @@
             "description": "bad request",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/deleteTable"
-                },
                 "examples": {
                   "Glue: Table Not Found": {
                     "summary": "Glue: Table Not Found",
@@ -757,7 +773,7 @@
                       },
                       "body": {
                         "error": {
-                          "message": "updated metadata validation failed"
+                          "message": "Updated metadata validation failed"
                         }
                       }
                     }
@@ -766,7 +782,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       }
     }
   },
@@ -908,9 +929,10 @@
       }
     },
     "securitySchemes": {
-      "api_key": {
-        "type": "apiKey",
-        "name": "api_key",
+      "authorizationToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "name": "authorizationToken",
         "in": "header"
       }
     }
