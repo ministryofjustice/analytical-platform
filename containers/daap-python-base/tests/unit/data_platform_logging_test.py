@@ -51,7 +51,12 @@ def test_stdout_info_log(extra_input, s3_client, region_name, capsys, monkeypatc
 
     test_logger.info("test info message")
     captured = capsys.readouterr()
-    assert "INFO     | 2023-01-01 00:00:00 | test info message\n" == captured.out
+    event_info = json.loads(captured.out)
+
+    assert event_info["message"] == "test info message"
+    assert event_info["date_time"] == "2023-01-01 00:00:00"
+    assert event_info["level"] == "info"
+    assert set(extra_input.items()).issubset(set(event_info.items()))
 
 
 @freeze_time("2023-01-01")
@@ -62,7 +67,11 @@ def test_stdout_warning_log(s3_client, region_name, capsys, monkeypatch):
     test_logger = DataPlatformLogger()
     test_logger.warning("test warning message")
     captured = capsys.readouterr()
-    assert "WARNING  | 2023-01-01 00:00:00 | test warning message\n" == captured.out
+    event_info = json.loads(captured.out)
+
+    assert event_info["message"] == "test warning message"
+    assert event_info["date_time"] == "2023-01-01 00:00:00"
+    assert event_info["level"] == "warning"
 
 
 @freeze_time("2023-01-01")
@@ -75,7 +84,11 @@ def test_stdout_debug_log(s3_client, region_name, capsys, monkeypatch):
     captured = capsys.readouterr()
     all_outputs = captured.out.split("\n")
     last_out = all_outputs[-2]
-    assert "DEBUG    | 2023-01-01 00:00:00 | test debug message" == last_out
+    event_info = json.loads(last_out)
+
+    assert event_info["message"] == "test debug message"
+    assert event_info["date_time"] == "2023-01-01 00:00:00"
+    assert event_info["level"] == "debug"
 
 
 @freeze_time("2023-01-01")
@@ -86,7 +99,11 @@ def test_stdout_error_log(s3_client, region_name, capsys, monkeypatch):
     test_logger = DataPlatformLogger()
     test_logger.error("test error message")
     captured = capsys.readouterr()
-    assert "ERROR    | 2023-01-01 00:00:00 | test error message\n" == captured.out
+    event_info = json.loads(captured.out)
+
+    assert event_info["message"] == "test error message"
+    assert event_info["date_time"] == "2023-01-01 00:00:00"
+    assert event_info["level"] == "error"
 
 
 @pytest.mark.parametrize("extra_input", extra_inputs)
