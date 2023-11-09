@@ -73,6 +73,7 @@ class TestCatalogueClient:
         return CatalogueMetadata(
             name="data_platform",
             description="All data products hosted on the data platform",
+            owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
         )
 
     @pytest.fixture
