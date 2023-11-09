@@ -24,7 +24,7 @@ def push_to_catalogue(
     }
 
     catalogue_response = lambda_client.invoke(
-        FunctionName=os.getenv("ARN_FOR_CATALOGUE_LAMBDA"),
+        FunctionName=os.getenv("PUSH_TO_CATALOGUE_LAMBDA_ARN"),
         InvocationType="RequestResponse",
         Payload=json.dumps(catalogue_input),
     )
