@@ -4,6 +4,7 @@ import os
 import pytest
 from data_platform_logging import DataPlatformLogger
 from freezegun import freeze_time
+from structlog.testing import capture_logs
 
 extra_inputs = [
     {
@@ -148,3 +149,25 @@ def test__write_log_dict_to_json_s3(extra_input, s3_client, region_name, monkeyp
     json_list = [json.loads(j) for j in data.split("\n") if j != ""]
 
     assert expected_log_json == json_list
+
+
+def test_dataproduct_and_table_vars():
+    test_logger = DataPlatformLogger(data_product_name="foo", table_name="bar")
+    with capture_logs() as cap_logs:
+        test_logger.info("hello world")
+        assert cap_logs[0]["data_product_name"] == "foo"
+        assert cap_logs[0]["table_name"] == "bar"
+
+
+def test_env_vars(monkeypatch):
+    monkeypatch.setenv("AWS_LAMBDA_FUNCTION_NAME", "test")
+    monkeypatch.setenv("VERSION", "1.2")
+    monkeypatch.setenv("BASE_VERSION", "2.3")
+
+    test_logger = DataPlatformLogger()
+
+    with capture_logs() as cap_logs:
+        test_logger.info("hello world")
+        assert cap_logs[0]["lambda_name"] == "test"
+        assert cap_logs[0]["image_version"] == "1.2"
+        assert cap_logs[0]["base_image_version"] == "2.3"
