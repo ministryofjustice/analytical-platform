@@ -23,11 +23,13 @@ def push_to_catalogue(
         "table_name": table_name,
     }
 
-    catalogue_response = lambda_client.invoke(
+    lambda_response = lambda_client.invoke(
         FunctionName=os.getenv("PUSH_TO_CATALOGUE_LAMBDA_ARN"),
         InvocationType="RequestResponse",
         Payload=json.dumps(catalogue_input),
     )
+
+    catalogue_response = json.loads(lambda_response["Payload"].read().decode("utf-8"))
 
     return catalogue_response
 
