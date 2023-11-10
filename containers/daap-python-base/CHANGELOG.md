@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.1.1] - 2023-11-10
+
+### Changed
+
+- Bumped pyarrow to address <https://github.com/ministryofjustice/data-platform/pull/2279>
+
 ## [6.1.0] - 2023-11-08
 
 ### Changed
