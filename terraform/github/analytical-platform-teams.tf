@@ -22,7 +22,6 @@ locals {
         "f-marry",           # Fabien Marry
         "alex-vonfeldmann",  # Alex von Feldmann
         "gfowler-moj",       # Greg Fowler
-        "RNTjustice",        # Richard Trist,
         "ymao2",             # Yikang Mao
         "BrianEllwood",      # Brian Ellwood
         "Emterry",           # Emma Terry

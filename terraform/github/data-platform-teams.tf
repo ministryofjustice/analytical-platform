@@ -12,7 +12,6 @@ locals {
       parent_team_id = module.data_platform_team.id
       members = [
         "gfowler-moj",      # Greg Fowler
-        "RNTjustice",       # Richard Trist
         "alex-vonfeldmann", # Alex von Feldmann
         "hrahim-moj",       # Haymon Rahim
         "f-marry",          # Fabien Marry
