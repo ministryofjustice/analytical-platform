@@ -84,7 +84,9 @@ def test_schema_does_not_exist_and_is_valid(fake_event, fake_context, s3_client)
             mock_metadata.return_value.load.latest_version_saved_data = {
                 "name": "test_p"
             }
-            response = handler(event=fake_event, context=fake_context)
+            with patch("create_schema.push_to_catalogue") as mock_push:
+                mock_push.return_value = {"catalog": "success"}
+                response = handler(event=fake_event, context=fake_context)
 
     assert json.loads(response["body"])["message"] == (
         "Schema for test_t has been created in the test_p data product"

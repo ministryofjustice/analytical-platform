@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - update Dockerfile COPY command fixing `LAMBDA_TASK_ROOT` typo
 
+## [1.1.0]
+
+### Added
+
+- Call to push-to-catalogue lambda.
+
 ## [1.0.2]
 
 ### Changed
