@@ -412,7 +412,12 @@ class TestUpdateMetadataRemoveSchema:
         )
 
     def test_glue_table_not_found(
-        self, s3_client, create_raw_and_curated_data, data_product_name, glue_client
+        self,
+        s3_client,
+        create_raw_and_curated_data,
+        data_product_name,
+        glue_client,
+        table_name,
     ):
         version_creator = VersionCreator(data_product_name, logging.getLogger())
         schema_list = ["schema0", "schema1"]
@@ -421,8 +426,7 @@ class TestUpdateMetadataRemoveSchema:
                 version_creator.update_metadata_remove_schemas(schema_list=schema_list)
                 assert (
                     str(exc.value)
-                    == f"An error occurred (EntityNotFoundException)\
-                        when calling the GetTable operation: Database {data_product_name} not found."
+                    == f"Could not locate glue table '{table_name}' in database '{data_product_name}'"
                 )
 
     def test_schema_glue_table_deleted(
@@ -444,7 +448,6 @@ class TestUpdateMetadataRemoveSchema:
                 table = glue_client.get_table(
                     DatabaseName=data_product_name, Name=f"{schema_list[0]})"
                 )
-            print(exc.value.response["Error"]["Message"])
             assert exc.value.response["Error"]["Code"] == "EntityNotFoundException"
             assert f"{schema_list[0]}" in exc.value.response["Error"]["Message"]
 
@@ -536,3 +539,120 @@ class TestUpdateMetadataRemoveSchema:
                     Prefix=schema_prefix,
                 )
                 assert response.get("KeyCount") == 1
+
+
+class TestRemoveAllVersions:
+    @pytest.fixture(autouse=True)
+    def setup(
+        self,
+        metadata_bucket,
+        s3_client,
+        glue_client,
+        data_product_name,
+        data_product_versions,
+    ):
+        self.bucket_name = metadata_bucket
+        for version in data_product_versions:
+            s3_client.put_object(
+                Body=json.dumps(test_metadata_with_schemas),
+                Bucket=self.bucket_name,
+                Key=f"{data_product_name}/{version}/metadata.json",
+            )
+        for i in range(3):
+            for version in data_product_versions:
+                s3_client.put_object(
+                    Body=json.dumps(test_schema),
+                    Bucket=self.bucket_name,
+                    Key=f"{data_product_name}/{version}/schema{i}/schema.json",
+                )
+
+    def test_success(
+        self,
+        s3_client,
+        create_glue_tables,
+        create_raw_and_curated_data,
+        data_product_name,
+        glue_client,
+    ):
+        # Assert we have the correct number of database tables created
+        tables = glue_client.get_tables(DatabaseName=data_product_name)
+        assert len(tables["TableList"]) == 3
+
+        # Assert we have the correct number of metadata files to begin with
+        prefix = f"{data_product_name}/"
+        response = s3_client.list_objects_v2(
+            Bucket=self.bucket_name,
+            Prefix=prefix,
+        )
+        assert response.get("KeyCount") == 12
+
+        # Assert we have the correct number of metadata files to begin with
+        prefix = f"raw/{data_product_name}/"
+        response = s3_client.list_objects_v2(
+            Bucket=os.getenv("RAW_DATA_BUCKET"),
+            Prefix=prefix,
+        )
+        assert response.get("KeyCount") == 30
+
+        # Assert we have the correct number of metadata files to begin with
+        prefix = f"curated/{data_product_name}/"
+        response = s3_client.list_objects_v2(
+            Bucket=os.getenv("CURATED_DATA_BUCKET"),
+            Prefix=prefix,
+        )
+        assert response.get("KeyCount") == 30
+
+        #######################################################################
+        version_creator = VersionCreator(data_product_name, logging.getLogger())
+
+        with patch("glue_utils.glue_client", glue_client):
+            # Call the handler
+            version_creator.remove_all_versions_of_data_product()
+
+            # Assert that all metadata files have been deleted
+            prefix = f"{data_product_name}/"
+            response = s3_client.list_objects_v2(
+                Bucket=self.bucket_name,
+                Prefix=prefix,
+            )
+            assert response.get("KeyCount") == 0
+
+            # Assert that raw files have been deleted
+            prefix = f"raw/{data_product_name}/"
+            response = s3_client.list_objects_v2(
+                Bucket=os.getenv("RAW_DATA_BUCKET"),
+                Prefix=prefix,
+            )
+            assert response.get("KeyCount") == 0
+
+            # Assert that curated files have been deleted
+            prefix = f"curated/{data_product_name}/"
+            response = s3_client.list_objects_v2(
+                Bucket=os.getenv("CURATED_DATA_BUCKET"),
+                Prefix=prefix,
+            )
+            assert response.get("KeyCount") == 0
+
+            with pytest.raises(glue_client.exceptions.EntityNotFoundException) as exc:
+                glue_client.get_database(Name=data_product_name)
+            assert (
+                exc.value.response["Error"]["Message"]
+                == f"Database {data_product_name} not found."
+            )
+            assert exc.value.response["Error"]["Code"] == "EntityNotFoundException"
+
+    def test_glue_table_does_not_exist(
+        self,
+        s3_client,
+        create_glue_tables,
+        create_raw_and_curated_data,
+        data_product_name,
+        glue_client,
+    ):
+        version_creator = VersionCreator("fake_data_product_name", logging.getLogger())
+        with pytest.raises(ValueError) as exc:
+            # Call the handler
+            version_creator.remove_all_versions_of_data_product()
+        assert (
+            str(exc.value) == "Could not locate glue database 'fake_data_product_name'"
+        )
