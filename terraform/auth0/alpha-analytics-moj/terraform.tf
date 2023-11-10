@@ -13,7 +13,7 @@ terraform {
       version = "5.25.0"
     }
     auth0 = {
-      source = "auth0/auth0"
+      source  = "auth0/auth0"
       version = "1.0.0"
     }
   }
@@ -33,4 +33,10 @@ provider "aws" {
   default_tags {
     tags = var.tags
   }
+}
+
+provider "auth0" {
+  domain        = data.aws_secretsmanager_secret_version.auth0_domain.secret_string
+  client_id     = data.aws_secretsmanager_secret_version.auth0_client_id.secret_string
+  client_secret = data.aws_secretsmanager_secret_version.auth0_client_secret.secret_string
 }
