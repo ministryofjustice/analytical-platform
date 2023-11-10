@@ -112,11 +112,22 @@ def handler(event, context):
             HTTPStatus.BAD_REQUEST, event=event, message=error_message
         )
 
+    input_schema = request_body.get("schema")
+
+    if input_schema is None:
+        error_msg = (
+            "a 'schema' object was not passed in the request, "
+            "did you pass {table_schema} instead of {'schema': {table_schema}}?"
+        )
+        return format_error_response(
+            HTTPStatus.BAD_REQUEST, event=event, message=error_msg
+        )
+
     schema = DataProductSchema(
         data_product_name=data_product_name,
         table_name=table_name,
         logger=logger,
-        input_data=request_body.get("schema"),
+        input_data=input_schema,
     )
 
     if schema.exists:
