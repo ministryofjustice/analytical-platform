@@ -3,18 +3,18 @@ terraform {
     acl            = "private"
     bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "aws/auth0/alpha-analytics-moj/terraform.tfstate"
+    key            = "auth0/alpha-analytics-moj/terraform.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.24.0"
+      version = "5.25.0"
     }
     auth0 = {
       source = "auth0/auth0"
-      version = "~>1.0.0"
+      version = "1.0.0"
     }
   }
   required_version = "~> 1.5"

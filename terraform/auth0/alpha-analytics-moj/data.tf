@@ -15,21 +15,17 @@ data "aws_region" "current" {}
 data "aws_secretsmanager_secret_version" "auth0_domain" {
   provider = aws.analytical-platform-management-production
 
-  secret_id = "auth0/domain"
+  secret_id = "auth0/alpha-analytics-moj/domain"
 }
 
 data "aws_secretsmanager_secret_version" "auth0_client_id" {
   provider = aws.analytical-platform-management-production
 
-  secret_id = "auth0/client-id"
+  secret_id = "auth0/alpha-analytics-moj/client-id"
 }
 
 data "aws_secretsmanager_secret_version" "auth0_client_secret" {
   provider = aws.analytical-platform-management-production
 
-  secret_id = "auth0/client-secret"
-}
-
-data "aws_cloudwatch_event_bus" "auth0" {
-  name = "aws.partner/auth0.com/alpha-analytics-moj-5991c2c1-c1a9-40e6-8460-b4bef6f519e7/auth0.logs" // This was created by Auth0, we accepted it in the UI
+  secret_id = "auth0/alpha-analytics-moj/client-secret"
 }

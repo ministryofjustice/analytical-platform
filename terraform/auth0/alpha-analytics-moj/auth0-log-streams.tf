@@ -1,5 +1,5 @@
-resource "auth0_log_stream" "aws_eventbridge_alpha_analytics_moj" {
-  name   = "alpha-analytics-moj"
+resource "auth0_log_stream" "aws_eventbridge_data_platform_apps_and_tools_production" {
+  name   = "data-platform-apps-and-tools-production"
   type   = "eventbridge"
   status = "active"
 
