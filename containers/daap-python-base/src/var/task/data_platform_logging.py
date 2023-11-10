@@ -1,13 +1,11 @@
-import inspect
 import json
 import logging
 import os
-import sys
 import time
-from datetime import datetime
 from typing import List
 
 import boto3
+import structlog
 from botocore.exceptions import ClientError
 from data_platform_paths import data_product_log_bucket_and_key
 
@@ -27,23 +25,6 @@ logging_levels = {
     "WARNING": logging.WARNING,
     "ERROR": logging.ERROR,
 }
-
-
-def _make_log_dict(level: str, msg: str, extra: dict, func: str) -> dict:
-    """
-    creates a dict with all the standard logging items plus a key
-    and value for any of the extra information passed to the logger
-    class.
-    """
-    msg_dict = {}
-    msg_dict["level"] = level
-    msg_dict["date_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    msg_dict["message"] = msg
-    msg_dict["function_name"] = func
-
-    for k, v in extra.items():
-        msg_dict[k] = v
-    return msg_dict
 
 
 class DataPlatformLogger:
@@ -83,42 +64,39 @@ class DataPlatformLogger:
 
         for k, v in extra.items():
             self.extra[k] = v
+
         self.log_list_dict: List[dict] = []
         self.format = format
-        self.logger = logging.getLogger()
+        structlog.configure(
+            wrapper_class=structlog.make_filtering_bound_logger(logging_levels[level]),
+            processors=[
+                structlog.processors.EventRenamer(to="message"),
+                structlog.processors.TimeStamper(
+                    fmt="%Y-%m-%d %H:%M:%S", key="date_time"
+                ),
+                structlog.processors.add_log_level,
+                structlog.processors.dict_tracebacks,
+                structlog.processors.CallsiteParameterAdder(
+                    parameters={structlog.processors.CallsiteParameter.FUNC_NAME},
+                    additional_ignores=["data_platform_logging"],
+                ),
+                self.write_log_dict_to_s3_json,
+                structlog.processors.JSONRenderer(),
+            ],
+        )
+        self.logger = structlog.get_logger(**self.extra)
 
         self.log_bucket_path = data_product_log_bucket_and_key(
             lambda_name=self.extra["lambda_name"], data_product_name=data_product_name
         )
 
-        # if used in a lambda function we remove the preloaded handlers
-        for h in self.logger.handlers:
-            self.logger.removeHandler(h)
-
-        handler = logging.StreamHandler(sys.stdout)
-
-        handler.setFormatter(logging.Formatter(format, datefmt="%Y-%m-%d %H:%M:%S"))
-        self.logger.addHandler(handler)
-        self.logger.setLevel(logging_levels[level])
-
-    def add_extras(self, other_extras: dict, format=None):
+    def add_extras(self, other_extras: dict):
         """
         This method can be used to add additional information to a logger
         object after it has been instantiated.
-
-        If given a format the new information will be added to the log
-        line in the standard output too. Other wise the extra information
-        will be collected in log_list_dict and can be written out as a json.
         """
-        for k, v in other_extras.items():
-            self.extra[k] = v
-        if format is not None:
-            self.logger.removeHandler(self.logger.handlers[0])
-            handler = logging.StreamHandler(sys.stdout)
-
-            handler.setFormatter(logging.Formatter(format, datefmt="%Y-%m-%d %H:%M:%S"))
-            self.logger.addHandler(handler)
-
+        self.extra.update(other_extras)
+        self.logger = self.logger.bind(**other_extras)
         return self
 
     def debug(self, msg: str, *args, **kwargs):
@@ -129,9 +107,7 @@ class DataPlatformLogger:
         Also adds the displays log info plus everything contained in extra.
 
         """
-        log_dict = _make_log_dict("debug", msg, self.extra, inspect.stack()[1].function)
-        self._write_log_dict_to_s3_json(log_dict)
-        self.logger.debug(msg, *args, extra=self.extra, **kwargs)
+        self.logger.debug(msg, *args, **kwargs)
 
     def info(self, msg: str, *args, **kwargs):
         """
@@ -141,9 +117,7 @@ class DataPlatformLogger:
         Also adds the displays log info plus everything contained in extra.
 
         """
-        log_dict = _make_log_dict("info", msg, self.extra, inspect.stack()[1].function)
-        self._write_log_dict_to_s3_json(log_dict)
-        self.logger.info(msg, *args, extra=self.extra, **kwargs)
+        self.logger.info(msg, *args, **kwargs)
 
     def warning(self, msg: str, *args, **kwargs):
         """
@@ -153,11 +127,7 @@ class DataPlatformLogger:
         Also adds the displays log info plus everything contained in extra.
 
         """
-        log_dict = _make_log_dict(
-            "warning", msg, self.extra, inspect.stack()[1].function
-        )
-        self._write_log_dict_to_s3_json(log_dict)
-        self.logger.warning(msg, *args, extra=self.extra, **kwargs)
+        self.logger.warning(msg, *args, **kwargs)
 
     def error(self, msg: str, *args, **kwargs):
         """
@@ -167,17 +137,14 @@ class DataPlatformLogger:
         Also adds the displays log info plus everything contained in extra.
 
         """
-        log_dict = _make_log_dict("error", msg, self.extra, inspect.stack()[1].function)
-        self._write_log_dict_to_s3_json(log_dict)
-        self.logger.error(msg, *args, extra=self.extra, **kwargs)
+        self.logger.error(msg, *args, **kwargs)
 
-    def _write_log_dict_to_s3_json(
-        self, log_line: dict, additional_args: dict = s3_security_opts
-    ) -> None:
+    def write_log_dict_to_s3_json(self, _logger, _method_name, event_dict) -> dict:
         """
         writes the list of log dicts to s3 as a json file in the correct
         format for an athena table
         """
+        event_dict["function_name"] = event_dict.pop("func_name")
         s3_client = boto3.client("s3")
 
         try:
@@ -191,17 +158,18 @@ class DataPlatformLogger:
                 # if an unexpected error we want to exit the method
                 # to avoid creating a log file with 1 line of last log
                 # but not raise an error, disrupting the application
-                print(e)
-                return None
+                return event_dict
         else:
             data = response.get("Body").read().decode("utf-8")
             jlines = data
 
-        jlines += json.dumps(log_line) + "\n"
+        jlines += json.dumps(event_dict) + "\n"
 
         s3_client.put_object(
             Body=jlines,
             Bucket=self.log_bucket_path.bucket,
             Key=self.log_bucket_path.key,
-            **additional_args
+            **s3_security_opts
         )
+
+        return event_dict

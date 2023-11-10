@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.1.1] - 2023-11-10
+
+### Changed
+
+- Bumped pyarrow to address <https://github.com/ministryofjustice/data-platform/pull/2279>
+
+## [6.1.0] - 2023-11-08
+
+### Changed
+
+- DataPlatformLogger now outputs JSON in the stdout logs, so that all the extra
+  data attached to a log record is preserved, and can be parsed and filtered
+  in CloudWatch.
+- The JSON written to S3 is unchanged.
+
 ## [6.0.0] - 2023-11-07
 
 ### Changed
@@ -20,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Data Product `database_name` property added;
-  includes suffix of major version string e.g. "_v1"
+  includes suffix of major version string e.g. "\_v1"
 - remove csv-specific values from template glue metadata
 
 ## [5.3.2] - 2023-11-1
