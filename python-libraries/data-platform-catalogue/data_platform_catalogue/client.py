@@ -127,7 +127,7 @@ class CatalogueClient:
     ):
         """
         Define a database.
-        There should be one database per data platform catalogue.
+        There should be one database per data product.
         """
         create_db = CreateDatabaseRequest(
             name=metadata.name,
@@ -141,7 +141,10 @@ class CatalogueClient:
     def create_or_update_schema(self, metadata: DataProductMetadata, database_fqn: str):
         """
         Define a database schema.
-        There should be one schema per data product.
+        There should be one schema per data product and for now flexibility is retained
+        and metadata is of type DataProductMetadata but we'd expect a uniform name and
+        description for each data product, e.g:
+            name="Tables", description="All the tables contained within {data_product_name}"
         """
         create_schema = CreateDatabaseSchemaRequest(
             name=metadata.name,
