@@ -69,8 +69,8 @@ table = TableMetadata(
 
 try:
   service_fqn = client.create_or_update_database_service(name="data_platform")
-  database_fqn = client.create_or_update_database(metadata=catalogue, service_fqn=service_fqn)
-  schema_fqn = client.create_or_update_schema(metadata=data_product, database_fqn=database_fqn)
+  database_fqn = client.create_or_update_database(metadata=data_product, service_fqn=service_fqn)
+  schema_fqn = client.create_or_update_schema(metadata=data_product_schema, database_fqn=database_fqn)
   table_fqn = client.create_or_update_table(metadata=table, schema_fqn=schema_fqn)
 except CatalogueError:
   print("oh no")
