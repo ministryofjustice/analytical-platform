@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.1] 2023-11-06
+
+### Fixed
+
+- response returned by push-to-catalogue lambda
+
 ## [2.1.0] 2023-11-06
 
 ### Added
@@ -16,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - function `push_to_catalogue` which calls another lambda which
   pushes registered data product metadata to the catalogue, as
   of now openmetadata.
-- returns a reposnse body for success (previously this was empty)
+- returns a response body for success (previously this was empty)
   and additonal key/values in that reposnse for the catalogue
   response.
 
