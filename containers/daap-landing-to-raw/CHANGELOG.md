@@ -9,7 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.3.1] 2023-11-08
+## [1.3.3] 2023-11-10
+
+### Changed
+
+- Updated base image
+- Updated pyarrow
+
+## [1.3.2] 2023-11-08
 
 ### Changed
 
