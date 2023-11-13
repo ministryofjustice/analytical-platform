@@ -1,4 +1,3 @@
-import os
 import time
 from http import HTTPStatus
 
@@ -106,11 +105,7 @@ def handler(event, context, athena_client=athena_client):
 
     logger = DataPlatformLogger(
         data_product_name=data_product_name,
-        extra={
-            "image_version": os.getenv("VERSION", "unknown"),
-            "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-            "table_name": table_name,
-        },
+        table_name=table_name,
     )
 
     dataproduct_exists = DataProductSchema(

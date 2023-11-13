@@ -11,12 +11,7 @@ from data_platform_paths import (
 )
 
 s3 = boto3.client("s3")
-logger = DataPlatformLogger(
-    extra={
-        "image_version": os.getenv("VERSION", "unknown"),
-        "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-    }
-)
+logger = DataPlatformLogger()
 
 raw_data_bucket = get_raw_data_bucket()
 curated_data_bucket = get_curated_data_bucket()
@@ -25,7 +20,7 @@ athena_load_lambda = os.environ.get("ATHENA_LOAD_LAMBDA", "")
 
 def handler(event, context):
     data_product_to_recreate = event.get("data_product", "")
-    logger.add_extras({"data_product_name": data_product_to_recreate})
+    logger.add_data_product(data_product_to_recreate)
 
     data_product = DataProductConfig(
         name=data_product_to_recreate,
