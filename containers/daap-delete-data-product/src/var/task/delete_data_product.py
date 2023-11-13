@@ -7,12 +7,7 @@ from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductMetadata
 from versioning import VersionCreator
 
-logger = DataPlatformLogger(
-    extra={
-        "image_version": os.getenv("VERSION", "unknown"),
-        "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-    }
-)
+logger = DataPlatformLogger()
 
 s3_client = boto3.client("s3")
 s3_resource = boto3.resource("s3")
