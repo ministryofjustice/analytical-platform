@@ -37,33 +37,29 @@ class DataPlatformLogger:
     dict object.
 
     Extras can also be added to the class after instantiation using the
-    add_extras() method. With this you can also choose whether to add them
-    into the standard output log line or just collect in the json object.
-
-    E.g. a lambda container function executing a data product load could contain:
-        logger = DataPlatformLogger({
-            "lambda_function_name": context.function_name,
-            "image_version": "1.0.0"),
-            "data_product_name": "great_data_product",
-            "table_name": "useful_table"
-        })
+    add_data_product() or add_extras() methods.
     """
 
     def __init__(
         self,
         data_product_name: str | None = None,
+        table_name: str | None = None,
         format: str = "%(levelname)-8s | %(asctime)s | %(message)s",
         extra: dict | None = None,
         level: str = "INFO",
     ):
         if extra is None:
             extra = {}
-        self.extra = {}
-        self.extra["lambda_name"] = os.getenv("AWS_LAMBDA_FUNCTION_NAME", None)
-        self.extra["data_product_name"] = data_product_name
 
-        for k, v in extra.items():
-            self.extra[k] = v
+        self.extra = {
+            "lambda_name": os.getenv("AWS_LAMBDA_FUNCTION_NAME", None),
+            "data_product_name": data_product_name,
+            "table_name": table_name,
+            "image_version": os.getenv("VERSION", "unknown"),
+            "base_image_version": os.getenv("BASE_VERSION", "unknown"),
+        }
+
+        self.extra.update(extra)
 
         self.log_list_dict: List[dict] = []
         self.format = format
@@ -88,6 +84,15 @@ class DataPlatformLogger:
 
         self.log_bucket_path = data_product_log_bucket_and_key(
             lambda_name=self.extra["lambda_name"], data_product_name=data_product_name
+        )
+
+    def add_data_product(self, data_product_name: str, table_name: str | None = None):
+        """
+        This method can be used to add data product information to a logger
+        object after it has been instantiated.
+        """
+        return self.add_extras(
+            {"data_product_name": data_product_name, "table_name": table_name}
         )
 
     def add_extras(self, other_extras: dict):

@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.2.0] - 2023-11-10
+
+## Changed
+
+- DataPlatformLogger now automatically adds version info the log context
+- DataPlatformLogger now accepts a `table_name` argument
+- Added `add_data_product()` to DataPlatformLogger to complement `add_extras()`
+
 ## [6.1.1] - 2023-11-10
 
 ### Changed
