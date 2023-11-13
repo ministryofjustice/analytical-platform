@@ -136,6 +136,13 @@ class QueryTable(NamedTuple):
     name: str
 
 
+def get_fail_data_bucket() -> str:
+    """
+    Get the raw data bucket name from the environment
+    """
+    return os.environ.get("RAW_DATA_BUCKET", "") or os.environ["BUCKET_NAME"]
+
+
 def get_raw_data_bucket() -> str:
     """
     Get the raw data bucket name from the environment

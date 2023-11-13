@@ -15,13 +15,29 @@ def delete_glue_table(
         if e.response["Error"]["Code"] == "EntityNotFoundException":
             error_message = f"Could not locate glue table '{table_name}' in database '{data_product_name}'"
             logger.error(error_message)
-            raise ValueError(e)
+            raise ValueError(error_message)
         else:
-            error_message = f"Unexpected ClientError: {e.response['Error']['Code']}"
-            logger.error(error_message)
-            raise ValueError(e)
+            raise
     else:
         result = glue_client.delete_table(
             DatabaseName=data_product_name, Name=table_name
         )
         return result
+
+
+def delete_glue_database(
+    data_product_name: str, logger: DataPlatformLogger
+) -> str | None:
+    """deletes a glue database and all associated tables"""
+    try:
+        glue_client.get_database(Name=data_product_name)
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "EntityNotFoundException":
+            error_message = f"Could not locate glue database '{data_product_name}'"
+            logger.error(error_message)
+            raise ValueError(error_message)
+        else:
+            raise
+    else:
+        glue_client.delete_database(Name=data_product_name)
+    return None
