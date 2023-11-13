@@ -13,6 +13,7 @@ from data_platform_paths import (
     DataProductElement,
     generate_all_element_version_prefixes,
     get_curated_data_bucket,
+    get_fail_data_bucket,
     get_metadata_bucket,
     get_raw_data_bucket,
 )
@@ -100,6 +101,10 @@ class VersionCreator:
             data_product_name=self.data_product_config.name, logger=self.logger
         )
 
+        # Delete fail files
+        s3_recursive_delete(
+            get_fail_data_bucket(), [f"fail/{self.data_product_config.name}/"]
+        )
         # Delete raw files
         s3_recursive_delete(
             get_raw_data_bucket(), [f"raw/{self.data_product_config.name}/"]

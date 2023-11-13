@@ -66,7 +66,7 @@ class TestRemoveAllVersions:
         self,
         s3_client,
         create_glue_tables,
-        create_raw_and_curated_data,
+        create_failed_raw_and_curated_data,
         data_product_name,
         glue_client,
         event,
@@ -84,7 +84,15 @@ class TestRemoveAllVersions:
         )
         assert response.get("KeyCount") == 12
 
-        # Assert we have the correct number of metadata files to begin with
+        # Assert we have the correct number of fail files to begin with
+        prefix = f"fail/{data_product_name}/"
+        response = s3_client.list_objects_v2(
+            Bucket=os.getenv("RAW_DATA_BUCKET"),
+            Prefix=prefix,
+        )
+        assert response.get("KeyCount") == 30
+
+        # Assert we have the correct number of raw files to begin with
         prefix = f"raw/{data_product_name}/"
         response = s3_client.list_objects_v2(
             Bucket=os.getenv("RAW_DATA_BUCKET"),
@@ -92,7 +100,7 @@ class TestRemoveAllVersions:
         )
         assert response.get("KeyCount") == 30
 
-        # Assert we have the correct number of metadata files to begin with
+        # Assert we have the correct number of curated files to begin with
         prefix = f"curated/{data_product_name}/"
         response = s3_client.list_objects_v2(
             Bucket=os.getenv("CURATED_DATA_BUCKET"),
@@ -109,6 +117,14 @@ class TestRemoveAllVersions:
             prefix = f"{data_product_name}/"
             response = s3_client.list_objects_v2(
                 Bucket=os.getenv("METADATA_BUCKET"),
+                Prefix=prefix,
+            )
+            assert response.get("KeyCount") == 0
+
+            # Assert we have the correct number of fail files to begin with
+            prefix = f"fail/{data_product_name}/"
+            response = s3_client.list_objects_v2(
+                Bucket=os.getenv("RAW_DATA_BUCKET"),
                 Prefix=prefix,
             )
             assert response.get("KeyCount") == 0
@@ -137,7 +153,7 @@ class TestRemoveAllVersions:
             )
             assert exc.value.response["Error"]["Code"] == "EntityNotFoundException"
 
-    def test_metadata_does_not_exist(self, fake_event, fake_context):
+    def test_error_400_when_metadata_does_not_exist(self, fake_event, fake_context):
         # Call the handler
         response = delete_data_product.handler(fake_event, fake_context)
         assert response.get("statusCode") == 400

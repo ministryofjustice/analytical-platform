@@ -180,7 +180,7 @@ def create_glue_tables(create_glue_database, glue_client, data_product_name):
 
 
 @pytest.fixture
-def create_raw_and_curated_data(
+def create_failed_raw_and_curated_data(
     s3_client,
     create_raw_bucket,
     create_curated_bucket,
@@ -198,5 +198,10 @@ def create_raw_and_curated_data(
             s3_client.put_object(
                 Bucket=os.getenv("RAW_DATA_BUCKET"),
                 Key=f"raw/{data_product_name}/{version}/schema0/raw-file-{str(i)}.json",
+                Body=json.dumps({"content": f"{i}"}),
+            )
+            s3_client.put_object(
+                Bucket=os.getenv("RAW_DATA_BUCKET"),
+                Key=f"fail/{data_product_name}/{version}/schema0/fail-file-{str(i)}.json",
                 Body=json.dumps({"content": f"{i}"}),
             )
