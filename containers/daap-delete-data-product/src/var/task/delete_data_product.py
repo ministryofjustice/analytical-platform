@@ -28,7 +28,7 @@ def handler(event, context):
     GET, PUT, and DELETE requests result in a 405 response.
 
     :param event: The event dict sent by Amazon API Gateway that contains all of the
-                  request data.
+        request data.
     :param context: The context in which the function is called.
     :return: A response that is sent to Amazon API Gateway, to be wrapped into
              an HTTP response. The 'statusCode' field is the HTTP status code
