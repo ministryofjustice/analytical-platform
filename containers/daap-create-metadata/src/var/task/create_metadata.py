@@ -52,12 +52,7 @@ def handler(event, context):
              and the 'body' field is the body of the response.
     """
 
-    logger = DataPlatformLogger(
-        extra={
-            "image_version": os.getenv("VERSION", "unknown"),
-            "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-        }
-    )
+    logger = DataPlatformLogger()
 
     def format_response(
         response_code: HTTPStatus, event: dict, body_dict: dict | None = None
@@ -115,7 +110,7 @@ def handler(event, context):
         error_message = "Data product name is missing, it must be specified in the metadata against the 'name' key"  # noqa E501
         return format_error_response(response_code, event, error_message)
 
-    logger.add_extras({"data_product_name": data_product_name})
+    logger.add_data_product(data_product_name)
 
     if http_method == HTTPMethod.POST:
         pass
