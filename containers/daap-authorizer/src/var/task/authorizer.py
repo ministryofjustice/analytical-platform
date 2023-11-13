@@ -3,12 +3,7 @@ import os
 
 from data_platform_logging import DataPlatformLogger
 
-logger = DataPlatformLogger(
-    extra={
-        "image_version": os.getenv("VERSION", "unknown"),
-        "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-    }
-)
+logger = DataPlatformLogger()
 
 
 def handler(event, context):

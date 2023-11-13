@@ -31,12 +31,7 @@ def handler(
     table_name = data_product_element.curated_data_table.name
 
     logger = DataPlatformLogger(
-        extra={
-            "image_version": os.getenv("VERSION", "unknown"),
-            "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-            "data_product_name": data_product_name,
-            "table_name": table_name,
-        }
+        data_product_name=data_product_name, table_name=table_name
     )
 
     logger.info(f"file is: {full_s3_path}")
