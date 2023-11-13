@@ -2,7 +2,9 @@
 Integration test that runs against a development OpenMetadata server.
 
 Run with:
-API_URL='https://catalogue.apps-tools.development.data-platform.service.justice.gov.uk/api' JWT_TOKEN=****** poetry run pytest tests/test_integration_with_server.py
+export API_URL='https://catalogue.apps-tools.development.data-platform.service.justice.gov.uk/api'
+export JWT_TOKEN=******
+poetry run pytest tests/test_integration_with_server.py
 """
 
 import os
