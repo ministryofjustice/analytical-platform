@@ -1,2 +1,0 @@
--r ../src/var/task/requirements.txt
-pytest==7.4.1
