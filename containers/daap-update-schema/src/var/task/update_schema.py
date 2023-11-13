@@ -11,20 +11,13 @@ from versioning import InvalidUpdate, VersionCreator
 s3_client = boto3.client("s3")
 
 
-logger = DataPlatformLogger(
-    extra={
-        "image_version": os.getenv("VERSION", "unknown"),
-        "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-    }
-)
+logger = DataPlatformLogger()
 
 
 def handler(event, context):
     data_product_name = event["pathParameters"].get("data-product-name")
     table_name = event["pathParameters"].get("table-name")
-    logger.add_extras(
-        {"data_product_name": data_product_name, "table_name": table_name}
-    )
+    logger.add_data_product(data_product_name=data_product_name, table_name=table_name)
     logger.info(f"event: {event}")
 
     schema_exists = DataProductSchema(
