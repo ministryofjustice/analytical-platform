@@ -1,4 +1,3 @@
-import os
 from http import HTTPStatus
 
 import boto3
