@@ -9,12 +9,7 @@ from data_platform_paths import DataProductConfig
 s3 = boto3.client("s3")
 glue = boto3.client("glue")
 
-logger = DataPlatformLogger(
-    extra={
-        "image_version": os.getenv("VERSION", "unknown"),
-        "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-    }
-)
+logger = DataPlatformLogger()
 s3_security_opts = {
     "ACL": "bucket-owner-full-control",
     "ServerSideEncryption": "AES256",
@@ -30,7 +25,7 @@ def handler(
     athena_load_lambda=os.environ.get("ATHENA_LOAD_LAMBDA", ""),
 ):
     data_product_name = event.get("data_product", "")
-    logger.add_extras({"data_product_name": data_product_name})
+    logger.add_data_product(data_product_name)
 
     data_product = DataProductConfig(name=data_product_name)
     raw_prefix = data_product.raw_data_prefix.key
