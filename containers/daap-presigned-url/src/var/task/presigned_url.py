@@ -10,12 +10,7 @@ from data_platform_paths import DataProductElement
 
 s3 = boto3.client("s3")
 
-logger = DataPlatformLogger(
-    extra={
-        "image_version": os.getenv("VERSION", "unknown"),
-        "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-    }
-)
+logger = DataPlatformLogger()
 
 
 def handler(event, context):
@@ -62,13 +57,7 @@ def handler(event, context):
         timestamp=amz_date, uuid_value=uuid_value, file_extension=file_extension
     )
 
-    logger.add_extras(
-        {
-            "lambda_name": context.function_name,
-            "data_product_name": data_product_name,
-            "table_name": table_name,
-        }
-    )
+    logger.add_data_product(data_product_name=data_product_name, table_name=table_name)
 
     logger.info(f"s3 path: {landing_data_path}")
     logger.info(f"data_product_name: {data_product_name}")
