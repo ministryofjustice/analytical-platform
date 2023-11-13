@@ -91,12 +91,7 @@ def handler(event, context):
         )
 
     logger = DataPlatformLogger(
-        extra={
-            "image_version": os.getenv("VERSION", "unknown"),
-            "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-            "data_product_name": data_product_name,
-            "table_name": table_name,
-        }
+        data_product_name=data_product_name, table_name=table_name
     )
 
     logger.info(f"event: {event}")
