@@ -72,17 +72,6 @@ def s3_client():
 
 
 @pytest.fixture
-def athena_client():
-    """
-    Create a mock athena service
-    """
-    with mock_athena():
-        client = boto3.client("athena", region_name="us-east-1")
-
-        yield client
-
-
-@pytest.fixture
 def logger():
     return DataPlatformLogger()
 
@@ -179,18 +168,6 @@ def create_metadata(
 
 
 @pytest.fixture
-def create_schema(
-    create_metadata, s3_client, data_product_name, table_name, data_product_versions
-):
-    for version in data_product_versions:
-        s3_client.put_object(
-            Bucket=os.getenv("METADATA_BUCKET"),
-            Key=f"{data_product_name}/{version}/{table_name}/schema.json",
-            Body=json.dumps({"test": version}),
-        )
-
-
-@pytest.fixture
 def create_glue_database(glue_client, data_product_name):
     glue_client.create_database(DatabaseInput={"Name": data_product_name})
 
@@ -201,36 +178,6 @@ def create_glue_tables(create_glue_database, glue_client, data_product_name):
         glue_client.create_table(
             DatabaseName=data_product_name, TableInput={"Name": f"schema{i}"}
         )
-
-
-@pytest.fixture
-def create_raw_data(
-    s3_client, create_raw_bucket, data_product_name, table_name, data_product_versions
-):
-    for version in data_product_versions:
-        for i in range(10):
-            s3_client.put_object(
-                Bucket=os.getenv("RAW_DATA_BUCKET"),
-                Key=f"raw/{data_product_name}/{version}/{table_name}/raw-file-{str(i)}.json",
-                Body=json.dumps({"content": f"{i}"}),
-            )
-
-
-@pytest.fixture
-def create_curated_data(
-    s3_client,
-    create_curated_bucket,
-    data_product_name,
-    table_name,
-    data_product_versions,
-):
-    for version in data_product_versions:
-        for i in range(10):
-            s3_client.put_object(
-                Bucket=os.getenv("CURATED_DATA_BUCKET"),
-                Key=f"curated/{data_product_name}/{version}/{table_name}/curated-file-{str(i)}.json",
-                Body=json.dumps({"content": f"{i}"}),
-            )
 
 
 @pytest.fixture
@@ -254,17 +201,3 @@ def create_raw_and_curated_data(
                 Key=f"raw/{data_product_name}/{version}/schema0/raw-file-{str(i)}.json",
                 Body=json.dumps({"content": f"{i}"}),
             )
-
-
-#     load_v1_1_metadata_schema_to_mock_s3(s3_client)
-# def load_v1_metadata_schema_to_mock_s3(s3_client):
-#     with urllib.request.urlopen(
-#         "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.1.0/moj_data_product_metadata_spec.json"  # noqa E501
-#     ) as url:
-#         data = json.load(url)
-#     json_data = json.dumps(data)
-#     s3_client.put_object(
-#         Body=json_data,
-#         Bucket=os.environ["METADATA_BUCKET"],
-#         Key="data_product_metadata_spec/v1.1.0/moj_data_product_metadata_spec.json",
-#     )
