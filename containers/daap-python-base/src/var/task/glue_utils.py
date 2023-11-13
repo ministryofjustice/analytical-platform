@@ -40,4 +40,4 @@ def delete_glue_database(
             raise
     else:
         glue_client.delete_database(Name=data_product_name)
-        return
+    return None

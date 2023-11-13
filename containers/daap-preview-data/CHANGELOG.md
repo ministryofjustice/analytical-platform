@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.2] - 2023-11-013
+
+### Added
+
+- structlog==23.2.0 to requirments.txt
+
 ## [2.0.1] - 2023-11-08
 
 ### Changed

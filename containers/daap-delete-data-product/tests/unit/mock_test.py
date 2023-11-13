@@ -1,15 +1,10 @@
 import json
-import logging
 import os
-
 from typing import Any
 from unittest.mock import patch
 
-import pytest
-from botocore.exceptions import ClientError
-
 import delete_data_product
-
+import pytest
 
 test_metadata_with_schemas = {
     "name": "test_product",

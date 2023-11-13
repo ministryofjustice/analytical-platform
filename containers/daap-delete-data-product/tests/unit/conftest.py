@@ -1,13 +1,12 @@
 import json
 import os
 import sys
-import urllib
 from dataclasses import dataclass
 from os.path import dirname, join
 
 import boto3
 import pytest
-from moto import mock_athena, mock_glue, mock_s3
+from moto import mock_glue, mock_s3
 
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
 sys.path.append(

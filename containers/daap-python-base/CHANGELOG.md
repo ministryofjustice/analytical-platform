@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.3.0] - 2023-11-13
+
+### Added
+
+- `remove_all_versions_of_data_product` added to VersionCreator
+  method to completely remove a data product
+- structlog==23.2.0 to requirments.txt
+
 ## [6.2.0] - 2023-11-10
 
 ## Changed

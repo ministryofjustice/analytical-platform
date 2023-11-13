@@ -17,7 +17,7 @@ from data_platform_paths import (
     get_raw_data_bucket,
 )
 from data_product_metadata import DataProductMetadata, DataProductSchema
-from glue_utils import delete_glue_table, delete_glue_database
+from glue_utils import delete_glue_database, delete_glue_table
 
 
 class Version(NamedTuple):
@@ -400,12 +400,6 @@ def generate_next_version_string(
         return str(current_version.increment_minor())
     else:
         return version
-
-
-def delete_all_files_for_data_product(
-    data_product_name: str, schemas: list[str]
-) -> bool:
-    """Handles deletion of all metadata, schema, raw and curated files for a given data product"""
 
 
 def delete_all_element_version_data_files(data_product_name: str, table_name: str):

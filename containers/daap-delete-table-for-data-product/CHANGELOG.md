@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - update Dockerfile COPY command fixing `LAMBDA_TASK_ROOT` typo
 
+## [2.0.1] - 2023-11-13
+
+### Added
+
+- structlog==23.2.0 to requirments.txt
+
 ## [2.0.0] - 2023-11-6
 
 ### Removed
