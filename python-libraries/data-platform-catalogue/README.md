@@ -63,7 +63,10 @@ data_product_schema = DataProductMetadata(
 table = TableMetadata(
   name = "my_table",
   description = "bla bla",
-  column_types = {"foo": "string", "bar": "int"},
+  column_details=[
+      {"name": "foo", "type": "string", "description": "a"},
+      {"name": "bar", "type": "int", "description": "b"},
+  ],
   retention_period_in_days = 365
 )
 
