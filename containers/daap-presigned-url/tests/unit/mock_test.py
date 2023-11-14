@@ -95,7 +95,7 @@ def test_dataproduct_does_not_exist(s3_client, fake_context, region_name, monkey
 def test_invalid_file_extension(fake_context):
     database = "database1"
     table = "table1"
-    filename = "testdata"
+    filename = "testdata.json"
 
     event = {
         "pathParameters": {
@@ -114,7 +114,7 @@ def test_invalid_file_extension(fake_context):
     body = json.loads(response["body"])
 
     assert response["statusCode"] == 400
-    assert body["error"]["message"] == "file extension is invalid."
+    assert body["error"]["message"] == "Invalid file extension."
 
 
 @freeze_time("2023-01-01")
