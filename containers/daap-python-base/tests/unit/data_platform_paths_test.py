@@ -87,7 +87,7 @@ def test_data_product_config_specification_prefix():
     )
 
 
-def test_data_product_element_config(monkeypatch):
+def test_data_product_element_config():
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
         element = DataProductElement.load("some_table", "data_product")
 
