@@ -1,17 +1,11 @@
 from http import HTTPStatus
 
-import boto3
 from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductMetadata
 from versioning import VersionCreator
 
 logger = DataPlatformLogger()
-
-s3_client = boto3.client("s3")
-s3_resource = boto3.resource("s3")
-glue_client = boto3.client("glue")
-athena_client = boto3.client("athena")
 
 
 def handler(event, context):
