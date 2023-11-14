@@ -235,11 +235,12 @@ def generate_all_element_version_prefixes(
     """Generates element prefixes for all data product versions"""
 
     data_product_versions = get_all_versions(data_product_name)
+    major_versions = {version.split(".")[0] for version in data_product_versions}
     element_prefixes = []
 
-    for version in data_product_versions:
+    for major_version in major_versions:
         element_prefixes.append(
-            f"{path_prefix}/{data_product_name}/{version}/{table_name}/"
+            f"{path_prefix}/{data_product_name}/{major_version}/{table_name}/"
         )
 
     return element_prefixes

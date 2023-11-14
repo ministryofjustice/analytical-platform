@@ -14,6 +14,7 @@ from data_platform_paths import (
     JsonSchemaName,
     RawDataExtraction,
     data_product_log_bucket_and_key,
+    generate_all_element_version_prefixes,
     get_curated_data_bucket,
     get_landing_zone_bucket,
     get_latest_version,
@@ -360,3 +361,28 @@ def test_get_latest_version(region_name, s3_client):
 def test_get_new_version(version, increment, expected):
     version = get_new_version(version, increment)
     assert version == expected
+
+
+def test_generate_all_element_version_prefixes(region_name, s3_client):
+    with patch("data_platform_paths.s3_client", s3_client):
+        s3_client.create_bucket(
+            Bucket="metadata",
+            CreateBucketConfiguration={"LocationConstraint": region_name},
+        )
+        s3_client.put_object(
+            Bucket="metadata", Key="data_product/v1.0/metadata.json", Body="hi"
+        )
+        s3_client.put_object(
+            Bucket="metadata", Key="data_product/v2.0/metadata.json", Body="hi"
+        )
+        s3_client.put_object(
+            Bucket="metadata", Key="data_product/v2.1/metadata.json", Body="hi"
+        )
+        # This file is empty and so should be ignored
+        s3_client.put_object(
+            Bucket="metadata", Key="data_product/v5.1/metadata.json", Body=""
+        )
+
+    result = generate_all_element_version_prefixes("raw", "data_product", "table")
+
+    assert set(result) == {"raw/data_product/v1/table/", "raw/data_product/v2/table/"}
