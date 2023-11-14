@@ -41,11 +41,11 @@ def handler(event, context):
         }
 
     file_extension = PurePath(filename).suffix
-    if file_extension == "":
+    if file_extension != ".csv":
         return {
             "statusCode": 400,
             "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"error": {"message": "file extension is invalid."}}),
+            "body": json.dumps({"error": {"message": "Invalid file extension."}}),
         }
 
     element = DataProductElement.load(
