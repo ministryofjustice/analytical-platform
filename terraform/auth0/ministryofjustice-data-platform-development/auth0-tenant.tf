@@ -12,4 +12,5 @@ resource "auth0_tenant" "this" {
   session_lifetime      = 168
   support_email         = "data-platform-tech@digital.justice.gov.uk"
   support_url           = "https://github.com/ministryofjustice/data-platform-support/issues/new/choose"
+  picture_url           = "https://data-platform-development-static-assets.apps.live.cloud-platform.service.justice.gov.uk/assets/justice-digital-logo.png"
 }
