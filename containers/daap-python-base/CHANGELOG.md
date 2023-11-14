@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [7.0.0] - 2023-11-14
 
-## Changed
+### Changed
 
 - Data paths now contain only the major version. A minor version change implies
   the schemas are all backwards compatable with existing data.
