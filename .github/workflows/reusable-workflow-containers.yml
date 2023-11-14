@@ -191,7 +191,7 @@ jobs:
           severity: CRITICAL
           limit-severities-for-sarif: true
 
-      - name: Scan Image (on failure)
+      - name: Scan Image (On SARIF Failure)
         if: failure() && steps.scan_image.outcome == 'failure'
         id: scan_image_on_failure
         uses: aquasecurity/trivy-action@2b6a709cf9c4025c5438138008beaddbb02086f0 # v0.14.0
