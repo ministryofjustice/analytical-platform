@@ -103,17 +103,17 @@ def test_data_product_element_config():
 
         assert element.landing_data_prefix == BucketPath(
             bucket="landing",
-            key="landing/data_product/v1.0/some_table/",
+            key="landing/data_product/v1/some_table/",
         )
 
         assert element.raw_data_prefix == BucketPath(
             bucket="raw",
-            key="raw/data_product/v1.0/some_table/",
+            key="raw/data_product/v1/some_table/",
         )
 
         assert element.curated_data_prefix == BucketPath(
             bucket="curated",
-            key="curated/data_product/v1.0/some_table/",
+            key="curated/data_product/v1/some_table/",
         )
 
 
@@ -128,14 +128,14 @@ def test_data_product_config_path_prefixes():
         )
 
         assert config.raw_data_prefix == BucketPath(
-            bucket="raw", key="raw/my-database/v1.0/"
+            bucket="raw", key="raw/my-database/v1/"
         )
         assert config.curated_data_prefix == BucketPath(
-            bucket="curated", key="curated/my-database/v1.0/"
+            bucket="curated", key="curated/my-database/v1/"
         )
 
         assert config.landing_data_prefix == BucketPath(
-            bucket="landing", key="landing/my-database/v1.0/"
+            bucket="landing", key="landing/my-database/v1/"
         )
 
 
@@ -174,7 +174,7 @@ def test_data_product_element_raw_data_path():
 
         assert path == BucketPath(
             bucket="raw",
-            key=f"raw/my-database/v1.0/some-table/load_timestamp=20230905T165300Z/{uuid_value}{file_extension}",
+            key=f"raw/my-database/v1/some-table/load_timestamp=20230905T165300Z/{uuid_value}{file_extension}",
         )
 
 
@@ -199,7 +199,7 @@ def test_data_product_element_landing_data_path():
 
         assert path == BucketPath(
             bucket="landing",
-            key=f"landing/my-database/v1.0/some-table/load_timestamp=20230905T165300Z/{uuid_value}{file_extension}",
+            key=f"landing/my-database/v1/some-table/load_timestamp=20230905T165300Z/{uuid_value}{file_extension}",
         )
 
 
@@ -244,7 +244,7 @@ def test_extraction_config():
         assert extraction.timestamp == timestamp
         assert extraction.path == BucketPath(
             bucket="raw",
-            key=f"raw/my-database/v1.0/some-table/load_timestamp=20230905T165300Z/{uuid_value}{file_extension}",
+            key=f"raw/my-database/v1/some-table/load_timestamp=20230905T165300Z/{uuid_value}{file_extension}",
         )
 
 
@@ -254,7 +254,7 @@ def test_extraction_config_parse_from_raw_uri(monkeypatch):
     monkeypatch.setenv("LANDING_ZONE_BUCKET", "bucket4")
 
     raw_data_uri = (
-        "s3://bucket1/raw/database-name/v1.0/table-name/load_timestamp=20230905T162700Z/"
+        "s3://bucket1/raw/database-name/v1/table-name/load_timestamp=20230905T162700Z/"
         + "7cf8e644-06af-47ce-8f5f-b53c22a35f2e"
     )
 
@@ -264,7 +264,7 @@ def test_extraction_config_parse_from_raw_uri(monkeypatch):
         assert config.path == BucketPath(
             bucket="bucket1",
             key=(
-                "raw/database-name/v1.0/table-name/load_timestamp=20230905T162700Z/"
+                "raw/database-name/v1/table-name/load_timestamp=20230905T162700Z/"
                 + "7cf8e644-06af-47ce-8f5f-b53c22a35f2e"
             ),
         )

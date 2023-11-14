@@ -257,7 +257,7 @@ class DataProductElement:
 
     @property
     def database_name(self) -> str:
-        latest_major_version = self.data_product.latest_version.split(".")[0]
+        latest_major_version = self.data_product.latest_major_version
         return self.data_product.name + "_" + latest_major_version
 
     @staticmethod
@@ -269,7 +269,7 @@ class DataProductElement:
     def landing_data_prefix(self):
         """
         The path to the raw data in s3 up to and including the element name,
-        e.g. landing/{data-product}/{version}/{some_element}
+        e.g. landing/{data-product}/{major-version}/{some_element}
         """
         return BucketPath(
             bucket=self.data_product.landing_zone_bucket,
@@ -281,7 +281,7 @@ class DataProductElement:
     def raw_data_prefix(self):
         """
         The path to the raw data in s3 up to and including the element name,
-        e.g. raw/{data-product}/{version}/{some_element}
+        e.g. raw/{data-product}/{major-version}/{some_element}
         """
         return BucketPath(
             bucket=self.data_product.raw_data_bucket,
@@ -292,7 +292,7 @@ class DataProductElement:
     def curated_data_prefix(self):
         """
         The path to the curated data in s3 up to and including the element name,
-        e.g. curated/{data-product}/{version}/{some-element}/
+        e.g. curated/{data-product}/{major-version}/{some-element}/
         """
         return BucketPath(
             bucket=self.data_product.curated_data_bucket,
@@ -392,38 +392,39 @@ class DataProductConfig:
 
     def __post_init__(self):
         self.latest_version = get_latest_version(self.name)
+        self.latest_major_version = self.latest_version.split(".")[0]
 
     @property
     def raw_data_prefix(self):
         """
         The path to the raw data in s3 excluding the element name,
-        e.g. raw/my-data-product/version/
+        e.g. raw/my-data-product/major-version/
         """
         return BucketPath(
             bucket=self.raw_data_bucket,
-            key=os.path.join("raw", self.name, self.latest_version) + "/",
+            key=os.path.join("raw", self.name, self.latest_major_version) + "/",
         )
 
     @property
     def landing_data_prefix(self):
         """
         The path to the landing data in s3 excluding the element name,
-        e.g. landing/my-data-product/version/
+        e.g. landing/my-data-product/major-version/
         """
         return BucketPath(
             bucket=self.landing_zone_bucket,
-            key=os.path.join("landing", self.name, self.latest_version) + "/",
+            key=os.path.join("landing", self.name, self.latest_major_version) + "/",
         )
 
     @property
     def curated_data_prefix(self):
         """
         The path to the curated data in s3 excluding the element name,
-        e.g. curated/my-data-product/version/
+        e.g. curated/my-data-product/major-version/
         """
         return BucketPath(
             bucket=self.curated_data_bucket,
-            key=os.path.join("curated", self.name, self.latest_version) + "/",
+            key=os.path.join("curated", self.name, self.latest_major_version) + "/",
         )
 
     def element(self, name):
