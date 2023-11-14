@@ -2,12 +2,21 @@ import boto3
 from datetime import datetime as dt
 import pandas as pd
 import awswrangler as wr
+from notifications_python_client.notifications import NotificationsAPIClient
+from notifications_python_client import prepare_upload
+from urllib.error import HTTPError
 
 def handler(
     event,
     context,
 ):
     boto3.setup_default_session(region_name="eu-west-2")
+    secrets_client = boto3.client('secretsmanager')
+    response = client.get_secret_value(
+        SecretId='placeholder-API-KEY-secret',
+    )
+    api_key = response['SecretString']
+    notifications_client = NotificationsAPIClient(api_key)
 
     now = dt.now()
     current_date = dt.strftime(now.date(), "%d/%m/%Y")
@@ -42,4 +51,17 @@ def handler(
 
     client = boto3.client('s3')
     client.upload_file('/tmp/test.xlsx', 'jml-export-bucket-REPLACE-ME', 'test.xlsx')
+    with open('/tmp/test.xlsx', 'rb') as f:
+        try:
+            response = notifications_client.send_email_notification(
+                email_address='some_team_replace_me@justice.gov.uk',
+                template_id='de618989-db86-4d9a-aa55-4724d5485fa5',
+                personalisation={
+                    'date': current_date,
+                    'link_to_file': prepare_upload(f),
+                }
+            )
+        except HTTPError as e:
+            print(e)
+            raise(e)
 
