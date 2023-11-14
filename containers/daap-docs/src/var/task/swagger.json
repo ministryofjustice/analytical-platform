@@ -220,7 +220,7 @@
     "/data-product/register": {
       "post": {
         "tags": [
-          "dataproduct"
+          "data product"
         ],
         "summary": "Register (metadata for) a new Data Product that you want to upload to the Data Platform.",
         "description": "Registers the first version of your Data Product (by submitting it's metadata)  and enables you to proceed with uploading data.",
@@ -321,7 +321,7 @@
     "/data-product/{data-product-name}": {
       "put": {
         "tags": [
-          "dataproduct"
+          "data product"
         ],
         "summary": "Update (metadata for) an existing Data Product.",
         "description": "Creates a new minor version of the data product with updated metadata.",
