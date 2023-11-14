@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Pull request assigner
         id: pull_request_assigner
-        uses: actions/github-script@211cb3fefb35a799baa5156f9321bb774fe56294 # v5.2.0
+        uses: actions/github-script@e69ef5462fd455e02edcaf4dd7708eda96b9eda0 # v7.0.0
         with:
           script: |
             github.rest.issues.addAssignees({
