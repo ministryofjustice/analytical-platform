@@ -22,7 +22,7 @@ test_metadata = {
 }
 
 test_metadata_with_schemas = {
-    "name": "test_product",
+    "name": "test_product_with_schemas",
     "description": "just testing the metadata json validation/registration",
     "domain": "MoJ",
     "dataProductOwner": "matthew.laverty@justice.gov.uk",
@@ -230,7 +230,7 @@ minor_inputs = [
 
 class TestVersionCreator:
     @pytest.fixture(autouse=True)
-    def setup(self, metadata_bucket, s3_client):
+    def setup(self, metadata_bucket, s3_client, data_product_name):
         self.s3_client = s3_client
         self.bucket_name = metadata_bucket
         s3_client.put_object(
@@ -238,16 +238,23 @@ class TestVersionCreator:
             Bucket=self.bucket_name,
             Key="test_product/v1.0/metadata.json",
         )
+        s3_client.put_object(
+            Body=json.dumps(test_metadata_with_schemas),
+            Bucket=self.bucket_name,
+            Key=f"test_product_with_schemas/v1.0/metadata.json",
+        )
 
-    def assert_has_keys(self, keys, version):
+    def assert_has_keys(
+        self, keys, version, data_product_name: str = test_metadata["name"]
+    ):
         contents = self.s3_client.list_objects_v2(
-            Bucket=self.bucket_name, Prefix=f"{test_metadata['name']}/{version}"
+            Bucket=self.bucket_name, Prefix=f"{data_product_name}/{version}"
         )["Contents"]
         actual = {i["Key"] for i in contents}
 
         assert actual == keys
 
-    def test_creates_minor_version_metadata(
+    def test_updates_minor_version_metadata(
         self,
     ):
         input_data = dict(**test_metadata)
@@ -261,7 +268,7 @@ class TestVersionCreator:
         self.assert_has_keys({"test_product/v1.1/metadata.json"}, "v1.1")
 
     @pytest.mark.parametrize("input_data, expected", minor_inputs)
-    def test_creates_minor_version_schema(self, s3_client, input_data, expected):
+    def test_updates_minor_version_schema(self, s3_client, input_data, expected):
         s3_client.put_object(
             Body=json.dumps(test_glue_table_input),
             Bucket=self.bucket_name,
@@ -280,6 +287,40 @@ class TestVersionCreator:
                 "test_product/v1.1/test_table/schema.json",
             },
             "v1.1",
+        )
+
+    def test_create_schema_version_new(self):
+        data_product_name = test_metadata["name"]
+        version_creator = VersionCreator(data_product_name, logging.getLogger())
+
+        version = version_creator.create_schema(
+            input_data=test_metadata, table_name="test_table"
+        )
+
+        assert version == "v1.0"
+        self.assert_has_keys(
+            {
+                "test_product/v1.0/metadata.json",
+            },
+            "v1.0",
+            data_product_name,
+        )
+
+    def test_create_schema_version_exists_bump(self):
+        data_product_name = test_metadata_with_schemas["name"]
+        version_creator = VersionCreator(data_product_name, logging.getLogger())
+
+        version = version_creator.create_schema(
+            input_data=test_metadata_with_schemas, table_name="test_table"
+        )
+
+        assert version == "v1.1"
+        self.assert_has_keys(
+            {
+                "test_product_with_schemas/v1.1/metadata.json",
+            },
+            "v1.1",
+            data_product_name,
         )
 
     @pytest.mark.parametrize("input_data, expected", major_inputs)

@@ -90,6 +90,7 @@ class VersionCreator:
 
     def __init__(self, data_product_name, logger: DataPlatformLogger):
         self.data_product_config = DataProductConfig(name=data_product_name)
+        self.latest_version = self.data_product_config.latest_version
         self.logger = logger
 
     def remove_all_versions_of_data_product(self):
@@ -202,6 +203,68 @@ class VersionCreator:
 
         return new_version
 
+    def _minor_version_bump(self, metadata: DataProductMetadata) -> str:
+        """Increment a Data Product by a major version, doing the following:
+            - increment version number
+            - copy all metadata from the previous version (metadata.json, schema.json)
+            - overwrite copied metadata.json with new version of metadata
+
+        Args:
+            metadata (DataProductMetadata): validated metadata
+
+        Returns:
+            str: new version number
+        """
+        new_version = generate_next_version_string(
+            self.latest_version, UpdateType.MinorUpdate
+        )
+        self._copy_from_previous_version(
+            latest_version=self.latest_version, new_version=new_version
+        )
+        new_version_key = self.data_product_config.metadata_path(new_version).key
+        metadata.write_json_to_s3(new_version_key)
+
+        return new_version
+
+    def _verify_input_metadata(self, input_data: dict) -> DataProductMetadata:
+        """Load and verify input Data Product metadata, raising errors if metadata is
+        missing, invalid, or if there are changes to fields that cannot be altered
+        between versions.
+
+        Args:
+            input_data (dict): input metadata in a format ready for loading into a
+            DataProductMetadata object.
+
+        Raises:
+            InvalidUpdate: raised if metadata is missing, invalid, or if there are
+            changes to fields that cannot be altered between versions
+
+        Returns:
+            DataProductMetadata: verified metadata object with current metadata in
+            metadata.data and previous metadata in metadata.latest_version_saved_data
+        """
+        metadata = DataProductMetadata(
+            data_product_name=self.data_product_config.name,
+            logger=self.logger,
+            input_data=input_data,
+        ).load()
+
+        if not metadata.valid or not metadata.exists:
+            msg = "invalid metadata passed"
+            raise InvalidUpdate(msg)
+
+        changed_fields = metadata.changed_fields()
+        if changed_fields.difference(UPDATABLE_METADATA_FIELDS):
+            changed_fields = list(changed_fields)
+            l = len(changed_fields)
+            msg = f"Non-updatable metadata field{('s'[:l!=1])} changed:"
+            for f in changed_fields:
+                msg += f"{f}: {metadata.latest_version_saved_data[f]} -> {metadata.data[f]}; "
+            self.logger.error(msg)
+            raise InvalidUpdate(msg)
+
+        return metadata
+
     def update_metadata(self, input_data) -> str:
         """
         Create a new version with updated metadata.
@@ -220,17 +283,11 @@ class VersionCreator:
         if state != UpdateType.MinorUpdate:
             raise InvalidUpdate(state)
 
-        latest_version = metadata.version
-        new_version = generate_next_version_string(latest_version, state)
-        self._copy_from_previous_version(
-            latest_version=latest_version, new_version=new_version
-        )
-        new_version_key = self.data_product_config.metadata_path(new_version).key
-        metadata.write_json_to_s3(new_version_key)
+        new_version = self._minor_version_bump(metadata)
 
         return new_version
 
-    def update_schema(self, input_data: dict, table_name: str):
+    def update_schema(self, input_data: dict, table_name: str) -> tuple[str, dict]:
         """
         Create a new version with updated schema.
         """
@@ -249,10 +306,9 @@ class VersionCreator:
         if not state == UpdateType.Unchanged:
             self.logger.info(f"Changes to schema: {changes}")
 
-            latest_version = schema.version
             new_version = generate_next_version_string(schema.version, state)
             self._copy_from_previous_version(
-                latest_version=latest_version, new_version=new_version
+                latest_version=self.latest_version, new_version=new_version
             )
             new_version_key = (
                 DataProductConfig(schema.data_product_name)
@@ -264,6 +320,31 @@ class VersionCreator:
             return new_version, changes
         else:
             raise InvalidUpdate()
+
+    def create_schema(self, input_data: dict, table_name: str) -> str:
+        """
+        Generate a version number for a new schema. Returns "v1.0" if this is the first
+        schema associated with that Data Product, otherwise returns a version number
+        after a minor version bump.
+        """
+        data_product_name = self.data_product_config.name
+
+        metadata = self._verify_input_metadata(input_data)
+
+        if self.latest_version == "v1.0":
+            schemas = metadata.load().latest_version_saved_data.get("schemas")
+
+            if not schemas:
+                self.logger.info(
+                    f"No existing schemas are associated with {data_product_name}; "
+                    f"setting version to 'v1.0' for {table_name}"
+                )
+                metadata.write_json_to_s3(metadata.latest_version_key)
+                return "v1.0"
+
+        new_version = self._minor_version_bump(metadata)
+
+        return new_version
 
     def _copy_from_previous_version(self, latest_version, new_version):
         bucket, source_folder = self.data_product_config.metadata_path(
@@ -288,10 +369,14 @@ def metadata_update_type(data_product_metadata: DataProductMetadata) -> UpdateTy
 
     changed_fields = data_product_metadata.changed_fields()
     if not changed_fields:
+        # NOTE: this does not capture all types of updates (e.g. schema-internal
+        # changes)
         return UpdateType.Unchanged
     if changed_fields.difference(UPDATABLE_METADATA_FIELDS):
         return UpdateType.NotAllowed
     else:
+        # NOTE: this does not capture all types of updates (e.g. removal of schema ->
+        # MajorUpdate)
         return UpdateType.MinorUpdate
 
 
@@ -335,8 +420,10 @@ def schema_update_type(
         }
         if not changed_fields:
             update_type = UpdateType.Unchanged
-        elif changed_fields.intersection(MINOR_UPDATE_SCHEMA_FIELDS):
+        elif changed_fields.intersection(MINOR_UPDATE_SCHEMA_FIELDS) == changed_fields:
             update_type = UpdateType.MinorUpdate
+        else:
+            update_type = UpdateType.MajorUpdate
 
     # could be returned and used to form notification of change to consumers of data when the
     # notification process is developed
@@ -367,7 +454,7 @@ def s3_copy_folder_to_new_folder(
     bucket, source_folder, latest_version, new_version, logger
 ):
     """
-    Recurisvely copy a folder, replacing {latest_version} with {new_version}
+    Recursively copy a folder, replacing {latest_version} with {new_version}
     """
     s3_client = boto3.client("s3")
     paginator = s3_client.get_paginator("list_objects_v2")
