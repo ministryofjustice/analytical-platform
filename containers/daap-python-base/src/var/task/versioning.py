@@ -269,13 +269,7 @@ class VersionCreator:
         """
         Create a new version with updated metadata.
         """
-        metadata = DataProductMetadata(
-            data_product_name=self.data_product_config.name,
-            logger=self.logger,
-            input_data=input_data,
-        ).load()
-        if not metadata.valid or not metadata.exists:
-            raise InvalidUpdate()
+        metadata = self._verify_input_metadata(input_data)
 
         state = metadata_update_type(metadata)
         self.logger.info(f"Update type {state}")
