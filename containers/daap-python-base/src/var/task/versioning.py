@@ -122,10 +122,14 @@ class VersionCreator:
     def update_metadata_remove_schemas(self, schema_list: list[str]) -> str:
         """Handles removing schema(s) for a data product."""
         s3_client = boto3.client("s3")
+        # remove any list duplicates and preserve list order
+        schema_list = list({k: None for k in schema_list}.keys())
+
+        data_product_name = self.data_product_config.name
 
         current_metadata = (
             DataProductMetadata(
-                data_product_name=self.data_product_config.name,
+                data_product_name=data_product_name,
                 logger=self.logger,
                 input_data=None,
             )
@@ -139,30 +143,31 @@ class VersionCreator:
             schema in current_schemas for schema in schema_list
         )
         if not valid_schemas_to_delete:
-            error = f"Invalid schemas found in schema_list: {schema_list}"
+            schemas_not_in_current = list(set(schema_list).difference(current_schemas))
+            error = f"Invalid schemas found in schema_list: {sorted(schemas_not_in_current)}"
             self.logger.error(error)
             raise InvalidUpdate(error)
 
         self.logger.info(f"schemas to delete: {schema_list}")
-        for schema in schema_list:
+        for schema_name in schema_list:
             # Delete the Glue table
             result = delete_glue_table(
-                data_product_name=self.data_product_config.name,
-                table_name=schema,
+                data_product_name=data_product_name,
+                table_name=schema_name,
                 logger=self.logger,
             )
             self.logger.info(str(result))
 
             # Delete a given elements raw and curated data for all versions of the data product
             delete_all_element_version_data_files(
-                data_product_name=self.data_product_config.name, table_name=schema
+                data_product_name=data_product_name, table_name=schema_name
             )
 
         current_metadata["schemas"] = [
             schema for schema in current_schemas if schema not in schema_list
         ]
         updated_metadata = DataProductMetadata(
-            data_product_name=self.data_product_config.name,
+            data_product_name=data_product_name,
             logger=self.logger,
             input_data=current_metadata,
         ).load()
@@ -172,27 +177,22 @@ class VersionCreator:
             self.logger.error(error)
             raise InvalidUpdate(error)
 
-        latest_version = updated_metadata.version
         new_version = generate_next_version_string(
-            latest_version, UpdateType.MajorUpdate
+            self.latest_version, UpdateType.MajorUpdate
         )
         self.logger.info(f"new version: {new_version}")
 
-        source_folder = f"{self.data_product_config.name}/{latest_version}/"
         # Copy files to the new version
-        s3_copy_folder_to_new_folder(
-            updated_metadata.write_bucket,
-            source_folder,
-            latest_version,
-            new_version,
-            self.logger,
+        self._copy_from_previous_version(
+            latest_version=self.latest_version, new_version=new_version
         )
+
         # Remove schema files that we no longer require in this version
         for schema in schema_list:
             # Get the current version of the schema path
-            schema_path = DataProductConfig(
-                name=self.data_product_config.name
-            ).schema_path(table_name=schema, version=new_version)
+            schema_path = DataProductConfig(name=data_product_name).schema_path(
+                table_name=schema, version=new_version
+            )
             # Delete the schema.json file for the table we have removed
             s3_client.delete_object(Bucket=schema_path.bucket, Key=schema_path.key)
 
@@ -256,8 +256,8 @@ class VersionCreator:
         changed_fields = metadata.changed_fields()
         if changed_fields.difference(UPDATABLE_METADATA_FIELDS):
             changed_fields = list(changed_fields)
-            l = len(changed_fields)
-            msg = f"Non-updatable metadata field{('s'[:l!=1])} changed:"
+            num_fields = len(changed_fields)
+            msg = f"Non-updatable metadata field{('s'[:num_fields!=1])} changed:"
             for f in changed_fields:
                 msg += f"{f}: {metadata.latest_version_saved_data[f]} -> {metadata.data[f]}; "
             self.logger.error(msg)
