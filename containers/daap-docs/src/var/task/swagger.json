@@ -2,12 +2,12 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Data Product API",
-    "description": "The Data Product API docs are based on the OpenAPI 3.0 specification.",
+    "description": "This API allows you to register and manage Data Product metadata with the Data Platform, and upload data to it.",
     "version": "0.0.1"
   },
   "externalDocs": {
-    "description": "Find out more about Swagger",
-    "url": "http://swagger.io"
+    "description": "Full technical documentation for the Data Platform",
+    "url": "https://technical-documentation.data-platform.service.justice.gov.uk/"
   },
   "servers": [
     {
@@ -222,8 +222,8 @@
         "tags": [
           "data product"
         ],
-        "summary": "Register (metadata for) a new Data Product that you want to upload to the Data Platform.",
-        "description": "Registers the first version of your Data Product (by submitting it's metadata)  and enables you to proceed with uploading data.",
+        "summary": "Register (metadata for) a new Data Product.",
+        "description": "Registers the first version of your Data Product (by submitting it's metadata) and enables you to proceed with uploading data.",
         "operationId": "registerDataProduct",
         "requestBody": {
           "content": {
@@ -416,8 +416,8 @@
         "tags": [
           "schema"
         ],
-        "summary": "Register a schema (blueprint of your table) for a new table in your Data Product that you want to upload to the Data Platform.",
-        "description": "Registers the first version of your Data Product's table (by submitting its schema) and enables you to proceed with uploading data to it.",
+        "summary": "Register a schema (blueprint of your table) for a new table in your Data Product.",
+        "description": "Registers the first version of your Data Product's table (by submitting its schema) and enables future uploads to be validated against it.",
         "operationId": "registerTableSchema",
         "requestBody": {
           "content": {
@@ -578,7 +578,7 @@
           "schema"
         ],
         "summary": "Update a schema (blueprint of your table) for an existing table in your Data Product.",
-        "description": "Use this to update the schema of your Data Product's existing tables. This will include when you want to add/remove columns, update descriptions of tables/columns and change data types of columns.",
+        "description": "Updates the schema of an existing table. Use this when you want to add/remove columns, update descriptions of tables/columns or change data types of columns.",
         "operationId": "updateTableSchema",
         "requestBody": {
           "content": {
@@ -682,9 +682,9 @@
         "tags": [
           "data"
         ],
-        "summary": "Delete a table and associated raw and curated data registered to an existing data product.",
+        "summary": "Delete a table from all versions of a data product.",
         "operationId": "deleteTable",
-        "description": "Deletes the Glue table, raw and curated data for all versions and issues a major version increase.",
+        "description": "Issues a major version increase, and completely deletes the table from all version of the data product, including all raw and curated data.",
         "parameters": [
           {
             "in": "path",
