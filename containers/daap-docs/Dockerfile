@@ -1,5 +1,5 @@
 # FROM public.ecr.aws/lambda/nodejs:14
-FROM public.ecr.aws/lambda/nodejs:14.2023.11.07.12
+FROM public.ecr.aws/lambda/nodejs:14.2023.11.13.09
 
 ARG VERSION
 

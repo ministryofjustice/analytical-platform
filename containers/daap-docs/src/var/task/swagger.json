@@ -158,16 +158,16 @@
         "operationId": "preview",
         "parameters": [
           {
-            "in": "query",
-            "name": "database",
+            "in": "path",
+            "name": "data-product-name",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
-            "in": "query",
-            "name": "table",
+            "in": "path",
+            "name": "table-name",
             "required": true,
             "schema": {
               "type": "string"
