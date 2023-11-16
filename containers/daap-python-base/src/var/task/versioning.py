@@ -334,17 +334,11 @@ class VersionManager:
                     f"setting version to 'v1.0' for {schema.table_name}"
                 )
 
-                schema.write_json_to_s3(
-                    DataProductConfig(data_product_name)
-                    .schema_path(schema.table_name, "v1.0")
-                    .key
-                )
-
                 metadata.write_json_to_s3(metadata.latest_version_key)
 
-                return "v1.0"
-
-        new_version = self._minor_version_bump(metadata)
+                new_version = "v1.0"
+        else:
+            new_version = self._minor_version_bump(metadata)
 
         schema.write_json_to_s3(
             DataProductConfig(data_product_name)
@@ -377,8 +371,8 @@ def metadata_update_type(data_product_metadata: DataProductMetadata) -> UpdateTy
 
     changed_fields = data_product_metadata.changed_fields()
     if not changed_fields:
-        # NOTE: this does not capture all types of updates (e.g. schema-internal
-        # changes)
+        # NOTE: this does not capture all types of updates (e.g. changes to a column
+        # data type inside an existing schema)
         return UpdateType.Unchanged
     if changed_fields.difference(UPDATABLE_METADATA_FIELDS):
         return UpdateType.NotAllowed

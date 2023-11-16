@@ -147,7 +147,6 @@ def handler(event, context):
             HTTPStatus.FORBIDDEN, event=event, message=error_msg
         )
 
-    # Code below that handles verisoning of a data product will be moved to a central module eventually.
     version_manager = VersionManager(data_product_name=data_product_name, logger=logger)
 
     # if schema already exist then we need to minor version increment to dataproduct metadata and schema
