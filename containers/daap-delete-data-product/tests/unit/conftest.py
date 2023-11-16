@@ -205,3 +205,51 @@ def create_failed_raw_and_curated_data(
                 Key=f"fail/{data_product_name}/{version}/schema0/fail-file-{str(i)}.json",
                 Body=json.dumps({"content": f"{i}"}),
             )
+
+
+@pytest.fixture
+def create_curated_data(
+    s3_client,
+    create_curated_bucket,
+    data_product_name,
+    data_product_versions,
+):
+    for version in data_product_versions:
+        for i in range(10):
+            s3_client.put_object(
+                Bucket=os.getenv("CURATED_DATA_BUCKET"),
+                Key=f"curated/{data_product_name}/{version}/schema0/curated-file-{str(i)}.json",
+                Body=json.dumps({"content": f"{i}"}),
+            )
+
+
+@pytest.fixture
+def create_raw_data(
+    s3_client,
+    create_raw_bucket,
+    data_product_name,
+    data_product_versions,
+):
+    for version in data_product_versions:
+        for i in range(10):
+            s3_client.put_object(
+                Bucket=os.getenv("RAW_DATA_BUCKET"),
+                Key=f"raw/{data_product_name}/{version}/schema0/raw-file-{str(i)}.json",
+                Body=json.dumps({"content": f"{i}"}),
+            )
+
+
+@pytest.fixture
+def create_fail_data(
+    s3_client,
+    create_raw_bucket,
+    data_product_name,
+    data_product_versions,
+):
+    for version in data_product_versions:
+        for i in range(10):
+            s3_client.put_object(
+                Bucket=os.getenv("RAW_DATA_BUCKET"),
+                Key=f"fail/{data_product_name}/{version}/schema0/fail-file-{str(i)}.json",
+                Body=json.dumps({"content": f"{i}"}),
+            )
