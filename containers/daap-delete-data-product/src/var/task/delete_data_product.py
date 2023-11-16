@@ -1,10 +1,17 @@
 from http import HTTPStatus
 
-from data_platform_api_responses import format_error_response, format_response_json
+import boto3
+from data_platform_api_responses import format_response_json
 from data_platform_logging import DataPlatformLogger
-from data_product_metadata import DataProductMetadata
-from versioning import VersionCreator
+from data_platform_paths import (
+    get_curated_data_bucket,
+    get_fail_data_bucket,
+    get_metadata_bucket,
+    get_raw_data_bucket,
+)
+from versioning import s3_recursive_delete
 
+glue_client = boto3.client("glue")
 logger = DataPlatformLogger()
 
 
@@ -24,26 +31,24 @@ def handler(event, context):
     """
 
     data_product_name = event["pathParameters"].get("data-product-name")
-
     logger.add_data_product(data_product_name)
     logger.info(f"event: {event}")
 
-    data_product_metadata = DataProductMetadata(
-        data_product_name=data_product_name, logger=logger, input_data=None
-    )
-    if not data_product_metadata.exists:
-        error_message = (
-            f"Could not locate metadata for data product: {data_product_name}."
-        )
-        logger.error(error_message)
-        return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
-
-    version_creator = VersionCreator(data_product_name=data_product_name, logger=logger)
     try:
-        version_creator.remove_all_versions_of_data_product()
-    except ValueError as e:
-        return format_error_response(HTTPStatus.BAD_REQUEST, event, str(e))
-    else:
-        msg = f"Successfully removed data product '{data_product_name}'"
-        logger.info(msg)
-        return format_response_json(HTTPStatus.OK, {"message": msg})
+        glue_client.delete_database(Name=data_product_name)
+    except glue_client.exceptions.EntityNotFoundException:
+        logger.info(f"Glue database '{data_product_name}' not found.")
+
+    # Delete fail files
+    s3_recursive_delete(get_fail_data_bucket(), [f"fail/{data_product_name}/"])
+    # Delete raw files
+    s3_recursive_delete(get_raw_data_bucket(), [f"raw/{data_product_name}/"])
+    # Delete curated files
+    s3_recursive_delete(get_curated_data_bucket(), [f"curated/{data_product_name}/"])
+    # Delete Metadata & Schema files
+    s3_recursive_delete(get_metadata_bucket(), [f"{data_product_name}/"])
+
+    return format_response_json(
+        HTTPStatus.OK,
+        {"message": f"Successfully removed data product '{data_product_name}'."},
+    )

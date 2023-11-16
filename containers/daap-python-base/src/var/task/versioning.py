@@ -12,13 +12,9 @@ from data_platform_paths import (
     DataProductConfig,
     DataProductElement,
     generate_all_element_version_prefixes,
-    get_curated_data_bucket,
-    get_fail_data_bucket,
-    get_metadata_bucket,
-    get_raw_data_bucket,
 )
 from data_product_metadata import DataProductMetadata, DataProductSchema
-from glue_utils import delete_glue_database, delete_glue_table
+from glue_utils import delete_glue_table
 
 
 class Version(NamedTuple):
@@ -91,32 +87,6 @@ class VersionCreator:
     def __init__(self, data_product_name, logger: DataPlatformLogger):
         self.data_product_config = DataProductConfig(name=data_product_name)
         self.logger = logger
-
-    def remove_all_versions_of_data_product(self):
-        """Completely removes a data product, including tables, schemas, metadata
-        raw & curated data"""
-
-        # Delete the Glue Database
-        delete_glue_database(
-            data_product_name=self.data_product_config.name, logger=self.logger
-        )
-
-        # Delete fail files
-        s3_recursive_delete(
-            get_fail_data_bucket(), [f"fail/{self.data_product_config.name}/"]
-        )
-        # Delete raw files
-        s3_recursive_delete(
-            get_raw_data_bucket(), [f"raw/{self.data_product_config.name}/"]
-        )
-        # Delete curated files
-        s3_recursive_delete(
-            get_curated_data_bucket(), [f"curated/{self.data_product_config.name}/"]
-        )
-        # Delete Metadata & Schema files
-        s3_recursive_delete(
-            get_metadata_bucket(), [f"{self.data_product_config.name}/"]
-        )
 
     def update_metadata_remove_schemas(self, schema_list: list[str]) -> str:
         """Handles removing schema(s) for a data product."""

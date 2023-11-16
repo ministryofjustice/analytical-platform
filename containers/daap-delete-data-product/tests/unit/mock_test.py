@@ -109,49 +109,53 @@ class TestRemoveAllVersions:
         assert response.get("KeyCount") == 30
 
         ######################################################################
-        with patch("glue_utils.glue_client", glue_client):
-            # Call the handler
-            delete_data_product.handler(event, fake_context)
+        # with patch("glue_utils.glue_client", glue_client):
+        # Call the handler
+        response = delete_data_product.handler(event, fake_context)
 
-            # Assert that all metadata files have been deleted
-            prefix = f"{data_product_name}/"
-            response = s3_client.list_objects_v2(
-                Bucket=os.getenv("METADATA_BUCKET"),
-                Prefix=prefix,
-            )
-            assert response.get("KeyCount") == 0
+        # Assert that all metadata files have been deleted
+        prefix = f"{data_product_name}/"
+        response = s3_client.list_objects_v2(
+            Bucket=os.getenv("METADATA_BUCKET"),
+            Prefix=prefix,
+        )
+        assert response.get("KeyCount") == 0
 
-            # Assert we have the correct number of fail files to begin with
-            prefix = f"fail/{data_product_name}/"
-            response = s3_client.list_objects_v2(
-                Bucket=os.getenv("RAW_DATA_BUCKET"),
-                Prefix=prefix,
-            )
-            assert response.get("KeyCount") == 0
+        # Assert we have the correct number of fail files to begin with
+        prefix = f"fail/{data_product_name}/"
+        response = s3_client.list_objects_v2(
+            Bucket=os.getenv("RAW_DATA_BUCKET"),
+            Prefix=prefix,
+        )
+        assert response.get("KeyCount") == 0
 
-            # Assert that raw files have been deleted
-            prefix = f"raw/{data_product_name}/"
-            response = s3_client.list_objects_v2(
-                Bucket=os.getenv("RAW_DATA_BUCKET"),
-                Prefix=prefix,
-            )
-            assert response.get("KeyCount") == 0
+        # Assert that raw files have been deleted
+        prefix = f"raw/{data_product_name}/"
+        response = s3_client.list_objects_v2(
+            Bucket=os.getenv("RAW_DATA_BUCKET"),
+            Prefix=prefix,
+        )
+        assert response.get("KeyCount") == 0
 
-            # Assert that curated files have been deleted
-            prefix = f"curated/{data_product_name}/"
-            response = s3_client.list_objects_v2(
-                Bucket=os.getenv("CURATED_DATA_BUCKET"),
-                Prefix=prefix,
-            )
-            assert response.get("KeyCount") == 0
+        # Assert that curated files have been deleted
+        prefix = f"curated/{data_product_name}/"
+        response = s3_client.list_objects_v2(
+            Bucket=os.getenv("CURATED_DATA_BUCKET"),
+            Prefix=prefix,
+        )
+        assert response.get("KeyCount") == 0
 
-            with pytest.raises(glue_client.exceptions.EntityNotFoundException) as exc:
-                glue_client.get_database(Name=data_product_name)
-            assert (
-                exc.value.response["Error"]["Message"]
-                == f"Database {data_product_name} not found."
-            )
-            assert exc.value.response["Error"]["Code"] == "EntityNotFoundException"
+        with pytest.raises(glue_client.exceptions.EntityNotFoundException) as exc:
+            glue_client.get_database(Name=data_product_name)
+        assert (
+            exc.value.response["Error"]["Message"]
+            == f"Database {data_product_name} not found."
+        )
+
+        assert (
+            json.loads(response.get("body"))["message"]
+            == f"Successfully removed data product '{data_product_name}'."
+        )
 
     def test_error_400_when_metadata_does_not_exist(self, fake_event, fake_context):
         # Call the handler
