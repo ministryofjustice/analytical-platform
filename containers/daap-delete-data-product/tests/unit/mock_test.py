@@ -1,7 +1,6 @@
 import json
 import os
 from typing import Any
-from unittest.mock import patch
 
 import delete_data_product
 import pytest
@@ -120,7 +119,7 @@ class TestRemoveAllVersions:
         )
         assert response.get("KeyCount") == 0
 
-        # Assert we have the correct number of fail files to begin with
+        # Assert that fail files have been deleted
         prefix = f"fail/{data_product_name}/"
         response = s3_client.list_objects_v2(
             Bucket=os.getenv("RAW_DATA_BUCKET"),
@@ -150,7 +149,6 @@ class TestRemoveAllVersions:
             exc.value.response["Error"]["Message"]
             == f"Database {data_product_name} not found."
         )
-        print("result", result)
         assert (
             json.loads(result.get("body"))["message"]
             == f"Successfully removed data product '{data_product_name}'."

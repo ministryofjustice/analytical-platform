@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.1.0] - 2023-11-16
+
+### Removed
+
+- `TestRemoveAllVersions` class from `versioning_test.py`
+- `VersionCreator.remove_all_versions_of_data_product()` method
+- `delete_glue_database` from `glue_utils.py`
+
 ## [7.0.0] - 2023-11-14
 
 ### Changed
