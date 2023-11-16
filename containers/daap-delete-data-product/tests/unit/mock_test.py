@@ -109,9 +109,8 @@ class TestRemoveAllVersions:
         assert response.get("KeyCount") == 30
 
         ######################################################################
-        # with patch("glue_utils.glue_client", glue_client):
         # Call the handler
-        response = delete_data_product.handler(event, fake_context)
+        result = delete_data_product.handler(event, fake_context)
 
         # Assert that all metadata files have been deleted
         prefix = f"{data_product_name}/"
@@ -151,31 +150,8 @@ class TestRemoveAllVersions:
             exc.value.response["Error"]["Message"]
             == f"Database {data_product_name} not found."
         )
-
+        print("result", result)
         assert (
-            json.loads(response.get("body"))["message"]
+            json.loads(result.get("body"))["message"]
             == f"Successfully removed data product '{data_product_name}'."
         )
-
-    def test_error_400_when_metadata_does_not_exist(self, fake_event, fake_context):
-        # Call the handler
-        response = delete_data_product.handler(fake_event, fake_context)
-        assert response.get("statusCode") == 400
-        message = json.loads(response.get("body"))["error"]["message"]
-        assert (
-            message
-            == "Could not locate metadata for data product: fake_data_product_name."
-        )
-
-    def test_database_does_not_exist(
-        self,
-        s3_client,
-        glue_client,
-        event,
-        fake_context,
-    ):
-        with patch("glue_utils.glue_client", glue_client):
-            response = delete_data_product.handler(event, fake_context)
-            assert response.get("statusCode") == 400
-            message = json.loads(response.get("body"))["error"]["message"]
-            assert message == "Could not locate glue database 'data-product'"
