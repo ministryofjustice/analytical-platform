@@ -83,7 +83,7 @@ class InvalidUpdate(Exception):
     """
 
 
-class VersionCreator:
+class VersionManager:
     """
     Service to create new versions of a data product when metadata or schema are updated.
     """
