@@ -327,16 +327,18 @@ class VersionManager:
         metadata = self._verify_input_metadata(metadata_dict)
         schema.convert_schema_to_glue_table_input_csv()
 
-        if self.latest_version == "v1.0":
-            if not schema.parent_product_has_registered_schema:
-                self.logger.info(
-                    f"No existing schemas are associated with {data_product_name}; "
-                    f"setting version to 'v1.0' for {schema.table_name}"
-                )
+        if (
+            self.latest_version == "v1.0"
+            and not schema.parent_product_has_registered_schema
+        ):
+            self.logger.info(
+                f"No existing schemas are associated with {data_product_name}; "
+                f"setting version to 'v1.0' for {schema.table_name}"
+            )
 
-                metadata.write_json_to_s3(metadata.latest_version_key)
+            metadata.write_json_to_s3(metadata.latest_version_key)
 
-                new_version = "v1.0"
+            new_version = "v1.0"
         else:
             new_version = self._minor_version_bump(metadata)
 
