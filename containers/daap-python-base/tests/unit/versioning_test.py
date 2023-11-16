@@ -559,7 +559,7 @@ class TestUpdateMetadataRemoveSchema:
 
         with patch("glue_utils.glue_client", glue_client):
             # Call the handler
-            version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+            version_manager.update_metadata_remove_schemas(schema_list=schema_list)
             schema_prefix = f"{data_product_name}/v3.0/{schema_list[0]}/schema.json"
             response = s3_client.list_objects_v2(
                 Bucket=self.bucket_name,
