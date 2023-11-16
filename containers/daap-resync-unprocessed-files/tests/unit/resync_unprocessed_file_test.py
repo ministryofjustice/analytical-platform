@@ -64,8 +64,8 @@ def test_get_raw_data_unique_extraction_timestamps(
     )
     raw_table_timestamp = sorted(get_unique_load_timestamps(pages))
     assert {i for i in raw_table_timestamp} == {
-        "data_product/v1.0/table_name/load_timestamp=timestamp1",
-        "data_product/v1.0/table_name/load_timestamp=timestamp2",
+        "data_product/v1/table_name/load_timestamp=timestamp1",
+        "data_product/v1/table_name/load_timestamp=timestamp2",
     }
 
 
@@ -80,7 +80,7 @@ def test_get_curated_unique_extraction_timestamps(
 
     curated_table_timestamp = sorted(get_unique_load_timestamps(pages))
     assert {i for i in curated_table_timestamp} == {
-        "data_product/v1.0/table_name/load_timestamp=timestamp1"
+        "data_product/v1/table_name/load_timestamp=timestamp1"
     }
 
 
@@ -105,5 +105,5 @@ def test_get_resync_keys(s3_client, data_element, raw_data_bucket, curated_data_
     )
 
     assert {i for i in raw_keys_to_resync} == {
-        "raw/data_product/v1.0/table_name/" + "load_timestamp=timestamp2/file2.csv"
+        "raw/data_product/v1/table_name/" + "load_timestamp=timestamp2/file2.csv"
     }

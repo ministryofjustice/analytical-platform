@@ -9,11 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [6.3.2] - 2023-11-14
+## [7.1.0] - 2023-11-16
 
 ### Added
 
 - `create_schema` versioning method
+
+### Changed
+
+- `VersionCreator` renamed to `VersionManager`
+
+## [7.0.0] - 2023-11-14
+
+### Changed
+
+- Data paths now contain only the major version. A minor version change implies
+  the schemas are all backwards compatable with existing data.
 
 ## [6.3.1] - 2023-11-14
 

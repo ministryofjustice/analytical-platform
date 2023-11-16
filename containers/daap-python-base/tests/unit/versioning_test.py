@@ -506,13 +506,13 @@ class TestUpdateMetadataRemoveSchema:
         create_raw_and_curated_data,
         data_product_name,
         glue_client,
-        data_product_versions,
+        data_product_major_versions,
     ):
         version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
         with patch("glue_utils.glue_client", glue_client):
             # Validate we have the required number of files
-            for version in data_product_versions:
+            for version in data_product_major_versions:
                 curated_prefix = f"curated/{data_product_name}/{version}/schema0/"
                 response = s3_client.list_objects_v2(
                     Bucket=os.getenv("CURATED_DATA_BUCKET"),
@@ -531,7 +531,7 @@ class TestUpdateMetadataRemoveSchema:
             version_manager.update_metadata_remove_schemas(schema_list=schema_list)
 
             # Validate files are deleted
-            for version in data_product_versions:
+            for version in data_product_major_versions:
                 curated_prefix = f"curated/{data_product_name}/{version}/schema0/"
                 response = s3_client.list_objects_v2(
                     Bucket=os.getenv("CURATED_DATA_BUCKET"),
@@ -559,8 +559,8 @@ class TestUpdateMetadataRemoveSchema:
 
         with patch("glue_utils.glue_client", glue_client):
             # Call the handler
-            version_manager.update_metadata_remove_schemas(schema_list=schema_list)
-            schema_prefix = f"{data_product_name}/v2.0/{schema_list[0]}/schema.json"
+            version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+            schema_prefix = f"{data_product_name}/v3.0/{schema_list[0]}/schema.json"
             response = s3_client.list_objects_v2(
                 Bucket=self.bucket_name,
                 Prefix=schema_prefix,
@@ -633,23 +633,23 @@ class TestRemoveAllVersions:
             Bucket=self.bucket_name,
             Prefix=prefix,
         )
-        assert response.get("KeyCount") == 12
+        assert response.get("KeyCount") == 16
 
-        # Assert we have the correct number of metadata files to begin with
+        # Assert we have the correct number of raw files to begin with
         prefix = f"raw/{data_product_name}/"
         response = s3_client.list_objects_v2(
             Bucket=os.getenv("RAW_DATA_BUCKET"),
             Prefix=prefix,
         )
-        assert response.get("KeyCount") == 30
+        assert response.get("KeyCount") == 20
 
-        # Assert we have the correct number of metadata files to begin with
+        # Assert we have the correct number of curated files to begin with
         prefix = f"curated/{data_product_name}/"
         response = s3_client.list_objects_v2(
             Bucket=os.getenv("CURATED_DATA_BUCKET"),
             Prefix=prefix,
         )
-        assert response.get("KeyCount") == 30
+        assert response.get("KeyCount") == 20
 
         #######################################################################
         version_manager = VersionManager(data_product_name, logging.getLogger())

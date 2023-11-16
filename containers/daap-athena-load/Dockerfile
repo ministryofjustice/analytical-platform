@@ -1,5 +1,4 @@
-FROM ghcr.io/ministryofjustice/data-platform-daap-python-base:6.2.0
-
+FROM ghcr.io/ministryofjustice/data-platform-daap-python-base:7.0.0
 ARG VERSION
 
 ENV VERSION="${VERSION}"

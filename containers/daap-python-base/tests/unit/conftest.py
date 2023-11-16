@@ -210,7 +210,12 @@ def table_name():
 
 @pytest.fixture
 def data_product_versions():
-    return {"v1.0", "v1.1", "v1.2"}
+    return {"v1.0", "v1.1", "v1.2", "v2.0"}
+
+
+@pytest.fixture
+def data_product_major_versions():
+    return {"v1", "v2"}
 
 
 @pytest.fixture
@@ -220,9 +225,9 @@ def create_raw_and_curated_data(
     create_curated_bucket,
     data_product_name,
     table_name,
-    data_product_versions,
+    data_product_major_versions,
 ):
-    for version in data_product_versions:
+    for version in data_product_major_versions:
         for i in range(10):
             s3_client.put_object(
                 Bucket=os.getenv("CURATED_DATA_BUCKET"),

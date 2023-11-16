@@ -2,12 +2,12 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Data Product API",
-    "description": "The Data Product API docs are based on the OpenAPI 3.0 specification.",
+    "description": "This API allows you to register and manage Data Product metadata with the Data Platform, and upload data to it.",
     "version": "0.0.1"
   },
   "externalDocs": {
-    "description": "Find out more about Swagger",
-    "url": "http://swagger.io"
+    "description": "Full technical documentation for the Data Platform",
+    "url": "https://technical-documentation.data-platform.service.justice.gov.uk/"
   },
   "servers": [
     {
@@ -45,7 +45,7 @@
               "type": "string",
               "minimum": 1
             },
-            "description": "The name of the data product for the table you wish to delete. This needs to be a registered data product name."
+            "description": "The name of the data product for the table you wish to upload data to. This needs to be a registered data product name."
           },
           {
             "in": "path",
@@ -57,7 +57,7 @@
               "minimum": 1,
               "maximum": 128
             },
-            "description": "The name of the table you wish to delete. Allows lowercase alphanumeric characters and \"_\"."
+            "description": "The name of the table you wish to upload data to. Allows lowercase alphanumeric characters and \"_\"."
           },
           {
             "in": "header",
@@ -158,16 +158,16 @@
         "operationId": "preview",
         "parameters": [
           {
-            "in": "query",
-            "name": "database",
+            "in": "path",
+            "name": "data-product-name",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
-            "in": "query",
-            "name": "table",
+            "in": "path",
+            "name": "table-name",
             "required": true,
             "schema": {
               "type": "string"
@@ -220,16 +220,24 @@
     "/data-product/register": {
       "post": {
         "tags": [
-          "dataproduct"
+          "data product"
         ],
-        "summary": "Register (metadata for) a new Data Product that you want to upload to the Data Platform.",
-        "description": "Registers the first version of your Data Product (by submitting it's metadata)  and enables you to proceed with uploading data.",
+        "summary": "Register (metadata for) a new Data Product.",
+        "description": "Registers the first version of your Data Product (by submitting it's metadata) and enables you to proceed with uploading data.",
         "operationId": "registerDataProduct",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/dataProductMetadata"
+                "required": [
+                  "metadata"
+                ],
+                "type": "object",
+                "properties": {
+                  "metadata": {
+                    "$ref": "#/components/schemas/userDefinedMetadata"
+                  }
+                }
               }
             }
           }
@@ -313,7 +321,7 @@
     "/data-product/{data-product-name}": {
       "put": {
         "tags": [
-          "dataproduct"
+          "data product"
         ],
         "summary": "Update (metadata for) an existing Data Product.",
         "description": "Creates a new minor version of the data product with updated metadata.",
@@ -322,7 +330,15 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/dataProductMetadata"
+                "required": [
+                  "metadata"
+                ],
+                "type": "object",
+                "properties": {
+                  "metadata": {
+                    "$ref": "#/components/schemas/userDefinedMetadata"
+                  }
+                }
               }
             }
           }
@@ -400,8 +416,8 @@
         "tags": [
           "schema"
         ],
-        "summary": "Register a schema (blueprint of your table) for a new table in your Data Product that you want to upload to the Data Platform.",
-        "description": "Registers the first version of your Data Product's table (by submitting its schema) and enables you to proceed with uploading data to it.",
+        "summary": "Register a schema (blueprint of your table) for a new table in your Data Product.",
+        "description": "Registers the first version of your Data Product's table (by submitting its schema) and enables future uploads to be validated against it.",
         "operationId": "registerTableSchema",
         "requestBody": {
           "content": {
@@ -562,7 +578,7 @@
           "schema"
         ],
         "summary": "Update a schema (blueprint of your table) for an existing table in your Data Product.",
-        "description": "Use this to update the schema of your Data Product's existing tables. This will include when you want to add/remove columns, update descriptions of tables/columns and change data types of columns.",
+        "description": "Updates the schema of an existing table. Use this when you want to add/remove columns, update descriptions of tables/columns or change data types of columns.",
         "operationId": "updateTableSchema",
         "requestBody": {
           "content": {
@@ -666,9 +682,9 @@
         "tags": [
           "data"
         ],
-        "summary": "Delete a table and associated raw and curated data registered to an existing data product.",
+        "summary": "Delete a table from all versions of a data product.",
         "operationId": "deleteTable",
-        "description": "Deletes the Glue table, raw and curated data for all versions and issues a major version increase.",
+        "description": "Issues a major version increase, and completely deletes the table from all version of the data product, including all raw and curated data.",
         "parameters": [
           {
             "in": "path",
@@ -804,19 +820,131 @@
           }
         }
       },
-      "dataProductMetadata": {
-        "required": [
-          "metadata"
-        ],
+      "userDefinedMetadata": {
         "type": "object",
+        "title": "User-defined Data Product Metadata",
+        "description": "Settable metadata for a Data Product",
+        "required": [
+          "name",
+          "description",
+          "domain",
+          "dataProductOwner",
+          "dataProductOwnerDisplayName",
+          "email",
+          "status",
+          "dpiaRequired",
+          "retentionPeriod"
+        ],
         "properties": {
-          "metadata": {
-            "$ref": "#/components/schemas/dataProductMetadataSchema"
+          "name": {
+            "type": "string",
+            "description": "The name of the Data Product. Must contain only lowercase letters, numbers, and the underscore character.",
+            "pattern": "^[a-z0-9_]+$",
+            "example": "my_data_product"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description about what functional area this Data Product is representing, what purpose it has and business related information.",
+            "example": "this data product hold lots of useful information I want to share with those who may have use for it."
+          },
+          "domain": {
+            "type": "string",
+            "description": "The identifier of the domain this Data Product belongs to. Should be one of HQ, HMPPS, OPG, LAA, HMCTS, CICA, or Platforms",
+            "example": "HMPPS"
+          },
+          "dataProductOwner": {
+            "type": "string",
+            "description": "Data Product owner, the unique identifier of the actual user that owns, manages, and receives notifications about the Data Product. To make it technology independent it is usually the email address of the owner.",
+            "example": "jane.doe@justice.gov.uk"
+          },
+          "dataProductOwnerDisplayName": {
+            "type": "string",
+            "description": "The human-readable version of dataProductOwner",
+            "example": "Jane Doe"
+          },
+          "dataProductMaintainer": {
+            "type": "string",
+            "description": "Secondary party who is able to approve DPIA access requests, but who may or may not be legally responsible for the data",
+            "example": "example.information.asset.owner@justice.gov.uk"
+          },
+          "dataProductMaintainerDisplayName": {
+            "type": "string",
+            "description": "The human-readable version of dataProductMaintainer",
+            "example": "Jonny Data"
+          },
+          "email": {
+            "type": "string",
+            "description": "point of contact between consumers and maintainers of the Data Product. It could be the owner or a distribution list, but must be reliable and responsive.",
+            "example": "jane.doe@justice.gov.uk"
+          },
+          "status": {
+            "type": "string",
+            "description": "this is an enum representing the status of this version of the Data Product. Allowed values are: [draft|published|retired]. This is a metadata that communicates the overall status of the Data Product but is not reflected to the actual deployment status.",
+            "enum": ["draft", "published", "retired"]
+          },
+          "dpiaRequired": {
+            "type": "boolean",
+            "description": "Bool for if a data privacy impact assessment (dpia) is required to access this data product",
+            "example": true
+          },
+          "dpiaLocation": {
+            "type": "string",
+            "description": "Data Privacy Impact Assessment (DPIA) file s3 location for this data product. Generated by data platform."
+          },
+          "retentionPeriod": {
+            "type": "integer",
+            "description": "Retention period of the data in this data product in days.",
+            "example": 3650
+          },
+          "tags": {
+            "type": "object",
+            "description": "Additional tags to add.",
+            "example": { "sandbox": true }
           }
-        }
+        },
+        "additionalProperties": false
       },
       "dataProductMetadataSchema": {
-        "$ref": "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.1.0/moj_data_product_metadata_spec.json"
+        "title": "Data Product metadata",
+        "description": "All metadata associated with a Data Product",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/userDefinedMetadata"
+          },
+          {
+            "properties": {
+              "version": {
+                "type": "string",
+                "description": "Data product version of form [major].[minor]. Generated by data platform."
+              },
+              "id": {
+                "type": "string",
+                "description": "Data product unique id. Generated by data platform.",
+                "example": "dp:civil-courts-data:v1.1"
+              },
+              "lastUpdated": {
+                "type": "string",
+                "description": "Last data upload date to this data product. Generated by data platform."
+              },
+              "creationDate": {
+                "type": "string",
+                "description": "Creation date of the data product. Generated by data platform."
+              },
+              "s3Location": {
+                "type": "string",
+                "description": "S3 path to data in this data product. Generated by data platform."
+              },
+              "rowCount": {
+                "type": "object",
+                "description": "Total row count of all tables in the data product, as a heuristic. Generated by data platform."
+              },
+              "schemas": {
+                "type": "array",
+                "description": "This contains a list of schemas or tables that are part of the data product. Generated by data platform"
+              }
+            }
+          }
+        ]
       },
       "dataProductSchemaSchema": {
         "$ref": "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-table-schema-json-schema/v1.0.0/moj_data_product_table_spec.json"
