@@ -315,28 +315,42 @@ class VersionManager:
         else:
             raise InvalidUpdate()
 
-    def create_schema(self, input_data: dict, table_name: str) -> str:
+    def create_schema(self, schema: DataProductSchema) -> str:
         """
         Generate a version number for a new schema. Returns "v1.0" if this is the first
         schema associated with that Data Product, otherwise returns a version number
         after a minor version bump.
         """
         data_product_name = self.data_product_config.name
+        metadata_dict = schema.parent_data_product_metadata
 
-        metadata = self._verify_input_metadata(input_data)
+        metadata = self._verify_input_metadata(metadata_dict)
+        schema.convert_schema_to_glue_table_input_csv()
 
         if self.latest_version == "v1.0":
-            schemas = metadata.load().latest_version_saved_data.get("schemas")
-
-            if not schemas:
+            if not schema.parent_product_has_registered_schema:
                 self.logger.info(
                     f"No existing schemas are associated with {data_product_name}; "
-                    f"setting version to 'v1.0' for {table_name}"
+                    f"setting version to 'v1.0' for {schema.table_name}"
                 )
+
+                schema.write_json_to_s3(
+                    DataProductConfig(data_product_name)
+                    .schema_path(schema.table_name, "v1.0")
+                    .key
+                )
+
                 metadata.write_json_to_s3(metadata.latest_version_key)
+
                 return "v1.0"
 
         new_version = self._minor_version_bump(metadata)
+
+        schema.write_json_to_s3(
+            DataProductConfig(data_product_name)
+            .schema_path(schema.table_name, new_version)
+            .key
+        )
 
         return new_version
 

@@ -8,6 +8,7 @@ from data_platform_api_responses import format_error_response, format_response_j
 from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import DataProductConfig, get_latest_version, get_new_version
 from data_product_metadata import DataProductMetadata, DataProductSchema
+from versioning import VersionManager
 
 s3_client = boto3.client("s3")
 
@@ -148,73 +149,28 @@ def handler(event, context):
         )
 
     # Code below that handles verisoning of a data product will be moved to a central module eventually.
+    version_manager = VersionManager(data_product_name=data_product_name, logger=logger)
 
     # if schema already exist then we need to minor version increment to dataproduct metadata and schema
     if schema.valid:
-        schema.convert_schema_to_glue_table_input_csv()
+        new_version = version_manager.create_schema(schema=schema)
+
         catalogue_response = push_to_catalogue(
             metadata=schema.data_pre_convert,
-            version="v1.0",
+            version=new_version,
             data_product_name=data_product_name,
             table_name=table_name,
         )
-        if not schema.parent_product_has_registered_schema:
-            metadata_dict = schema.parent_data_product_metadata
-            metadata_dict["schemas"] = [table_name]
 
-            # write v1.0 of metadata updated with registered schema, this is the only time we overwrite v1
-            DataProductMetadata(
-                data_product_name=data_product_name,
-                logger=logger,
-                input_data=metadata_dict,
-            ).write_json_to_s3(
-                DataProductConfig(data_product_name).metadata_path("v1.0").key
-            )
-            schema.write_json_to_s3(
-                DataProductConfig(data_product_name).schema_path(table_name, "v1.0").key
-            )
-            msg = f"Schema for {table_name} has been created in the {data_product_name} data product"
-            logger.info("Schema successfully created")
-            return format_response_json(
-                HTTPStatus.OK, {**{"message": msg}, **catalogue_response}
-            )
-        else:
-            # write to next minor version increment
-            latest_version = get_latest_version(data_product_name=data_product_name)
-            new_version = get_new_version(latest_version, "minor")
-            # copy metatdata and schema to new version folder
-            latest_metadata_path = DataProductConfig(data_product_name).metadata_path()
-            folder = os.path.dirname(latest_metadata_path.key) + "/"
+        msg = (
+            f"Schema for {table_name} has been created in the {data_product_name} Data "
+            f"Product, version {new_version}"
+        )
+        logger.info(msg)
+        return format_response_json(
+            HTTPStatus.OK, {**{"message": msg}, **catalogue_response}
+        )
 
-            s3_copy_folder_to_new_folder(
-                bucket=latest_metadata_path.bucket,
-                source_folder=folder,
-                latest_version=latest_version,
-                new_version=new_version,
-                logger=logger,
-            )
-
-            schema_key = (
-                DataProductConfig(name=data_product_name)
-                .schema_path(table_name=table_name, version=new_version)
-                .key
-            )
-            metadata_key = (
-                DataProductConfig(name=data_product_name)
-                .metadata_path(version=new_version)
-                .key
-            )
-            metadata_dict = schema.parent_data_product_metadata
-            metadata_dict["schemas"].append(table_name)
-            DataProductMetadata(
-                data_product_name=data_product_name,
-                logger=logger,
-                input_data=metadata_dict,
-            ).write_json_to_s3(write_key=metadata_key)
-            schema.write_json_to_s3(write_key=schema_key)
-            msg = f"Schema for {table_name} has been created in the {data_product_name} data product"
-            logger.info("Schema successfully created")
-            return format_response_json({**{"message": msg}, **catalogue_response})
     else:
         error_msg = f"schema for {table_name} has failed validation with the following error: {schema.error_traceback}"
         return format_error_response(

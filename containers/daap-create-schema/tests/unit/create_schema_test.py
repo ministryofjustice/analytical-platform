@@ -22,6 +22,19 @@ def load_v1_schema_schema_to_mock_s3(bucket_name, s3_client):
     )
 
 
+def load_v1_1_metadata_schema_to_mock_s3(bucket_name, s3_client):
+    with urllib.request.urlopen(
+        "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.1.0/moj_data_product_metadata_spec.json"  # noqa E501
+    ) as url:
+        data = json.load(url)
+    json_data = json.dumps(data)
+    s3_client.put_object(
+        Body=json_data,
+        Bucket=bucket_name,
+        Key="data_product_metadata_spec/v1.1.0/moj_data_product_metadata_spec.json",
+    )
+
+
 def test_s3_copy_folder_to_new_folder(s3_client):
     bucket_name = os.environ["BUCKET_NAME"]
     s3_client.create_bucket(Bucket=bucket_name)
@@ -86,21 +99,20 @@ def test_schema_does_not_exist_and_is_valid(fake_event, fake_context, s3_client)
     bucket_name = os.environ["BUCKET_NAME"]
     s3_client.create_bucket(Bucket=bucket_name)
     load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
+    load_v1_1_metadata_schema_to_mock_s3(bucket_name, s3_client)
 
-    with patch("create_schema.DataProductSchema") as mock_schema:
-        mock_schema.return_value.exists = False
-        mock_schema.return_value.valid = True
-        mock_schema.return_value.parent_product_has_registered_schema = False
-        with patch("create_schema.DataProductMetadata") as mock_metadata:
-            mock_metadata.return_value.load.latest_version_saved_data = {
-                "name": "test_p"
-            }
+    with patch("create_schema.VersionManager") as mock_version_manager:
+        mock_version_manager.return_value.create_schema.return_value = "v1.0"
+        with patch("create_schema.DataProductSchema") as mock_schema:
+            mock_schema.return_value.exists = False
+            mock_schema.return_value.valid = True
+            mock_schema.return_value.parent_product_has_registered_schema = False
             with patch("create_schema.push_to_catalogue") as mock_push:
                 mock_push.return_value = {"catalog": "success"}
                 response = handler(event=fake_event, context=fake_context)
 
     assert json.loads(response["body"])["message"] == (
-        "Schema for test_t has been created in the test_p data product"
+        "Schema for test_t has been created in the test_p Data Product, version v1.0"
     )
 
 
