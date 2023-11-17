@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import pytest
 from create_schema import handler, s3_copy_folder_to_new_folder
-from data_product_metadata import DataProductSchema
+from data_product_metadata import DataProductSchema  # noqa F401
 from versioning import VersionManager
 
 
