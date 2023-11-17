@@ -79,6 +79,7 @@ locals {
       name                                              = "data-platform-control-panel"
       description                                       = "Data Platform Control Panel"
       topics                                            = ["ministryofjustice", "data-platform"]
+      has_projects                                      = true
       branch_protection_required_status_checks_contexts = ["Super-Linter"]
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
