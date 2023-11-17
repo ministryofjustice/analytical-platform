@@ -7,3 +7,7 @@ fi
 if [[ "${INSTALLCONFTEST}" == "true" ]]; then
   bash $( dirname $0 )/install-conftest.sh
 fi
+
+if [[ "${INSTALLGATOR}" == "true" ]]; then
+  bash $( dirname $0 )/install-gator.sh
+fi

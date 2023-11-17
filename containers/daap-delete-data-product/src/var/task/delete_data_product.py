@@ -11,8 +11,8 @@ from data_platform_paths import (
 )
 from versioning import s3_recursive_delete
 
-glue_client = boto3.client("glue")
 logger = DataPlatformLogger()
+glue_client = boto3.client("glue")
 
 
 def handler(event, context):

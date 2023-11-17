@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import pytest
 from botocore.exceptions import ClientError
-from versioning import InvalidUpdate, VersionCreator
+from versioning import InvalidUpdate, VersionManager
 
 test_metadata = {
     "name": "test_product",
@@ -22,7 +22,7 @@ test_metadata = {
 }
 
 test_metadata_with_schemas = {
-    "name": "test_product",
+    "name": "test_product_with_schemas",
     "description": "just testing the metadata json validation/registration",
     "domain": "MoJ",
     "dataProductOwner": "matthew.laverty@justice.gov.uk",
@@ -228,9 +228,9 @@ minor_inputs = [
 ]
 
 
-class TestVersionCreator:
+class TestVersionManager:
     @pytest.fixture(autouse=True)
-    def setup(self, metadata_bucket, s3_client):
+    def setup(self, metadata_bucket, s3_client, data_product_name):
         self.s3_client = s3_client
         self.bucket_name = metadata_bucket
         s3_client.put_object(
@@ -238,39 +238,44 @@ class TestVersionCreator:
             Bucket=self.bucket_name,
             Key="test_product/v1.0/metadata.json",
         )
+        s3_client.put_object(
+            Body=json.dumps(test_metadata_with_schemas),
+            Bucket=self.bucket_name,
+            Key="test_product_with_schemas/v1.0/metadata.json",
+        )
 
-    def assert_has_keys(self, keys, version):
+    def assert_has_keys(self, keys, version, data_product_name=test_metadata["name"]):
         contents = self.s3_client.list_objects_v2(
-            Bucket=self.bucket_name, Prefix=f"{test_metadata['name']}/{version}"
+            Bucket=self.bucket_name, Prefix=f"{data_product_name}/{version}"
         )["Contents"]
         actual = {i["Key"] for i in contents}
 
         assert actual == keys
 
-    def test_creates_minor_version_metadata(
+    def test_updates_minor_version_metadata(
         self,
     ):
         input_data = dict(**test_metadata)
         input_data["description"] = "New description"
 
-        version_creator = VersionCreator(test_metadata["name"], logging.getLogger())
+        version_manager = VersionManager(test_metadata["name"], logging.getLogger())
 
-        version = version_creator.update_metadata(input_data)
+        version = version_manager.update_metadata(input_data)
 
         assert version == "v1.1"
         self.assert_has_keys({"test_product/v1.1/metadata.json"}, "v1.1")
 
     @pytest.mark.parametrize("input_data, expected", minor_inputs)
-    def test_creates_minor_version_schema(self, s3_client, input_data, expected):
+    def test_updates_minor_version_schema(self, s3_client, input_data, expected):
         s3_client.put_object(
             Body=json.dumps(test_glue_table_input),
             Bucket=self.bucket_name,
             Key="test_product/v1.0/test_table/schema.json",
         )
 
-        version_creator = VersionCreator(test_metadata["name"], logging.getLogger())
+        version_manager = VersionManager(test_metadata["name"], logging.getLogger())
 
-        version, changes = version_creator.update_schema(input_data, "test_table")
+        version, changes = version_manager.update_schema(input_data, "test_table")
 
         assert version == "v1.1"
         assert changes == expected
@@ -282,6 +287,42 @@ class TestVersionCreator:
             "v1.1",
         )
 
+    def test_create_schema_version_new(self, s3_client, table_name):
+        data_product_name = test_metadata["name"]
+        version_manager = VersionManager(data_product_name, logging.getLogger())
+
+        version, _ = version_manager.create_schema(
+            table_name=table_name, input_data=test_schema
+        )
+
+        assert version == "v1.0"
+        self.assert_has_keys(
+            {
+                "test_product/v1.0/metadata.json",
+                "test_product/v1.0/table-name/schema.json",
+            },
+            "v1.0",
+            data_product_name,
+        )
+
+    def test_create_schema_version_exists_bump(self, table_name):
+        data_product_name = test_metadata_with_schemas["name"]
+        version_manager = VersionManager(data_product_name, logging.getLogger())
+
+        version, _ = version_manager.create_schema(
+            table_name=table_name, input_data=test_schema
+        )
+
+        assert version == "v1.1"
+        self.assert_has_keys(
+            {
+                "test_product_with_schemas/v1.1/metadata.json",
+                "test_product_with_schemas/v1.1/table-name/schema.json",
+            },
+            "v1.1",
+            data_product_name,
+        )
+
     @pytest.mark.parametrize("input_data, expected", major_inputs)
     def test_creates_major_version_schema(self, s3_client, input_data, expected):
         s3_client.put_object(
@@ -290,9 +331,9 @@ class TestVersionCreator:
             Key="test_product/v1.0/test_table/schema.json",
         )
 
-        version_creator = VersionCreator(test_metadata["name"], logging.getLogger())
+        version_manager = VersionManager(test_metadata["name"], logging.getLogger())
 
-        version, changes = version_creator.update_schema(input_data, "test_table")
+        version, changes = version_manager.update_schema(input_data, "test_table")
 
         assert version == "v2.0"
         assert changes == expected
@@ -312,9 +353,9 @@ class TestVersionCreator:
         )
         input_data = copy.deepcopy(test_schema)
 
-        version_creator = VersionCreator(test_metadata["name"], logging.getLogger())
+        version_manager = VersionManager(test_metadata["name"], logging.getLogger())
         with pytest.raises(InvalidUpdate):
-            version, changes = version_creator.update_schema(input_data, "test_table")
+            version, changes = version_manager.update_schema(input_data, "test_table")
 
     def test_copies_schemas(self, s3_client):
         s3_client.put_object(
@@ -326,9 +367,9 @@ class TestVersionCreator:
         input_data = dict(**test_metadata)
         input_data["description"] = "New description"
 
-        version_creator = VersionCreator(test_metadata["name"], logging.getLogger())
+        version_manager = VersionManager(test_metadata["name"], logging.getLogger())
 
-        version_creator.update_metadata(input_data)
+        version_manager.update_metadata(input_data)
 
         self.assert_has_keys(
             {
@@ -342,19 +383,19 @@ class TestVersionCreator:
         input_data = dict(**test_metadata)
         input_data["name"] = "new name"
 
-        version_creator = VersionCreator(test_metadata["name"], logging.getLogger())
+        version_manager = VersionManager(test_metadata["name"], logging.getLogger())
 
         with pytest.raises(InvalidUpdate):
-            version_creator.update_metadata(input_data)
+            version_manager.update_metadata(input_data)
 
     def test_cannot_update_product_that_does_not_exist(self):
         input_data = dict(**test_metadata)
         input_data["description"] = "New description"
 
-        version_creator = VersionCreator("does_not_exist", logging.getLogger())
+        version_manager = VersionManager("does_not_exist", logging.getLogger())
 
         with pytest.raises(InvalidUpdate):
-            version_creator.update_metadata(input_data)
+            version_manager.update_metadata(input_data)
 
 
 class TestUpdateMetadataRemoveSchema:
@@ -389,10 +430,10 @@ class TestUpdateMetadataRemoveSchema:
     def test_success(
         self, s3_client, create_raw_and_curated_data, data_product_name, glue_client
     ):
-        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
         with patch("glue_utils.glue_client", glue_client):
-            version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+            version_manager.update_metadata_remove_schemas(schema_list=schema_list)
             schema_prefix = f"{data_product_name}/v2.0/metadata.json"
             response = s3_client.list_objects_v2(
                 Bucket=self.bucket_name,
@@ -401,11 +442,11 @@ class TestUpdateMetadataRemoveSchema:
         assert response.get("KeyCount") == 1
 
     def test_invalid_schemas(self, data_product_name):
-        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema3", "schema4"]
 
         with pytest.raises(InvalidUpdate) as exc:
-            version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+            version_manager.update_metadata_remove_schemas(schema_list=schema_list)
         assert (
             str(exc.value)
             == "Invalid schemas found in schema_list: ['schema3', 'schema4']"
@@ -419,11 +460,11 @@ class TestUpdateMetadataRemoveSchema:
         glue_client,
         table_name,
     ):
-        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0", "schema1"]
         with patch("glue_utils.glue_client", glue_client):
             with pytest.raises(ValueError) as exc:
-                version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+                version_manager.update_metadata_remove_schemas(schema_list=schema_list)
                 assert (
                     str(exc.value)
                     == f"Could not locate glue table '{table_name}' in database '{data_product_name}'"
@@ -432,7 +473,7 @@ class TestUpdateMetadataRemoveSchema:
     def test_schema_glue_table_deleted(
         self, s3_client, create_raw_and_curated_data, data_product_name, glue_client
     ):
-        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
         with patch("glue_utils.glue_client", glue_client):
             table = glue_client.get_table(
@@ -443,7 +484,7 @@ class TestUpdateMetadataRemoveSchema:
 
             with pytest.raises(ClientError) as exc:
                 # Call the handler
-                version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+                version_manager.update_metadata_remove_schemas(schema_list=schema_list)
 
                 table = glue_client.get_table(
                     DatabaseName=data_product_name, Name=f"{schema_list[0]})"
@@ -459,7 +500,7 @@ class TestUpdateMetadataRemoveSchema:
         glue_client,
         data_product_major_versions,
     ):
-        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
         with patch("glue_utils.glue_client", glue_client):
             # Validate we have the required number of files
@@ -479,7 +520,7 @@ class TestUpdateMetadataRemoveSchema:
                 assert response.get("KeyCount") == 10
 
             # Call the handler
-            version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+            version_manager.update_metadata_remove_schemas(schema_list=schema_list)
 
             # Validate files are deleted
             for version in data_product_major_versions:
@@ -505,12 +546,12 @@ class TestUpdateMetadataRemoveSchema:
         glue_client,
         data_product_versions,
     ):
-        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
 
         with patch("glue_utils.glue_client", glue_client):
             # Call the handler
-            version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+            version_manager.update_metadata_remove_schemas(schema_list=schema_list)
             schema_prefix = f"{data_product_name}/v3.0/{schema_list[0]}/schema.json"
             response = s3_client.list_objects_v2(
                 Bucket=self.bucket_name,
@@ -526,12 +567,12 @@ class TestUpdateMetadataRemoveSchema:
         glue_client,
         data_product_versions,
     ):
-        version_creator = VersionCreator(data_product_name, logging.getLogger())
+        version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
 
         with patch("glue_utils.glue_client", glue_client):
             # Call the handler
-            version_creator.update_metadata_remove_schemas(schema_list=schema_list)
+            version_manager.update_metadata_remove_schemas(schema_list=schema_list)
             for i in range(1, 3):
                 schema_prefix = f"{data_product_name}/v2.0/schema{i}/schema.json"
                 response = s3_client.list_objects_v2(

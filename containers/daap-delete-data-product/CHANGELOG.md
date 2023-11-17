@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - duplicated tests
 
+## [1.3.1] - 2023-11-16
+
+### Changed
+
+- renamed VersionCreator to VersionManager to match versioning module
+
 ## [1.3.0] 2023-11-15
 
 ### Changed

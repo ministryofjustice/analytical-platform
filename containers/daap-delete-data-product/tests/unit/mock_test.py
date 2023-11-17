@@ -38,11 +38,18 @@ test_schema: dict[str, Any] = {
 
 
 def count_files(client, bucket, prefix):
-    response = client.list_objects_v2(
+    paginator = client.get_paginator("list_objects_v2")
+    page_iterator = paginator.paginate(
         Bucket=bucket,
         Prefix=prefix,
     )
-    return response.get("KeyCount")
+    file_count = 0
+    try:
+        for page in page_iterator:
+            file_count += page["KeyCount"]
+    except KeyError:
+        pass
+    return file_count
 
 
 class TestRemoveAllVersions:
@@ -91,85 +98,43 @@ class TestRemoveAllVersions:
             == f"Successfully removed data product '{data_product_name}'."
         )
 
-    def test_fail_files_are_deleted(
+    @pytest.mark.parametrize(
+        "bucket_name,file_type,pre_count,post_count",
+        [
+            ("RAW_DATA_BUCKET", "fail", 30, 0),
+            ("RAW_DATA_BUCKET", "raw", 30, 0),
+            ("CURATED_DATA_BUCKET", "curated", 30, 0),
+            ("METADATA_BUCKET", "", 12, 0),
+        ],
+    )
+    def test_files_are_deleted(
         self,
         s3_client,
         create_fail_data,
-        data_product_name,
-        fake_context,
-        event,
-    ):
-        bucket = os.getenv("RAW_DATA_BUCKET")
-        prefix = f"fail/{data_product_name}/"
-
-        # Assert we have the correct number of fail files to begin with
-        assert count_files(s3_client, bucket, prefix) == 30
-
-        # Call the handler
-        delete_data_product.handler(event, fake_context)
-
-        # Assert that fail files have been deleted
-        assert count_files(s3_client, bucket, prefix) == 0
-
-    def test_raw_files_are_deleted(
-        self,
-        s3_client,
         create_raw_data,
-        data_product_name,
-        fake_context,
-        event,
-    ):
-        bucket = os.getenv("RAW_DATA_BUCKET")
-        prefix = f"raw/{data_product_name}/"
-
-        # Assert we have the correct number of fail files to begin with
-        assert count_files(s3_client, bucket, prefix) == 30
-
-        # Call the handler
-        delete_data_product.handler(event, fake_context)
-
-        # Assert that fail files have been deleted
-        assert count_files(s3_client, bucket, prefix) == 0
-
-    def test_curated_files_are_deleted(
-        self,
-        s3_client,
         create_curated_data,
         data_product_name,
         fake_context,
         event,
+        bucket_name,
+        file_type,
+        pre_count,
+        post_count,
     ):
-        bucket = os.getenv("CURATED_DATA_BUCKET")
-        prefix = f"curated/{data_product_name}/"
+        bucket = os.getenv(bucket_name)
+        if file_type:
+            prefix = f"{file_type}/{data_product_name}/"
+        else:
+            prefix = f"{data_product_name}/"
 
         # Assert we have the correct number of fail files to begin with
-        assert count_files(s3_client, bucket, prefix) == 30
+        assert count_files(s3_client, bucket, prefix) == pre_count
 
         # Call the handler
         delete_data_product.handler(event, fake_context)
 
         # Assert that fail files have been deleted
-        assert count_files(s3_client, bucket, prefix) == 0
-
-    def test_metadata_and_schema_files_are_deleted(
-        self,
-        s3_client,
-        create_failed_raw_and_curated_data,
-        data_product_name,
-        fake_context,
-        event,
-    ):
-        bucket = os.getenv("METADATA_BUCKET")
-        prefix = f"{data_product_name}/"
-
-        # Assert we have the correct number of fail files to begin with
-        assert count_files(s3_client, bucket, prefix) == 12
-
-        # Call the handler
-        delete_data_product.handler(event, fake_context)
-
-        # Assert that fail files have been deleted
-        assert count_files(s3_client, bucket, prefix) == 0
+        assert count_files(s3_client, bucket, prefix) == post_count
 
     def test_database_is_deleted(
         self,
@@ -177,7 +142,6 @@ class TestRemoveAllVersions:
         fake_context,
         data_product_name,
         glue_client,
-        create_failed_raw_and_curated_data,
         create_glue_tables,
     ):
         # Call the handler
@@ -190,29 +154,33 @@ class TestRemoveAllVersions:
             == f"Database {data_product_name} not found."
         )
 
+    @pytest.mark.parametrize(
+        "bucket_name,file_type,count",
+        [
+            ("CURATED_DATA_BUCKET", "curated", 0),
+            ("RAW_DATA_BUCKET", "raw", 0),
+            ("RAW_DATA_BUCKET", "fail", 0),
+        ],
+    )
     def test_delete_data_files_when_no_files_exist(
-        self, s3_client, event, fake_context, data_product_name
+        self,
+        s3_client,
+        event,
+        fake_context,
+        data_product_name,
+        bucket_name,
+        file_type,
+        count,
     ):
+        bucket = os.getenv(bucket_name)
+        prefix = f"{file_type}/{data_product_name}/"
+        # Assert that no files have been created
+        assert count_files(s3_client, bucket, prefix) == count
+
         # Call the handler
-        delete_data_product.handler(event, fake_context)
+        result = delete_data_product.handler(event, fake_context)
 
-        # Test Curated
-        bucket = os.getenv("CURATED_DATA_BUCKET")
-        prefix = f"curated/{data_product_name}/"
-
-        # Assert that fail files have been deleted
-        assert count_files(s3_client, bucket, prefix) == 0
-
-        # Test raw
-        bucket = os.getenv("RAW_DATA_BUCKET")
-        prefix = f"raw/{data_product_name}/"
-
-        # Assert that fail files have been deleted
-        assert count_files(s3_client, bucket, prefix) == 0
-
-        # Test failed
-        bucket = os.getenv("RAW_DATA_BUCKET")
-        prefix = f"fail/{data_product_name}/"
-
-        # Assert that fail files have been deleted
-        assert count_files(s3_client, bucket, prefix) == 0
+        assert (
+            json.loads(result.get("body"))["message"]
+            == f"Successfully removed data product '{data_product_name}'."
+        )

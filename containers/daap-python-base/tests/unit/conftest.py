@@ -163,6 +163,7 @@ def metadata_bucket(s3_client, region_name):
     )
 
     load_v1_metadata_schema_to_mock_s3(s3_client)
+    load_v1_1_metadata_schema_to_mock_s3(s3_client)
     load_v1_schema_schema_to_mock_s3(s3_client)
 
     return bucket_name
