@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 import pytest
 from create_schema import handler, s3_copy_folder_to_new_folder
+from data_product_metadata import DataProductSchema
 from versioning import VersionManager
 
 
@@ -85,7 +86,7 @@ def test_schema_already_exists(fake_event, fake_context, s3_client):
     s3_client.create_bucket(Bucket=bucket_name)
     load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
 
-    with patch("create_schema.DataProductSchema") as mock_schema:
+    with patch("data_product_metadata.DataProductSchema") as mock_schema:
         mock_schema.return_value.valid = True
         mock_schema.return_value.exists = True
         with patch.object(VersionManager, "_verify_input_schema", mock_schema):
@@ -104,7 +105,7 @@ def test_schema_does_not_exist_and_is_valid(fake_event, fake_context, s3_client)
     load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
     load_v1_1_metadata_schema_to_mock_s3(bucket_name, s3_client)
 
-    with patch("create_schema.DataProductSchema") as mock_schema:
+    with patch("data_product_metadata.DataProductSchema") as mock_schema:
         mock_schema.return_value.exists = False
         mock_schema.return_value.valid = True
         mock_schema.return_value.parent_product_has_registered_schema = False
@@ -130,7 +131,7 @@ def test_schema_not_valid(fake_event, fake_context, s3_client):
     s3_client.create_bucket(Bucket=bucket_name)
     load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
 
-    with patch("create_schema.DataProductSchema") as mock_schema:
+    with patch("data_product_metadata.DataProductSchema") as mock_schema:
         mock_schema.return_value.exists = False
         mock_schema.return_value.valid = False
         mock_schema.return_value.parent_product_has_registered_schema = False
