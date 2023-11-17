@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.2.0] - 2023-11-17
+
+### Added
+
+- `curated_data` package, extracted from athena load
+- `glue_utils.create_glue_database`, extracted from athena load
+
 ## [7.1.0] - 2023-11-16
 
 ### Added
