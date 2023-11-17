@@ -13,7 +13,7 @@ def handler(
     boto3.setup_default_session(region_name="eu-west-2")
     secrets_client = boto3.client('secretsmanager')
     response = client.get_secret_value(
-        SecretId='placeholder-API-KEY-secret',
+        SecretId="gov-uk-notify/production/api-key",
     )
     api_key = response['SecretString']
     notifications_client = NotificationsAPIClient(api_key)
@@ -49,12 +49,12 @@ def handler(
 
     dataframe.to_excel('/tmp/test.xlsx', index=False)
 
-    client = boto3.client('s3')
-    client.upload_file('/tmp/test.xlsx', 'jml-export-bucket-REPLACE-ME', 'test.xlsx')
+    # client = boto3.client('s3')
+    # client.upload_file('/tmp/test.xlsx', 'jml-export-bucket-REPLACE-ME', 'test.xlsx')
     with open('/tmp/test.xlsx', 'rb') as f:
         try:
             response = notifications_client.send_email_notification(
-                email_address='some_team_replace_me@justice.gov.uk',
+                email_address='jacob.hamblin-pyke@digital.justice.gov.uk',
                 template_id='de618989-db86-4d9a-aa55-4724d5485fa5',
                 personalisation={
                     'date': current_date,
