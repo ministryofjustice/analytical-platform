@@ -13,9 +13,13 @@ module "create_a_derived_table_iam_role" {
   }
 
   oidc_providers = {
-    one = {
+    cloud-platform = {
       provider_arn               = "arn:aws:iam::593291632749:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/DF366E49809688A3B16EEC29707D8C09"
       namespace_service_accounts = ["data-platform-production:gha-shr-mojas-create-a-derived-table"]
+    }
+    data-platform = {
+      provider_arn               = "arn:aws:iam::593291632749:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/BEE86BED6494692D4ED31C2ED2319E13"
+      namespace_service_accounts = ["github-actions:gha-shr-mojas-create-a-derived-table"]
     }
   }
 }
