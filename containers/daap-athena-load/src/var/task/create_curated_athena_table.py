@@ -1,9 +1,9 @@
 import time
 
 from botocore.exceptions import ClientError
-from create_raw_athena_table import create_glue_database
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import BucketPath, QueryTable
+from glue_utils import create_glue_database
 
 
 class TableMissingForExistingDataProduct(Exception):
