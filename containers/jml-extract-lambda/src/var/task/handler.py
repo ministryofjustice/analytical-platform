@@ -1,10 +1,11 @@
-import boto3
 from datetime import datetime as dt
-import pandas as pd
-import awswrangler as wr
-from notifications_python_client.notifications import NotificationsAPIClient
-from notifications_python_client import prepare_upload
 from urllib.error import HTTPError
+
+import awswrangler as wr
+import boto3
+import pandas as pd
+from notifications_python_client import prepare_upload
+from notifications_python_client.notifications import NotificationsAPIClient
 
 
 def handler(
