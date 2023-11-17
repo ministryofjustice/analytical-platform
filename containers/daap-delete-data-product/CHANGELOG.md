@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] 2023-11-16
+
+### Added
+
+- `handler` now handles the entire process of removing data product
+
+### Removed
+
+- duplicated tests
+
 ## [1.3.1] - 2023-11-16
 
 ### Changed
