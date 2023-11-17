@@ -6,7 +6,6 @@ from http import HTTPMethod, HTTPStatus
 import boto3
 from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger, s3_security_opts
-from data_product_metadata import DataProductSchema
 from versioning import InvalidUpdate, VersionManager
 
 s3_client = boto3.client("s3")

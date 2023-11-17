@@ -7,7 +7,6 @@ from unittest.mock import patch
 
 import pytest
 from botocore.exceptions import ClientError
-from data_product_metadata import DataProductSchema
 from versioning import InvalidUpdate, VersionManager
 
 test_metadata = {
