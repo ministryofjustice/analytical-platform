@@ -54,7 +54,7 @@ def handler(
     with open('/tmp/test.xlsx', 'rb') as f:
         try:
             response = notifications_client.send_email_notification(
-                email_address='jacob.hamblin-pyke@digital.justice.gov.uk',
+                email_address='CHANGE_ME@example.com',
                 template_id='de618989-db86-4d9a-aa55-4724d5485fa5',
                 personalisation={
                     'date': current_date,
