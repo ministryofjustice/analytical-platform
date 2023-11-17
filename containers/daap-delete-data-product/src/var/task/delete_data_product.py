@@ -3,7 +3,7 @@ from http import HTTPStatus
 from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductMetadata
-from versioning import VersionCreator
+from versioning import VersionManager
 
 logger = DataPlatformLogger()
 
@@ -38,9 +38,9 @@ def handler(event, context):
         logger.error(error_message)
         return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
 
-    version_creator = VersionCreator(data_product_name=data_product_name, logger=logger)
+    version_manager = VersionManager(data_product_name=data_product_name, logger=logger)
     try:
-        version_creator.remove_all_versions_of_data_product()
+        version_manager.remove_all_versions_of_data_product()
     except ValueError as e:
         return format_error_response(HTTPStatus.BAD_REQUEST, event, str(e))
     else:
