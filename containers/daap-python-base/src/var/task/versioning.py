@@ -265,6 +265,47 @@ class VersionManager:
 
         return metadata
 
+    def _verify_input_schema(
+        self, input_data: dict, table_name: str
+    ) -> DataProductSchema:
+        """Load and verify input Data Product schema, raising errors if schema is
+        missing, invalid, or if there is no associated parent Data Product.
+
+        Args:
+            input_data (dict): input schema in a format ready for loading into a
+            DataProductSchema object.
+
+        Raises:
+            InvalidUpdate: raised if schema is missing, invalid, or if there is no
+            associated parent Data Product
+
+        Returns:
+            DataProductSchema: verified schema object
+        """
+        schema = DataProductSchema(
+            data_product_name=self.data_product_config.name,
+            table_name=table_name,
+            logger=self.logger,
+            input_data=input_data,
+        ).load()
+
+        if not schema.valid:
+            error_message = (
+                f"schema for {table_name} has failed validation with the following error: "
+                f"{schema.error_traceback}"
+            )
+            raise InvalidUpdate(error_message)
+
+        if not schema.has_registered_data_product:
+            error_message = (
+                f"Schema for {table_name} has no registered metadata for the data "
+                "product it belongs to. Please first register the data product "
+                "metadata using the POST method of the /data-product/register endpoint."
+            )
+            raise InvalidUpdate(error_message)
+
+        return schema
+
     def update_metadata(self, input_data) -> str:
         """
         Create a new version with updated metadata.
@@ -285,15 +326,7 @@ class VersionManager:
         """
         Create a new version with updated schema.
         """
-        schema = DataProductSchema(
-            data_product_name=self.data_product_config.name,
-            table_name=table_name,
-            input_data=input_data,
-            logger=self.logger,
-        ).load()
-
-        if not schema.valid:
-            raise InvalidUpdate()
+        schema = self._verify_input_schema(input_data=input_data, table_name=table_name)
 
         state, changes = schema_update_type(schema)
         self.logger.info(f"Update type {state}")
@@ -315,12 +348,24 @@ class VersionManager:
         else:
             raise InvalidUpdate()
 
-    def create_schema(self, schema: DataProductSchema) -> str:
+    def create_schema(
+        self, input_data: dict, table_name: str
+    ) -> tuple[str, DataProductSchema]:
         """
         Generate a version number for a new schema. Returns "v1.0" if this is the first
         schema associated with that Data Product, otherwise returns a version number
         after a minor version bump.
         """
+        schema = self._verify_input_schema(input_data=input_data, table_name=table_name)
+
+        if schema.exists:
+            error_message = (
+                f"v1 of this schema for table {table_name} already exists. You can upversion this schema if "
+                "there are changes from v1 using the PUT method of this endpoint. Or if this is a different "
+                "table then please choose a different name for it."
+            )
+            raise InvalidUpdate(error_message)
+
         data_product_name = self.data_product_config.name
         metadata_dict = schema.parent_data_product_metadata
 
@@ -348,7 +393,7 @@ class VersionManager:
             .key
         )
 
-        return new_version
+        return new_version, schema
 
     def _copy_from_previous_version(self, latest_version, new_version):
         bucket, source_folder = self.data_product_config.metadata_path(

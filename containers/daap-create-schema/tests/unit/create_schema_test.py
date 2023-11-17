@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 import pytest
 from create_schema import handler, s3_copy_folder_to_new_folder
+from versioning import VersionManager
 
 
 def load_v1_schema_schema_to_mock_s3(bucket_name, s3_client):
@@ -85,8 +86,10 @@ def test_schema_already_exists(fake_event, fake_context, s3_client):
     load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
 
     with patch("create_schema.DataProductSchema") as mock_schema:
+        mock_schema.return_value.valid = True
         mock_schema.return_value.exists = True
-        response = handler(event=fake_event, context=fake_context)
+        with patch.object(VersionManager, "_verify_input_schema", mock_schema):
+            response = handler(event=fake_event, context=fake_context)
 
     assert json.loads(response["body"])["error"]["message"] == (
         "v1 of this schema for table test_t already exists. You can upversion this schema if "
@@ -101,12 +104,18 @@ def test_schema_does_not_exist_and_is_valid(fake_event, fake_context, s3_client)
     load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
     load_v1_1_metadata_schema_to_mock_s3(bucket_name, s3_client)
 
-    with patch("create_schema.VersionManager") as mock_version_manager:
-        mock_version_manager.return_value.create_schema.return_value = "v1.0"
-        with patch("create_schema.DataProductSchema") as mock_schema:
-            mock_schema.return_value.exists = False
-            mock_schema.return_value.valid = True
-            mock_schema.return_value.parent_product_has_registered_schema = False
+    with patch("create_schema.DataProductSchema") as mock_schema:
+        mock_schema.return_value.exists = False
+        mock_schema.return_value.valid = True
+        mock_schema.return_value.parent_product_has_registered_schema = False
+        with patch.object(
+            VersionManager,
+            "create_schema",
+            return_value=(
+                "v1.0",
+                mock_schema,
+            ),
+        ):
             with patch("create_schema.push_to_catalogue") as mock_push:
                 mock_push.return_value = {"catalog": "success"}
                 response = handler(event=fake_event, context=fake_context)
@@ -128,7 +137,7 @@ def test_schema_not_valid(fake_event, fake_context, s3_client):
 
         response = handler(event=fake_event, context=fake_context)
 
-    assert json.loads(response["body"])["error"]["message"][:65] == (
+    assert json.loads(response["body"])["error"]["message"].startswith(
         "schema for test_t has failed validation with the following error:"
     )
 

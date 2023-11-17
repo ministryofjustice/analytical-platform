@@ -7,7 +7,7 @@ import boto3
 from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_product_metadata import DataProductSchema
-from versioning import VersionManager
+from versioning import InvalidUpdate, VersionManager
 
 s3_client = boto3.client("s3")
 
@@ -118,59 +118,32 @@ def handler(event, context):
             HTTPStatus.BAD_REQUEST, event=event, message=error_msg
         )
 
-    schema = DataProductSchema(
-        data_product_name=data_product_name,
-        table_name=table_name,
-        logger=logger,
-        input_data=input_schema,
-    )
-
-    if schema.exists:
-        error_msg = (
-            f"v1 of this schema for table {table_name} already exists. You can upversion this schema if "
-            "there are changes from v1 using the PUT method of this endpoint. Or if this is a different "
-            "table then please choose a different name for it."
-        )
-        logger.error("create schema called where v1 already exists.")
-        return format_error_response(
-            HTTPStatus.FORBIDDEN, event=event, message=error_msg
-        )
-
-    if not schema.has_registered_data_product:
-        error_msg = (
-            f"Schema for {table_name} has no registered metadata for the data product it belongs to. "
-            "Please first register the data product metadata using the POST method of the /data-product/register"
-            " endpoint."
-        )
-        logger.error("schema has no associated registered data product metadata.")
-        return format_error_response(
-            HTTPStatus.FORBIDDEN, event=event, message=error_msg
-        )
-
     version_manager = VersionManager(data_product_name=data_product_name, logger=logger)
 
-    # if schema already exist then we need to minor version increment to dataproduct metadata and schema
-    if schema.valid:
-        new_version = version_manager.create_schema(schema=schema)
+    try:
+        new_version, schema = version_manager.create_schema(
+            table_name=table_name, input_data=input_schema
+        )
+    except InvalidUpdate as e:
+        error_message = str(e)
+        if error_message.startswith(f"schema for {table_name} has failed validation:"):
+            error_code = HTTPStatus.BAD_REQUEST
+        else:
+            error_code = HTTPStatus.FORBIDDEN
+        return format_error_response(error_code, event=event, message=str(e))
 
-        catalogue_response = push_to_catalogue(
-            metadata=schema.data_pre_convert,
-            version=new_version,
-            data_product_name=data_product_name,
-            table_name=table_name,
-        )
+    catalogue_response = push_to_catalogue(
+        metadata=schema.data_pre_convert,
+        version=new_version,
+        data_product_name=data_product_name,
+        table_name=table_name,
+    )
 
-        msg = (
-            f"Schema for {table_name} has been created in the {data_product_name} Data "
-            f"Product, version {new_version}"
-        )
-        logger.info(msg)
-        return format_response_json(
-            HTTPStatus.OK, {**{"message": msg}, **catalogue_response}
-        )
-
-    else:
-        error_msg = f"schema for {table_name} has failed validation with the following error: {schema.error_traceback}"
-        return format_error_response(
-            HTTPStatus.BAD_REQUEST, event=event, message=error_msg
-        )
+    msg = (
+        f"Schema for {table_name} has been created in the {data_product_name} Data "
+        f"Product, version {new_version}"
+    )
+    logger.info(msg)
+    return format_response_json(
+        HTTPStatus.OK, {**{"message": msg}, **catalogue_response}
+    )

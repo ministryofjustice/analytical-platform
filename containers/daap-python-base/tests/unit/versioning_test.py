@@ -291,13 +291,10 @@ class TestVersionManager:
     def test_create_schema_version_new(self, s3_client, table_name):
         data_product_name = test_metadata["name"]
         version_manager = VersionManager(data_product_name, logging.getLogger())
-        schema = DataProductSchema(
-            data_product_name=data_product_name,
-            table_name=table_name,
-            logger=logging.getLogger(),
-            input_data=test_schema,
+
+        version, _ = version_manager.create_schema(
+            table_name=table_name, input_data=test_schema
         )
-        version = version_manager.create_schema(schema)
 
         assert version == "v1.0"
         self.assert_has_keys(
@@ -313,13 +310,9 @@ class TestVersionManager:
         data_product_name = test_metadata_with_schemas["name"]
         version_manager = VersionManager(data_product_name, logging.getLogger())
 
-        schema = DataProductSchema(
-            data_product_name="test_product_with_schemas",
-            table_name=table_name,
-            logger=logging.getLogger(),
-            input_data=test_schema,
+        version, _ = version_manager.create_schema(
+            table_name=table_name, input_data=test_schema
         )
-        version = version_manager.create_schema(schema)
 
         assert version == "v1.1"
         self.assert_has_keys(
