@@ -9,7 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.13] 2023-11-14
+
+- Fix parameter names for /preview endpoint
+- Removed non-writable metadata fields from examples to avoid confusion
 - update Dockerfile COPY command fixing `LAMBDA_TASK_ROOT` typo
+
+## [1.0.12] 2023-11-09
+
+### Changed
+
+- apiKey security schema reference to authorizationToken
+- upload data and delete table are now grouped under data
+- update metadata is now a put request
 
 ## [1.0.11] 2023-11-07
 

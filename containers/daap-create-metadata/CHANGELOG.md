@@ -9,7 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- update Dockerfile COPY command fixing `LAMBDA_TASK_ROOT` typo
+## [2.2.0] 2023-11-13
+
+### Changed
+
+- updated base image to 6.2.0
+
+## [2.1.1] 2023-11-06
+
+### Fixed
+
+- response returned by push-to-catalogue lambda
+
+## [2.1.0] 2023-11-06
+
+### Added
+
+- function `push_to_catalogue` which calls another lambda which
+  pushes registered data product metadata to the catalogue, as
+  of now openmetadata.
+- returns a response body for success (previously this was empty)
+  and additonal key/values in that reposnse for the catalogue
+  response.
 
 ## [2.0.0] 2023-10-13
 

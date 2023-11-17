@@ -1,4 +1,3 @@
-import os
 import time
 from http import HTTPStatus
 
@@ -106,33 +105,30 @@ def handler(event, context, athena_client=athena_client):
 
     logger = DataPlatformLogger(
         data_product_name=data_product_name,
-        extra={
-            "image_version": os.getenv("VERSION", "unknown"),
-            "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-            "table_name": table_name,
-        },
+        table_name=table_name,
     )
 
-    dataproduct_exists = DataProductSchema(
+    schema = DataProductSchema(
         data_product_name=data_product_name,
         table_name=table_name,
         logger=logger,
         input_data=None,
-    ).exists
+    )
 
-    if not dataproduct_exists:
+    if not schema.exists:
         logger.error("Data product does not exists.")
         return format_plain_text_response(
             "Data product does not exist", HTTPStatus.NOT_FOUND
         )
 
-    query = f'SELECT * FROM "{data_product_name}"."{table_name}" LIMIT 10'
+    database_name = schema.database_name
+    query = f'SELECT * FROM "{database_name}"."{table_name}" LIMIT 10'
 
     logger.info(f"'{query}' execution in progress")
 
     query_id = start_query_execution_and_wait(
         athena_client=athena_client,
-        database_name=data_product_name,
+        database_name=database_name,
         sql=query,
         logger=logger,
     )

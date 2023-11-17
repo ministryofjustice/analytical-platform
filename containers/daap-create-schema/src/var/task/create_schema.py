@@ -15,6 +15,32 @@ s3_client = boto3.client("s3")
 TABLE_NAME_REGEX = re.compile(r"\A[a-zA-Z][a-zA-Z0-9_]{1,127}\Z")
 
 
+def push_to_catalogue(
+    metadata: dict,
+    version: str,
+    data_product_name: str,
+    table_name: str | None = None,
+):
+    lambda_client = boto3.client("lambda")
+
+    catalogue_input = {
+        "metadata": metadata,
+        "version": version,
+        "data_product_name": data_product_name,
+        "table_name": table_name,
+    }
+
+    lambda_response = lambda_client.invoke(
+        FunctionName=os.getenv("PUSH_TO_CATALOGUE_LAMBDA_ARN"),
+        InvocationType="RequestResponse",
+        Payload=json.dumps(catalogue_input),
+    )
+
+    catalogue_response = json.loads(lambda_response["Payload"].read().decode("utf-8"))
+
+    return catalogue_response
+
+
 def is_valid_table_name(value: str | None) -> bool:
     """
     Ensure that the name consists of alphanumeric characters and underscores,
@@ -65,12 +91,7 @@ def handler(event, context):
         )
 
     logger = DataPlatformLogger(
-        extra={
-            "image_version": os.getenv("VERSION", "unknown"),
-            "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-            "data_product_name": data_product_name,
-            "table_name": table_name,
-        }
+        data_product_name=data_product_name, table_name=table_name
     )
 
     logger.info(f"event: {event}")
@@ -86,11 +107,22 @@ def handler(event, context):
             HTTPStatus.BAD_REQUEST, event=event, message=error_message
         )
 
+    input_schema = request_body.get("schema")
+
+    if input_schema is None:
+        error_msg = (
+            "a 'schema' object was not passed in the request, "
+            "did you pass {table_schema} instead of {'schema': {table_schema}}?"
+        )
+        return format_error_response(
+            HTTPStatus.BAD_REQUEST, event=event, message=error_msg
+        )
+
     schema = DataProductSchema(
         data_product_name=data_product_name,
         table_name=table_name,
         logger=logger,
-        input_data=request_body.get("schema"),
+        input_data=input_schema,
     )
 
     if schema.exists:
@@ -120,6 +152,12 @@ def handler(event, context):
     # if schema already exist then we need to minor version increment to dataproduct metadata and schema
     if schema.valid:
         schema.convert_schema_to_glue_table_input_csv()
+        catalogue_response = push_to_catalogue(
+            metadata=schema.data_pre_convert,
+            version="v1.0",
+            data_product_name=data_product_name,
+            table_name=table_name,
+        )
         if not schema.parent_product_has_registered_schema:
             metadata_dict = schema.parent_data_product_metadata
             metadata_dict["schemas"] = [table_name]
@@ -137,7 +175,9 @@ def handler(event, context):
             )
             msg = f"Schema for {table_name} has been created in the {data_product_name} data product"
             logger.info("Schema successfully created")
-            return format_response_json(HTTPStatus.OK, {"message": msg})
+            return format_response_json(
+                HTTPStatus.OK, {**{"message": msg}, **catalogue_response}
+            )
         else:
             # write to next minor version increment
             latest_version = get_latest_version(data_product_name=data_product_name)
@@ -174,7 +214,7 @@ def handler(event, context):
             schema.write_json_to_s3(write_key=schema_key)
             msg = f"Schema for {table_name} has been created in the {data_product_name} data product"
             logger.info("Schema successfully created")
-            return format_response_json({"message": msg})
+            return format_response_json({**{"message": msg}, **catalogue_response})
     else:
         error_msg = f"schema for {table_name} has failed validation with the following error: {schema.error_traceback}"
         return format_error_response(

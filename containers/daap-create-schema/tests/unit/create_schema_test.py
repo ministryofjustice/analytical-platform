@@ -47,11 +47,22 @@ def test_s3_copy_folder_to_new_folder(s3_client):
 
 @pytest.mark.parametrize("method", [HTTPMethod.GET, HTTPMethod.PUT, HTTPMethod.DELETE])
 def test_http_method_fail(fake_event, fake_context, method):
+    with patch("create_schema.DataPlatformLogger"):
+        response = handler(event=fake_event, context=fake_context)
+
+        assert (
+            json.loads(response["body"])["error"]["message"]
+            == f"Sorry, {method} isn't allowed."
+        )
+
+
+@pytest.mark.parametrize("body_content", [{"TableDescription": "test_name"}])
+def test_schema_key_fail(fake_event, fake_context, body_content):
     response = handler(event=fake_event, context=fake_context)
 
-    assert (
-        json.loads(response["body"])["error"]["message"]
-        == f"Sorry, {method} isn't allowed."
+    assert json.loads(response["body"])["error"]["message"] == (
+        "a 'schema' object was not passed in the request, "
+        "did you pass {table_schema} instead of {'schema': {table_schema}}?"
     )
 
 
@@ -84,7 +95,9 @@ def test_schema_does_not_exist_and_is_valid(fake_event, fake_context, s3_client)
             mock_metadata.return_value.load.latest_version_saved_data = {
                 "name": "test_p"
             }
-            response = handler(event=fake_event, context=fake_context)
+            with patch("create_schema.push_to_catalogue") as mock_push:
+                mock_push.return_value = {"catalog": "success"}
+                response = handler(event=fake_event, context=fake_context)
 
     assert json.loads(response["body"])["message"] == (
         "Schema for test_t has been created in the test_p data product"

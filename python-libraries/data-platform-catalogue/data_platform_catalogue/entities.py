@@ -6,6 +6,7 @@ from typing import Any
 class CatalogueMetadata:
     name: str
     description: str
+    owner: str
     tags: list[str] = field(default_factory=list)
 
 

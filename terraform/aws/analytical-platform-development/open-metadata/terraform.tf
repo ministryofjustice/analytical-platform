@@ -14,7 +14,7 @@ terraform {
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "5.24.0"
+      version = "5.25.0"
     }
     helm = {
       source  = "hashicorp/helm"
@@ -30,7 +30,7 @@ terraform {
     }
     grafana = {
       source  = "grafana/grafana"
-      version = "2.5.0"
+      version = "2.6.1"
     }
   }
   required_version = "~> 1.5"

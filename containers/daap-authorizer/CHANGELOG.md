@@ -1,4 +1,5 @@
 <!-- markdownlint-disable MD003 -->
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -8,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0]
+
+### Changed
+
+- update base image to 6.2.0
 - update Dockerfile COPY command fixing `LAMBDA_TASK_ROOT` typo
 
 ## [1.1.1]

@@ -73,6 +73,7 @@ class TestCatalogueClient:
         return CatalogueMetadata(
             name="data_platform",
             description="All data products hosted on the data platform",
+            owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
         )
 
     @pytest.fixture
@@ -105,7 +106,7 @@ class TestCatalogueClient:
     def client(self, requests_mock):
         requests_mock.get(
             "http://example.com/api/v1/system/version",
-            json={"version": "1.1.7.0", "revision": "1", "timestamp": 0},
+            json={"version": "1.2.0.1", "revision": "1", "timestamp": 0},
         )
 
         return CatalogueClient(jwt_token="abc", api_uri="http://example.com/api")
@@ -138,9 +139,20 @@ class TestCatalogueClient:
         assert requests_mock.last_request.json() == {
             "name": "data_platform",
             "displayName": None,
+            "domain": None,
+            "lifeCycle": None,
             "description": "All data products hosted on the data platform",
             "tags": [],
-            "owner": None,
+            "owner": {
+                "id": "2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+                "type": "user",
+                "name": None,
+                "fullyQualifiedName": None,
+                "description": None,
+                "displayName": None,
+                "deleted": None,
+                "href": None,
+            },
             "service": "data-platform",
             "default": False,
             "retentionPeriod": None,
@@ -161,6 +173,8 @@ class TestCatalogueClient:
         assert requests_mock.last_request.json() == {
             "name": "my_data_product",
             "displayName": None,
+            "domain": None,
+            "lifeCycle": None,
             "description": "bla bla",
             "owner": {
                 "deleted": None,
@@ -176,10 +190,13 @@ class TestCatalogueClient:
             "tags": [
                 {
                     "description": None,
+                    "displayName": None,
+                    "name": None,
                     "href": None,
                     "labelType": "Automated",
                     "source": "Classification",
                     "state": "Confirmed",
+                    "style": None,
                     "tagFQN": "test",
                 }
             ],
@@ -201,7 +218,10 @@ class TestCatalogueClient:
         assert requests_mock.last_request.json() == {
             "name": "my_table",
             "displayName": None,
+            "domain": None,
+            "lifeCycle": None,
             "description": "bla bla",
+            "dataProducts": None,
             "tableType": None,
             "columns": [
                 {

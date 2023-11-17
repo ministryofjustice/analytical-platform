@@ -135,7 +135,12 @@ def event(data_product_name, table_name):
 
 @pytest.fixture
 def data_product_versions():
-    return {"v1.0", "v1.1", "v1.2"}
+    return {"v1.0", "v1.1", "v1.2", "v2.0"}
+
+
+@pytest.fixture
+def data_product_major_versions():
+    return {"v1", "v2"}
 
 
 @pytest.fixture
@@ -194,9 +199,13 @@ def create_glue_table(create_glue_database, glue_client, data_product_name, tabl
 
 @pytest.fixture
 def create_raw_data(
-    s3_client, create_raw_bucket, data_product_name, table_name, data_product_versions
+    s3_client,
+    create_raw_bucket,
+    data_product_name,
+    table_name,
+    data_product_major_versions,
 ):
-    for version in data_product_versions:
+    for version in data_product_major_versions:
         for i in range(10):
             s3_client.put_object(
                 Bucket=os.getenv("RAW_DATA_BUCKET"),
@@ -211,9 +220,9 @@ def create_curated_data(
     create_curated_bucket,
     data_product_name,
     table_name,
-    data_product_versions,
+    data_product_major_versions,
 ):
-    for version in data_product_versions:
+    for version in data_product_major_versions:
         for i in range(10):
             s3_client.put_object(
                 Bucket=os.getenv("CURATED_DATA_BUCKET"),

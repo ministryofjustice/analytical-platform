@@ -15,10 +15,9 @@ pip install ministryofjustice-data-platform-catalogue
 
 ## Topology
 
-- Each internal data platform catalogue is mapped to a database in the
-  OpenMetadata catalogue
-- Each data product is mapped to a schema
-- Each table is mapped to a table
+- Each moj data product is mapped to a database in the OpenMetadata catalogue
+- We populate the schema level in openmetdata with a generic entry of `Tables`
+- Each table is mapped to a table in openmetadata
 
 ![Topology diagram](./diagram.png)
 
@@ -39,11 +38,6 @@ client = CatalogueClient(
 assert client.is_healthy()
 
 
-catalogue = CatalogueMetadata(
-  name = "data_platform",
-  description = "All data products hosted on the data platform",
-)
-
 data_product = DataProductMetadata(
     name = "my_data_product",
     description = "bla bla",
@@ -55,17 +49,31 @@ data_product = DataProductMetadata(
     dpia_required = False
 )
 
+data_product_schema = DataProductMetadata(
+    name = "Tables",
+    description = "All the tables contained within my_data_product",
+    version = "v1.0.0",
+    owner = "7804c127-d677-4900-82f9-83517e51bb94",
+    email = "justice@justice.gov.uk",
+    retention_period_in_days = 365,
+    domain = "legal-aid",
+    dpia_required = False
+)
+
 table = TableMetadata(
   name = "my_table",
   description = "bla bla",
-  column_types = {"foo": "string", "bar": "int"},
+  column_details=[
+      {"name": "foo", "type": "string", "description": "a"},
+      {"name": "bar", "type": "int", "description": "b"},
+  ],
   retention_period_in_days = 365
 )
 
 try:
   service_fqn = client.create_or_update_database_service(name="data_platform")
-  database_fqn = client.create_or_update_database(metadata=catalogue, service_fqn=service_fqn)
-  schema_fqn = client.create_or_update_schema(metadata=data_product, database_fqn=database_fqn)
+  database_fqn = client.create_or_update_database(metadata=data_product, service_fqn=service_fqn)
+  schema_fqn = client.create_or_update_schema(metadata=data_product_schema, database_fqn=database_fqn)
   table_fqn = client.create_or_update_table(metadata=table, schema_fqn=schema_fqn)
 except CatalogueError:
   print("oh no")

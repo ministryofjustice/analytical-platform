@@ -99,8 +99,8 @@ def test_get_data_product_pages(s3_client, raw_data_bucket, data_product):
     )
     assert len(pages) == 1
     assert {i["Key"] for i in pages[0]["Contents"]} == {
-        "raw/foo/v1.0/bar/abc",
-        "raw/foo/v1.0/bar/baz",
+        "raw/foo/v1/bar/abc",
+        "raw/foo/v1/bar/baz",
     }
 
 
@@ -163,13 +163,13 @@ def test_handler_invokes_lambda_for_each_raw_file(
     do_nothing_lambda_client.invoke.assert_any_call(
         FunctionName="athena_load_lambda",
         InvocationType="Event",
-        Payload=f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}}, "object":{{"key":"raw/foo/v1.0/bar/abc"}}}}}}',
+        Payload=f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}}, "object":{{"key":"raw/foo/v1/bar/abc"}}}}}}',
     )
 
     do_nothing_lambda_client.invoke.assert_any_call(
         FunctionName="athena_load_lambda",
         InvocationType="Event",
-        Payload=f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}}, "object":{{"key":"raw/foo/v1.0/bar/baz"}}}}}}',
+        Payload=f'{{"detail":{{"bucket":{{"name":"{raw_data_bucket}"}}, "object":{{"key":"raw/foo/v1/bar/baz"}}}}}}',
     )
 
 

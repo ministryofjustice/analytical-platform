@@ -1,4 +1,3 @@
-import os
 from http import HTTPStatus
 
 from data_platform_api_responses import format_error_response, format_response_json
@@ -11,12 +10,7 @@ def handler(event, context):
     table_name = event["pathParameters"]["table-name"]
 
     logger = DataPlatformLogger(
-        data_product_name=data_product_name,
-        extra={
-            "image_version": os.getenv("VERSION", "unknown"),
-            "base_image_version": os.getenv("BASE_VERSION", "unknown"),
-            "table_name": table_name,
-        },
+        data_product_name=data_product_name, table_name=table_name
     )
 
     try:

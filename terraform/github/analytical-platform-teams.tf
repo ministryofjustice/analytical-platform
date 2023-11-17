@@ -14,7 +14,6 @@ locals {
         "julialawrence",     # Julia Lawrence
         "bagg3rs",           # Richard Baguley
         "jacobwoffenden",    # Jacob Woffenden
-        "calumabarnett",     # Calum Barnett
         "SimonsMOJ",         # Simon Heron
         "mshodge",           # Michael Hodges
         "YvanMOJdigital",    # Yvan Smith
@@ -22,7 +21,6 @@ locals {
         "f-marry",           # Fabien Marry
         "alex-vonfeldmann",  # Alex von Feldmann
         "gfowler-moj",       # Greg Fowler
-        "RNTjustice",        # Richard Trist,
         "ymao2",             # Yikang Mao
         "BrianEllwood",      # Brian Ellwood
         "Emterry",           # Emma Terry

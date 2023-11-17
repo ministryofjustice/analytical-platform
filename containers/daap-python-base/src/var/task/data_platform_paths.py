@@ -136,6 +136,13 @@ class QueryTable(NamedTuple):
     name: str
 
 
+def get_fail_data_bucket() -> str:
+    """
+    Get the raw data bucket name from the environment
+    """
+    return os.environ.get("RAW_DATA_BUCKET", "") or os.environ["BUCKET_NAME"]
+
+
 def get_raw_data_bucket() -> str:
     """
     Get the raw data bucket name from the environment
@@ -228,11 +235,12 @@ def generate_all_element_version_prefixes(
     """Generates element prefixes for all data product versions"""
 
     data_product_versions = get_all_versions(data_product_name)
+    major_versions = {version.split(".")[0] for version in data_product_versions}
     element_prefixes = []
 
-    for version in data_product_versions:
+    for major_version in major_versions:
         element_prefixes.append(
-            f"{path_prefix}/{data_product_name}/{version}/{table_name}/"
+            f"{path_prefix}/{data_product_name}/{major_version}/{table_name}/"
         )
 
     return element_prefixes
@@ -250,7 +258,7 @@ class DataProductElement:
 
     @property
     def database_name(self) -> str:
-        latest_major_version = self.data_product.latest_version.split(".")[0]
+        latest_major_version = self.data_product.latest_major_version
         return self.data_product.name + "_" + latest_major_version
 
     @staticmethod
@@ -262,7 +270,7 @@ class DataProductElement:
     def landing_data_prefix(self):
         """
         The path to the raw data in s3 up to and including the element name,
-        e.g. landing/{data-product}/{version}/{some_element}
+        e.g. landing/{data-product}/{major-version}/{some_element}
         """
         return BucketPath(
             bucket=self.data_product.landing_zone_bucket,
@@ -274,7 +282,7 @@ class DataProductElement:
     def raw_data_prefix(self):
         """
         The path to the raw data in s3 up to and including the element name,
-        e.g. raw/{data-product}/{version}/{some_element}
+        e.g. raw/{data-product}/{major-version}/{some_element}
         """
         return BucketPath(
             bucket=self.data_product.raw_data_bucket,
@@ -285,7 +293,7 @@ class DataProductElement:
     def curated_data_prefix(self):
         """
         The path to the curated data in s3 up to and including the element name,
-        e.g. curated/{data-product}/{version}/{some-element}/
+        e.g. curated/{data-product}/{major-version}/{some-element}/
         """
         return BucketPath(
             bucket=self.data_product.curated_data_bucket,
@@ -385,38 +393,39 @@ class DataProductConfig:
 
     def __post_init__(self):
         self.latest_version = get_latest_version(self.name)
+        self.latest_major_version = self.latest_version.split(".")[0]
 
     @property
     def raw_data_prefix(self):
         """
         The path to the raw data in s3 excluding the element name,
-        e.g. raw/my-data-product/version/
+        e.g. raw/my-data-product/major-version/
         """
         return BucketPath(
             bucket=self.raw_data_bucket,
-            key=os.path.join("raw", self.name, self.latest_version) + "/",
+            key=os.path.join("raw", self.name, self.latest_major_version) + "/",
         )
 
     @property
     def landing_data_prefix(self):
         """
         The path to the landing data in s3 excluding the element name,
-        e.g. landing/my-data-product/version/
+        e.g. landing/my-data-product/major-version/
         """
         return BucketPath(
             bucket=self.landing_zone_bucket,
-            key=os.path.join("landing", self.name, self.latest_version) + "/",
+            key=os.path.join("landing", self.name, self.latest_major_version) + "/",
         )
 
     @property
     def curated_data_prefix(self):
         """
         The path to the curated data in s3 excluding the element name,
-        e.g. curated/my-data-product/version/
+        e.g. curated/my-data-product/major-version/
         """
         return BucketPath(
             bucket=self.curated_data_bucket,
-            key=os.path.join("curated", self.name, self.latest_version) + "/",
+            key=os.path.join("curated", self.name, self.latest_major_version) + "/",
         )
 
     def element(self, name):

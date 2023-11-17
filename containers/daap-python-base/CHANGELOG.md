@@ -9,6 +9,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.0.0] - 2023-11-14
+
+### Changed
+
+- Data paths now contain only the major version. A minor version change implies
+  the schemas are all backwards compatable with existing data.
+
+## [6.3.1] - 2023-11-14
+
+### Changed
+
+- Updated config with new version 6.3.1
+
+## [6.3.0] - 2023-11-13
+
+### Added
+
+- `remove_all_versions_of_data_product` added to VersionCreator
+  method to completely remove a data product
+- structlog==23.2.0 to requirments.txt
+
+## [6.2.0] - 2023-11-10
+
+## Changed
+
+- DataPlatformLogger now automatically adds version info the log context
+- DataPlatformLogger now accepts a `table_name` argument
+- Added `add_data_product()` to DataPlatformLogger to complement `add_extras()`
+
+## [6.1.1] - 2023-11-10
+
+### Changed
+
+- Bumped pyarrow to address <https://github.com/ministryofjustice/data-platform/pull/2279>
+
+## [6.1.0] - 2023-11-08
+
+### Changed
+
+- DataPlatformLogger now outputs JSON in the stdout logs, so that all the extra
+  data attached to a log record is preserved, and can be parsed and filtered
+  in CloudWatch.
+- The JSON written to S3 is unchanged.
+
 ## [6.0.0] - 2023-11-07
 
 ### Changed
@@ -20,7 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Data Product `database_name` property added;
-  includes suffix of major version string e.g. "_v1"
+  includes suffix of major version string e.g. "\_v1"
 - remove csv-specific values from template glue metadata
 
 ## [5.3.2] - 2023-11-1

@@ -9,6 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] 2023-11-15
+
+### Changed
+
+- Update base image to 7.0.0
+
+## [1.6.0] 2023-11-14
+
+### Changed
+
+- file_extension validation now only allows `.csv` extension
+
+## [1.5.0] 2023-11-13
+
+### Changed
+
+- upgrade to base image 6.2.0
+
+## [1.4.0] 2023-11-09
+
+- upgrade to latest base image
 - update Dockerfile COPY command fixing `LAMBDA_TASK_ROOT` typo
 
 ## [1.3.0] 2023-10-25
