@@ -25,6 +25,17 @@
       "description": "AWS Vault version",
       "proposals": ["latest"],
       "default": "latest"
+    },
+    "installAwsNuke": {
+      "type": "boolean",
+      "description": "Install AWS Nuke (https://github.com/rebuy-de/aws-nuke)",
+      "default": true
+    },
+    "awsNukeVersion": {
+      "type": "string",
+      "description": "AWS Nuke version",
+      "proposals": ["latest"],
+      "default": "latest"
     }
   },
   "mounts": [{ "source": "ministryofjustice-data-platform-devcontainer-awsvault", "target": "/home/vscode/.awsvault", "type": "volume" }],
