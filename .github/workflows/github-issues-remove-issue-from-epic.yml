@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Remove Issue Link from Epic Description
-        uses: actions/github-script@v7.0.0
+        uses: actions/github-script@v7.0.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |

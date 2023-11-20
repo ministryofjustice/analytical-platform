@@ -72,7 +72,7 @@ jobs:
       - name: Check for Static Analysis Override Label
         if: github.ref != 'refs/heads/main'
         id: check_for_static_analysis_override
-        uses: actions/github-script@e69ef5462fd455e02edcaf4dd7708eda96b9eda0 # v7.0.0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           result-encoding: string
           script: |
@@ -97,7 +97,7 @@ jobs:
       - name: Comment on Pull Request
         if: github.event_name == 'pull_request'
         id: comment
-        uses: actions/github-script@e69ef5462fd455e02edcaf4dd7708eda96b9eda0 # v7.0.0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           script: |
             const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
@@ -265,7 +265,7 @@ jobs:
       - name: Comment on Pull Request
         if: github.event_name == 'pull_request'
         id: comment
-        uses: actions/github-script@e69ef5462fd455e02edcaf4dd7708eda96b9eda0 # v7.0.0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           script: |
             const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
@@ -329,7 +329,7 @@ jobs:
       - name: Automatic Approval for Dependabot
         if: (github.event_name == 'pull_request' && github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
         id: automatic_approval
-        uses: actions/github-script@e69ef5462fd455e02edcaf4dd7708eda96b9eda0 # v7.0.0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           github-token: ${{ env.GITHUB_ROBOT_TOKEN }}
           script: |
