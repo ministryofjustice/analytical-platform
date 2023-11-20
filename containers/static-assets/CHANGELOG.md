@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Bump `nginxinc/nginx-unprivileged` from `1.25.2-alpine3.18-slim` to `1.25.3-alpine3.18-slim` [#2446](https://github.com/ministryofjustice/data-platform/pull/2446/commits/333aeb02f1b421fe4c15d605ca4c1ea2ad4c0e5b)
+- Bump `nginxinc/nginx-unprivileged` from `1.25.2-alpine3.18-slim` to
+`1.25.3-alpine3.18-slim`
+[#2446](https://github.com/ministryofjustice/data-platform/pull/2446/commits/333aeb02f1b421fe4c15d605ca4c1ea2ad4c0e5b)
 
 ## [0.0.1] - 2023-11-14
 
