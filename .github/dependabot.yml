@@ -127,6 +127,17 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "docker"
+    directory: "containers/static-assets"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "docker"
     directory: "containers/ubuntu-base"
     schedule:
       interval: "daily"
@@ -336,17 +347,6 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-development/open-metadata"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-apps-and-tools"
-  - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-development/sagemaker"
     schedule:
       interval: "daily"
@@ -381,6 +381,17 @@ updates:
       - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-production/cluster"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/cloud-platform/live/data-platform-development/static-assets"
     schedule:
       interval: "daily"
       time: "09:00"
