@@ -1,6 +1,8 @@
 resource "auth0_client" "data_platform_control_panel" {
-  name     = "data-platform-control-panel"
-  app_type = "regular_web"
+  name        = "data-platform-control-panel"
+  app_type    = "regular_web"
+  description = "Data Platform Control Panel"
+  logo_uri    = "https://assets.development.data-platform.service.justice.gov.uk/assets/justice-digital-logo.png"
 }
 
 resource "auth0_connection_client" "data_platform_control_panel_entra_id" {
