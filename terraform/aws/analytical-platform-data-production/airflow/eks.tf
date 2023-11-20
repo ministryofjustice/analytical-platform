@@ -181,7 +181,7 @@ resource "kubernetes_namespace" "dev_airflow" {
   timeouts {}
 }
 
-resource "kubernetes_namespace" "kyverno" {
+resource "kubernetes_namespace" "kyverno_dev" {
   provider = kubernetes.dev-airflow-cluster
   metadata {
     name = "kyverno"
