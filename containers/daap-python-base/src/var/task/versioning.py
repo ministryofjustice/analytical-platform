@@ -116,13 +116,15 @@ class VersionManager:
             schemas_not_in_current = list(set(schema_list).difference(current_schemas))
             error = f"Invalid schemas found in schema_list: {sorted(schemas_not_in_current)}"
             self.logger.error(error)
-            raise InvalidUpdate(error)
 
         self.logger.info(f"schemas to delete: {schema_list}")
         for schema_name in schema_list:
+            element = DataProductElement.load(
+                element_name=schema_name, data_product_name=data_product_name
+            )
             # Delete the Glue table
             result = delete_glue_table(
-                data_product_name=data_product_name,
+                database_name=element.database_name,
                 table_name=schema_name,
                 logger=self.logger,
             )
