@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Moved internal classes to base image (7.2.0)
+## [2.0.0] 2023-11-21
+
+- Moved internal classes to base image (7.3.0)
 
 ## [1.5.0] 2023-11-15
 
