@@ -75,3 +75,22 @@ class CuratedDataQueryBuilder:
         """
 
         return partition_sql
+
+    def sql_create_next_major_increment_table(
+        new_v_database: str, existing_v_database: str, table_name: str
+    ):
+        sql = f"""
+            CREATE TABLE {new_v_database}.{table_name}
+            WITH(
+                format='parquet',
+                write_compression = 'SNAPPY',
+                external_location='{self.table_path}',
+                partitioned_by=ARRAY['extraction_timestamp']
+            ) AS
+            SELECT
+                *
+            FROM {existing_v_database}.{table_name}
+            WHERE extraction_timestamp = (SELECT MAX(extraction_timestamp) from {existing_v_database}.{table_name})
+        """
+
+        return sql
