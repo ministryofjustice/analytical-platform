@@ -134,7 +134,7 @@ def fake_event(table_name):
 
 @pytest.fixture
 def data_product_versions():
-    return {"v1.0", "v1.1", "v1.2"}
+    return {"v1.1", "v2.0", "v2.1"}
 
 
 @pytest.fixture
@@ -167,16 +167,28 @@ def create_metadata(
 
 
 @pytest.fixture
-def create_glue_database(glue_client, data_product_name):
-    glue_client.create_database(DatabaseInput={"Name": data_product_name})
+def database_names(data_product_name, data_product_versions):
+    return sorted(
+        {
+            data_product_name + "_" + version.split(".")[0]
+            for version in data_product_versions
+        }
+    )
 
 
 @pytest.fixture
-def create_glue_tables(create_glue_database, glue_client, data_product_name):
-    for i in range(3):
-        glue_client.create_table(
-            DatabaseName=data_product_name, TableInput={"Name": f"schema{i}"}
-        )
+def create_glue_databases(glue_client, data_product_name, database_names):
+    for database_name in database_names:
+        glue_client.create_database(DatabaseInput={"Name": database_name})
+
+
+@pytest.fixture
+def create_glue_tables(create_glue_databases, glue_client, database_names):
+    for database_name in database_names:
+        for i in range(3):
+            glue_client.create_table(
+                DatabaseName=database_name, TableInput={"Name": f"schema{i}"}
+            )
 
 
 def populate_bucket(
