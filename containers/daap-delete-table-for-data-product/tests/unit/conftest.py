@@ -135,12 +135,12 @@ def event(data_product_name, table_name):
 
 @pytest.fixture
 def data_product_versions():
-    return ["v1.0", "v1.1", "v1.2", "v2.0"]
+    return {"v1.0", "v1.1", "v1.2", "v2.0"}
 
 
 @pytest.fixture
 def data_product_major_versions():
-    return ["v1", "v2"]
+    return {"v1", "v2"}
 
 
 @pytest.fixture
@@ -188,10 +188,14 @@ def create_schema(
 @pytest.fixture
 def database_name(data_product_name, data_product_versions):
 <<<<<<< HEAD
+<<<<<<< HEAD
     latest_version = sorted(data_product_versions)[-1]
 =======
     latest_version = data_product_versions[-1]
 >>>>>>> 117cd3d3 (:white_check_mark: Update tests)
+=======
+    latest_version = sorted(data_product_versions)[-1]
+>>>>>>> 28c0ec5c (:memo: Update change logs and version files)
     return data_product_name + "_" + latest_version.split(".")[0]
 
 

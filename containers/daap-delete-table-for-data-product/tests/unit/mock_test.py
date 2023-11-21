@@ -1,11 +1,10 @@
 import json
 import os
 from http import HTTPStatus
-from unittest.mock import patch
 
-import pytest
 import delete_table
 import pytest
+<<<<<<< HEAD
 
 
 def count_files(client, bucket, prefix):
@@ -21,6 +20,8 @@ def count_files(client, bucket, prefix):
     except KeyError:
         pass
     return file_count
+=======
+>>>>>>> 28c0ec5c (:memo: Update change logs and version files)
 
 
 def count_files(client, bucket, prefix):
