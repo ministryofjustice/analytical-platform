@@ -3,7 +3,7 @@ from typing import Generator
 
 from botocore.exceptions import ClientError
 from data_platform_logging import DataPlatformLogger
-from glue_utils import create_glue_database
+from glue_and_athena_utils import create_glue_database
 from infer_glue_schema import InferredMetadata
 
 

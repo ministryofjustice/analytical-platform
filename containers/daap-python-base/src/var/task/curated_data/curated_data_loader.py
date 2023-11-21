@@ -3,7 +3,11 @@ import time
 from botocore.exceptions import ClientError
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import QueryTable
-from glue_utils import create_glue_database
+from glue_and_athena_utils import (
+    create_glue_database,
+    refresh_table_partitions,
+    start_query_execution_and_wait,
+)
 
 from .curated_data_query_builder import CuratedDataQueryBuilder
 
@@ -50,13 +54,22 @@ class CuratedDataLoader:
         create_glue_database(
             self.glue_client, self.curated_data_table.database, self.logger
         )
-        qid = self._start_query_execution_and_wait(
-            self.curated_data_table.database,
-            self.query_builder.sql_create_table_partition(
+        # qid = self._start_query_execution_and_wait(
+        #     self.curated_data_table.database,
+        #     self.query_builder.sql_create_table_partition(
+        #         timestamp=extraction_timestamp,
+        #         curated_table=self.curated_data_table,
+        #         raw_table=raw_data_table,
+        #     ),
+        # )
+        qid = start_query_execution_and_wait(
+            database_name=self.curated_data_table.database,
+            sql=self.query_builder.sql_create_table_partition(
                 timestamp=extraction_timestamp,
                 curated_table=self.curated_data_table,
                 raw_table=raw_data_table,
             ),
+            logger=self.logger,
         )
         self.logger.info(f"Created {self.curated_data_table}, using query id {qid}")
 
@@ -64,82 +77,92 @@ class CuratedDataLoader:
         """
         Ingest raw data into the curated tables. This creates new partition files in s3.
         """
-        qid = self._start_query_execution_and_wait(
-            raw_data_table.database,
-            self.query_builder.sql_unload_table_partition(
+        # qid = self._start_query_execution_and_wait(
+        #     raw_data_table.database,
+        #     self.query_builder.sql_unload_table_partition(
+        #         timestamp=extraction_timestamp, raw_table=raw_data_table
+        #     ),
+        # )
+        qid = start_query_execution_and_wait(
+            database_name=self.curated_data_table.database,
+            sql=self.query_builder.sql_unload_table_partition(
                 timestamp=extraction_timestamp, raw_table=raw_data_table
             ),
+            logger=self.logger,
         )
-
         self.logger.info(f"Updated {self.curated_data_table}, using query id {qid}")
-        self.refresh_table_partitions()
-
-    def refresh_table_partitions(self) -> None:
-        """
-        Refreshes partitions following an update to a table
-        """
-        self.athena_client.start_query_execution(
-            QueryString=f"MSCK REPAIR TABLE {self.curated_data_table.database}.{self.curated_data_table.name}",
-            WorkGroup="data_product_workgroup",
+        # self.refresh_table_partitions()
+        refresh_table_partitions(
+            database_name=self.curated_data_table.database,
+            table_name=self.curated_data_table.name,
         )
 
-    def table_exists(self) -> bool:
-        """
-        Check if the curated data table exists in the glue catalog
-        """
-        try:
-            self.glue_client.get_table(
-                DatabaseName=self.curated_data_table.database,
-                Name=self.curated_data_table.name,
-            )
-        except ClientError as e:
-            if e.response["Error"]["Code"] == "EntityNotFoundException":
-                return False
-            else:
-                raise
-        return True
+    # def refresh_table_partitions(self) -> None:
+    #     """
+    #     Refreshes partitions following an update to a table
+    #     """
+    #     self.athena_client.start_query_execution(
+    #         QueryString=f"MSCK REPAIR TABLE {self.curated_data_table.database}.{self.curated_data_table.name}",
+    #         WorkGroup="data_product_workgroup",
+    #     )
 
-    def _start_query_execution_and_wait(
-        self,
-        database_name: str,
-        sql: str,
-    ) -> str:
-        """
-        runs query for given sql and waits for completion
-        """
-        try:
-            res = self.athena_client.start_query_execution(
-                QueryString=sql,
-                QueryExecutionContext={"Database": database_name},
-                WorkGroup="data_product_workgroup",
-            )
-        except ClientError as e:
-            if e.response["Error"]["Code"] == "InvalidRequestException":
-                self.logger.error(f"This sql caused an error: {sql}")
-                raise ValueError(e)
-            else:
-                self.logger.error(f"unexpected error: {e}")
-                raise ValueError(e)
+    # def table_exists(self) -> bool:
+    #     """
+    #     Check if the curated data table exists in the glue catalog
+    #     """
+    #     try:
+    #         self.glue_client.get_table(
+    #             DatabaseName=self.curated_data_table.database,
+    #             Name=self.curated_data_table.name,
+    #         )
+    #     except ClientError as e:
+    #         if e.response["Error"]["Code"] == "EntityNotFoundException":
+    #             return False
+    #         else:
+    #             raise
+    #     return True
 
-        query_id = res["QueryExecutionId"]
-        while response := self.athena_client.get_query_execution(
-            QueryExecutionId=query_id
-        ):
-            state = response["QueryExecution"]["Status"]["State"]
-            if state not in ["SUCCEEDED", "FAILED"]:
-                time.sleep(0.1)
-            else:
-                break
+    # def _start_query_execution_and_wait(
+    #     self,
+    #     database_name: str,
+    #     sql: str,
+    # ) -> str:
+    #     """
+    #     runs query for given sql and waits for completion
+    #     """
+    #     try:
+    #         res = self.athena_client.start_query_execution(
+    #             QueryString=sql,
+    #             QueryExecutionContext={"Database": database_name},
+    #             WorkGroup="data_product_workgroup",
+    #         )
+    #     except ClientError as e:
+    #         if e.response["Error"]["Code"] == "InvalidRequestException":
+    #             self.logger.error(f"This sql caused an error: {sql}")
+    #             raise ValueError(e)
+    #         else:
+    #             self.logger.error(f"unexpected error: {e}")
+    #             raise ValueError(e)
 
-        if not state == "SUCCEEDED":
-            self.logger.error(
-                "Query_id {}, failed with response: {}".format(
-                    query_id,
-                    response["QueryExecution"]["Status"].get("StateChangeReason"),
-                )
-            )
-            raise ValueError(
-                response["QueryExecution"]["Status"].get("StateChangeReason")
-            )
+    #     query_id = res["QueryExecutionId"]
+    #     while response := self.athena_client.get_query_execution(
+    #         QueryExecutionId=query_id
+    #     ):
+    #         state = response["QueryExecution"]["Status"]["State"]
+    #         if state not in ["SUCCEEDED", "FAILED"]:
+    #             time.sleep(0.1)
+    #         else:
+    #             break
 
-        return query_id
+    #     if not state == "SUCCEEDED":
+    #         self.logger.error(
+    #             "Query_id {}, failed with response: {}".format(
+    #                 query_id,
+    #                 response["QueryExecution"]["Status"].get("StateChangeReason"),
+    #             )
+    #         )
+    #         raise ValueError(
+    #             response["QueryExecution"]["Status"].get("StateChangeReason")
+    #         )
+
+    #     return query_id

@@ -1,6 +1,7 @@
 from curated_data.curated_data_loader import CuratedDataLoader
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import BucketPath, QueryTable
+from glue_and_athena_utils import table_exists as te
 
 
 class TableMissingForExistingDataProduct(Exception):
@@ -32,7 +33,11 @@ def create_curated_athena_table(
         logger=logger,
     )
 
-    table_exists = loader.table_exists()
+    # table_exists = loader.table_exists()
+    table_exists = te(
+        database_name=loader.curated_data_table.database,
+        table_name=loader.curated_data_table.name,
+    )
 
     partition_file_exists = does_partition_file_exist(
         data_product_element.curated_data_prefix,
