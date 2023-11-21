@@ -191,14 +191,6 @@ def create_glue_database(glue_client, database_name):
 
 
 @pytest.fixture
-def create_glue_tables(create_glue_database, glue_client, database_name):
-    for i in range(3):
-        glue_client.create_table(
-            DatabaseName=database_name, TableInput={"Name": f"schema{i}"}
-        )
-
-
-@pytest.fixture
 def data_product_name():
     return "data-product"
 

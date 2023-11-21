@@ -435,14 +435,14 @@ class TestUpdateMetadataRemoveSchema:
         schema_list = ["schema0"]
         with patch("glue_and_athena_utils.glue_client", glue_client):
             version_manager.update_metadata_remove_schemas(schema_list=schema_list)
-            schema_prefix = f"{data_product_name}/v2.0/metadata.json"
+            schema_prefix = f"{data_product_name}/v3.0/metadata.json"
             response = s3_client.list_objects_v2(
                 Bucket=self.bucket_name,
                 Prefix=schema_prefix,
             )
         assert response.get("KeyCount") == 1
 
-    def test_schema_glue_table_deleted(
+    def test_glue_table_deleted(
         self,
         s3_client,
         create_raw_and_curated_data,
@@ -458,10 +458,12 @@ class TestUpdateMetadataRemoveSchema:
             with pytest.raises(
                 glue_client.exceptions.EntityNotFoundException
             ) as exception:
-                glue_client.get_table(DatabaseName=database_name, Name=table_name)
+                glue_client.get_table(
+                    DatabaseName=database_name, Name=f"{schema_list[0]}"
+                )
             assert (
                 exception.value.response["Error"]["Message"]
-                == f"Table {table_name} not found."
+                == f"Table {schema_list[0]} not found."
             )
 
     def test_data_files_deleted(
@@ -537,7 +539,6 @@ class TestUpdateMetadataRemoveSchema:
         create_raw_and_curated_data,
         data_product_name,
         glue_client,
-        data_product_versions,
     ):
         version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
@@ -546,7 +547,7 @@ class TestUpdateMetadataRemoveSchema:
             # Call the handler
             version_manager.update_metadata_remove_schemas(schema_list=schema_list)
             for i in range(1, 3):
-                schema_prefix = f"{data_product_name}/v2.0/schema{i}/schema.json"
+                schema_prefix = f"{data_product_name}/v3.0/schema{i}/schema.json"
                 response = s3_client.list_objects_v2(
                     Bucket=self.bucket_name,
                     Prefix=schema_prefix,
