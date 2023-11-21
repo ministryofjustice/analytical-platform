@@ -77,7 +77,7 @@ def athena_client(region_name):
     """
     Create a mock glue catalogue
     """
-    with mock_glue():
+    with mock_athena():
         client = boto3.client("athena", region_name=region_name)
 
         yield client

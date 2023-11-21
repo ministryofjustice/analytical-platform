@@ -1,6 +1,3 @@
-import time
-
-from botocore.exceptions import ClientError
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import QueryTable
 from glue_and_athena_utils import (
