@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Fixed `KeyError` bug with `DataProductBase.changed_fields()` if new fields are added
+- Fixed `KeyError` bug with `DataProductBase.changed_fields()` if new fields
+  are added
 
 ## [7.3.0] - 2023-11-17
 
