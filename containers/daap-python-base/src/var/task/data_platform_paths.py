@@ -229,9 +229,9 @@ def get_latest_version(data_product_name: str) -> str:
     return get_all_versions(data_product_name=data_product_name)[-1]
 
 
-def get_all_major_versions(data_product_name: str) -> set[str]:
+def get_all_major_versions(data_product_name: str) -> list[str]:
     all_versions = get_all_versions(data_product_name=data_product_name)
-    return {version.split(".")[0] for version in all_versions}
+    return sorted({version.split(".")[0] for version in all_versions})
 
 
 def generate_all_element_version_prefixes(
