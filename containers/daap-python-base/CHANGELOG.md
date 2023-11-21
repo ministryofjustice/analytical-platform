@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.3.0] - 2023-11-17
+
+### Added
+
+- `curated_data` package, extracted from athena load
+- `glue_and_athena_utils.py` created and added
+  `create_glue_database`, `test_table_exists`, `refresh_table_partitions`
+  `start_query_execution_and_wait` extracted from athena load
+
 ## [7.2.1] - 2023-11-17
 
 ### Removed

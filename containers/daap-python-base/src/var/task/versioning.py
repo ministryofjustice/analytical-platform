@@ -14,7 +14,7 @@ from data_platform_paths import (
     generate_all_element_version_prefixes,
 )
 from data_product_metadata import DataProductMetadata, DataProductSchema
-from glue_utils import delete_glue_table
+from glue_and_athena_utils import delete_glue_table
 
 
 class Version(NamedTuple):

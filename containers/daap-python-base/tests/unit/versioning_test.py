@@ -433,7 +433,7 @@ class TestUpdateMetadataRemoveSchema:
     ):
         version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
-        with patch("glue_utils.glue_client", glue_client):
+        with patch("glue_and_athena_utils.glue_client", glue_client):
             version_manager.update_metadata_remove_schemas(schema_list=schema_list)
             schema_prefix = f"{data_product_name}/v2.0/metadata.json"
             response = s3_client.list_objects_v2(
@@ -452,7 +452,7 @@ class TestUpdateMetadataRemoveSchema:
     ):
         version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
-        with patch("glue_utils.glue_client", glue_client):
+        with patch("glue_and_athena_utils.glue_client", glue_client):
             table = glue_client.get_table(
                 DatabaseName=database_name, Name=f"{schema_list[0]}"
             )
@@ -484,7 +484,7 @@ class TestUpdateMetadataRemoveSchema:
     ):
         version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
-        with patch("glue_utils.glue_client", glue_client):
+        with patch("glue_and_athena_utils.glue_client", glue_client):
             # Validate we have the required number of files
             for version in data_product_major_versions:
                 curated_prefix = f"curated/{data_product_name}/{version}/schema0/"
@@ -531,7 +531,7 @@ class TestUpdateMetadataRemoveSchema:
         version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
 
-        with patch("glue_utils.glue_client", glue_client):
+        with patch("glue_and_athena_utils.glue_client", glue_client):
             # Call the handler
             version_manager.update_metadata_remove_schemas(schema_list=schema_list)
             schema_prefix = f"{data_product_name}/v3.0/{schema_list[0]}/schema.json"
@@ -552,7 +552,7 @@ class TestUpdateMetadataRemoveSchema:
         version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
 
-        with patch("glue_utils.glue_client", glue_client):
+        with patch("glue_and_athena_utils.glue_client", glue_client):
             # Call the handler
             version_manager.update_metadata_remove_schemas(schema_list=schema_list)
             for i in range(1, 3):
