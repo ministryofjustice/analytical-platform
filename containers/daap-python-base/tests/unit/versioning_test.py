@@ -21,18 +21,27 @@ test_metadata = {
     "dpiaRequired": False,
 }
 
-test_metadata_with_schemas = {
-    "name": "test_product_with_schemas",
-    "description": "just testing the metadata json validation/registration",
-    "domain": "MoJ",
-    "dataProductOwner": "matthew.laverty@justice.gov.uk",
-    "dataProductOwnerDisplayName": "matt laverty",
-    "email": "matthew.laverty@justice.gov.uk",
-    "status": "draft",
-    "retentionPeriod": 3000,
-    "dpiaRequired": False,
-    "schemas": ["schema0", "schema1", "schema2"],
-}
+test_metadata_with_schemas = copy.deepcopy(test_metadata)
+test_metadata_with_schemas.update(
+    {
+        "name": "test_product_with_schemas",
+        "schemas": ["schema0", "schema1", "schema2"],
+    }
+)
+
+test_metadata_with_opt_keys = copy.deepcopy(test_metadata)
+test_metadata_with_opt_keys.update(
+    {
+        "name": "test_product_with_opt_keys",
+        "dpiaLocation": "s3://dpias/test",
+    }
+)
+
+test_metadatas = [
+    test_metadata,
+    test_metadata_with_schemas,
+    test_metadata_with_opt_keys,
+]
 
 test_schema: dict[str, Any] = {
     "tableDescription": "table has schema to pass test",
@@ -233,37 +242,43 @@ class TestVersionManager:
     def setup(self, metadata_bucket, s3_client, data_product_name):
         self.s3_client = s3_client
         self.bucket_name = metadata_bucket
-        s3_client.put_object(
-            Body=json.dumps(test_metadata),
-            Bucket=self.bucket_name,
-            Key="test_product/v1.0/metadata.json",
-        )
-        s3_client.put_object(
-            Body=json.dumps(test_metadata_with_schemas),
-            Bucket=self.bucket_name,
-            Key="test_product_with_schemas/v1.0/metadata.json",
-        )
+        for metadata in test_metadatas:
+            s3_client.put_object(
+                Body=json.dumps(metadata),
+                Bucket=self.bucket_name,
+                Key=f"{metadata['name']}/v1.0/metadata.json",
+            )
 
-    def assert_has_keys(self, keys, version, data_product_name=test_metadata["name"]):
+    def assert_has_keys(
+        self, keys, version, data_product_name: str = test_metadata["name"]
+    ):
         contents = self.s3_client.list_objects_v2(
             Bucket=self.bucket_name, Prefix=f"{data_product_name}/{version}"
         )["Contents"]
-        actual = {i["Key"] for i in contents}
+        actual = {
+            i["Key"] for i in contents if i["Key"].startswith(f"{data_product_name}/")
+        }
 
         assert actual == keys
 
-    def test_updates_minor_version_metadata(
-        self,
-    ):
-        input_data = dict(**test_metadata)
+    @pytest.mark.parametrize(
+        "input_metadata",
+        [test_metadata, test_metadata_with_schemas, test_metadata_with_opt_keys],
+    )
+    def test_updates_minor_version_metadata(self, input_metadata):
+        input_data = dict(**input_metadata)
         input_data["description"] = "New description"
 
-        version_manager = VersionManager(test_metadata["name"], logging.getLogger())
+        version_manager = VersionManager(input_metadata["name"], logging.getLogger())
 
         version = version_manager.update_metadata(input_data)
 
         assert version == "v1.1"
-        self.assert_has_keys({"test_product/v1.1/metadata.json"}, "v1.1")
+        self.assert_has_keys(
+            {f"{input_metadata['name']}/v1.1/metadata.json"},
+            "v1.1",
+            data_product_name=input_metadata["name"],
+        )
 
     @pytest.mark.parametrize("input_data, expected", minor_inputs)
     def test_updates_minor_version_schema(self, s3_client, input_data, expected):
