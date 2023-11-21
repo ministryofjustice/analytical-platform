@@ -44,26 +44,12 @@ def handler(event, context):
         logger.error(error_message)
         return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
 
-    table_schema = DataProductSchema(
-        data_product_name=data_product_name,
-        table_name=table_name,
-        logger=logger,
-        input_data=None,
-    )
-    # Validate the existence of the table schema for the latest data product version
-    if not table_schema.exists:
-        error_message = f"Could not locate valid schema for table: {table_name}."
-        logger.error(error_message)
-        return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
-
     version_manager = VersionManager(data_product_name=data_product_name, logger=logger)
     try:
         new_version = version_manager.update_metadata_remove_schemas(
             schema_list=[table_name]
         )
     except InvalidUpdate as e:
-        return format_error_response(HTTPStatus.BAD_REQUEST, event, str(e))
-    except ValueError as e:
         return format_error_response(HTTPStatus.BAD_REQUEST, event, str(e))
     else:
         msg = f"Successfully removed table '{table_name}'"
