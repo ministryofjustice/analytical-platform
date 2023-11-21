@@ -4,6 +4,7 @@ import boto3
 from data_platform_api_responses import format_response_json
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import (
+    get_all_major_versions,
     get_curated_data_bucket,
     get_fail_data_bucket,
     get_metadata_bucket,
@@ -34,10 +35,14 @@ def handler(event, context):
     logger.add_data_product(data_product_name)
     logger.info(f"event: {event}")
 
-    try:
-        glue_client.delete_database(Name=data_product_name)
-    except glue_client.exceptions.EntityNotFoundException:
-        logger.info(f"Glue database '{data_product_name}' not found.")
+    major_versions = get_all_major_versions(data_product_name=data_product_name)
+    for major_version in major_versions:
+        database_name = f"{data_product_name}_{major_version}"
+
+        try:
+            glue_client.delete_database(Name=database_name)
+        except glue_client.exceptions.EntityNotFoundException:
+            logger.info(f"Glue database '{database_name}' not found.")
 
     # Delete fail files
     s3_recursive_delete(get_fail_data_bucket(), [f"fail/{data_product_name}/"])
