@@ -1,12 +1,7 @@
 import logging
 from unittest.mock import patch
 
-from glue_and_athena_utils import (
-    create_glue_database,
-    delete_glue_table,
-    start_query_execution_and_wait,
-    table_exists,
-)
+from glue_and_athena_utils import create_glue_database, delete_glue_table, table_exists
 
 
 def test_create_glue_database(glue_client):
