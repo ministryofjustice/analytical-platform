@@ -186,15 +186,15 @@ def create_curated_bucket(s3_client, region_name):
 
 
 @pytest.fixture
-def create_glue_database(glue_client, data_product_name):
-    glue_client.create_database(DatabaseInput={"Name": data_product_name})
+def create_glue_database(glue_client, database_name):
+    glue_client.create_database(DatabaseInput={"Name": database_name})
 
 
 @pytest.fixture
-def create_glue_tables(create_glue_database, glue_client, data_product_name):
+def create_glue_tables(create_glue_database, glue_client, database_name):
     for i in range(3):
         glue_client.create_table(
-            DatabaseName=data_product_name, TableInput={"Name": f"schema{i}"}
+            DatabaseName=database_name, TableInput={"Name": f"schema{i}"}
         )
 
 
@@ -211,6 +211,12 @@ def table_name():
 @pytest.fixture
 def data_product_versions():
     return {"v1.0", "v1.1", "v1.2", "v2.0"}
+
+
+@pytest.fixture
+def database_name(data_product_name, data_product_versions):
+    latest_version = sorted(data_product_versions)[-1]
+    return data_product_name + "_" + latest_version.split(".")[0]
 
 
 @pytest.fixture

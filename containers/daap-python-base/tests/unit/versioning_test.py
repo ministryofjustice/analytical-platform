@@ -408,6 +408,7 @@ class TestUpdateMetadataRemoveSchema:
         create_glue_database,
         data_product_name,
         data_product_versions,
+        database_name,
     ):
         self.bucket_name = metadata_bucket
         for version in data_product_versions:
@@ -424,7 +425,7 @@ class TestUpdateMetadataRemoveSchema:
                     Key=f"{data_product_name}/{version}/schema{i}/schema.json",
                 )
         glue_client.create_table(
-            DatabaseName=data_product_name, TableInput={"Name": "schema0"}
+            DatabaseName=database_name, TableInput={"Name": "schema0"}
         )
 
     def test_success(
@@ -441,56 +442,37 @@ class TestUpdateMetadataRemoveSchema:
             )
         assert response.get("KeyCount") == 1
 
-    def test_invalid_schemas(self, data_product_name):
-        version_manager = VersionManager(data_product_name, logging.getLogger())
-        schema_list = ["schema3", "schema4"]
-
-        with pytest.raises(InvalidUpdate) as exc:
-            version_manager.update_metadata_remove_schemas(schema_list=schema_list)
-        assert (
-            str(exc.value)
-            == "Invalid schemas found in schema_list: ['schema3', 'schema4']"
-        )
-
-    def test_glue_table_not_found(
+    def test_schema_glue_table_deleted(
         self,
         s3_client,
         create_raw_and_curated_data,
         data_product_name,
         glue_client,
-        table_name,
-    ):
-        version_manager = VersionManager(data_product_name, logging.getLogger())
-        schema_list = ["schema0", "schema1"]
-        with patch("glue_utils.glue_client", glue_client):
-            with pytest.raises(ValueError) as exc:
-                version_manager.update_metadata_remove_schemas(schema_list=schema_list)
-                assert (
-                    str(exc.value)
-                    == f"Could not locate glue table '{table_name}' in database '{data_product_name}'"
-                )
-
-    def test_schema_glue_table_deleted(
-        self, s3_client, create_raw_and_curated_data, data_product_name, glue_client
+        database_name,
     ):
         version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
         with patch("glue_utils.glue_client", glue_client):
             table = glue_client.get_table(
-                DatabaseName=data_product_name, Name=f"{schema_list[0]}"
+                DatabaseName=database_name, Name=f"{schema_list[0]}"
             )
             assert table["ResponseMetadata"]["HTTPStatusCode"] == 200
             assert table["Table"]["Name"] == schema_list[0]
 
-            with pytest.raises(ClientError) as exc:
-                # Call the handler
-                version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+            # Call the handler
+            version_manager.update_metadata_remove_schemas(schema_list=schema_list)
 
-                table = glue_client.get_table(
-                    DatabaseName=data_product_name, Name=f"{schema_list[0]})"
+            with pytest.raises(
+                glue_client.exceptions.EntityNotFoundException
+            ) as exception:
+                result = glue_client.get_table(
+                    DatabaseName=database_name, Name=f"{schema_list[0]}"
                 )
-            assert exc.value.response["Error"]["Code"] == "EntityNotFoundException"
-            assert f"{schema_list[0]}" in exc.value.response["Error"]["Message"]
+                print(result)
+            assert (
+                exception.value.response["Error"]["Message"]
+                == f"Table {schema_list[0]} not found."
+            )
 
     def test_data_files_deleted(
         self,

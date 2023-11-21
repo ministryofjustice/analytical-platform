@@ -135,12 +135,12 @@ def event(data_product_name, table_name):
 
 @pytest.fixture
 def data_product_versions():
-    return {"v1.0", "v1.1", "v1.2", "v2.0"}
+    return ["v1.0", "v1.1", "v1.2", "v2.0"]
 
 
 @pytest.fixture
 def data_product_major_versions():
-    return {"v1", "v2"}
+    return ["v1", "v2"]
 
 
 @pytest.fixture
@@ -186,14 +186,20 @@ def create_schema(
 
 
 @pytest.fixture
-def create_glue_database(glue_client, data_product_name):
-    glue_client.create_database(DatabaseInput={"Name": data_product_name})
+def database_name(data_product_name, data_product_versions):
+    latest_version = data_product_versions[-1]
+    return data_product_name + "_" + latest_version.split(".")[0]
 
 
 @pytest.fixture
-def create_glue_table(create_glue_database, glue_client, data_product_name, table_name):
+def create_glue_database(glue_client, database_name):
+    glue_client.create_database(DatabaseInput={"Name": database_name})
+
+
+@pytest.fixture
+def create_glue_table(create_glue_database, glue_client, database_name, table_name):
     glue_client.create_table(
-        DatabaseName=data_product_name, TableInput={"Name": table_name}
+        DatabaseName=database_name, TableInput={"Name": table_name}
     )
 
 
@@ -242,8 +248,3 @@ def load_v1_metadata_schema_to_mock_s3(s3_client):
         Bucket=os.environ["METADATA_BUCKET"],
         Key="data_product_metadata_spec/v1.1.0/moj_data_product_metadata_spec.json",
     )
-
-
-@pytest.fixture
-def regenerate_schema_data(create_schema):
-    pass

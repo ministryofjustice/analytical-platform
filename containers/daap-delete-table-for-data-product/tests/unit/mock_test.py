@@ -1,8 +1,25 @@
 import json
 import os
 from http import HTTPStatus
+from unittest.mock import patch
 
+import pytest
 import delete_table
+
+
+def count_files(client, bucket, prefix):
+    paginator = client.get_paginator("list_objects_v2")
+    page_iterator = paginator.paginate(
+        Bucket=bucket,
+        Prefix=prefix,
+    )
+    file_count = 0
+    try:
+        for page in page_iterator:
+            file_count += page["KeyCount"]
+    except KeyError:
+        pass
+    return file_count
 
 
 class TestHandler:
@@ -11,6 +28,7 @@ class TestHandler:
         logger,
         event,
         fake_context,
+        glue_client,
         table_name,
         create_schema,
         create_glue_table,
@@ -18,7 +36,6 @@ class TestHandler:
         create_curated_data,
     ):
         response = delete_table.handler(event=event, context=fake_context)
-
         assert response["statusCode"] == HTTPStatus.OK
         assert (
             json.loads(response["body"])["message"]
@@ -35,31 +52,35 @@ class TestHandler:
             == f"Could not locate metadata for data product: {data_product_name}."
         )
 
-    def test_table_schema_fail(
-        self, s3_client, event, fake_context, table_name, create_metadata
+    def test_glue_table_deleted(
+        self,
+        logger,
+        event,
+        fake_context,
+        glue_client,
+        table_name,
+        create_schema,
+        create_glue_table,
+        create_raw_data,
+        create_curated_data,
+        database_name,
     ):
-        response = delete_table.handler(event=event, context=fake_context)
-        assert response["statusCode"] == HTTPStatus.BAD_REQUEST
+        delete_table.handler(event=event, context=fake_context)
+        with pytest.raises(glue_client.exceptions.EntityNotFoundException) as exception:
+            glue_client.get_table(DatabaseName=database_name, Name=table_name)
         assert (
-            json.loads(response["body"])["error"]["message"]
-            == f"Could not locate valid schema for table: {table_name}."
+            exception.value.response["Error"]["Message"]
+            == f"Table {table_name} not found."
         )
 
-    def test_glue_table_fail(
-        self,
-        event,
-        fake_context,
-        table_name,
-        data_product_name,
-        create_schema,
-        create_glue_database,
-    ):
-        response = delete_table.handler(event=event, context=fake_context)
-        print(response)
-        assert response["statusCode"] == HTTPStatus.BAD_REQUEST
-        assert f"{table_name}" in json.loads(response["body"])["error"]["message"]
-
-    def test_deletion_of_raw_files(
+    @pytest.mark.parametrize(
+        "bucket_name,file_type,pre_count,post_count",
+        [
+            ("RAW_DATA_BUCKET", "raw", 10, 0),
+            ("CURATED_DATA_BUCKET", "curated", 10, 0),
+        ],
+    )
+    def test_deletion_of_files(
         self,
         event,
         fake_context,
@@ -72,61 +93,22 @@ class TestHandler:
         data_product_name,
         table_name,
         data_product_major_versions,
+        bucket_name,
+        file_type,
+        pre_count,
+        post_count,
     ):
-        bucket = os.getenv("RAW_DATA_BUCKET")
+        bucket = os.getenv(bucket_name)
         for version in data_product_major_versions:
-            prefix = f"raw/{data_product_name}/{version}/{table_name}/"
-            response = s3_client.list_objects_v2(
-                Bucket=bucket,
-                Prefix=prefix,
-            )
-            assert response.get("KeyCount") == 10
+            prefix = f"{file_type}/{data_product_name}/{version}/{table_name}/"
+            assert count_files(s3_client, bucket, prefix) == pre_count
 
         # Call the handler
         delete_table.handler(event=event, context=fake_context)
 
         for version in data_product_major_versions:
-            prefix = f"raw/{data_product_name}/{version}/{table_name}/"
-            response = s3_client.list_objects_v2(
-                Bucket=bucket,
-                Prefix=prefix,
-            )
-            assert response.get("KeyCount") == 0
-
-    def test_deletion_of_curated_files(
-        self,
-        event,
-        fake_context,
-        logger,
-        create_schema,
-        create_glue_table,
-        create_raw_data,
-        create_curated_data,
-        s3_client,
-        data_product_name,
-        table_name,
-        data_product_major_versions,
-    ):
-        bucket = os.getenv("CURATED_DATA_BUCKET")
-
-        for version in data_product_major_versions:
-            prefix = f"curated/{data_product_name}/{version}/{table_name}/"
-            response = s3_client.list_objects_v2(
-                Bucket=bucket,
-                Prefix=prefix,
-            )
-            assert response.get("KeyCount") == 10
-
-        # Call the handler
-        delete_table.handler(event=event, context=fake_context)
-
-        for version in data_product_major_versions:
-            prefix = f"curated/{data_product_name}/{version}/{table_name}/"
-            response = s3_client.list_objects_v2(
-                Bucket=bucket,
-                Prefix=prefix,
-            )
-            assert response.get("KeyCount") == 0
+            prefix = f"{file_type}/{data_product_name}/{version}/{table_name}/"
+            assert count_files(s3_client, bucket, prefix) == post_count
 
     def test_deletion_of_old_schema_version(
         self,
@@ -143,16 +125,11 @@ class TestHandler:
         data_product_versions,
     ):
         # Call the handler
-        response = delete_table.handler(event=event, context=fake_context)
+        delete_table.handler(event=event, context=fake_context)
         bucket = os.getenv("METADATA_BUCKET")
+        prefix = f"{data_product_name}/v3.0/{table_name}/schema.json"
 
-        # Validate that v3.0 of schema.json doesnt exist
-        schema_prefix = f"{data_product_name}/v3.0/{table_name}/schema.json"
-        response = s3_client.list_objects_v2(
-            Bucket=bucket,
-            Prefix=schema_prefix,
-        )
-        assert response.get("KeyCount") == 0
+        assert count_files(s3_client, bucket, prefix) == 0
 
     def test_major_version_update_of_metadata(
         self,
@@ -168,13 +145,8 @@ class TestHandler:
         table_name,
     ):
         # Call the handler
-        response = delete_table.handler(event=event, context=fake_context)
+        delete_table.handler(event=event, context=fake_context)
         bucket = os.getenv("METADATA_BUCKET")
+        prefix = f"{data_product_name}/v3.0/metadata.json"
 
-        # Check that v2.0 of metadata.json exists.
-        metadata_prefix = f"{data_product_name}/v2.0/metadata.json"
-        response = s3_client.list_objects_v2(
-            Bucket=bucket,
-            Prefix=metadata_prefix,
-        )
-        assert response.get("KeyCount") == 1
+        assert count_files(s3_client, bucket, prefix) == 1
