@@ -188,6 +188,17 @@ def create_curated_bucket(s3_client, region_name):
 @pytest.fixture
 def create_glue_database(glue_client, database_name):
     glue_client.create_database(DatabaseInput={"Name": database_name})
+<<<<<<< HEAD
+=======
+
+
+@pytest.fixture
+def create_glue_tables(create_glue_database, glue_client, database_name):
+    for i in range(3):
+        glue_client.create_table(
+            DatabaseName=database_name, TableInput={"Name": f"schema{i}"}
+        )
+>>>>>>> 117cd3d3 (:white_check_mark: Update tests)
 
 
 @pytest.fixture

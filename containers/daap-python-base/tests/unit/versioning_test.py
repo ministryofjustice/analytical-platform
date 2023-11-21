@@ -441,13 +441,18 @@ class TestUpdateMetadataRemoveSchema:
             )
         assert response.get("KeyCount") == 1
 
+<<<<<<< HEAD
     def test_glue_table_deleted(
+=======
+    def test_schema_glue_table_deleted(
+>>>>>>> 117cd3d3 (:white_check_mark: Update tests)
         self,
         s3_client,
         create_raw_and_curated_data,
         data_product_name,
         glue_client,
         database_name,
+<<<<<<< HEAD
         table_name,
     ):
         version_manager = VersionManager(data_product_name, logging.getLogger())
@@ -464,6 +469,32 @@ class TestUpdateMetadataRemoveSchema:
                 exception.value.response["Error"]["Message"]
                 == f"Table {schema_list[0]} not found."
             )
+=======
+    ):
+        version_manager = VersionManager(data_product_name, logging.getLogger())
+        schema_list = ["schema0"]
+        with patch("glue_and_athena_utils.glue_client", glue_client):
+            table = glue_client.get_table(
+                DatabaseName=database_name, Name=f"{schema_list[0]}"
+            )
+            assert table["ResponseMetadata"]["HTTPStatusCode"] == 200
+            assert table["Table"]["Name"] == schema_list[0]
+
+            # Call the handler
+            version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+
+            with pytest.raises(
+                glue_client.exceptions.EntityNotFoundException
+            ) as exception:
+                result = glue_client.get_table(
+                    DatabaseName=database_name, Name=f"{schema_list[0]}"
+                )
+                print(result)
+            assert (
+                exception.value.response["Error"]["Message"]
+                == f"Table {schema_list[0]} not found."
+            )
+>>>>>>> 117cd3d3 (:white_check_mark: Update tests)
 
     def test_data_files_deleted(
         self,

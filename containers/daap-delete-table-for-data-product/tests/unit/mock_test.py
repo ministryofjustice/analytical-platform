@@ -1,9 +1,26 @@
 import json
 import os
 from http import HTTPStatus
+from unittest.mock import patch
 
+import pytest
 import delete_table
 import pytest
+
+
+def count_files(client, bucket, prefix):
+    paginator = client.get_paginator("list_objects_v2")
+    page_iterator = paginator.paginate(
+        Bucket=bucket,
+        Prefix=prefix,
+    )
+    file_count = 0
+    try:
+        for page in page_iterator:
+            file_count += page["KeyCount"]
+    except KeyError:
+        pass
+    return file_count
 
 
 def count_files(client, bucket, prefix):
