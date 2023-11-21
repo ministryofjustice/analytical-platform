@@ -104,61 +104,61 @@ locals {
   }
 
   data_platform_modernisation_platform_teams = {
-    "data-platform-development-modernisation-platform-sandbox" = {
-      name           = "data-platform-development-modernisation-platform-sandbox"
-      description    = "Data Platform Development Modernisation Platform Sandbox"
+    "data-platform-development-sandbox" = {
+      name           = "data-platform-development-sandbox"
+      description    = "Data Platform Development Sandbox"
       parent_team_id = module.data_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
         local.data_platform_teams["data-platform-labs"].members
       ])
     },
-    "data-platform-preproduction-modernisation-platform-developer" = {
-      name           = "data-platform-preproduction-modernisation-platform-developer"
-      description    = "Data Platform PreProduction Modernisation Platform Developer"
+    "data-platform-preproduction-developer" = {
+      name           = "data-platform-preproduction-developer"
+      description    = "Data Platform PreProduction Developer"
       parent_team_id = module.data_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
         local.data_platform_teams["data-platform-labs"].members
       ])
     },
-    "data-platform-production-modernisation-platform-developer" = {
-      name           = "data-platform-production-modernisation-platform-developer"
-      description    = "Data Platform Production Modernisation Platform Developer"
+    "data-platform-production-developer" = {
+      name           = "data-platform-production-developer"
+      description    = "Data Platform Production Developer"
       parent_team_id = module.data_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
         local.data_platform_teams["data-platform-labs"].members
       ])
     },
-    "data-platform-test-modernisation-platform-developer" = {
-      name           = "data-platform-test-modernisation-platform-developer"
-      description    = "Data Platform Test Modernisation Platform Developer"
+    "data-platform-test-developer" = {
+      name           = "data-platform-test-developer"
+      description    = "Data Platform Test Developer"
       parent_team_id = module.data_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
         local.data_platform_teams["data-platform-labs"].members
       ])
     }
-    "data-platform-modernisation-platform-audit-and-security" = {
-      name           = "data-platform-modernisation-platform-audit-and-security"
-      description    = "Data Platform Modernisation Platform Audit and Security"
+    "data-platform-audit-and-security" = {
+      name           = "data-platform-audit-and-security"
+      description    = "Data Platform Audit and Security"
       parent_team_id = module.data_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-audit-and-security"].members
       ])
     },
-    "data-platform-apps-and-tools-development-modernisation-platform-sandbox" = {
-      name           = "data-platform-apps-and-tools-development-modernisation-platform-sandbox"
-      description    = "Data Platform Apps and Tools Development Modernisation Platform Sandbox"
+    "data-platform-apps-and-tools-development-sandbox" = {
+      name           = "data-platform-apps-and-tools-development-sandbox"
+      description    = "Data Platform Apps and Tools Development Sandbox"
       parent_team_id = module.data_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
     },
-    "data-platform-apps-and-tools-production-modernisation-platform-developer" = {
-      name           = "data-platform-apps-and-tools-production-modernisation-platform-developer"
-      description    = "Data Platform Apps and Tools Production Modernisation Platform Developer"
+    "data-platform-apps-and-tools-production-developer" = {
+      name           = "data-platform-apps-and-tools-production-developer"
+      description    = "Data Platform Apps and Tools Production Developer"
       parent_team_id = module.data_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
