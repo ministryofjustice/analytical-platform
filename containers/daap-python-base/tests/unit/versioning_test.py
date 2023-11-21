@@ -249,9 +249,7 @@ class TestVersionManager:
                 Key=f"{metadata['name']}/v1.0/metadata.json",
             )
 
-    def assert_has_keys(
-        self, keys, version, data_product_name: str = test_metadata["name"]
-    ):
+    def assert_has_keys(self, keys, version, data_product_name=test_metadata["name"]):
         contents = self.s3_client.list_objects_v2(
             Bucket=self.bucket_name, Prefix=f"{data_product_name}/{version}"
         )["Contents"]
