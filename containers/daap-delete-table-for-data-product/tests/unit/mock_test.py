@@ -1,10 +1,9 @@
 import json
 import os
 from http import HTTPStatus
-from unittest.mock import patch
 
-import pytest
 import delete_table
+import pytest
 
 
 def count_files(client, bucket, prefix):

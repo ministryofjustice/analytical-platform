@@ -6,7 +6,6 @@ from typing import Any
 from unittest.mock import patch
 
 import pytest
-from botocore.exceptions import ClientError
 from versioning import InvalidUpdate, VersionManager
 
 test_metadata = {

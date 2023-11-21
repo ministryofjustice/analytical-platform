@@ -3,7 +3,7 @@ from http import HTTPStatus
 import boto3
 from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger
-from data_product_metadata import DataProductMetadata, DataProductSchema
+from data_product_metadata import DataProductMetadata
 from versioning import InvalidUpdate, VersionManager
 
 logger = DataPlatformLogger()

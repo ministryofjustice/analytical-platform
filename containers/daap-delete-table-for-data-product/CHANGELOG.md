@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2023-11-21
+
+### Added
+
+- `count_files` helper function in tests
+
+### Removed
+
+- DataProductSchema.exists check
+- 'ValueError' exception handling as glue delete table
+  will no longer throw an exception back to the caller
+- `test_table_schema_fail` as schema check no longer exists
+
+### Changed
+
+- tests for deletion of raw and curated files combined
+
 ## [2.2.1] - 2023-11-16
 
 ### Changed

@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.4.0] - 2023-11-21
+
+### Changed
+
+- `delete_glue_table` data_product_name parameter changed to
+  database_name
+- `delete_glue_table` no longer raises an exception is table
+  is not found in the database
+- `create_glue_database` fixture now uses datebase name instead of data_product_name
+- `test_glue_table_not_found` renamed to `test_glue_table_deleted`
+- `test_glue_table_deleted` matches exact exception
+- `test_validate_other_schemas_are_upversioned` matches v3.0
+
+### Removed
+
+- `test_invalid_schemas` these are now just ignored and logged
+- `test_schema_glue_table_deleted` test as schema is no longer checked
+
+### Added
+
+- `versioning.update_metadata_remove_schemas` method now create a
+  DataProductElement object to pass the database name to `delete_glue_table`
+- `database_name` fixture to create the latest version of the database name
+
 ## [7.3.0] - 2023-11-17
 
 ### Added
