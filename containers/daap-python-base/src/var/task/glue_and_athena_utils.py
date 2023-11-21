@@ -41,7 +41,6 @@ def delete_glue_table(
         if e.response["Error"]["Code"] == "EntityNotFoundException":
             error_message = f"Could not locate glue table '{table_name}' in database '{database_name}'"
             logger.error(error_message)
-            raise ValueError(error_message)
         else:
             raise
     else:

@@ -449,29 +449,19 @@ class TestUpdateMetadataRemoveSchema:
         data_product_name,
         glue_client,
         database_name,
+        table_name,
     ):
         version_manager = VersionManager(data_product_name, logging.getLogger())
-        schema_list = ["schema0"]
+        schema_list = ["schema0", "schema1"]
         with patch("glue_and_athena_utils.glue_client", glue_client):
-            table = glue_client.get_table(
-                DatabaseName=database_name, Name=f"{schema_list[0]}"
-            )
-            assert table["ResponseMetadata"]["HTTPStatusCode"] == 200
-            assert table["Table"]["Name"] == schema_list[0]
-
-            # Call the handler
             version_manager.update_metadata_remove_schemas(schema_list=schema_list)
-
             with pytest.raises(
                 glue_client.exceptions.EntityNotFoundException
             ) as exception:
-                result = glue_client.get_table(
-                    DatabaseName=database_name, Name=f"{schema_list[0]}"
-                )
-                print(result)
+                glue_client.get_table(DatabaseName=database_name, Name=table_name)
             assert (
                 exception.value.response["Error"]["Message"]
-                == f"Table {schema_list[0]} not found."
+                == f"Table {table_name} not found."
             )
 
     def test_data_files_deleted(
