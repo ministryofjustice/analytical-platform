@@ -1,12 +1,16 @@
 import logging
 from unittest.mock import patch
 
-from glue_and_athena_utils import create_glue_database, delete_glue_table, table_exists
+from glue_and_athena_utils import (
+    create_glue_database,
+    delete_glue_table,
+    start_query_execution_and_wait,
+    table_exists,
+)
 
 
 def test_create_glue_database(glue_client):
     database_name = "test_db"
-    table_name = "test_table"
     create_glue_database(glue_client, database_name, logging.getLogger())
     response = glue_client.get_database(Name=database_name)
     assert response["Database"]["Name"] == database_name
