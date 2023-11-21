@@ -7,6 +7,7 @@ from enum import Enum
 from typing import NamedTuple
 
 import boto3
+from curated_data.curated_data_loader import CuratedDataCopier
 from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import (
     DataProductConfig,
@@ -314,6 +315,9 @@ class VersionManager:
             )
             schema.convert_schema_to_glue_table_input_csv()
             schema.write_json_to_s3(new_version_key)
+            # if major we need to create next major version data product data
+            if state == UpdateType.MajorUpdate:
+                copier = CuratedDataCopier()
             return new_version, changes
         else:
             raise InvalidUpdate()
