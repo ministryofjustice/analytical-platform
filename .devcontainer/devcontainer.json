@@ -31,5 +31,14 @@
     { "source": "ministryofjustice-data-platform-devcontainer-workspace", "target": "/home/vscode/workspace", "type": "volume" },
     { "source": "ministryofjustice-data-platform-devcontainer-commandhistory", "target": "/home/vscode/.commandhistory", "type": "volume" }
   ],
-  "workspaceFolder": "/home/vscode/workspace"
+  "workspaceFolder": "/home/vscode/workspace",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "dotfiles.repository": "https://github.com/${localEnv:GITHUB_USER}/dotfiles",
+        "dotfiles.targetPath": "~/dotfiles",
+        "dotfiles.installCommand": "setup.sh"
+      }
+    }
+  }
 }
