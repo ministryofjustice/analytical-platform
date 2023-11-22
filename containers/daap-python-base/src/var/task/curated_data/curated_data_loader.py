@@ -1,5 +1,3 @@
-import os
-
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import DataProductElement, QueryTable
 from data_product_metadata import DataProductSchema, format_table_schema
