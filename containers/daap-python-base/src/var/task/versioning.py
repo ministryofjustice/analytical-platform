@@ -317,7 +317,13 @@ class VersionManager:
             schema.write_json_to_s3(new_version_key)
             # if major we need to create next major version data product data
             if state == UpdateType.MajorUpdate:
-                copier = CuratedDataCopier()
+                data_product_element = DataProductElement.load(
+                    schema.table_name, self.data_product_config.name
+                )
+                create_next_major_version_data_product_and_data(
+                    schema, data_product_element, changes, self.logger
+                )
+
             return new_version, changes
         else:
             raise InvalidUpdate()
@@ -540,3 +546,21 @@ def s3_recursive_delete(bucket_name: str, prefixes: list[str]) -> None:
     bucket = s3_resource.Bucket(bucket_name)
     for prefix in prefixes:
         bucket.objects.filter(Prefix=prefix).delete()
+
+
+def create_next_major_version_data_product_and_data(
+    schema, data_product_element, changes, logger
+):
+    athena_client = boto3.client("athena")
+    glue_client = boto3.client("glue")
+
+    copier = CuratedDataCopier(
+        column_changes=changes[schema.table_name]["columns"],
+        new_schema=schema,
+        element=data_product_element,
+        athena_client=athena_client,
+        glue_client=glue_client,
+        logger=logger,
+    )
+
+    copier.run()
