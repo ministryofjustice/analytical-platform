@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] 2023-11-21
+
+### Changed
+
+- `delete_data_product.handler` now deletes databases
+    for all major versions of the data product
+
 ## [2.0.0] 2023-11-16
 
 ### Added
