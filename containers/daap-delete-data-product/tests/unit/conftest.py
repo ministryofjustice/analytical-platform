@@ -6,7 +6,7 @@ from os.path import dirname, join
 
 import boto3
 import pytest
-from glue_athena_utils import create_glue_database
+from glue_and_athena_utils import create_glue_database
 from moto import mock_glue, mock_s3
 
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
