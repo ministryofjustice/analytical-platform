@@ -94,37 +94,33 @@ class VersionManager:
         s3_client = boto3.client("s3")
         # remove any list duplicates and preserve list order
         schema_list = list({k: None for k in schema_list}.keys())
+        self.logger.info(f"schemas to delete: {schema_list}")
 
         data_product_name = self.data_product_config.name
 
-        current_metadata = (
-            DataProductMetadata(
-                data_product_name=data_product_name,
-                logger=self.logger,
-                input_data=None,
-            )
-            .load()
-            .latest_version_saved_data
+        data_product_metadata = DataProductMetadata(
+            data_product_name=data_product_name,
+            logger=self.logger,
+            input_data=None,
         )
+        database_name = data_product_metadata.database_name
+
+        current_metadata = data_product_metadata.load().latest_version_saved_data
         current_schemas = current_metadata.get("schemas", [])
-        self.logger.info(f"Current schemas: {current_schemas}")
+        self.logger.info(f"Existing schemas: {current_schemas}")
 
         valid_schemas_to_delete = all(
             schema in current_schemas for schema in schema_list
         )
         if not valid_schemas_to_delete:
             schemas_not_in_current = list(set(schema_list).difference(current_schemas))
-            error = f"Invalid schemas found in schema_list: {sorted(schemas_not_in_current)}"
-            self.logger.error(error)
+            message = f"Schemas not found in current schema_list: {sorted(schemas_not_in_current)}"
+            self.logger.info(message)
 
-        self.logger.info(f"schemas to delete: {schema_list}")
         for schema_name in schema_list:
-            element = DataProductElement.load(
-                element_name=schema_name, data_product_name=data_product_name
-            )
             # Delete the Glue table
             result = delete_glue_table(
-                database_name=element.database_name,
+                database_name=database_name,
                 table_name=schema_name,
                 logger=self.logger,
             )
