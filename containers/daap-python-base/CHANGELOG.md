@@ -33,6 +33,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   DataProductElement object to pass the database name to `delete_glue_table`
 - `database_name` fixture to create the latest version of the database name
 
+## [7.3.1] - 2023-11-21
+
+### Added
+
+- `get_all_major_versions` helpder function to `data_platform_paths.py`
+- `delete_database` utility function to `glue_and_athena_utils.py`
+
 ## [7.3.0] - 2023-11-17
 
 ### Added
