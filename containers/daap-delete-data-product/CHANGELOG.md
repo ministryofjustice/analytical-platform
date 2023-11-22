@@ -11,18 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.1.0] 2023-11-21
 
-### Added
-
-- `database_names` fixture to generate a list of database names
-    for all major versions
-
 ### Changed
 
-- updated `create_glue_database` to `create_glue_databases`
-- `create_glue_databases` now creates databases for all major versions
-- `create_glue_tables` now creates tables for all database names
-- `test_databases_are_deleted` now checks for databases
-    for all major versions
+- `delete_data_product.handler` now deletes databases
+    for all majore versions of the data product
 
 ## [2.0.0] 2023-11-16
 
