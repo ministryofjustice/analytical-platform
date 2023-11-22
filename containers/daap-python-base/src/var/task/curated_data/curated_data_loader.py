@@ -96,7 +96,6 @@ class CuratedDataLoader:
                 database_name=self.curated_data_table.database,
                 sql=self.query_builder.sql_create_next_major_increment_table(
                     self.curated_data_table,
-                    self.column_metadata,
                 ),
                 logger=self.logger,
             )

@@ -76,9 +76,7 @@ class CuratedDataQueryBuilder:
 
         return partition_sql
 
-    def sql_create_next_major_increment_table(
-        self, new_curated_table: QueryTable, column_metadata: dict
-    ):
+    def sql_create_next_major_increment_table(self, new_curated_table: QueryTable):
         """
         This creates a table in the new version database of the latest snapshot
         from each table in a data product.
