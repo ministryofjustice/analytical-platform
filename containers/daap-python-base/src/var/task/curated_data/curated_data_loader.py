@@ -106,7 +106,6 @@ class CuratedDataLoader:
                 database_name=self.curated_data_table.database,
                 sql=self.query_builder.sql_unload_for_major_updated_table(
                     curated_table=self.curated_data_table,
-                    column_metadata=self.column_metadata,
                 ),
                 logger=self.logger,
             )
