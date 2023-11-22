@@ -29,6 +29,16 @@ def create_glue_database(
             raise
 
 
+def delete_database(
+    glue_client: BaseClient, database_name: str, logger: DataPlatformLogger
+) -> None:
+    """Delete a glue database with the given database name"""
+    try:
+        glue_client.delete_database(Name=database_name)
+    except glue_client.exceptions.EntityNotFoundException:
+        logger.info(f"Glue database '{database_name}' not found.")
+
+
 def delete_glue_table(
     data_product_name: str,
     table_name: str,
