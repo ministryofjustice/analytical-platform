@@ -10,7 +10,7 @@ from data_platform_paths import (
     get_metadata_bucket,
     get_raw_data_bucket,
 )
-from glue_and_athena_utils import delete_database
+from glue_and_athena_utils import delete_glue_database
 from versioning import s3_recursive_delete
 
 logger = DataPlatformLogger()
@@ -39,7 +39,7 @@ def handler(event, context):
     major_versions = get_all_major_versions(data_product_name=data_product_name)
     for major_version in major_versions:
         database_name = f"{data_product_name}_{major_version}"
-        delete_database(database_name=database_name, logger=logger)
+        delete_glue_database(database_name=database_name, logger=logger)
 
     # Delete fail files
     s3_recursive_delete(get_fail_data_bucket(), [f"fail/{data_product_name}/"])

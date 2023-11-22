@@ -6,7 +6,7 @@ from os.path import dirname, join
 
 import boto3
 import pytest
-from glue_and_athena_utils import create_glue_database
+
 from moto import mock_glue, mock_s3
 
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
@@ -25,6 +25,7 @@ os.environ["BUCKET_NAME"] = "test"
 
 from data_platform_logging import DataPlatformLogger  # noqa E402
 from data_platform_paths import DataProductElement  # noqa E402
+from glue_and_athena_utils import create_glue_database
 
 
 @pytest.fixture(autouse=True)

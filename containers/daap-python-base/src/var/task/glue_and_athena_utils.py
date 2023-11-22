@@ -29,9 +29,7 @@ def create_glue_database(
             raise
 
 
-def delete_database(
-    glue_client: BaseClient, database_name: str, logger: DataPlatformLogger
-) -> None:
+def delete_glue_database(database_name: str, logger: DataPlatformLogger) -> None:
     """Delete a glue database with the given database name"""
     try:
         glue_client.delete_database(Name=database_name)
