@@ -6,6 +6,7 @@ from os.path import dirname, join
 
 import boto3
 import pytest
+from glue_athena_utils import create_glue_database
 from moto import mock_glue, mock_s3
 
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
@@ -177,9 +178,11 @@ def database_names(data_product_name, data_product_versions):
 
 
 @pytest.fixture
-def create_glue_databases(glue_client, data_product_name, database_names):
+def create_glue_databases(glue_client, database_names, logger):
     for database_name in database_names:
-        glue_client.create_database(DatabaseInput={"Name": database_name})
+        create_glue_database(
+            glue_client=glue_client, database_name=database_name, logger=logger
+        )
 
 
 @pytest.fixture
