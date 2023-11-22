@@ -3,6 +3,7 @@ name: Trivy
 on:
   schedule:
     - cron: "0 6 * * 1"
+  workflow_dispatch:
 
 permissions: read-all
 
@@ -11,8 +12,15 @@ jobs:
     name: trivy
     runs-on: ubuntu-latest
     permissions:
-      issues: write
+      contents: read
+      id-token: write
+      security-events: write
+      pull-requests: read
+      issues: read
     steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: trivy
         id: terraform_static_analysis_trivy
         uses: aquasecurity/trivy-action@2b6a709cf9c4025c5438138008beaddbb02086f0 # v0.14.0
