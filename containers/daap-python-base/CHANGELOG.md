@@ -9,11 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [7.4.1] - 2023-11-21
+## [7.3.1] - 2023-11-21
 
 ### Added
 
 - `get_all_major_versions` helpder function to `data_platform_paths.py`
+- `delete_database` utility function to `glue_and_athena_utils.py`
 
 ## [7.3.0] - 2023-11-17
 
