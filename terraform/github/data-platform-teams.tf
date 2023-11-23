@@ -25,7 +25,6 @@ locals {
       parent_team_id = module.data_platform_team.id
       members = [
         "bagg3rs",           # Richard Baguley
-        "AlexVilela",        # Alex Vilela
         "julialawrence",     # Julia Lawrence
         "jhpyke",            # Jacob Hamblin-Pyke
         "jacobwoffenden",    # Jacob Woffenden
@@ -68,7 +67,6 @@ locals {
       parent_team_id = module.data_platform_team.id
       members = [
         "bagg3rs",           # Richard Baguley
-        "AlexVilela",        # Alex Vilela
         "julialawrence",     # Julia Lawrence
         "jhpyke",            # Jacob Hamblin-Pyke
         "jacobwoffenden",    # Jacob Woffenden
