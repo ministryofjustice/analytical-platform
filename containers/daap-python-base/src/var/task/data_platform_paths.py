@@ -93,6 +93,12 @@ def specification_path(
     )
 
 
+def get_database_name_for_version(
+    data_product_name: str, latest_major_version: str
+) -> str:
+    return data_product_name + "_" + latest_major_version
+
+
 def get_new_version(version, increment_type):
     if increment_type == "minor":
         new_version = version.split(".")[0] + "." + str(int(version.split(".")[-1]) + 1)
@@ -264,7 +270,9 @@ class DataProductElement:
     @property
     def database_name(self) -> str:
         latest_major_version = self.data_product.latest_major_version
-        return self.data_product.name + "_" + latest_major_version
+        return get_database_name_for_version(
+            self.data_product.name, latest_major_version
+        )
 
     @staticmethod
     def load(element_name, data_product_name):

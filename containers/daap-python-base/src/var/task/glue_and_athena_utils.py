@@ -14,7 +14,7 @@ def create_database(
     logger: DataPlatformLogger,
     db_meta: dict | None = None,
     client: BaseClient = None,
-):
+) -> None:
     """If a glue database doesn't exist, create a glue database"""
     if client is None:
         client = glue_client
@@ -50,7 +50,7 @@ def get_database(database_name: str, logger: DataPlatformLogger) -> dict | None:
         return datebase
 
 
-def database_exists(database_name: str, logger: DataPlatformLogger) -> dict | None:
+def database_exists(database_name: str, logger: DataPlatformLogger) -> bool:
     """Check if a database exists with the given name"""
     return get_database(database_name=database_name, logger=logger) is not None
 
@@ -76,7 +76,10 @@ def clone_database(
     current_database = get_database(database_name=existing_database_name, logger=logger)
     current_tables = list_tables(database_name=existing_database_name, logger=logger)
 
-    database = current_database.get("Database")
+    if current_database is None:
+        raise ValueError(f"Database f{existing_database_name} does not exist")
+
+    database = current_database["Database"]
     database_keys_to_remove = ["CreateTime"]
     db_meta = {k: v for k, v in database.items() if k not in database_keys_to_remove}
     db_meta["Name"] = new_database_name
@@ -98,8 +101,11 @@ def clone_database(
         "VersionId",
         "FederatedTable",
     ]
-    tables = current_tables.get("TableList", [])
-    for table in tables:
+
+    if not current_tables:
+        return
+
+    for table in current_tables:
         table_meta = {k: v for k, v in table.items() if k not in table_keys_to_remove}
         table_meta = {"TableInput": {**table_meta}}
         create_table(
@@ -125,6 +131,8 @@ def create_table(
             logger.error("Unexpected error: %s" % e)
             raise
 
+    return None
+
 
 def get_table(
     database_name: str, table_name: str, logger: DataPlatformLogger
@@ -135,6 +143,7 @@ def get_table(
     except ClientError as e:
         if e.response["Error"]["Code"] == "AlreadyExistsException":
             logger.error(f"Table name {table_name} not found.")
+            return None
         else:
             logger.error("Unexpected error: %s" % e)
             raise
@@ -142,13 +151,15 @@ def get_table(
         return table
 
 
-def list_tables(database_name: str, logger: DataPlatformLogger) -> list[dict] | None:
+def list_tables(database_name: str, logger: DataPlatformLogger) -> list[dict]:
     """Get the table for the given table name and database"""
     try:
         tables = glue_client.get_tables(DatabaseName=database_name)
+        return tables["TableList"]
     except ClientError as e:
         if e.response["Error"]["Code"] == "AlreadyExistsException":
             logger.error(f"Database name {database_name} not found.")
+            return []
         else:
             logger.error("Unexpected error: %s" % e)
             raise
@@ -177,7 +188,7 @@ def delete_table(
     database_name: str,
     table_name: str,
     logger: DataPlatformLogger,
-) -> str | None:
+) -> None:
     """Attempts to locate and delete a glue table for the given data product"""
     try:
         glue_client.get_table(DatabaseName=database_name, Name=table_name)
@@ -191,7 +202,7 @@ def delete_table(
             raise
     else:
         result = glue_client.delete_table(DatabaseName=database_name, Name=table_name)
-        return result
+        logger.debug(str(result))
 
 
 def refresh_table_partitions(

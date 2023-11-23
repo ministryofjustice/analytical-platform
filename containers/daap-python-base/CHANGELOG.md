@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `delete_table` data_product_name parameter changed to
   database_name
 - removed `glue_client` from `create_database`
+- add `get_database_name_for_version` function to paths module
 
 ## [7.4.0] - 2023-11-24
 

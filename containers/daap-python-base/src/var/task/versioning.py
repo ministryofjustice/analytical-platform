@@ -13,9 +13,10 @@ from data_platform_paths import (
     DataProductConfig,
     DataProductElement,
     generate_all_element_version_prefixes,
+    get_database_name_for_version,
 )
 from data_product_metadata import DataProductMetadata, DataProductSchema
-from glue_and_athena_utils import delete_glue_table
+from glue_and_athena_utils import clone_database, delete_table
 
 athena_client = boto3.client("athena")
 glue_client = boto3.client("glue")
@@ -31,6 +32,9 @@ class Version(NamedTuple):
 
     def __str__(self):
         return f"v{self.major}.{self.minor}"
+
+    def format_major_version(self):
+        return f"v{self.major}"
 
     @staticmethod
     def parse(version_str) -> Version:
@@ -90,6 +94,7 @@ class VersionManager:
 
     def __init__(self, data_product_name, logger: DataPlatformLogger):
         self.data_product_config = DataProductConfig(name=data_product_name)
+        self.data_product_name = data_product_name
         self.latest_version = self.data_product_config.latest_version
         self.logger = logger
 
@@ -123,19 +128,9 @@ class VersionManager:
             raise InvalidUpdate(error)
 
         self.logger.info(f"schemas to delete: {schema_list}")
-        for schema_name in schema_list:
-            # Delete the Glue table
-            result = delete_glue_table(
-                data_product_name=data_product_name,
-                table_name=schema_name,
-                logger=self.logger,
-            )
-            self.logger.info(str(result))
 
-            # Delete a given elements raw and curated data for all versions of the data product
-            delete_all_element_version_data_files(
-                data_product_name=data_product_name, table_name=schema_name
-            )
+        for schema_name in schema_list:
+            self._delete_data_for_schema(schema_name)
 
         current_metadata["schemas"] = [
             schema for schema in current_schemas if schema not in schema_list
@@ -156,23 +151,23 @@ class VersionManager:
         )
         self.logger.info(f"new version: {new_version}")
 
-        # Copy files to the new version
         self._copy_from_previous_version(
             latest_version=self.latest_version, new_version=new_version
         )
 
-        # Remove schema files that we no longer require in this version
         for schema in schema_list:
-            # Get the current version of the schema path
             schema_path = DataProductConfig(name=data_product_name).schema_path(
                 table_name=schema, version=new_version
             )
-            # Delete the schema.json file for the table we have removed
             s3_client.delete_object(Bucket=schema_path.bucket, Key=schema_path.key)
 
-        # Get the metadata path for the new version
+        self._create_database_for_new_version(
+            self.data_product_config.name,
+            latest_version=self.latest_version,
+            new_version=new_version,
+        )
+
         new_version_key = self.data_product_config.metadata_path(new_version).key
-        # Overwite the copied metadata.json file with the updated parameters
         updated_metadata.write_json_to_s3(new_version_key)
 
         return new_version
@@ -397,6 +392,49 @@ class VersionManager:
             latest_version=latest_version,
             new_version=new_version,
             logger=self.logger,
+        )
+
+    def _create_database_for_new_version(
+        self, data_product_name, latest_version, new_version
+    ):
+        """
+        Copy the athena database from the old version to the new version
+        """
+        latest_major_version = Version.parse(latest_version).format_major_version()
+        new_major_version = Version.parse(new_version).format_major_version()
+
+        existing_database_name = get_database_name_for_version(
+            data_product_name, latest_major_version
+        )
+        new_database_name = get_database_name_for_version(
+            data_product_name, new_major_version
+        )
+
+        clone_database(
+            existing_database_name=existing_database_name,
+            new_database_name=new_database_name,
+            logger=self.logger,
+        )
+
+    def _delete_data_for_schema(self, schema_name: str):
+        """
+        Wipe data from a particular schema. This logic needs reviewing.
+        Current behaviour:
+        - Drop the table from the *latest* version
+        - Delete the data files from *every* version
+        """
+        delete_table(
+            database_name=get_database_name_for_version(
+                self.data_product_name,
+                Version.parse(self.latest_version).format_major_version(),
+            ),
+            table_name=schema_name,
+            logger=self.logger,
+        )
+
+        # Delete a given elements raw and curated data for all versions of the data product
+        delete_all_element_version_data_files(
+            data_product_name=self.data_product_name, table_name=schema_name
         )
 
 

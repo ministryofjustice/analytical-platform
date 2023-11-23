@@ -6,7 +6,7 @@ from typing import Any
 from unittest.mock import patch
 
 import pytest
-from botocore.exceptions import ClientError
+from glue_and_athena_utils import table_exists
 from versioning import InvalidUpdate, VersionManager
 
 test_metadata_no_schema = {
@@ -445,9 +445,9 @@ class TestUpdateMetadataRemoveSchema:
         metadata_bucket,
         s3_client,
         glue_client,
-        create_glue_database,
         data_product_name,
         data_product_versions,
+        data_product_major_versions,
     ):
         self.bucket_name = metadata_bucket
         for version in data_product_versions:
@@ -463,9 +463,18 @@ class TestUpdateMetadataRemoveSchema:
                     Bucket=self.bucket_name,
                     Key=f"{data_product_name}/{version}/schema{i}/schema.json",
                 )
-        glue_client.create_table(
-            DatabaseName=data_product_name, TableInput={"Name": "schema0"}
-        )
+
+        self.latest_major_version = "v2"
+        for major_version in data_product_major_versions:
+            database_name = f"{data_product_name}_{major_version}"
+
+            glue_client.create_database(DatabaseInput={"Name": database_name})
+
+            for i in range(3):
+                glue_client.create_table(
+                    DatabaseName=database_name,
+                    TableInput={"Name": f"schema{i}"},
+                )
 
     def test_success(
         self, s3_client, create_raw_and_curated_data, data_product_name, glue_client
@@ -501,14 +510,10 @@ class TestUpdateMetadataRemoveSchema:
         table_name,
     ):
         version_manager = VersionManager(data_product_name, logging.getLogger())
-        schema_list = ["schema0", "schema1"]
+        schema_list = ["schema0", "banana"]
         with patch("glue_and_athena_utils.glue_client", glue_client):
-            with pytest.raises(ValueError) as exc:
+            with pytest.raises(InvalidUpdate):
                 version_manager.update_metadata_remove_schemas(schema_list=schema_list)
-                assert (
-                    str(exc.value)
-                    == f"Could not locate glue table '{table_name}' in database '{data_product_name}'"
-                )
 
     def test_schema_glue_table_deleted(
         self, s3_client, create_raw_and_curated_data, data_product_name, glue_client
@@ -516,21 +521,12 @@ class TestUpdateMetadataRemoveSchema:
         version_manager = VersionManager(data_product_name, logging.getLogger())
         schema_list = ["schema0"]
         with patch("glue_and_athena_utils.glue_client", glue_client):
-            table = glue_client.get_table(
-                DatabaseName=data_product_name, Name=f"{schema_list[0]}"
+            # Call the handler
+            version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+
+            assert not table_exists(
+                database_name=self.latest_major_version, table_name=schema_list[0]
             )
-            assert table["ResponseMetadata"]["HTTPStatusCode"] == 200
-            assert table["Table"]["Name"] == schema_list[0]
-
-            with pytest.raises(ClientError) as exc:
-                # Call the handler
-                version_manager.update_metadata_remove_schemas(schema_list=schema_list)
-
-                table = glue_client.get_table(
-                    DatabaseName=data_product_name, Name=f"{schema_list[0]})"
-                )
-            assert exc.value.response["Error"]["Code"] == "EntityNotFoundException"
-            assert f"{schema_list[0]}" in exc.value.response["Error"]["Message"]
 
     def test_data_files_deleted(
         self,

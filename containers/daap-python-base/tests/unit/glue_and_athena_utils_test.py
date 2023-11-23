@@ -115,7 +115,7 @@ class TestDatabaseOperations:
             logger=logger,
         )
         result = list_tables(database_name=database_name, logger=logger)
-        assert [i["Name"] for i in result["TableList"]] == ["foo"]
+        assert [i["Name"] for i in result] == ["foo"]
 
 
 class TestTableOperations:
@@ -166,7 +166,7 @@ class TestTableOperations:
         )
 
         result = list_tables(database_name=database_name, logger=logger)
-        assert [i["Name"] for i in result["TableList"]] == [table_name_1, table_name_2]
+        assert [i["Name"] for i in result] == [table_name_1, table_name_2]
 
     def test_table_exists(self, database_name, table_name, table_meta):
         create_database(database_name, logging.getLogger())
@@ -189,6 +189,4 @@ class TestTableOperations:
         create_database(database_name, logging.getLogger())
         create_table(database_name=database_name, logger=logger, table_meta=table_meta)
 
-        resp = delete_table(database_name, table_name, logging.getLogger())
-
-        assert resp["ResponseMetadata"]["HTTPStatusCode"] == 200
+        delete_table(database_name, table_name, logging.getLogger())
