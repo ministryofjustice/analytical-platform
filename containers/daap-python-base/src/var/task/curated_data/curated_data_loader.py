@@ -167,7 +167,6 @@ class CuratedDataCopier:
         create_glue_database(self.glue_client, self.new_database_name, self.logger)
         parquet_table_input = format_parquet_glue_table_input(
             self.schema.data["TableInput"],
-            # os.path.join(self.new_curated_data_product_path, self.schema.table_name),
             self.new_curated_data_product_path,
         )
         self.glue_client.create_table(
@@ -210,7 +209,7 @@ class CuratedDataCopier:
                 glue_client=self.glue_client,
                 logger=self.logger,
             ).create_new_major_version_data_product_table(
-                is_updated_table=table == self.schema.table_name
+                is_updated_table=(table == self.schema.table_name)
             )
             new_version_key = self.element.data_product.schema_path(
                 schema_for_copy.table_name
