@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 import boto3
 import pytest
-from moto import mock_glue, mock_s3
+from moto import mock_athena, mock_glue, mock_s3
 
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
 
@@ -68,6 +68,17 @@ def glue_client(region_name):
     """
     with mock_glue():
         client = boto3.client("glue", region_name=region_name)
+
+        yield client
+
+
+@pytest.fixture
+def athena_client(region_name):
+    """
+    Create a mock glue catalogue
+    """
+    with mock_athena():
+        client = boto3.client("athena", region_name=region_name)
 
         yield client
 

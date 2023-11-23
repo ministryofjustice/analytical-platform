@@ -17,6 +17,9 @@ from data_platform_paths import (
 from data_product_metadata import DataProductMetadata, DataProductSchema
 from glue_and_athena_utils import delete_glue_table
 
+athena_client = boto3.client("athena")
+glue_client = boto3.client("glue")
+
 
 class Version(NamedTuple):
     """
@@ -551,9 +554,6 @@ def s3_recursive_delete(bucket_name: str, prefixes: list[str]) -> None:
 def create_next_major_version_data_product_and_data(
     schema, data_product_element, changes, logger
 ):
-    athena_client = boto3.client("athena")
-    glue_client = boto3.client("glue")
-
     copier = CuratedDataCopier(
         column_changes=changes[schema.table_name]["columns"],
         new_schema=schema,
