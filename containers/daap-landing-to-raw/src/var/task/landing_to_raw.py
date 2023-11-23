@@ -28,12 +28,29 @@ def validate_format(bucket_name: str, file_key: str, logger: DataPlatformLogger)
     validate_csv_format(bytes_stream, logger)
 
 
+def s3_copy_and_remove_source(
+    source_key: str,
+    source_bucket: str,
+    destination_key: str,
+    destination_bucket: str,
+    s3_security_opts=s3_security_opts,
+    s3=s3,
+):
+    s3.copy(
+        CopySource={"Bucket": source_bucket, "Key": source_key},
+        Bucket=destination_bucket,
+        Key=destination_key,
+        ExtraArgs=s3_security_opts,
+    )
+    s3.delete_object(Bucket=source_bucket, Key=source_key)
+
+
 def handler(event, context):
     raw_data_bucket = get_raw_data_bucket()
     bucket_name = event["detail"]["bucket"]["name"]
     file_key = event["detail"]["object"]["key"]
     copy_source = {"Bucket": bucket_name, "Key": file_key}
-    destination_key = file_key.replace("landing/", "raw/")
+    success_key = file_key.replace("landing/", "raw/")
     fail_key = file_key.replace("landing/", "fail/")
 
     config = RawDataExtraction.parse_from_uri("s3://bucket/" + file_key)
@@ -44,7 +61,7 @@ def handler(event, context):
     logger.info(f"Origin bucket: {bucket_name}")
     logger.info(f"Origin key: {file_key}")
     logger.info(f"Destination bucket: {raw_data_bucket}")
-    logger.info(f"Destination key: {destination_key}")
+    logger.info(f"Success key: {success_key}")
 
     schema_path = config.data_product_config.schema_path(table_name=config.element.name)
 
@@ -73,11 +90,11 @@ def handler(event, context):
             )
         except DataInvalid:
             logger.error(f"{file_key} invalid; moving to fail location", exc_info=True)
-            s3.copy(
-                CopySource=copy_source,
-                Bucket=raw_data_bucket,
-                Key=fail_key,
-                ExtraArgs=s3_security_opts,
+            s3_copy_and_remove_source(
+                source_key=file_key,
+                source_bucket=bucket_name,
+                destination_key=fail_key,
+                destination_bucket=raw_data_bucket,
             )
             return
 
@@ -86,20 +103,18 @@ def handler(event, context):
         validate_format(bucket_name=bucket_name, file_key=file_key, logger=logger)
     except DataInvalid:
         logger.error(f"{file_key} invalid; moving to fail location", exc_info=True)
-        s3.copy(
-            CopySource=copy_source,
-            Bucket=raw_data_bucket,
-            Key=fail_key,
-            ExtraArgs=s3_security_opts,
+        s3_copy_and_remove_source(
+            source_key=file_key,
+            source_bucket=bucket_name,
+            destination_key=fail_key,
+            destination_bucket=raw_data_bucket,
         )
         return
 
     logger.info("Continuing with ingestion")
-    s3.copy(
-        CopySource=copy_source,
-        Bucket=raw_data_bucket,
-        Key=destination_key,
-        ExtraArgs=s3_security_opts,
+    s3_copy_and_remove_source(
+        source_key=file_key,
+        source_bucket=bucket_name,
+        destination_key=success_key,
+        destination_bucket=raw_data_bucket,
     )
-
-    s3.delete_object(Bucket=bucket_name, Key=file_key)
