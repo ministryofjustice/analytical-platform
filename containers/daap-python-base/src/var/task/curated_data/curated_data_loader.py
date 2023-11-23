@@ -173,7 +173,7 @@ class CuratedDataCopier:
             DatabaseName=self.new_database_name,
             TableInput=parquet_table_input,
         )
-
+        schemas_for_rewrite = []
         for table in self.tables_to_copy:
             input_data = format_table_schema(
                 (
@@ -211,11 +211,9 @@ class CuratedDataCopier:
             ).create_new_major_version_data_product_table(
                 is_updated_table=(table == self.schema.table_name)
             )
-            new_version_key = self.element.data_product.schema_path(
-                schema_for_copy.table_name
-            ).key
-            # save schema with updated database name for newly created version
-            schema_for_copy.write_json_to_s3(new_version_key)
+            schemas_for_rewrite.append(schema_for_copy)
+
+        return schemas_for_rewrite
 
     def get_tables_to_copy(self):
         """

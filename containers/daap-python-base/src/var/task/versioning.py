@@ -296,7 +296,9 @@ class VersionManager:
 
         return new_version
 
-    def update_schema(self, input_data: dict, table_name: str) -> tuple[str, dict]:
+    def update_schema(
+        self, input_data: dict, table_name: str
+    ) -> tuple[str, dict, dict]:
         """
         Create a new version with updated schema.
         """
@@ -323,11 +325,16 @@ class VersionManager:
                 data_product_element = DataProductElement.load(
                     schema.table_name, self.data_product_config.name
                 )
-                create_next_major_version_data_product_and_data(
+                copy_resp, schemas_to_write = create_next_major_version_data_product(
                     schema, data_product_element, changes, self.logger
                 )
+                for schema_to_write in schemas_to_write:
+                    new_version_key = data_product_element.data_product.schema_path(
+                        schema_to_write.table_name
+                    ).key
+                    schema_to_write.write_json_to_s3(new_version_key)
 
-            return new_version, changes
+            return new_version, changes, copy_resp
         else:
             raise InvalidUpdate()
 
@@ -551,9 +558,20 @@ def s3_recursive_delete(bucket_name: str, prefixes: list[str]) -> None:
         bucket.objects.filter(Prefix=prefix).delete()
 
 
-def create_next_major_version_data_product_and_data(
-    schema, data_product_element, changes, logger
-):
+def create_next_major_version_data_product(
+    schema: DataProductSchema,
+    data_product_element: DataProductElement,
+    changes: dict,
+    logger,
+) -> tuple[dict[str, bool], list[DataProductSchema]]:
+    """
+    creates a new version dataproduct database and copies
+    all tables from existing version, and conditionally, the table
+    where schema has been updated.
+
+    returns a list of DataProductSchema objects for each copied table
+    to be written to the new major version metadata folder
+    """
     copier = CuratedDataCopier(
         column_changes=changes[schema.table_name]["columns"],
         new_schema=schema,
@@ -563,4 +581,9 @@ def create_next_major_version_data_product_and_data(
         logger=logger,
     )
 
-    copier.run()
+    copy_response = {f"{schema.table_name} copied": copier.copy_updated_table}
+
+    # returns all schemas copied with new databased name to be written to s3
+    schemas_to_rewrite = copier.run()
+
+    return copy_response, schemas_to_rewrite
