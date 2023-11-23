@@ -10,19 +10,23 @@ athena_client = boto3.client("athena")
 
 
 def create_glue_database(
-    glue_client: BaseClient, database_name: str, logger: DataPlatformLogger
+    glue_client: BaseClient,
+    database_name: str,
+    logger: DataPlatformLogger,
+    db_meta: dict | None = None,
 ):
     """If a glue database doesn't exist, create a glue database"""
     try:
         glue_client.get_database(Name=database_name)
     except ClientError as e:
         if e.response["Error"]["Code"] == "EntityNotFoundException":
-            db_meta = {
-                "DatabaseInput": {
-                    "Description": "database for {} products".format(database_name),
-                    "Name": database_name,
+            if not db_meta:
+                db_meta = {
+                    "DatabaseInput": {
+                        "Description": "database for {} products".format(database_name),
+                        "Name": database_name,
+                    }
                 }
-            }
             glue_client.create_database(**db_meta)
         else:
             logger.error("Unexpected error: %s" % e)

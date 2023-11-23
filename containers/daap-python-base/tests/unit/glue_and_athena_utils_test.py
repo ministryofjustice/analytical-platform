@@ -4,11 +4,28 @@ from unittest.mock import patch
 from glue_and_athena_utils import create_glue_database, delete_glue_table, table_exists
 
 
-def test_create_glue_database(glue_client):
-    database_name = "test_db"
-    create_glue_database(glue_client, database_name, logging.getLogger())
-    response = glue_client.get_database(Name=database_name)
-    assert response["Database"]["Name"] == database_name
+class TestCreateGlueDatabase:
+    def test_create_by_name(self, glue_client):
+        database_name = "test_db"
+        create_glue_database(glue_client, database_name, logging.getLogger())
+        response = glue_client.get_database(Name=database_name)
+        assert response["Database"]["Name"] == database_name
+
+    def test_create_with_db_meta(self, glue_client):
+        database_name = "test_db"
+        description = database_name
+        db_meta = {
+            "DatabaseInput": {
+                "Description": description,
+                "Name": "test_db",
+            }
+        }
+        create_glue_database(
+            glue_client, database_name, logging.getLogger(), db_meta=db_meta
+        )
+        response = glue_client.get_database(Name=database_name)
+        assert response["Database"]["Name"] == database_name
+        assert response["Database"]["Description"] == description
 
 
 def test_delete_glue_table(glue_client):
