@@ -92,6 +92,7 @@ locals {
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
+        local.data_platform_teams["data-platform-labs"].members,
         local.data_engineering_team_members
       ])
     },
@@ -100,6 +101,7 @@ locals {
       description    = "Analytical Platform Data Engineering SandboxA Data Engineer"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
+        local.data_platform_teams["data-platform-labs"].members,
         local.data_engineering_team_members
       ])
     },
