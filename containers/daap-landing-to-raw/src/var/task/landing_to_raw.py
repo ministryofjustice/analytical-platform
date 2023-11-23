@@ -49,7 +49,6 @@ def handler(event, context):
     raw_data_bucket = get_raw_data_bucket()
     bucket_name = event["detail"]["bucket"]["name"]
     file_key = event["detail"]["object"]["key"]
-    copy_source = {"Bucket": bucket_name, "Key": file_key}
     success_key = file_key.replace("landing/", "raw/")
     fail_key = file_key.replace("landing/", "fail/")
 
