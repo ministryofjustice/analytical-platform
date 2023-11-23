@@ -7,12 +7,12 @@ review_in: 6 months
 
 # <%= current_page.data.title %>
 
-There is a lot of technical tooling we use in developing the Analytical and Data Platforms
+There is a lot of technical tooling we use when developing the Analytical and Data Platforms.
 
-To ease the onboarding process, we have created a [dev container](https://containers.dev/) that contains all the tools you need to get up and running
+To ease the onboarding process, we have created a [dev container](https://containers.dev/) that contains all the tools you need to get up and running.
 
-This implementation of the dev container is designed to have repositories cloned into it under the persistent workspace `/home/vscode/workspace`
-Once we begin our journey to the monorepo, this should become redundant, but that means that right now, it is not intended to use this with GitHub Codespaces, but its still possible
+This implementation of the dev container is designed to have repositories cloned into it under the persistent workspace `/home/vscode/workspace`.
+Once we begin our journey to the monorepo, this should become redundant, but that means that right now, it is not intended to use this with GitHub Codespaces.
 
 ## Getting Started
 
@@ -257,3 +257,10 @@ The provided configuration file handles authentication to EKS clusters using AWS
     ```bash
     bash -x /workspace/.devcontainer/features/src/<feature>/install-<tool>.sh
     ```
+
+## `devcontainer` Settings
+
+### dotfiles
+
+You can populate your devcontainer with personal dotfiles by adding them to a personal public repository called `dotfiles`.
+An example of this can be seen [here](https://github.com/gary-h9/dotfiles). This configuration is defined [here](https://github.com/ministryofjustice/data-platform/blob/a2ad017a46db2e8b1e6be26bae657f1c105bd932/.devcontainer/devcontainer.json#L37).

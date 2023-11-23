@@ -136,22 +136,24 @@ class TestRemoveAllVersions:
         # Assert that fail files have been deleted
         assert count_files(s3_client, bucket, prefix) == post_count
 
-    def test_database_is_deleted(
+    def test_databases_are_deleted(
         self,
         event,
         fake_context,
         data_product_name,
         glue_client,
         create_glue_tables,
+        database_names,
     ):
         # Call the handler
         delete_data_product.handler(event, fake_context)
 
-        with pytest.raises(glue_client.exceptions.EntityNotFoundException) as exc:
-            glue_client.get_database(Name=data_product_name)
+        with pytest.raises(glue_client.exceptions.EntityNotFoundException) as exception:
+            for database_name in database_names:
+                glue_client.get_database(Name=database_name)
         assert (
-            exc.value.response["Error"]["Message"]
-            == f"Database {data_product_name} not found."
+            exception.value.response["Error"]["Message"]
+            == f"Database {database_name} not found."
         )
 
     @pytest.mark.parametrize(
