@@ -51,3 +51,21 @@ The [#ask-data-platform](https://mojdt.slack.com/archives/C04LY2RVCS2) channel i
 The [#data-platform-notifications](https://mojdt.slack.com/archives/C04MUAV0QC8) channel is where we direct notifications from GitHub, such as pull requests or issues. This includes updates to Team Documentation and  [Architecture Decision Records (ADR)](/documentation/adrs/adr-index.html)
 
 It's a noisy channel, so it's up to you whether to join it.
+
+### GitHub
+
+Access to Data Platform's GitHub repositories and projects is managed in Terraform.
+
+To add a user to a team, add their GitHub username to the relevant team in in the [`data_platform_teams`](https://github.com/ministryofjustice/data-platform/blob/dfaf901feedb7617d1313dfbe76e832147b1f8f1/terraform/github/data-platform-teams.tf#L8) configuration.
+
+### PagerDuty
+
+Our PagerDuty configuration is managed in Terraform.
+
+To add a user, do the following:
+
+1. Add an entry into [`users.tf`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/pagerduty/users.tf)
+
+1. Add an entry into [`teams.tf`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/pagerduty/teams.tf)
+
+1. Add an entry into [`schedules.tf`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/pagerduty/schedules.tf)
