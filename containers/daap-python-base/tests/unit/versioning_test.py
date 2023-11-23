@@ -298,10 +298,13 @@ class TestVersionManager:
 
         version_manager = VersionManager(test_metadata["name"], logging.getLogger())
 
-        version, changes = version_manager.update_schema(input_data, "test_table")
+        version, changes, copy_response = version_manager.update_schema(
+            input_data, "test_table"
+        )
 
         assert version == "v1.1"
         assert changes == expected
+        assert copy_response == None
         self.assert_has_keys(
             {
                 "test_product/v1.1/metadata.json",
@@ -366,12 +369,13 @@ class TestVersionManager:
                 "versioning.athena_client",
                 athena_client,
             ):
-                version, changes = version_manager.update_schema(
+                version, changes, copy_response = version_manager.update_schema(
                     input_data, "test_table"
                 )
 
         assert version == "v2.0"
         assert changes == expected
+        assert copy_response == {"test_table copied": False}
         self.assert_has_keys(
             {
                 "test_product/v2.0/metadata.json",

@@ -298,7 +298,7 @@ class VersionManager:
 
     def update_schema(
         self, input_data: dict, table_name: str
-    ) -> tuple[str, dict, dict]:
+    ) -> tuple[str, dict, dict | None]:
         """
         Create a new version with updated schema.
         """
@@ -320,6 +320,7 @@ class VersionManager:
             )
             schema.convert_schema_to_glue_table_input_csv()
             schema.write_json_to_s3(new_version_key)
+            copy_resp = None
             # if major we need to create next major version data product data
             if state == UpdateType.MajorUpdate:
                 data_product_element = DataProductElement.load(
