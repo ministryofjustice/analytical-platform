@@ -22,7 +22,7 @@ test_metadata_no_schema = {
 }
 
 test_metadata = copy.deepcopy(test_metadata_no_schema)
-test_metadata.update({"name": "test_product", "schemas":["test_table"]})
+test_metadata.update({"name": "test_product", "schemas": ["test_table"]})
 
 test_metadata_with_schemas = copy.deepcopy(test_metadata_no_schema)
 test_metadata_with_schemas.update(
@@ -339,8 +339,8 @@ class TestVersionManager:
         assert version == "v1.1"
         self.assert_has_keys(
             {
-                "test_product1/v1.1/metadata.json",
-                "test_product1/v1.1/table-name/schema.json",
+                "test_product_with_schemas/v1.1/metadata.json",
+                "test_product_with_schemas/v1.1/table-name/schema.json",
             },
             "v1.1",
             data_product_name,
