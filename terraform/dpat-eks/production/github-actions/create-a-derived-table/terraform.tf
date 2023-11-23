@@ -32,11 +32,11 @@ provider "aws" {
 }
 
 provider "kubernetes" {
-  host                   = data.aws_secretsmanager_secret.dpat_eks_production_cluster_endpoint.secret_string
-  cluster_ca_certificate = base64decode(data.aws_secretsmanager_secret.dpat_eks_production_cluster_ca_cert.secret_string)
+  host                   = data.aws_secretsmanager_secret_version.dpat_eks_production_cluster_endpoint.secret_string
+  cluster_ca_certificate = base64decode(data.aws_secretsmanager_secret_version.dpat_eks_production_cluster_ca_cert.secret_string)
   exec {
     api_version = "client.authentication.k8s.io/v1beta1"
     command     = "bash"
-    args        = ["../../../../../scripts/eks/terraform-authentication.sh", data.aws_secretsmanager_secret.dpat_eks_production_account.secret_string, data.aws_secretsmanager_secret.dpat_eks_production_cluster_name.secret_string]
+    args        = ["../../../../../scripts/eks/terraform-authentication.sh", data.aws_secretsmanager_secret_version.dpat_eks_production_account.secret_string, data.aws_secretsmanager_secret_version.dpat_eks_production_cluster_name.secret_string, "data-platform-eks-access"]
   }
 }
