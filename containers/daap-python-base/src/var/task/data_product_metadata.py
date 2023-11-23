@@ -246,7 +246,7 @@ class BaseJsonSchema:
 
         changed_fields = set()
         for field in new_version:
-            if new_version[field] == latest_version[field]:
+            if new_version.get(field) == latest_version.get(field):
                 continue
 
             changed_fields.add(field)
