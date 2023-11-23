@@ -60,7 +60,7 @@ def handler(event, context):
     logger.info(f"Origin bucket: {bucket_name}")
     logger.info(f"Origin key: {file_key}")
     logger.info(f"Destination bucket: {raw_data_bucket}")
-    logger.info(f"Success key: {success_key}")
+    logger.info(f"Destination key: {success_key}")
 
     schema_path = config.data_product_config.schema_path(table_name=config.element.name)
 
