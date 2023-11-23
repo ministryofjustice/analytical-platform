@@ -14,7 +14,7 @@ from data_platform_paths import (
     generate_all_element_version_prefixes,
 )
 from data_product_metadata import DataProductMetadata, DataProductSchema
-from glue_and_athena_utils import delete_glue_table
+from glue_and_athena_utils import delete_glue_table, upversion_database
 
 
 class Version(NamedTuple):
@@ -118,7 +118,6 @@ class VersionManager:
             self.logger.info(message)
 
         for schema_name in schema_list:
-            # Delete the Glue table
             result = delete_glue_table(
                 database_name=database_name,
                 table_name=schema_name,
@@ -150,23 +149,21 @@ class VersionManager:
         )
         self.logger.info(f"new version: {new_version}")
 
-        # Copy files to the new version
         self._copy_from_previous_version(
             latest_version=self.latest_version, new_version=new_version
         )
 
-        # Remove schema files that we no longer require in this version
         for schema in schema_list:
-            # Get the current version of the schema path
             schema_path = DataProductConfig(name=data_product_name).schema_path(
                 table_name=schema, version=new_version
             )
-            # Delete the schema.json file for the table we have removed
             s3_client.delete_object(Bucket=schema_path.bucket, Key=schema_path.key)
 
-        # Get the metadata path for the new version
+        upversion_database(
+            database_name=database_name, new_version=new_version, logger=self.logger
+        )
+
         new_version_key = self.data_product_config.metadata_path(new_version).key
-        # Overwite the copied metadata.json file with the updated parameters
         updated_metadata.write_json_to_s3(new_version_key)
 
         return new_version

@@ -9,20 +9,76 @@ glue_client = boto3.client("glue")
 athena_client = boto3.client("athena")
 
 
+def upversion_database(
+    database_name: str, new_version: str, logger: DataPlatformLogger
+) -> None:
+    current_database = get_glue_database(database_name=database_name, logger=logger)
+    current_tables = get_glue_tables(database_name=database_name)
+
+    database = current_database.get("Database")
+    database_keys_to_remove = ["CreateTime"]
+    db_meta = {k: v for k, v in database.items() if k not in database_keys_to_remove}
+    db_meta = {"DatabaseInput": {**db_meta}}
+    logger.info(str(db_meta))
+
+    new_database_name = database_name.split("_")[0] + new_version.split(".")[0]
+    create_glue_database(
+        database_name=new_database_name,
+        glue_client=glue_client,
+        logger=logger,
+        db_meta=db_meta,
+    )
+
+    table_keys_to_remove = [
+        "DatabaseName",
+        "CreateTime",
+        "UpdateTime",
+        "CatalogId",
+        "VersionId",
+        "FederatedTable",
+    ]
+    tables = current_tables.get("TableList", [])
+    for table in tables:
+        table_meta = {k: v for k, v in table.items() if k not in table_keys_to_remove}
+        table_meta = {"TableInput": {**table_meta}}
+        create_glue_table(
+            database_name=new_database_name, logger=logger, table_meta=table_meta
+        )
+
+
+def get_glue_database(database_name: str, logger: DataPlatformLogger) -> dict | None:
+    """Get the database for the given database name"""
+    try:
+        datebase = glue_client.get_database(Name=database_name)
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "EntityNotFoundException":
+            logger.error(f"Database name {database_name} not found.")
+            return None
+        else:
+            logger.error(f"Unexpected error: {e}")
+            raise
+    else:
+        return datebase
+
+
 def create_glue_database(
-    glue_client: BaseClient, database_name: str, logger: DataPlatformLogger
+    glue_client: BaseClient,
+    database_name: str,
+    logger: DataPlatformLogger,
+    db_meta: dict | None = None,
 ):
     """If a glue database doesn't exist, create a glue database"""
     try:
         glue_client.get_database(Name=database_name)
     except ClientError as e:
         if e.response["Error"]["Code"] == "EntityNotFoundException":
-            db_meta = {
-                "DatabaseInput": {
-                    "Description": "database for {} products".format(database_name),
-                    "Name": database_name,
+            if not db_meta:
+                db_meta = {
+                    "DatabaseInput": {
+                        "Description": "database for {} products".format(database_name),
+                        "Name": database_name,
+                    }
                 }
-            }
             glue_client.create_database(**db_meta)
         else:
             logger.error("Unexpected error: %s" % e)
@@ -33,8 +89,63 @@ def delete_glue_database(database_name: str, logger: DataPlatformLogger) -> None
     """Delete a glue database with the given database name"""
     try:
         glue_client.delete_database(Name=database_name)
-    except glue_client.exceptions.EntityNotFoundException:
-        logger.info(f"Glue database '{database_name}' not found.")
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "EntityNotFoundException":
+            logger.info(f"Glue database '{database_name}' not found.")
+        else:
+            logger.error("Unexpected error: %s" % e)
+            raise
+
+
+def create_glue_table(
+    database_name: str,
+    logger: DataPlatformLogger,
+    table_name: str | None = None,
+    table_meta: dict | None = None,
+) -> None:
+    """Create a glue table on the given database."""
+    if not table_meta:
+        table_meta = {"TableInput": {"Name": table_name}}
+    try:
+        glue_client.create_table(DatabaseName=database_name, **table_meta)
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "AlreadyExistsException":
+            logger.error(f"Table {table_meta['TableInput']['Name']} already exists.")
+        else:
+            logger.error("Unexpected error: %s" % e)
+            raise
+
+
+def get_glue_table(
+    database_name: str, table_name: str, logger: DataPlatformLogger
+) -> dict | None:
+    """Get the table for the given table name and database"""
+    try:
+        table = glue_client.get_table(DatabaseName=database_name, Name=table_name)
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "AlreadyExistsException":
+            logger.error(f"Table name {table_name} not found.")
+        else:
+            logger.error("Unexpected error: %s" % e)
+            raise
+    else:
+        return table
+
+
+def get_glue_tables(
+    database_name: str, logger: DataPlatformLogger
+) -> list[dict] | None:
+    """Get the table for the given table name and database"""
+    try:
+        tables = glue_client.get_tables(DatabaseName=database_name)
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "AlreadyExistsException":
+            logger.error(f"Database name {database_name} not found.")
+        else:
+            logger.error("Unexpected error: %s" % e)
+            raise
+    else:
+        return tables
 
 
 def delete_glue_table(
@@ -47,9 +158,11 @@ def delete_glue_table(
         glue_client.get_table(DatabaseName=database_name, Name=table_name)
     except ClientError as e:
         if e.response["Error"]["Code"] == "EntityNotFoundException":
-            error_message = f"Could not locate glue table '{table_name}' in database '{database_name}'"
-            logger.error(error_message)
+            logger.error(
+                f"Could not locate glue table '{table_name}' in database '{database_name}'"
+            )
         else:
+            logger.error("Unexpected error: %s" % e)
             raise
     else:
         result = glue_client.delete_table(DatabaseName=database_name, Name=table_name)
