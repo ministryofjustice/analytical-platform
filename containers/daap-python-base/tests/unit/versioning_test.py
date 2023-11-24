@@ -304,7 +304,7 @@ class TestVersionManager:
 
         assert version == "v1.1"
         assert changes == expected
-        assert copy_response == None
+        assert copy_response is None
         self.assert_has_keys(
             {
                 "test_product/v1.1/metadata.json",
