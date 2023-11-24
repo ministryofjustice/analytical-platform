@@ -246,15 +246,28 @@ def generate_all_element_version_prefixes(
     """Generates element prefixes for all data product versions"""
 
     data_product_versions = get_all_versions(data_product_name)
-    major_versions = {version.split(".")[0] for version in data_product_versions}
     element_prefixes = []
 
-    for major_version in major_versions:
+    for version in data_product_versions:
         element_prefixes.append(
-            f"{path_prefix}/{data_product_name}/{major_version}/{table_name}/"
+            generate_element_version_prefixes_for_version(
+                path_prefix=path_prefix,
+                data_product_name=data_product_name,
+                table_name=table_name,
+                version=version,
+            )
         )
 
     return element_prefixes
+
+
+def generate_element_version_prefixes_for_version(
+    path_prefix: str, data_product_name: str, table_name: str, version: str
+) -> str:
+    """Generates element prefixes for all data product versions"""
+    major_version = version.split(".")[0]
+
+    return f"{path_prefix}/{data_product_name}/{major_version}/{table_name}/"
 
 
 @dataclass

@@ -12,7 +12,7 @@ from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import (
     DataProductConfig,
     DataProductElement,
-    generate_all_element_version_prefixes,
+    generate_element_version_prefixes_for_version,
     get_database_name_for_version,
 )
 from data_product_metadata import DataProductMetadata, DataProductSchema
@@ -418,10 +418,7 @@ class VersionManager:
 
     def _delete_data_for_schema(self, schema_name: str, version: str):
         """
-        Wipe data from a particular schema. This logic needs reviewing.
-        Current behaviour:
-        - Drop the table from the *new* version
-        - Delete the data files from *every* version
+        Wipe data belonging to a particular schema.
         """
         delete_table(
             database_name=get_database_name_for_version(
@@ -432,9 +429,10 @@ class VersionManager:
             logger=self.logger,
         )
 
-        # Delete a given elements raw and curated data for all versions of the data product
-        delete_all_element_version_data_files(
-            data_product_name=self.data_product_name, table_name=schema_name
+        delete_element_version_data_files(
+            data_product_name=self.data_product_name,
+            table_name=schema_name,
+            version=version,
         )
 
 
@@ -572,29 +570,30 @@ def generate_next_version_string(
         return version
 
 
-def delete_all_element_version_data_files(data_product_name: str, table_name: str):
-    """Deletes raw and curated data for all element versions"""
+def delete_element_version_data_files(
+    data_product_name: str, table_name: str, version: str
+):
+    """Deletes raw and curated data for a particular version"""
     # Proceed to delete the raw data
     element = DataProductElement.load(
         element_name=table_name, data_product_name=data_product_name
     )
-    raw_prefixes = generate_all_element_version_prefixes(
-        "raw", data_product_name, table_name
+    raw_prefixes = generate_element_version_prefixes_for_version(
+        "raw", data_product_name, table_name, version
     )
-    curated_prefixes = generate_all_element_version_prefixes(
-        "curated", data_product_name, table_name
+    curated_prefixes = generate_element_version_prefixes_for_version(
+        "curated", data_product_name, table_name, version
     )
 
     s3_recursive_delete(element.data_product.raw_data_bucket, raw_prefixes)
     s3_recursive_delete(element.data_product.curated_data_bucket, curated_prefixes)
 
 
-def s3_recursive_delete(bucket_name: str, prefixes: list[str]) -> None:
+def s3_recursive_delete(bucket_name: str, prefix: str) -> None:
     """Delete all files from a prefix in s3"""
     s3_resource = boto3.resource("s3")
     bucket = s3_resource.Bucket(bucket_name)
-    for prefix in prefixes:
-        bucket.objects.filter(Prefix=prefix).delete()
+    bucket.objects.filter(Prefix=prefix).delete()
 
 
 def create_next_major_version_data_product(
