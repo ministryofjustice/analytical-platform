@@ -26,9 +26,7 @@ def handler(event, context):
         input_data=None,
     )
 
-    schema_exists = schema.exists
-
-    if not schema_exists:
+    if not schema.exists:
         logger.error("No previous version of schema exists")
         return format_error_response(
             response_code=HTTPStatus.BAD_REQUEST,
