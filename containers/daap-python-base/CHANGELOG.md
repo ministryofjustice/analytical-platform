@@ -19,8 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   functions to `CuratedDataQueryBuilder` to generate sql for created tables in new
   version data product database. 
 
-
-
 ## [7.3.2] - 2023-11-23
 
 ### Changed

@@ -3,10 +3,7 @@ import logging
 from unittest.mock import patch
 
 import pytest
-from curated_data.curated_data_loader import (
-    CuratedDataCopier,
-    format_parquet_glue_table_input,
-)
+from curated_data.curated_data_loader import CuratedDataCopier
 from data_platform_paths import DataProductElement
 from data_product_metadata import DataProductSchema
 
