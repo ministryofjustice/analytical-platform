@@ -56,12 +56,6 @@ test_params1 = [
     (changes3_remove_add_desc_column, valid_copy3, expected_copy3),
 ]
 
-test_params2 = [
-    (changes1_remove_a_column, expected_copy1),
-    (changes2_remove_a_column_type_changed, expected_copy2),
-    (changes3_remove_add_desc_column, expected_copy3),
-]
-
 
 class TestCuratedDataCopier:
     @pytest.fixture(autouse=True)
