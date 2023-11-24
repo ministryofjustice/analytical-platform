@@ -138,9 +138,9 @@ class CuratedDataCopier:
         self.glue_client = glue_client
         self.athena_client = athena_client
         self.logger = logger
-        self.get_tables_to_copy()
+        self._get_tables_to_copy()
 
-    def validate(self):
+    def _is_updated_table_valid_for_copy(self):
         """
         Check whether it is possible to copy the data of changed schema
         between two major versions
@@ -156,12 +156,14 @@ class CuratedDataCopier:
         else:
             return True
 
-    def run(self):
+    def run(self) -> list[DataProductSchema]:
         """
         This runs the actual copy of each data product table into the new database version
 
         The table for where schema has been updated is created via boto3
         as it will not always have data loaded to it via this method
+
+        returns a list of updated DataProductSchema objects to caller
         """
         # create new version database and table for updated schema
         create_glue_database(self.glue_client, self.new_database_name, self.logger)
@@ -215,11 +217,11 @@ class CuratedDataCopier:
 
         return schemas_for_rewrite
 
-    def get_tables_to_copy(self):
+    def _get_tables_to_copy(self):
         """
         Creates a list of tables to copy into new version of data product database
         """
-        if self.validate():
+        if self._is_updated_table_valid_for_copy():
             self.tables_to_copy = self.schema.parent_data_product_metadata["schemas"]
             self.copy_updated_table = True
         else:
