@@ -9,8 +9,8 @@ import pytest
 from botocore.exceptions import ClientError
 from versioning import InvalidUpdate, VersionManager
 
-test_metadata = {
-    "name": "test_product",
+test_metadata_no_schema = {
+    "name": "test_product0",
     "description": "just testing the metadata json validation/registration",
     "domain": "MoJ",
     "dataProductOwner": "matthew.laverty@justice.gov.uk",
@@ -21,7 +21,10 @@ test_metadata = {
     "dpiaRequired": False,
 }
 
-test_metadata_with_schemas = copy.deepcopy(test_metadata)
+test_metadata = copy.deepcopy(test_metadata_no_schema)
+test_metadata.update({"name": "test_product", "schemas": ["test_table"]})
+
+test_metadata_with_schemas = copy.deepcopy(test_metadata_no_schema)
 test_metadata_with_schemas.update(
     {
         "name": "test_product_with_schemas",
@@ -29,7 +32,7 @@ test_metadata_with_schemas.update(
     }
 )
 
-test_metadata_with_opt_keys = copy.deepcopy(test_metadata)
+test_metadata_with_opt_keys = copy.deepcopy(test_metadata_no_schema)
 test_metadata_with_opt_keys.update(
     {
         "name": "test_product_with_opt_keys",
@@ -41,6 +44,7 @@ test_metadatas = [
     test_metadata,
     test_metadata_with_schemas,
     test_metadata_with_opt_keys,
+    test_metadata_no_schema,
 ]
 
 test_schema: dict[str, Any] = {
@@ -65,7 +69,7 @@ test_glue_table_input = {
     "DatabaseName": "test_product",
     "TableInput": {
         "Description": "table has schema to pass test",
-        "Name": "test_table",
+        "Name": "schema0",
         "Owner": "matthew.laverty@justice.gov.uk",
         "Retention": 3000,
         "Parameters": {"classification": "csv", "skip.header.line.count": "1"},
@@ -122,12 +126,17 @@ expected1 = {
 }
 input_data2 = copy.deepcopy(test_schema)
 input_data2["columns"].pop(0)
+input_data2["columns"][0] = {
+    "name": "col_2",
+    "type": "string",
+    "description": "ABCDEFGHIJKL",
+}
 expected2 = {
     "test_table": {
         "columns": {
             "removed_columns": ["col_1"],
             "added_columns": None,
-            "types_changed": None,
+            "types_changed": ["col_2"],
             "descriptions_changed": None,
         },
         "non_column_fields": None,
@@ -242,6 +251,7 @@ class TestVersionManager:
     def setup(self, metadata_bucket, s3_client, data_product_name):
         self.s3_client = s3_client
         self.bucket_name = metadata_bucket
+
         for metadata in test_metadatas:
             s3_client.put_object(
                 Body=json.dumps(metadata),
@@ -288,10 +298,13 @@ class TestVersionManager:
 
         version_manager = VersionManager(test_metadata["name"], logging.getLogger())
 
-        version, changes = version_manager.update_schema(input_data, "test_table")
+        version, changes, copy_response = version_manager.update_schema(
+            input_data, "test_table"
+        )
 
         assert version == "v1.1"
         assert changes == expected
+        assert copy_response is None
         self.assert_has_keys(
             {
                 "test_product/v1.1/metadata.json",
@@ -301,7 +314,7 @@ class TestVersionManager:
         )
 
     def test_create_schema_version_new(self, s3_client, table_name):
-        data_product_name = test_metadata["name"]
+        data_product_name = test_metadata_no_schema["name"]
         version_manager = VersionManager(data_product_name, logging.getLogger())
 
         version, _ = version_manager.create_schema(
@@ -311,8 +324,8 @@ class TestVersionManager:
         assert version == "v1.0"
         self.assert_has_keys(
             {
-                "test_product/v1.0/metadata.json",
-                "test_product/v1.0/table-name/schema.json",
+                "test_product0/v1.0/metadata.json",
+                "test_product0/v1.0/table-name/schema.json",
             },
             "v1.0",
             data_product_name,
@@ -337,7 +350,9 @@ class TestVersionManager:
         )
 
     @pytest.mark.parametrize("input_data, expected", major_inputs)
-    def test_creates_major_version_schema(self, s3_client, input_data, expected):
+    def test_creates_major_version_schema(
+        self, s3_client, glue_client, athena_client, input_data, expected
+    ):
         s3_client.put_object(
             Body=json.dumps(test_glue_table_input),
             Bucket=self.bucket_name,
@@ -346,16 +361,28 @@ class TestVersionManager:
 
         version_manager = VersionManager(test_metadata["name"], logging.getLogger())
 
-        version, changes = version_manager.update_schema(input_data, "test_table")
+        with patch(
+            "versioning.glue_client",
+            glue_client,
+        ):
+            with patch(
+                "versioning.athena_client",
+                athena_client,
+            ):
+                version, changes, copy_response = version_manager.update_schema(
+                    input_data, "test_table"
+                )
 
         assert version == "v2.0"
         assert changes == expected
+        assert copy_response == {"test_table copied": False}
         self.assert_has_keys(
             {
                 "test_product/v2.0/metadata.json",
                 "test_product/v2.0/test_table/schema.json",
             },
             "v2.0",
+            data_product_name=test_metadata["name"],
         )
 
     def test_unchanged_schema_as_input(self, s3_client):

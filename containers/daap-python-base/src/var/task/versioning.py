@@ -7,6 +7,7 @@ from enum import Enum
 from typing import NamedTuple
 
 import boto3
+from curated_data.curated_data_loader import CuratedDataCopier
 from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import (
     DataProductConfig,
@@ -15,6 +16,9 @@ from data_platform_paths import (
 )
 from data_product_metadata import DataProductMetadata, DataProductSchema
 from glue_and_athena_utils import delete_glue_table
+
+athena_client = boto3.client("athena")
+glue_client = boto3.client("glue")
 
 
 class Version(NamedTuple):
@@ -292,7 +296,9 @@ class VersionManager:
 
         return new_version
 
-    def update_schema(self, input_data: dict, table_name: str) -> tuple[str, dict]:
+    def update_schema(
+        self, input_data: dict, table_name: str
+    ) -> tuple[str, dict, dict | None]:
         """
         Create a new version with updated schema.
         """
@@ -314,7 +320,22 @@ class VersionManager:
             )
             schema.convert_schema_to_glue_table_input_csv()
             schema.write_json_to_s3(new_version_key)
-            return new_version, changes
+            copy_resp = None
+            # if major we need to create next major version data product data
+            if state == UpdateType.MajorUpdate:
+                data_product_element = DataProductElement.load(
+                    schema.table_name, self.data_product_config.name
+                )
+                copy_resp, schemas_to_write = create_next_major_version_data_product(
+                    schema, data_product_element, changes, self.logger
+                )
+                for schema_to_write in schemas_to_write:
+                    new_version_key = data_product_element.data_product.schema_path(
+                        schema_to_write.table_name
+                    ).key
+                    schema_to_write.write_json_to_s3(new_version_key)
+
+            return new_version, changes, copy_resp
         else:
             raise InvalidUpdate()
 
@@ -536,3 +557,34 @@ def s3_recursive_delete(bucket_name: str, prefixes: list[str]) -> None:
     bucket = s3_resource.Bucket(bucket_name)
     for prefix in prefixes:
         bucket.objects.filter(Prefix=prefix).delete()
+
+
+def create_next_major_version_data_product(
+    schema: DataProductSchema,
+    data_product_element: DataProductElement,
+    changes: dict,
+    logger,
+) -> tuple[dict[str, bool], list[DataProductSchema]]:
+    """
+    creates a new version dataproduct database and copies
+    all tables from existing version, and conditionally, the table
+    where schema has been updated.
+
+    returns a list of DataProductSchema objects for each copied table
+    to be written to the new major version metadata folder
+    """
+    copier = CuratedDataCopier(
+        column_changes=changes[schema.table_name]["columns"],
+        new_schema=schema,
+        element=data_product_element,
+        athena_client=athena_client,
+        glue_client=glue_client,
+        logger=logger,
+    )
+
+    copy_response = {f"{schema.table_name} copied": copier.copy_updated_table}
+
+    # returns all schemas copied with new databased name to be written to s3
+    schemas_to_rewrite = copier.run()
+
+    return copy_response, schemas_to_rewrite

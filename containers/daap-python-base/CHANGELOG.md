@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.4.0] - 2023-11-24
+
+### Added
+
+- `create_next_major_version_data_product` function to `versioning`
+- `CuratedDataCopier` class to `curated_data_loader`
+- `sql_create_next_major_increment_table` and `sql_unload_for_major_updated_table`
+  functions to `CuratedDataQueryBuilder` to generate sql for created tables in new
+  version data product database.
+
 ## [7.3.2] - 2023-11-23
 
 ### Changed

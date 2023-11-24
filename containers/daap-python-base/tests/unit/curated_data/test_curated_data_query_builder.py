@@ -64,3 +64,66 @@ class TestCuratedDataQueryBuilder:
             FROM data_products_raw.table_raw
             """
         )
+
+    def test_sql_create_next_major_increment_table(self):
+        builder = CuratedDataQueryBuilder(
+            table_path="s3://bucket_name/curated/v2/database_name=dataproduct/table_name=table_name/",
+            column_metadata=[
+                {"Name": "foo", "Type": "string"},
+                {"Name": "bar", "Type": None},
+            ],
+        )
+        result = builder.sql_create_next_major_increment_table(
+            new_curated_table=QueryTable("dataproduct_v2", "table_name"),
+        )
+
+        assert dedent(result) == dedent(
+            """
+                CREATE TABLE dataproduct_v2.table_name
+                WITH(
+                    format='parquet',
+                    write_compression = 'SNAPPY',
+                    external_location='s3://bucket_name/curated/v2/database_name=dataproduct/table_name=table_name/',
+                    partitioned_by=ARRAY['extraction_timestamp']
+                ) AS
+                SELECT
+                    *
+                FROM dataproduct_v1.table_name
+                WHERE extraction_timestamp = (
+                    SELECT MAX(extraction_timestamp)
+                    FROM dataproduct_v1.table_name
+                )
+            """
+        )
+
+    def test_sql_unload_for_major_updated_table(self):
+        builder = CuratedDataQueryBuilder(
+            table_path="s3://bucket_name/curated/v2/database_name=dataproduct/table_name=table_name/",
+            column_metadata=[
+                {"Name": "foo", "Type": "string"},
+                {"Name": "bar", "Type": None},
+            ],
+        )
+        result = builder.sql_unload_for_major_updated_table(
+            curated_table=QueryTable("dataproduct_v2", "table_name"),
+        )
+
+        assert dedent(result) == dedent(
+            """
+                UNLOAD (
+                    SELECT
+                        *
+                    FROM dataproduct_v1.table_name
+                    WHERE extraction_timestamp = (
+                        SELECT MAX(extraction_timestamp)
+                        FROM dataproduct_v1.table_name
+                    )
+                )
+                TO 's3://bucket_name/curated/v2/database_name=dataproduct/table_name=table_name/'
+                WITH(
+                    format='parquet',
+                    compression = 'SNAPPY',
+                    partitioned_by=ARRAY['extraction_timestamp']
+                )
+            """
+        )
