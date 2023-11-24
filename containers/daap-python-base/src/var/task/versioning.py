@@ -129,9 +129,6 @@ class VersionManager:
 
         self.logger.info(f"schemas to delete: {schema_list}")
 
-        for schema_name in schema_list:
-            self._delete_data_for_schema(schema_name)
-
         current_metadata["schemas"] = [
             schema for schema in current_schemas if schema not in schema_list
         ]
@@ -166,6 +163,9 @@ class VersionManager:
             latest_version=self.latest_version,
             new_version=new_version,
         )
+
+        for schema_name in schema_list:
+            self._delete_data_for_schema(schema_name, new_version)
 
         new_version_key = self.data_product_config.metadata_path(new_version).key
         updated_metadata.write_json_to_s3(new_version_key)
@@ -416,17 +416,17 @@ class VersionManager:
             logger=self.logger,
         )
 
-    def _delete_data_for_schema(self, schema_name: str):
+    def _delete_data_for_schema(self, schema_name: str, version: str):
         """
         Wipe data from a particular schema. This logic needs reviewing.
         Current behaviour:
-        - Drop the table from the *latest* version
+        - Drop the table from the *new* version
         - Delete the data files from *every* version
         """
         delete_table(
             database_name=get_database_name_for_version(
                 self.data_product_name,
-                Version.parse(self.latest_version).format_major_version(),
+                Version.parse(version).format_major_version(),
             ),
             table_name=schema_name,
             logger=self.logger,

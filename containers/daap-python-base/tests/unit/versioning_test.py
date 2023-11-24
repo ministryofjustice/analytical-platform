@@ -6,8 +6,10 @@ from typing import Any
 from unittest.mock import patch
 
 import pytest
-from glue_and_athena_utils import table_exists
+from glue_and_athena_utils import database_exists, table_exists
 from versioning import InvalidUpdate, VersionManager
+
+logger = logging.getLogger()
 
 test_metadata_no_schema = {
     "name": "test_product0",
@@ -586,7 +588,6 @@ class TestUpdateMetadataRemoveSchema:
         schema_list = ["schema0"]
 
         with patch("glue_and_athena_utils.glue_client", glue_client):
-            # Call the handler
             version_manager.update_metadata_remove_schemas(schema_list=schema_list)
             schema_prefix = f"{data_product_name}/v3.0/{schema_list[0]}/schema.json"
             response = s3_client.list_objects_v2(
@@ -594,6 +595,24 @@ class TestUpdateMetadataRemoveSchema:
                 Prefix=schema_prefix,
             )
             assert response.get("KeyCount") == 0
+
+    def test_deleted_table_removed_from_new_version(
+        self,
+        data_product_name,
+        glue_client,
+        create_raw_and_curated_data,
+        data_product_versions,
+    ):
+        version_manager = VersionManager(data_product_name, logging.getLogger())
+        schema_list = ["schema0"]
+
+        with patch("glue_and_athena_utils.glue_client", glue_client):
+            version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+
+            expected_database_name = f"{data_product_name}_v3"
+            assert database_exists(expected_database_name, logger=logger)
+            assert table_exists(expected_database_name, "schema1")
+            assert not table_exists(expected_database_name, "schema0")
 
     def test_validate_other_schemas_are_upversioned(
         self,
