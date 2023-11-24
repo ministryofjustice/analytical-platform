@@ -21,21 +21,21 @@ test_metadata = {
 }
 
 
-changes1 = {
+changes1_remove_a_column = {
     "removed_columns": ["col_1"],
     "added_columns": None,
     "types_changed": None,
     "descriptions_changed": None,
 }
 
-changes2 = {
+changes2_remove_a_column_type_changed = {
     "removed_columns": ["col_1"],
     "added_columns": None,
-    "types_changed": ["col_1"],
+    "types_changed": ["col_2"],
     "descriptions_changed": None,
 }
 
-changes3 = {
+changes3_remove_add_desc_column = {
     "removed_columns": ["col_1"],
     "added_columns": ["col_3", "col_4"],
     "types_changed": None,
@@ -51,15 +51,15 @@ expected_copy2 = ["test_table1"]
 expected_copy3 = ["test_table", "test_table1"]
 
 test_params1 = [
-    (changes1, valid_copy1, expected_copy1),
-    (changes2, valid_copy2, expected_copy2),
-    (changes3, valid_copy3, expected_copy3),
+    (changes1_remove_a_column, valid_copy1, expected_copy1),
+    (changes2_remove_a_column_type_changed, valid_copy2, expected_copy2),
+    (changes3_remove_add_desc_column, valid_copy3, expected_copy3),
 ]
 
 test_params2 = [
-    (changes1, expected_copy1),
-    (changes2, expected_copy2),
-    (changes3, expected_copy3),
+    (changes1_remove_a_column, expected_copy1),
+    (changes2_remove_a_column_type_changed, expected_copy2),
+    (changes3_remove_add_desc_column, expected_copy3),
 ]
 
 
@@ -76,31 +76,9 @@ class TestCuratedDataCopier:
         )
 
     @pytest.mark.parametrize("changes, valid_copy, expected_copy", test_params1)
-    def test_init(self, athena_client, glue_client, changes, valid_copy, expected_copy):
-        new_schema = DataProductSchema(
-            data_product_name="test_product",
-            table_name="test_table",
-            logger=logging.getLogger(),
-            input_data={
-                "tableDescription": "test",
-                "columns": [{"name": "col_5", "type": "int", "description": "test"}],
-            },
-        )
-        element = DataProductElement.load(new_schema.table_name, "test_product")
-        copier = CuratedDataCopier(
-            column_changes=changes,
-            new_schema=new_schema,
-            element=element,
-            athena_client=athena_client,
-            glue_client=glue_client,
-            logger=logging.getLogger(),
-        )
-
-        assert copier.copy_updated_table == valid_copy
-        assert copier.tables_to_copy == expected_copy
-
-    @pytest.mark.parametrize("changes, expected_copy", test_params2)
-    def test_run(self, s3_client, athena_client, glue_client, changes, expected_copy):
+    def test_run(
+        self, s3_client, athena_client, glue_client, changes, valid_copy, expected_copy
+    ):
         schema = DataProductSchema(
             data_product_name="test_product",
             table_name="test_table",
@@ -157,4 +135,7 @@ class TestCuratedDataCopier:
                 schema_list = copier.run()
 
         schema_names = [schema.table_name for schema in schema_list]
+
         assert schema_names == expected_copy
+        assert copier.copy_updated_table == valid_copy
+        assert copier.tables_to_copy == expected_copy
