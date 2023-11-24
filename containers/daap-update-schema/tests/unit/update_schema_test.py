@@ -57,7 +57,64 @@ def fake_event(body_content, table_name="test_t"):
     }
 
 
-def test_success(s3_client, body_content, fake_context):
+@pytest.mark.parametrize(
+    "update_schema, expected_body",
+    [
+        (
+            {
+                "schema": {
+                    "tableDescription": "test table",
+                    "columns": [
+                        {"name": "col1", "type": "int", "description": "test"},
+                        {"name": "col2", "type": "int", "description": "test"},
+                    ],
+                }
+            },
+            {
+                "version": "v1.1",
+                "increment_type": "minor",
+                "changes": {
+                    "test_t": {
+                        "columns": {
+                            "removed_columns": None,
+                            "added_columns": ["col2"],
+                            "types_changed": None,
+                            "descriptions_changed": None,
+                        },
+                        "non_column_fields": ["tableDescription"],
+                    }
+                },
+            },
+        ),
+        (
+            {
+                "schema": {
+                    "tableDescription": "test table",
+                    "columns": [
+                        {"name": "col2", "type": "int", "description": "test"},
+                    ],
+                }
+            },
+            {
+                "version": "v2.0",
+                "increment_type": "major",
+                "changes": {
+                    "test_t": {
+                        "columns": {
+                            "removed_columns": ["col1"],
+                            "added_columns": ["col2"],
+                            "types_changed": None,
+                            "descriptions_changed": None,
+                        },
+                        "non_column_fields": ["tableDescription"],
+                    }
+                },
+                "test_t copied": True,
+            },
+        ),
+    ],
+)
+def test_success(s3_client, fake_context, update_schema, expected_body):
     s3_client.put_object(
         Body=json.dumps(
             {
@@ -81,25 +138,12 @@ def test_success(s3_client, body_content, fake_context):
         Key="test_p/v1.0/test_t/schema.json",
     )
     with patch("data_platform_paths.get_latest_version", lambda _: "v1.0"):
-        response = handler(fake_event(body_content), fake_context)
+        with patch("versioning.create_next_major_version_data_product") as mock_func:
+            mock_func.return_value = ({"test_t copied": True}, [])
+            response = handler(fake_event(update_schema), fake_context)
 
     assert response == {
-        "body": json.dumps(
-            {
-                "version": "v1.1",
-                "changes": {
-                    "test_t": {
-                        "columns": {
-                            "removed_columns": None,
-                            "added_columns": ["col2"],
-                            "types_changed": None,
-                            "descriptions_changed": None,
-                        },
-                        "non_column_fields": ["tableDescription"],
-                    }
-                },
-            }
-        ),
+        "body": json.dumps(expected_body),
         "statusCode": HTTPStatus.OK,
         "headers": {"Content-Type": "application/json"},
     }
