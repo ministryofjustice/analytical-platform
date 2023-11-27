@@ -8,6 +8,7 @@ config:
   - '[Event,*,*]'
   - '[*,kube-system,*]'
   - '[*,kube-public,*]'
+  - '[*,kube2iam-system,*]'
   - '[*,kube-node-lease,*]'
   - '[Node,*,*]'
   - '[APIService,*,*]'
@@ -18,17 +19,17 @@ config:
   - '[ReplicaSet,*,*]'
   - '[ReportChangeRequest,*,*]'
   - '[ClusterReportChangeRequest,*,*]'
-webhooks:
-  - namespaceSelector:
-      matchExpressions:
-      - key: kubernetes.io/metadata.name
-        operator: NotIn
-        values:
-          - kube-system
-          - kyverno
-          - kube2iam-system
-          - cluster-autoscaler-system
-  - objectSelector:
-      matchExpressions:
-      - key: webhooks.kyverno.io/exclude
-        operator: DoesNotExist
+  webhooks:
+    - namespaceSelector:
+        matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values:
+            - kube-system
+            - kyverno
+            - kube2iam-system
+            - cluster-autoscaler-system
+    - objectSelector:
+        matchExpressions:
+        - key: webhooks.kyverno.io/exclude
+          operator: DoesNotExist
