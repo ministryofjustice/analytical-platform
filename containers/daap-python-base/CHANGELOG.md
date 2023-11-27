@@ -9,12 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.5.0] - 2023-11-27
+
+### Changed
+
 - renamed glue_and_athena_utils functions to drop `glue` from the name and
   use create/get/list/update/delete terminology
 - `delete_table` data_product_name parameter changed to
   database_name
-- removed `glue_client` from `create_database`
-- add `get_database_name_for_version` function to paths module
+- made `glue_client` optional in `create_database` to match other functions
+
+### Added
+
+- `clone_database` function in `glue_and_athena_utils`
+- `get_database_name_for_version` function in `data_platform_paths`
 
 ## [7.4.0] - 2023-11-24
 
