@@ -93,20 +93,25 @@ def clone_database(
         db_meta=db_meta,
     )
 
-    table_keys_to_remove = [
-        "DatabaseName",
-        "CreateTime",
-        "UpdateTime",
-        "CatalogId",
-        "VersionId",
-        "FederatedTable",
+    table_keys_to_keep = [
+        "Name",
+        "Description",
+        "Owner",
+        "Retention",
+        "StorageDescriptor",
+        "PartitionKeys",
+        "ViewOriginalText",
+        "ViewExpandedText",
+        "TableType",
+        "Parameters",
+        "TargetTable",
     ]
 
     if not current_tables:
         return
 
     for table in current_tables:
-        table_meta = {k: v for k, v in table.items() if k not in table_keys_to_remove}
+        table_meta = {k: v for k, v in table.items() if k in table_keys_to_keep}
         table_meta = {"TableInput": {**table_meta}}
         create_table(
             database_name=new_database_name, logger=logger, table_meta=table_meta
