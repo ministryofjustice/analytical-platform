@@ -66,7 +66,7 @@ def handler(event, context):
     except ValueError as e:
         return format_error_response(HTTPStatus.BAD_REQUEST, event, str(e))
     except Exception as e:
-        message = "Error while removing schemas. New version may be incorrect state"
+        message = "Unexpected error while removing schemas. The new version may be in an invalid state"
         logger.error(message, exc_info=e)
         return format_error_response(HTTPStatus.INTERNAL_SERVER_ERROR, event, message)
     else:
