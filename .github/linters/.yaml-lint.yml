@@ -3,6 +3,7 @@ extends: default
 
 ignore:
   # Helm templates
+  - '**/charts/*/templates/*.yaml'
   - '**/terraform/cloud-platform/live/data-platform-production/github-actions-self-hosted-runners/src/helm/charts/github-actions-self-hosted-runners/templates/*.yml'
   # Kyverno policies
   - '**/terraform/aws/analytical-platform-data-production/airflow/files/kyverno_policies/*'
