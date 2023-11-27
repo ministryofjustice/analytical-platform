@@ -39,6 +39,7 @@ locals {
       name        = "data-platform-support"
       description = "Data Platform Support"
       topics      = ["ministryofjustice", "data-platform"]
+      visibility  = "internal"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
