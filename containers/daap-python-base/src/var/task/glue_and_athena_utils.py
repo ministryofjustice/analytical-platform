@@ -71,7 +71,10 @@ def clone_database(
     existing_database_name: str, new_database_name: str, logger: DataPlatformLogger
 ) -> None:
     """
-    Make a copy of a database with a new name, copying all metadata except ids and timestamps. This function makes a new empty database with the same metadata definition, note it does NOT copy any of the tables or data within a database.
+    Make a copy of a database with a new name, copying all metadata except ids and timestamps.
+
+    This function makes a new empty database with the same metadata definition, note it does NOT copy any of the
+    tables or data within a database.
     """
     current_database = get_database(database_name=existing_database_name, logger=logger)
     current_tables = list_tables(database_name=existing_database_name, logger=logger)
