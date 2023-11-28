@@ -404,7 +404,8 @@ class VersionManager:
         self, data_product_name, latest_version, new_version
     ):
         """
-        Copy the athena database from the old version to the new version
+        Copy the athena database configuration from the old version to the new version
+        Only the metadata is copied, none of the contents data
         """
         latest_major_version = Version.parse(latest_version).format_major_version()
         new_major_version = Version.parse(new_version).format_major_version()
