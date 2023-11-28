@@ -28,10 +28,11 @@ jobs:
         with:
           scan-type: config
           ignore-unfixed: true
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          exit-code: '1'
+          format: "sarif"
+          output: "trivy-results.sarif"
+          exit-code: "1"
           severity: CRITICAL,HIGH,LOW,MEDIUM
+          trivyignores: .github/.trivyignore.yaml
         continue-on-error: true
 
       - name: Sarif workaround
@@ -41,4 +42,4 @@ jobs:
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
