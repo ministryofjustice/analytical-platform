@@ -148,22 +148,28 @@ class VersionManager:
         )
         self.logger.info(f"new version: {new_version}")
 
+        # Copy files to the new version
         self._copy_from_previous_version(
             latest_version=self.latest_version, new_version=new_version
         )
 
+        # Remove schema files that we no longer require in this version
         for schema in schema_list:
+            # Get the current version of the schema path
             schema_path = DataProductConfig(name=data_product_name).schema_path(
                 table_name=schema, version=new_version
             )
+            # Delete the schema.json file for the table we have removed
             s3_client.delete_object(Bucket=schema_path.bucket, Key=schema_path.key)
 
+        # Create a new version of the athena database with all the tables in
         self._create_database_for_new_version(
             self.data_product_config.name,
             latest_version=self.latest_version,
             new_version=new_version,
         )
 
+        # Remove the table we are deleting from the new version of the database
         for schema_name in schema_list:
             self._delete_data_for_schema(schema_name, new_version)
 
