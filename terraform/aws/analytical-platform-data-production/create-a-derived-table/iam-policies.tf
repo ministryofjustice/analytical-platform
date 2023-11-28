@@ -14,10 +14,10 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "arn:aws:s3:::mojap-derived-tables",
       "arn:aws:s3:::dbt-query-dump/*",
       "arn:aws:s3:::dbt-query-dump",
-      "arn:aws:s3:::mojap-manage-offences",
       "arn:aws:s3:::mojap-manage-offences/*",
-      "arn:aws:s3:::mojap-hub-exports/",
+      "arn:aws:s3:::mojap-manage-offences",
       "arn:aws:s3:::mojap-hub-exports/*",
+      "arn:aws:s3:::mojap-hub-exports/",
     ]
   }
   statement {
