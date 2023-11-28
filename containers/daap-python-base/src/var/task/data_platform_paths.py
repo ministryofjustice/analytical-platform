@@ -264,7 +264,12 @@ def generate_all_element_version_prefixes(
 def generate_element_version_prefixes_for_version(
     path_prefix: str, data_product_name: str, table_name: str, version: str
 ) -> str:
-    """Generates element prefixes for all data product versions"""
+    """
+    Generates element prefixes for all data product versions
+
+    >>> generate_element_version_prefixes_for_version('curated', 'my-data-product', 'some-table', 'v1.0')
+    'curated/my-data-product/v1/some-table/'
+    """
     major_version = version.split(".")[0]
 
     return f"{path_prefix}/{data_product_name}/{major_version}/{table_name}/"
