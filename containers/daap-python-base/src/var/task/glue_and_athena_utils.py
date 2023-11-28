@@ -38,7 +38,7 @@ def create_database(
 def get_database(database_name: str, logger: DataPlatformLogger) -> dict | None:
     """Get the database for the given database name"""
     try:
-        datebase = glue_client.get_database(Name=database_name)
+        database = glue_client.get_database(Name=database_name)
     except ClientError as e:
         if e.response["Error"]["Code"] == "EntityNotFoundException":
             logger.error(f"Database name {database_name} not found.")
@@ -47,7 +47,7 @@ def get_database(database_name: str, logger: DataPlatformLogger) -> dict | None:
             logger.error(f"Unexpected error: {e}")
             raise
     else:
-        return datebase
+        return database
 
 
 def database_exists(database_name: str, logger: DataPlatformLogger) -> bool:
@@ -71,7 +71,7 @@ def clone_database(
     existing_database_name: str, new_database_name: str, logger: DataPlatformLogger
 ) -> None:
     """
-    Make a copy of a database with a new name, copying all metadata except ids and timestamps.
+    Make a copy of a database with a new name, copying all metadata except ids and timestamps. This function makes a new empty database with the same metadata definition, note it does NOT copy any of the tables or data within a database.
     """
     current_database = get_database(database_name=existing_database_name, logger=logger)
     current_tables = list_tables(database_name=existing_database_name, logger=logger)
