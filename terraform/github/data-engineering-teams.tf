@@ -18,7 +18,6 @@ locals {
     "jhpyke",             # Jake Hamblin-Pyke
     "murad-ali-MoJ",      # Murad Ali
     "oliver-critchfield", # Oliver Critchfield
-    "AlexVilela",         # Alex Vilela
     "davidbridgwood",     # David Bridgwood
     "mshodge",            # Michael Hodge
     "Andy-Cook",          # Andy Cook

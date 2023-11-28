@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.14] 2023-11-23
+
+## Added
+
+- Delete data product documentation
+
+## [1.0.13] 2023-11-14
+
+- Fix parameter names for /preview endpoint
+- Removed non-writable metadata fields from examples to avoid confusion
 - update Dockerfile COPY command fixing `LAMBDA_TASK_ROOT` typo
 
 ## [1.0.12] 2023-11-09

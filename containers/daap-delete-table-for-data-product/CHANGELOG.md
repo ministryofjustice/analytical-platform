@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- updated to base image 7.5.0
+
+## [2.2.1] - 2023-11-16
+
+### Changed
+
+- renamed VersionCreator to VersionManager to match versioning module
+
+## [2.2.0] - 2023-11-15
+
+### Changed
+
+- update base image to 7.0.0
+
 ## [2.1.0] - 2023-11-13
 
 ### Changed
@@ -16,12 +30,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - update base image to 6.2.0
 - update Dockerfile COPY command fixing `LAMBDA_TASK_ROOT` typo
 
+## [2.0.1] - 2023-11-13
+
+### Added
+
+- structlog==23.2.0 to requirments.txt
+
 ## [2.0.0] - 2023-11-6
 
 ### Removed
 
 - Most of the work done previously has now been moved to
-    the `VersionCreator.update_metadata_remove_schemas` method
+  the `VersionCreator.update_metadata_remove_schemas` method
 - `get_all_versions` moved to base
 - `generate_all_element_version_prefixes` moved to base
 - `delete_all_element_version_data_files` moved to base

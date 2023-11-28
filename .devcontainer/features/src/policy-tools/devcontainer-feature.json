@@ -25,6 +25,17 @@
       "description": "Conftest version",
       "proposals": ["latest"],
       "default": "latest"
+    },
+    "installGator": {
+      "type": "boolean",
+      "description": "Gator (https://github.com/open-policy-agent/gatekeeper)",
+      "default": true
+    },
+    "gatorVersion": {
+      "type": "string",
+      "description": "Gator version",
+      "proposals": ["latest"],
+      "default": "latest"
     }
   },
   "customizations": {

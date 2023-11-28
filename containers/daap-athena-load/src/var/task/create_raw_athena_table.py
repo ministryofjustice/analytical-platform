@@ -3,6 +3,7 @@ from typing import Generator
 
 from botocore.exceptions import ClientError
 from data_platform_logging import DataPlatformLogger
+from glue_and_athena_utils import create_glue_database
 from infer_glue_schema import InferredMetadata
 
 
@@ -24,24 +25,6 @@ def create_raw_athena_table(
         pass
     glue_client.create_table(**metadata.metadata_str)
     logger.info(f"created table {database_name}.{table_name}")
-
-
-def create_glue_database(glue_client, database_name, logger):
-    """If a glue database doesn't exist, create a glue database"""
-    try:
-        glue_client.get_database(Name=database_name)
-    except ClientError as e:
-        if e.response["Error"]["Code"] == "EntityNotFoundException":
-            db_meta = {
-                "DatabaseInput": {
-                    "Description": "database for {} products".format(database_name),
-                    "Name": database_name,
-                }
-            }
-            glue_client.create_database(**db_meta)
-        else:
-            logger.error("Unexpected error: %s" % e)
-            raise
 
 
 def delete_raw_athena_table(

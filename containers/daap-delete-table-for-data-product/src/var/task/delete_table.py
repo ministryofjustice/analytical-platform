@@ -4,7 +4,7 @@ import boto3
 from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductMetadata, DataProductSchema
-from versioning import InvalidUpdate, VersionCreator
+from versioning import InvalidUpdate, VersionManager
 
 logger = DataPlatformLogger()
 
@@ -56,15 +56,19 @@ def handler(event, context):
         logger.error(error_message)
         return format_error_response(HTTPStatus.BAD_REQUEST, event, error_message)
 
-    version_creator = VersionCreator(data_product_name=data_product_name, logger=logger)
+    version_manager = VersionManager(data_product_name=data_product_name, logger=logger)
     try:
-        new_version = version_creator.update_metadata_remove_schemas(
+        new_version = version_manager.update_metadata_remove_schemas(
             schema_list=[table_name]
         )
     except InvalidUpdate as e:
         return format_error_response(HTTPStatus.BAD_REQUEST, event, str(e))
     except ValueError as e:
         return format_error_response(HTTPStatus.BAD_REQUEST, event, str(e))
+    except Exception as e:
+        message = "Unexpected error while removing schemas. The new version may be in an invalid state"
+        logger.error(message, exc_info=e)
+        return format_error_response(HTTPStatus.INTERNAL_SERVER_ERROR, event, message)
     else:
         msg = f"Successfully removed table '{table_name}'"
         msg += f", data files and generated new matadata version '{new_version}'"

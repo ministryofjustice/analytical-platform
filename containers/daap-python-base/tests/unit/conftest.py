@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 import boto3
 import pytest
-from moto import mock_glue, mock_s3
+from moto import mock_athena, mock_glue, mock_s3
 
 sys.path.append(join(dirname(__file__), "../", "../", "src", "var", "task"))
 
@@ -68,6 +68,17 @@ def glue_client(region_name):
     """
     with mock_glue():
         client = boto3.client("glue", region_name=region_name)
+
+        yield client
+
+
+@pytest.fixture
+def athena_client(region_name):
+    """
+    Create a mock glue catalogue
+    """
+    with mock_athena():
+        client = boto3.client("athena", region_name=region_name)
 
         yield client
 
@@ -163,6 +174,7 @@ def metadata_bucket(s3_client, region_name):
     )
 
     load_v1_metadata_schema_to_mock_s3(s3_client)
+    load_v1_1_metadata_schema_to_mock_s3(s3_client)
     load_v1_schema_schema_to_mock_s3(s3_client)
 
     return bucket_name
@@ -185,19 +197,6 @@ def create_curated_bucket(s3_client, region_name):
 
 
 @pytest.fixture
-def create_glue_database(glue_client, data_product_name):
-    glue_client.create_database(DatabaseInput={"Name": data_product_name})
-
-
-@pytest.fixture
-def create_glue_tables(create_glue_database, glue_client, data_product_name):
-    for i in range(3):
-        glue_client.create_table(
-            DatabaseName=data_product_name, TableInput={"Name": f"schema{i}"}
-        )
-
-
-@pytest.fixture
 def data_product_name():
     return "data-product"
 
@@ -209,7 +208,12 @@ def table_name():
 
 @pytest.fixture
 def data_product_versions():
-    return {"v1.0", "v1.1", "v1.2"}
+    return {"v1.0", "v1.1", "v1.2", "v2.0"}
+
+
+@pytest.fixture
+def data_product_major_versions():
+    return {"v1", "v2"}
 
 
 @pytest.fixture
@@ -219,9 +223,9 @@ def create_raw_and_curated_data(
     create_curated_bucket,
     data_product_name,
     table_name,
-    data_product_versions,
+    data_product_major_versions,
 ):
-    for version in data_product_versions:
+    for version in data_product_major_versions:
         for i in range(10):
             s3_client.put_object(
                 Bucket=os.getenv("CURATED_DATA_BUCKET"),

@@ -172,7 +172,7 @@ jobs:
 
       - name: Build Image
         id: build_image
-        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5.1.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Dockerfile
@@ -190,6 +190,16 @@ jobs:
           output: trivy-results.sarif
           severity: CRITICAL
           limit-severities-for-sarif: true
+
+      - name: Scan Image (On SARIF Scan Failure)
+        if: failure() && steps.scan_image.outcome == 'failure'
+        id: scan_image_on_failure
+        uses: aquasecurity/trivy-action@2b6a709cf9c4025c5438138008beaddbb02086f0 # v0.14.0
+        with:
+          image-ref: ${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
+          exit-code: 1
+          format: table
+          severity: CRITICAL
 
       - name: Upload SARIF
         if: always()
@@ -217,7 +227,7 @@ jobs:
 
       - name: Build and Push
         id: build_and_push
-        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5.1.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Dockerfile
@@ -246,7 +256,7 @@ jobs:
 
       - name: Build and Push
         id: build_and_push
-        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5.1.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Dockerfile
@@ -288,7 +298,7 @@ jobs:
 
       - name: Build and Push
         id: build_and_push
-        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5.1.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Dockerfile

@@ -93,6 +93,12 @@ def specification_path(
     )
 
 
+def get_database_name_for_version(
+    data_product_name: str, latest_major_version: str
+) -> str:
+    return data_product_name + "_" + latest_major_version
+
+
 def get_new_version(version, increment_type):
     if increment_type == "minor":
         new_version = version.split(".")[0] + "." + str(int(version.split(".")[-1]) + 1)
@@ -134,6 +140,13 @@ class QueryTable(NamedTuple):
 
     database: str
     name: str
+
+
+def get_fail_data_bucket() -> str:
+    """
+    Get the raw data bucket name from the environment
+    """
+    return os.environ.get("RAW_DATA_BUCKET", "") or os.environ["BUCKET_NAME"]
 
 
 def get_raw_data_bucket() -> str:
@@ -222,6 +235,11 @@ def get_latest_version(data_product_name: str) -> str:
     return get_all_versions(data_product_name=data_product_name)[-1]
 
 
+def get_all_major_versions(data_product_name: str) -> list[str]:
+    all_versions = get_all_versions(data_product_name=data_product_name)
+    return sorted({version.split(".")[0] for version in all_versions})
+
+
 def generate_all_element_version_prefixes(
     path_prefix: str, data_product_name: str, table_name: str
 ) -> list[str]:
@@ -232,10 +250,29 @@ def generate_all_element_version_prefixes(
 
     for version in data_product_versions:
         element_prefixes.append(
-            f"{path_prefix}/{data_product_name}/{version}/{table_name}/"
+            generate_element_version_prefixes_for_version(
+                path_prefix=path_prefix,
+                data_product_name=data_product_name,
+                table_name=table_name,
+                version=version,
+            )
         )
 
     return element_prefixes
+
+
+def generate_element_version_prefixes_for_version(
+    path_prefix: str, data_product_name: str, table_name: str, version: str
+) -> str:
+    """
+    Generates element prefixes for all data product versions
+
+    >>> generate_element_version_prefixes_for_version('curated', 'my-data-product', 'some-table', 'v1.0')
+    'curated/my-data-product/v1/some-table/'
+    """
+    major_version = version.split(".")[0]
+
+    return f"{path_prefix}/{data_product_name}/{major_version}/{table_name}/"
 
 
 @dataclass
@@ -250,8 +287,10 @@ class DataProductElement:
 
     @property
     def database_name(self) -> str:
-        latest_major_version = self.data_product.latest_version.split(".")[0]
-        return self.data_product.name + "_" + latest_major_version
+        latest_major_version = self.data_product.latest_major_version
+        return get_database_name_for_version(
+            self.data_product.name, latest_major_version
+        )
 
     @staticmethod
     def load(element_name, data_product_name):
@@ -262,7 +301,7 @@ class DataProductElement:
     def landing_data_prefix(self):
         """
         The path to the raw data in s3 up to and including the element name,
-        e.g. landing/{data-product}/{version}/{some_element}
+        e.g. landing/{data-product}/{major-version}/{some_element}
         """
         return BucketPath(
             bucket=self.data_product.landing_zone_bucket,
@@ -274,7 +313,7 @@ class DataProductElement:
     def raw_data_prefix(self):
         """
         The path to the raw data in s3 up to and including the element name,
-        e.g. raw/{data-product}/{version}/{some_element}
+        e.g. raw/{data-product}/{major-version}/{some_element}
         """
         return BucketPath(
             bucket=self.data_product.raw_data_bucket,
@@ -285,7 +324,7 @@ class DataProductElement:
     def curated_data_prefix(self):
         """
         The path to the curated data in s3 up to and including the element name,
-        e.g. curated/{data-product}/{version}/{some-element}/
+        e.g. curated/{data-product}/{major-version}/{some-element}/
         """
         return BucketPath(
             bucket=self.data_product.curated_data_bucket,
@@ -385,38 +424,39 @@ class DataProductConfig:
 
     def __post_init__(self):
         self.latest_version = get_latest_version(self.name)
+        self.latest_major_version = self.latest_version.split(".")[0]
 
     @property
     def raw_data_prefix(self):
         """
         The path to the raw data in s3 excluding the element name,
-        e.g. raw/my-data-product/version/
+        e.g. raw/my-data-product/major-version/
         """
         return BucketPath(
             bucket=self.raw_data_bucket,
-            key=os.path.join("raw", self.name, self.latest_version) + "/",
+            key=os.path.join("raw", self.name, self.latest_major_version) + "/",
         )
 
     @property
     def landing_data_prefix(self):
         """
         The path to the landing data in s3 excluding the element name,
-        e.g. landing/my-data-product/version/
+        e.g. landing/my-data-product/major-version/
         """
         return BucketPath(
             bucket=self.landing_zone_bucket,
-            key=os.path.join("landing", self.name, self.latest_version) + "/",
+            key=os.path.join("landing", self.name, self.latest_major_version) + "/",
         )
 
     @property
     def curated_data_prefix(self):
         """
         The path to the curated data in s3 excluding the element name,
-        e.g. curated/my-data-product/version/
+        e.g. curated/my-data-product/major-version/
         """
         return BucketPath(
             bucket=self.curated_data_bucket,
-            key=os.path.join("curated", self.name, self.latest_version) + "/",
+            key=os.path.join("curated", self.name, self.latest_major_version) + "/",
         )
 
     def element(self, name):

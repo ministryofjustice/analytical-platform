@@ -90,7 +90,7 @@ resource "aws_eks_node_group" "dev_node_group_standard" {
   scaling_config {
     desired_size = 1
     max_size     = 10
-    min_size     = 0
+    min_size     = 1
   }
 
   update_config {
@@ -181,7 +181,7 @@ resource "kubernetes_namespace" "dev_airflow" {
   timeouts {}
 }
 
-resource "kubernetes_namespace" "kyverno" {
+resource "kubernetes_namespace" "kyverno_dev" {
   provider = kubernetes.dev-airflow-cluster
   metadata {
     name = "kyverno"

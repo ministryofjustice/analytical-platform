@@ -9,6 +9,89 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.5.0] - 2023-11-27
+
+### Changed
+
+- renamed glue_and_athena_utils functions to drop `glue` from the name and
+  use create/get/list/update/delete terminology
+- `delete_table` data_product_name parameter changed to
+  database_name
+- made `glue_client` optional in `create_database` to match other functions
+
+### Added
+
+- `clone_database` function in `glue_and_athena_utils`
+- `get_database_name_for_version` function in `data_platform_paths`
+
+## [7.4.0] - 2023-11-24
+
+### Added
+
+- `create_next_major_version_data_product` function to `versioning`
+- `CuratedDataCopier` class to `curated_data_loader`
+- `sql_create_next_major_increment_table` and `sql_unload_for_major_updated_table`
+  functions to `CuratedDataQueryBuilder` to generate sql for created tables in new
+  version data product database.
+
+## [7.3.2] - 2023-11-23
+
+### Changed
+
+- Fixed `KeyError` bug with `BaseJsonSchema.changed_fields()` if new fields
+  are added
+
+- `get_all_major_versions` helpder function to `data_platform_paths.py`
+- `delete_database` utility function to `glue_and_athena_utils.py`
+
+## [7.3.0] - 2023-11-17
+
+### Added
+
+- `curated_data` package, extracted from athena load
+- `glue_and_athena_utils.py` created and added
+  `create_glue_database`, `test_table_exists`, `refresh_table_partitions`
+  `start_query_execution_and_wait` extracted from athena load
+
+## [7.2.1] - 2023-11-17
+
+### Removed
+
+- `TestRemoveAllVersions` class from `versioning_test.py`
+- `VersionCreator.remove_all_versions_of_data_product()` method
+- `delete_glue_database` from `glue_utils.py`
+
+## [7.2.0] - 2023-11-16
+
+### Added
+
+- `create_schema` versioning method
+
+### Changed
+
+- `VersionCreator` renamed to `VersionManager`
+
+## [7.0.0] - 2023-11-14
+
+### Changed
+
+- Data paths now contain only the major version. A minor version change implies
+  the schemas are all backwards compatable with existing data.
+
+## [6.3.1] - 2023-11-14
+
+### Changed
+
+- Updated config with new version 6.3.1
+
+## [6.3.0] - 2023-11-13
+
+### Added
+
+- `remove_all_versions_of_data_product` added to VersionCreator
+  method to completely remove a data product
+- structlog==23.2.0 to requirments.txt
+
 ## [6.2.0] - 2023-11-10
 
 ## Changed
