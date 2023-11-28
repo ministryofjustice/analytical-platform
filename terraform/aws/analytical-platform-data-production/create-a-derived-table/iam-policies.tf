@@ -15,9 +15,9 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "arn:aws:s3:::dbt-query-dump/*",
       "arn:aws:s3:::dbt-query-dump",
       "arn:aws:s3:::mojap-manage-offences/ho-offence-codes/*",
-      "arn:aws:s3:::mojap-manage-offences/ho-offence-codes",
+      "arn:aws:s3:::mojap-manage-offences",
       "arn:aws:s3:::mojap-hub-exports/probation_referrals_dump/*",
-      "arn:aws:s3:::mojap-hub-exports/probation_referrals_dump",
+      "arn:aws:s3:::mojap-hub-exports",
     ]
   }
   statement {
