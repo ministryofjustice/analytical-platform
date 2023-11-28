@@ -197,19 +197,6 @@ def create_curated_bucket(s3_client, region_name):
 
 
 @pytest.fixture
-def create_glue_database(glue_client, data_product_name):
-    glue_client.create_database(DatabaseInput={"Name": data_product_name})
-
-
-@pytest.fixture
-def create_glue_tables(create_glue_database, glue_client, data_product_name):
-    for i in range(3):
-        glue_client.create_table(
-            DatabaseName=data_product_name, TableInput={"Name": f"schema{i}"}
-        )
-
-
-@pytest.fixture
 def data_product_name():
     return "data-product"
 

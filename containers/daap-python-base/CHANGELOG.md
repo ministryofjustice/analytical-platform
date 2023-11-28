@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.5.0] - 2023-11-27
+
+### Changed
+
+- renamed glue_and_athena_utils functions to drop `glue` from the name and
+  use create/get/list/update/delete terminology
+- `delete_table` data_product_name parameter changed to
+  database_name
+- made `glue_client` optional in `create_database` to match other functions
+
+### Added
+
+- `clone_database` function in `glue_and_athena_utils`
+- `get_database_name_for_version` function in `data_platform_paths`
+
 ## [7.4.0] - 2023-11-24
 
 ### Added
@@ -25,10 +40,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed `KeyError` bug with `BaseJsonSchema.changed_fields()` if new fields
   are added
-
-## [7.3.1] - 2023-11-21
-
-### Added
 
 - `get_all_major_versions` helpder function to `data_platform_paths.py`
 - `delete_database` utility function to `glue_and_athena_utils.py`

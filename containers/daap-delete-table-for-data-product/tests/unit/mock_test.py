@@ -59,7 +59,7 @@ class TestHandler:
         assert response["statusCode"] == HTTPStatus.BAD_REQUEST
         assert f"{table_name}" in json.loads(response["body"])["error"]["message"]
 
-    def test_deletion_of_raw_files(
+    def test_does_not_delete_raw_files(
         self,
         event,
         fake_context,
@@ -91,9 +91,9 @@ class TestHandler:
                 Bucket=bucket,
                 Prefix=prefix,
             )
-            assert response.get("KeyCount") == 0
+            assert response.get("KeyCount") == 10
 
-    def test_deletion_of_curated_files(
+    def test_does_not_delete_curated_files(
         self,
         event,
         fake_context,
@@ -126,7 +126,7 @@ class TestHandler:
                 Bucket=bucket,
                 Prefix=prefix,
             )
-            assert response.get("KeyCount") == 0
+            assert response.get("KeyCount") == 10
 
     def test_deletion_of_old_schema_version(
         self,
