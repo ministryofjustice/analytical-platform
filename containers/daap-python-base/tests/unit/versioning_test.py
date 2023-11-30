@@ -248,6 +248,65 @@ minor_inputs = [
 ]
 
 
+class TestTableWithNoGlueDatabase:
+    """
+    Test that the operation doesn't error if a glue database does not exist already.
+    Currently the creation of this database is delayed until the first data upload.
+    So if this hasn't happened, we should skip any data copying that takes place as part of
+    the versioning.
+    """
+
+    @pytest.fixture(autouse=True)
+    def setup(
+        self,
+        metadata_bucket,
+        s3_client,
+        data_product_name,
+        data_product_versions,
+    ):
+        self.s3_client = s3_client
+        self.bucket_name = metadata_bucket
+        self.data_product_name = data_product_name
+        self.latest_major_version = "v2"
+        self.new_major_version = "v3"
+
+        for version in data_product_versions:
+            s3_client.put_object(
+                Body=json.dumps(
+                    {
+                        "name": "test_product0",
+                        "description": "just testing the metadata json validation/registration",
+                        "domain": "MoJ",
+                        "dataProductOwner": "matthew.laverty@justice.gov.uk",
+                        "dataProductOwnerDisplayName": "matt laverty",
+                        "email": "matthew.laverty@justice.gov.uk",
+                        "status": "draft",
+                        "retentionPeriod": 3000,
+                        "dpiaRequired": False,
+                        "schemas": ["schema"],
+                    }
+                ),
+                Bucket=self.bucket_name,
+                Key=f"{data_product_name}/{version}/metadata.json",
+            )
+
+            s3_client.put_object(
+                Body=json.dumps(test_schema),
+                Bucket=self.bucket_name,
+                Key=f"{data_product_name}/{version}/schema/schema.json",
+            )
+
+    @pytest.fixture(autouse=True)
+    def setup_subject(self, glue_client, data_product_name):
+        with patch("glue_and_athena_utils.glue_client", glue_client):
+            self.version_manager = VersionManager(data_product_name, logger)
+            yield
+
+    def test_can_delete_schema(self):
+        schema_list = ["schema"]
+        self.version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+
+
 class TestVersionManager:
     @pytest.fixture(autouse=True)
     def setup(self, metadata_bucket, s3_client, data_product_name):

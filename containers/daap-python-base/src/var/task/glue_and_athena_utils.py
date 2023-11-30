@@ -78,7 +78,7 @@ def clone_database(
     """
     current_database = get_database(database_name=existing_database_name, logger=logger)
     if current_database is None:
-        raise ValueError(f"Database f{existing_database_name} does not exist")
+        raise ValueError(f"Database {existing_database_name} does not exist")
 
     current_tables = list_tables(database_name=existing_database_name, logger=logger)
 

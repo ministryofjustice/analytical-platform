@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.5.2] - 2023-11-30
+
+### Changed
+
+- Make sure the ValueError from glue utils is handled in the versioning module
+  when a table is deleted but there is no glue database associated with the
+  current version.
+
 ## [7.5.1] - 2023-11-30
 
 ### Changed
