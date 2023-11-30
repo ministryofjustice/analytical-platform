@@ -417,30 +417,40 @@ class VersionManager:
             data_product_name, new_major_version
         )
 
-        clone_database(
-            existing_database_name=existing_database_name,
-            new_database_name=new_database_name,
-            logger=self.logger,
-        )
+        try:
+            clone_database(
+                existing_database_name=existing_database_name,
+                new_database_name=new_database_name,
+                logger=self.logger,
+            )
+        except ValueError:
+            self.logger.info(
+                f"Version {latest_major_version} of the glue database doesn't exist; Postponing creation of {new_major_version}"
+            )
+            return
 
     def _delete_data_for_schema(self, schema_name: str, version: str):
         """
         Wipe data belonging to a particular schema.
         """
-        delete_table(
-            database_name=get_database_name_for_version(
-                self.data_product_name,
-                Version.parse(version).format_major_version(),
-            ),
-            table_name=schema_name,
-            logger=self.logger,
-        )
+        try:
+            delete_table(
+                database_name=get_database_name_for_version(
+                    self.data_product_name,
+                    Version.parse(version).format_major_version(),
+                ),
+                table_name=schema_name,
+                logger=self.logger,
+            )
 
-        delete_element_version_data_files(
-            data_product_name=self.data_product_name,
-            table_name=schema_name,
-            version=version,
-        )
+            delete_element_version_data_files(
+                data_product_name=self.data_product_name,
+                table_name=schema_name,
+                version=version,
+            )
+        except ValueError:
+            self.logger.info("Table does not exist - nothing to delete")
+            return
 
 
 def metadata_update_type(data_product_metadata: DataProductMetadata) -> UpdateType:
