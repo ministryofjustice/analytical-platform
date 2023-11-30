@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- correctly handle EntityNotFoundException from Glue when fetching databases and tables
+- correctly handle EntityNotFoundException from Glue when fetching databases
+  and tables
 
 ## [7.5.0] - 2023-11-27
 
