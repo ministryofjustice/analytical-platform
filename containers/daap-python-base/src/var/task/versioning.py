@@ -425,7 +425,7 @@ class VersionManager:
             )
         except ValueError:
             self.logger.info(
-                f"Version {latest_major_version} of the glue database doesn't exist; Postponing creation of {new_major_version}"
+                f"Postponing creation of {new_major_version} glue db: previous version does not exist"
             )
             return
 
