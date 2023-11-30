@@ -150,7 +150,9 @@ def get_table(
         table = glue_client.get_table(DatabaseName=database_name, Name=table_name)
     except ClientError as e:
         if e.response["Error"]["Code"] == "EntityNotFoundException":
-            logger.error(f"Table name {table_name} not found in database {database_name}.")
+            logger.error(
+                f"Table name {table_name} not found in database {database_name}."
+            )
             return None
         else:
             logger.error("Unexpected error: %s" % e)
