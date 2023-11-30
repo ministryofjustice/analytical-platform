@@ -77,10 +77,10 @@ def clone_database(
     tables or data within a database.
     """
     current_database = get_database(database_name=existing_database_name, logger=logger)
-    current_tables = list_tables(database_name=existing_database_name, logger=logger)
-
     if current_database is None:
         raise ValueError(f"Database f{existing_database_name} does not exist")
+
+    current_tables = list_tables(database_name=existing_database_name, logger=logger)
 
     database = current_database["Database"]
     database_keys_to_remove = ["CreateTime"]
@@ -149,8 +149,10 @@ def get_table(
     try:
         table = glue_client.get_table(DatabaseName=database_name, Name=table_name)
     except ClientError as e:
-        if e.response["Error"]["Code"] == "AlreadyExistsException":
-            logger.error(f"Table name {table_name} not found.")
+        if e.response["Error"]["Code"] == "EntityNotFoundException":
+            logger.error(
+                f"Table name {table_name} not found in database {database_name}."
+            )
             return None
         else:
             logger.error("Unexpected error: %s" % e)
@@ -165,7 +167,7 @@ def list_tables(database_name: str, logger: DataPlatformLogger) -> list[dict]:
         tables = glue_client.get_tables(DatabaseName=database_name)
         return tables["TableList"]
     except ClientError as e:
-        if e.response["Error"]["Code"] == "AlreadyExistsException":
+        if e.response["Error"]["Code"] == "EntityNotFoundException":
             logger.error(f"Database name {database_name} not found.")
             return []
         else:
