@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.5.3] - 2023-11-30
+
+### Changed
+
+- Prevent `clone_database` function from trying to pass a `CatalogId`
+  to glue when creating the new database (this parameter is invalid).
+
 ## [7.5.2] - 2023-11-30
 
 ### Changed
