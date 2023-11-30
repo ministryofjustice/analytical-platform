@@ -79,6 +79,9 @@ class TestDatabaseOperations:
 
         assert not database_exists(database_name=database_name, logger=logger)
 
+    def test_get_missing_database(self, database_name):
+        assert get_database(database_name=database_name, logger=logger) is None
+
     def test_clone_database(self, database_name, description):
         db_meta = {
             "DatabaseInput": {
@@ -167,6 +170,9 @@ class TestTableOperations:
 
         result = list_tables(database_name=database_name, logger=logger)
         assert [i["Name"] for i in result] == [table_name_1, table_name_2]
+
+    def test_list_tables_for_missing_db(self, database_name):
+        assert list_tables(database_name=database_name, logger=logger) == []
 
     def test_table_exists(self, database_name, table_name, table_meta):
         create_database(database_name, logging.getLogger())
