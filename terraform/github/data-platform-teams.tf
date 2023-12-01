@@ -35,7 +35,6 @@ locals {
         "BrianEllwood",      # Brian Ellwood
         "murad-ali-MoJ",     # Murad Ali
         "EO510",             # Eki Osehenye
-        "tom-webber",      # Tom Webber
       ]
     },
     "data-platform-labs" = {
