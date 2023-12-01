@@ -1,6 +1,6 @@
 {
     "name": "daap-delete-table-for-data-product",
-    "version": "2.3.2",
+    "version": "2.3.3",
     "registry": "ecr",
     "ecr": {
         "role": "arn:aws:iam::013433889002:role/modernisation-platform-oidc-cicd",
