@@ -83,8 +83,8 @@ def clone_database(
     current_tables = list_tables(database_name=existing_database_name, logger=logger)
 
     database = current_database["Database"]
-    database_keys_to_remove = ["CreateTime"]
-    db_meta = {k: v for k, v in database.items() if k not in database_keys_to_remove}
+    database_keys_to_keep = ["Name", "Description", "LocationUri", "Parameters"]
+    db_meta = {k: v for k, v in database.items() if k in database_keys_to_keep}
     db_meta["Name"] = new_database_name
     db_meta = {"DatabaseInput": {**db_meta}}
     logger.info(str(db_meta))
