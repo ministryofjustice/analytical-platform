@@ -36,9 +36,13 @@ locals {
       }
     }
     "data-platform-support" = {
-      name        = "data-platform-support"
-      description = "Data Platform Support"
-      topics      = ["ministryofjustice", "data-platform"]
+      name                                   = "data-platform-support"
+      description                            = "Data Platform Support"
+      topics                                 = ["ministryofjustice", "data-platform"]
+      visibility                             = "internal"
+      advanced_security_status               = "disabled"
+      secret_scanning_status                 = "disabled"
+      secret_scanning_push_protection_status = "disabled"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
@@ -79,7 +83,8 @@ locals {
       name                                              = "data-platform-control-panel"
       description                                       = "Data Platform Control Panel"
       topics                                            = ["ministryofjustice", "data-platform"]
-      has_projects                                      = true
+      has_projects                                      = false
+      has_issues                                        = false
       branch_protection_required_status_checks_contexts = ["Super-Linter"]
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]

@@ -187,13 +187,13 @@ def create_schema(
 
 @pytest.fixture
 def create_glue_database(glue_client, data_product_name):
-    glue_client.create_database(DatabaseInput={"Name": data_product_name})
+    glue_client.create_database(DatabaseInput={"Name": data_product_name + "_v2"})
 
 
 @pytest.fixture
 def create_glue_table(create_glue_database, glue_client, data_product_name, table_name):
     glue_client.create_table(
-        DatabaseName=data_product_name, TableInput={"Name": table_name}
+        DatabaseName=data_product_name + "_v2", TableInput={"Name": table_name}
     )
 
 

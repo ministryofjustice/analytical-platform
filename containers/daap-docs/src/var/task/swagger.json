@@ -409,6 +409,65 @@
             "authorizationToken": []
           }
         ]
+      },
+      "delete": {
+        "tags": [
+          "data product"
+        ],
+        "summary": "Delete an existing Data Product.",
+        "description": "Deletes an existing Data Product.",
+        "operationId": "deleteDataProduct",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorizationToken",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "data-product-name",
+            "required": true,
+            "example": "my_data_product",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The name of the data product you want to delete."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "version"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully removed data product 'data_product_name'."
+                    }
+                  },
+                  "example": {
+                    "message": "Successfully removed data product 'data_product_name'."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorizationToken": []
+          }
+        ]
       }
     },
     "/data-product/{data-product-name}/table/{table-name}/schema": {
@@ -880,7 +939,11 @@
           "status": {
             "type": "string",
             "description": "this is an enum representing the status of this version of the Data Product. Allowed values are: [draft|published|retired]. This is a metadata that communicates the overall status of the Data Product but is not reflected to the actual deployment status.",
-            "enum": ["draft", "published", "retired"]
+            "enum": [
+              "draft",
+              "published",
+              "retired"
+            ]
           },
           "dpiaRequired": {
             "type": "boolean",
@@ -899,7 +962,9 @@
           "tags": {
             "type": "object",
             "description": "Additional tags to add.",
-            "example": { "sandbox": true }
+            "example": {
+              "sandbox": true
+            }
           }
         },
         "additionalProperties": false

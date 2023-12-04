@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] 2023-11-23
+
+- Added s3_copy_and_remove_source function to patch bug where
+  files weren't being deleted
+
 ## [1.5.0] 2023-11-15
 
 - Updated base image to 7.0.0

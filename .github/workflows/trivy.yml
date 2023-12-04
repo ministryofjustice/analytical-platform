@@ -3,6 +3,8 @@ name: Trivy
 on:
   schedule:
     - cron: "0 6 * * 1"
+  workflow_dispatch:
+  pull_request:
 
 permissions: read-all
 
@@ -11,21 +13,33 @@ jobs:
     name: trivy
     runs-on: ubuntu-latest
     permissions:
-      issues: write
+      contents: read
+      id-token: write
+      security-events: write
+      pull-requests: read
+      issues: read
     steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: trivy
         id: terraform_static_analysis_trivy
         uses: aquasecurity/trivy-action@2b6a709cf9c4025c5438138008beaddbb02086f0 # v0.14.0
         with:
           scan-type: config
           ignore-unfixed: true
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          exit-code: '1'
+          format: "sarif"
+          output: "trivy-results.sarif"
+          exit-code: "1"
           severity: CRITICAL,HIGH,LOW,MEDIUM
+          trivyignores: .github/.trivyignore.yaml
         continue-on-error: true
+
+      - name: Sarif workaround
+        run: |
+          sed -i 's/git::https:\///g' trivy-results.sarif
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"

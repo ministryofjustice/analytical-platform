@@ -7,14 +7,19 @@ from enum import Enum
 from typing import NamedTuple
 
 import boto3
+from curated_data.curated_data_loader import CuratedDataCopier
 from data_platform_logging import DataPlatformLogger, s3_security_opts
 from data_platform_paths import (
     DataProductConfig,
     DataProductElement,
-    generate_all_element_version_prefixes,
+    generate_element_version_prefixes_for_version,
+    get_database_name_for_version,
 )
 from data_product_metadata import DataProductMetadata, DataProductSchema
-from glue_and_athena_utils import delete_glue_table
+from glue_and_athena_utils import clone_database, delete_table
+
+athena_client = boto3.client("athena")
+glue_client = boto3.client("glue")
 
 
 class Version(NamedTuple):
@@ -27,6 +32,9 @@ class Version(NamedTuple):
 
     def __str__(self):
         return f"v{self.major}.{self.minor}"
+
+    def format_major_version(self):
+        return f"v{self.major}"
 
     @staticmethod
     def parse(version_str) -> Version:
@@ -86,6 +94,7 @@ class VersionManager:
 
     def __init__(self, data_product_name, logger: DataPlatformLogger):
         self.data_product_config = DataProductConfig(name=data_product_name)
+        self.data_product_name = data_product_name
         self.latest_version = self.data_product_config.latest_version
         self.logger = logger
 
@@ -119,19 +128,6 @@ class VersionManager:
             raise InvalidUpdate(error)
 
         self.logger.info(f"schemas to delete: {schema_list}")
-        for schema_name in schema_list:
-            # Delete the Glue table
-            result = delete_glue_table(
-                data_product_name=data_product_name,
-                table_name=schema_name,
-                logger=self.logger,
-            )
-            self.logger.info(str(result))
-
-            # Delete a given elements raw and curated data for all versions of the data product
-            delete_all_element_version_data_files(
-                data_product_name=data_product_name, table_name=schema_name
-            )
 
         current_metadata["schemas"] = [
             schema for schema in current_schemas if schema not in schema_list
@@ -166,9 +162,18 @@ class VersionManager:
             # Delete the schema.json file for the table we have removed
             s3_client.delete_object(Bucket=schema_path.bucket, Key=schema_path.key)
 
-        # Get the metadata path for the new version
+        # Create a new version of the athena database with all the tables in
+        self._create_database_for_new_version(
+            self.data_product_config.name,
+            latest_version=self.latest_version,
+            new_version=new_version,
+        )
+
+        # Remove the table we are deleting from the new version of the database
+        for schema_name in schema_list:
+            self._delete_data_for_schema(schema_name, new_version)
+
         new_version_key = self.data_product_config.metadata_path(new_version).key
-        # Overwite the copied metadata.json file with the updated parameters
         updated_metadata.write_json_to_s3(new_version_key)
 
         return new_version
@@ -292,7 +297,9 @@ class VersionManager:
 
         return new_version
 
-    def update_schema(self, input_data: dict, table_name: str) -> tuple[str, dict]:
+    def update_schema(
+        self, input_data: dict, table_name: str
+    ) -> tuple[str, dict, dict | None]:
         """
         Create a new version with updated schema.
         """
@@ -314,7 +321,22 @@ class VersionManager:
             )
             schema.convert_schema_to_glue_table_input_csv()
             schema.write_json_to_s3(new_version_key)
-            return new_version, changes
+            copy_resp = None
+            # if major we need to create next major version data product data
+            if state == UpdateType.MajorUpdate:
+                data_product_element = DataProductElement.load(
+                    schema.table_name, self.data_product_config.name
+                )
+                copy_resp, schemas_to_write = create_next_major_version_data_product(
+                    schema, data_product_element, changes, self.logger
+                )
+                for schema_to_write in schemas_to_write:
+                    new_version_key = data_product_element.data_product.schema_path(
+                        schema_to_write.table_name
+                    ).key
+                    schema_to_write.write_json_to_s3(new_version_key)
+
+            return new_version, changes, copy_resp
         else:
             raise InvalidUpdate()
 
@@ -377,6 +399,58 @@ class VersionManager:
             new_version=new_version,
             logger=self.logger,
         )
+
+    def _create_database_for_new_version(
+        self, data_product_name, latest_version, new_version
+    ):
+        """
+        Copy the athena database configuration from the old version to the new version
+        Only the metadata is copied, none of the contents data
+        """
+        latest_major_version = Version.parse(latest_version).format_major_version()
+        new_major_version = Version.parse(new_version).format_major_version()
+
+        existing_database_name = get_database_name_for_version(
+            data_product_name, latest_major_version
+        )
+        new_database_name = get_database_name_for_version(
+            data_product_name, new_major_version
+        )
+
+        try:
+            clone_database(
+                existing_database_name=existing_database_name,
+                new_database_name=new_database_name,
+                logger=self.logger,
+            )
+        except ValueError:
+            self.logger.info(
+                f"Postponing creation of {new_major_version} glue db: previous version does not exist"
+            )
+            return
+
+    def _delete_data_for_schema(self, schema_name: str, version: str):
+        """
+        Wipe data belonging to a particular schema.
+        """
+        try:
+            delete_table(
+                database_name=get_database_name_for_version(
+                    self.data_product_name,
+                    Version.parse(version).format_major_version(),
+                ),
+                table_name=schema_name,
+                logger=self.logger,
+            )
+
+            delete_element_version_data_files(
+                data_product_name=self.data_product_name,
+                table_name=schema_name,
+                version=version,
+            )
+        except ValueError:
+            self.logger.info("Table does not exist - nothing to delete")
+            return
 
 
 def metadata_update_type(data_product_metadata: DataProductMetadata) -> UpdateType:
@@ -513,26 +587,58 @@ def generate_next_version_string(
         return version
 
 
-def delete_all_element_version_data_files(data_product_name: str, table_name: str):
-    """Deletes raw and curated data for all element versions"""
+def delete_element_version_data_files(
+    data_product_name: str, table_name: str, version: str
+):
+    """Deletes raw and curated data for a particular version"""
     # Proceed to delete the raw data
     element = DataProductElement.load(
         element_name=table_name, data_product_name=data_product_name
     )
-    raw_prefixes = generate_all_element_version_prefixes(
-        "raw", data_product_name, table_name
+    raw_prefixes = generate_element_version_prefixes_for_version(
+        "raw", data_product_name, table_name, version
     )
-    curated_prefixes = generate_all_element_version_prefixes(
-        "curated", data_product_name, table_name
+    curated_prefixes = generate_element_version_prefixes_for_version(
+        "curated", data_product_name, table_name, version
     )
 
     s3_recursive_delete(element.data_product.raw_data_bucket, raw_prefixes)
     s3_recursive_delete(element.data_product.curated_data_bucket, curated_prefixes)
 
 
-def s3_recursive_delete(bucket_name: str, prefixes: list[str]) -> None:
+def s3_recursive_delete(bucket_name: str, prefix: str) -> None:
     """Delete all files from a prefix in s3"""
     s3_resource = boto3.resource("s3")
     bucket = s3_resource.Bucket(bucket_name)
-    for prefix in prefixes:
-        bucket.objects.filter(Prefix=prefix).delete()
+    bucket.objects.filter(Prefix=prefix).delete()
+
+
+def create_next_major_version_data_product(
+    schema: DataProductSchema,
+    data_product_element: DataProductElement,
+    changes: dict,
+    logger,
+) -> tuple[dict[str, bool], list[DataProductSchema]]:
+    """
+    creates a new version dataproduct database and copies
+    all tables from existing version, and conditionally, the table
+    where schema has been updated.
+
+    returns a list of DataProductSchema objects for each copied table
+    to be written to the new major version metadata folder
+    """
+    copier = CuratedDataCopier(
+        column_changes=changes[schema.table_name]["columns"],
+        new_schema=schema,
+        element=data_product_element,
+        athena_client=athena_client,
+        glue_client=glue_client,
+        logger=logger,
+    )
+
+    copy_response = {f"{schema.table_name} copied": copier.copy_updated_table}
+
+    # returns all schemas copied with new databased name to be written to s3
+    schemas_to_rewrite = copier.run()
+
+    return copy_response, schemas_to_rewrite

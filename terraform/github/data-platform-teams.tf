@@ -25,7 +25,6 @@ locals {
       parent_team_id = module.data_platform_team.id
       members = [
         "bagg3rs",           # Richard Baguley
-        "AlexVilela",        # Alex Vilela
         "julialawrence",     # Julia Lawrence
         "jhpyke",            # Jacob Hamblin-Pyke
         "jacobwoffenden",    # Jacob Woffenden
@@ -68,7 +67,6 @@ locals {
       parent_team_id = module.data_platform_team.id
       members = [
         "bagg3rs",           # Richard Baguley
-        "AlexVilela",        # Alex Vilela
         "julialawrence",     # Julia Lawrence
         "jhpyke",            # Jacob Hamblin-Pyke
         "jacobwoffenden",    # Jacob Woffenden
@@ -138,14 +136,6 @@ locals {
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
         local.data_platform_teams["data-platform-labs"].members
-      ])
-    }
-    "data-platform-audit-and-security" = {
-      name           = "data-platform-audit-and-security"
-      description    = "Data Platform Audit and Security"
-      parent_team_id = module.data_platform_team.id
-      members = flatten([
-        local.data_platform_teams["data-platform-audit-and-security"].members
       ])
     },
     "data-platform-apps-and-tools-development-sandbox" = {
