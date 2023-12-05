@@ -88,6 +88,8 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
 ##################################################
 
 module "iam_assumable_role_cert_manager" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version                       = "5.32.0"
   create_role                   = true
@@ -102,6 +104,8 @@ module "iam_assumable_role_cert_manager" {
 ##################################################
 
 module "iam_assumable_role_cluster_autoscaler" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version                       = "5.32.0"
   create_role                   = true
@@ -116,6 +120,8 @@ module "iam_assumable_role_cluster_autoscaler" {
 ##################################################
 
 module "iam_assumable_role_ebs_csi_driver" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source                   = "github.com/ministryofjustice/ap-terraform-iam-roles//eks-role?ref=v1.4.2"
   role_name_prefix         = "EbsCsiDriver"
   role_description         = "ebs_csi_driver role for cluster ${module.eks.cluster_id}"
@@ -129,6 +135,8 @@ module "iam_assumable_role_ebs_csi_driver" {
 ##################################################
 
 module "iam_assumable_role_external_dns" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version                       = "5.32.0"
   create_role                   = true
@@ -143,6 +151,8 @@ module "iam_assumable_role_external_dns" {
 ##################################################
 
 module "iam_assumable_role_external_secrets" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version                       = "5.32.0"
   create_role                   = true
@@ -157,6 +167,8 @@ module "iam_assumable_role_external_secrets" {
 ##################################################
 
 module "iam_assumable_role_jupyterhub_teama" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version                       = "5.32.0"
   create_role                   = true
@@ -171,6 +183,8 @@ module "iam_assumable_role_jupyterhub_teama" {
 ##################################################
 
 module "iam_assumable_role_prometheus_remote_ingest" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version                       = "5.32.0"
   create_role                   = true
@@ -185,6 +199,8 @@ module "iam_assumable_role_prometheus_remote_ingest" {
 ##################################################
 
 module "iam_assumable_role_superset" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version                       = "5.32.0"
   create_role                   = true
@@ -199,6 +215,8 @@ module "iam_assumable_role_superset" {
 ##################################################
 
 module "iam_assumable_role_control_panel_api" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source           = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version          = "5.32.0"
   create_role      = true
