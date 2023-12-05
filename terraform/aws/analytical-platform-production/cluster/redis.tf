@@ -3,6 +3,8 @@
 ##################################################
 
 module "control_panel_redis" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source  = "cloudposse/elasticache-redis/aws"
   version = "0.53.0"
 
