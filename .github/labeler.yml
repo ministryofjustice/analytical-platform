@@ -1,8 +1,7 @@
 ---
 documentation:
   - changed-files:
-    - "docs/*"
-    - "**/*.md"
+    - any-glob-to-any-file: "docs/*"
 
 github-workflow:
   - changed-files:
