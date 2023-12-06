@@ -36,8 +36,8 @@ locals {
     "sivabathina2",       # Siva Bathina
     "hemeshpatel-moj",    # Hemesh Patel
     "kraihanmoj",         # Khristiania Raihan
-    "andrewc-moj",        # Andrew Craik,
-    "pricemg",            # Matthew Price,
+    "andrewc-moj",        # Andrew Craik
+    "pricemg",            # Matthew Price
     "matt-heery"          # Matt Heery
   ]
 }
