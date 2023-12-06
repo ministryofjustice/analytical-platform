@@ -30,4 +30,7 @@ module "control_panel_redis" {
 
   security_group_description = "Security group for Control panel Redis"
   allowed_security_groups    = [module.eks.worker_security_group_id]
+
+  create_parameter_group = true
+  parameter_group_name   = "control-panel-${var.environment}"
 }
