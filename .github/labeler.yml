@@ -1,13 +1,17 @@
 ---
 documentation:
-  - "docs/**"
-  - "README.md"
+  - changed-files:
+    - any-glob-to-any-file: "docs/*"
+    - any-glob-to-any-file: "README.md"
 
 github-workflow:
-  - ".github/workflows/**"
+  - changed-files:
+    - any-glob-to-any-file: ".github/workflows/**"
 
 identity-access-management:
-  - "terraform/github/teams.tf"
+  - changed-files:
+    - any-glob-to-any-file: "terraform/github/*teams.tf"
 
 devcontainer:
-  - ".devcontainer/**"
+  - changed-files:
+    - any-glob-to-any-file: ".devcontainer/**"
