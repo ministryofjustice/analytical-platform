@@ -2,6 +2,7 @@
 documentation:
   - changed-files:
     - any-glob-to-any-file: "docs/*"
+    - any-glob-to-any-file: "README.md"
 
 github-workflow:
   - changed-files:
