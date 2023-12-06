@@ -4,7 +4,7 @@
 
 module "control_panel_redis" {
   source  = "cloudposse/elasticache-redis/aws"
-  version = "0.53.0"
+  version = "1.0.0"
 
   enabled                    = var.redis_enabled
   replication_group_id       = local.redis_replication_group_id
@@ -31,4 +31,7 @@ module "control_panel_redis" {
 
   security_group_description = "Security group for Control panel Redis"
   allowed_security_groups    = [module.eks.worker_security_group_id]
+
+  create_parameter_group = true
+  parameter_group_name   = "control-panel-${var.environment}"
 }
