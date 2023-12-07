@@ -42,6 +42,8 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_production_
 }
 
 module "analytical_platform_data_engineering_production_github_oidc_provider" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.1"
 
   providers = {
@@ -103,6 +105,8 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_sandbox_a_g
 }
 
 module "analytical_platform_data_engineering_sandbox_a_github_oidc_provider" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.1"
 
   providers = {
@@ -144,6 +148,8 @@ data "aws_iam_policy_document" "analytical_platform_data_production_github_oidc_
 }
 
 module "analytical_platform_data_production_github_oidc_provider" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.1"
 
   providers = {
@@ -208,6 +214,8 @@ data "aws_iam_policy_document" "analytical_platform_management_production_github
 }
 
 module "analytical_platform_management_production_github_oidc_provider" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.1"
 
   providers = {

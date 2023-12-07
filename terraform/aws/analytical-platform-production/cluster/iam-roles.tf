@@ -3,6 +3,8 @@
 ##################################################
 
 module "iam_assumable_role_ebs_csi_driver" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source = "github.com/ministryofjustice/ap-terraform-iam-roles//eks-role?ref=v1.4.2"
 
   role_name_prefix         = "EbsCsiDriver"
@@ -17,6 +19,8 @@ module "iam_assumable_role_ebs_csi_driver" {
 ##################################################
 
 module "iam_assumable_role_control_panel_api" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version = "5.32.0"
 
@@ -39,6 +43,8 @@ module "iam_assumable_role_control_panel_api" {
 ##################################################
 
 module "iam_assumable_role_cert_manager" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version = "5.32.0"
 
@@ -54,6 +60,8 @@ module "iam_assumable_role_cert_manager" {
 ##################################################
 
 module "iam_assumable_role_cluster_autoscaler" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version = "5.32.0"
 
@@ -69,6 +77,8 @@ module "iam_assumable_role_cluster_autoscaler" {
 ##################################################
 
 module "iam_assumable_role_external_dns" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version = "5.32.0"
 
@@ -84,6 +94,8 @@ module "iam_assumable_role_external_dns" {
 ##################################################
 
 module "iam_assumable_role_external_secrets" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version = "5.32.0"
 
@@ -99,6 +111,8 @@ module "iam_assumable_role_external_secrets" {
 ##################################################
 
 module "iam_assumable_role_prometheus_remote_ingest" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version = "5.32.0"
 
