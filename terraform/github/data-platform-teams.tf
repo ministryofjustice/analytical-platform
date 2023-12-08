@@ -83,18 +83,16 @@ locals {
 
   data_platform_cloud_platform_teams = {
     "data-platform-cloud-platform-development" = {
-      name           = "data-platform-cloud-platform-development"
-      description    = "Data Platform Cloud Platform Development"
-      parent_team_id = module.data_platform_team.id
+      name        = "data-platform-cloud-platform-development"
+      description = "Data Platform Cloud Platform Development"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
         local.data_platform_teams["data-platform-labs"].members
       ])
     },
     "data-platform-cloud-platform-production" = {
-      name           = "data-platform-cloud-platform-production"
-      description    = "Data Platform Cloud Platform Production"
-      parent_team_id = module.data_platform_team.id
+      name        = "data-platform-cloud-platform-production"
+      description = "Data Platform Cloud Platform Production"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
@@ -103,84 +101,64 @@ locals {
 
   data_platform_modernisation_platform_teams = {
     "data-platform-development-sandbox" = {
-      name           = "data-platform-development-sandbox"
-      description    = "Data Platform Development Sandbox"
-      parent_team_id = module.data_platform_team.id
+      name        = "data-platform-development-sandbox"
+      description = "Data Platform Development Sandbox"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
         local.data_platform_teams["data-platform-labs"].members
       ])
     },
     "data-platform-preproduction-developer" = {
-      name           = "data-platform-preproduction-developer"
-      description    = "Data Platform PreProduction Developer"
-      parent_team_id = module.data_platform_team.id
+      name        = "data-platform-preproduction-developer"
+      description = "Data Platform PreProduction Developer"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
         local.data_platform_teams["data-platform-labs"].members
       ])
     },
     "data-platform-production-developer" = {
-      name           = "data-platform-production-developer"
-      description    = "Data Platform Production Developer"
-      parent_team_id = module.data_platform_team.id
+      name        = "data-platform-production-developer"
+      description = "Data Platform Production Developer"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
         local.data_platform_teams["data-platform-labs"].members
       ])
     },
     "data-platform-test-developer" = {
-      name           = "data-platform-test-developer"
-      description    = "Data Platform Test Developer"
-      parent_team_id = module.data_platform_team.id
+      name        = "data-platform-test-developer"
+      description = "Data Platform Test Developer"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
         local.data_platform_teams["data-platform-labs"].members
       ])
     },
     "data-platform-apps-and-tools-development-sandbox" = {
-      name           = "data-platform-apps-and-tools-development-sandbox"
-      description    = "Data Platform Apps and Tools Development Sandbox"
-      parent_team_id = module.data_platform_team.id
+      name        = "data-platform-apps-and-tools-development-sandbox"
+      description = "Data Platform Apps and Tools Development Sandbox"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
     },
     "data-platform-apps-and-tools-production-developer" = {
-      name           = "data-platform-apps-and-tools-production-developer"
-      description    = "Data Platform Apps and Tools Production Developer"
-      parent_team_id = module.data_platform_team.id
+      name        = "data-platform-apps-and-tools-production-developer"
+      description = "Data Platform Apps and Tools Production Developer"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
-      ])
-    }
-  }
-
-  data_platform_observability_platform_teams = {
-    "data-platform-observability-platform" = {
-      name           = "data-platform-observability-platform"
-      description    = "Data Platform Observability Platform"
-      parent_team_id = module.data_platform_team.id
-      members = flatten([
-        local.data_platform_teams["data-platform-apps-and-tools"].members,
-        local.data_platform_teams["data-platform-labs"].members
       ])
     }
   }
 
   data_platform_apps_and_tools_teams = {
     "data-platform-apps-and-tools-airflow-users" = {
-      name           = "data-platform-apps-and-tools-airflow-users"
-      description    = "Data Platform Apps and Tools Airflow Users"
-      parent_team_id = module.data_platform_teams["data-platform-apps-and-tools"].id
+      name        = "data-platform-apps-and-tools-airflow-users"
+      description = "Data Platform Apps and Tools Airflow Users"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
     },
     "data-platform-apps-and-tools-sagemaker-users" = {
-      name           = "data-platform-apps-and-tools-sagemaker-users"
-      description    = "Data Platform Apps and Tools SageMaker Users"
-      parent_team_id = module.data_platform_teams["data-platform-apps-and-tools"].id
+      name        = "data-platform-apps-and-tools-sagemaker-users"
+      description = "Data Platform Apps and Tools SageMaker Users"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
@@ -206,7 +184,7 @@ module "data_platform_teams" {
 
   name                             = each.value.name
   description                      = each.value.description
-  parent_team_id                   = each.value.parent_team_id
+  parent_team_id                   = try(each.value.parent_team_id, null)
   members                          = each.value.members
   users_with_special_github_access = local.users_with_special_github_access
 }
@@ -219,7 +197,7 @@ module "data_platform_cloud_platform_teams" {
 
   name                             = each.value.name
   description                      = each.value.description
-  parent_team_id                   = each.value.parent_team_id
+  parent_team_id                   = try(each.value.parent_team_id, null)
   members                          = each.value.members
   users_with_special_github_access = local.users_with_special_github_access
 }
@@ -232,20 +210,7 @@ module "data_platform_modernisation_platform_teams" {
 
   name                             = each.value.name
   description                      = each.value.description
-  parent_team_id                   = each.value.parent_team_id
-  members                          = each.value.members
-  users_with_special_github_access = local.users_with_special_github_access
-}
-
-# Observability Platform Access Teams
-module "data_platform_observability_platform_teams" {
-  source = "./modules/team"
-
-  for_each = { for team in local.data_platform_observability_platform_teams : team.name => team }
-
-  name                             = each.value.name
-  description                      = each.value.description
-  parent_team_id                   = each.value.parent_team_id
+  parent_team_id                   = try(each.value.parent_team_id, null)
   members                          = each.value.members
   users_with_special_github_access = local.users_with_special_github_access
 }
@@ -258,7 +223,7 @@ module "data_platform_apps_and_tools_teams" {
 
   name                             = each.value.name
   description                      = each.value.description
-  parent_team_id                   = each.value.parent_team_id
+  parent_team_id                   = try(each.value.parent_team_id, null)
   members                          = each.value.members
   users_with_special_github_access = local.users_with_special_github_access
 }
