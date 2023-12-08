@@ -7,6 +7,7 @@ import pandas as pd
 from notifications_python_client import prepare_upload
 from notifications_python_client.notifications import NotificationsAPIClient
 
+
 def handler(event, context):
     # Constants
     AWS_REGION = "eu-west-2"
