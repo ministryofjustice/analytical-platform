@@ -59,7 +59,6 @@ locals {
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
-        "tom-webber",
       ])
     },
     "analytical-platform-data-development-data-engineer" = {
