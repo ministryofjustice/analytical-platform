@@ -170,7 +170,7 @@ module "analytical_platform_team" {
   name                             = "analytical-platform"
   description                      = "Analytical Platform"
   members                          = local.analytical_platform_all_teams_members
-  parent_team_id                   = module.data_platform_team.id
+  parent_team_id                   = null
   users_with_special_github_access = local.users_with_special_github_access
 }
 
