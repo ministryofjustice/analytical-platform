@@ -77,4 +77,3 @@ def handler(event, context):
         except HTTPError as e:
             print(e)
             raise e
-        
