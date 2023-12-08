@@ -46,7 +46,7 @@ def handler(event, context):
 
     start_datetime = dt(year, previous_month, 1, 0, 0, 0)
 
-   # Read logs
+    # Read logs
     dataframe = wr.cloudwatch.read_logs(
         log_group_names=LOG_GROUP_NAMES,
         query=query,
@@ -54,14 +54,16 @@ def handler(event, context):
         end_time=end_datetime,
     )
     
-
-     # Datestamp
+    
+    # Datestamp
     datestamp = end_datetime.strftime(format="%Y_%m_%d")
     dataframe["last_login"] = pd.to_datetime(
         dataframe["last_login"], format="%Y-%m-%d %H:%M:%S.%f"
     ).apply(lambda x: str(dt.strftime(x, "%Y/%m/%d")))
 
-    # Save to Excel
+    # Save to 
+    excel_filename = f"/tmp/jml_extract_{datestamp}.xlsx"
+    dataframe.to_excel(excel_filename, index=False)
     #Send email notification
     with open(excel_filename, "rb") as f:
         try:
