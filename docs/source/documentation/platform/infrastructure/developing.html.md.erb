@@ -36,6 +36,8 @@ Once we begin our journey to the monorepo, this should become redundant, but tha
 
 - Docker
 
+    > If you are have an Apple Silicon Mac, you will need to enable Rosetta emulation, see Docker's [documentation](https://docs.docker.com/desktop/settings/mac/#general:~:text=Use%20Rosetta%20for%20x86/AMD64%20emulation%20on%20Apple%20Silicon) for more information.
+
     ```bash
     brew install --cask docker
     ```
@@ -203,7 +205,7 @@ The provided configuration file handles authentication to EKS clusters using AWS
 
 > Rebuilding the dev container will reset the Kubernetes configuration file, so you'll need to authenticate again.
 
-1. Login to Cloud Platform Kuberos (https://login.cloud-platform.service.justice.gov.uk/)
+1. Login to Cloud Platform Kuberos (<https://login.cloud-platform.service.justice.gov.uk>)
 
 1. Obtain the command from "Authenticate Manually"
 
