@@ -32,7 +32,6 @@ def handler(event, context):
     | stats max(@timestamp) as last_login by "{current_date}" as effective_date, user, email
     | sort last_login desc
     """
-    secrets_client = boto3.client("secretsmanager")
 
     # Date range
     year = dt.now().year
@@ -53,18 +52,18 @@ def handler(event, context):
         start_time=start_datetime,
         end_time=end_datetime,
     )
-    
-    
+
     # Datestamp
     datestamp = end_datetime.strftime(format="%Y_%m_%d")
     dataframe["last_login"] = pd.to_datetime(
         dataframe["last_login"], format="%Y-%m-%d %H:%M:%S.%f"
     ).apply(lambda x: str(dt.strftime(x, "%Y/%m/%d")))
 
-    # Save to 
+    # Save to Excel
     excel_filename = f"/tmp/jml_extract_{datestamp}.xlsx"
     dataframe.to_excel(excel_filename, index=False)
-    #Send email notification
+
+    # Send email notification
     with open(excel_filename, "rb") as f:
         try:
             response = notifications_client.send_email_notification(
@@ -78,3 +77,4 @@ def handler(event, context):
         except HTTPError as e:
             print(e)
             raise e
+        
