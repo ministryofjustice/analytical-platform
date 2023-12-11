@@ -21,7 +21,7 @@ locals {
         maintainers = [module.data_platform_teams["data-platform-labs"].id]
         pushers = [
           module.data_platform_team.id,
-          module.data_engineering_team.id
+          data.github_team.data_engineering.id
         ]
       }
     }

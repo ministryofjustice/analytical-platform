@@ -19,3 +19,7 @@ data "aws_secretsmanager_secret_version" "github_token" {
 data "github_team" "data_and_analytics_engineering" {
   slug = "data-and-analytics-engineering"
 }
+
+data "github_team" "data_engineering" {
+  slug = "data-engineering"
+}
