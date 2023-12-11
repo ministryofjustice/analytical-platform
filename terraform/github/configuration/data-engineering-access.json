@@ -1,0 +1,439 @@
+[
+  {
+    "name": "Calum Barnett",
+    "github": "calumabarnett",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Priya Basker",
+    "github": "PriyaBasker23",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Soumaya Mauthoor",
+    "github": "SoumayaMauthoorMOJ",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Theodoros Manassis",
+    "github": "mamonu",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Mike Ratford",
+    "github": "mratford",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Danjiv Ramkhalawon",
+    "github": "Danjiv",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Kimberley Brett",
+    "github": "K1Br",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Francesca von Braun-Bates",
+    "github": "vonbraunbates",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Anthony Cody",
+    "github": "AnthonyCody",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Gwion ApRhobat",
+    "github": "gwionap",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Tapan Perkins",
+    "github": "tmpks",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Thomas Hirsch",
+    "github": "Thomas-Hirsch",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Matt Laverty",
+    "github": "LavMatt",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "William Orr",
+    "github": "williamorrie",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Gustav Moller",
+    "github": "gustavmoller",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Jake Hamblin-Pyke",
+    "github": "jhpyke",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Murad Ali",
+    "github": "murad-ali-MoJ",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Oliver Critchfield",
+    "github": "oliver-critchfield",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "David Bridgwood",
+    "github": "davidbridgwood",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Michael Hodge",
+    "github": "mshodge",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Andy Cook",
+    "github": "Andy-Cook",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Sam Lindsay",
+    "github": "samnlindsay",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Thomas Hepworth",
+    "github": "ThomasHepworth",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Zoe Slade",
+    "github": "zslade",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Andrew Bond",
+    "github": "ADBond",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Alice O'Leary",
+    "github": "aliceoleary0",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Ross Kennedy",
+    "github": "RossKen",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Afua Kokayi",
+    "github": "afua-moj",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Murdo Moyse",
+    "github": "murdo-moj",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Mat Moore",
+    "github": "matmoore",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Anthony Fitzroy",
+    "github": "AntFMoJ",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Tom Holt",
+    "github": "tomholt1",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Lalitha Nagarur",
+    "github": "lalithanagarur",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Siva Bathina",
+    "github": "sivabathina2",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Hemesh Patel",
+    "github": "hemeshpatel-moj",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Khristiania Raihan",
+    "github": "kraihanmoj",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Andrew Craik",
+    "github": "andrewc-moj",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Matthew Price",
+    "github": "pricemg",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Matt Heery",
+    "github": "matt-heery",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Parminder Thindal",
+    "github": "parminder-thindal-moj",
+    "access": [
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer"
+    ]
+  }
+]
