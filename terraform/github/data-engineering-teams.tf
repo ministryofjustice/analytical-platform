@@ -1,4 +1,6 @@
 locals {
+  data_engineering_access = jsondecode(file("${path.module}/configuration/data-engineering-access.json"))
+
   data_engineering_team_members = [
     "calumabarnett",      # Calum Barnett
     "PriyaBasker23",      # Priya Basker

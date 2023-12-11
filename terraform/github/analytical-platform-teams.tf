@@ -66,7 +66,10 @@ locals {
       description    = "Analytical Platform Data Development Data Engineer"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
-        local.data_engineering_team_members
+        {
+          for user in local.data_engineering_access : user => user
+          if contains("analytical-platform-data-development-data-engineer", user.access)
+        }
       ])
     },
     "analytical-platform-data-production-administrator" = {
