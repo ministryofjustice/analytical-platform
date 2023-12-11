@@ -182,7 +182,7 @@ jobs:
 
       - name: Scan Image
         id: scan_image
-        uses: aquasecurity/trivy-action@22d2755f774d925b191a185b74e782a4b0638a41 # v0.15.0
+        uses: aquasecurity/trivy-action@91713af97dc80187565512baba96e4364e983601 # v0.16.0
         with:
           image-ref: ${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
           exit-code: 1
@@ -194,7 +194,7 @@ jobs:
       - name: Scan Image (On SARIF Scan Failure)
         if: failure() && steps.scan_image.outcome == 'failure'
         id: scan_image_on_failure
-        uses: aquasecurity/trivy-action@22d2755f774d925b191a185b74e782a4b0638a41 # v0.15.0
+        uses: aquasecurity/trivy-action@91713af97dc80187565512baba96e4364e983601 # v0.16.0
         with:
           image-ref: ${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
           exit-code: 1
