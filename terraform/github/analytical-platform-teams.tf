@@ -29,8 +29,7 @@ locals {
         "murad-ali-MoJ",     # Murad Ali
         "Gary-H9",           # Gary Henderson
         "mitchdawson1982",   # Mitch Dawson
-        "bagg3rs",           # Richard Baguley
-        "seanprivett"        # Sean Privett
+        "bagg3rs"            # Richard Baguley
       ]
     }
   }
