@@ -41,7 +41,8 @@ locals {
       description    = "Analytical Platform Development Administrator"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
-        local.data_platform_teams["data-platform-apps-and-tools"].members
+        local.data_platform_teams["data-platform-apps-and-tools"].members,
+        "seanprivett", # Sean Privett
       ])
     },
     "analytical-platform-production-administrator" = {
@@ -49,7 +50,8 @@ locals {
       description    = "Analytical Platform Production Administrator"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
-        local.data_platform_teams["data-platform-apps-and-tools"].members
+        local.data_platform_teams["data-platform-apps-and-tools"].members,
+        "seanprivett", # Sean Privett
       ])
     },
     /* Analytical Platform Data */
