@@ -50,6 +50,7 @@ locals {
         "tom-webber",      # Tom Webber
         "mitchdawson1982", # Mitch Dawson
         "MatMoore",        # Mat Moore
+        "seanprivett",     # Sean Privett
       ]
     },
     "data-platform-audit-and-security" = {
