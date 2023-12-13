@@ -1,0 +1,5 @@
+{
+  "name": "kubectl",
+  "version": "0.3.0",
+  "registry": "dockerhub"
+}
