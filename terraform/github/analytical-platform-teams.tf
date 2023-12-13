@@ -61,6 +61,7 @@ locals {
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
+        "seanprivett", # Sean Privett
       ])
     },
     "analytical-platform-data-development-data-engineer" = {
@@ -80,7 +81,8 @@ locals {
       description    = "Analytical Platform Data Production Administrator"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
-        local.data_platform_teams["data-platform-apps-and-tools"].members
+        local.data_platform_teams["data-platform-apps-and-tools"].members,
+        "seanprivett", # Sean Privett
       ])
     },
     "analytical-platform-data-production-data-engineer" = {
@@ -140,7 +142,8 @@ locals {
       description    = "Analytical Platform Data Engineering Production Administrator"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
-        local.data_platform_teams["data-platform-apps-and-tools"].members
+        local.data_platform_teams["data-platform-apps-and-tools"].members,
+        "seanprivett", # Sean Privett
       ])
     },
     "analytical-platform-data-engineering-production-data-engineer" = {
@@ -167,7 +170,8 @@ locals {
       description    = "Analytical Platform Landing Development Administrator"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
-        local.data_platform_teams["data-platform-apps-and-tools"].members
+        local.data_platform_teams["data-platform-apps-and-tools"].members,
+        "seanprivett", # Sean Privett
       ])
     },
     /* Analytical Platform Management */
@@ -176,7 +180,8 @@ locals {
       description    = "Analytical Platform Management Development Administrator"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
-        local.data_platform_teams["data-platform-apps-and-tools"].members
+        local.data_platform_teams["data-platform-apps-and-tools"].members,
+        "seanprivett", # Sean Privett
       ])
     },
     /* MI Platform */
