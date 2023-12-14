@@ -27,6 +27,9 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
+    labels:
+      - "docker"
+      - "needs-human-intervention"
   - package-ecosystem: "docker"
     directory: "containers/alpine-base"
     schedule:
@@ -38,17 +41,9 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
-  - package-ecosystem: "docker"
-    directory: "containers/kubectl"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "docker"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-apps-and-tools"
+    labels:
+      - "docker"
+      - "needs-human-intervention"
   - package-ecosystem: "docker"
     directory: "containers/rshiny-3.5.3"
     schedule:
@@ -60,6 +55,9 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
+    labels:
+      - "docker"
+      - "needs-human-intervention"
   - package-ecosystem: "docker"
     directory: "containers/rshiny-3.6.3"
     schedule:
@@ -71,6 +69,9 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
+    labels:
+      - "docker"
+      - "needs-human-intervention"
   - package-ecosystem: "docker"
     directory: "containers/rshiny-4.0.5"
     schedule:
@@ -82,6 +83,9 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
+    labels:
+      - "docker"
+      - "needs-human-intervention"
   - package-ecosystem: "docker"
     directory: "containers/rshiny-4.1.3"
     schedule:
@@ -93,6 +97,9 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
+    labels:
+      - "docker"
+      - "needs-human-intervention"
   - package-ecosystem: "docker"
     directory: "containers/rshiny-4.2.2"
     schedule:
@@ -104,6 +111,9 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
+    labels:
+      - "docker"
+      - "needs-human-intervention"
   - package-ecosystem: "docker"
     directory: "containers/rshiny-open-source-base"
     schedule:
@@ -115,6 +125,9 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
+    labels:
+      - "docker"
+      - "needs-human-intervention"
   - package-ecosystem: "docker"
     directory: "containers/rstudio"
     schedule:
@@ -126,6 +139,9 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
+    labels:
+      - "docker"
+      - "needs-human-intervention"
   - package-ecosystem: "docker"
     directory: "containers/static-assets"
     schedule:
@@ -137,6 +153,9 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
+    labels:
+      - "docker"
+      - "needs-human-intervention"
   - package-ecosystem: "docker"
     directory: "containers/ubuntu-base"
     schedule:
@@ -148,6 +167,9 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
+    labels:
+      - "docker"
+      - "needs-human-intervention"
   - package-ecosystem: "pip"
     directory: "scripts/pagerduty/rota-to-slack"
     schedule:
@@ -336,6 +358,17 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-development/cluster/.terraform/modules/iam_assumable_role_ebs_csi_driver/_template/test"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-development/control-panel-message-broker"
     schedule:
       interval: "daily"
@@ -381,6 +414,17 @@ updates:
       - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-production/cluster"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform-production/cluster/.terraform/modules/iam_assumable_role_ebs_csi_driver/_template/test"
     schedule:
       interval: "daily"
       time: "09:00"

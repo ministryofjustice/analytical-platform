@@ -67,6 +67,12 @@ for ecosystem in docker pip terraform; do
     printf "    reviewers:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
     printf "      - \"ministryofjustice/data-platform-apps-and-tools\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
 
+    if [[ "${ecosystem}" == "docker" ]]; then
+      printf "    labels:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+      printf "      - \"docker\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+      printf "      - \"needs-human-intervention\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+    fi
+
   done
 
 done

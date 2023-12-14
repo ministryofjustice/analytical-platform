@@ -21,7 +21,7 @@ locals {
         maintainers = [module.data_platform_teams["data-platform-labs"].id]
         pushers = [
           module.data_platform_team.id,
-          module.data_engineering_team.id
+          data.github_team.data_engineering.id
         ]
       }
     }
@@ -36,9 +36,13 @@ locals {
       }
     }
     "data-platform-support" = {
-      name        = "data-platform-support"
-      description = "Data Platform Support"
-      topics      = ["ministryofjustice", "data-platform"]
+      name                                   = "data-platform-support"
+      description                            = "Data Platform Support"
+      topics                                 = ["ministryofjustice", "data-platform"]
+      visibility                             = "internal"
+      advanced_security_status               = "disabled"
+      secret_scanning_status                 = "disabled"
+      secret_scanning_push_protection_status = "disabled"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]

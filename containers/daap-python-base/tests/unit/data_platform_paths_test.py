@@ -16,6 +16,7 @@ from data_platform_paths import (
     data_product_log_bucket_and_key,
     generate_all_element_version_prefixes,
     get_curated_data_bucket,
+    get_database_name_for_version,
     get_landing_zone_bucket,
     get_latest_version,
     get_log_bucket,
@@ -386,3 +387,7 @@ def test_generate_all_element_version_prefixes(region_name, s3_client):
     result = generate_all_element_version_prefixes("raw", "data_product", "table")
 
     assert set(result) == {"raw/data_product/v1/table/", "raw/data_product/v2/table/"}
+
+
+def test_database_name():
+    get_database_name_for_version("foo", "v1") == "foo_v1"

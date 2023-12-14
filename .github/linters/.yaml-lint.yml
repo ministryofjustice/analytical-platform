@@ -8,6 +8,8 @@ ignore:
   - '**/terraform/cloud-platform/live/data-platform-production/github-actions-self-hosted-runners/src/helm/charts/github-actions-self-hosted-runners/templates/*.yml'
   # Kyverno policies
   - '**/terraform/aws/analytical-platform-data-production/airflow/files/kyverno_policies/*'
+  # labeler.yml
+  - '**/.github/labeler.yml'
 rules:
   comments:
     min-spaces-from-content: 1

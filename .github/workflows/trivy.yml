@@ -24,14 +24,15 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: trivy
         id: terraform_static_analysis_trivy
-        uses: aquasecurity/trivy-action@2b6a709cf9c4025c5438138008beaddbb02086f0 # v0.14.0
+        uses: aquasecurity/trivy-action@22d2755f774d925b191a185b74e782a4b0638a41 # v0.15.0
         with:
           scan-type: config
           ignore-unfixed: true
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          exit-code: '1'
+          format: "sarif"
+          output: "trivy-results.sarif"
+          exit-code: "1"
           severity: CRITICAL,HIGH,LOW,MEDIUM
+          trivyignores: .github/.trivyignore.yaml
         continue-on-error: true
 
       - name: Sarif workaround
@@ -41,4 +42,4 @@ jobs:
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
