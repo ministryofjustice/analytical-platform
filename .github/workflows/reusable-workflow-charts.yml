@@ -163,4 +163,4 @@ jobs:
       - name: Push Chart
         id: push_chart
         run: |
-          helm push .helm-deploy/${{ needs.prepare-environment.outputs.name }}-${{ needs.prepare-environment.outputs.version }}.tgz oci://ghcr.io/ministryofjustice/data-platform-charts-${{ needs.prepare-environment.outputs.name }}
+          helm push .helm-deploy/${{ needs.prepare-environment.outputs.name }}-${{ needs.prepare-environment.outputs.version }}.tgz oci://ghcr.io/ministryofjustice/data-platform-charts
