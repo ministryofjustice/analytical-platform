@@ -26,10 +26,10 @@ mv ct /usr/local/bin/ct
 
 chmod +x /usr/local/bin/ct
 
-mkdir --parents ${HOME}/.ct
+mkdir --parents /home/vscode/.ct
 
-mv /etc/chart_schema.yaml ${HOME}/.ct/chart_schema.yaml
+mv /etc/chart_schema.yaml /home/vscode/.ct/chart_schema.yaml
 
-mv /etc/lintconf.yaml ${HOME}/.ct/lintconf.yaml
+mv /etc/lintconf.yaml /home/vscode/.ct/lintconf.yaml
 
 rm --force --recursive chart-testing_${VERSION_STRIP_V}_linux_${ARCHITECTURE}.tar.gz LICENSE README.md
