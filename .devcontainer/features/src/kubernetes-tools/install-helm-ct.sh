@@ -26,4 +26,4 @@ mv ct /usr/local/bin/ct
 
 chmod +x /usr/local/bin/ct
 
-rm --force --recursive chart-testing_${VERSION_STRIP_V}_linux_${ARCHITECTURE}.tar.gz LICENSE README.md /etc/chart_schema.yaml /etc/lintconf.yaml 
+rm --force --recursive chart-testing_${VERSION_STRIP_V}_linux_${ARCHITECTURE}.tar.gz LICENSE README.md /etc/chart_schema.yaml /etc/lintconf.yaml
