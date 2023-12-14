@@ -158,13 +158,9 @@ jobs:
       - name: Package Chart
         id: package_chart
         run: |
-          helm package charts/${{ inputs.chart }} --destination .helm-deploy
-
+          helm package charts/${{ needs.prepare-environment.outputs.name }} --destination .helm-deploy
 
       - name: Push Chart
         id: push_chart
         run: |
-          # DEBUG
-          ls -la .helm-deploy
-
-          # helm push .helm-deploy/${{ inputs.chart }}*.tgz ghcr.io/ministryofjustice/data-platform-charts-${{ needs.prepare-environment.outputs.name }}
+          helm push .helm-deploy/${{ needs.prepare-environment.outputs.name }}-${{ needs.prepare-environment.outputs.version }}.tgz ghcr.io/ministryofjustice/data-platform-charts-${{ needs.prepare-environment.outputs.name }}
