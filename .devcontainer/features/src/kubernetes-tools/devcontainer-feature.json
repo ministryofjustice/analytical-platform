@@ -80,6 +80,17 @@
       "description": "Velero version",
       "proposals": ["latest"],
       "default": "latest"
+    },
+    "installHelmCt": {
+      "type": "boolean",
+      "description": "Install Helm Chart Testing (https://github.com/helm/chart-testing)",
+      "default": true
+    },
+    "helmCtVersion": {
+      "type": "string",
+      "description": "Helm Chart Testing version",
+      "proposals": ["latest"],
+      "default": "latest"
     }
   },
   "customizations": {
