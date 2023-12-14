@@ -106,3 +106,26 @@ jobs:
           if [[ "${failBuild}" == "true" ]]; then
             exit 1
           fi
+
+  lint:
+    if: github.ref != 'refs/heads/main'
+    needs: [prepare-environment, preflight-checks]
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Set up Helm
+        id: setup_helm
+        uses: azure/setup-helm@5119fcb9089d432beecbf79bb2c7915207344b78 # v3.5
+
+      - name: Set up Helm Chart Testing
+        id: setup_chart_testing
+        uses: helm/chart-testing-action@e6669bcd63d7cb57cb4380c33043eebe5d111992 # v2.6.1
+
+      - name: Lint Chart
+        id: lint_chart
+        run: |
+          ct lint --charts charts/${{ inputs.chart }}
