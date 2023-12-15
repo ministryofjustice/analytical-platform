@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2023-11-24
+
+### Added
+
+- Update of base image to 7.4.0 now triggers new database creation on major
+  update and returns a copy_response
+
 ## [1.1.1] - 2023-11-16
 
 ### Changed

@@ -9,16 +9,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.5.3] - 2023-11-30
+
+### Changed
+
+- Prevent `clone_database` function from trying to pass a `CatalogId`
+  to glue when creating the new database (this parameter is invalid).
+
+## [7.5.2] - 2023-11-30
+
+### Changed
+
+- Make sure the ValueError from glue utils is handled in the versioning module
+  when a table is deleted but there is no glue database associated with the
+  current version.
+
+## [7.5.1] - 2023-11-30
+
+### Changed
+
+- correctly handle EntityNotFoundException from Glue when fetching databases
+  and tables
+
+## [7.5.0] - 2023-11-27
+
+### Changed
+
+- renamed glue_and_athena_utils functions to drop `glue` from the name and
+  use create/get/list/update/delete terminology
+- `delete_table` data_product_name parameter changed to
+  database_name
+- made `glue_client` optional in `create_database` to match other functions
+
+### Added
+
+- `clone_database` function in `glue_and_athena_utils`
+- `get_database_name_for_version` function in `data_platform_paths`
+
+## [7.4.0] - 2023-11-24
+
+### Added
+
+- `create_next_major_version_data_product` function to `versioning`
+- `CuratedDataCopier` class to `curated_data_loader`
+- `sql_create_next_major_increment_table` and `sql_unload_for_major_updated_table`
+  functions to `CuratedDataQueryBuilder` to generate sql for created tables in new
+  version data product database.
+
 ## [7.3.2] - 2023-11-23
 
 ### Changed
 
 - Fixed `KeyError` bug with `BaseJsonSchema.changed_fields()` if new fields
   are added
-
-## [7.3.1] - 2023-11-21
-
-### Added
 
 - `get_all_major_versions` helpder function to `data_platform_paths.py`
 - `delete_database` utility function to `glue_and_athena_utils.py`

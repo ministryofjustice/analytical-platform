@@ -75,3 +75,61 @@ class CuratedDataQueryBuilder:
         """
 
         return partition_sql
+
+    def sql_create_next_major_increment_table(self, new_curated_table: QueryTable):
+        """
+        This creates a table in the new version database of the latest snapshot
+        from each table in a data product.
+
+        For tables that have not been updated as part of the version increment
+        """
+        previous_major_database = new_curated_table.database[:-1] + str(
+            int(new_curated_table.database[-1]) - 1
+        )
+
+        sql = f"""
+            CREATE TABLE {new_curated_table.database}.{new_curated_table.name}
+            WITH(
+                format='parquet',
+                write_compression = 'SNAPPY',
+                external_location='{self.table_path}',
+                partitioned_by=ARRAY['extraction_timestamp']
+            ) AS
+            SELECT
+                *
+            FROM {previous_major_database}.{new_curated_table.name}
+            WHERE extraction_timestamp = (
+                SELECT MAX(extraction_timestamp)
+                FROM {previous_major_database}.{new_curated_table.name}
+            )
+        """
+
+        return sql
+
+    def sql_unload_for_major_updated_table(self, curated_table: QueryTable):
+        """
+        Unloads latest snapshot data of the table that is updated to the partition folder
+        in the new version database
+        """
+        previous_major_database = curated_table.database[:-1] + str(
+            int(curated_table.database[-1]) - 1
+        )
+
+        sql = f"""
+            UNLOAD (
+                SELECT
+                    *
+                FROM {previous_major_database}.{curated_table.name}
+                WHERE extraction_timestamp = (
+                    SELECT MAX(extraction_timestamp)
+                    FROM {previous_major_database}.{curated_table.name}
+                )
+            )
+            TO '{self.table_path}'
+            WITH(
+                format='parquet',
+                compression = 'SNAPPY',
+                partitioned_by=ARRAY['extraction_timestamp']
+            )
+        """
+        return sql

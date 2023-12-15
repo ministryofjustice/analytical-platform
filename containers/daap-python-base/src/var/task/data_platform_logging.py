@@ -63,6 +63,22 @@ class DataPlatformLogger:
 
         self.log_list_dict: List[dict] = []
         self.format = format
+
+        is_local = (
+            self.extra["lambda_name"] is None
+            or self.extra["lambda_name"] == "test_function"
+        )
+
+        extra_processors = (
+            [structlog.dev.ConsoleRenderer(event_key="message")]
+            if is_local
+            else [
+                structlog.processors.dict_tracebacks,
+                self.write_log_dict_to_s3_json,
+                structlog.processors.JSONRenderer(),
+            ]
+        )
+
         structlog.configure(
             wrapper_class=structlog.make_filtering_bound_logger(logging_levels[level]),
             processors=[
@@ -71,13 +87,11 @@ class DataPlatformLogger:
                     fmt="%Y-%m-%d %H:%M:%S", key="date_time"
                 ),
                 structlog.processors.add_log_level,
-                structlog.processors.dict_tracebacks,
                 structlog.processors.CallsiteParameterAdder(
                     parameters={structlog.processors.CallsiteParameter.FUNC_NAME},
                     additional_ignores=["data_platform_logging"],
                 ),
-                self.write_log_dict_to_s3_json,
-                structlog.processors.JSONRenderer(),
+                *extra_processors,
             ],
         )
         self.logger = structlog.get_logger(**self.extra)
