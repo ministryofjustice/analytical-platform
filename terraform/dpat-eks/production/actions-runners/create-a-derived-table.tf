@@ -39,6 +39,6 @@ resource "helm_release" "create_a_derived_table" {
 
   set {
     name  = "runner.labels"
-    value = "do-not-use-moj-data-platform"
+    value = "moj-data-platform"
   }
 }
