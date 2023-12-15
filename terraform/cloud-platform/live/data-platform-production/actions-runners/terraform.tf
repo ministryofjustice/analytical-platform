@@ -3,7 +3,7 @@ terraform {
     acl            = "private"
     bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "cloud-platform/live/data-platform-production/github-actions-self-hosted-runners/terraform.tfstate"
+    key            = "cloud-platform/live/data-platform-production/actions-runners/terraform.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
