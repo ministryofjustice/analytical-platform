@@ -131,11 +131,8 @@ jobs:
           ct lint --charts charts/${{ inputs.chart }}
 
   publish:
-    # if: github.ref == 'refs/heads/main'
-    # needs: [prepare-environment]
-    # THIS IS A TEST
-    if: github.ref != 'refs/heads/main'
-    needs: [prepare-environment, preflight-checks]
+    if: github.ref == 'refs/heads/main'
+    needs: [prepare-environment]
     name: Publish
     runs-on: ubuntu-latest
     steps:
