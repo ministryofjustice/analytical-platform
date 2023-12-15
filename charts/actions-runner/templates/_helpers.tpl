@@ -1,15 +1,4 @@
 {{/*
-Create a shorthand version of the GitHub Organisation
-*/}}
-{{- define "actions-runner.orgShorthand" }}
-{{- if eq "moj-analytical-services" .Values.github.organisation }}
-{{- printf "%s" "mojas"}}
-{{- else -}}
-{{- printf "%s" "moj"}}
-{{- end -}}
-{{- end }}
-
-{{/*
 Expand the name of the chart.
 */}}
 {{- define "actions-runner.name" -}}
@@ -70,11 +59,4 @@ Create the name of the service account to use
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
-{{- end }}
-
-{{/*
-Create secret prefix
-*/}}
-{{- define "actions-runner.secretPrefix" -}}
-{{- default (include "actions-runner.name" .) }}
 {{- end }}
