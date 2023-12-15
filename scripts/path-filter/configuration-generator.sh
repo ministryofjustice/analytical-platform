@@ -3,6 +3,11 @@
 MODE="${1}"
 
 case ${MODE} in
+  charts)
+    PATH_FILTER_CONFIGURATION_FILE=".github/path-filter/charts.yml"
+    SEARCH_PATTERN="*Chart.yaml*"
+    SKIP_FILE=".charts-path-filter-ignore"
+  ;;
   containers)
     PATH_FILTER_CONFIGURATION_FILE=".github/path-filter/containers.yml"
     SEARCH_PATTERN="*Dockerfile*"
