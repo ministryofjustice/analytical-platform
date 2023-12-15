@@ -5,10 +5,10 @@ account_ids = {
 tags = {
   business-unit          = "Platforms"
   application            = "Data Platform"
-  component              = "GitHub Actions Runner: create-a-dervied-table"
+  component              = "Actions Runners"
   environment            = "management"
   is-production          = "true"
   owner                  = "data-platform:data-platform-tech@digital.justice.gov.uk"
   infrastructure-support = "data-platform:data-platform-tech@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/data-platform/terraform/dpat-eks/development/github-actions/create-a-derived-table"
+  source-code            = "github.com/ministryofjustice/data-platform/terraform/dpat-eks/production/actions-runners"
 }
