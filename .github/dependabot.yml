@@ -45,6 +45,20 @@ updates:
       - "docker"
       - "needs-human-intervention"
   - package-ecosystem: "docker"
+    directory: "containers/kubectl"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+    labels:
+      - "docker"
+      - "needs-human-intervention"
+  - package-ecosystem: "docker"
     directory: "containers/rshiny-3.5.3"
     schedule:
       interval: "daily"
@@ -282,17 +296,6 @@ updates:
       - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-data-production/create-a-derived-table"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-apps-and-tools"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-data-production/kops"
     schedule:
       interval: "daily"
       time: "09:00"
