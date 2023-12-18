@@ -3,9 +3,9 @@ github:
   organisation: ministryofjustice
   repository: data-platform
   token: this-is-not-a-real-token
+  runner:
+    labels: "self-hosted,data-platform"
 
-runner:
-  labels: "self-hosted,data-platform"
-
-irsa:
-  roleArn: arn:aws:iam::123456789012:role/this-is-not-a-real-role
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/this-is-not-a-real-role

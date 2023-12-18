@@ -41,6 +41,6 @@ spec:
                   name: {{ .Release.Name }}-github-token
                   key: token
             - name: RUNNER_LABELS
-              value: {{ .Values.runner.labels | quote }}
+              value: {{ .Values.github.runner.labels | quote }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
