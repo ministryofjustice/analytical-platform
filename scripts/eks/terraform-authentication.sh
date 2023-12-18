@@ -2,9 +2,10 @@
 
 AWS_ACCOUNT_ID=${1}
 EKS_CLUSTER_NAME=${2}
+AWS_ROLE=${3}
 
 assumeRole=$(aws sts assume-role \
-  --role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/GlobalGitHubActionAdmin \
+  --role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/${AWS_ROLE} \
   --role-session-name terraform-eks-authentication)
 export assumeRole
 
