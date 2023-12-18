@@ -38,7 +38,7 @@ resource "helm_release" "create_a_derived_table" {
   }
 
   set {
-    name  = "serviceAccount.annotations.eks.amazonaws.com/role-arn"
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
     value = "arn:aws:iam::593291632749:role/create-a-derived-table"
   }
 }
