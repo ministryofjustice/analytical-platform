@@ -47,7 +47,10 @@ jobs:
         uses: actions/upload-pages-artifact@a753861a5debcf57bf8b404356158c8e1e33150c # v2.0.0
         with:
           name: github-pages
-          path: docs/docs # This looks strange, but actions run in the root of the repo, so to consume the compiled artifact we need to specify the path from the root of the repo
+          # This looks unusual, but it's correct
+          # `uses` (https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsuses) runs in the root of the repository
+          # so we need to specify the full path to the compiled documentation
+          path: docs/docs
 
   deploy:
     if: github.ref == 'refs/heads/main'
