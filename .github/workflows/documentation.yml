@@ -42,18 +42,12 @@ jobs:
         id: compile
         run: /scripts/deploy.sh
 
-      - name: DEBUG
-        id: debug
-        run: |
-          ls -lrt
-
-      # - name: Upload artifact
-      #   id: upload_artifact
-      #   uses: actions/upload-pages-artifact@0252fc4ba7626f0298f0cf00902a25c6afc77fa8 # v3.0.0
-      #   with:
-      #     name: github-pages
-      #     path: docs/artifact.tar
-      #     retention-days: 1
+      - name: Upload artifact
+        id: upload_artifact
+        uses: actions/upload-pages-artifact@0252fc4ba7626f0298f0cf00902a25c6afc77fa8 # v3.0.0
+        with:
+          name: github-pages
+          path: docs/
 
   deploy:
     if: github.ref == 'refs/heads/main'
