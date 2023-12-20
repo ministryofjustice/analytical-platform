@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deploy_github_pages.outputs.page_url }}
+      url: ${{ steps.deploy_github_pages.outputs.base_url }}
     permissions:
       pages: write
       id-token: write
@@ -67,4 +67,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deploy_github_pages
-        uses: actions/deploy-pages@f33f41b675f0ab2dc5a6863c9a170fe83af3571e # v4.0.0
+        uses: actions/deploy-pages@13b55b33dd8996121833dbc1db458c793a334630 # v3.0.1
