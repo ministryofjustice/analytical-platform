@@ -50,7 +50,7 @@ jobs:
           path: docs/docs # This looks strange, but actions run in the root of the repo, so to consume the compiled artifact we need to specify the path from the root of the repo
 
   deploy:
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
     needs: [build]
     name: Deploy
     runs-on: ubuntu-latest
