@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2023-12-18
+
+### Changed
+
+- Squashes `runner.labels` into `github`
+
+- Removes `irsa`
+
+- Bumps to `2.0.0`
+
 ## [1.0.0] - 2023-12-14
 
 ### Changed

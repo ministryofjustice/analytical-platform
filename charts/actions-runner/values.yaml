@@ -36,9 +36,5 @@ github:
   organisation:
   repository:
   token:
-
-runner:
-  labels:
-
-irsa:
-  roleArn:
+  runner:
+    labels:
