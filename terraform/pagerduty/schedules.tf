@@ -12,7 +12,6 @@ locals {
           users = [
             module.users["jacob.woffenden@digital.justice.gov.uk"].id,
             module.users["julia.lawrence@digital.justice.gov.uk"].id,
-            module.users["richard.baguley@digital.justice.gov.uk"].id,
             module.users["emma.terry@digital.justice.gov.uk"].id,
             module.users["brian.ellwood@digital.justice.gov.uk"].id,
             module.users["michael.collins@digital.justice.gov.uk"].id,
