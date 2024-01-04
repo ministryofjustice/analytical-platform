@@ -11,7 +11,7 @@ class TableMissingForExistingDataProduct(Exception):
 def create_curated_athena_table(
     data_product_element,
     raw_data_table: QueryTable,
-    extraction_timestamp,
+    load_timestamp,
     metadata,
     logger: DataPlatformLogger,
     athena_client,
@@ -41,21 +41,21 @@ def create_curated_athena_table(
 
     partition_file_exists = does_partition_file_exist(
         data_product_element.curated_data_prefix,
-        extraction_timestamp,
+        load_timestamp,
         logger=logger,
         s3_client=s3_client,
     )
 
     if table_exists and partition_file_exists:
         logger.info(
-            "partition for extraction_timestamp and table already exists so nothing more to be done."
+            "partition for load_timestamp and table already exists so nothing more to be done."
         )
         return
 
     if table_exists:
         logger.info("Table exists but partition does not")
         loader.ingest_raw_data(
-            raw_data_table=raw_data_table, extraction_timestamp=extraction_timestamp
+            raw_data_table=raw_data_table, load_timestamp=load_timestamp
         )
         return
 
@@ -68,7 +68,7 @@ def create_curated_athena_table(
     ):
         logger.info("This is a new data product.")
         loader.create_for_new_data_product(
-            raw_data_table=raw_data_table, extraction_timestamp=extraction_timestamp
+            raw_data_table=raw_data_table, load_timestamp=load_timestamp
         )
         return
 

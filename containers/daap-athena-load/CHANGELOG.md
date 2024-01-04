@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Renamed `extraction_timestamp` to `load_timestamp`
+- Update base image to 8.0.0
+
 ## [2.0.0] 2023-11-21
 
 - Moved internal classes to base image (7.3.0)
