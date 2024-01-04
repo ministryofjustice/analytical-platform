@@ -43,7 +43,7 @@ class CuratedDataLoader:
     def create_for_new_data_product(
         self,
         raw_data_table: QueryTable,
-        extraction_timestamp: str,
+        load_timestamp: str,
     ):
         """
         Create the partitions using athena for a new data product;
@@ -56,7 +56,7 @@ class CuratedDataLoader:
         qid = start_query_execution_and_wait(
             database_name=self.curated_data_table.database,
             sql=self.query_builder.sql_create_table_partition(
-                timestamp=extraction_timestamp,
+                timestamp=load_timestamp,
                 curated_table=self.curated_data_table,
                 raw_table=raw_data_table,
             ),
@@ -64,14 +64,14 @@ class CuratedDataLoader:
         )
         self.logger.info(f"Created {self.curated_data_table}, using query id {qid}")
 
-    def ingest_raw_data(self, raw_data_table: QueryTable, extraction_timestamp: str):
+    def ingest_raw_data(self, raw_data_table: QueryTable, load_timestamp: str):
         """
         Ingest raw data into the curated tables. This creates new partition files in s3.
         """
         qid = start_query_execution_and_wait(
             database_name=self.curated_data_table.database,
             sql=self.query_builder.sql_unload_table_partition(
-                timestamp=extraction_timestamp, raw_table=raw_data_table
+                timestamp=load_timestamp, raw_table=raw_data_table
             ),
             logger=self.logger,
         )
@@ -255,7 +255,7 @@ def format_parquet_glue_table_input(schema: dict, location: str) -> dict:
         "classification": "parquet",
         "compressionType": "SNAPPY",
     }
-    schema["PartitionKeys"] = [{"Name": "extraction_timestamp", "Type": "varchar(16)"}]
+    schema["PartitionKeys"] = [{"Name": "load_timestamp", "Type": "varchar(16)"}]
     schema["Parameters"] = {"classification": "parquet"}
 
     return schema
