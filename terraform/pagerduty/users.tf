@@ -25,10 +25,6 @@ locals {
       email = "michael.collins@digital.justice.gov.uk"
     },
     {
-      name  = "Yikang Mao"
-      email = "yikang.mao@justice.gov.uk"
-    },
-    {
       name  = "Gary Henderson"
       email = "gary.henderson@digital.justice.gov.uk"
     },
