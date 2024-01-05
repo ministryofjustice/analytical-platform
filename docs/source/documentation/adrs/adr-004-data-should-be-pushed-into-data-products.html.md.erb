@@ -1,7 +1,7 @@
 ---
 owner_slack: "#data-platform-notifications"
 title: ADR-004 Data should be pushed into Data Products
-last_reviewed_on: 2023-07-10
+last_reviewed_on: 2024-01-04
 review_in: 3 months
 ---
 
@@ -18,7 +18,8 @@ The data platform is built on the availability of Data Products. In order to bec
 ## Analysis
 
 Two different approaches were initially proposed and analysed: push and pull.
-- On a push approach, raw data should be sent to the platform by a system. The Data Platform is passive and receives the data.
+
+- On a push approach, data should be sent to the platform by a system. The Data Platform is passive and receives the data.
 - On a pull approach, the Data Product should know how to fetch the raw data from a data source (e.g. a database).
 
 Both approaches have advantages:
