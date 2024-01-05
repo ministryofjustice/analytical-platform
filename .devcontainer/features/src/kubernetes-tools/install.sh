@@ -27,3 +27,7 @@ fi
 if [[ "${INSTALLVELERO}" == "true" ]]; then
   bash $( dirname $0 )/install-velero.sh
 fi
+
+if [[ "${INSTALLHELMCT}" == "true" ]]; then
+  bash $( dirname $0 )/install-helm-ct.sh
+fi

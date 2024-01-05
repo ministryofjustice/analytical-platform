@@ -81,7 +81,7 @@ With this being used as a PoC it has quite a narrow scope and the following limi
 * Raw data are a full-load snapshot at every upload.
 * Raw data are csv format.
 * Data producers cannot include transformations of the data.
-* An extraction_timestamp - used as the partition - is the only column added to the data during the curation step (conversion to parquet). There is no SCD2.
+* A `load_timestamp` - used as the partition - is the only column added to the data during the curation step (conversion to parquet). There is no SCD2.
 * No schema changes can be made once a data product is created, users must create a new product
 
 

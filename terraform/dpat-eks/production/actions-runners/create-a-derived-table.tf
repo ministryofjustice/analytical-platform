@@ -1,7 +1,3 @@
-##################################################
-# moj-analytical-services/create-a-derived-table
-##################################################
-
 data "aws_secretsmanager_secret" "github_actions_self_hosted_runner_create_a_derived_table" {
   provider = aws.analytical-platform-management-production
 
@@ -14,10 +10,12 @@ data "aws_secretsmanager_secret_version" "github_actions_self_hosted_runner_crea
   secret_id = data.aws_secretsmanager_secret.github_actions_self_hosted_runner_create_a_derived_table.id
 }
 
-resource "helm_release" "github_actions_self_hosted_runners_create_a_derived_table" {
-  name      = "gha-shr-create-a-derived-table"
-  chart     = "./src/helm/charts/github-actions-self-hosted-runners"
-  namespace = "data-platform-production"
+resource "helm_release" "create_a_derived_table" {
+  name       = "actions-runner-mojas-create-a-derived-table"
+  repository = "oci://ghcr.io/ministryofjustice/data-platform-charts"
+  version    = "2.0.0"
+  chart      = "actions-runner"
+  namespace  = "actions-runners"
 
   set {
     name  = "github.organisation"
@@ -35,12 +33,12 @@ resource "helm_release" "github_actions_self_hosted_runners_create_a_derived_tab
   }
 
   set {
-    name  = "irsa.roleArn"
-    value = "arn:aws:iam::593291632749:role/create-a-derived-table"
+    name  = "github.runner.labels"
+    value = "moj-data-platform"
   }
 
   set {
-    name  = "runner.labels"
-    value = "moj-cloud-platform"
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = "arn:aws:iam::593291632749:role/create-a-derived-table"
   }
 }

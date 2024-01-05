@@ -1,0 +1,12 @@
+---
+apiVersion: v2
+name: actions-runner
+icon: https://assets.data-platform.service.justice.gov.uk/assets/justice-digital-logo.png
+type: application
+description: Deployed GitHub Actions Self-Hosted Runner
+version: 2.0.0
+appVersion: 2.311.0
+
+maintainers:
+  - name: moj-data-platform-robot
+    email: data-platform+tech@digital.justice.gov.uk
