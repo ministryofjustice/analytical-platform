@@ -5,6 +5,7 @@ import boto3
 from botocore.paginate import PageIterator
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import DataProductConfig, get_database_name_for_version
+from glue_and_athena_utils import create_database, database_exists
 
 s3 = boto3.client("s3")
 glue = boto3.client("glue")
@@ -43,6 +44,9 @@ def handler(
         bucket=raw_data_bucket, data_product_prefix=raw_prefix, s3_client=s3
     )
 
+    if not database_exists(database_name=database_name, logger=logger):
+        create_database(database_name=database_name, logger=logger)
+
     # Drop existing athena tables for that data product
     glue_response = glue.get_tables(DatabaseName=database_name)
     data_product_tables = glue_response.get("TableList", [])
@@ -73,6 +77,7 @@ def handler(
         aws_lambda.invoke(
             FunctionName=athena_load_lambda, InvocationType="Event", Payload=payload
         )
+        logger.info(f"Invoked athena load with key {key}")
 
     logger.info(f"data product {data_product_name} recreated")
 
