@@ -361,7 +361,7 @@ class DataProductElement:
     ) -> BucketPath:
         """
         Path to the raw data extracted at a particular timestamp.
-        E.g. raw_data/my-data-product/some-element/load_timestamp=
+        E.g. raw/my-data-product/some-element/load_timestamp=
              20230101T000000Z/3d95ff89-b063-484d-b510-53742d0a6a64.csv
         """
         return self.extraction_instance(timestamp, uuid_value, file_extension).path
