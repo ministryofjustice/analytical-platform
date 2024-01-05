@@ -160,10 +160,8 @@ class GlueSchemaGenerator:
             metadata_mojap=metadata_mojap, table_name=table_name, file_type="parquet"
         )
 
-        metadata_mojap.columns.append(
-            {"name": "extraction_timestamp", "type": "string"}
-        )
-        metadata_mojap.partitions = ["extraction_timestamp"]
+        metadata_mojap.columns.append({"name": "load_timestamp", "type": "string"})
+        metadata_mojap.partitions = ["load_timestamp"]
 
         metadata_glue = self.gc.generate_from_meta(
             metadata_mojap,

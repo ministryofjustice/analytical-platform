@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.0.0] - 2024-01-04
+
+### Changed
+
+- Rename all `extraction_timestamp` arguments to `load_timestamp` and use this as
+  the partition column name for curated tables.
+
 ## [7.5.3] - 2023-11-30
 
 ### Changed
