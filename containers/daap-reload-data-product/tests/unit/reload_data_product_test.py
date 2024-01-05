@@ -122,7 +122,7 @@ def test_handler_recursively_deletes_curated_data(
     raw_data_bucket,
     fake_context,
 ):
-    glue_client.create_database(DatabaseInput={"Name": data_product.name})
+    glue_client.create_database(DatabaseInput={"Name": data_product.name + "_v1"})
 
     handler(
         event={"data_product": data_product.name},
@@ -149,7 +149,7 @@ def test_handler_invokes_lambda_for_each_raw_file(
     raw_data_bucket,
     fake_context,
 ):
-    glue_client.create_database(DatabaseInput={"Name": data_product.name})
+    glue_client.create_database(DatabaseInput={"Name": data_product.name + "_v1"})
 
     handler(
         event={"data_product": data_product.name},
@@ -182,10 +182,10 @@ def test_handler_deletes_glue_table(
     raw_data_bucket,
     fake_context,
 ):
-    glue_client.create_database(DatabaseInput={"Name": data_product.name})
+    glue_client.create_database(DatabaseInput={"Name": data_product.name + "_v1"})
     glue_client.create_table(
         TableInput={"Name": "foo"},
-        DatabaseName=data_product.name,
+        DatabaseName=data_product.name + "_v1",
     )
 
     handler(
@@ -197,5 +197,5 @@ def test_handler_deletes_glue_table(
         athena_load_lambda="athena_load_lambda",
     )
 
-    response = glue_client.get_tables(DatabaseName=data_product.name)
+    response = glue_client.get_tables(DatabaseName=data_product.name + "_v1")
     assert response["TableList"] == []

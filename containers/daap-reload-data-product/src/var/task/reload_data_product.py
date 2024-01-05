@@ -4,7 +4,7 @@ import time
 import boto3
 from botocore.paginate import PageIterator
 from data_platform_logging import DataPlatformLogger
-from data_platform_paths import DataProductConfig
+from data_platform_paths import DataProductConfig, get_database_name_for_version
 
 s3 = boto3.client("s3")
 glue = boto3.client("glue")
@@ -34,20 +34,24 @@ def handler(
     logger.info(f"Data product to recreate: {data_product.name}")
     logger.info(f"Raw prefix: {raw_prefix}")
 
+    database_name = get_database_name_for_version(
+        data_product.name, data_product.latest_major_version
+    )
+
     # Check data product has associated data
     data_product_pages = get_data_product_pages(
         bucket=raw_data_bucket, data_product_prefix=raw_prefix, s3_client=s3
     )
 
     # Drop existing athena tables for that data product
-    glue_response = glue.get_tables(DatabaseName=data_product.name)
+    glue_response = glue.get_tables(DatabaseName=database_name)
     data_product_tables = glue_response.get("TableList", [])
     if not any(data_product_tables):
-        logger.info(f"No tables found for data product {data_product.name}")
+        logger.info(f"No tables found for data product {database_name}")
     for table in data_product_tables:
         table_name = table["Name"]
-        glue.delete_table(DatabaseName=data_product.name, Name=table_name)
-        logger.info(f"Deleted glue table {data_product.name}.{table_name}")
+        glue.delete_table(DatabaseName=database_name, Name=table_name)
+        logger.info(f"Deleted glue table {database_name}.{table_name}")
     # Remove curated data files for that data product
     s3_recursive_delete(
         bucket=curated_data_bucket,

@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1]
+
+### Fixed
+
+- Use the correct name when removing the glue database.
+  This has been changed to include a major version number.
+
 ## [2.2.0]
 
 ### Changed
