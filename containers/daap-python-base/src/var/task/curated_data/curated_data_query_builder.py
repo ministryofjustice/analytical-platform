@@ -20,7 +20,12 @@ class CuratedDataQueryBuilder:
         select_list = []
         for column in self.column_metadata:
             col_name = '"' + column["Name"] + '"'
-            col_type = column["Type"] if not column["Type"] == "string" else "VARCHAR"
+            column_type = column["Type"]
+            type_mapping = {
+                "string": "VARCHAR",
+                "float": "real"
+            }
+            col_type = type_mapping.get(column_type, "default_type")
             col_no_zero_len_str = f"NULLIF({col_name},'')"
             select_list.append(
                 f"CAST({col_no_zero_len_str} as {col_type}) as {col_name}"
