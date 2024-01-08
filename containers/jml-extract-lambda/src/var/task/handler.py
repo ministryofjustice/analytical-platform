@@ -13,7 +13,7 @@ def handler(event, context):
     AWS_REGION = "eu-west-2"
     SECRET_ID = "gov-uk-notify/production/api-key"
     LOG_GROUP_NAMES = ["/aws/events/auth0/alpha-analytics-moj"]
-    EMAIL_ADDRESS = "CHANGE_ME@example.com"
+    EMAIL_SECRET = "jml/email"
     TEMPLATE_ID = "de618989-db86-4d9a-aa55-4724d5485fa5"
 
     boto3.setup_default_session(region_name=AWS_REGION)
@@ -77,4 +77,3 @@ def handler(event, context):
         except HTTPError as e:
             print(e)
             raise e
-        
