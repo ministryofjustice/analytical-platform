@@ -21,13 +21,12 @@ class CuratedDataQueryBuilder:
         for column in self.column_metadata:
             col_name = '"' + column["Name"] + '"'
             column_type = column["Type"]
-            type_mapping = {
-                "string": "VARCHAR",
-                "float": "real"
-            }
+            type_mapping = {"string": "VARCHAR", "float": "real"}
             col_type = type_mapping.get(column_type, column_type)
             col_no_zero_len_str = (
-                "NULLIF({col_name},'')" if col_type == "string"else f"NULLIF({col_name},0)"
+                "NULLIF({col_name},'')"
+                if col_type == "string"
+                else f"NULLIF({col_name},0)"
             )
             select_list.append(
                 f"CAST({col_no_zero_len_str} as {col_type}) as {col_name}"
