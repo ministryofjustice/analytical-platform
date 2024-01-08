@@ -93,6 +93,12 @@ def specification_path(
     )
 
 
+def get_database_name_for_version(
+    data_product_name: str, latest_major_version: str
+) -> str:
+    return data_product_name + "_" + latest_major_version
+
+
 def get_new_version(version, increment_type):
     if increment_type == "minor":
         new_version = version.split(".")[0] + "." + str(int(version.split(".")[-1]) + 1)
@@ -229,21 +235,44 @@ def get_latest_version(data_product_name: str) -> str:
     return get_all_versions(data_product_name=data_product_name)[-1]
 
 
+def get_all_major_versions(data_product_name: str) -> list[str]:
+    all_versions = get_all_versions(data_product_name=data_product_name)
+    return sorted({version.split(".")[0] for version in all_versions})
+
+
 def generate_all_element_version_prefixes(
     path_prefix: str, data_product_name: str, table_name: str
 ) -> list[str]:
     """Generates element prefixes for all data product versions"""
 
     data_product_versions = get_all_versions(data_product_name)
-    major_versions = {version.split(".")[0] for version in data_product_versions}
     element_prefixes = []
 
-    for major_version in major_versions:
+    for version in data_product_versions:
         element_prefixes.append(
-            f"{path_prefix}/{data_product_name}/{major_version}/{table_name}/"
+            generate_element_version_prefixes_for_version(
+                path_prefix=path_prefix,
+                data_product_name=data_product_name,
+                table_name=table_name,
+                version=version,
+            )
         )
 
     return element_prefixes
+
+
+def generate_element_version_prefixes_for_version(
+    path_prefix: str, data_product_name: str, table_name: str, version: str
+) -> str:
+    """
+    Generates element prefixes for all data product versions
+
+    >>> generate_element_version_prefixes_for_version('curated', 'my-data-product', 'some-table', 'v1.0')
+    'curated/my-data-product/v1/some-table/'
+    """
+    major_version = version.split(".")[0]
+
+    return f"{path_prefix}/{data_product_name}/{major_version}/{table_name}/"
 
 
 @dataclass
@@ -259,7 +288,9 @@ class DataProductElement:
     @property
     def database_name(self) -> str:
         latest_major_version = self.data_product.latest_major_version
-        return self.data_product.name + "_" + latest_major_version
+        return get_database_name_for_version(
+            self.data_product.name, latest_major_version
+        )
 
     @staticmethod
     def load(element_name, data_product_name):

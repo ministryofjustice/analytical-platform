@@ -10,11 +10,19 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.26.0"
+      version = "5.31.0"
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "4.0.4"
+      version = "4.0.5"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.12.1"
+    }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = "1.14.0"
     }
   }
   required_version = "~> 1.5"
@@ -67,6 +75,102 @@ provider "kubernetes" {
       "get-token",
       "--cluster-name",
       aws_eks_cluster.airflow_dev_eks_cluster.name,
+      "--role-arn",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/restricted-admin"
+    ]
+    command = "aws"
+  }
+}
+
+provider "helm" {
+  alias = "dev-airflow-cluster"
+  kubernetes {
+    host                   = aws_eks_cluster.airflow_dev_eks_cluster.endpoint
+    cluster_ca_certificate = base64decode(aws_eks_cluster.airflow_dev_eks_cluster.certificate_authority[0].data)
+    exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      args = [
+        "eks",
+        "get-token",
+        "--cluster-name",
+        aws_eks_cluster.airflow_dev_eks_cluster.name,
+        "--role-arn",
+        "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/restricted-admin"
+      ]
+      command = "aws"
+    }
+  }
+}
+
+provider "kubectl" {
+  alias = "dev-airflow-cluster"
+
+  host                   = aws_eks_cluster.airflow_dev_eks_cluster.endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.airflow_dev_eks_cluster.certificate_authority[0].data)
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    args = [
+      "eks",
+      "get-token",
+      "--cluster-name",
+      aws_eks_cluster.airflow_dev_eks_cluster.name,
+      "--role-arn",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/restricted-admin"
+    ]
+    command = "aws"
+  }
+}
+
+provider "kubernetes" {
+  alias                  = "prod-airflow-cluster"
+  host                   = aws_eks_cluster.airflow_prod_eks_cluster.endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.airflow_prod_eks_cluster.certificate_authority[0].data)
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    args = [
+      "eks",
+      "get-token",
+      "--cluster-name",
+      aws_eks_cluster.airflow_prod_eks_cluster.name,
+      "--role-arn",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/restricted-admin"
+    ]
+    command = "aws"
+  }
+}
+
+provider "helm" {
+  alias = "prod-airflow-cluster"
+  kubernetes {
+    host                   = aws_eks_cluster.airflow_prod_eks_cluster.endpoint
+    cluster_ca_certificate = base64decode(aws_eks_cluster.airflow_prod_eks_cluster.certificate_authority[0].data)
+    exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      args = [
+        "eks",
+        "get-token",
+        "--cluster-name",
+        aws_eks_cluster.airflow_prod_eks_cluster.name,
+        "--role-arn",
+        "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/restricted-admin"
+      ]
+      command = "aws"
+    }
+  }
+}
+
+provider "kubectl" {
+  alias = "prod-airflow-cluster"
+
+  host                   = aws_eks_cluster.airflow_prod_eks_cluster.endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.airflow_prod_eks_cluster.certificate_authority[0].data)
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    args = [
+      "eks",
+      "get-token",
+      "--cluster-name",
+      aws_eks_cluster.airflow_prod_eks_cluster.name,
       "--role-arn",
       "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/restricted-admin"
     ]

@@ -45,7 +45,7 @@ class TestHandler:
             == f"Could not locate valid schema for table: {table_name}."
         )
 
-    def test_glue_table_fail(
+    def test_ignores_missing_glue_table(
         self,
         event,
         fake_context,
@@ -55,11 +55,9 @@ class TestHandler:
         create_glue_database,
     ):
         response = delete_table.handler(event=event, context=fake_context)
-        print(response)
-        assert response["statusCode"] == HTTPStatus.BAD_REQUEST
-        assert f"{table_name}" in json.loads(response["body"])["error"]["message"]
+        assert response["statusCode"] == HTTPStatus.OK
 
-    def test_deletion_of_raw_files(
+    def test_does_not_delete_raw_files(
         self,
         event,
         fake_context,
@@ -91,9 +89,9 @@ class TestHandler:
                 Bucket=bucket,
                 Prefix=prefix,
             )
-            assert response.get("KeyCount") == 0
+            assert response.get("KeyCount") == 10
 
-    def test_deletion_of_curated_files(
+    def test_does_not_delete_curated_files(
         self,
         event,
         fake_context,
@@ -126,7 +124,7 @@ class TestHandler:
                 Bucket=bucket,
                 Prefix=prefix,
             )
-            assert response.get("KeyCount") == 0
+            assert response.get("KeyCount") == 10
 
     def test_deletion_of_old_schema_version(
         self,

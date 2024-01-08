@@ -7,6 +7,8 @@ from unittest.mock import patch
 
 import pytest
 from create_schema import handler, s3_copy_folder_to_new_folder
+from data_product_metadata import DataProductSchema  # noqa F401
+from versioning import VersionManager
 
 
 def load_v1_schema_schema_to_mock_s3(bucket_name, s3_client):
@@ -19,6 +21,19 @@ def load_v1_schema_schema_to_mock_s3(bucket_name, s3_client):
         Body=json_data,
         Bucket=bucket_name,
         Key="data_product_schema_spec/v1.0.0/moj_data_product_schema_spec.json",
+    )
+
+
+def load_v1_1_metadata_schema_to_mock_s3(bucket_name, s3_client):
+    with urllib.request.urlopen(
+        "https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/main/terraform/environments/data-platform/data-product-metadata-json-schema/v1.1.0/moj_data_product_metadata_spec.json"  # noqa E501
+    ) as url:
+        data = json.load(url)
+    json_data = json.dumps(data)
+    s3_client.put_object(
+        Body=json_data,
+        Bucket=bucket_name,
+        Key="data_product_metadata_spec/v1.1.0/moj_data_product_metadata_spec.json",
     )
 
 
@@ -71,9 +86,11 @@ def test_schema_already_exists(fake_event, fake_context, s3_client):
     s3_client.create_bucket(Bucket=bucket_name)
     load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
 
-    with patch("create_schema.DataProductSchema") as mock_schema:
+    with patch("data_product_metadata.DataProductSchema") as mock_schema:
+        mock_schema.return_value.valid = True
         mock_schema.return_value.exists = True
-        response = handler(event=fake_event, context=fake_context)
+        with patch.object(VersionManager, "_verify_input_schema", mock_schema):
+            response = handler(event=fake_event, context=fake_context)
 
     assert json.loads(response["body"])["error"]["message"] == (
         "v1 of this schema for table test_t already exists. You can upversion this schema if "
@@ -86,21 +103,26 @@ def test_schema_does_not_exist_and_is_valid(fake_event, fake_context, s3_client)
     bucket_name = os.environ["BUCKET_NAME"]
     s3_client.create_bucket(Bucket=bucket_name)
     load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
+    load_v1_1_metadata_schema_to_mock_s3(bucket_name, s3_client)
 
-    with patch("create_schema.DataProductSchema") as mock_schema:
+    with patch("data_product_metadata.DataProductSchema") as mock_schema:
         mock_schema.return_value.exists = False
         mock_schema.return_value.valid = True
         mock_schema.return_value.parent_product_has_registered_schema = False
-        with patch("create_schema.DataProductMetadata") as mock_metadata:
-            mock_metadata.return_value.load.latest_version_saved_data = {
-                "name": "test_p"
-            }
+        with patch.object(
+            VersionManager,
+            "create_schema",
+            return_value=(
+                "v1.0",
+                mock_schema,
+            ),
+        ):
             with patch("create_schema.push_to_catalogue") as mock_push:
                 mock_push.return_value = {"catalog": "success"}
                 response = handler(event=fake_event, context=fake_context)
 
     assert json.loads(response["body"])["message"] == (
-        "Schema for test_t has been created in the test_p data product"
+        "Schema for test_t has been created in the test_p Data Product, version v1.0"
     )
 
 
@@ -109,14 +131,14 @@ def test_schema_not_valid(fake_event, fake_context, s3_client):
     s3_client.create_bucket(Bucket=bucket_name)
     load_v1_schema_schema_to_mock_s3(bucket_name, s3_client)
 
-    with patch("create_schema.DataProductSchema") as mock_schema:
+    with patch("data_product_metadata.DataProductSchema") as mock_schema:
         mock_schema.return_value.exists = False
         mock_schema.return_value.valid = False
         mock_schema.return_value.parent_product_has_registered_schema = False
 
         response = handler(event=fake_event, context=fake_context)
 
-    assert json.loads(response["body"])["error"]["message"][:65] == (
+    assert json.loads(response["body"])["error"]["message"].startswith(
         "schema for test_t has failed validation with the following error:"
     )
 

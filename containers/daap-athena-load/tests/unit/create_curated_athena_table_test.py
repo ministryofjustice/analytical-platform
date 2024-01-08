@@ -1,9 +1,6 @@
-from textwrap import dedent
-
 import pytest
 from create_curated_athena_table import (
     CuratedDataLoader,
-    CuratedDataQueryBuilder,
     TableMissingForExistingDataProduct,
     create_curated_athena_table,
     does_partition_file_exist,
@@ -26,7 +23,7 @@ class TestCreateCuratedAthenaTable:
         return dict(
             data_product_element=data_product_element,
             raw_data_table=data_product_element.raw_data_table_unique(),
-            extraction_timestamp="20230101T000000Z",
+            load_timestamp="20230101T000000Z",
             metadata={
                 "TableInput": {"Name": "table", "StorageDescriptor": {"Columns": []}},
                 "DatabaseName": "data_products_raw",
@@ -91,7 +88,7 @@ class TestCreateCuratedAthenaTable:
 
         # This assertion needs work following move to structlog
         # assert (
-        #     "partition for extraction_timestamp and table already exists so nothing more to be done."
+        #     "partition for load_timestamp and table already exists so nothing more to be done."
         #     in caplog.text
         # )
 
@@ -109,69 +106,6 @@ class TestCreateCuratedAthenaTable:
 
         with pytest.raises(TableMissingForExistingDataProduct):
             create_curated_athena_table(**function_kwargs)
-
-
-class TestCuratedDataQueryBuilder:
-    def test_sql_unload_table_partition(self):
-        builder = CuratedDataQueryBuilder(
-            table_path="s3://bucket_name/curated_data/database_name=dataproduct/table_name=table_name/",
-            column_metadata=[
-                {"Name": "foo", "Type": "string"},
-                {"Name": "bar", "Type": None},
-            ],
-        )
-        result = builder.sql_unload_table_partition(
-            raw_table=QueryTable("data_products_raw", "table_raw"),
-            timestamp="20230101T000000Z",
-        )
-
-        assert dedent(result) == dedent(
-            """
-            UNLOAD (
-                SELECT
-                    CAST(NULLIF("foo",'') as VARCHAR) as "foo",CAST(NULLIF("bar",'') as None) as "bar",
-                    '20230101T000000Z' as extraction_timestamp
-                FROM data_products_raw.table_raw
-            )
-            TO 's3://bucket_name/curated_data/database_name=dataproduct/table_name=table_name/'
-            WITH(
-                format='parquet',
-                compression = 'SNAPPY',
-                partitioned_by=ARRAY['extraction_timestamp']
-            )
-            """
-        )
-
-    def test_sql_create_table_partition(self):
-        builder = CuratedDataQueryBuilder(
-            table_path="s3://bucket_name/curated_data/database_name=dataproduct/table_name=table_name/",
-            column_metadata=[
-                {"Name": "foo", "Type": "string"},
-                {"Name": "bar", "Type": None},
-            ],
-        )
-
-        result = builder.sql_create_table_partition(
-            raw_table=QueryTable("data_products_raw", "table_raw"),
-            curated_table=QueryTable("db", "table"),
-            timestamp="20230101T000000Z",
-        )
-
-        assert dedent(result) == dedent(
-            """
-            CREATE TABLE db.table
-            WITH(
-                format='parquet',
-                write_compression = 'SNAPPY',
-                external_location='s3://bucket_name/curated_data/database_name=dataproduct/table_name=table_name/',
-                partitioned_by=ARRAY['extraction_timestamp']
-            ) AS
-            SELECT
-                CAST(NULLIF("foo",'') as VARCHAR) as "foo",CAST(NULLIF("bar",'') as None) as "bar",
-                '20230101T000000Z' as extraction_timestamp
-            FROM data_products_raw.table_raw
-            """
-        )
 
 
 class TestDoesPartitionFileExist:
@@ -229,7 +163,7 @@ class TestCuratedDataLoader:
     ):
         loader.create_for_new_data_product(
             raw_data_table=QueryTable("data_products_raw", "table"),
-            extraction_timestamp="20000101T000000Z",
+            load_timestamp="20000101T000000Z",
         )
 
         assert len(athena_client.list_query_executions()["QueryExecutionIds"]) == 1
@@ -241,7 +175,7 @@ class TestCuratedDataLoader:
     ):
         loader.ingest_raw_data(
             raw_data_table=QueryTable("data_products_raw", "table"),
-            extraction_timestamp="20000101T000000Z",
+            load_timestamp="20000101T000000Z",
         )
 
         assert len(athena_client.list_query_executions()["QueryExecutionIds"]) == 2

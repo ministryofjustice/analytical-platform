@@ -172,11 +172,13 @@ class BaseJsonSchema:
         on successful validation of dict object it is saved to the class instance
         property which can be written to s3.
         """
-        validate_against_jsonschema = read_json_from_s3(
-            get_data_product_specification_path(self.type, json_schema_version)
+        json_spec_path = get_data_product_specification_path(
+            self.type, json_schema_version
         )
+        self.logger.info(f"json_spec used for validation: {json_spec_path}")
+        json_spec_to_validate_against = read_json_from_s3(json_spec_path)
         try:
-            validate(instance=data_to_validate, schema=validate_against_jsonschema)
+            validate(instance=data_to_validate, schema=json_spec_to_validate_against)
         except ValidationError:
             self.error_traceback = traceback.format_exc()
             self.logger.error(
@@ -244,7 +246,7 @@ class BaseJsonSchema:
 
         changed_fields = set()
         for field in new_version:
-            if new_version[field] == latest_version[field]:
+            if new_version.get(field) == latest_version.get(field):
                 continue
 
             changed_fields.add(field)

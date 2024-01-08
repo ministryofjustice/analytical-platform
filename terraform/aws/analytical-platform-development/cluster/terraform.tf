@@ -10,19 +10,19 @@ terraform {
   required_providers {
     auth0 = {
       source  = "auth0/auth0"
-      version = "1.1.0"
+      version = "1.1.1"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "5.25.0"
+      version = "5.31.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.23.0"
+      version = "2.25.1"
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.5.1"
+      version = "3.6.0"
     }
   }
   required_version = "~> 1.5"

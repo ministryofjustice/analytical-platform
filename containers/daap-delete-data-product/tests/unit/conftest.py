@@ -24,6 +24,7 @@ os.environ["BUCKET_NAME"] = "test"
 
 from data_platform_logging import DataPlatformLogger  # noqa E402
 from data_platform_paths import DataProductElement  # noqa E402
+from glue_and_athena_utils import create_glue_database  # noqa E402
 
 
 @pytest.fixture(autouse=True)
@@ -134,7 +135,7 @@ def fake_event(table_name):
 
 @pytest.fixture
 def data_product_versions():
-    return {"v1.0", "v1.1", "v1.2"}
+    return {"v1.1", "v2.0", "v2.1"}
 
 
 @pytest.fixture
@@ -167,41 +168,88 @@ def create_metadata(
 
 
 @pytest.fixture
-def create_glue_database(glue_client, data_product_name):
-    glue_client.create_database(DatabaseInput={"Name": data_product_name})
+def database_names(data_product_name, data_product_versions):
+    return sorted(
+        {
+            data_product_name + "_" + version.split(".")[0]
+            for version in data_product_versions
+        }
+    )
 
 
 @pytest.fixture
-def create_glue_tables(create_glue_database, glue_client, data_product_name):
-    for i in range(3):
-        glue_client.create_table(
-            DatabaseName=data_product_name, TableInput={"Name": f"schema{i}"}
+def create_glue_databases(glue_client, database_names, logger):
+    for database_name in database_names:
+        create_glue_database(
+            glue_client=glue_client, database_name=database_name, logger=logger
         )
 
 
 @pytest.fixture
-def create_failed_raw_and_curated_data(
-    s3_client,
-    create_raw_bucket,
-    create_curated_bucket,
-    data_product_name,
-    table_name,
-    data_product_versions,
+def create_glue_tables(create_glue_databases, glue_client, database_names):
+    for database_name in database_names:
+        for i in range(3):
+            glue_client.create_table(
+                DatabaseName=database_name, TableInput={"Name": f"schema{i}"}
+            )
+
+
+def populate_bucket(
+    data_product_versions, s3_client, data_product_name, bucket_name, bucket_type
 ):
     for version in data_product_versions:
         for i in range(10):
+            key = f"{bucket_type}/{data_product_name}/{version}/schema0/file-{str(i)}.json"
             s3_client.put_object(
-                Bucket=os.getenv("CURATED_DATA_BUCKET"),
-                Key=f"curated/{data_product_name}/{version}/schema0/curated-file-{str(i)}.json",
+                Bucket=os.getenv(bucket_name),
+                Key=key,
                 Body=json.dumps({"content": f"{i}"}),
             )
-            s3_client.put_object(
-                Bucket=os.getenv("RAW_DATA_BUCKET"),
-                Key=f"raw/{data_product_name}/{version}/schema0/raw-file-{str(i)}.json",
-                Body=json.dumps({"content": f"{i}"}),
-            )
-            s3_client.put_object(
-                Bucket=os.getenv("RAW_DATA_BUCKET"),
-                Key=f"fail/{data_product_name}/{version}/schema0/fail-file-{str(i)}.json",
-                Body=json.dumps({"content": f"{i}"}),
-            )
+
+
+@pytest.fixture
+def create_curated_data(
+    s3_client,
+    create_curated_bucket,
+    data_product_name,
+    data_product_versions,
+):
+    populate_bucket(
+        data_product_versions,
+        s3_client,
+        data_product_name,
+        "CURATED_DATA_BUCKET",
+        "curated",
+    )
+
+
+@pytest.fixture
+def create_raw_data(
+    s3_client,
+    create_raw_bucket,
+    data_product_name,
+    data_product_versions,
+):
+    populate_bucket(
+        data_product_versions,
+        s3_client,
+        data_product_name,
+        "RAW_DATA_BUCKET",
+        "raw",
+    )
+
+
+@pytest.fixture
+def create_fail_data(
+    s3_client,
+    create_raw_bucket,
+    data_product_name,
+    data_product_versions,
+):
+    populate_bucket(
+        data_product_versions,
+        s3_client,
+        data_product_name,
+        "RAW_DATA_BUCKET",
+        "fail",
+    )

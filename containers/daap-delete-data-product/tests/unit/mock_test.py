@@ -1,7 +1,6 @@
 import json
 import os
 from typing import Any
-from unittest.mock import patch
 
 import delete_data_product
 import pytest
@@ -38,15 +37,32 @@ test_schema: dict[str, Any] = {
 }
 
 
+def count_files(client, bucket, prefix):
+    paginator = client.get_paginator("list_objects_v2")
+    page_iterator = paginator.paginate(
+        Bucket=bucket,
+        Prefix=prefix,
+    )
+    file_count = 0
+    try:
+        for page in page_iterator:
+            file_count += page["KeyCount"]
+    except KeyError:
+        pass
+    return file_count
+
+
 class TestRemoveAllVersions:
     @pytest.fixture(autouse=True)
     def setup(
         self,
         s3_client,
+        create_metadata_bucket,
+        create_raw_bucket,
+        create_curated_bucket,
         glue_client,
         data_product_name,
         data_product_versions,
-        create_metadata_bucket,
     ):
         for version in data_product_versions:
             s3_client.put_object(
@@ -66,112 +82,107 @@ class TestRemoveAllVersions:
         self,
         s3_client,
         create_glue_tables,
-        create_failed_raw_and_curated_data,
+        create_fail_data,
+        create_raw_data,
+        create_curated_data,
         data_product_name,
         glue_client,
         event,
         fake_context,
     ):
-        # Assert we have the correct number of database tables created
-        tables = glue_client.get_tables(DatabaseName=data_product_name)
-        assert len(tables["TableList"]) == 3
-
-        # Assert we have the correct number of metadata files to begin with
-        prefix = f"{data_product_name}/"
-        response = s3_client.list_objects_v2(
-            Bucket=os.getenv("METADATA_BUCKET"),
-            Prefix=prefix,
-        )
-        assert response.get("KeyCount") == 12
-
-        # Assert we have the correct number of fail files to begin with
-        prefix = f"fail/{data_product_name}/"
-        response = s3_client.list_objects_v2(
-            Bucket=os.getenv("RAW_DATA_BUCKET"),
-            Prefix=prefix,
-        )
-        assert response.get("KeyCount") == 30
-
-        # Assert we have the correct number of raw files to begin with
-        prefix = f"raw/{data_product_name}/"
-        response = s3_client.list_objects_v2(
-            Bucket=os.getenv("RAW_DATA_BUCKET"),
-            Prefix=prefix,
-        )
-        assert response.get("KeyCount") == 30
-
-        # Assert we have the correct number of curated files to begin with
-        prefix = f"curated/{data_product_name}/"
-        response = s3_client.list_objects_v2(
-            Bucket=os.getenv("CURATED_DATA_BUCKET"),
-            Prefix=prefix,
-        )
-        assert response.get("KeyCount") == 30
-
-        ######################################################################
-        with patch("glue_utils.glue_client", glue_client):
-            # Call the handler
-            delete_data_product.handler(event, fake_context)
-
-            # Assert that all metadata files have been deleted
-            prefix = f"{data_product_name}/"
-            response = s3_client.list_objects_v2(
-                Bucket=os.getenv("METADATA_BUCKET"),
-                Prefix=prefix,
-            )
-            assert response.get("KeyCount") == 0
-
-            # Assert we have the correct number of fail files to begin with
-            prefix = f"fail/{data_product_name}/"
-            response = s3_client.list_objects_v2(
-                Bucket=os.getenv("RAW_DATA_BUCKET"),
-                Prefix=prefix,
-            )
-            assert response.get("KeyCount") == 0
-
-            # Assert that raw files have been deleted
-            prefix = f"raw/{data_product_name}/"
-            response = s3_client.list_objects_v2(
-                Bucket=os.getenv("RAW_DATA_BUCKET"),
-                Prefix=prefix,
-            )
-            assert response.get("KeyCount") == 0
-
-            # Assert that curated files have been deleted
-            prefix = f"curated/{data_product_name}/"
-            response = s3_client.list_objects_v2(
-                Bucket=os.getenv("CURATED_DATA_BUCKET"),
-                Prefix=prefix,
-            )
-            assert response.get("KeyCount") == 0
-
-            with pytest.raises(glue_client.exceptions.EntityNotFoundException) as exc:
-                glue_client.get_database(Name=data_product_name)
-            assert (
-                exc.value.response["Error"]["Message"]
-                == f"Database {data_product_name} not found."
-            )
-            assert exc.value.response["Error"]["Code"] == "EntityNotFoundException"
-
-    def test_error_400_when_metadata_does_not_exist(self, fake_event, fake_context):
         # Call the handler
-        response = delete_data_product.handler(fake_event, fake_context)
-        assert response.get("statusCode") == 400
-        message = json.loads(response.get("body"))["error"]["message"]
+        result = delete_data_product.handler(event, fake_context)
+
         assert (
-            message
-            == "Could not locate metadata for data product: fake_data_product_name."
+            json.loads(result.get("body"))["message"]
+            == f"Successfully removed data product '{data_product_name}'."
         )
 
-    def test_database_does_not_exist(
+    @pytest.mark.parametrize(
+        "bucket_name,file_type,pre_count,post_count",
+        [
+            ("RAW_DATA_BUCKET", "fail", 30, 0),
+            ("RAW_DATA_BUCKET", "raw", 30, 0),
+            ("CURATED_DATA_BUCKET", "curated", 30, 0),
+            ("METADATA_BUCKET", "", 12, 0),
+        ],
+    )
+    def test_files_are_deleted(
         self,
         s3_client,
-        glue_client,
+        create_fail_data,
+        create_raw_data,
+        create_curated_data,
+        data_product_name,
+        fake_context,
+        event,
+        bucket_name,
+        file_type,
+        pre_count,
+        post_count,
+    ):
+        bucket = os.getenv(bucket_name)
+        if file_type:
+            prefix = f"{file_type}/{data_product_name}/"
+        else:
+            prefix = f"{data_product_name}/"
+
+        # Assert we have the correct number of fail files to begin with
+        assert count_files(s3_client, bucket, prefix) == pre_count
+
+        # Call the handler
+        delete_data_product.handler(event, fake_context)
+
+        # Assert that fail files have been deleted
+        assert count_files(s3_client, bucket, prefix) == post_count
+
+    def test_databases_are_deleted(
+        self,
         event,
         fake_context,
+        data_product_name,
+        glue_client,
+        create_glue_tables,
+        database_names,
     ):
-        with patch("glue_utils.glue_client", glue_client):
-            response = delete_data_product.handler(event, fake_context)
-            assert response.get("statusCode") == 400
-            message = json.loads(response.get("body"))["error"]["message"]
-            assert message == "Could not locate glue database 'data-product'"
+        # Call the handler
+        delete_data_product.handler(event, fake_context)
+
+        with pytest.raises(glue_client.exceptions.EntityNotFoundException) as exception:
+            for database_name in database_names:
+                glue_client.get_database(Name=database_name)
+        assert (
+            exception.value.response["Error"]["Message"]
+            == f"Database {database_name} not found."
+        )
+
+    @pytest.mark.parametrize(
+        "bucket_name,file_type,count",
+        [
+            ("CURATED_DATA_BUCKET", "curated", 0),
+            ("RAW_DATA_BUCKET", "raw", 0),
+            ("RAW_DATA_BUCKET", "fail", 0),
+        ],
+    )
+    def test_delete_data_files_when_no_files_exist(
+        self,
+        s3_client,
+        event,
+        fake_context,
+        data_product_name,
+        bucket_name,
+        file_type,
+        count,
+    ):
+        bucket = os.getenv(bucket_name)
+        prefix = f"{file_type}/{data_product_name}/"
+        # Assert that no files have been created
+        assert count_files(s3_client, bucket, prefix) == count
+
+        # Call the handler
+        result = delete_data_product.handler(event, fake_context)
+
+        assert (
+            json.loads(result.get("body"))["message"]
+            == f"Successfully removed data product '{data_product_name}'."
+        )

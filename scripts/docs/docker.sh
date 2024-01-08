@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 MODE="${1}"
-IMAGE="docker.io/ministryofjustice/tech-docs-github-pages-publisher:data-platform"
+IMAGE="docker.io/ministryofjustice/tech-docs-github-pages-publisher:ministryofjustice-fork"
 
 case ${MODE} in
   deploy|preview|check-url-links)

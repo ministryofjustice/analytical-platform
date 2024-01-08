@@ -181,7 +181,7 @@ resource "kubernetes_namespace" "dev_airflow" {
   timeouts {}
 }
 
-resource "kubernetes_namespace" "kyverno" {
+resource "kubernetes_namespace" "kyverno_dev" {
   provider = kubernetes.dev-airflow-cluster
   metadata {
     name = "kyverno"
@@ -322,4 +322,16 @@ resource "aws_eks_node_group" "prod_node_group_high_memory" {
   labels = {
     high-memory = "true"
   }
+}
+
+
+resource "kubernetes_namespace" "kyverno_prod" {
+  provider = kubernetes.prod-airflow-cluster
+  metadata {
+    name = "kyverno"
+    labels = {
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+  }
+  timeouts {}
 }

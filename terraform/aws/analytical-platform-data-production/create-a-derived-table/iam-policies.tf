@@ -14,6 +14,10 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "arn:aws:s3:::mojap-derived-tables",
       "arn:aws:s3:::dbt-query-dump/*",
       "arn:aws:s3:::dbt-query-dump",
+      "arn:aws:s3:::mojap-manage-offences/ho-offence-codes/*",
+      "arn:aws:s3:::mojap-manage-offences",
+      "arn:aws:s3:::mojap-hub-exports/probation_referrals_dump/*",
+      "arn:aws:s3:::mojap-hub-exports",
     ]
   }
   statement {
@@ -76,7 +80,7 @@ module "create_a_derived_table_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.31.0"
+  version = "5.33.0"
 
   name_prefix = "create-a-derived-table"
 

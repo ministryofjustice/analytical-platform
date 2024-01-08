@@ -5,7 +5,7 @@ import boto3
 from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger
 from data_product_metadata import DataProductSchema
-from versioning import InvalidUpdate, VersionCreator
+from versioning import InvalidUpdate, VersionManager
 
 s3_client = boto3.client("s3")
 
@@ -19,14 +19,14 @@ def handler(event, context):
     logger.add_data_product(data_product_name=data_product_name, table_name=table_name)
     logger.info(f"event: {event}")
 
-    schema_exists = DataProductSchema(
+    schema = DataProductSchema(
         data_product_name=data_product_name,
         table_name=table_name,
         logger=logger,
         input_data=None,
-    ).exists
+    )
 
-    if not schema_exists:
+    if not schema.exists:
         logger.error("No previous version of schema exists")
         return format_error_response(
             response_code=HTTPStatus.BAD_REQUEST,
@@ -45,9 +45,11 @@ def handler(event, context):
         )
 
     try:
-        version_creator = VersionCreator(data_product_name, logger)
+        version_manager = VersionManager(data_product_name, logger)
         # changes can be passed to a notification service once developed
-        new_version, changes = version_creator.update_schema(new_schema, table_name)
+        new_version, changes, copy_response = version_manager.update_schema(
+            new_schema, table_name
+        )
     except InvalidUpdate as exception:
         logger.error("Unable to update the data product", exc_info=exception)
         return format_error_response(
@@ -56,6 +58,18 @@ def handler(event, context):
             message="Update not allowed",
         )
 
-    return format_response_json(
-        status_code=HTTPStatus.OK, body={"version": new_version, "changes": changes}
-    )
+    # check if major or minor
+    if not int(new_version.split(".")[0][-1]) == int(schema.version.split(".")[0][-1]):
+        body_dict = {
+            "version": new_version,
+            "increment_type": "major",
+            "changes": changes,
+            **copy_response,
+        }
+    else:
+        body_dict = {
+            "version": new_version,
+            "increment_type": "minor",
+            "changes": changes,
+        }
+    return format_response_json(status_code=HTTPStatus.OK, body=body_dict)

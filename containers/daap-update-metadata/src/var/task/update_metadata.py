@@ -4,7 +4,7 @@ from http import HTTPStatus
 import boto3
 from data_platform_api_responses import format_error_response, format_response_json
 from data_platform_logging import DataPlatformLogger
-from versioning import InvalidUpdate, VersionCreator
+from versioning import InvalidUpdate, VersionManager
 
 s3_client = boto3.client("s3")
 
@@ -28,8 +28,8 @@ def handler(event, context):
         )
 
     try:
-        version_creator = VersionCreator(data_product_name, logger)
-        new_version = version_creator.update_metadata(new_metadata)
+        version_manager = VersionManager(data_product_name, logger)
+        new_version = version_manager.update_metadata(new_metadata)
     except InvalidUpdate as exception:
         logger.error("Unable to update the data product", exc_info=exception)
         return format_error_response(
