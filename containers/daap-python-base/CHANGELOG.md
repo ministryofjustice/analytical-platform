@@ -13,9 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- When a table is deleted, the new version of the data product should copy across the remaining data.
-  Use `CuratedDataCopier` to achieve this.
-- Renamed `VersionManager._copy_from_previous_version` to `VersionManager._copy_metadata_from_previous_version`
+- When a table is deleted, the new version of the data product should copy across
+  the remaining data. Use `CuratedDataCopier` to achieve this.
+- Renamed `VersionManager._copy_from_previous_version` to
+  `VersionManager._copy_metadata_from_previous_version`
 
 ## [8.0.0] - 2024-01-04
 

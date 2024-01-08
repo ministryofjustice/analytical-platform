@@ -178,8 +178,8 @@ class VersionManager:
 
         # Populate the new versions of the athena tables with the old data
         CuratedDataCopier(
-            column_changes={"types_changed": False}, # This forces all tables to be copied
-            new_schema=self.schema_object, # dont want this either
+            column_changes={"types_changed": False},  # This forces all tables to be copied
+            new_schema=self.schema_object,  # dont want this either
             element=DataProductElement(schema_list[0], self.data_product_config),
             athena_client=athena_client,
             glue_client=glue_client,
