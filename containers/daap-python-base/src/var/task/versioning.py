@@ -163,11 +163,12 @@ class VersionManager:
             s3_client.delete_object(Bucket=schema_path.bucket, Key=schema_path.key)
 
         # Create a new version of the athena database with all the tables in
-        # self._create_database_for_new_version(
-        #     self.data_product_config.name,
-        #     latest_version=self.latest_version,
-        #     new_version=new_version,
-        # )
+        self._create_database_for_new_version(
+            self.data_product_config.name,
+            latest_version=self.latest_version,
+            new_version=new_version,
+        )
+
         self.schema_object = DataProductSchema(
             data_product_name=self.data_product_name,
             table_name=schema_list[0],
