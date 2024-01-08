@@ -22,8 +22,7 @@ class TestCuratedDataQueryBuilder:
             """
             UNLOAD (
                 SELECT
-                    CAST(NULLIF("foo",'') as VARCHAR) as "foo",CAST(NULLIF("bar",'') as None) as "bar",
-                    CAST(NULLIF({col_name},0) as real) as "value",
+                    CAST(NULLIF("foo",'') as VARCHAR) as "foo",CAST(NULLIF("bar",'') as None) as bar,CAST(NULLIF({col_name},0) as real) as "value",
                     '20230101T000000Z' as load_timestamp
                 FROM data_products_raw.table_raw
             )
