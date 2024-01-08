@@ -10,6 +10,7 @@ class TestCuratedDataQueryBuilder:
             column_metadata=[
                 {"Name": "foo", "Type": "string"},
                 {"Name": "bar", "Type": None},
+                {"Name": "value", "Type": float},
             ],
         )
         result = builder.sql_unload_table_partition(
@@ -22,6 +23,7 @@ class TestCuratedDataQueryBuilder:
             UNLOAD (
                 SELECT
                     CAST(NULLIF("foo",'') as VARCHAR) as "foo",CAST(NULLIF("bar",'') as None) as "bar",
+                    CAST(NULLIF("value",'') as real) as "foo"
                     '20230101T000000Z' as load_timestamp
                 FROM data_products_raw.table_raw
             )
