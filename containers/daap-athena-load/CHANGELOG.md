@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.0.0] 2024-01-05
+## [3.0.1] 2024-01-05
 
 - Renamed `extraction_timestamp` to `load_timestamp`
 - Update base image to 8.0.0
