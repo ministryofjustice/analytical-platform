@@ -20,6 +20,8 @@ def handler(event, context):
     secrets_client = boto3.client("secretsmanager")
     response = secrets_client.get_secret_value(SecretId=SECRET_ID)
     api_key = response["SecretString"]
+    response = secrets_client.get_secret_value(SecretId=EMAIL_SECRET)
+    EMAIL_ADDRESS = response["SecretString"]
     notifications_client = NotificationsAPIClient(api_key)
 
     now = dt.now()
