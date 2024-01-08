@@ -10,7 +10,7 @@ class TestCuratedDataQueryBuilder:
             column_metadata=[
                 {"Name": "foo", "Type": "string"},
                 {"Name": "bar", "Type": None},
-                {"Name": "value", "Type": float},
+                {"Name": "value", "Type": "float"},
             ],
         )
         result = builder.sql_unload_table_partition(
