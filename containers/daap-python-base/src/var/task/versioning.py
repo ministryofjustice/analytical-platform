@@ -99,7 +99,7 @@ class VersionManager:
         self.logger = logger
 
     def update_metadata_remove_schemas(self, schema_list: list[str]) -> str:
-        """Handles removing schema(s) for a data product."""
+        """Handles removing schema(s) for a data product. This is a major version bump"""
         s3_client = boto3.client("s3")
         # remove any list duplicates and preserve list order
         schema_list = list({k: None for k in schema_list}.keys())
@@ -148,8 +148,8 @@ class VersionManager:
         )
         self.logger.info(f"new version: {new_version}")
 
-        # Copy files to the new version
-        self._copy_from_previous_version(
+        # Copy metadata files to the new version
+        self._copy_metadata_from_previous_version(
             latest_version=self.latest_version, new_version=new_version
         )
 
@@ -163,10 +163,26 @@ class VersionManager:
             s3_client.delete_object(Bucket=schema_path.bucket, Key=schema_path.key)
 
         # Create a new version of the athena database with all the tables in
-        self._create_database_for_new_version(
-            self.data_product_config.name,
-            latest_version=self.latest_version,
-            new_version=new_version,
+        # self._create_database_for_new_version(
+        #     self.data_product_config.name,
+        #     latest_version=self.latest_version,
+        #     new_version=new_version,
+        # )
+        self.schema_object = DataProductSchema(
+            data_product_name=self.data_product_name,
+            table_name=schema_list[0],
+            logger=self.logger,
+            input_data=None,
+        )
+
+        # Populate the new versions of the athena tables with the old data
+        CuratedDataCopier(
+            column_changes={"types_changed": False}, # This forces all tables to be copied
+            new_schema=self.schema_object, # dont want this either
+            element=DataProductElement(schema_list[0], self.data_product_config),
+            athena_client=athena_client,
+            glue_client=glue_client,
+            logger=self.logger,
         )
 
         # Remove the table we are deleting from the new version of the database
@@ -193,7 +209,7 @@ class VersionManager:
         new_version = generate_next_version_string(
             self.latest_version, UpdateType.MinorUpdate
         )
-        self._copy_from_previous_version(
+        self._copy_metadata_from_previous_version(
             latest_version=self.latest_version, new_version=new_version
         )
         new_version_key = self.data_product_config.metadata_path(new_version).key
@@ -311,7 +327,7 @@ class VersionManager:
             self.logger.info(f"Changes to schema: {changes}")
 
             new_version = generate_next_version_string(schema.version, state)
-            self._copy_from_previous_version(
+            self._copy_metadata_from_previous_version(
                 latest_version=self.latest_version, new_version=new_version
             )
             new_version_key = (
@@ -387,7 +403,7 @@ class VersionManager:
 
         return new_version, schema
 
-    def _copy_from_previous_version(self, latest_version, new_version):
+    def _copy_metadata_from_previous_version(self, latest_version, new_version):
         bucket, source_folder = self.data_product_config.metadata_path(
             latest_version
         ).parent
