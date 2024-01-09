@@ -77,6 +77,7 @@ resource "pagerduty_service_integration" "cloudwatch" {
   vendor = "PZQ6AUS"
 }
 
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
 resource "aws_secretsmanager_secret" "pagerduty_cloudwatch_integration_key" {
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
   #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
@@ -110,6 +111,7 @@ resource "pagerduty_service_integration" "cloudtrail" {
   vendor = "PDSJRA7"
 }
 
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
 resource "aws_secretsmanager_secret" "pagerduty_cloudtrail_integration_key" {
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
   #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
@@ -143,6 +145,7 @@ resource "pagerduty_service_integration" "guardduty" {
   vendor = "PH27SPX"
 }
 
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
 resource "aws_secretsmanager_secret" "pagerduty_guardduty_integration_key" {
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
   #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
@@ -175,6 +178,7 @@ resource "pagerduty_service_integration" "health_dashboard" {
   vendor  = data.pagerduty_vendor.health_dashboard.id
 }
 
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
 resource "aws_secretsmanager_secret" "pagerduty_health_dashboard_integration_key" {
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
   #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
@@ -208,6 +212,7 @@ resource "pagerduty_service_integration" "security_hub" {
   vendor = "PF0BK6R"
 }
 
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
 resource "aws_secretsmanager_secret" "pagerduty_security_hub_integration_key" {
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
   #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
@@ -242,7 +247,7 @@ resource "pagerduty_service_integration" "email" {
   integration_email = local.pagerduty_integration_email
 }
 
-#tfsec:ignore:AVD-AWS-0098
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
 resource "aws_secretsmanager_secret" "pagerduty_email_integration_key" {
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
   #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
@@ -275,6 +280,7 @@ resource "pagerduty_service_integration" "airflow" {
   vendor  = data.pagerduty_vendor.airflow.id
 }
 
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
 resource "aws_secretsmanager_secret" "pagerduty_airflow_integration_key" {
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
   #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
@@ -308,6 +314,7 @@ resource "pagerduty_service_integration" "alert_manager" {
   vendor = "P1S0PW6"
 }
 
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
 resource "aws_secretsmanager_secret" "pagerduty_alert_manager_integration_key" {
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
   #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
