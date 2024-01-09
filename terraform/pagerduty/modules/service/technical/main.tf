@@ -242,6 +242,7 @@ resource "pagerduty_service_integration" "email" {
   integration_email = local.pagerduty_integration_email
 }
 
+#tfsec:ignore:AVD-AWS-0098
 resource "aws_secretsmanager_secret" "pagerduty_email_integration_key" {
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
   #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
