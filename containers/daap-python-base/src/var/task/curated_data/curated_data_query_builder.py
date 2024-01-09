@@ -23,11 +23,7 @@ class CuratedDataQueryBuilder:
             column_type = column["Type"]
             type_mapping = {"string": "VARCHAR", "float": "real"}
             col_type = type_mapping.get(column_type, column_type)
-            col_no_zero_len_str = (
-                "NULLIF({col_name},0)"
-                if col_type in ["real", "int", "double"]
-                else f"NULLIF({col_name},'')"
-            )
+            col_no_zero_len_str = f"NULLIF({col_name},'')"
             select_list.append(
                 f"CAST({col_no_zero_len_str} as {col_type}) as {col_name}"
             )
