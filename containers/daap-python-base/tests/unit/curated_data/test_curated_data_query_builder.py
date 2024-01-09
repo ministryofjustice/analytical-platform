@@ -32,7 +32,7 @@ class TestCuratedDataQueryBuilder:
                 compression = 'SNAPPY',
                 partitioned_by=ARRAY['load_timestamp']
             )
-            """ # noqa
+            """  # noqa
         )
 
     def test_sql_create_table_partition(self):
