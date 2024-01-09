@@ -36,7 +36,7 @@ def raw_data_bucket(s3_client, empty_raw_data_bucket, data_element):
     s3_client.put_object(
         Bucket=bucket_name,
         Key=data_element.raw_data_prefix.key + "load_timestamp=timestamp1/file3.csv",
-        Body="Test data in same extraction time stamp but different file",
+        Body="Test data in same load time stamp but different file",
     )
     return bucket_name
 
@@ -54,9 +54,7 @@ def curated_data_bucket(s3_client, empty_curated_data_bucket, data_element):
     return bucket_name
 
 
-def test_get_raw_data_unique_extraction_timestamps(
-    s3_client, raw_data_bucket, data_element
-):
+def test_get_raw_data_unique_load_timestamps(s3_client, raw_data_bucket, data_element):
     pages = get_data_product_pages(
         bucket=raw_data_bucket,
         data_product_prefix=data_element.raw_data_prefix.key,
@@ -69,7 +67,7 @@ def test_get_raw_data_unique_extraction_timestamps(
     }
 
 
-def test_get_curated_unique_extraction_timestamps(
+def test_get_curated_unique_load_timestamps(
     s3_client, curated_data_bucket, data_element
 ):
     pages = get_data_product_pages(
