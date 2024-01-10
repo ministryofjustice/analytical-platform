@@ -15,7 +15,7 @@ from data_platform_paths import (
     generate_element_version_prefixes_for_version,
     get_database_name_for_version,
 )
-from data_product_metadata import DataProductMetadata, DataProductSchema
+from data_product_metadata import DataProductMetadata, DataProductSchema, format_table_schema
 from glue_and_athena_utils import clone_database, delete_table
 
 athena_client = boto3.client("athena")
@@ -168,6 +168,33 @@ class VersionManager:
             latest_version=self.latest_version,
             new_version=new_version,
         )
+
+        # Move any data across
+        if current_metadata["schemas"]:
+            input_data = format_table_schema(
+                DataProductSchema(
+                    data_product_name=self.data_product_name,
+                    table_name=current_metadata["schemas"][0],
+                    logger=self.logger,
+                    input_data=None,
+                )
+                .load()
+                .latest_version_saved_data
+            )
+            schema_to_keep = DataProductSchema(
+                data_product_name=self.data_product_name,
+                table_name=updated_metadata.data["schemas"][0],
+                logger=self.logger,
+                input_data=input_data,
+            )
+            CuratedDataCopier(
+                element=DataProductElement(schema_list[0], self.data_product_config),
+                new_schema=schema_to_keep,
+                schemas_to_copy=current_metadata["schemas"],
+                athena_client=athena_client,
+                glue_client=glue_client,
+                logger=self.logger,
+            ).run()
 
         # Remove the table we are deleting from the new version of the database
         for schema_name in schema_list:
