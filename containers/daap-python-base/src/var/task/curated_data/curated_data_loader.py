@@ -125,14 +125,14 @@ class CuratedDataCopier:
         logger=DataPlatformLogger,
         schemas_to_copy=None,
         column_changes=None,
-        schema_delete: bool=False,
+        schema_delete: bool = False,
     ):
         """
         Copy data from existing version of data product to new version of
         data product.
         """
         self.schema = new_schema if new_schema else None
-        self.data_product_name = self.schema.data_product_name
+        self.data_product_name = element.data_product.name
         self.column_changes = column_changes
         self.new_curated_data_product_path = element.curated_data_prefix.uri
         self.new_database_name = element.database_name

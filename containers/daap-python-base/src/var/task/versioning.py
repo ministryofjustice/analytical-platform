@@ -18,7 +18,7 @@ from data_platform_paths import (
 from data_product_metadata import (
     DataProductMetadata,
     DataProductSchema,
-    format_table_schema
+    format_table_schema,
 )
 from glue_and_athena_utils import clone_database, delete_table
 
