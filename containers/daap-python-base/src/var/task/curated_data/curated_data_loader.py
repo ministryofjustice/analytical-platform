@@ -1,6 +1,6 @@
 from data_platform_logging import DataPlatformLogger
 from data_platform_paths import DataProductElement, QueryTable
-from data_product_metadata import DataProductSchema, DataProductMetadata, format_table_schema
+from data_product_metadata import DataProductSchema, format_table_schema
 from glue_and_athena_utils import (
     create_glue_database,
     refresh_table_partitions,
@@ -121,17 +121,17 @@ class CuratedDataCopier:
         element: DataProductElement,
         athena_client,
         glue_client,
+        new_schema: DataProductSchema,
         logger=DataPlatformLogger,
         schemas_to_copy=None,
-        column_changes = None,
-        new_schema: DataProductSchema = None,
-        schema_delete: bool = False,
+        column_changes=None,
+        schema_delete: bool=False,
     ):
         """
         Copy data from existing version of data product to new version of
         data product.
         """
-        self.schema = new_schema
+        self.schema = new_schema if new_schema else None
         self.data_product_name = self.schema.data_product_name
         self.column_changes = column_changes
         self.new_curated_data_product_path = element.curated_data_prefix.uri

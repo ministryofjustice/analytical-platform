@@ -565,7 +565,9 @@ class TestUpdateMetadataRemoveSchema:
                 mock_query.return_value = "qidyes"
                 mock_refresh.return_value = "qidyes"
                 schema_list = ["schema0"]
-                self.version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+                self.version_manager.update_metadata_remove_schemas(
+                    schema_list=schema_list
+                )
 
         schema_prefix = f"{self.data_product_name}/v2.0/metadata.json"
         self.assert_object_count(self.bucket_name, schema_prefix, 1)
@@ -605,7 +607,9 @@ class TestUpdateMetadataRemoveSchema:
             ) as mock_refresh:
                 mock_query.return_value = "qidyes"
                 mock_refresh.return_value = "qidyes"
-                self.version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+                self.version_manager.update_metadata_remove_schemas(
+                    schema_list=schema_list
+                )
 
         self.assert_object_count(os.getenv("CURATED_DATA_BUCKET"), curated_prefix, 10)
         self.assert_object_count(os.getenv("RAW_DATA_BUCKET"), raw_prefix, 10)
@@ -623,7 +627,9 @@ class TestUpdateMetadataRemoveSchema:
             ) as mock_refresh:
                 mock_query.return_value = "qidyes"
                 mock_refresh.return_value = "qidyes"
-                self.version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+                self.version_manager.update_metadata_remove_schemas(
+                    schema_list=schema_list
+                )
 
         schema_prefix = f"{self.data_product_name}/v3.0/{schema_list[0]}/schema.json"
         self.assert_object_count(self.bucket_name, schema_prefix, 0)
@@ -639,7 +645,9 @@ class TestUpdateMetadataRemoveSchema:
             ) as mock_refresh:
                 mock_query.return_value = "qidyes"
                 mock_refresh.return_value = "qidyes"
-                self.version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+                self.version_manager.update_metadata_remove_schemas(
+                    schema_list=schema_list
+                )
 
         expected_database_name = f"{self.data_product_name}_{self.new_major_version}"
         assert database_exists(expected_database_name, logger=logger)
@@ -657,7 +665,9 @@ class TestUpdateMetadataRemoveSchema:
             ) as mock_refresh:
                 mock_query.return_value = "qidyes"
                 mock_refresh.return_value = "qidyes"
-                self.version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+                self.version_manager.update_metadata_remove_schemas(
+                    schema_list=schema_list
+                )
 
         for i in range(1, self.number_of_schemas):
             self.assert_object_exists(
