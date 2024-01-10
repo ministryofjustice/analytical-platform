@@ -13,8 +13,9 @@ terraform {
       version = "1.1.1"
     }
     aws = {
-      source  = "hashicorp/aws"
-      version = "5.31.0"
+      source                = "hashicorp/aws"
+      version               = "5.31.0"
+      configuration_aliases = [aws.target] # required by aws_iam_policy_document
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
