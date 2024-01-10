@@ -131,7 +131,7 @@ class CuratedDataCopier:
         Copy data from existing version of data product to new version of
         data product.
         """
-        self.schema = new_schema if new_schema else None
+        self.schema = new_schema
         self.data_product_name = element.data_product.name
         self.column_changes = column_changes
         self.new_curated_data_product_path = element.curated_data_prefix.uri
