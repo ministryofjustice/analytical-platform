@@ -125,7 +125,6 @@ class CuratedDataCopier:
         logger=DataPlatformLogger,
         schemas_to_copy=None,
         column_changes=None,
-        schema_delete: bool = False,
     ):
         """
         Copy data from existing version of data product to new version of
@@ -140,7 +139,6 @@ class CuratedDataCopier:
         self.glue_client = glue_client
         self.athena_client = athena_client
         self.logger = logger
-        self.schema_delete = schema_delete
         self._get_tables_to_copy()
 
     def _is_updated_table_valid_for_copy(self):
