@@ -550,7 +550,7 @@ class TestUpdateMetadataRemoveSchema:
     def setup_subject(self, glue_client, athena_client, data_product_name):
         with patch("glue_and_athena_utils.glue_client", glue_client):
             with patch("glue_and_athena_utils.athena_client", athena_client):
-                athena_client.create_work_group(Name="data_product_workgroup")
+                
                 self.version_manager = VersionManager(data_product_name, logger)
             yield
 
