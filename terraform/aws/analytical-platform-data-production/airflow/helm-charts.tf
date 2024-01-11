@@ -2,7 +2,7 @@ resource "helm_release" "kyverno_dev" {
   name       = "kyverno"
   repository = "https://kyverno.github.io/kyverno/"
   chart      = "kyverno"
-  version    = "2.5.3"
+  version    = "2.6.0"
   namespace  = kubernetes_namespace.kyverno_dev.metadata[0].name
   provider   = helm.dev-airflow-cluster
   values = [

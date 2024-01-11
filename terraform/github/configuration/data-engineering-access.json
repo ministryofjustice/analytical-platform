@@ -449,5 +449,16 @@
       "analytical-platform-data-engineering-sandboxa-data-engineer",
       "analytical-platform-data-engineering-production-data-engineer"
     ]
+  },
+  {
+    "name": "Guy Wheeler",
+    "github": "guyvw1",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
   }
 ]
