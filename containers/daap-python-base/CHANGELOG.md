@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Add logic to dopy data to new tables after a schema gets deleted.
+- Add logic to copy data to new tables after a schema gets deleted.
 
 ## [8.0.1] - 2023-01-08
 
