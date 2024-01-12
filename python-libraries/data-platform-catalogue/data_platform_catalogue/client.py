@@ -1,7 +1,20 @@
 import json
 import logging
+from abc import ABC, abstractmethod
+from enum import Enum, auto
 from http import HTTPStatus
 
+import datahub.emitter.mce_builder as mce_builder
+import datahub.metadata.schema_classes as schema_classes
+from datahub.emitter.mce_builder import make_data_platform_urn
+from datahub.emitter.mcp import MetadataChangeProposalWrapper
+from datahub.ingestion.graph.client import DatahubClientConfig, DataHubGraph
+from datahub.metadata.schema_classes import (
+    OtherSchemaClass,
+    SchemaFieldClass,
+    SchemaFieldDataTypeClass,
+    SchemaMetadataClass,
+)
 from metadata.generated.schema.api.data.createDatabase import CreateDatabaseRequest
 from metadata.generated.schema.api.data.createDatabaseSchema import (
     CreateDatabaseSchemaRequest,
@@ -34,7 +47,7 @@ from .entities import CatalogueMetadata, DataProductMetadata, TableMetadata
 logger = logging.getLogger(__name__)
 
 
-DATA_TYPE_MAPPING = {
+OMD_DATA_TYPE_MAPPING = {
     "boolean": OpenMetadataDataType.BOOLEAN,
     "tinyint": OpenMetadataDataType.TINYINT,
     "smallint": OpenMetadataDataType.SMALLINT,
@@ -51,6 +64,43 @@ DATA_TYPE_MAPPING = {
     "timestamp": OpenMetadataDataType.TIMESTAMP,
 }
 
+DATAHUB_DATA_TYPE_MAPPING = {
+    "boolean": schema_classes.BooleanTypeClass(),
+    "tinyint": schema_classes.NumberTypeClass(),
+    "smallint": schema_classes.NumberTypeClass(),
+    "int": schema_classes.NumberTypeClass(),
+    "integer": schema_classes.NumberTypeClass(),
+    "bigint": schema_classes.NumberTypeClass(),
+    "double": schema_classes.NumberTypeClass(),
+    "float": schema_classes.NumberTypeClass(),
+    "decimal": schema_classes.NumberTypeClass(),
+    "char": schema_classes.StringTypeClass(),
+    "varchar": schema_classes.StringTypeClass(),
+    "string": schema_classes.StringTypeClass(),
+    "date": schema_classes.DateTypeClass(),
+    "timestamp": schema_classes.TimeTypeClass(),
+}
+
+
+class ClientName(Enum):
+    OPENMETADATA = auto()
+    DATAHUB = auto()
+
+    @classmethod
+    def __contains__(cls, item):
+        return item in cls.__members__.values()
+
+    @classmethod
+    def from_string(cls, string: str):
+        s = ("".join(filter(str.isalpha, string))).upper()
+
+        if "OPENMETADATA" in s:
+            return cls["OPENMETADATA"]
+        elif "DATAHUB" in s:
+            return cls["DATAHUB"]
+        else:
+            raise ValueError(f"Cannot infer client name from given string: {string}")
+
 
 class CatalogueError(Exception):
     """
@@ -65,9 +115,53 @@ class ReferencedEntityMissing(CatalogueError):
     """
 
 
-class CatalogueClient:
+class BaseCatalogueClient(ABC):
+    @abstractmethod
+    def create_or_update_database_service(self, name: str, display_name: str) -> str:
+        pass
+
+    @abstractmethod
+    def create_or_update_database(
+        self, metadata: CatalogueMetadata | DataProductMetadata, service_fqn: str
+    ):
+        pass
+
+    @abstractmethod
+    def create_or_update_schema(self, metadata: DataProductMetadata, database_fqn: str):
+        pass
+
+    @abstractmethod
+    def create_or_update_table(self, metadata: TableMetadata):
+        pass
+
+    def delete_database_service(self, fqn: str):
+        """
+        Delete a database service.
+        """
+        raise NotImplementedError
+
+    def delete_database(self, fqn: str):
+        """
+        Delete a database.
+        """
+        raise NotImplementedError
+
+    def delete_schema(self, fqn: str):
+        """
+        Delete a schema.
+        """
+        raise NotImplementedError
+
+    def delete_table(self, fqn: str):
+        """
+        Delete a table.
+        """
+        raise NotImplementedError
+
+
+class OpenMetadataCatalogueClient(BaseCatalogueClient):
     """
-    Client for pushing metadata to the catalogue.
+    Client for pushing metadata to the OpenMetadata catalogue.
 
     Tables in the catalogue are arranged into the following hierarchy:
     DatabaseService -> Database -> Schema -> Table
@@ -79,13 +173,13 @@ class CatalogueClient:
     def __init__(
         self,
         jwt_token,
-        api_uri: str = "https://catalogue.apps-tools.development.data-platform.service.justice.gov.uk/api",
+        api_url: str = "https://catalogue.apps-tools.development.data-platform.service.justice.gov.uk/api",
     ):
         self.server_config = OpenMetadataConnection(
-            hostPort=api_uri,
+            hostPort=api_url,
             securityConfig=OpenMetadataJWTClientConfig(jwtToken=jwt_token),
             authProvider="openmetadata",
-        )
+        )  # pyright: ignore[reportGeneralTypeIssues]
         self.metadata = OpenMetadata(self.server_config)
 
     def is_healthy(self) -> bool:
@@ -119,8 +213,10 @@ class CatalogueClient:
         response = self.metadata.client.put(
             "/services/databaseServices", data=json.dumps(service)
         )
-
-        return response["fullyQualifiedName"]
+        if response is not None:
+            return response["fullyQualifiedName"]
+        else:
+            raise ReferencedEntityMissing
 
     def create_or_update_database(
         self, metadata: CatalogueMetadata | DataProductMetadata, service_fqn: str
@@ -134,7 +230,9 @@ class CatalogueClient:
             description=metadata.description,
             tags=self._generate_tags(metadata.tags),
             service=service_fqn,
-            owner=EntityReference(id=metadata.owner, type="user"),
+            owner=EntityReference(
+                id=metadata.owner, type="user"
+            ),  # pyright: ignore[reportGeneralTypeIssues]
         )
         return self._create_or_update_entity(create_db)
 
@@ -149,7 +247,9 @@ class CatalogueClient:
         create_schema = CreateDatabaseSchemaRequest(
             name=metadata.name,
             description=metadata.description,
-            owner=EntityReference(id=metadata.owner, type="user"),
+            owner=EntityReference(
+                id=metadata.owner, type="user"
+            ),  # pyright: ignore[reportGeneralTypeIssues]
             tags=self._generate_tags(metadata.tags),
             retentionPeriod=self._generate_duration(metadata.retention_period_in_days),
             database=database_fqn,
@@ -166,9 +266,10 @@ class CatalogueClient:
         columns = [
             Column(
                 name=column["name"],
-                dataType=DATA_TYPE_MAPPING[column["type"]],
+                dataType=OMD_DATA_TYPE_MAPPING[column["type"]],
                 description=column["description"],
-            )
+            )  # pyright: ignore[reportGeneralTypeIssues]
+            # pyright is ignoring field(None,x)
             for column in metadata.column_details
         ]
         create_table = CreateTableRequest(
@@ -178,7 +279,7 @@ class CatalogueClient:
             tags=self._generate_tags(metadata.tags),
             databaseSchema=schema_fqn,
             columns=columns,
-        )
+        )  # pyright: ignore[reportGeneralTypeIssues]
         return self._create_or_update_entity(create_table)
 
     def _create_or_update_entity(self, data) -> str:
@@ -201,42 +302,22 @@ class CatalogueClient:
         returns the user id from openmetadata when given a user's email
         """
         username = user_email.split("@")[0]
-        user_id = self.metadata.get_by_name(entity=User, fqn=username).id
-
-        return user_id
-
-    def delete_database_service(self, fqn: str):
-        """
-        Delete a database service.
-        """
-        raise NotImplementedError
-
-    def delete_database(self, fqn: str):
-        """
-        Delete a database.
-        """
-        raise NotImplementedError
-
-    def delete_schema(self, fqn: str):
-        """
-        Delete a schema
-        """
-        raise NotImplementedError
-
-    def delete_table(self, fqn: str):
-        """
-        Delete a table.
-        """
-        raise NotImplementedError
+        user = self.metadata.get_by_name(entity=User, fqn=username)
+        if user is not None:
+            return user.id
+        else:
+            raise ReferencedEntityMissing
 
     def _generate_tags(self, tags: list[str]):
+        # TODO? update using the sdk logic:
+        # https://docs.open-metadata.org/v1.2.x/sdk/python/ingestion/tags#6-creating-the-classification
         return [
             TagLabel(
                 tagFQN=tag,
                 labelType=LabelType.Automated,
                 source=TagSource.Classification,
                 state=State.Confirmed,
-            )
+            )  # pyright: ignore[reportGeneralTypeIssues]
             for tag in tags
         ]
 
@@ -245,3 +326,153 @@ class CatalogueClient:
             return None
         else:
             return Duration.parse_obj(f"P{duration_in_days}D")
+
+
+import datahub.emitter.mce_builder as mce_builder
+import datahub.emitter.mce_builder as builder
+from datahub.api.entities.dataproduct.dataproduct import DataProduct
+from datahub.emitter.mce_builder import make_data_platform_urn, make_dataset_urn
+from datahub.emitter.mcp import MetadataChangeProposalWrapper
+from datahub.emitter.mcp_builder import DatahubKey
+from datahub.emitter.rest_emitter import DatahubRestEmitter
+from datahub.ingestion.graph.client import DatahubClientConfig, DataHubGraph
+
+
+class DataHubCatalogueClient(BaseCatalogueClient):
+    """
+    Client for pushing metadata to the DataHub catalogue.
+
+    Tables in the catalogue are arranged into the following hierarchy:
+    DatabaseService -> Database -> Schema -> Table
+
+    If there is a problem communicating with the catalogue, methods will raise an instance of
+    CatalogueError.
+    """
+
+    # purpose: map CRUD operations from 2 APIs onto a single API / base class.
+
+    # Datahub: Data Platform + dataset
+    # OMD: Database Service + Database + Schema + Table
+
+    # 'Service' + 'entity', specifying which level?
+    # create + update (PATCH / PUT) + delete ?
+
+    # Existing:
+    # create_or_update_database_service
+    # create_or_update_database
+    # create_or_update_schema
+    # create_or_update_table
+
+    # _create_or_update_entity
+
+    # delete_database_service
+    # delete_database
+    # delete_schema
+    # delete_table
+
+    # get_user_id
+
+    # _generate_tags
+    # _generate_duration
+
+    def __init__(
+        self,
+        jwt_token,
+        api_url: str = "https://datahub.apps-tools.development.data-platform.service.justice.gov.uk/api/gms",
+    ):
+        self.gms_endpoint = api_url
+        self.server_config = DatahubClientConfig(
+            server=self.gms_endpoint, token=jwt_token
+        )
+        self.graph = DataHubGraph(self.server_config)
+
+    def create_or_update_database_service(
+        self, name: str = "data-platform", display_name: str = "Data platform"
+    ) -> str:
+        """
+        Define a DataHub 'Data Platform'.
+        We have one service representing the connection to the data platform's internal
+        glue catalogue.
+
+        Returns the fully qualified name of the metadata object in the catalogue.
+        """
+
+        raise NotImplementedError
+
+    def create_or_update_database(
+        self, metadata: CatalogueMetadata | DataProductMetadata, service_fqn: str
+    ):
+        """
+        Define a database. Not implemented for DataHub, which uses Data Platforms + Datasets only.
+        """
+        raise NotImplementedError
+
+    def create_or_update_schema(self, metadata: DataProductMetadata, database_fqn: str):
+        """
+        Define a database. Not implemented for DataHub, which uses Data Platforms + Datasets only.
+        """
+        raise NotImplementedError
+
+    def create_or_update_table(self, metadata: TableMetadata):
+        """
+        Define a table.
+        There can be many tables per data product.
+        columns are expected to be a list of dicts in the format
+            {"name": "column1", "type": "string", "description": "just an example"}
+        """
+        dataset_schema_properties = SchemaMetadataClass(
+            schemaName=metadata.name,  # not used
+            platform=make_data_platform_urn(
+                "glue"
+            ),  # important <- platform must be an urn
+            version=1,  # when the source system has a notion of versioning of schemas, insert this in, otherwise leave as 0
+            hash="",  # when the source system has a notion of unique schemas identified via hash, include a hash, else leave it as empty string
+            # platformSchema: Union["EspressoSchemaClass", "OracleDDLClass", "MySqlDDLClass", "PrestoDDLClass", "KafkaSchemaClass", "BinaryJsonSchemaClass", "OrcSchemaClass", "SchemalessClass", "KeyValueSchemaClass", "OtherSchemaClass"],
+            platformSchema=OtherSchemaClass(rawSchema="__insert raw schema here__"),
+            fields=[
+                SchemaFieldClass(
+                    fieldPath=f"{column['name']}",
+                    type=SchemaFieldDataTypeClass(
+                        type=DATAHUB_DATA_TYPE_MAPPING[column["type"]]
+                    ),
+                    nativeDataType=column["type"],
+                    description=column["description"],
+                )
+                for column in metadata.column_details
+            ],
+        )
+
+        dataset_urn = mce_builder.make_dataset_urn(
+            platform="glue", name=f"{metadata.name}", env="PROD"
+        )
+
+        metadata_event = MetadataChangeProposalWrapper(
+            entityUrn=dataset_urn,
+            aspect=dataset_schema_properties,
+        )
+        self.graph.emit(metadata_event)
+
+        ## tags
+        tags_to_add = mce_builder.make_global_tag_aspect_with_tag_list(
+            tags=metadata.tags
+        )
+        event: MetadataChangeProposalWrapper = MetadataChangeProposalWrapper(
+            entityUrn=dataset_urn,
+            aspect=tags_to_add,
+        )
+        self.graph.emit(event)
+
+        return dataset_urn
+
+
+def get_client_by_name(client_name: ClientName | str):
+    if isinstance(client_name, str):
+        client_name = ClientName.from_string(client_name)
+
+    client_dict = {
+        ClientName.DATAHUB: DataHubCatalogueClient,
+        ClientName.OPENMETADATA: OpenMetadataCatalogueClient,
+    }
+    client = client_dict[client_name]
+
+    return client
