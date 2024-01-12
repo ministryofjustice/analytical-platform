@@ -10,16 +10,20 @@ poetry run pytest tests/test_integration_with_server.py
 import os
 
 import pytest
-from data_platform_catalogue import CatalogueClient, DataProductMetadata, TableMetadata
+from data_platform_catalogue import (
+    DataProductMetadata,
+    OpenMetadataCatalogueClient,
+    TableMetadata,
+)
 
 jwt_token = os.environ.get("JWT_TOKEN")
-api_url = os.environ.get("API_URL")
+api_url = os.environ.get("API_URL", "")
 runs_on_development_server = pytest.mark.skipif("not jwt_token or not api_url")
 
 
 @runs_on_development_server
 def test_create_or_update_test_hierarchy():
-    client = CatalogueClient(jwt_token=jwt_token, api_uri=api_url)
+    client = OpenMetadataCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
     assert client.is_healthy()
 
