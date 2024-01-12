@@ -15,14 +15,14 @@
       "proposals": ["latest"],
       "default": "latest"
     },
-    "installAwsVault": {
+    "installAwsSsoCli": {
       "type": "boolean",
-      "description": "Install AWS Vault (https://github.com/99designs/aws-vault)",
+      "description": "Install AWS SSO CLI (https://github.com/synfinatic/aws-sso-cli)",
       "default": true
     },
-    "awsVaultVersion": {
+    "awsSsoCliVersion": {
       "type": "string",
-      "description": "AWS Vault version",
+      "description": "AWS SSO CLI version",
       "proposals": ["latest"],
       "default": "latest"
     },
