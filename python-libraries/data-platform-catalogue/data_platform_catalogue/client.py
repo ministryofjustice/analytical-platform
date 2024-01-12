@@ -3,6 +3,7 @@ import logging
 from abc import ABC, abstractmethod
 from enum import Enum, auto
 from http import HTTPStatus
+from typing import Any
 
 import datahub.emitter.mce_builder as mce_builder
 import datahub.metadata.schema_classes as schema_classes
@@ -118,42 +119,42 @@ class ReferencedEntityMissing(CatalogueError):
 
 class BaseCatalogueClient(ABC):
     @abstractmethod
-    def create_or_update_database_service(self, name: str, display_name: str) -> str:
+    def create_or_update_database_service(self, *args: Any, **kwargs: Any):
         pass
 
     @abstractmethod
-    def create_or_update_database(
-        self, metadata: CatalogueMetadata | DataProductMetadata, service_fqn: str
+    def create_or_update_database(self, *args: Any, **kwargs: Any):
+        pass
+
+    @abstractmethod
+    def create_or_update_schema(self, *args: Any, **kwargs: Any):
+        pass
+
+    @abstractmethod
+    def create_or_update_table(
+        self, metadata: TableMetadata, *args: Any, **kwargs: Any
     ):
         pass
 
-    @abstractmethod
-    def create_or_update_schema(self, metadata: DataProductMetadata, database_fqn: str):
-        pass
-
-    @abstractmethod
-    def create_or_update_table(self, metadata: TableMetadata):
-        pass
-
-    def delete_database_service(self, fqn: str):
+    def delete_database_service(self, *args: Any, **kwargs: Any):
         """
         Delete a database service.
         """
         raise NotImplementedError
 
-    def delete_database(self, fqn: str):
+    def delete_database(self, *args: Any, **kwargs: Any):
         """
         Delete a database.
         """
         raise NotImplementedError
 
-    def delete_schema(self, fqn: str):
+    def delete_schema(self, *args: Any, **kwargs: Any):
         """
         Delete a schema.
         """
         raise NotImplementedError
 
-    def delete_table(self, fqn: str):
+    def delete_table(self, *args: Any, **kwargs: Any):
         """
         Delete a table.
         """
