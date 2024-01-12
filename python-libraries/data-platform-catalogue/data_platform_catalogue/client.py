@@ -343,37 +343,11 @@ class DataHubCatalogueClient(BaseCatalogueClient):
     Client for pushing metadata to the DataHub catalogue.
 
     Tables in the catalogue are arranged into the following hierarchy:
-    DatabaseService -> Database -> Schema -> Table
+    Data Platform -> Dataset
 
     If there is a problem communicating with the catalogue, methods will raise an instance of
     CatalogueError.
     """
-
-    # purpose: map CRUD operations from 2 APIs onto a single API / base class.
-
-    # Datahub: Data Platform + dataset
-    # OMD: Database Service + Database + Schema + Table
-
-    # 'Service' + 'entity', specifying which level?
-    # create + update (PATCH / PUT) + delete ?
-
-    # Existing:
-    # create_or_update_database_service
-    # create_or_update_database
-    # create_or_update_schema
-    # create_or_update_table
-
-    # _create_or_update_entity
-
-    # delete_database_service
-    # delete_database
-    # delete_schema
-    # delete_table
-
-    # get_user_id
-
-    # _generate_tags
-    # _generate_duration
 
     def __init__(
         self,
@@ -463,16 +437,3 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         self.graph.emit(event)
 
         return dataset_urn
-
-
-def get_client_by_name(client_name: ClientName | str):
-    if isinstance(client_name, str):
-        client_name = ClientName.from_string(client_name)
-
-    client_dict = {
-        ClientName.DATAHUB: DataHubCatalogueClient,
-        ClientName.OPENMETADATA: OpenMetadataCatalogueClient,
-    }
-    client = client_dict[client_name]
-
-    return client
