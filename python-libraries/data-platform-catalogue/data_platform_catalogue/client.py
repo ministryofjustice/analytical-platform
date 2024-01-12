@@ -195,7 +195,7 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
 
     def create_or_update_database_service(
         self, name: str = "data-platform", display_name: str = "Data platform"
-    ) -> str:
+    ) -> str:  # type: ignore[override]
         """
         Define a database service.
         We have one service representing the connection to the data platform's internal
@@ -225,7 +225,7 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
 
     def create_or_update_database(
         self, metadata: CatalogueMetadata | DataProductMetadata, service_fqn: str
-    ):
+    ):  # type: ignore[override]
         """
         Define a database.
         There should be one database per data product.
@@ -241,7 +241,7 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
         )
         return self._create_or_update_entity(create_db)
 
-    def create_or_update_schema(self, metadata: DataProductMetadata, database_fqn: str):
+    def create_or_update_schema(self, metadata: DataProductMetadata, database_fqn: str):  # type: ignore[override]
         """
         Define a database schema.
         There should be one schema per data product and for now flexibility is retained
@@ -261,7 +261,7 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
         )
         return self._create_or_update_entity(create_schema)
 
-    def create_or_update_table(self, metadata: TableMetadata, schema_fqn: str):
+    def create_or_update_table(self, metadata: TableMetadata, schema_fqn: str):  # type: ignore[override]
         """
         Define a table.
         There can be many tables per data product.
@@ -357,7 +357,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
 
     def create_or_update_database_service(
         self, name: str = "data-platform", display_name: str = "Data platform"
-    ) -> str:
+    ) -> str:  # type: ignore[override]
         """
         Define a DataHub 'Data Platform'.
         We have one service representing the connection to the data platform's internal
@@ -370,19 +370,19 @@ class DataHubCatalogueClient(BaseCatalogueClient):
 
     def create_or_update_database(
         self, metadata: CatalogueMetadata | DataProductMetadata, service_fqn: str
-    ):
+    ):  # type: ignore[override]
         """
         Define a database. Not implemented for DataHub, which uses Data Platforms + Datasets only.
         """
         raise NotImplementedError
 
-    def create_or_update_schema(self, metadata: DataProductMetadata, database_fqn: str):
+    def create_or_update_schema(self, metadata: DataProductMetadata, database_fqn: str):  # type: ignore[override]
         """
         Define a database. Not implemented for DataHub, which uses Data Platforms + Datasets only.
         """
         raise NotImplementedError
 
-    def create_or_update_table(self, metadata: TableMetadata):
+    def create_or_update_table(self, metadata: TableMetadata):  # type: ignore[override]
         """
         Define a table.
         There can be many tables per data product.
