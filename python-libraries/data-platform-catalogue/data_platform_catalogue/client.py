@@ -9,7 +9,6 @@ import datahub.emitter.mce_builder as mce_builder
 import datahub.metadata.schema_classes as schema_classes
 from datahub.emitter.mce_builder import make_data_platform_urn
 from datahub.emitter.mcp import MetadataChangeProposalWrapper
-from datahub.emitter.rest_emitter import DatahubRestEmitter
 from datahub.ingestion.graph.client import DatahubClientConfig, DataHubGraph
 from datahub.metadata.schema_classes import (
     OtherSchemaClass,
@@ -119,42 +118,46 @@ class ReferencedEntityMissing(CatalogueError):
 
 class BaseCatalogueClient(ABC):
     @abstractmethod
-    def create_or_update_database_service(self, *args: Any, **kwargs: Any):
+    def create_or_update_database_service(
+        self, *args: Any, **kwargs: Any
+    ):  # mypy: ignore-errors
         pass
 
     @abstractmethod
-    def create_or_update_database(self, *args: Any, **kwargs: Any):
+    def create_or_update_database(
+        self, *args: Any, **kwargs: Any
+    ):  # mypy: ignore-errors
         pass
 
     @abstractmethod
-    def create_or_update_schema(self, *args: Any, **kwargs: Any):
+    def create_or_update_schema(self, *args: Any, **kwargs: Any):  # mypy: ignore-errors
         pass
 
     @abstractmethod
     def create_or_update_table(
         self, metadata: TableMetadata, *args: Any, **kwargs: Any
-    ):
+    ):  # mypy: ignore-errors
         pass
 
-    def delete_database_service(self, *args: Any, **kwargs: Any):
+    def delete_database_service(self, *args: Any, **kwargs: Any):  # mypy: ignore-errors
         """
         Delete a database service.
         """
         raise NotImplementedError
 
-    def delete_database(self, *args: Any, **kwargs: Any):
+    def delete_database(self, *args: Any, **kwargs: Any):  # mypy: ignore-errors
         """
         Delete a database.
         """
         raise NotImplementedError
 
-    def delete_schema(self, *args: Any, **kwargs: Any):
+    def delete_schema(self, *args: Any, **kwargs: Any):  # mypy: ignore-errors
         """
         Delete a schema.
         """
         raise NotImplementedError
 
-    def delete_table(self, *args: Any, **kwargs: Any):
+    def delete_table(self, *args: Any, **kwargs: Any):  # mypy: ignore-errors
         """
         Delete a table.
         """
@@ -387,13 +390,10 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             {"name": "column1", "type": "string", "description": "just an example"}
         """
         dataset_schema_properties = SchemaMetadataClass(
-            schemaName=metadata.name,  # not used
-            platform=make_data_platform_urn(
-                "glue"
-            ),  # important <- platform must be an urn
-            version=1,  # when the source system has a notion of versioning of schemas, insert this in, otherwise leave as 0
-            hash="",  # when the source system has a notion of unique schemas identified via hash, include a hash, else leave it as empty string
-            # platformSchema: Union["EspressoSchemaClass", "OracleDDLClass", "MySqlDDLClass", "PrestoDDLClass", "KafkaSchemaClass", "BinaryJsonSchemaClass", "OrcSchemaClass", "SchemalessClass", "KeyValueSchemaClass", "OtherSchemaClass"],
+            schemaName=metadata.name,
+            platform=make_data_platform_urn("glue"),
+            version=1,
+            hash="",
             platformSchema=OtherSchemaClass(rawSchema="__insert raw schema here__"),
             fields=[
                 SchemaFieldClass(
