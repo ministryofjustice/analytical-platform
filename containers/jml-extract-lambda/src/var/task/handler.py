@@ -25,14 +25,14 @@ def handler(event, context):
     notifications_client = NotificationsAPIClient(api_key)
 
     now = dt.now()
-    current_date = dt.strftime(now.date(), "%d/%m/%Y")
+    current_date = dt.strftime(now.date(), "%Y/%m/%d")
 
     # Query
-    query = f"""fields detail.data.user_id as user, detail.data.user_name as email
+    query = f"""fields detail.data.user_id as `User`, detail.data.user_name as `Employee Email Address`
     | filter detail.data.type = "s"
     | filter detail.data.connection = "github"
-    | stats max(@timestamp) as last_login by "{current_date}" as effective_date, user, email
-    | sort last_login desc
+    | stats max(@timestamp) as `Last login date` by "{current_date}" as `Effective Date of Data`, `User`, `Employee Email Address`
+    | sort `Last login date` desc
     """
 
     # Date range
@@ -42,8 +42,8 @@ def handler(event, context):
     end_datetime = dt(year, current_month, 1, 0, 0, 0)
     if previous_month == 0:
         previous_month = 12
-        year = year - 1
         end_datetime = dt(year, current_month, 1, 0, 0, 0)
+        year = year - 1
 
     start_datetime = dt(year, previous_month, 1, 0, 0, 0)
 
@@ -57,13 +57,13 @@ def handler(event, context):
 
     # Datestamp
     datestamp = end_datetime.strftime(format="%Y_%m_%d")
-    dataframe["last_login"] = pd.to_datetime(
-        dataframe["last_login"], format="%Y-%m-%d %H:%M:%S.%f"
+    dataframe["Last login date"] = pd.to_datetime(
+        dataframe["Last login date"], format="%Y-%m-%d %H:%M:%S.%f"
     ).apply(lambda x: str(dt.strftime(x, "%Y/%m/%d")))
 
     # Save to Excel
     excel_filename = f"/tmp/jml_extract_{datestamp}.xlsx"
-    dataframe.to_excel(excel_filename, index=False)
+    dataframe.to_excel(excel_filename, index=False, sheet_name='Data')
 
     # Send email notification
     with open(excel_filename, "rb") as f:
