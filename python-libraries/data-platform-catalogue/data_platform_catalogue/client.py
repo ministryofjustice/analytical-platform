@@ -8,6 +8,7 @@ import datahub.emitter.mce_builder as mce_builder
 import datahub.metadata.schema_classes as schema_classes
 from datahub.emitter.mce_builder import make_data_platform_urn
 from datahub.emitter.mcp import MetadataChangeProposalWrapper
+from datahub.emitter.rest_emitter import DatahubRestEmitter
 from datahub.ingestion.graph.client import DatahubClientConfig, DataHubGraph
 from datahub.metadata.schema_classes import (
     OtherSchemaClass,
@@ -328,16 +329,6 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
             return Duration.parse_obj(f"P{duration_in_days}D")
 
 
-import datahub.emitter.mce_builder as mce_builder
-import datahub.emitter.mce_builder as builder
-from datahub.api.entities.dataproduct.dataproduct import DataProduct
-from datahub.emitter.mce_builder import make_data_platform_urn, make_dataset_urn
-from datahub.emitter.mcp import MetadataChangeProposalWrapper
-from datahub.emitter.mcp_builder import DatahubKey
-from datahub.emitter.rest_emitter import DatahubRestEmitter
-from datahub.ingestion.graph.client import DatahubClientConfig, DataHubGraph
-
-
 class DataHubCatalogueClient(BaseCatalogueClient):
     """
     Client for pushing metadata to the DataHub catalogue.
@@ -426,7 +417,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         )
         self.graph.emit(metadata_event)
 
-        ## tags
+        # tags
         tags_to_add = mce_builder.make_global_tag_aspect_with_tag_list(
             tags=metadata.tags
         )

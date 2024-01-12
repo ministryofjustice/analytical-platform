@@ -1,5 +1,4 @@
 import json
-from typing import Any
 
 import pytest
 from data_platform_catalogue.client import (
@@ -78,7 +77,7 @@ class TestCatalogueClient:
                 "changeType": "UPSERT",
                 "aspectName": "schemaMetadata",
                 "aspect": {
-                    "value": '{"schemaName": "some-table", "platform": "urn:li:dataPlatform:glue", "version": 1, "created": {"time": 0, "actor": "urn:li:corpuser:unknown"}, "lastModified": {"time": 0, "actor": "urn:li:corpuser:unknown"}, "hash": "", "platformSchema": {"com.linkedin.schema.OtherSchema": {"rawSchema": "__insert raw schema here__"}}, "fields": [{"fieldPath": "foo", "nullable": false, "description": "a", "type": {"type": {"com.linkedin.schema.StringType": {}}}, "nativeDataType": "string", "recursive": false, "isPartOfKey": false}, {"fieldPath": "bar", "nullable": false, "description": "b", "type": {"type": {"com.linkedin.schema.NumberType": {}}}, "nativeDataType": "int", "recursive": false, "isPartOfKey": false}]}',
+                    "value": '{"schemaName": "some-table", "platform": "urn:li:dataPlatform:glue", "version": 1, "created": {"time": 0, "actor": "urn:li:corpuser:unknown"}, "lastModified": {"time": 0, "actor": "urn:li:corpuser:unknown"}, "hash": "", "platformSchema": {"com.linkedin.schema.OtherSchema": {"rawSchema": "__insert raw schema here__"}}, "fields": [{"fieldPath": "foo", "nullable": false, "description": "a", "type": {"type": {"com.linkedin.schema.StringType": {}}}, "nativeDataType": "string", "recursive": false, "isPartOfKey": false}, {"fieldPath": "bar", "nullable": false, "description": "b", "type": {"type": {"com.linkedin.schema.NumberType": {}}}, "nativeDataType": "int", "recursive": false, "isPartOfKey": false}]}',  # noqa E501
                     "contentType": "application/json",
                 },
             }

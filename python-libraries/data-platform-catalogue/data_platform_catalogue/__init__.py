@@ -1,11 +1,11 @@
-from .client import (
+from .client import (  # noqa: F401
     CatalogueError,
-    DataHubCatalogueClient,  # noqa: F401
+    DataHubCatalogueClient,
     OpenMetadataCatalogueClient,
     ReferencedEntityMissing,
 )
-from .entities import (
+from .entities import (  # noqa: F401
     CatalogueMetadata,
-    DataProductMetadata,  # noqa: F401
+    DataProductMetadata,
     TableMetadata,
 )
