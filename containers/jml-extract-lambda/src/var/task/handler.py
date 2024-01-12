@@ -31,7 +31,8 @@ def handler(event, context):
     query = f"""fields detail.data.user_id as `User`, detail.data.user_name as `Employee Email Address`
     | filter detail.data.type = "s"
     | filter detail.data.connection = "github"
-    | stats max(@timestamp) as `Last login date` by "{current_date}" as `Effective Date of Data`, `User`, `Employee Email Address`
+    | stats max(@timestamp) as `Last login date` by "{current_date}" as `Effective Date of Data`, \
+     `User`, `Employee Email Address`
     | sort `Last login date` desc
     """
 
@@ -63,7 +64,7 @@ def handler(event, context):
 
     # Save to Excel
     excel_filename = f"/tmp/jml_extract_{datestamp}.xlsx"
-    dataframe.to_excel(excel_filename, index=False, sheet_name='Data')
+    dataframe.to_excel(excel_filename, index=False, sheet_name="Data")
 
     # Send email notification
     with open(excel_filename, "rb") as f:
