@@ -120,44 +120,44 @@ class BaseCatalogueClient(ABC):
     @abstractmethod
     def create_or_update_database_service(
         self, *args: Any, **kwargs: Any
-    ):  # mypy: ignore-errors
+    ):  # type: ignore[override]
         pass
 
     @abstractmethod
     def create_or_update_database(
         self, *args: Any, **kwargs: Any
-    ):  # mypy: ignore-errors
+    ):  # type: ignore[override]
         pass
 
     @abstractmethod
-    def create_or_update_schema(self, *args: Any, **kwargs: Any):  # mypy: ignore-errors
+    def create_or_update_schema(self, *args: Any, **kwargs: Any):  # type: ignore[override]
         pass
 
     @abstractmethod
     def create_or_update_table(
         self, metadata: TableMetadata, *args: Any, **kwargs: Any
-    ):  # mypy: ignore-errors
+    ):  # type: ignore[override]
         pass
 
-    def delete_database_service(self, *args: Any, **kwargs: Any):  # mypy: ignore-errors
+    def delete_database_service(self, *args: Any, **kwargs: Any):  # type: ignore[override]
         """
         Delete a database service.
         """
         raise NotImplementedError
 
-    def delete_database(self, *args: Any, **kwargs: Any):  # mypy: ignore-errors
+    def delete_database(self, *args: Any, **kwargs: Any):  # type: ignore[override]
         """
         Delete a database.
         """
         raise NotImplementedError
 
-    def delete_schema(self, *args: Any, **kwargs: Any):  # mypy: ignore-errors
+    def delete_schema(self, *args: Any, **kwargs: Any):  # type: ignore[override]
         """
         Delete a schema.
         """
         raise NotImplementedError
 
-    def delete_table(self, *args: Any, **kwargs: Any):  # mypy: ignore-errors
+    def delete_table(self, *args: Any, **kwargs: Any):  # type: ignore[override]
         """
         Delete a table.
         """
