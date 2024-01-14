@@ -23,21 +23,21 @@ __zsh_prompt() {
             fi; \
         fi`'
 
-    # AWS Vault Profile
-    if command -v aws-vault &> /dev/null; then
+    # AWS
+    if command -v aws-sso &> /dev/null; then
       PROMPT+='`\
-          if [[ ${AWS_VAULT} == *"development"* || ${AWS_VAULT} == *"sandbox"* ]]; then \
-            echo -n "[ aws: %{$fg[green]%}${AWS_VAULT}@${AWS_REGION}%{$reset_color%} ] "; \
-          elif [[ ${AWS_VAULT} == *"management"* ]]; then \
-            echo -n "[ aws: %{$fg[yellow]%}${AWS_VAULT}@${AWS_REGION}%{$reset_color%} ] "; \
-          elif [[ ${AWS_VAULT} == *"production"* ]]; then \
-            echo -n "[ aws: %{$fg[red]%}${AWS_VAULT}@${AWS_REGION}%{$reset_color%} ] "; \
-          elif [[ ! -z ${AWS_VAULT} ]]; then \
-            echo -n "[ aws: %{$fg[blue]%}${AWS_VAULT}@${AWS_REGION}%{$reset_color%} ] "; \
+          if [[ ${AWS_SSO_PROFILE} == *"development"* || ${AWS_SSO_PROFILE} == *"sandbox"* ]]; then \
+            echo -n "[ aws: %{$fg[green]%}${AWS_SSO_PROFILE}@${AWS_DEFAULT_REGION}%{$reset_color%} ] "; \
+          elif [[ ${AWS_SSO_PROFILE} == *"management"* ]]; then \
+            echo -n "[ aws: %{$fg[yellow]%}${AWS_SSO_PROFILE}@${AWS_DEFAULT_REGION}%{$reset_color%} ] "; \
+          elif [[ ${AWS_SSO_PROFILE} == *"production"* ]]; then \
+            echo -n "[ aws: %{$fg[red]%}${AWS_SSO_PROFILE}@${AWS_DEFAULT_REGION}%{$reset_color%} ] "; \
+          elif [[ ! -z ${AWS_SSO_PROFILE} ]]; then \
+            echo -n "[ aws: %{$fg[blue]%}${AWS_SSO_PROFILE}@${AWS_DEFAULT_REGION}%{$reset_color%} ] "; \
           fi`'
     fi
 
-    # Kubernetes Context
+    # Kubernetes
     if command -v kubectl &> /dev/null; then
       PROMPT+='`\
           export KUBE_CURRENT_CONTEXT=$(kubectl config current-context 2>/dev/null); \
