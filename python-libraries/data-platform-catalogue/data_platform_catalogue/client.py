@@ -395,7 +395,9 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         """
         raise NotImplementedError
 
-    def create_or_update_table(self, metadata: TableMetadata, platform: str = "glue", version: int = 1):  # type: ignore[override]
+    def create_or_update_table(
+        self, metadata: TableMetadata, platform: str = "glue", version: int = 1
+    ):  # type: ignore[override]
         """
         Define a table (a 'dataset' in DataHub parlance), a 'collection of data'
         (https://datahubproject.io/docs/metadata-modeling/metadata-model#the-core-entities).
