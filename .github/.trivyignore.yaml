@@ -1,5 +1,5 @@
 misconfigurations:
   - id: AVD-DS-0002
     paths:
-      - "containers/daap-python-base/Dockerfile"
+      - "containers/daap-*/Dockerfile"
     statement: Regardless of what is specified in the Dockerfile, AWS lambda will run the function as a non-root user. See https://github.com/aws/aws-lambda-dotnet/discussions/1301
