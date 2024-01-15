@@ -11,6 +11,11 @@ from datahub.emitter.mce_builder import make_data_platform_urn
 from datahub.emitter.mcp import MetadataChangeProposalWrapper
 from datahub.ingestion.graph.client import DatahubClientConfig, DataHubGraph
 from datahub.metadata.schema_classes import (
+    ChangeTypeClass,
+    DataProductAssociationClass,
+    DataProductPropertiesClass,
+    DomainPropertiesClass,
+    DomainsClass,
     OtherSchemaClass,
     SchemaFieldClass,
     SchemaFieldDataTypeClass,
@@ -360,10 +365,12 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         """
         if api_url.endswith("/"):
             api_url = api_url[:-1]
-        if api_url.endswith("/api/gms"):
+        if api_url.endswith("/api/gms") or api_url.endswith(":8080"):
             self.gms_endpoint = api_url
         elif api_url.endswith("/api"):
             self.gms_endpoint = api_url + "/gms"
+        else:
+            raise CatalogueError("api_url is incorrectly formatted")
 
         self.server_config = DatahubClientConfig(
             server=self.gms_endpoint, token=jwt_token
@@ -395,8 +402,86 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         """
         raise NotImplementedError
 
+    def create_domain(
+        self, domain: str, description: str = "", parentDomain: str | None = None
+    ):
+        """Create a Domain, a logical collection of Data assets (Data Products).
+
+        Args:
+            metadata (DataProductMetadata): _description_
+        """
+        domain_properties = DomainPropertiesClass(
+            name=domain, description=description, parentDomain=parentDomain
+        )
+
+        domain_urn = mce_builder.make_domain_urn(domain=domain)
+
+        metadata_event = MetadataChangeProposalWrapper(
+            entityType="domain",
+            changeType=ChangeTypeClass.UPSERT,
+            entityUrn=domain_urn,
+            aspect=domain_properties,
+        )
+        self.graph.emit(metadata_event)
+
+        return domain_urn
+
+    def create_or_update_data_product(self, metadata: DataProductMetadata):
+        """
+        Define a data product. Must belong to a domain
+        """
+        metadata_dict = vars(metadata)
+        version = metadata_dict.pop("version")
+        owner = metadata_dict.pop("owner")
+        tags = metadata_dict.pop("tags")
+
+        name = metadata_dict.pop("name")
+        description = metadata_dict.pop("description")
+
+        data_product_urn = "urn:li:dataProduct:" + "".join(name.split())
+
+        if metadata.domain:
+            domain = metadata_dict.pop("domain")
+            domain_urn = self.graph.get_domain_urn_by_name(domain_name=domain)
+
+            if domain_urn is None:
+                logger.info(f"creating new domain {domain} for {name}")
+                domain_urn = self.create_domain(domain=domain)
+
+            data_product_domain = DomainsClass(domains=[domain_urn])
+            metadata_event = MetadataChangeProposalWrapper(
+                entityType="dataproduct",
+                changeType=ChangeTypeClass.UPSERT,
+                entityUrn=data_product_urn,
+                aspect=data_product_domain,
+            )
+            self.graph.emit(metadata_event)
+            logger.info(f"Data Product {name} associated with domain {domain}")
+
+            data_product_properties = DataProductPropertiesClass(
+                customProperties={key: str(val) for key, val in metadata_dict.items()},
+                description=description,
+                name=name,
+            )
+            metadata_event = MetadataChangeProposalWrapper(
+                entityType="dataproduct",
+                changeType=ChangeTypeClass.UPSERT,
+                entityUrn=data_product_urn,
+                aspect=data_product_properties,
+            )
+            self.graph.emit(metadata_event)
+            logger.info(f"Properties updated for Data Product {name} ")
+
+            return data_product_urn
+        else:
+            raise ReferencedEntityMissing("Data Product must belong to a Domain")
+
     def create_or_update_table(  # type: ignore[override]
-        self, metadata: TableMetadata, platform: str = "glue", version: int = 1
+        self,
+        metadata: TableMetadata,
+        data_product_metadata: DataProductMetadata | None = None,
+        platform: str = "glue",
+        version: int = 1,
     ):
         """
         Define a table (a 'dataset' in DataHub parlance), a 'collection of data'
@@ -447,6 +532,8 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         )
 
         metadata_event = MetadataChangeProposalWrapper(
+            entityType="dataset",
+            changeType=ChangeTypeClass.UPSERT,
             entityUrn=dataset_urn,
             aspect=dataset_schema_properties,
         )
@@ -457,9 +544,48 @@ class DataHubCatalogueClient(BaseCatalogueClient):
                 tags=metadata.tags
             )
             event: MetadataChangeProposalWrapper = MetadataChangeProposalWrapper(
+                entityType="dataset",
+                changeType=ChangeTypeClass.UPSERT,
                 entityUrn=dataset_urn,
                 aspect=tags_to_add,
             )
             self.graph.emit(event)
+
+        if data_product_metadata is not None:
+            data_product_urn = "urn:li:dataProduct:" + "".join(
+                data_product_metadata.name.split()
+            )
+            data_product_exists = self.graph.exists(entity_urn=data_product_urn)
+            if not data_product_exists:
+                data_product_urn = self.create_or_update_data_product(
+                    metadata=data_product_metadata
+                )
+
+            data_product_existing_properties = self.graph.get_aspect(
+                entity_urn=data_product_urn, aspect_type=DataProductPropertiesClass
+            )
+
+            data_product_association = DataProductAssociationClass(
+                destinationUrn=dataset_urn, sourceUrn=data_product_urn
+            )
+
+            if (
+                data_product_existing_properties.assets  # pyright: ignore[reportOptionalMemberAccess]
+                is not None
+            ):
+                assets = data_product_existing_properties.assets.append(  # pyright: ignore[reportOptionalMemberAccess]
+                    data_product_association
+                )
+            else:
+                assets = [data_product_association]
+            data_product_properties = DataProductPropertiesClass(assets=assets)
+
+            metadata_event = MetadataChangeProposalWrapper(
+                entityType="dataproduct",
+                changeType=ChangeTypeClass.UPSERT,
+                entityUrn=data_product_urn,
+                aspect=data_product_properties,
+            )
+            self.graph.emit(metadata_event)
 
         return dataset_urn
