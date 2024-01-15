@@ -123,23 +123,23 @@ class ReferencedEntityMissing(CatalogueError):
 
 class BaseCatalogueClient(ABC):
     @abstractmethod
-    def create_or_update_database_service(
+    def upsert_database_service(
         self, *args: Any, **kwargs: Any
     ):  # type: ignore[override]
         pass
 
     @abstractmethod
-    def create_or_update_database(
+    def upsert_database(
         self, *args: Any, **kwargs: Any
     ):  # type: ignore[override]
         pass
 
     @abstractmethod
-    def create_or_update_schema(self, *args: Any, **kwargs: Any):  # type: ignore[override]
+    def upsert_schema(self, *args: Any, **kwargs: Any):  # type: ignore[override]
         pass
 
     @abstractmethod
-    def create_or_update_table(
+    def upsert_table(
         self, metadata: TableMetadata, *args: Any, **kwargs: Any
     ):  # type: ignore[override]
         pass
@@ -198,7 +198,7 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
         """
         return self.metadata.health_check()
 
-    def create_or_update_database_service(
+    def upsert_database_service(
         self, name: str = "data-platform", display_name: str = "Data platform"
     ) -> str:  # type: ignore[override]
         """
@@ -228,7 +228,7 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
         else:
             raise ReferencedEntityMissing
 
-    def create_or_update_database(
+    def upsert_database(
         self, metadata: CatalogueMetadata | DataProductMetadata, service_fqn: str
     ):  # type: ignore[override]
         """
@@ -244,9 +244,9 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
                 id=metadata.owner, type="user"
             ),  # pyright: ignore[reportGeneralTypeIssues]
         )
-        return self._create_or_update_entity(create_db)
+        return self._upsert_entity(create_db)
 
-    def create_or_update_schema(self, metadata: DataProductMetadata, database_fqn: str):  # type: ignore[override]
+    def upsert_schema(self, metadata: DataProductMetadata, database_fqn: str):  # type: ignore[override]
         """
         Define a database schema.
         There should be one schema per data product and for now flexibility is retained
@@ -264,9 +264,9 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
             retentionPeriod=self._generate_duration(metadata.retention_period_in_days),
             database=database_fqn,
         )
-        return self._create_or_update_entity(create_schema)
+        return self._upsert_entity(create_schema)
 
-    def create_or_update_table(self, metadata: TableMetadata, schema_fqn: str):  # type: ignore[override]
+    def upsert_table(self, metadata: TableMetadata, schema_fqn: str):  # type: ignore[override]
         """
         Define a table.
         There can be many tables per data product.
@@ -290,9 +290,9 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
             databaseSchema=schema_fqn,
             columns=columns,
         )  # pyright: ignore[reportGeneralTypeIssues]
-        return self._create_or_update_entity(create_table)
+        return self._upsert_entity(create_table)
 
-    def _create_or_update_entity(self, data) -> str:
+    def _upsert_entity(self, data) -> str:
         logger.info(f"Creating {data.json()}")
 
         try:
@@ -377,7 +377,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         )
         self.graph = DataHubGraph(self.server_config)
 
-    def create_or_update_database_service(
+    def upsert_database_service(
         self, platform: str = "glue"
     ) -> str:  # type: ignore[override]
         """
@@ -388,7 +388,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
 
         raise NotImplementedError
 
-    def create_or_update_database(
+    def upsert_database(
         self, metadata: CatalogueMetadata | DataProductMetadata, service_fqn: str
     ):  # type: ignore[override]
         """
@@ -396,7 +396,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         """
         raise NotImplementedError
 
-    def create_or_update_schema(self, metadata: DataProductMetadata, database_fqn: str):  # type: ignore[override]
+    def upsert_schema(self, metadata: DataProductMetadata, database_fqn: str):  # type: ignore[override]
         """
         Define a database. Not implemented for DataHub, which uses Data Platforms + Datasets only.
         """
@@ -426,7 +426,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
 
         return domain_urn
 
-    def create_or_update_data_product(self, metadata: DataProductMetadata):
+    def upsert_data_product(self, metadata: DataProductMetadata):
         """
         Define a data product. Must belong to a domain
         """
@@ -476,7 +476,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         else:
             raise ReferencedEntityMissing("Data Product must belong to a Domain")
 
-    def create_or_update_table(  # type: ignore[override]
+    def upsert_table(  # type: ignore[override]
         self,
         metadata: TableMetadata,
         data_product_metadata: DataProductMetadata | None = None,
@@ -557,7 +557,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             )
             data_product_exists = self.graph.exists(entity_urn=data_product_urn)
             if not data_product_exists:
-                data_product_urn = self.create_or_update_data_product(
+                data_product_urn = self.upsert_data_product(
                     metadata=data_product_metadata
                 )
 
