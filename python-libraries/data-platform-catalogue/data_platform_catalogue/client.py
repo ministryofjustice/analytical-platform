@@ -178,7 +178,7 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
     def __init__(
         self,
         jwt_token,
-        api_url: str = "https://catalogue.apps-tools.development.data-platform.service.justice.gov.uk/api",
+        api_url: str,
     ):
         self.server_config = OpenMetadataConnection(
             hostPort=api_url,
@@ -334,34 +334,47 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
 
 
 class DataHubCatalogueClient(BaseCatalogueClient):
-    """
-    Client for pushing metadata to the DataHub catalogue.
+    """Client for pushing metadata to the DataHub catalogue.
 
-    Tables in the catalogue are arranged into the following hierarchy:
-    Data Platform -> Dataset
+    Tables in the DataHub catalogue are arranged into the following hierarchy:
+    DataPlatform -> Dataset
 
-    If there is a problem communicating with the catalogue, methods will raise an instance of
-    CatalogueError.
+    This client uses the General Metadata Service (GMS, https://datahubproject.io/docs/what/gms/)
+    of DataHub to create and update metadata within DataHub. This is implemented in the
+    python SDK as the 'python emitter' - https://datahubproject.io/docs/metadata-ingestion/as-a-library.
+
+    If there is a problem communicating with the catalogue, methods will raise an
+    instance of CatalogueError.
     """
 
     def __init__(
         self,
         jwt_token,
-        api_url: str = "https://datahub.apps-tools.development.data-platform.service.justice.gov.uk/api/gms",
+        api_url: str,
     ):
-        self.gms_endpoint = api_url
+        """Create a connection to the DataHub GMS endpoint for class methods to use.
+
+        Args:
+            jwt_token: client token for interacting with the provided DataHub instance.
+            api_url (str, optional): GMS endpoint for the DataHub instance for the client object.
+        """
+        if api_url.endswith("/"):
+            api_url = api_url[:-1]
+        if api_url.endswith("/api/gms"):
+            self.gms_endpoint = api_url
+        elif api_url.endswith("/api"):
+            self.gms_endpoint = api_url + "/gms"
+
         self.server_config = DatahubClientConfig(
             server=self.gms_endpoint, token=jwt_token
         )
         self.graph = DataHubGraph(self.server_config)
 
     def create_or_update_database_service(
-        self, name: str = "data-platform", display_name: str = "Data platform"
+        self, platform: str = "glue"
     ) -> str:  # type: ignore[override]
         """
-        Define a DataHub 'Data Platform'.
-        We have one service representing the connection to the data platform's internal
-        glue catalogue.
+        Define a DataHub 'Data Platform'. This is a type of connection, e.g. 'hive' or 'glue'.
 
         Returns the fully qualified name of the metadata object in the catalogue.
         """
@@ -382,17 +395,36 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         """
         raise NotImplementedError
 
-    def create_or_update_table(self, metadata: TableMetadata):  # type: ignore[override]
+    def create_or_update_table(self, metadata: TableMetadata, platform: str = "glue", version: int = 1):  # type: ignore[override]
         """
-        Define a table.
-        There can be many tables per data product.
-        columns are expected to be a list of dicts in the format
+        Define a table (a 'dataset' in DataHub parlance), a 'collection of data'
+        (https://datahubproject.io/docs/metadata-modeling/metadata-model#the-core-entities).
+
+        There can be many tables per Data Product.
+
+        Columns are expected to be a list of dicts in the format
             {"name": "column1", "type": "string", "description": "just an example"}
+
+        This method creates a schemaMetadata aspect object from the metadata object
+        (https://datahubproject.io/docs/generated/metamodel/entities/dataset/#schemametadata)
+        together with generating a unique reference name (URN) for the dataset used by DataHub.
+        These are then emitted to the rest.li api as a dataset creation/update event proposal.
+
+        If tags are present in the metadata object, a second request is made to update the dataset
+        with these tags as a separate aspect.
+
+        Args:
+            metadata (TableMetadata): metadata object.
+            platform (str, optional): DataHub data platform type. Defaults to "glue".
+            version (int, optional): Defaults to 1.
+
+        Returns:
+            dataset_urn: the dataset URN
         """
         dataset_schema_properties = SchemaMetadataClass(
             schemaName=metadata.name,
-            platform=make_data_platform_urn("glue"),
-            version=1,
+            platform=make_data_platform_urn(platform=platform),
+            version=version,
             hash="",
             platformSchema=OtherSchemaClass(rawSchema="__insert raw schema here__"),
             fields=[
@@ -409,7 +441,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         )
 
         dataset_urn = mce_builder.make_dataset_urn(
-            platform="glue", name=f"{metadata.name}", env="PROD"
+            platform=platform, name=f"{metadata.name}", env="PROD"
         )
 
         metadata_event = MetadataChangeProposalWrapper(
@@ -418,14 +450,14 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         )
         self.graph.emit(metadata_event)
 
-        # tags
-        tags_to_add = mce_builder.make_global_tag_aspect_with_tag_list(
-            tags=metadata.tags
-        )
-        event: MetadataChangeProposalWrapper = MetadataChangeProposalWrapper(
-            entityUrn=dataset_urn,
-            aspect=tags_to_add,
-        )
-        self.graph.emit(event)
+        if metadata.tags:
+            tags_to_add = mce_builder.make_global_tag_aspect_with_tag_list(
+                tags=metadata.tags
+            )
+            event: MetadataChangeProposalWrapper = MetadataChangeProposalWrapper(
+                entityUrn=dataset_urn,
+                aspect=tags_to_add,
+            )
+            self.graph.emit(event)
 
         return dataset_urn

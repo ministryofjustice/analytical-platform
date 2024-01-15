@@ -351,17 +351,18 @@ class TestCatalogueClient:
         )
 
         assert requests_mock.called
-        assert aspects_count == 2
+        if table.tags:
+            assert aspects_count == 2
+            response_json = requests_mock.request_history[-2].json()
+            assert requests_mock.last_request.json()["proposal"]["entityUrn"] == fqn_out
+        else:
+            assert aspects_count == 1
+            response_json = requests_mock.last_request.json()
         assert (
-            json.loads(
-                requests_mock.request_history[-2].json()["proposal"]["aspect"]["value"]
-            )["schemaName"]
+            json.loads(response_json["proposal"]["aspect"]["value"])["schemaName"]
             == "my_table"
         )
-        assert (
-            requests_mock.request_history[-2].json()["proposal"]["entityUrn"] == fqn_out
-        )
-        assert requests_mock.last_request.json()["proposal"]["entityUrn"] == fqn_out
+        assert response_json["proposal"]["entityUrn"] == fqn_out
         assert fqn == fqn_out
 
     def test_404_handling_omd(self, request, omd_client, requests_mock, table):
