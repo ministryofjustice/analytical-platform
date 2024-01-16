@@ -172,7 +172,7 @@ class TestCatalogueClient:
             json=self.mock_service_response("some-service"),
         )
 
-        fqn = omd_client.create_or_update_database_service()
+        fqn = omd_client.upsert_database_service()
 
         assert requests_mock.last_request.json() == {
             "name": "data-platform",
@@ -188,7 +188,7 @@ class TestCatalogueClient:
             json=self.mock_database_response("some-db"),
         )
 
-        fqn: str = omd_client.create_or_update_database(
+        fqn: str = omd_client.upsert_database(
             metadata=catalogue, service_fqn="data-platform"
         )
         assert requests_mock.last_request.json() == {
@@ -222,7 +222,7 @@ class TestCatalogueClient:
             json=self.mock_schema_response("some-schema"),
         )
 
-        fqn = omd_client.create_or_update_schema(
+        fqn = omd_client.upsert_schema(
             metadata=data_product, database_fqn="data-product"
         )
         assert requests_mock.last_request.json() == {
@@ -267,7 +267,7 @@ class TestCatalogueClient:
             json=self.mock_table_response_omd(),
         )
 
-        fqn = omd_client.create_or_update_table(
+        fqn = omd_client.upsert_table(
             metadata=table, schema_fqn="data-platform.data-product.schema"
         )
         assert requests_mock.called
@@ -340,7 +340,7 @@ class TestCatalogueClient:
         )
 
         # this method makes 2 calls to 'graph.emit()', first is to update dataset, second is to update tags
-        fqn = datahub_client.create_or_update_table(metadata=table)
+        fqn = datahub_client.upsert_table(metadata=table)
         fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)"
 
         aspects_count = sum(
@@ -373,7 +373,7 @@ class TestCatalogueClient:
         )
 
         with pytest.raises(ReferencedEntityMissing):
-            omd_client.create_or_update_table(
+            omd_client.upsert_table(
                 metadata=table, schema_fqn="data-platform.data-product.schema"
             )
 
@@ -385,7 +385,7 @@ class TestCatalogueClient:
         )
 
         with pytest.raises(OperationalError):
-            datahub_client.create_or_update_table(metadata=table)
+            datahub_client.upsert_table(metadata=table)
 
     def test_get_user_id(self, request, requests_mock, omd_client):
         requests_mock.get(

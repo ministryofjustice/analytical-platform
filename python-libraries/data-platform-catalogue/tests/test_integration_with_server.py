@@ -22,7 +22,7 @@ runs_on_development_server = pytest.mark.skipif("not jwt_token or not api_url")
 
 
 @runs_on_development_server
-def test_create_or_update_test_hierarchy():
+def test_upsert_test_hierarchy():
     client = OpenMetadataCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
     assert client.is_healthy()
@@ -59,18 +59,18 @@ def test_create_or_update_test_hierarchy():
         retention_period_in_days=365,
     )
 
-    service_fqn = client.create_or_update_database_service(name="data_platform")
+    service_fqn = client.upsert_database_service(name="data_platform")
     assert service_fqn == "data_platform"
 
-    database_fqn = client.create_or_update_database(
+    database_fqn = client.upsert_database(
         metadata=data_product, service_fqn=service_fqn
     )
     assert database_fqn == "data_platform.my_data_product"
 
-    schema_fqn = client.create_or_update_schema(
+    schema_fqn = client.upsert_schema(
         metadata=data_product_schema, database_fqn=database_fqn
     )
     assert schema_fqn == "data_platform.my_data_product.Tables"
 
-    table_fqn = client.create_or_update_table(metadata=table, schema_fqn=schema_fqn)
+    table_fqn = client.upsert_table(metadata=table, schema_fqn=schema_fqn)
     assert table_fqn == "data_platform.my_data_product.Tables.my_table"

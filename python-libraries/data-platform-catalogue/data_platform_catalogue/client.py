@@ -129,9 +129,7 @@ class BaseCatalogueClient(ABC):
         pass
 
     @abstractmethod
-    def upsert_database(
-        self, *args: Any, **kwargs: Any
-    ):  # type: ignore[override]
+    def upsert_database(self, *args: Any, **kwargs: Any):  # type: ignore[override]
         pass
 
     @abstractmethod
@@ -431,9 +429,9 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         Define a data product. Must belong to a domain
         """
         metadata_dict = vars(metadata)
-        version = metadata_dict.pop("version")
-        owner = metadata_dict.pop("owner")
-        tags = metadata_dict.pop("tags")
+        metadata_dict.pop("version")
+        metadata_dict.pop("owner")
+        metadata_dict.pop("tags")
 
         name = metadata_dict.pop("name")
         description = metadata_dict.pop("description")
