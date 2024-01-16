@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.1.1] - 2023-01-10
+
+### Changed
+
+- Add logic to copy data to new tables after a schema gets deleted.
+
+## [8.0.1] - 2023-01-08
+
+### Changed
+
+- Added map to convert `float` to `real` when creating Athena sql queries.
+
 ## [8.0.0] - 2024-01-04
 
 ### Changed
