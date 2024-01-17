@@ -8,7 +8,6 @@ from data_platform_catalogue.entities import (
     DataProductMetadata,
     TableMetadata,
 )
-from tests.test_helpers.mce_helpers import check_golden_file
 
 
 class TestCatalogueClientWithOMD:

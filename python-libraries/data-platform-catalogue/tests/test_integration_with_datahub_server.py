@@ -32,17 +32,17 @@ def test_upsert_test_hierarchy():
         retention_period_in_days=365,
         domain="Sample",
         dpia_required=False,
-        tags=["test"],
     )
 
     table = TableMetadata(
-        name="my_table2",
+        name="my_data_product2.my_table3",
         description="bla bla",
         column_details=[
             {"name": "foo", "type": "string", "description": "a"},
             {"name": "bar", "type": "int", "description": "b"},
         ],
         retention_period_in_days=365,
+        tags=["test"],
     )
 
     table_fqn = client.upsert_table(
@@ -50,7 +50,10 @@ def test_upsert_test_hierarchy():
         data_product_metadata=data_product,
         platform="glue",
     )
-    assert table_fqn == "urn:li:dataset:(urn:li:dataPlatform:glue,my_table2,PROD)"
+    assert (
+        table_fqn
+        == "urn:li:dataset:(urn:li:dataPlatform:glue,my_data_product2.my_table3,PROD)"
+    )
 
     # Ensure data went through
     assert client.graph.get_aspect(table_fqn, DatasetPropertiesClass)
