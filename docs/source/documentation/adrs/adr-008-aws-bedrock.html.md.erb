@@ -1,0 +1,38 @@
+---
+owner_slack: "#data-platform-notifications"
+title: ADR-008 AWS Bedrock
+last_reviewed_on: 2024-01-17
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+## Status
+
+🤔 Proposed
+
+## Context
+
+Our users want to explore and leverage [large language model](https://en.wikipedia.org/wiki/Large_language_model) (LLM)for various use cases.
+Our platform lacks the resources required to run these models.
+
+## Decision
+
+We will offer [Amazon Bedrock](https://aws.amazon.com/bedrock/) to our users.
+Amazon Bedrock is fully managed [large language model](https://en.wikipedia.org/wiki/Large_language_model) (LLM) which offers many foundation models which be customised privately using techniques such as fine tuning and [retrieval-augmented generation (RAG)](https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-customize-rag.html)
+
+## Consequences
+
+### General consequences
+
+* Bedrock provides pre-trained models with limited ability to customise or tune the models
+* Bedrock pricing is based on usage and can vary significantly month-to-month depending on your application's traffic and costs could spike unexpectedly. Usage is metered and billed per inference request based on factors like model used, input length, and response length
+* Bedrock models are accessed via an API using AWS authentication keys
+
+### Advantages
+
+* Serverless access to large language models meaning that our platform and users don't need to manage and maintain infrastructure
+
+### Disadvantages
+
+* Limited model selection, Bedrock offers a few pre-trained models and new models can take time to reach all AWS regions

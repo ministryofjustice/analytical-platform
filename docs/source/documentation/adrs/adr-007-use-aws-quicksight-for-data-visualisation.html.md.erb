@@ -1,0 +1,42 @@
+---
+owner_slack: "#data-platform-notifications"
+title: ADR-007 Use AWS QuickSight-for-data-visualisation
+last_reviewed_on: 2024-01-17
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+## Status
+
+🤔 Proposed
+
+## Context
+
+We do not offer a managed data visualisation and reporting tool. Users need to build and run these applications themselves using [R](https://en.wikipedia.org/wiki/R_(programming_language)) or [Python](https://en.wikipedia.org/wiki/Python_(programming_language)). [PowerBI](https://en.wikipedia.org/wiki/Microsoft_Power_BI) comes part of our Microsoft 365 subscription, but connecting to data on our platform requires additional [infrastructure(https://docs.aws.amazon.com/whitepapers/latest/using-power-bi-with-aws-cloud/connecting-the-microsoft-power-bi-service-to-aws-data-sources.html)].
+
+ If we were to offer AWS QuickSight to the Platform, can enable teams to have a choice of a managed dashboard which seamlessly integrates with AWS data sources e.g. Amazon Redshift, Amazon RDS and Amazon S3.
+
+## Decision
+
+We will offer AWS QuickSight to our users. QuickSight is fully managed and can be integrated into our identity management system.
+
+## Consequences
+
+### General consequences
+
+* Users can build and share dashboards from data stored on our platform
+* Operates on a pay-as-you-go [pricing](https://aws.amazon.com/quicksight/pricing/) model, which means we are billed based on actual usage
+* We won't need to produce extensive documentation to support as AWS provides many resources for creating charts
+* We will need to start a QuickSight community for users to help and share their experiences and knowledge to reduce our support burden
+* QuickSight is designed to be user-friendly, but users might face issues when dealing with more advanced or complex use cases.
+* While QuickSight allows for customisation, it may have limitations in terms of the extent to which users can customise and tailor the platform to their specific needs
+
+### Advantages
+
+* Serverless BI service, meaning we do not need to patch or maintain. [Security and compliance](https://docs.aws.amazon.com/quicksight/latest/user/QS-compliance.html) are maintained by AWS
+* User friendly interface and extensive online training materials
+
+### Disadvantages
+
+* Creating [dashboards as code](https://github.com/aws-samples/amazon-quicksight-assets-as-code-sample) does not support all QuickSight resources and visual types

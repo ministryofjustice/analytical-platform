@@ -1,0 +1,13 @@
+gource  --title "Data Platform Repo unwrapped" --camera-mode track --seconds-per-day 0.1 --user-image-dir ./pics --hide filenames --auto-skip-seconds 1  gource.mp4
+
+
+
+gource --hide dirnames,filenames --seconds-per-day 0.1 --auto-skip-seconds 1 -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 gource.mp4
+
+
+gource --title "Data Platform Repo unwrapped" --camera-mode track --seconds-per-day 0.1 --user-image-dir ./pics --hide dirnames,filenames --seconds-per-day 0.1 --auto-skip-seconds 1 -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 gource.mp4
+
+gource --title "Data Platform Repo unwrapped" --camera-mode track --user-image-dir ./pics --hide dirnames,filenames --seconds-per-day 0.1 --auto-skip-seconds 1 -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 gource.mp4
+
+gource --title "Data Platform Github contributions" --camera-mode overview --user-image-dir ./pics --hide dirnames,filenames --seconds-per-day 0.1 --auto-skip-seconds 1 -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 gource.mp4
+
