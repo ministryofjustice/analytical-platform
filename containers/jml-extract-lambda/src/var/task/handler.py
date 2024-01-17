@@ -15,11 +15,12 @@ def handler(event, context):
     EMAIL_SECRET = os.environ["EMAIL_SECRET"]
     TEMPLATE_ID = os.environ["TEMPLATE_ID"]
 
-    notifications_client = NotificationsAPIClient(api_key)
     secrets_client = boto3.client("secretsmanager")
 
     response = secrets_client.get_secret_value(SecretId=SECRET_ID)
     api_key = response["SecretString"]
+
+    notifications_client = NotificationsAPIClient(api_key)
 
     response = secrets_client.get_secret_value(SecretId=EMAIL_SECRET)
     email_address = response["SecretString"]
