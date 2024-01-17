@@ -16,9 +16,6 @@ from data_platform_catalogue.entities import (
 )
 from datahub.api.entities.dataproduct.dataproduct import DataProduct
 from datahub.configuration.common import OperationalError
-from datahub.ingestion.graph.client import DataHubGraph
-from datahub.metadata.schema_classes import DomainPropertiesClass
-from datahub.testing.compare_metadata_json import diff_metadata_json, load_json_file
 from freezegun import freeze_time
 from tests.test_helpers.graph_helpers import MockDataHubGraph
 from tests.test_helpers.mce_helpers import check_golden_file

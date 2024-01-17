@@ -214,7 +214,9 @@ def _get_mcp_urn_path_spec() -> List[str]:
 def assert_mce_entity_urn(
     filter: str, entity_type: str, regex_pattern: str, file: str
 ) -> int:
-    """Assert that all mce entity urns must match the regex pattern passed in. Return the number of events matched"""
+    """Assert that all mce entity urns must match the regex pattern passed in.
+
+    Return the number of events matched"""
 
     test_output = load_json_file(file)
     if isinstance(test_output, list):
@@ -285,7 +287,7 @@ def assert_for_each_entity(
             for f in aspect_field_matcher:
                 assert aspect_field_matcher[f] == _get_element(
                     aspect_val, [f]
-                ), f"urn: {urn} -> Field {f} must match value {aspect_field_matcher[f]}, found {_get_element(aspect_val, [f])}"
+                ), f"urn: {urn} -> Field {f} must match value {aspect_field_matcher[f]}, found {_get_element(aspect_val, [f])}"  # noqa: E501
             success.append(urn)
         elif urn not in exception_urns:
             print(f"Adding {urn} to failures")
@@ -346,13 +348,15 @@ def assert_entity_mcp_aspect(
             for f in aspect_field_matcher:
                 assert aspect_field_matcher[f] == _get_element(
                     aspect_val, [f]
-                ), f"urn: {mcp.entityUrn} -> Field {f} must match value {aspect_field_matcher[f]}, found {_get_element(aspect_val, [f])}"
+                ), f"urn: {mcp.entityUrn} -> Field {f} must match value {aspect_field_matcher[f]}, found {_get_element(aspect_val, [f])}"  # noqa: E501
                 matches = matches + 1
     return matches
 
 
 def assert_entity_urn_not_like(entity_type: str, regex_pattern: str, file: str) -> int:
-    """Assert that there are no entity urns that match the regex pattern passed in. Returns the total number of events in the file"""
+    """Assert that there are no entity urns that match the regex pattern passed in.
+
+    Returns the total number of events in the file"""
 
     # TODO: Refactor common code with assert_entity_urn_like.
     test_output = load_json_file(file)
@@ -381,7 +385,9 @@ def assert_entity_urn_not_like(entity_type: str, regex_pattern: str, file: str) 
 
 
 def assert_entity_urn_like(entity_type: str, regex_pattern: str, file: str) -> int:
-    """Assert that there exist entity urns that match the regex pattern passed in. Returns the total number of events in the file"""
+    """Assert that there exist entity urns that match the regex pattern passed in.
+
+    Returns the total number of events in the file"""
 
     test_output = load_json_file(file)
     assert isinstance(test_output, list)
