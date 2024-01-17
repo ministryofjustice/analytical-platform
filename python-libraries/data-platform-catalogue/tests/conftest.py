@@ -1,12 +1,9 @@
-import difflib
 from pathlib import Path
 from typing import Any, Dict
 
 import pytest
 from datahub.metadata.schema_classes import DomainPropertiesClass
-from freezegun import freeze_time
 from tests.test_helpers.graph_helpers import MockDataHubGraph
-from tests.test_helpers.mce_helpers import check_golden_file
 
 FROZEN_TIME = "2023-04-14 07:00:00"
 
@@ -30,8 +27,8 @@ def base_mock_graph(
 
 
 @pytest.fixture
-def test_resources_dir(pytestconfig: pytest.Config) -> Path:
-    return pytestconfig.rootpath / "tests/gold_copies"
+def test_snapshots_dir(pytestconfig: pytest.Config) -> Path:
+    return pytestconfig.rootpath / "tests/snapshots"
 
 
 def pytest_addoption(parser):

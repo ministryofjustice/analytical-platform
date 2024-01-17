@@ -1,7 +1,6 @@
 import difflib
 import json
 from pathlib import Path
-from typing import Any, Dict
 
 import pytest
 from data_platform_catalogue.client import (
@@ -51,14 +50,14 @@ def check_yaml_golden_file(input_file: str, golden_file: str) -> bool:
 )
 def test_dataproduct_from_yaml(
     pytestconfig: pytest.Config,
-    test_resources_dir: Path,
+    test_snapshots_dir: Path,
     tmp_path: Path,
     base_mock_graph: MockDataHubGraph,
     data_product_filename: str,
     upsert: bool,
     golden_filename: str,
 ) -> None:
-    data_product_file = test_resources_dir / data_product_filename
+    data_product_file = test_snapshots_dir / data_product_filename
     mock_graph = base_mock_graph
     data_product = DataProduct.from_yaml(data_product_file, mock_graph)
     assert data_product._resolved_domain_urn == "urn:li:domain:12345"
@@ -70,19 +69,19 @@ def test_dataproduct_from_yaml(
 
     output_file = Path(tmp_path / "test_dataproduct_out.json")
     mock_graph.sink_to_file(output_file)
-    golden_file = Path(test_resources_dir / golden_filename)
+    golden_file = Path(test_snapshots_dir / golden_filename)
     check_golden_file(pytestconfig, output_file, golden_file)
 
 
 @freeze_time(FROZEN_TIME)
 def test_dataproduct_from_datahub(
     pytestconfig: pytest.Config,
-    test_resources_dir: Path,
+    test_snapshots_dir: Path,
     tmp_path: Path,
     base_mock_graph: MockDataHubGraph,
 ) -> None:
     mock_graph = base_mock_graph
-    golden_file = Path(test_resources_dir / "golden_dataproduct_out.json")
+    golden_file = Path(test_snapshots_dir / "golden_dataproduct_out.json")
     mock_graph.import_file(golden_file)
 
     data_product: DataProduct = DataProduct.from_datahub(
@@ -99,7 +98,7 @@ def test_dataproduct_from_datahub(
 
     output_file = Path(tmp_path / "test_dataproduct_to_datahub_out.json")
     mock_graph.sink_to_file(output_file)
-    golden_file = Path(test_resources_dir / "golden_dataproduct_out.json")
+    golden_file = Path(test_snapshots_dir / "golden_dataproduct_out.json")
     check_golden_file(pytestconfig, output_file, golden_file)
 
 
