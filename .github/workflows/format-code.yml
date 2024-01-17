@@ -1,0 +1,14 @@
+name: code-formatter
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  format-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ministryofjustice/github-actions/code-formatter@v14
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
