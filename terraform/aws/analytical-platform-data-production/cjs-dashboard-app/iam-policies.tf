@@ -19,7 +19,7 @@ module "cjs_dashboard_app_iam_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.33.0"
 
-  name_prefix = "cjs-dashboard-app"
+  name_prefix = "github-cjs-dashboard-app"
 
   policy = data.aws_iam_policy_document.cjs_dashboard_app.json
 }
