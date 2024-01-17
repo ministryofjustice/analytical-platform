@@ -10,11 +10,8 @@ poetry run pytest tests/test_integration_with_server.py
 import os
 
 import pytest
-from data_platform_catalogue import (
-    DataHubCatalogueClient,
-    DataProductMetadata,
-    TableMetadata,
-)
+from data_platform_catalogue import DataProductMetadata, TableMetadata
+from data_platform_catalogue.client import DataHubCatalogueClient
 from datahub.metadata.schema_classes import DatasetPropertiesClass, SchemaMetadataClass
 
 jwt_token = os.environ.get("JWT_TOKEN")
@@ -27,7 +24,7 @@ def test_upsert_test_hierarchy():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
     data_product = DataProductMetadata(
-        name="my_data_product",
+        name="my_data_product2",
         description="bla bla",
         version="v1.0.0",
         owner="7804c127-d677-4900-82f9-83517e51bb94",
@@ -35,10 +32,11 @@ def test_upsert_test_hierarchy():
         retention_period_in_days=365,
         domain="Sample",
         dpia_required=False,
+        tags=["test"],
     )
 
     table = TableMetadata(
-        name="my_table",
+        name="my_table2",
         description="bla bla",
         column_details=[
             {"name": "foo", "type": "string", "description": "a"},
@@ -52,7 +50,7 @@ def test_upsert_test_hierarchy():
         data_product_metadata=data_product,
         platform="glue",
     )
-    assert table_fqn == "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)"
+    assert table_fqn == "urn:li:dataset:(urn:li:dataPlatform:glue,my_table2,PROD)"
 
     # Ensure data went through
     assert client.graph.get_aspect(table_fqn, DatasetPropertiesClass)

@@ -13,6 +13,7 @@ from datahub.metadata.schema_classes import (
     ChangeTypeClass,
     DataProductAssociationClass,
     DataProductPropertiesClass,
+    DatasetPropertiesClass,
     DomainPropertiesClass,
     DomainsClass,
     OtherSchemaClass,
@@ -207,6 +208,21 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         Returns:
             dataset_urn: the dataset URN
         """
+        dataset_urn = mce_builder.make_dataset_urn(
+            platform=platform, name=f"{metadata.name}", env="PROD"
+        )
+
+        dataset_properties = DatasetPropertiesClass(
+            description=metadata.description,
+            # customProperties={"dpia_required": "yes"},
+        )
+
+        metadata_event = MetadataChangeProposalWrapper(
+            entityUrn=dataset_urn,
+            aspect=dataset_properties,
+        )
+        self.graph.emit(metadata_event)
+
         dataset_schema_properties = SchemaMetadataClass(
             schemaName=metadata.name,
             platform=make_data_platform_urn(platform=platform),
@@ -224,10 +240,6 @@ class DataHubCatalogueClient(BaseCatalogueClient):
                 )
                 for column in metadata.column_details
             ],
-        )
-
-        dataset_urn = mce_builder.make_dataset_urn(
-            platform=platform, name=f"{metadata.name}", env="PROD"
         )
 
         metadata_event = MetadataChangeProposalWrapper(
