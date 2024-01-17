@@ -424,7 +424,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         """
         Define a data product. Must belong to a domain
         """
-        metadata_dict = vars(metadata)
+        metadata_dict = dict(metadata.__dict__)
         metadata_dict.pop("version")
         metadata_dict.pop("owner")
         metadata_dict.pop("tags")
@@ -550,6 +550,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
                 data_product_metadata.name.split()
             )
             data_product_exists = self.graph.exists(entity_urn=data_product_urn)
+
             if not data_product_exists:
                 data_product_urn = self.upsert_data_product(
                     metadata=data_product_metadata
@@ -564,10 +565,10 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             )
 
             if (
-                data_product_existing_properties.assets  # pyright: ignore[reportOptionalMemberAccess]
-                is not None
+                data_product_existing_properties is not None
+                and data_product_existing_properties.assets is not None
             ):
-                assets = data_product_existing_properties.assets.append(  # pyright: ignore[reportOptionalMemberAccess]
+                assets = data_product_existing_properties.assets.append(
                     data_product_association
                 )
             else:
