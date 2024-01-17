@@ -1,31 +1,10 @@
 import logging
 from abc import ABC, abstractmethod
-from enum import Enum, auto
 from typing import Any
 
 from ..entities import TableMetadata
 
 logger = logging.getLogger(__name__)
-
-
-class ClientName(Enum):
-    OPENMETADATA = auto()
-    DATAHUB = auto()
-
-    @classmethod
-    def __contains__(cls, item):
-        return item in cls.__members__.values()
-
-    @classmethod
-    def from_string(cls, string: str):
-        s = ("".join(filter(str.isalpha, string))).upper()
-
-        if "OPENMETADATA" in s:
-            return cls["OPENMETADATA"]
-        elif "DATAHUB" in s:
-            return cls["DATAHUB"]
-        else:
-            raise ValueError(f"Cannot infer client name from given string: {string}")
 
 
 class CatalogueError(Exception):
