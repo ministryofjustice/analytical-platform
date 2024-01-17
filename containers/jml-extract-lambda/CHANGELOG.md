@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2024-01-17
+
+### Changed
+
+- Updated ECR repository name
+
 ## [1.0.0] - 2023-09-12
 
 ### Added
