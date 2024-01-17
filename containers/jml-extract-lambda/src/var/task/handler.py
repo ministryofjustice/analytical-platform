@@ -11,9 +11,9 @@ from notifications_python_client.notifications import NotificationsAPIClient
 def handler(event, context):
     # Constants
     SECRET_ID = os.environ["SECRET_ID"]
-    LOG_GROUP_NAMES = os.environ.["LOG_GROUP_NAMES"]
+    LOG_GROUP_NAMES = os.environ["LOG_GROUP_NAMES"]
     EMAIL_SECRET = os.environ["EMAIL_SECRET"]
-    TEMPLATE_ID = os.environ.get["TEMPLATE_ID"]
+    TEMPLATE_ID = os.environ["TEMPLATE_ID"]
 
     boto3.setup_default_session(region_name=AWS_REGION)
     secrets_client = boto3.client("secretsmanager")
