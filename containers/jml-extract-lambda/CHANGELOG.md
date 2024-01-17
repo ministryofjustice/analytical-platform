@@ -14,12 +14,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - initial implementation of lambda function for extracting JML data on a schedule
-
-### Changed
-
-- Everything, or nothing, depending on your point of view.
-
-### To Do
-
-- Implement Unit Tests(?)
-- Finalise output bucket
