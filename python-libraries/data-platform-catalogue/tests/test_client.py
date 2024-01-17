@@ -1,4 +1,3 @@
-import difflib
 import json
 from pathlib import Path
 
@@ -20,23 +19,6 @@ from tests.test_helpers.graph_helpers import MockDataHubGraph
 from tests.test_helpers.mce_helpers import check_golden_file
 
 FROZEN_TIME = "2023-04-14 07:00:00"
-
-
-def check_yaml_golden_file(input_file: str, golden_file: str) -> bool:
-    with open(input_file) as input:
-        input_lines = input.readlines()
-
-    with open(golden_file) as golden:
-        golden_lines = golden.readlines()
-
-    diff_exists = False
-    for line in difflib.unified_diff(
-        input_lines, golden_lines, fromfile=input_file, tofile=golden_file, lineterm=""
-    ):
-        print(line)
-        diff_exists = True
-
-    return diff_exists
 
 
 @freeze_time(FROZEN_TIME)
