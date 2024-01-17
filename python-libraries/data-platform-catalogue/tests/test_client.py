@@ -143,7 +143,7 @@ class TestCatalogueClient:
 
     def mock_table_response_omd(self):
         return {
-            "fullyQualifiedName": "some-table",
+            "fullyQualifiedName": "my_table",
             "id": "39b855e3-84a5-491e-b9a5-c411e626e340",
             "name": "foo",
             "service": {
@@ -165,11 +165,11 @@ class TestCatalogueClient:
         response = {
             "proposal": {
                 "entityType": "dataset",
-                "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,some-table,PROD)",
+                "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)",
                 "changeType": "UPSERT",
                 "aspectName": "schemaMetadata",
                 "aspect": {
-                    "value": '{"schemaName": "some-table", "platform": "urn:li:dataPlatform:glue", "version": 1, "created": {"time": 0, "actor": "urn:li:corpuser:unknown"}, "lastModified": {"time": 0, "actor": "urn:li:corpuser:unknown"}, "hash": "", "platformSchema": {"com.linkedin.schema.OtherSchema": {"rawSchema": "__insert raw schema here__"}}, "fields": [{"fieldPath": "foo", "nullable": false, "description": "a", "type": {"type": {"com.linkedin.schema.StringType": {}}}, "nativeDataType": "string", "recursive": false, "isPartOfKey": false}, {"fieldPath": "bar", "nullable": false, "description": "b", "type": {"type": {"com.linkedin.schema.NumberType": {}}}, "nativeDataType": "int", "recursive": false, "isPartOfKey": false}]}',  # noqa E501
+                    "value": '{"schemaName": "my_table", "platform": "urn:li:dataPlatform:glue", "version": 1, "created": {"time": 0, "actor": "urn:li:corpuser:unknown"}, "lastModified": {"time": 0, "actor": "urn:li:corpuser:unknown"}, "hash": "", "platformSchema": {"com.linkedin.schema.OtherSchema": {"rawSchema": "__insert raw schema here__"}}, "fields": [{"fieldPath": "foo", "nullable": false, "description": "a", "type": {"type": {"com.linkedin.schema.StringType": {}}}, "nativeDataType": "string", "recursive": false, "isPartOfKey": false}, {"fieldPath": "bar", "nullable": false, "description": "b", "type": {"type": {"com.linkedin.schema.NumberType": {}}}, "nativeDataType": "int", "recursive": false, "isPartOfKey": false}]}',  # noqa E501
                     "contentType": "application/json",
                 },
             }
@@ -208,7 +208,7 @@ class TestCatalogueClient:
     @pytest.fixture
     def table(self):
         return TableMetadata(
-            name="some-table",
+            name="my_table",
             description="bla bla",
             column_details=[
                 {"name": "foo", "type": "string", "description": "a"},
@@ -423,7 +423,7 @@ class TestCatalogueClient:
             "sourceUrl": None,
             "fileFormat": None,
         }
-        assert fqn == "some-table"
+        assert fqn == "my_table"
 
     def test_create_table_datahub(self, request, datahub_client, requests_mock, table):
         requests_mock.post(
@@ -433,7 +433,7 @@ class TestCatalogueClient:
 
         # this method makes 2 calls to 'graph.emit()', first is to update dataset, second is to update tags
         fqn = datahub_client.upsert_table(metadata=table)
-        fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,some-table,PROD)"
+        fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)"
 
         aspects_count = sum(
             [
@@ -452,7 +452,7 @@ class TestCatalogueClient:
             response_json = requests_mock.last_request.json()
         assert (
             json.loads(response_json["proposal"]["aspect"]["value"])["schemaName"]
-            == "some-table"
+            == "my_table"
         )
         assert response_json["proposal"]["entityUrn"] == fqn_out
         assert fqn == fqn_out
