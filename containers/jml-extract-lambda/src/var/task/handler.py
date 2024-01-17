@@ -10,11 +10,10 @@ from notifications_python_client.notifications import NotificationsAPIClient
 
 def handler(event, context):
     # Constants
-    AWS_REGION = "eu-west-2"
-    SECRET_ID = "gov-uk-notify/production/api-key"
-    LOG_GROUP_NAMES = ["/aws/events/auth0/alpha-analytics-moj"]
-    EMAIL_SECRET = "jml/email"
-    TEMPLATE_ID = "de618989-db86-4d9a-aa55-4724d5485fa5"
+    SECRET_ID = os.environ["SECRET_ID"]
+    LOG_GROUP_NAMES = os.environ.["LOG_GROUP_NAMES"]
+    EMAIL_SECRET = os.environ["EMAIL_SECRET"]
+    TEMPLATE_ID = os.environ.get["TEMPLATE_ID"]
 
     boto3.setup_default_session(region_name=AWS_REGION)
     secrets_client = boto3.client("secretsmanager")
