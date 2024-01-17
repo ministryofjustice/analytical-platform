@@ -1,4 +1,7 @@
+import difflib
 import json
+from pathlib import Path
+from typing import Any, Dict
 
 import pytest
 from data_platform_catalogue.client import (
@@ -11,25 +14,16 @@ from data_platform_catalogue.entities import (
     DataProductMetadata,
     TableMetadata,
 )
-from datahub.configuration.common import OperationalError
-from datahub.testing.compare_metadata_json import
-from datahub.ingestion.graph.client import DataHubGraph
-
-import difflib
-from pathlib import Path
-from typing import Any, Dict
-
-import pytest
-from freezegun import freeze_time
-
 from datahub.api.entities.dataproduct.dataproduct import DataProduct
+from datahub.configuration.common import OperationalError
+from datahub.ingestion.graph.client import DataHubGraph
 from datahub.metadata.schema_classes import DomainPropertiesClass
+from datahub.testing.compare_metadata_json import diff_metadata_json, load_json_file
+from freezegun import freeze_time
 from tests.test_helpers.graph_helpers import MockDataHubGraph
 from tests.test_helpers.mce_helpers import check_golden_file
 
 FROZEN_TIME = "2023-04-14 07:00:00"
-
-
 
 
 def check_yaml_golden_file(input_file: str, golden_file: str) -> bool:
@@ -110,9 +104,6 @@ def test_dataproduct_from_datahub(
     mock_graph.sink_to_file(output_file)
     golden_file = Path(test_resources_dir / "golden_dataproduct_out.json")
     check_golden_file(pytestconfig, output_file, golden_file)
-
-
-
 
 
 class TestCatalogueClient:
