@@ -6,6 +6,10 @@ locals {
       topics       = ["ministryofjustice", "analytical-platform"]
       has_issues   = false
       homepage_url = "https://user-guidance.analytical-platform.service.justice.gov.uk"
+      access = {
+        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
+      }
     }
     "analytics-platform-infrastructure" = {
       name                                   = "analytics-platform-infrastructure"
