@@ -30,7 +30,6 @@ locals {
         "jacobwoffenden",    # Jacob Woffenden
         "Gary-H9",           # Gary Henderson
         "Emterry",           # Emma Terry
-        "ymao2",             # Yikang Mao
         "michaeljcollinsuk", # Michael Collins
         "BrianEllwood",      # Brian Ellwood
         "murad-ali-MoJ",     # Murad Ali
@@ -72,7 +71,6 @@ locals {
         "jacobwoffenden",    # Jacob Woffenden
         "Gary-H9",           # Gary Henderson
         "Emterry",           # Emma Terry
-        "ymao2",             # Yikang Mao
         "michaeljcollinsuk", # Michael Collins
         "BrianEllwood",      # Brian Ellwood
         "murad-ali-MoJ",     # Murad Ali

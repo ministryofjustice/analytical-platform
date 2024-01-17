@@ -21,7 +21,6 @@ locals {
         "f-marry",           # Fabien Marry
         "alex-vonfeldmann",  # Alex von Feldmann
         "gfowler-moj",       # Greg Fowler
-        "ymao2",             # Yikang Mao
         "BrianEllwood",      # Brian Ellwood
         "Emterry",           # Emma Terry
         "michaeljcollinsuk", # Michael Collins

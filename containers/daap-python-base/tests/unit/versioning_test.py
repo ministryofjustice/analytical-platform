@@ -518,6 +518,7 @@ class TestUpdateMetadataRemoveSchema:
         self.new_major_version = "v3"
         self.number_of_schemas = 3
 
+        # Set up metadata and schema files for existing versions
         for version in data_product_versions:
             s3_client.put_object(
                 Body=json.dumps(test_metadata_with_schemas),
@@ -526,12 +527,14 @@ class TestUpdateMetadataRemoveSchema:
             )
         for i in range(self.number_of_schemas):
             for version in data_product_versions:
+                test_schema_with_input_data = test_schema | test_glue_table_input
                 s3_client.put_object(
-                    Body=json.dumps(test_schema),
+                    Body=json.dumps(test_schema_with_input_data),
                     Bucket=self.bucket_name,
                     Key=f"{data_product_name}/{version}/schema{i}/schema.json",
                 )
 
+        # Set up glue databases for major versions
         for major_version in data_product_major_versions:
             database_name = f"{data_product_name}_{major_version}"
 
@@ -544,14 +547,26 @@ class TestUpdateMetadataRemoveSchema:
                 )
 
     @pytest.fixture(autouse=True)
-    def setup_subject(self, glue_client, data_product_name):
+    def setup_subject(self, glue_client, athena_client, data_product_name):
         with patch("glue_and_athena_utils.glue_client", glue_client):
-            self.version_manager = VersionManager(data_product_name, logger)
+            with patch("glue_and_athena_utils.athena_client", athena_client):
+                self.version_manager = VersionManager(data_product_name, logger)
             yield
 
     def test_success(self):
-        schema_list = ["schema0"]
-        self.version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+        # The patches stub the sql calls to copy data over
+        with patch(
+            "curated_data.curated_data_loader.start_query_execution_and_wait"
+        ) as mock_query:
+            with patch(
+                "curated_data.curated_data_loader.refresh_table_partitions"
+            ) as mock_refresh:
+                mock_query.return_value = "qidyes"
+                mock_refresh.return_value = "qidyes"
+                schema_list = ["schema0"]
+                self.version_manager.update_metadata_remove_schemas(
+                    schema_list=schema_list
+                )
 
         schema_prefix = f"{self.data_product_name}/v2.0/metadata.json"
         self.assert_object_count(self.bucket_name, schema_prefix, 1)
@@ -566,9 +581,7 @@ class TestUpdateMetadataRemoveSchema:
             == "Invalid schemas found in schema_list: ['schema3', 'schema4']"
         )
 
-    def test_glue_table_not_found(
-        self,
-    ):
+    def test_glue_table_not_found(self):
         schema_list = ["schema0", "banana"]
         with pytest.raises(InvalidUpdate):
             self.version_manager.update_metadata_remove_schemas(schema_list=schema_list)
@@ -585,7 +598,17 @@ class TestUpdateMetadataRemoveSchema:
         self.assert_object_count(os.getenv("CURATED_DATA_BUCKET"), curated_prefix, 10)
         self.assert_object_count(os.getenv("RAW_DATA_BUCKET"), raw_prefix, 10)
 
-        self.version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+        with patch(
+            "curated_data.curated_data_loader.start_query_execution_and_wait"
+        ) as mock_query:
+            with patch(
+                "curated_data.curated_data_loader.refresh_table_partitions"
+            ) as mock_refresh:
+                mock_query.return_value = "qidyes"
+                mock_refresh.return_value = "qidyes"
+                self.version_manager.update_metadata_remove_schemas(
+                    schema_list=schema_list
+                )
 
         self.assert_object_count(os.getenv("CURATED_DATA_BUCKET"), curated_prefix, 10)
         self.assert_object_count(os.getenv("RAW_DATA_BUCKET"), raw_prefix, 10)
@@ -595,14 +618,35 @@ class TestUpdateMetadataRemoveSchema:
     ):
         schema_list = ["schema0"]
 
-        self.version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+        with patch(
+            "curated_data.curated_data_loader.start_query_execution_and_wait"
+        ) as mock_query:
+            with patch(
+                "curated_data.curated_data_loader.refresh_table_partitions"
+            ) as mock_refresh:
+                mock_query.return_value = "qidyes"
+                mock_refresh.return_value = "qidyes"
+                self.version_manager.update_metadata_remove_schemas(
+                    schema_list=schema_list
+                )
+
         schema_prefix = f"{self.data_product_name}/v3.0/{schema_list[0]}/schema.json"
         self.assert_object_count(self.bucket_name, schema_prefix, 0)
 
     def test_deleted_table_removed_from_new_version(self):
         schema_list = ["schema0"]
 
-        self.version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+        with patch(
+            "curated_data.curated_data_loader.start_query_execution_and_wait"
+        ) as mock_query:
+            with patch(
+                "curated_data.curated_data_loader.refresh_table_partitions"
+            ) as mock_refresh:
+                mock_query.return_value = "qidyes"
+                mock_refresh.return_value = "qidyes"
+                self.version_manager.update_metadata_remove_schemas(
+                    schema_list=schema_list
+                )
 
         expected_database_name = f"{self.data_product_name}_{self.new_major_version}"
         assert database_exists(expected_database_name, logger=logger)
@@ -612,7 +656,18 @@ class TestUpdateMetadataRemoveSchema:
     def test_validate_other_schemas_are_upversioned(self):
         schema_list = ["schema0"]
 
-        self.version_manager.update_metadata_remove_schemas(schema_list=schema_list)
+        with patch(
+            "curated_data.curated_data_loader.start_query_execution_and_wait"
+        ) as mock_query:
+            with patch(
+                "curated_data.curated_data_loader.refresh_table_partitions"
+            ) as mock_refresh:
+                mock_query.return_value = "qidyes"
+                mock_refresh.return_value = "qidyes"
+                self.version_manager.update_metadata_remove_schemas(
+                    schema_list=schema_list
+                )
+
         for i in range(1, self.number_of_schemas):
             self.assert_object_exists(
                 self.bucket_name,
