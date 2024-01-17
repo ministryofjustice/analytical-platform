@@ -336,13 +336,6 @@ resource "kubernetes_namespace" "kyverno_prod" {
   timeouts {}
 }
 
-resource "aws_eks_addon" "coredns_dev" {
-  cluster_name                = var.dev_eks_cluster_name
-  addon_name                  = "coredns"
-  addon_version               = "v1.10.1-eksbuild.6"
-  resolve_conflicts_on_create = "OVERWRITE"
-}
-
 resource "aws_eks_addon" "kube_proxy_dev" {
   cluster_name                = var.dev_eks_cluster_name
   addon_name                  = "kube-proxy"
