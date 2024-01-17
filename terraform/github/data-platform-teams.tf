@@ -34,7 +34,8 @@ locals {
         "BrianEllwood",      # Brian Ellwood
         "murad-ali-MoJ",     # Murad Ali
         "EO510",             # Eki Osehenye
-        "AntFMoJ"            # Anthony Fitzroy
+        "AntFMoJ",           # Anthony Fitzroy
+        "mitchdawson1982",   # Mitch Dawson
       ]
     },
     "data-platform-labs" = {
