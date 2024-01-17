@@ -10,19 +10,19 @@ from notifications_python_client.notifications import NotificationsAPIClient
 
 
 def handler(event, context):
-    # Constants
     SECRET_ID = os.environ["SECRET_ID"]
     LOG_GROUP_NAMES = os.environ["LOG_GROUP_NAMES"]
     EMAIL_SECRET = os.environ["EMAIL_SECRET"]
     TEMPLATE_ID = os.environ["TEMPLATE_ID"]
 
-    boto3.setup_default_session(region_name=AWS_REGION)
+    notifications_client = NotificationsAPIClient(api_key)
     secrets_client = boto3.client("secretsmanager")
+
     response = secrets_client.get_secret_value(SecretId=SECRET_ID)
     api_key = response["SecretString"]
+
     response = secrets_client.get_secret_value(SecretId=EMAIL_SECRET)
-    EMAIL_ADDRESS = response["SecretString"]
-    notifications_client = NotificationsAPIClient(api_key)
+    email_address = response["SecretString"]
 
     now = dt.now()
     current_date = dt.strftime(now.date(), "%Y/%m/%d")
@@ -70,7 +70,7 @@ def handler(event, context):
     with open(excel_filename, "rb") as f:
         try:
             response = notifications_client.send_email_notification(
-                email_address=EMAIL_ADDRESS,
+                email_address=email_address,
                 template_id=TEMPLATE_ID,
                 personalisation={
                     "date": current_date,
