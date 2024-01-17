@@ -139,22 +139,6 @@ class TestCatalogueClient:
             "columns": [],
         }
 
-    def mock_table_response_datahub(self):
-        response = {
-            "proposal": {
-                "entityType": "dataset",
-                "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)",
-                "changeType": "UPSERT",
-                "aspectName": "schemaMetadata",
-                "aspect": {
-                    "value": '{"schemaName": "my_table", "platform": "urn:li:dataPlatform:glue", "version": 1, "created": {"time": 0, "actor": "urn:li:corpuser:unknown"}, "lastModified": {"time": 0, "actor": "urn:li:corpuser:unknown"}, "hash": "", "platformSchema": {"com.linkedin.schema.OtherSchema": {"rawSchema": "__insert raw schema here__"}}, "fields": [{"fieldPath": "foo", "nullable": false, "description": "a", "type": {"type": {"com.linkedin.schema.StringType": {}}}, "nativeDataType": "string", "recursive": false, "isPartOfKey": false}, {"fieldPath": "bar", "nullable": false, "description": "b", "type": {"type": {"com.linkedin.schema.NumberType": {}}}, "nativeDataType": "int", "recursive": false, "isPartOfKey": false}]}',  # noqa E501
-                    "contentType": "application/json",
-                },
-            }
-        }
-
-        return response
-
     def mock_user_response(self, fqn):
         return {
             "email": "justice@justice.gov.uk",
@@ -207,33 +191,9 @@ class TestCatalogueClient:
         )
 
     @pytest.fixture
-    def datahub_client(self, requests_mock) -> DataHubCatalogueClient:
-        requests_mock.get(
-            "http://example.com/api/gms/config",
-            json={
-                "models": {},
-                "patchCapable": True,
-                "versions": {
-                    "linkedin/datahub": {
-                        "version": "v0.12.1",
-                        "commit": "990bb65fec7f1fa6f5dee0445499481c6d93220c",
-                    }
-                },
-                "managedIngestion": {"defaultCliVersion": "0.12.1", "enabled": True},
-                "statefulIngestionCapable": True,
-                "supportsImpactAnalysis": True,
-                "timeZone": "GMT",
-                "telemetry": {"enabledCli": True, "enabledIngestion": False},
-                "datasetUrnNameCasing": False,
-                "retention": "true",
-                "datahub": {"serverType": "quickstart"},
-                "noCode": "true",
-            },
-        )
-
+    def datahub_client(self, base_mock_graph) -> DataHubCatalogueClient:
         return DataHubCatalogueClient(
-            jwt_token="abc",
-            api_url="http://example.com/api/gms",
+            jwt_token="abc", api_url="http://example.com/api/gms", graph=base_mock_graph
         )
 
     def test_create_service_omd(self, omd_client, requests_mock):
@@ -403,37 +363,30 @@ class TestCatalogueClient:
         }
         assert fqn == "my_table"
 
-    def test_create_table_datahub(self, request, datahub_client, requests_mock, table):
-        requests_mock.post(
-            "http://example.com/api/gms/aspects?action=ingestProposal",
-            json=self.mock_table_response_datahub(),
-        )
+    def test_create_table_datahub(
+        self,
+        request,
+        datahub_client,
+        base_mock_graph,
+        table,
+        tmp_path,
+        test_snapshots_dir,
+        pytestconfig,
+    ):
+        """
+        Test that the contract with DataHubGraph has not changed, using a mock.
 
-        # this method makes 2 calls to 'graph.emit()', first is to update dataset, second is to update tags
+        If so, then the final metadata graph should match the snapshot in snapshots/datahub_create_table.json.
+        """
         fqn = datahub_client.upsert_table(metadata=table)
         fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)"
 
-        aspects_count = sum(
-            [
-                path == "/api/gms/aspects"
-                for path in [request.path for request in requests_mock.request_history]
-            ]
-        )
-
-        assert requests_mock.called
-        if table.tags:
-            assert aspects_count == 2
-            response_json = requests_mock.request_history[-2].json()
-            assert requests_mock.last_request.json()["proposal"]["entityUrn"] == fqn_out
-        else:
-            assert aspects_count == 1
-            response_json = requests_mock.last_request.json()
-        assert (
-            json.loads(response_json["proposal"]["aspect"]["value"])["schemaName"]
-            == "my_table"
-        )
-        assert response_json["proposal"]["entityUrn"] == fqn_out
         assert fqn == fqn_out
+
+        output_file = Path(tmp_path / "datahub_create_table.json")
+        base_mock_graph.sink_to_file(output_file)
+        last_snapshot = Path(test_snapshots_dir / "datahub_create_table.json")
+        check_golden_file(pytestconfig, output_file, last_snapshot)
 
     def test_404_handling_omd(self, request, omd_client, requests_mock, table):
         requests_mock.put(
@@ -446,16 +399,6 @@ class TestCatalogueClient:
             omd_client.upsert_table(
                 metadata=table, schema_fqn="data-platform.data-product.schema"
             )
-
-    def test_404_handling_datahub(self, request, datahub_client, requests_mock, table):
-        requests_mock.post(
-            "http://example.com/api/gms/aspects?action=ingestProposal",
-            status_code=404,
-            json={"code": "something", "message": "something"},
-        )
-
-        with pytest.raises(OperationalError):
-            datahub_client.upsert_table(metadata=table)
 
     def test_get_user_id(self, request, requests_mock, omd_client):
         requests_mock.get(

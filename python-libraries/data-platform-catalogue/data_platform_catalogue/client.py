@@ -350,11 +350,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
     instance of CatalogueError.
     """
 
-    def __init__(
-        self,
-        jwt_token,
-        api_url: str,
-    ):
+    def __init__(self, jwt_token, api_url: str, graph=None):
         """Create a connection to the DataHub GMS endpoint for class methods to use.
 
         Args:
@@ -373,7 +369,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         self.server_config = DatahubClientConfig(
             server=self.gms_endpoint, token=jwt_token
         )
-        self.graph = DataHubGraph(self.server_config)
+        self.graph = graph or DataHubGraph(self.server_config)
 
     def upsert_database_service(
         self, platform: str = "glue"

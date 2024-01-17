@@ -59,21 +59,6 @@
     "entityType": "dataProduct",
     "entityUrn": "urn:li:dataProduct:pet_of_the_week",
     "changeType": "UPSERT",
-    "aspectName": "globalTags",
-    "aspect": {
-        "json": {
-            "tags": [
-                {
-                    "tag": "urn:li:tag:awesome"
-                }
-            ]
-        }
-    }
-},
-{
-    "entityType": "dataProduct",
-    "entityUrn": "urn:li:dataProduct:pet_of_the_week",
-    "changeType": "UPSERT",
     "aspectName": "glossaryTerms",
     "aspect": {
         "json": {
@@ -94,6 +79,32 @@
     "entityType": "dataProduct",
     "entityUrn": "urn:li:dataProduct:pet_of_the_week",
     "changeType": "UPSERT",
+    "aspectName": "globalTags",
+    "aspect": {
+        "json": {
+            "tags": [
+                {
+                    "tag": "urn:li:tag:awesome"
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataProduct",
+    "entityUrn": "urn:li:dataProduct:pet_of_the_week",
+    "changeType": "UPSERT",
+    "aspectName": "status",
+    "aspect": {
+        "json": {
+            "removed": false
+        }
+    }
+},
+{
+    "entityType": "dataProduct",
+    "entityUrn": "urn:li:dataProduct:pet_of_the_week",
+    "changeType": "UPSERT",
     "aspectName": "ownership",
     "aspect": {
         "json": {
@@ -107,17 +118,6 @@
                 "time": 0,
                 "actor": "urn:li:corpuser:unknown"
             }
-        }
-    }
-},
-{
-    "entityType": "dataProduct",
-    "entityUrn": "urn:li:dataProduct:pet_of_the_week",
-    "changeType": "UPSERT",
-    "aspectName": "status",
-    "aspect": {
-        "json": {
-            "removed": false
         }
     }
 }
