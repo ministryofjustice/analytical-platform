@@ -7,10 +7,15 @@ from data_platform_catalogue.entities import (
     DataProductMetadata,
     TableMetadata,
 )
-from tests.test_helpers.mce_helpers import check_golden_file
 
 
 class TestCatalogueClientWithDatahub:
+    """
+    Test that the contract with DataHubGraph has not changed, using a mock.
+
+    If this is the case, then the final metadata graph should match a snapshot we took earlier.
+    """
+
     @pytest.fixture
     def catalogue(self):
         return CatalogueMetadata(
@@ -52,18 +57,10 @@ class TestCatalogueClientWithDatahub:
         )
 
     def test_create_table_datahub(
-        self,
-        datahub_client,
-        base_mock_graph,
-        table,
-        tmp_path,
-        test_snapshots_dir,
-        pytestconfig,
+        self, datahub_client, base_mock_graph, table, tmp_path, check_snapshot
     ):
         """
-        Test that the contract with DataHubGraph has not changed, using a mock.
-
-        If so, then the final metadata graph should match the snapshot in snapshots/datahub_create_table.json.
+        Case where we just create a dataset (no data product)
         """
         fqn = datahub_client.upsert_table(metadata=table)
         fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)"
@@ -72,8 +69,7 @@ class TestCatalogueClientWithDatahub:
 
         output_file = Path(tmp_path / "datahub_create_table.json")
         base_mock_graph.sink_to_file(output_file)
-        last_snapshot = Path(test_snapshots_dir / "datahub_create_table.json")
-        check_golden_file(pytestconfig, output_file, last_snapshot)
+        check_snapshot("datahub_create_table.json", output_file)
 
     def test_create_table_with_metadata_datahub(
         self,
@@ -82,16 +78,10 @@ class TestCatalogueClientWithDatahub:
         data_product,
         base_mock_graph,
         tmp_path,
-        test_snapshots_dir,
-        pytestconfig,
+        check_snapshot,
     ):
         """
-        Test that the contract with DataHubGraph has not changed, using a mock.
-
-        If so, then the final metadata graph should match the snapshot in
-        snapshots/datahub_create_table_with_metadata.json.
-
-        This version of the method upserts the domain, data product and table in one step.
+        Case where we create a dataset, data product and domain
         """
         fqn = datahub_client.upsert_table(
             metadata=table, data_product_metadata=data_product
@@ -100,12 +90,9 @@ class TestCatalogueClientWithDatahub:
 
         assert fqn == fqn_out
 
-        output_file = Path(tmp_path / "datahub_create_table.json")
+        output_file = Path(tmp_path / "datahub_create_table_with_metadata.json")
         base_mock_graph.sink_to_file(output_file)
-        last_snapshot = Path(
-            test_snapshots_dir / "datahub_create_table_with_metadata.json"
-        )
-        check_golden_file(pytestconfig, output_file, last_snapshot)
+        check_snapshot("datahub_create_table_with_metadata.json", output_file)
 
     def test_create_table_and_metadata_idempotent_datahub(
         self,
@@ -114,16 +101,10 @@ class TestCatalogueClientWithDatahub:
         data_product,
         base_mock_graph,
         tmp_path,
-        test_snapshots_dir,
-        pytestconfig,
+        check_snapshot,
     ):
         """
-        Test that the contract with DataHubGraph has not changed, using a mock.
-
-        If so, then the final metadata graph should match the snapshot in
-        snapshots/datahub_create_table_with_metadata.json.
-
-        This should work even if the entities already exist in the metadata graph.
+        `create_table` should work even if the entities already exist in the metadata graph.
         """
         datahub_client.upsert_table(metadata=table, data_product_metadata=data_product)
 
@@ -134,9 +115,6 @@ class TestCatalogueClientWithDatahub:
 
         assert fqn == fqn_out
 
-        output_file = Path(tmp_path / "datahub_create_table.json")
+        output_file = Path(tmp_path / "datahub_create_table_with_metadata.json")
         base_mock_graph.sink_to_file(output_file)
-        last_snapshot = Path(
-            test_snapshots_dir / "datahub_create_table_with_metadata.json"
-        )
-        check_golden_file(pytestconfig, output_file, last_snapshot)
+        check_snapshot("datahub_create_table_with_metadata.json", output_file)
