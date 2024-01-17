@@ -24,6 +24,7 @@ from glue_and_athena_utils import clone_database, delete_table
 
 athena_client = boto3.client("athena")
 glue_client = boto3.client("glue")
+s3_client = boto3.client("s3")
 
 
 class Version(NamedTuple):
@@ -104,7 +105,6 @@ class VersionManager:
 
     def update_metadata_remove_schemas(self, schema_list: list[str]) -> str:
         """Handles removing schema(s) for a data product."""
-        s3_client = boto3.client("s3")
         # remove any list duplicates and preserve list order
         schema_list = list({k: None for k in schema_list}.keys())
 
@@ -120,6 +120,7 @@ class VersionManager:
             .latest_version_saved_data
         )
         current_schemas = current_metadata.get("schemas", [])
+        self.logger.info(f"Current metadata: {current_metadata}")
         self.logger.info(f"Current schemas: {current_schemas}")
 
         valid_schemas_to_delete = all(
@@ -153,8 +154,14 @@ class VersionManager:
         self.logger.info(f"new version: {new_version}")
 
         # Copy files to the new version
-        self._copy_from_previous_version(
-            latest_version=self.latest_version, new_version=new_version
+        bucket, source_folder = self.data_product_config.metadata_path(
+            self.latest_version
+        ).parent
+        self._copy_data_from_previous_version(
+            bucket=bucket,
+            source_folder=source_folder,
+            latest_version=self.latest_version,
+            new_version=new_version,
         )
 
         # Remove schema files that we no longer require in this version
@@ -173,7 +180,7 @@ class VersionManager:
             new_version=new_version,
         )
 
-        # Move any data across
+        # Move any data across, in glue and s3
         if current_metadata["schemas"]:
             input_data = format_table_schema(
                 DataProductSchema(
@@ -200,6 +207,19 @@ class VersionManager:
                 logger=self.logger,
             ).run()
 
+            # Copy data files in the curated bucket
+            bucket = self.data_product_config.curated_data_prefix.bucket
+            source_folder = self.data_product_config.curated_data_prefix.key
+            # Curated data does not have the minor version in it's directory structure
+            latest_major_version = self.latest_version.split(".")[0]
+            new_major_version = new_version.split(".")[0]
+            self._copy_data_from_previous_version(
+                bucket=bucket,
+                source_folder=source_folder,
+                latest_version=latest_major_version,
+                new_version=new_major_version,
+            )
+
         # Remove the table we are deleting from the new version of the database
         for schema_name in schema_list:
             self._delete_data_for_schema(schema_name, new_version)
@@ -224,8 +244,14 @@ class VersionManager:
         new_version = generate_next_version_string(
             self.latest_version, UpdateType.MinorUpdate
         )
-        self._copy_from_previous_version(
-            latest_version=self.latest_version, new_version=new_version
+        bucket, source_folder = self.data_product_config.metadata_path(
+            self.latest_version
+        ).parent
+        self._copy_data_from_previous_version(
+            bucket=bucket,
+            source_folder=source_folder,
+            latest_version=self.latest_version,
+            new_version=new_version,
         )
         new_version_key = self.data_product_config.metadata_path(new_version).key
         metadata.write_json_to_s3(new_version_key)
@@ -342,8 +368,14 @@ class VersionManager:
             self.logger.info(f"Changes to schema: {changes}")
 
             new_version = generate_next_version_string(schema.version, state)
-            self._copy_from_previous_version(
-                latest_version=self.latest_version, new_version=new_version
+            bucket, source_folder = self.data_product_config.metadata_path(
+                self.latest_version
+            ).parent
+            self._copy_data_from_previous_version(
+                bucket=bucket,
+                source_folder=source_folder,
+                latest_version=self.latest_version,
+                new_version=new_version,
             )
             new_version_key = (
                 DataProductConfig(schema.data_product_name)
@@ -418,11 +450,9 @@ class VersionManager:
 
         return new_version, schema
 
-    def _copy_from_previous_version(self, latest_version, new_version):
-        bucket, source_folder = self.data_product_config.metadata_path(
-            latest_version
-        ).parent
-
+    def _copy_data_from_previous_version(self, bucket, source_folder, latest_version, new_version):
+        """Copy data recursively from one version folder to another.
+        This can be used """
         s3_copy_folder_to_new_folder(
             bucket=bucket,
             source_folder=source_folder,
@@ -580,7 +610,6 @@ def s3_copy_folder_to_new_folder(
     """
     Recursively copy a folder, replacing {latest_version} with {new_version}
     """
-    s3_client = boto3.client("s3")
     paginator = s3_client.get_paginator("list_objects_v2")
     page_iterator = paginator.paginate(
         Bucket=bucket,
