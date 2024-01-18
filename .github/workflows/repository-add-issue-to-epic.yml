@@ -13,7 +13,7 @@ concurrency:
 permissions: read-all
 
 jobs:
-   add-issue-to-epic:
+  add-issue-to-epic:
     runs-on: ubuntu-latest
     permissions:
       issues: write
