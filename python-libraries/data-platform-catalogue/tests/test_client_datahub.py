@@ -67,7 +67,7 @@ class TestCatalogueClientWithDatahub:
             metadata=table,
             location=DataLocation(fully_qualified_name="my_database"),
         )
-        fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)"
+        fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table,PROD)"
 
         assert fqn == fqn_out
 
@@ -92,7 +92,7 @@ class TestCatalogueClientWithDatahub:
             data_product_metadata=data_product,
             location=DataLocation("my_database"),
         )
-        fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)"
+        fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table,PROD)"
 
         assert fqn == fqn_out
 
@@ -123,7 +123,7 @@ class TestCatalogueClientWithDatahub:
             data_product_metadata=data_product,
             location=DataLocation("my_database"),
         )
-        fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)"
+        fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table,PROD)"
 
         assert fqn == fqn_out
 

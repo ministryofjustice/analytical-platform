@@ -49,9 +49,12 @@ def test_upsert_test_hierarchy():
     table_fqn = client.upsert_table(
         metadata=table,
         data_product_metadata=data_product,
-        location=DataLocation("test_data_product_v1"),
+        location=DataLocation("test_data_product_v2"),
     )
-    assert table_fqn == "urn:li:dataset:(urn:li:dataPlatform:glue,test_table,PROD)"
+    assert (
+        table_fqn
+        == "urn:li:dataset:(urn:li:dataPlatform:glue,test_data_product_v2.test_table,PROD)"
+    )
 
     # Ensure data went through
     assert client.graph.get_aspect(table_fqn, DatasetPropertiesClass)

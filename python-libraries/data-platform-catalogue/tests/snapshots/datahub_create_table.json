@@ -1,7 +1,7 @@
 [
 {
     "entityType": "dataset",
-    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table,PROD)",
     "changeType": "UPSERT",
     "aspectName": "datasetProperties",
     "aspect": {
@@ -14,7 +14,7 @@
 },
 {
     "entityType": "dataset",
-    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table,PROD)",
     "changeType": "UPSERT",
     "aspectName": "schemaMetadata",
     "aspect": {
@@ -33,7 +33,7 @@
             "hash": "",
             "platformSchema": {
                 "com.linkedin.schema.OtherSchema": {
-                    "rawSchema": "__insert raw schema here__"
+                    "rawSchema": ""
                 }
             },
             "fields": [

@@ -212,8 +212,13 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         Returns:
             dataset_urn: the dataset URN
         """
+        if location.fully_qualified_name:
+            name = f"{location.fully_qualified_name}.{metadata.name}"
+        else:
+            name = metadata.name
+
         dataset_urn = mce_builder.make_dataset_urn(
-            platform=location.platform_id, name=f"{metadata.name}", env="PROD"
+            platform=location.platform_id, name=name, env="PROD"
         )
 
         dataset_properties = DatasetPropertiesClass(
@@ -232,7 +237,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             platform=make_data_platform_urn(platform=location.platform_id),
             version=metadata.major_version,
             hash="",
-            platformSchema=OtherSchemaClass(rawSchema="__insert raw schema here__"),
+            platformSchema=OtherSchemaClass(rawSchema=""),
             fields=[
                 SchemaFieldClass(
                     fieldPath=f"{column['name']}",
