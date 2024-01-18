@@ -349,3 +349,10 @@ resource "aws_eks_addon" "vpc_cni_dev" {
   addon_version               = "v1.16.0-eksbuild.1"
   resolve_conflicts_on_create = "OVERWRITE"
 }
+
+resource "aws_eks_addon" "coredns_dev" {
+  cluster_name                = var.dev_eks_cluster_name
+  addon_name                  = "coredns"
+  addon_version               = "v1.9.3-eksbuild.10"
+  resolve_conflicts_on_create = "OVERWRITE"
+}
