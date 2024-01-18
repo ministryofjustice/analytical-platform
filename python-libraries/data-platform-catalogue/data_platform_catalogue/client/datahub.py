@@ -82,9 +82,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         )
         self.graph = graph or DataHubGraph(self.server_config)
 
-    def upsert_database_service(
-        self, platform: str = "glue", *args, **kwargs
-    ) -> str:  # type: ignore[override]
+    def upsert_database_service(self, platform: str = "glue", *args, **kwargs) -> str:
         """
         Define a DataHub 'Data Platform'. This is a type of connection, e.g. 'hive' or 'glue'.
 
@@ -94,14 +92,16 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         raise NotImplementedError
 
     def upsert_database(
-        self, metadata: CatalogueMetadata | DataProductMetadata, service_fqn: str
-    ):  # type: ignore[override]
+        self, metadata: CatalogueMetadata | DataProductMetadata, location: DataLocation
+    ) -> str:
         """
         Define a database. Not implemented for DataHub, which uses Data Platforms + Datasets only.
         """
         raise NotImplementedError
 
-    def upsert_schema(self, metadata: DataProductMetadata, database_fqn: str):
+    def upsert_schema(
+        self, metadata: DataProductMetadata, location: DataLocation
+    ) -> str:
         """
         Define a database. Not implemented for DataHub, which uses Data Platforms + Datasets only.
         """
