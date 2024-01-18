@@ -452,9 +452,11 @@ class VersionManager:
 
         return new_version, schema
 
-    def _copy_data_from_previous_version(self, bucket, source_folder, latest_version, new_version):
+    def _copy_data_from_previous_version(
+        self, bucket, source_folder, latest_version, new_version
+    ):
         """Copy data recursively from one version folder to another.
-        This can be used """
+        This can be used"""
         s3_copy_folder_to_new_folder(
             bucket=bucket,
             source_folder=source_folder,
