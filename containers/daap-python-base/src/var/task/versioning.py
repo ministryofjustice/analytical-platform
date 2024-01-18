@@ -213,12 +213,14 @@ class VersionManager:
             # Curated data does not have the minor version in it's directory structure
             latest_major_version = self.latest_version.split(".")[0]
             new_major_version = new_version.split(".")[0]
-            self._copy_data_from_previous_version(
-                bucket=bucket,
-                source_folder=source_folder,
-                latest_version=latest_major_version,
-                new_version=new_major_version,
-            )
+            for schema in current_metadata["schemas"]:
+                table_data_directory = source_folder + schema
+                self._copy_data_from_previous_version(
+                    bucket=bucket,
+                    source_folder=table_data_directory,
+                    latest_version=latest_major_version,
+                    new_version=new_major_version,
+                )
 
         # Remove the table we are deleting from the new version of the database
         for schema_name in schema_list:
