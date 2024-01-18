@@ -1,6 +1,5 @@
 import logging
 from abc import ABC, abstractmethod
-from typing import Any
 
 from ..entities import (
     CatalogueMetadata,
@@ -27,7 +26,9 @@ class ReferencedEntityMissing(CatalogueError):
 
 class BaseCatalogueClient(ABC):
     @abstractmethod
-    def upsert_database_service(self, platform: str = "glue", display_name: str = "Data platform"):  # type: ignore[override]
+    def upsert_database_service(
+        self, platform: str = "glue", display_name: str = "Data platform"
+    ) -> str:
         pass
 
     @abstractmethod
