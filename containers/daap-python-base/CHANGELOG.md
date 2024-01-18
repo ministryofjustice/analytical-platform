@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.2.0] - 2023-01-18
+
+### Changed
+
+- Add logic to copy curated data files after a schema gets deleted.
+
 ## [8.1.1] - 2023-01-10
 
 ### Changed
