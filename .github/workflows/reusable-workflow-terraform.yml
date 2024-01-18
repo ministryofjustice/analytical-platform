@@ -51,7 +51,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@7f9dcb2543985c9e6f23b1156d75378361634587 # v12.2619.0
+        uses: bridgecrewio/checkov-action@d72836860bd74dda0cec7ade4df5b9ca7aabd096 # v12.2643.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -62,7 +62,7 @@ jobs:
       - name: Trivy
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_trivy
-        uses: aquasecurity/trivy-action@22d2755f774d925b191a185b74e782a4b0638a41 # v0.15.0
+        uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
           scan-type: config
           scan-ref: ${{ env.working-directory }}

@@ -20,7 +20,9 @@ class CuratedDataQueryBuilder:
         select_list = []
         for column in self.column_metadata:
             col_name = '"' + column["Name"] + '"'
-            col_type = column["Type"] if not column["Type"] == "string" else "VARCHAR"
+            column_type = column["Type"]
+            type_mapping = {"string": "VARCHAR", "float": "real"}
+            col_type = type_mapping.get(column_type, column_type)
             col_no_zero_len_str = f"NULLIF({col_name},'')"
             select_list.append(
                 f"CAST({col_no_zero_len_str} as {col_type}) as {col_name}"
@@ -39,14 +41,14 @@ class CuratedDataQueryBuilder:
             UNLOAD (
                 SELECT
                     {self._get_column_names_and_types()},
-                    '{timestamp}' as extraction_timestamp
+                    '{timestamp}' as load_timestamp
                 FROM {raw_table.database}.{raw_table.name}
             )
             TO '{self.table_path}'
             WITH(
                 format='parquet',
                 compression = 'SNAPPY',
-                partitioned_by=ARRAY['extraction_timestamp']
+                partitioned_by=ARRAY['load_timestamp']
             )
         """
 
@@ -66,11 +68,11 @@ class CuratedDataQueryBuilder:
                 format='parquet',
                 write_compression = 'SNAPPY',
                 external_location='{self.table_path}',
-                partitioned_by=ARRAY['extraction_timestamp']
+                partitioned_by=ARRAY['load_timestamp']
             ) AS
             SELECT
                 {self._get_column_names_and_types()},
-                '{timestamp}' as extraction_timestamp
+                '{timestamp}' as load_timestamp
             FROM {raw_table.database}.{raw_table.name}
         """
 
@@ -93,13 +95,13 @@ class CuratedDataQueryBuilder:
                 format='parquet',
                 write_compression = 'SNAPPY',
                 external_location='{self.table_path}',
-                partitioned_by=ARRAY['extraction_timestamp']
+                partitioned_by=ARRAY['load_timestamp']
             ) AS
             SELECT
                 *
             FROM {previous_major_database}.{new_curated_table.name}
-            WHERE extraction_timestamp = (
-                SELECT MAX(extraction_timestamp)
+            WHERE load_timestamp = (
+                SELECT MAX(load_timestamp)
                 FROM {previous_major_database}.{new_curated_table.name}
             )
         """
@@ -120,8 +122,8 @@ class CuratedDataQueryBuilder:
                 SELECT
                     *
                 FROM {previous_major_database}.{curated_table.name}
-                WHERE extraction_timestamp = (
-                    SELECT MAX(extraction_timestamp)
+                WHERE load_timestamp = (
+                    SELECT MAX(load_timestamp)
                     FROM {previous_major_database}.{curated_table.name}
                 )
             )
@@ -129,7 +131,7 @@ class CuratedDataQueryBuilder:
             WITH(
                 format='parquet',
                 compression = 'SNAPPY',
-                partitioned_by=ARRAY['extraction_timestamp']
+                partitioned_by=ARRAY['load_timestamp']
             )
         """
         return sql
