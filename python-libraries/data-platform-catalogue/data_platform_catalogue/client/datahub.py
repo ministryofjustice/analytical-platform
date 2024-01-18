@@ -22,7 +22,12 @@ from datahub.metadata.schema_classes import (
     SchemaMetadataClass,
 )
 
-from ..entities import CatalogueMetadata, DataProductMetadata, TableMetadata
+from ..entities import (
+    CatalogueMetadata,
+    DataLocation,
+    DataProductMetadata,
+    TableMetadata,
+)
 
 DATAHUB_DATA_TYPE_MAPPING = {
     "boolean": schema_classes.BooleanTypeClass(),
@@ -78,7 +83,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         self.graph = graph or DataHubGraph(self.server_config)
 
     def upsert_database_service(
-        self, platform: str = "glue"
+        self, platform: str = "glue", *args, **kwargs
     ) -> str:  # type: ignore[override]
         """
         Define a DataHub 'Data Platform'. This is a type of connection, e.g. 'hive' or 'glue'.
@@ -96,7 +101,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         """
         raise NotImplementedError
 
-    def upsert_schema(self, metadata: DataProductMetadata, database_fqn: str):  # type: ignore[override]
+    def upsert_schema(self, metadata: DataProductMetadata, database_fqn: str):
         """
         Define a database. Not implemented for DataHub, which uses Data Platforms + Datasets only.
         """
@@ -104,7 +109,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
 
     def create_domain(
         self, domain: str, description: str = "", parentDomain: str | None = None
-    ):
+    ) -> str:
         """Create a Domain, a logical collection of Data assets (Data Products).
 
         Args:
@@ -176,13 +181,12 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         else:
             raise ReferencedEntityMissing("Data Product must belong to a Domain")
 
-    def upsert_table(  # type: ignore[override]
+    def upsert_table(
         self,
         metadata: TableMetadata,
+        location: DataLocation,
         data_product_metadata: DataProductMetadata | None = None,
-        platform: str = "glue",
-        version: int = 1,
-    ):
+    ) -> str:
         """
         Define a table (a 'dataset' in DataHub parlance), a 'collection of data'
         (https://datahubproject.io/docs/metadata-modeling/metadata-model#the-core-entities).
@@ -209,7 +213,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             dataset_urn: the dataset URN
         """
         dataset_urn = mce_builder.make_dataset_urn(
-            platform=platform, name=f"{metadata.name}", env="PROD"
+            platform=location.platform_id, name=f"{metadata.name}", env="PROD"
         )
 
         dataset_properties = DatasetPropertiesClass(
@@ -225,8 +229,8 @@ class DataHubCatalogueClient(BaseCatalogueClient):
 
         dataset_schema_properties = SchemaMetadataClass(
             schemaName=metadata.name,
-            platform=make_data_platform_urn(platform=platform),
-            version=version,
+            platform=make_data_platform_urn(platform=location.platform_id),
+            version=metadata.major_version,
             hash="",
             platformSchema=OtherSchemaClass(rawSchema="__insert raw schema here__"),
             fields=[

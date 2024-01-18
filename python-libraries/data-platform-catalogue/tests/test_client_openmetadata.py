@@ -5,6 +5,7 @@ from data_platform_catalogue.client import (
 )
 from data_platform_catalogue.entities import (
     CatalogueMetadata,
+    DataLocation,
     DataProductMetadata,
     TableMetadata,
 )
@@ -139,7 +140,7 @@ class TestCatalogueClientWithOMD:
         )
 
         fqn: str = omd_client.upsert_database(
-            metadata=catalogue, service_fqn="data-platform"
+            metadata=catalogue, location=DataLocation("data-platform")
         )
         assert requests_mock.last_request.json() == {
             "name": "data_platform",
@@ -173,7 +174,7 @@ class TestCatalogueClientWithOMD:
         )
 
         fqn = omd_client.upsert_schema(
-            metadata=data_product, database_fqn="data-product"
+            metadata=data_product, location=DataLocation("data-product")
         )
         assert requests_mock.last_request.json() == {
             "name": "my_data_product",
@@ -218,7 +219,7 @@ class TestCatalogueClientWithOMD:
         )
 
         fqn = omd_client.upsert_table(
-            metadata=table, schema_fqn="data-platform.data-product.schema"
+            metadata=table, location=DataLocation("data-platform.data-product.schema")
         )
         assert requests_mock.called
         assert requests_mock.last_request.json() == {
@@ -292,7 +293,8 @@ class TestCatalogueClientWithOMD:
 
         with pytest.raises(ReferencedEntityMissing):
             omd_client.upsert_table(
-                metadata=table, schema_fqn="data-platform.data-product.schema"
+                metadata=table,
+                location=DataLocation("data-platform.data-product.schema"),
             )
 
     def test_get_user_id(self, request, requests_mock, omd_client):

@@ -12,6 +12,7 @@ import os
 import pytest
 from data_platform_catalogue import DataProductMetadata, TableMetadata
 from data_platform_catalogue.client import DataHubCatalogueClient
+from data_platform_catalogue.entities import DataLocation
 from datahub.metadata.schema_classes import DatasetPropertiesClass, SchemaMetadataClass
 
 jwt_token = os.environ.get("JWT_TOKEN")
@@ -24,7 +25,7 @@ def test_upsert_test_hierarchy():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
     data_product = DataProductMetadata(
-        name="my_data_product2",
+        name="test_data_product",
         description="bla bla",
         version="v1.0.0",
         owner="7804c127-d677-4900-82f9-83517e51bb94",
@@ -35,7 +36,7 @@ def test_upsert_test_hierarchy():
     )
 
     table = TableMetadata(
-        name="my_data_product2.my_table3",
+        name="test_table",
         description="bla bla",
         column_details=[
             {"name": "foo", "type": "string", "description": "a"},
@@ -48,12 +49,9 @@ def test_upsert_test_hierarchy():
     table_fqn = client.upsert_table(
         metadata=table,
         data_product_metadata=data_product,
-        platform="glue",
+        location=DataLocation("test_data_product_v1"),
     )
-    assert (
-        table_fqn
-        == "urn:li:dataset:(urn:li:dataPlatform:glue,my_data_product2.my_table3,PROD)"
-    )
+    assert table_fqn == "urn:li:dataset:(urn:li:dataPlatform:glue,test_table,PROD)"
 
     # Ensure data went through
     assert client.graph.get_aspect(table_fqn, DatasetPropertiesClass)

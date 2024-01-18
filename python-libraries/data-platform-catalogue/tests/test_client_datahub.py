@@ -4,6 +4,7 @@ import pytest
 from data_platform_catalogue.client import DataHubCatalogueClient
 from data_platform_catalogue.entities import (
     CatalogueMetadata,
+    DataLocation,
     DataProductMetadata,
     TableMetadata,
 )
@@ -62,7 +63,10 @@ class TestCatalogueClientWithDatahub:
         """
         Case where we just create a dataset (no data product)
         """
-        fqn = datahub_client.upsert_table(metadata=table)
+        fqn = datahub_client.upsert_table(
+            metadata=table,
+            location=DataLocation(fully_qualified_name="my_database"),
+        )
         fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)"
 
         assert fqn == fqn_out
@@ -84,7 +88,9 @@ class TestCatalogueClientWithDatahub:
         Case where we create a dataset, data product and domain
         """
         fqn = datahub_client.upsert_table(
-            metadata=table, data_product_metadata=data_product
+            metadata=table,
+            data_product_metadata=data_product,
+            location=DataLocation("my_database"),
         )
         fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)"
 
@@ -106,10 +112,16 @@ class TestCatalogueClientWithDatahub:
         """
         `create_table` should work even if the entities already exist in the metadata graph.
         """
-        datahub_client.upsert_table(metadata=table, data_product_metadata=data_product)
+        datahub_client.upsert_table(
+            metadata=table,
+            data_product_metadata=data_product,
+            location=DataLocation("my_database"),
+        )
 
         fqn = datahub_client.upsert_table(
-            metadata=table, data_product_metadata=data_product
+            metadata=table,
+            data_product_metadata=data_product,
+            location=DataLocation("my_database"),
         )
         fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_table,PROD)"
 

@@ -2,7 +2,12 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Any
 
-from ..entities import TableMetadata
+from ..entities import (
+    CatalogueMetadata,
+    DataLocation,
+    DataProductMetadata,
+    TableMetadata,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -22,45 +27,28 @@ class ReferencedEntityMissing(CatalogueError):
 
 class BaseCatalogueClient(ABC):
     @abstractmethod
-    def upsert_database_service(
-        self, *args: Any, **kwargs: Any
-    ):  # type: ignore[override]
+    def upsert_database_service(self, platform: str = "glue", display_name: str = "Data platform"):  # type: ignore[override]
         pass
 
     @abstractmethod
-    def upsert_database(self, *args: Any, **kwargs: Any):  # type: ignore[override]
+    def upsert_database(
+        self,
+        metadata: CatalogueMetadata | DataProductMetadata,
+        location: DataLocation,
+    ) -> str:
         pass
 
     @abstractmethod
-    def upsert_schema(self, *args: Any, **kwargs: Any):  # type: ignore[override]
+    def upsert_schema(
+        self, metadata: DataProductMetadata, location: DataLocation
+    ) -> str:
         pass
 
     @abstractmethod
     def upsert_table(
-        self, metadata: TableMetadata, *args: Any, **kwargs: Any
-    ):  # type: ignore[override]
+        self,
+        metadata: TableMetadata,
+        location: DataLocation,
+        data_product_metadata: DataProductMetadata | None = None,
+    ) -> str:
         pass
-
-    def delete_database_service(self, *args: Any, **kwargs: Any):  # type: ignore[override]
-        """
-        Delete a database service.
-        """
-        raise NotImplementedError
-
-    def delete_database(self, *args: Any, **kwargs: Any):  # type: ignore[override]
-        """
-        Delete a database.
-        """
-        raise NotImplementedError
-
-    def delete_schema(self, *args: Any, **kwargs: Any):  # type: ignore[override]
-        """
-        Delete a schema.
-        """
-        raise NotImplementedError
-
-    def delete_table(self, *args: Any, **kwargs: Any):  # type: ignore[override]
-        """
-        Delete a table.
-        """
-        raise NotImplementedError

@@ -12,6 +12,7 @@ import os
 import pytest
 from data_platform_catalogue import DataProductMetadata, TableMetadata
 from data_platform_catalogue.client import OpenMetadataCatalogueClient
+from data_platform_catalogue.entities import DataLocation
 
 jwt_token = os.environ.get("JWT_TOKEN")
 api_url = os.environ.get("API_URL", "")
@@ -60,14 +61,14 @@ def test_upsert_test_hierarchy():
     assert service_fqn == "data_platform"
 
     database_fqn = client.upsert_database(
-        metadata=data_product, service_fqn=service_fqn
+        metadata=data_product, location=DataLocation(service_fqn)
     )
     assert database_fqn == "data_platform.my_data_product"
 
     schema_fqn = client.upsert_schema(
-        metadata=data_product_schema, database_fqn=database_fqn
+        metadata=data_product_schema, location=DataLocation(database_fqn)
     )
     assert schema_fqn == "data_platform.my_data_product.Tables"
 
-    table_fqn = client.upsert_table(metadata=table, schema_fqn=schema_fqn)
+    table_fqn = client.upsert_table(metadata=table, location=DataLocation(schema_fqn))
     assert table_fqn == "data_platform.my_data_product.Tables.my_table"

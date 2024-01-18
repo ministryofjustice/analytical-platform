@@ -34,7 +34,12 @@ from metadata.generated.schema.type.tagLabel import (
 )
 from metadata.ingestion.ometa.ometa_api import APIError, OpenMetadata
 
-from ..entities import CatalogueMetadata, DataProductMetadata, TableMetadata
+from ..entities import (
+    CatalogueMetadata,
+    DataLocation,
+    DataProductMetadata,
+    TableMetadata,
+)
 
 OMD_DATA_TYPE_MAPPING = {
     "boolean": OpenMetadataDataType.BOOLEAN,
@@ -85,7 +90,7 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
 
     def upsert_database_service(
         self, name: str = "data-platform", display_name: str = "Data platform"
-    ) -> str:  # type: ignore[override]
+    ) -> str:
         """
         Define a database service.
         We have one service representing the connection to the data platform's internal
@@ -114,8 +119,8 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
             raise ReferencedEntityMissing
 
     def upsert_database(
-        self, metadata: CatalogueMetadata | DataProductMetadata, service_fqn: str
-    ):  # type: ignore[override]
+        self, metadata: CatalogueMetadata | DataProductMetadata, location: DataLocation
+    ) -> str:
         """
         Define a database.
         There should be one database per data product.
@@ -124,14 +129,16 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
             name=metadata.name,
             description=metadata.description,
             tags=self._generate_tags(metadata.tags),
-            service=service_fqn,
+            service=location.fully_qualified_name,
             owner=EntityReference(
                 id=metadata.owner, type="user"
             ),  # pyright: ignore[reportGeneralTypeIssues]
         )
         return self._upsert_entity(create_db)
 
-    def upsert_schema(self, metadata: DataProductMetadata, database_fqn: str):  # type: ignore[override]
+    def upsert_schema(
+        self, metadata: DataProductMetadata, location: DataLocation
+    ) -> str:
         """
         Define a database schema.
         There should be one schema per data product and for now flexibility is retained
@@ -147,11 +154,17 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
             ),  # pyright: ignore[reportGeneralTypeIssues]
             tags=self._generate_tags(metadata.tags),
             retentionPeriod=self._generate_duration(metadata.retention_period_in_days),
-            database=database_fqn,
+            database=location.fully_qualified_name,
         )
         return self._upsert_entity(create_schema)
 
-    def upsert_table(self, metadata: TableMetadata, schema_fqn: str):  # type: ignore[override]
+    def upsert_table(
+        self,
+        metadata: TableMetadata,
+        location: DataLocation,
+        *args,
+        **kwargs,
+    ) -> str:
         """
         Define a table.
         There can be many tables per data product.
@@ -172,7 +185,7 @@ class OpenMetadataCatalogueClient(BaseCatalogueClient):
             description=metadata.description,
             retentionPeriod=self._generate_duration(metadata.retention_period_in_days),
             tags=self._generate_tags(metadata.tags),
-            databaseSchema=schema_fqn,
+            databaseSchema=location.fully_qualified_name,
             columns=columns,
         )  # pyright: ignore[reportGeneralTypeIssues]
         return self._upsert_entity(create_table)
