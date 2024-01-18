@@ -471,5 +471,27 @@
       "analytical-platform-data-engineering-sandboxa-data-engineer",
       "analytical-platform-data-engineering-production-data-engineer"
     ]
+  },
+  {
+    "name": "Lee Broadhurst",
+    "github": "Lee-250",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Toby Petty",
+    "github": "Staberinde",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
   }
 ]
