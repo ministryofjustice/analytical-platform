@@ -335,3 +335,17 @@ resource "kubernetes_namespace" "kyverno_prod" {
   }
   timeouts {}
 }
+
+resource "aws_eks_addon" "kube_proxy_dev" {
+  cluster_name                = var.dev_eks_cluster_name
+  addon_name                  = "kube-proxy"
+  addon_version               = "v1.25.16-minimal-eksbuild.1"
+  resolve_conflicts_on_create = "OVERWRITE"
+}
+
+resource "aws_eks_addon" "vpc_cni_dev" {
+  cluster_name                = var.dev_eks_cluster_name
+  addon_name                  = "vpc-cni"
+  addon_version               = "v1.16.0-eksbuild.1"
+  resolve_conflicts_on_create = "OVERWRITE"
+}
