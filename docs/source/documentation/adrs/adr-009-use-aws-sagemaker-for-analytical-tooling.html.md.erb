@@ -1,0 +1,28 @@
+---
+owner_slack: "#data-platform-notifications"
+title: ADR-009 Use AWS Sagemaker for analytical tooling
+last_reviewed_on: 2024-01-17
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+## Status
+
+🤔 Proposed
+
+## Context
+
+Our Data Scientist want the ability to make use modelling with GPU which is not currently available, and the options with specialised CPU and higher memory to aid analytical applications.
+
+## Decision
+
+We will look to offer [Amazon SageMaker](https://aws.amazon.com/bedrock/) to our users.
+
+## Consequences
+
+* Leverage managed services like SageMaker Studio
+* SageMaker pricing is based on usage and can vary significantly month-to-month depending on your application's usage, instance type and costs could spike unexpectedly
+* Workloads will be run in isolation mode without access to the internet to secure sensitive data
+* Users can make use of services when available and require development of front and backend service
+* Greater choice in open source Foundation Models and VPC isolation for highly sensitive data
