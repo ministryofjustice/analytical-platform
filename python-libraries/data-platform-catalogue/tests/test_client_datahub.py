@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from data_platform_catalogue.client import DataHubCatalogueClient
+from data_platform_catalogue.client.datahub.datahub_client import DataHubCatalogueClient
 from data_platform_catalogue.entities import (
     CatalogueMetadata,
     DataLocation,

@@ -7,6 +7,7 @@ from ..entities import (
     DataProductMetadata,
     TableMetadata,
 )
+from ..search_types import SearchResponse
 
 logger = logging.getLogger(__name__)
 
@@ -53,3 +54,11 @@ class BaseCatalogueClient(ABC):
         data_product_metadata: DataProductMetadata | None = None,
     ) -> str:
         pass
+
+    def search(
+        self, query: str = "*", count: int = 20, page: str | None = None
+    ) -> SearchResponse:
+        """
+        Wraps the catalogue's search function.
+        """
+        raise NotImplementedError

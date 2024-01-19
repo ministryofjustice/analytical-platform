@@ -6,6 +6,7 @@ from data_platform_catalogue.client.base import (
     ReferencedEntityMissing,
     logger,
 )
+from data_platform_catalogue.search_types import SearchResponse
 from datahub.emitter.mce_builder import make_data_platform_urn
 from datahub.emitter.mcp import MetadataChangeProposalWrapper
 from datahub.ingestion.graph.client import DatahubClientConfig, DataHubGraph
@@ -22,12 +23,13 @@ from datahub.metadata.schema_classes import (
     SchemaMetadataClass,
 )
 
-from ..entities import (
+from ...entities import (
     CatalogueMetadata,
     DataLocation,
     DataProductMetadata,
     TableMetadata,
 )
+from .search import SearchClient
 
 DATAHUB_DATA_TYPE_MAPPING = {
     "boolean": schema_classes.BooleanTypeClass(),
@@ -81,6 +83,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             server=self.gms_endpoint, token=jwt_token
         )
         self.graph = graph or DataHubGraph(self.server_config)
+        self.search_client = SearchClient(self.graph)
 
     def upsert_database_service(self, platform: str = "glue", *args, **kwargs) -> str:
         """
@@ -310,3 +313,11 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             self.graph.emit(metadata_event)
 
         return dataset_urn
+
+    def search(
+        self, query: str = "*", count: int = 20, page: str | None = None
+    ) -> SearchResponse:
+        """
+        Wraps the catalogue's search function.
+        """
+        return self.search_client.search(query=query, count=count, page=page)
