@@ -11,7 +11,7 @@ There are certain scenarios where we may need to run GitHub Actions workflows th
 
 - A repository that contains sensitive data that cannot be made public
 
-To facilitate this, we can offer a self-hosted runner that runs on [MoJ's Cloud Platform](https://user-guide.cloud-platform.service.justice.gov.uk)
+To facilitate this, we can offer a self-hosted runner that runs on Data Platform's EKS cluster.
 
 ## How to request a self-hosted runner
 
@@ -30,13 +30,9 @@ The intended audience for section is the Data Platform Apps and Tools Team
 
 1. Create a new Secrets Manager secret in analytical-platform-management-production eu-west-2 called `github/actions/self-hosted-runner/${REPOSITORY_NAME}`
 
-1. Create a new entry in `terraform/cloud-platform/live/data-platform-production/github-actions-self-hosted-runners/helm-releases.tf`, replacing `${GITHUB_ORGANISATION}` and `${GITHUB_REPOSITORY}` with the appropriate values:
+1. Create a new entry in `terraform/dpat-eks/production/actions-runners/${GITHUB_REPOSITORY}.tf`, replacing `${GITHUB_ORGANISATION}` and `${GITHUB_REPOSITORY}` with the appropriate values:
 
     ```hcl
-    ##################################################
-    # ${GITHUB_ORGANISATION}/${GITHUB_REPOSITORY}
-    ##################################################
-
     data "aws_secretsmanager_secret" "github_actions_self_hosted_runner_${GITHUB_REPOSITORY}" {
       provider = aws.analytical-platform-management-production
 
@@ -49,10 +45,12 @@ The intended audience for section is the Data Platform Apps and Tools Team
       secret_id = data.aws_secretsmanager_secret.github_actions_self_hosted_runner_${GITHUB_REPOSITORY}.id
     }
 
-    resource "helm_release" "github_actions_self_hosted_runners_${GITHUB_REPOSITORY}" {
-      name      = "gha-shr-${GITHUB_REPOSITORY}"
-      chart     = "./src/helm/charts/github-actions-self-hosted-runners"
-      namespace = "data-platform-production"
+    resource "helm_release" "${GITHUB_REPOSITORY}" {
+      name      = "actions-runner-(moj|mojas)-${GITHUB_REPOSITORY}"
+      repository = "oci://ghcr.io/ministryofjustice/data-platform-charts"
+      version    = "2.0.0"
+      chart      = "actions-runner"
+      namespace  = "actions-runners"
 
       set {
         name  = "github.organisation"
@@ -70,13 +68,13 @@ The intended audience for section is the Data Platform Apps and Tools Team
       }
 
       set {
-        name  = "irsa.roleArn"
-        value = "arn:aws:iam::593291632749:role/${GITHUB_REPOSITORY}"
+        name  = "github.runner.labels"
+        value = "moj-data-platform"
       }
 
       set {
-        name  = "runner.labels"
-        value = "moj-cloud-platform"
+        name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+        value = "arn:aws:iam::593291632749:role/${GITHUB_REPOSITORY}"
       }
     }
     ```
@@ -90,5 +88,5 @@ When a self-hosted runner is deployed, it will automatically register itself wit
 To consume it in a workflow, add the following to the workflow's `runs-on` section:
 
 ```yaml
-runs-on: [self-hosted, moj-cloud-platform]
+runs-on: [self-hosted, moj-data-platform]
 ```
