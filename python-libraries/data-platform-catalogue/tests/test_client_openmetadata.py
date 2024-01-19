@@ -1,8 +1,6 @@
 import pytest
-from data_platform_catalogue.client import (
-    OpenMetadataCatalogueClient,
-    ReferencedEntityMissing,
-)
+from data_platform_catalogue.client import ReferencedEntityMissing
+from data_platform_catalogue.client.openmetadata import OpenMetadataCatalogueClient
 from data_platform_catalogue.entities import (
     CatalogueMetadata,
     DataLocation,

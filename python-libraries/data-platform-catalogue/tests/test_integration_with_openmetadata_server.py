@@ -11,7 +11,7 @@ import os
 
 import pytest
 from data_platform_catalogue import DataProductMetadata, TableMetadata
-from data_platform_catalogue.client import OpenMetadataCatalogueClient
+from data_platform_catalogue.client.openmetadata import OpenMetadataCatalogueClient
 from data_platform_catalogue.entities import DataLocation
 
 jwt_token = os.environ.get("JWT_TOKEN")
