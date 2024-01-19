@@ -294,11 +294,11 @@ class DataHubCatalogueClient(BaseCatalogueClient):
                 data_product_existing_properties is not None
                 and data_product_existing_properties.assets is not None
             ):
-                assets = data_product_existing_properties.assets.append(
-                    data_product_association
-                )
+                assets = data_product_existing_properties.assets[::]
+                assets.append(data_product_association)
             else:
                 assets = [data_product_association]
+
             data_product_properties = DataProductPropertiesClass(assets=assets)
 
             metadata_event = MetadataChangeProposalWrapper(
