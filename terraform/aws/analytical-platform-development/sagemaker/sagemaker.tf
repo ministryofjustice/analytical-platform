@@ -1,6 +1,9 @@
 resource "aws_sagemaker_domain" "studio_domain" {
   domain_name = var.domain_name
-  auth_mode   = var.auth_mode
+  auth_mode   = var.auth_mode #
+
+  # KMS customer managed key for encryption of EFS
+  kms_key_id = aws_kms_key.sagemaker_cmk.key_id
 
   default_space_settings {
     execution_role = aws_iam_role.sagemaker_studio_execution_role.arn
