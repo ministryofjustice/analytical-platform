@@ -10,16 +10,15 @@ terraform {
   required_providers {
     auth0 = {
       source  = "auth0/auth0"
-      version = "1.1.1"
+      version = "1.1.2"
     }
     aws = {
-      source                = "hashicorp/aws"
-      version               = "5.31.0"
-      configuration_aliases = [aws.target] # required by aws_iam_policy_document
+      source  = "hashicorp/aws"
+      version = "5.31.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.25.1"
+      version = "2.25.2"
     }
     random = {
       source  = "hashicorp/random"

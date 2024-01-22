@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking changes
+
+- Changed `database_fqn`, `schema_fqn`, etc to a more generic
+  `location: DataLocation` argument on all methods. This captures information
+  about where a node in the metadata graph should be located, and what kind
+  of database it comes from.
+
+- Extracted `BaseCatalogueClient` base class from `CatalogueClient`. Use this
+  as a type annotation to avoid coupling to the OpenMetadata implementation.
+
+- Renamed the existing `CatalogueClient` implementation to
+  `OpenMetadataCatalogueClient`.
+
+### Added
+
+- Added `DataHubCatalogueClient` to support DataHub's GMS as the catalogue
+  implementation.
+
 ## [0.3.1] 2023-11-13
 
 - Updated to OpenMetadata 1.2

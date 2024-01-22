@@ -1,13 +1,17 @@
 import pytest
-from data_platform_catalogue.client import CatalogueClient, ReferencedEntityMissing
+from data_platform_catalogue.client import (
+    OpenMetadataCatalogueClient,
+    ReferencedEntityMissing,
+)
 from data_platform_catalogue.entities import (
     CatalogueMetadata,
+    DataLocation,
     DataProductMetadata,
     TableMetadata,
 )
 
 
-class TestCatalogueClient:
+class TestCatalogueClientWithOMD:
     def mock_service_response(self, fqn):
         return {
             "fullyQualifiedName": fqn,
@@ -42,9 +46,9 @@ class TestCatalogueClient:
             },
         }
 
-    def mock_table_response(self, fqn):
+    def mock_table_response_omd(self):
         return {
-            "fullyQualifiedName": "some-table",
+            "fullyQualifiedName": "my_table",
             "id": "39b855e3-84a5-491e-b9a5-c411e626e340",
             "name": "foo",
             "service": {
@@ -103,21 +107,23 @@ class TestCatalogueClient:
         )
 
     @pytest.fixture
-    def client(self, requests_mock):
+    def omd_client(self, requests_mock) -> OpenMetadataCatalogueClient:
         requests_mock.get(
             "http://example.com/api/v1/system/version",
             json={"version": "1.2.0.1", "revision": "1", "timestamp": 0},
         )
 
-        return CatalogueClient(jwt_token="abc", api_uri="http://example.com/api")
+        return OpenMetadataCatalogueClient(
+            jwt_token="abc", api_url="http://example.com/api"
+        )
 
-    def test_create_service(self, client, requests_mock):
+    def test_create_service_omd(self, omd_client, requests_mock):
         requests_mock.put(
             "http://example.com/api/v1/services/databaseServices",
             json=self.mock_service_response("some-service"),
         )
 
-        fqn = client.create_or_update_database_service()
+        fqn = omd_client.upsert_database_service()
 
         assert requests_mock.last_request.json() == {
             "name": "data-platform",
@@ -127,14 +133,14 @@ class TestCatalogueClient:
         }
         assert fqn == "some-service"
 
-    def test_create_database(self, client, requests_mock, catalogue):
+    def test_create_database_omd(self, request, omd_client, requests_mock, catalogue):
         requests_mock.put(
             "http://example.com/api/v1/databases",
             json=self.mock_database_response("some-db"),
         )
 
-        fqn = client.create_or_update_database(
-            metadata=catalogue, service_fqn="data-platform"
+        fqn: str = omd_client.upsert_database(
+            metadata=catalogue, location=DataLocation("data-platform")
         )
         assert requests_mock.last_request.json() == {
             "name": "data_platform",
@@ -161,14 +167,14 @@ class TestCatalogueClient:
         }
         assert fqn == "some-db"
 
-    def test_create_schema(self, client, requests_mock, data_product):
+    def test_create_schema(self, request, omd_client, requests_mock, data_product):
         requests_mock.put(
             "http://example.com/api/v1/databaseSchemas",
             json=self.mock_schema_response("some-schema"),
         )
 
-        fqn = client.create_or_update_schema(
-            metadata=data_product, database_fqn="data-product"
+        fqn = omd_client.upsert_schema(
+            metadata=data_product, location=DataLocation("data-product")
         )
         assert requests_mock.last_request.json() == {
             "name": "my_data_product",
@@ -206,15 +212,16 @@ class TestCatalogueClient:
         }
         assert fqn == "some-schema"
 
-    def test_create_table(self, client, requests_mock, table):
+    def test_create_table_omd(self, request, omd_client, requests_mock, table):
         requests_mock.put(
             "http://example.com/api/v1/tables",
-            json=self.mock_table_response("some-table"),
+            json=self.mock_table_response_omd(),
         )
 
-        fqn = client.create_or_update_table(
-            metadata=table, schema_fqn="data-platform.data-product.schema"
+        fqn = omd_client.upsert_table(
+            metadata=table, location=DataLocation("data-platform.data-product.schema")
         )
+        assert requests_mock.called
         assert requests_mock.last_request.json() == {
             "name": "my_table",
             "displayName": None,
@@ -275,9 +282,9 @@ class TestCatalogueClient:
             "sourceUrl": None,
             "fileFormat": None,
         }
-        assert fqn == "some-table"
+        assert fqn == "my_table"
 
-    def test_404_handling(self, client, requests_mock, table):
+    def test_404_handling_omd(self, request, omd_client, requests_mock, table):
         requests_mock.put(
             "http://example.com/api/v1/tables",
             status_code=404,
@@ -285,11 +292,12 @@ class TestCatalogueClient:
         )
 
         with pytest.raises(ReferencedEntityMissing):
-            client.create_or_update_table(
-                metadata=table, schema_fqn="data-platform.data-product.schema"
+            omd_client.upsert_table(
+                metadata=table,
+                location=DataLocation("data-platform.data-product.schema"),
             )
 
-    def test_get_user_id(self, requests_mock, client):
+    def test_get_user_id(self, request, requests_mock, omd_client):
         requests_mock.get(
             "http://example.com/api/v1/users/name/justice",
             json={
@@ -298,6 +306,7 @@ class TestCatalogueClient:
                 "id": "39b855e3-84a5-491e-b9a5-c411e626e340",
             },
         )
-        user_id = client.get_user_id("justice@justice.gov.uk")
+
+        user_id = omd_client.get_user_id("justice@justice.gov.uk")
 
         assert "39b855e3-84a5-491e-b9a5-c411e626e340" in str(user_id)

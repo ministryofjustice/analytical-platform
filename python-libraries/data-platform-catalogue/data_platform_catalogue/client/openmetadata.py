@@ -1,7 +1,12 @@
 import json
-import logging
 from http import HTTPStatus
 
+from data_platform_catalogue.client.base import (
+    BaseCatalogueClient,
+    CatalogueError,
+    ReferencedEntityMissing,
+    logger,
+)
 from metadata.generated.schema.api.data.createDatabase import CreateDatabaseRequest
 from metadata.generated.schema.api.data.createDatabaseSchema import (
     CreateDatabaseSchemaRequest,
@@ -29,12 +34,14 @@ from metadata.generated.schema.type.tagLabel import (
 )
 from metadata.ingestion.ometa.ometa_api import APIError, OpenMetadata
 
-from .entities import CatalogueMetadata, DataProductMetadata, TableMetadata
+from ..entities import (
+    CatalogueMetadata,
+    DataLocation,
+    DataProductMetadata,
+    TableMetadata,
+)
 
-logger = logging.getLogger(__name__)
-
-
-DATA_TYPE_MAPPING = {
+OMD_DATA_TYPE_MAPPING = {
     "boolean": OpenMetadataDataType.BOOLEAN,
     "tinyint": OpenMetadataDataType.TINYINT,
     "smallint": OpenMetadataDataType.SMALLINT,
@@ -52,22 +59,9 @@ DATA_TYPE_MAPPING = {
 }
 
 
-class CatalogueError(Exception):
+class OpenMetadataCatalogueClient(BaseCatalogueClient):
     """
-    Base class for all errors.
-    """
-
-
-class ReferencedEntityMissing(CatalogueError):
-    """
-    A referenced entity (such as a user or tag) does not yet exist when
-    attempting to create a new metadata resource in the catalogue.
-    """
-
-
-class CatalogueClient:
-    """
-    Client for pushing metadata to the catalogue.
+    Client for pushing metadata to the OpenMetadata catalogue.
 
     Tables in the catalogue are arranged into the following hierarchy:
     DatabaseService -> Database -> Schema -> Table
@@ -79,13 +73,13 @@ class CatalogueClient:
     def __init__(
         self,
         jwt_token,
-        api_uri: str = "https://catalogue.apps-tools.development.data-platform.service.justice.gov.uk/api",
+        api_url: str,
     ):
         self.server_config = OpenMetadataConnection(
-            hostPort=api_uri,
+            hostPort=api_url,
             securityConfig=OpenMetadataJWTClientConfig(jwtToken=jwt_token),
             authProvider="openmetadata",
-        )
+        )  # pyright: ignore[reportGeneralTypeIssues]
         self.metadata = OpenMetadata(self.server_config)
 
     def is_healthy(self) -> bool:
@@ -94,7 +88,7 @@ class CatalogueClient:
         """
         return self.metadata.health_check()
 
-    def create_or_update_database_service(
+    def upsert_database_service(
         self, name: str = "data-platform", display_name: str = "Data platform"
     ) -> str:
         """
@@ -119,12 +113,14 @@ class CatalogueClient:
         response = self.metadata.client.put(
             "/services/databaseServices", data=json.dumps(service)
         )
+        if response is not None:
+            return response["fullyQualifiedName"]
+        else:
+            raise ReferencedEntityMissing
 
-        return response["fullyQualifiedName"]
-
-    def create_or_update_database(
-        self, metadata: CatalogueMetadata | DataProductMetadata, service_fqn: str
-    ):
+    def upsert_database(
+        self, metadata: CatalogueMetadata | DataProductMetadata, location: DataLocation
+    ) -> str:
         """
         Define a database.
         There should be one database per data product.
@@ -133,12 +129,16 @@ class CatalogueClient:
             name=metadata.name,
             description=metadata.description,
             tags=self._generate_tags(metadata.tags),
-            service=service_fqn,
-            owner=EntityReference(id=metadata.owner, type="user"),
+            service=location.fully_qualified_name,
+            owner=EntityReference(
+                id=metadata.owner, type="user"
+            ),  # pyright: ignore[reportGeneralTypeIssues]
         )
-        return self._create_or_update_entity(create_db)
+        return self._upsert_entity(create_db)
 
-    def create_or_update_schema(self, metadata: DataProductMetadata, database_fqn: str):
+    def upsert_schema(
+        self, metadata: DataProductMetadata, location: DataLocation
+    ) -> str:
         """
         Define a database schema.
         There should be one schema per data product and for now flexibility is retained
@@ -149,14 +149,22 @@ class CatalogueClient:
         create_schema = CreateDatabaseSchemaRequest(
             name=metadata.name,
             description=metadata.description,
-            owner=EntityReference(id=metadata.owner, type="user"),
+            owner=EntityReference(
+                id=metadata.owner, type="user"
+            ),  # pyright: ignore[reportGeneralTypeIssues]
             tags=self._generate_tags(metadata.tags),
             retentionPeriod=self._generate_duration(metadata.retention_period_in_days),
-            database=database_fqn,
+            database=location.fully_qualified_name,
         )
-        return self._create_or_update_entity(create_schema)
+        return self._upsert_entity(create_schema)
 
-    def create_or_update_table(self, metadata: TableMetadata, schema_fqn: str):
+    def upsert_table(
+        self,
+        metadata: TableMetadata,
+        location: DataLocation,
+        *args,
+        **kwargs,
+    ) -> str:
         """
         Define a table.
         There can be many tables per data product.
@@ -166,9 +174,10 @@ class CatalogueClient:
         columns = [
             Column(
                 name=column["name"],
-                dataType=DATA_TYPE_MAPPING[column["type"]],
+                dataType=OMD_DATA_TYPE_MAPPING[column["type"]],
                 description=column["description"],
-            )
+            )  # pyright: ignore[reportGeneralTypeIssues]
+            # pyright is ignoring field(None,x)
             for column in metadata.column_details
         ]
         create_table = CreateTableRequest(
@@ -176,12 +185,12 @@ class CatalogueClient:
             description=metadata.description,
             retentionPeriod=self._generate_duration(metadata.retention_period_in_days),
             tags=self._generate_tags(metadata.tags),
-            databaseSchema=schema_fqn,
+            databaseSchema=location.fully_qualified_name,
             columns=columns,
-        )
-        return self._create_or_update_entity(create_table)
+        )  # pyright: ignore[reportGeneralTypeIssues]
+        return self._upsert_entity(create_table)
 
-    def _create_or_update_entity(self, data) -> str:
+    def _upsert_entity(self, data) -> str:
         logger.info(f"Creating {data.json()}")
 
         try:
@@ -201,42 +210,22 @@ class CatalogueClient:
         returns the user id from openmetadata when given a user's email
         """
         username = user_email.split("@")[0]
-        user_id = self.metadata.get_by_name(entity=User, fqn=username).id
-
-        return user_id
-
-    def delete_database_service(self, fqn: str):
-        """
-        Delete a database service.
-        """
-        raise NotImplementedError
-
-    def delete_database(self, fqn: str):
-        """
-        Delete a database.
-        """
-        raise NotImplementedError
-
-    def delete_schema(self, fqn: str):
-        """
-        Delete a schema
-        """
-        raise NotImplementedError
-
-    def delete_table(self, fqn: str):
-        """
-        Delete a table.
-        """
-        raise NotImplementedError
+        user = self.metadata.get_by_name(entity=User, fqn=username)
+        if user is not None:
+            return user.id
+        else:
+            raise ReferencedEntityMissing
 
     def _generate_tags(self, tags: list[str]):
+        # TODO? update using the sdk logic:
+        # https://docs.open-metadata.org/v1.2.x/sdk/python/ingestion/tags#6-creating-the-classification
         return [
             TagLabel(
                 tagFQN=tag,
                 labelType=LabelType.Automated,
                 source=TagSource.Classification,
                 state=State.Confirmed,
-            )
+            )  # pyright: ignore[reportGeneralTypeIssues]
             for tag in tags
         ]
 
