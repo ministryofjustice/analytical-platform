@@ -75,9 +75,3 @@ data "aws_nat_gateways" "nat_gateways" {
     values = ["available"]
   }
 }
-
-##################################################
-# added as required by aws_iam_policy_document
-data "aws_caller_identity" "target" {
-  provider = aws.target
-}
