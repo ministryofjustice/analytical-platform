@@ -13,7 +13,7 @@ review_in: 6 months
 
 ## Context
 
-* a
+The Data Platform will need to provide a secure location to store and share data to those who have been granted access. The use of a multi-account strategy will give the Data Platform a scalable storage architecture which adheres to AWS best practices (see)[AWS Well-Architected Framework](http://aws.amazon.com/architecture/well-architected/) pillars on operational excellence, security, reliability, and cost optimisation. Our current architecture is overly permissive in design and hides 
 
 ## Decision
 
@@ -23,7 +23,8 @@ review_in: 6 months
 
 ### General consequences
 
-* a
+* Ownership and responsibility of cloud resources,  we need for our users to take responsibility for storing data as there is a [sustainability](https://www.gov.uk/guidance/the-technology-code-of-practice#make-your-technology-sustainable) and cost associated with storing data. The just create a lot of data without any lifecycle or metadata controls.
+* Using separate AWS (Amazon Web Services) accounts for storing data will serve several purposes for MoJ, each contributing to improved governance, security and manageability.
 
 ### Advantages
 
