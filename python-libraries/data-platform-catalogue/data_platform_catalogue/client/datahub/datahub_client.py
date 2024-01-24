@@ -332,3 +332,6 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         return self.search_client.search(
             query=query, count=count, page=page, result_types=result_types
         )
+
+    def list_data_products(self) -> SearchResponse:
+        return self.search(count=500, result_types=ResultType.DATA_PRODUCT)
