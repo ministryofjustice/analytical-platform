@@ -1,5 +1,6 @@
 import logging
 from abc import ABC, abstractmethod
+from typing import Sequence
 
 from ..entities import (
     CatalogueMetadata,
@@ -7,6 +8,7 @@ from ..entities import (
     DataProductMetadata,
     TableMetadata,
 )
+from ..search_types import ResultType, SearchResponse
 
 logger = logging.getLogger(__name__)
 
@@ -53,3 +55,18 @@ class BaseCatalogueClient(ABC):
         data_product_metadata: DataProductMetadata | None = None,
     ) -> str:
         pass
+
+    def search(
+        self,
+        query: str = "*",
+        count: int = 20,
+        page: str | None = None,
+        result_types: Sequence[ResultType] = (
+            ResultType.DATA_PRODUCT,
+            ResultType.TABLE,
+        ),
+    ) -> SearchResponse:
+        """
+        Wraps the catalogue's search function.
+        """
+        raise NotImplementedError

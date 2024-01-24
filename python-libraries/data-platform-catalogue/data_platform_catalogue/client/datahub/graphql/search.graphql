@@ -1,0 +1,144 @@
+query Search(
+  $query: String!
+  $count: Int!
+  $start: Int!
+  $types: [EntityType!]
+) {
+  searchAcrossEntities(
+    input: { types: $types, query: $query, start: $start, count: $count }
+  ) {
+    start
+    count
+    total
+    searchResults {
+      insights {
+        text
+      }
+      matchedFields {
+        name
+        value
+      }
+      entity {
+        type
+        ... on Dataset {
+          urn
+          type
+          platform {
+            name
+          }
+          ownership {
+            owners {
+              owner {
+                ... on CorpUser {
+                  urn
+                  properties {
+                    fullName
+                    email
+                  }
+                }
+                ... on CorpGroup {
+                  urn
+                  properties {
+                    displayName
+                    email
+                  }
+                }
+              }
+            }
+          }
+          name
+          properties {
+            name
+            qualifiedName
+            description
+            customProperties {
+              key
+              value
+            }
+            created
+            lastModified
+          }
+          editableProperties {
+            description
+          }
+          tags {
+            tags {
+              tag {
+                urn
+                properties {
+                  name
+                  description
+                }
+              }
+            }
+          }
+          lastIngested
+          domain {
+            domain {
+              urn
+              id
+              properties {
+                name
+                description
+              }
+            }
+          }
+        }
+        ... on DataProduct {
+          urn
+          type
+          ownership {
+            owners {
+              owner {
+                ... on CorpUser {
+                  urn
+                  properties {
+                    fullName
+                    email
+                  }
+                }
+                ... on CorpGroup {
+                  urn
+                  properties {
+                    displayName
+                    email
+                  }
+                }
+              }
+            }
+          }
+          properties {
+            name
+            description
+            customProperties {
+              key
+              value
+            }
+            numAssets
+          }
+          domain {
+            domain {
+              urn
+              id
+              properties {
+                name
+                description
+              }
+            }
+          }
+          tags {
+            tags {
+              tag {
+                urn
+                properties {
+                  name
+                  description
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
