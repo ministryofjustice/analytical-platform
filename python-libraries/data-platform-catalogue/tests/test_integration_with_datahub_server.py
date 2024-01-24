@@ -13,6 +13,7 @@ import pytest
 from data_platform_catalogue import DataProductMetadata, TableMetadata
 from data_platform_catalogue.client.datahub.datahub_client import DataHubCatalogueClient
 from data_platform_catalogue.entities import DataLocation
+from data_platform_catalogue.search_types import ResultType
 from datahub.metadata.schema_classes import DatasetPropertiesClass, SchemaMetadataClass
 
 jwt_token = os.environ.get("JWT_TOKEN")
@@ -85,6 +86,8 @@ def test_search_for_data_product():
     )
     client.upsert_data_product(data_product)
 
-    response = client.search(query="lfdskjflkjflkjsdflksfjds")
+    response = client.search(
+        query="lfdskjflkjflkjsdflksfjds", result_types=(ResultType.DATA_PRODUCT,)
+    )
     assert response.total_results >= 1
     assert response.page_results[0].id == "urn:li:dataProduct:lfdskjflkjflkjsdflksfjds"

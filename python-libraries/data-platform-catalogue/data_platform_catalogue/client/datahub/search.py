@@ -2,7 +2,7 @@ import json
 import logging
 from datetime import datetime
 from importlib.resources import files
-from typing import Any
+from typing import Any, Sequence
 
 from data_platform_catalogue.search_types import (
     ResultType,
@@ -25,7 +25,14 @@ class SearchClient:
         )
 
     def search(
-        self, query: str = "*", count: int = 20, page: str | None = None
+        self,
+        query: str = "*",
+        count: int = 20,
+        page: str | None = None,
+        result_types: Sequence[ResultType] = (
+            ResultType.DATA_PRODUCT,
+            ResultType.TABLE,
+        ),
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
@@ -35,7 +42,9 @@ class SearchClient:
         else:
             start = int(page)
 
-        variables = {"count": count, "query": query, "start": start}
+        types = self._map_result_types(result_types)
+
+        variables = {"count": count, "query": query, "start": start, "types": types}
 
         try:
             response = self.graph.execute_graphql(self.search_query, variables)
@@ -64,6 +73,17 @@ class SearchClient:
         return SearchResponse(
             total_results=response["total"], page_results=page_results
         )
+
+    def _map_result_types(self, result_types: Sequence[ResultType]):
+        """
+        Map result types to Datahub EntityTypes
+        """
+        types = []
+        if ResultType.DATA_PRODUCT in result_types:
+            types.append("DATA_PRODUCT")
+        if ResultType.TABLE in result_types:
+            types.append("DATASET")
+        return types
 
     def _parse_owner(self, entity: dict[str, Any]):
         """

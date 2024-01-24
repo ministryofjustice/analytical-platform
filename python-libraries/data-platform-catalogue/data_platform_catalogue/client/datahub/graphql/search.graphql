@@ -1,11 +1,11 @@
-query Search($query: String!, $count: Int!, $start: Int!) {
+query Search(
+  $query: String!
+  $count: Int!
+  $start: Int!
+  $types: [EntityType!]
+) {
   searchAcrossEntities(
-    input: {
-      types: [DATASET, DATA_PRODUCT]
-      query: $query
-      start: $start
-      count: $count
-    }
+    input: { types: $types, query: $query, start: $start, count: $count }
   ) {
     start
     count
