@@ -52,6 +52,18 @@ class TestCatalogueClientWithDatahub:
         )
 
     @pytest.fixture
+    def table2(self):
+        return TableMetadata(
+            name="my_table2",
+            description="this is a different table",
+            column_details=[
+                {"name": "boo", "type": "boolean", "description": "spooky"},
+                {"name": "yar", "type": "string", "description": "shiver my timbers"},
+            ],
+            retention_period_in_days=1,
+        )
+
+    @pytest.fixture
     def datahub_client(self, base_mock_graph) -> DataHubCatalogueClient:
         return DataHubCatalogueClient(
             jwt_token="abc", api_url="http://example.com/api/gms", graph=base_mock_graph
@@ -99,6 +111,41 @@ class TestCatalogueClientWithDatahub:
         output_file = Path(tmp_path / "datahub_create_table_with_metadata.json")
         base_mock_graph.sink_to_file(output_file)
         check_snapshot("datahub_create_table_with_metadata.json", output_file)
+
+    def test_create_two_tables_with_metadata(
+        self,
+        datahub_client,
+        table,
+        table2,
+        data_product,
+        base_mock_graph,
+        tmp_path,
+        check_snapshot,
+    ):
+        """
+        Case where we create a dataset, data product and domain
+        """
+        fqn = datahub_client.upsert_table(
+            metadata=table,
+            data_product_metadata=data_product,
+            location=DataLocation("my_database"),
+        )
+        fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table,PROD)"
+
+        assert fqn == fqn_out
+
+        fqn = datahub_client.upsert_table(
+            metadata=table2,
+            data_product_metadata=data_product,
+            location=DataLocation("my_database"),
+        )
+        fqn_out = "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table2,PROD)"
+
+        assert fqn == fqn_out
+
+        output_file = Path(tmp_path / "datahub_create_table_with_metadata.json")
+        base_mock_graph.sink_to_file(output_file)
+        check_snapshot("datahub_create_two_tables_with_metadata.json", output_file)
 
     def test_create_table_and_metadata_idempotent_datahub(
         self,
