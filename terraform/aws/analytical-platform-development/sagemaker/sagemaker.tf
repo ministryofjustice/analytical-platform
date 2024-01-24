@@ -1,9 +1,7 @@
 resource "aws_sagemaker_domain" "studio_domain" {
+  #checkov:skip=CKV_AWS_187: low severity change requires destroy and replace
   domain_name = var.domain_name
-  auth_mode   = var.auth_mode #
-
-  # KMS customer managed key for encryption of EFS
-  kms_key_id = aws_kms_key.sagemaker_cmk.key_id
+  auth_mode   = var.auth_mode
 
   default_space_settings {
     execution_role = aws_iam_role.sagemaker_studio_execution_role.arn
