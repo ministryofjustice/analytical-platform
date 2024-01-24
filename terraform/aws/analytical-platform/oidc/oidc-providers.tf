@@ -6,6 +6,7 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_production_
     resources = [format("arn:aws:iam::%s:role/github-actions-infrastructure", var.account_ids["analytical-platform-data-engineering-production"])]
   }
   statement {
+    #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid       = "AllowOIDCToDecryptKMS"
     effect    = "Allow"
     actions   = ["kms:Decrypt"]
@@ -21,6 +22,7 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_production_
     resources = ["arn:aws:s3:::global-tf-state-aqsvzyd5u9/*", "arn:aws:s3:::global-tf-state-aqsvzyd5u9/"]
   }
   statement {
+    #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
     sid    = "AllowOIDCWriteState"
     effect = "Allow"
     actions = [
@@ -69,6 +71,7 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_sandbox_a_g
     resources = [format("arn:aws:iam::%s:role/github-actions-infrastructure", var.account_ids["analytical-platform-data-engineering-sandbox-a"])]
   }
   statement {
+    #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid       = "AllowOIDCToDecryptKMS"
     effect    = "Allow"
     actions   = ["kms:Decrypt"]
@@ -84,6 +87,7 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_sandbox_a_g
     resources = ["arn:aws:s3:::global-tf-state-aqsvzyd5u9/*", "arn:aws:s3:::global-tf-state-aqsvzyd5u9/"]
   }
   statement {
+    #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
     sid    = "AllowOIDCWriteState"
     effect = "Allow"
     actions = [
@@ -175,6 +179,7 @@ data "aws_iam_policy_document" "analytical_platform_management_production_github
     resources = formatlist("arn:aws:iam::%s:role/github-actions-infrastructure", values(var.account_ids))
   }
   statement {
+    #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid       = "AllowOIDCToDecryptKMS"
     effect    = "Allow"
     actions   = ["kms:Decrypt"]
@@ -193,6 +198,7 @@ data "aws_iam_policy_document" "analytical_platform_management_production_github
     ]
   }
   statement {
+    #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
     sid    = "AllowOIDCWriteState"
     effect = "Allow"
     actions = [
