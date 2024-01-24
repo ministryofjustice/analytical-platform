@@ -356,3 +356,24 @@ resource "aws_eks_addon" "coredns_dev" {
   addon_version               = "v1.9.3-eksbuild.7"
   resolve_conflicts_on_create = "OVERWRITE"
 }
+
+resource "aws_eks_addon" "kube_proxy_prod" {
+  cluster_name                = var.prod_eks_cluster_name
+  addon_name                  = "kube-proxy"
+  addon_version               = "v1.25.14-eksbuild.2"
+  resolve_conflicts_on_create = "OVERWRITE"
+}
+
+resource "aws_eks_addon" "vpc_cni_prod" {
+  cluster_name                = var.prod_eks_cluster_name
+  addon_name                  = "vpc-cni"
+  addon_version               = "v1.16.0-eksbuild.1"
+  resolve_conflicts_on_create = "OVERWRITE"
+}
+
+resource "aws_eks_addon" "coredns_prod" {
+  cluster_name                = var.prod_eks_cluster_name
+  addon_name                  = "coredns"
+  addon_version               = "v1.9.3-eksbuild.7"
+  resolve_conflicts_on_create = "OVERWRITE"
+}
