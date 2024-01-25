@@ -334,4 +334,4 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         )
 
     def list_data_products(self) -> SearchResponse:
-        return self.search(count=500, result_types=[ResultType.DATA_PRODUCT])
+        return self.search_client.list_data_products()
