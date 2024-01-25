@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- DataHubCatalogueClient.list_data_products()
+- SearchClient.list_data_products()
 
 ## [0.5.0] 2024-01-24
 
