@@ -4,6 +4,7 @@ from unittest.mock import MagicMock
 import pytest
 from data_platform_catalogue.client.datahub.search import SearchClient
 from data_platform_catalogue.search_types import (
+    MultiSelectFilter,
     ResultType,
     SearchResponse,
     SearchResult,
@@ -306,4 +307,23 @@ def test_result_with_owner(mock_graph, searcher):
                 tags=[],
             )
         ],
+    )
+
+
+def test_filter(searcher, mock_graph):
+    datahub_response = {
+        "searchAcrossEntities": {
+            "start": 0,
+            "count": 0,
+            "total": 0,
+            "searchResults": [],
+        }
+    }
+    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+    response = searcher.search(filters=[MultiSelectFilter("domains", ["Abc", "Def"])])
+
+    assert response == SearchResponse(
+        total_results=0,
+        page_results=[],
     )

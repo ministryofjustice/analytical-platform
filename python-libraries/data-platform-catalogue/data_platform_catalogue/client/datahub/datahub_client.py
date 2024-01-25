@@ -8,7 +8,11 @@ from data_platform_catalogue.client.base import (
     ReferencedEntityMissing,
     logger,
 )
-from data_platform_catalogue.search_types import ResultType, SearchResponse
+from data_platform_catalogue.search_types import (
+    MultiSelectFilter,
+    ResultType,
+    SearchResponse,
+)
 from datahub.emitter.mce_builder import make_data_platform_urn
 from datahub.emitter.mcp import MetadataChangeProposalWrapper
 from datahub.ingestion.graph.client import DatahubClientConfig, DataHubGraph
@@ -325,10 +329,15 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
         ),
+        filters: Sequence[MultiSelectFilter] = (),
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
         """
         return self.search_client.search(
-            query=query, count=count, page=page, result_types=result_types
+            query=query,
+            count=count,
+            page=page,
+            result_types=result_types,
+            filters=filters,
         )

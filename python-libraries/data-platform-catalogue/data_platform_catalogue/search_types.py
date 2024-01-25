@@ -1,12 +1,18 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum, auto
-from typing import Any
+from typing import Any, Literal
 
 
 class ResultType(Enum):
     DATA_PRODUCT = auto()
     TABLE = auto()
+
+
+@dataclass
+class MultiSelectFilter:
+    filter_name: Literal["domains", "tags", "customProperties"]
+    included_values: list[Any]
 
 
 @dataclass

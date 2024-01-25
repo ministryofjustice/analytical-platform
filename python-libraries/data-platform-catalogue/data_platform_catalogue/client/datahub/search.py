@@ -5,6 +5,7 @@ from importlib.resources import files
 from typing import Any, Sequence
 
 from data_platform_catalogue.search_types import (
+    MultiSelectFilter,
     ResultType,
     SearchResponse,
     SearchResult,
@@ -33,6 +34,7 @@ class SearchClient:
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
         ),
+        filters: Sequence[MultiSelectFilter] = (),
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
@@ -43,8 +45,15 @@ class SearchClient:
             start = int(page)
 
         types = self._map_result_types(result_types)
+        formatted_filters = self._map_filters(filters)
 
-        variables = {"count": count, "query": query, "start": start, "types": types}
+        variables = {
+            "count": count,
+            "query": query,
+            "start": start,
+            "types": types,
+            "filters": formatted_filters,
+        }
 
         try:
             response = self.graph.execute_graphql(self.search_query, variables)
@@ -84,6 +93,14 @@ class SearchClient:
         if ResultType.TABLE in result_types:
             types.append("DATASET")
         return types
+
+    def _map_filters(self, filters: Sequence[MultiSelectFilter]):
+        result = []
+        for filter in filters:
+            result.append(
+                {"field": filter.filter_name, "values": filter.included_values}
+            )
+        return result
 
     def _parse_owner(self, entity: dict[str, Any]):
         """
