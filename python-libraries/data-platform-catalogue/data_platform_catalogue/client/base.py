@@ -70,3 +70,6 @@ class BaseCatalogueClient(ABC):
         Wraps the catalogue's search function.
         """
         raise NotImplementedError
+
+    def list_data_products(self) -> SearchResponse:
+        return self.search(count=500, result_types=[ResultType.DATA_PRODUCT])

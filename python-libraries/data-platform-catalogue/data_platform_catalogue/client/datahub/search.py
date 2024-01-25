@@ -74,9 +74,6 @@ class SearchClient:
             total_results=response["total"], page_results=page_results
         )
 
-    def list_data_products(self):
-        return self.search(count=500, result_types=[ResultType.DATA_PRODUCT])
-
     def _map_result_types(self, result_types: Sequence[ResultType]):
         """
         Map result types to Datahub EntityTypes
