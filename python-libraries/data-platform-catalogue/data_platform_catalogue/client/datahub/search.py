@@ -4,15 +4,16 @@ from datetime import datetime
 from importlib.resources import files
 from typing import Any, Literal, Sequence
 
-from data_platform_catalogue.search_types import (
+from datahub.configuration.common import GraphError
+from datahub.ingestion.graph.client import DataHubGraph
+
+from ...search_types import (
     FacetOption,
     MultiSelectFilter,
     ResultType,
     SearchResponse,
     SearchResult,
 )
-from datahub.configuration.common import GraphError
-from datahub.ingestion.graph.client import DataHubGraph
 
 logger = logging.getLogger(__name__)
 
