@@ -12,6 +12,7 @@ resource "aws_security_group" "efs" {
     to_port     = 2049
     protocol    = "tcp"
     cidr_blocks = var.vpc_private_subnets
+    description = "EFS security group to allow access to home directories"
   }
 }
 
@@ -28,12 +29,14 @@ resource "aws_security_group" "aps" {
     to_port         = 443
     protocol        = "tcp"
     security_groups = [module.eks.worker_security_group_id]
+    description     = "allow EKS cluster to access VPC endpoint for managed prometheus"
   }
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "allow EKS cluster to access VPC endpoint for managed prometheus"
   }
 }
 
@@ -42,6 +45,7 @@ resource "aws_security_group" "aps" {
 ##################################################
 
 resource "aws_security_group" "controlplane" {
+  #checkov:skip=CKV2_AWS_5: skip not atttached to ec2
   name        = "cluster_security_group"
   description = "control plane ingress"
   vpc_id      = module.vpc.vpc_id

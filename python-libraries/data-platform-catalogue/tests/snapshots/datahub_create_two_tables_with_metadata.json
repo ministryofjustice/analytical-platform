@@ -1,0 +1,256 @@
+[
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "datasetProperties",
+    "aspect": {
+        "json": {
+            "customProperties": {},
+            "description": "bla bla",
+            "tags": []
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "schemaMetadata",
+    "aspect": {
+        "json": {
+            "schemaName": "my_table",
+            "platform": "urn:li:dataPlatform:glue",
+            "version": 1,
+            "created": {
+                "time": 0,
+                "actor": "urn:li:corpuser:unknown"
+            },
+            "lastModified": {
+                "time": 0,
+                "actor": "urn:li:corpuser:unknown"
+            },
+            "hash": "",
+            "platformSchema": {
+                "com.linkedin.schema.OtherSchema": {
+                    "rawSchema": ""
+                }
+            },
+            "fields": [
+                {
+                    "fieldPath": "foo",
+                    "nullable": false,
+                    "description": "a",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.StringType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "bar",
+                    "nullable": false,
+                    "description": "b",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NumberType": {}
+                        }
+                    },
+                    "nativeDataType": "int",
+                    "recursive": false,
+                    "isPartOfKey": false
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "domain",
+    "entityUrn": "urn:li:domain:legal-aid",
+    "changeType": "UPSERT",
+    "aspectName": "domainProperties",
+    "aspect": {
+        "json": {
+            "name": "legal-aid",
+            "description": ""
+        }
+    }
+},
+{
+    "entityType": "dataproduct",
+    "entityUrn": "urn:li:dataProduct:my_data_product",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:legal-aid"
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataproduct",
+    "entityUrn": "urn:li:dataProduct:my_data_product",
+    "changeType": "UPSERT",
+    "aspectName": "dataProductProperties",
+    "aspect": {
+        "json": {
+            "customProperties": {
+                "email": "justice@justice.gov.uk",
+                "retention_period_in_days": "365",
+                "dpia_required": "False"
+            },
+            "name": "my_data_product",
+            "description": "bla bla"
+        }
+    }
+},
+{
+    "entityType": "dataproduct",
+    "entityUrn": "urn:li:dataProduct:my_data_product",
+    "changeType": "UPSERT",
+    "aspectName": "dataProductProperties",
+    "aspect": {
+        "json": {
+            "customProperties": {},
+            "assets": [
+                {
+                    "sourceUrn": "urn:li:dataProduct:my_data_product",
+                    "destinationUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table,PROD)"
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table2,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "datasetProperties",
+    "aspect": {
+        "json": {
+            "customProperties": {},
+            "description": "this is a different table",
+            "tags": []
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table2,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "schemaMetadata",
+    "aspect": {
+        "json": {
+            "schemaName": "my_table2",
+            "platform": "urn:li:dataPlatform:glue",
+            "version": 1,
+            "created": {
+                "time": 0,
+                "actor": "urn:li:corpuser:unknown"
+            },
+            "lastModified": {
+                "time": 0,
+                "actor": "urn:li:corpuser:unknown"
+            },
+            "hash": "",
+            "platformSchema": {
+                "com.linkedin.schema.OtherSchema": {
+                    "rawSchema": ""
+                }
+            },
+            "fields": [
+                {
+                    "fieldPath": "boo",
+                    "nullable": false,
+                    "description": "spooky",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.BooleanType": {}
+                        }
+                    },
+                    "nativeDataType": "boolean",
+                    "recursive": false,
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "yar",
+                    "nullable": false,
+                    "description": "shiver my timbers",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.StringType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "isPartOfKey": false
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "domain",
+    "entityUrn": "urn:li:domain:legal-aid",
+    "changeType": "UPSERT",
+    "aspectName": "domainProperties",
+    "aspect": {
+        "json": {
+            "name": "legal-aid",
+            "description": ""
+        }
+    }
+},
+{
+    "entityType": "dataproduct",
+    "entityUrn": "urn:li:dataProduct:my_data_product",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:legal-aid"
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataproduct",
+    "entityUrn": "urn:li:dataProduct:my_data_product",
+    "changeType": "UPSERT",
+    "aspectName": "dataProductProperties",
+    "aspect": {
+        "json": {
+            "customProperties": {
+                "email": "justice@justice.gov.uk",
+                "retention_period_in_days": "365",
+                "dpia_required": "False"
+            },
+            "name": "my_data_product",
+            "description": "bla bla"
+        }
+    }
+},
+{
+    "entityType": "dataproduct",
+    "entityUrn": "urn:li:dataProduct:my_data_product",
+    "changeType": "UPSERT",
+    "aspectName": "dataProductProperties",
+    "aspect": {
+        "json": {
+            "customProperties": {},
+            "assets": [
+                {
+                    "sourceUrn": "urn:li:dataProduct:my_data_product",
+                    "destinationUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table2,PROD)"
+                }
+            ]
+        }
+    }
+}
+]
