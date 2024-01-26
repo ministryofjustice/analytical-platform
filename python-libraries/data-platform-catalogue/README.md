@@ -70,6 +70,26 @@ except CatalogueError:
   print("oh no")
 ```
 
+## Search example
+
+```python
+response = client.search()
+
+# Total results across all pages
+print(response.total_results)
+
+# Iterate over search results
+for item in response.page_results:
+  print(item)
+
+# Iterate over facet options
+for option in response.facets['domains']:
+  print(option)
+
+# Filter by domain
+client.search(filters=[MultiSelectFilter("domains", [response.facets['domains'][0].value])])
+```
+
 ## Catalogue Implementations
 
 ### DataHub

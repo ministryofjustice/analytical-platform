@@ -102,3 +102,25 @@ def test_search_by_domain():
         result_types=(ResultType.DATA_PRODUCT,),
     )
     assert response.total_results == 0
+
+
+@runs_on_development_server
+def test_domain_facets_are_returned():
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+
+    data_product = DataProductMetadata(
+        name="lfdskjflkjflkjsdflksfjds",
+        description="lfdskjflkjflkjsdflksfjds",
+        version="v1.0.0",
+        owner="7804c127-d677-4900-82f9-83517e51bb94",
+        email="justice@justice.gov.uk",
+        retention_period_in_days=365,
+        domain="Sample",
+        dpia_required=False,
+    )
+    client.upsert_data_product(data_product)
+
+    response = client.search()
+    assert response.facets["domains"]

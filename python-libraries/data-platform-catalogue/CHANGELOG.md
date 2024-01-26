@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added filters param to the search function
+- Return facets attribute to the search response. This is a dictionary mapping
+  fieldnames to `FacetOptions`, which expose values, display names and the
+  count of results with that value.
 
 ## [0.6.0] 2024-01-24
 
