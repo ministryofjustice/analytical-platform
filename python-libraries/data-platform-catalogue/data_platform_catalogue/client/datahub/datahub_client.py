@@ -2,13 +2,6 @@ from typing import Sequence
 
 import datahub.emitter.mce_builder as mce_builder
 import datahub.metadata.schema_classes as schema_classes
-from data_platform_catalogue.client.base import (
-    BaseCatalogueClient,
-    CatalogueError,
-    ReferencedEntityMissing,
-    logger,
-)
-from data_platform_catalogue.search_types import ResultType, SearchResponse
 from datahub.emitter.mce_builder import make_data_platform_urn
 from datahub.emitter.mcp import MetadataChangeProposalWrapper
 from datahub.ingestion.graph.client import DatahubClientConfig, DataHubGraph
@@ -31,6 +24,8 @@ from ...entities import (
     DataProductMetadata,
     TableMetadata,
 )
+from ...search_types import MultiSelectFilter, ResultType, SearchResponse
+from ..base import BaseCatalogueClient, CatalogueError, ReferencedEntityMissing, logger
 from .search import SearchClient
 
 DATAHUB_DATA_TYPE_MAPPING = {
@@ -325,10 +320,15 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
         ),
+        filters: Sequence[MultiSelectFilter] = (),
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
         """
         return self.search_client.search(
-            query=query, count=count, page=page, result_types=result_types
+            query=query,
+            count=count,
+            page=page,
+            result_types=result_types,
+            filters=filters,
         )

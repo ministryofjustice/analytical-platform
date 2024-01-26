@@ -7,6 +7,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] 2024-01-25
+
+### Added
+
+- Added filters param to the search function
+- Return facets attribute to the search response. This is a dictionary mapping
+  fieldnames to `FacetOptions`, which expose values, display names and the
+  count of results with that value.
+
 ## [0.6.0] 2024-01-24
 
 ### Added

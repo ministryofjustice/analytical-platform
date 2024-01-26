@@ -13,7 +13,7 @@ import pytest
 from data_platform_catalogue import DataProductMetadata, TableMetadata
 from data_platform_catalogue.client.datahub.datahub_client import DataHubCatalogueClient
 from data_platform_catalogue.entities import DataLocation
-from data_platform_catalogue.search_types import ResultType
+from data_platform_catalogue.search_types import MultiSelectFilter, ResultType
 from datahub.metadata.schema_classes import DatasetPropertiesClass, SchemaMetadataClass
 
 jwt_token = os.environ.get("JWT_TOKEN")
@@ -91,3 +91,36 @@ def test_search_for_data_product():
     )
     assert response.total_results >= 1
     assert response.page_results[0].id == "urn:li:dataProduct:lfdskjflkjflkjsdflksfjds"
+
+
+@runs_on_development_server
+def test_search_by_domain():
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+
+    response = client.search(
+        filters=[MultiSelectFilter("domains", ["does-not-exist"])],
+        result_types=(ResultType.DATA_PRODUCT,),
+    )
+    assert response.total_results == 0
+
+
+@runs_on_development_server
+def test_domain_facets_are_returned():
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+
+    data_product = DataProductMetadata(
+        name="lfdskjflkjflkjsdflksfjds",
+        description="lfdskjflkjflkjsdflksfjds",
+        version="v1.0.0",
+        owner="7804c127-d677-4900-82f9-83517e51bb94",
+        email="justice@justice.gov.uk",
+        retention_period_in_days=365,
+        domain="Sample",
+        dpia_required=False,
+    )
+    client.upsert_data_product(data_product)
+
+    response = client.search()
+    assert response.facets["domains"]

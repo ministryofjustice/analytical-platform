@@ -4,6 +4,8 @@ from unittest.mock import MagicMock
 import pytest
 from data_platform_catalogue.client.datahub.search import SearchClient
 from data_platform_catalogue.search_types import (
+    FacetOption,
+    MultiSelectFilter,
     ResultType,
     SearchResponse,
     SearchResult,
@@ -306,4 +308,110 @@ def test_result_with_owner(mock_graph, searcher):
                 tags=[],
             )
         ],
+    )
+
+
+def test_filter(searcher, mock_graph):
+    datahub_response = {
+        "searchAcrossEntities": {
+            "start": 0,
+            "count": 0,
+            "total": 0,
+            "searchResults": [],
+        }
+    }
+    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+    response = searcher.search(filters=[MultiSelectFilter("domains", ["Abc", "Def"])])
+
+    assert response == SearchResponse(
+        total_results=0,
+        page_results=[],
+    )
+
+
+def test_facets(searcher, mock_graph):
+    datahub_response = {
+        "searchAcrossEntities": {
+            "start": 0,
+            "count": 10,
+            "total": 10,
+            "searchResults": [],
+            "facets": [
+                {
+                    "field": "_entityType",
+                    "displayName": "Type",
+                    "aggregations": [
+                        {"value": "DATASET", "count": 1505, "entity": None}
+                    ],
+                },
+                {
+                    "field": "glossaryTerms",
+                    "displayName": "Glossary Term",
+                    "aggregations": [
+                        {
+                            "value": "urn:li:glossaryTerm:Classification.Sensitive",
+                            "count": 1,
+                            "entity": {"properties": {"name": "Sensitive"}},
+                        },
+                        {
+                            "value": "urn:li:glossaryTerm:Silver",
+                            "count": 1,
+                            "entity": {"properties": None},
+                        },
+                    ],
+                },
+                {
+                    "field": "domains",
+                    "displayName": "Domain",
+                    "aggregations": [
+                        {
+                            "value": "urn:li:domain:094dc54b-0ebc-40a6-a4cf-e1b75e8b8089",
+                            "count": 7,
+                            "entity": {"properties": {"name": "Pet Adoptions"}},
+                        },
+                        {
+                            "value": "urn:li:domain:7186eeff-a860-4b0a-989f-69473a0c9c67",
+                            "count": 4,
+                            "entity": {"properties": {"name": "E-Commerce"}},
+                        },
+                    ],
+                },
+            ],
+        }
+    }
+
+    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+    response = searcher.search()
+
+    assert response == SearchResponse(
+        total_results=10,
+        page_results=[],
+        facets={
+            "glossaryTerms": [
+                FacetOption(
+                    value="urn:li:glossaryTerm:Classification.Sensitive",
+                    label="Sensitive",
+                    count=1,
+                ),
+                FacetOption(
+                    value="urn:li:glossaryTerm:Silver",
+                    label="urn:li:glossaryTerm:Silver",
+                    count=1,
+                ),
+            ],
+            "domains": [
+                FacetOption(
+                    value="urn:li:domain:094dc54b-0ebc-40a6-a4cf-e1b75e8b8089",
+                    label="Pet Adoptions",
+                    count=7,
+                ),
+                FacetOption(
+                    value="urn:li:domain:7186eeff-a860-4b0a-989f-69473a0c9c67",
+                    label="E-Commerce",
+                    count=4,
+                ),
+            ],
+        },
     )
