@@ -25,16 +25,17 @@ Our current architecture is overly permissive in design and makes understanding 
 
 ### General consequences
 
-- A shift in ownership and responsibility of cloud resources, we need for our users to take responsibility for storing data as per our [sustainability](https://www.gov.uk/guidance/the-technology-code-of-practice#make-your-technology-sustainable) Technology Code of Practice [TCOP] and the costs associated with storing data. Our current Control Panel hides complexity but in doing so hides all the cost away from our users and ultimately makes our team responsible as that data is not appropriately tied back to the users or teams
-- We will need to work with Modernisation Platform on dispensing accounts which does not impact their own operations.
+- A shift in ownership and responsibility of cloud resources, we need for our users to take responsibility for storing data and align our service against [number 12, make your service sustainable](https://www.gov.uk/guidance/the-technology-code-of-practice#make-your-technology-sustainable) of the Technology Code of Practice. Our current offering hides complexity, but in doing so hides all the cost away from our users and ultimately makes our team responsible as that data is not appropriately tied back to the users or teams
+- Align with [NCSC cloud security guidance](https://www.ncsc.gov.uk/collection/cloud/the-cloud-security-principles/principle-3-separation-between-customers) on separation between customers to defend against another customer having malicious code in their instance of the service
+- We will need to work with Modernisation Platform on improving our ability to offer the dispensing accounts, and ensure that does not impact their own operations
 - We will be defining [Service Control Policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html) against [AWS Organizations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html)
 - Using separate AWS (Amazon Web Services) accounts for storing data will serve several purposes for MoJ, each contributing to improved governance, security and manageability
 - We will need to add functionality to our platform for users to request and manage access to their accounts
 - We will be able to give teams access to a project or temporary account which then can be closed down with all associated resources removed once completed
 
-Using separate AWS (Amazon Web Services) accounts for storing data will serve several purposes for MoJ, each contributing to improved governance, security, manageability, and efficiency. Here are some reasons for using separate AWS accounts for data storage:
+Using separate AWS (Amazon Web Services) accounts for storing data will serve several purposes for MoJ, each contributing to improved governance, security, manageability, and efficiency.
 
-Here are some reasons for using separate AWS accounts for data storage:
+Other reasons for using separate AWS accounts for data storage:
 
 1. **Security Isolation:**
     - **Data Segmentation:** Different types of data may have varying sensitivity levels. By using separate accounts, you can isolate highly sensitive data from less critical information, reducing the risk of unauthorised access or data breaches.
