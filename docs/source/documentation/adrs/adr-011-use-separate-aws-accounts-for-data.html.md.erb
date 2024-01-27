@@ -15,7 +15,10 @@ review_in: 6 months
 
 The Data Platform will need to provide a secure location to store and share data to those who have been granted access. The use of a multi-account strategy will give the Data Platform a scalable storage architecture which adheres to AWS best practices, see [AWS Well-Architected Framework](http://aws.amazon.com/architecture/well-architected/) pillars on operational excellence, security, reliability, and cost optimisation.
 
+**/tldr**
 Our current architecture is overly permissive in design and makes understanding responsibility and cost difficult
+
+Using separate AWS (Amazon Web Services) accounts for storing data will serve several purposes for MoJ, each contributing to improved governance, security and manageability
 
 ## Decision
 
@@ -25,13 +28,15 @@ Our current architecture is overly permissive in design and makes understanding 
 
 ### General consequences
 
-- A shift in ownership and responsibility of cloud resources, we need for our users to take responsibility for storing data and align our service against [number 12, make your service sustainable](https://www.gov.uk/guidance/the-technology-code-of-practice#make-your-technology-sustainable) of the Technology Code of Practice. Our current offering hides complexity, but in doing so hides all the cost away from our users and ultimately makes our team responsible as that data is not appropriately tied back to the users or teams
-- Align with [NCSC cloud security guidance](https://www.ncsc.gov.uk/collection/cloud/the-cloud-security-principles/principle-3-separation-between-customers) on separation between customers to defend against another customer having malicious code in their instance of the service
-- We will need to work with Modernisation Platform on improving our ability to offer the dispensing accounts, and ensure that does not impact their own operations
-- We will be defining [Service Control Policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html) against [AWS Organizations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html)
-- Using separate AWS (Amazon Web Services) accounts for storing data will serve several purposes for MoJ, each contributing to improved governance, security and manageability
-- We will need to add functionality to our platform for users to request and manage access to their accounts
-- We will be able to give teams access to a project or temporary account which then can be closed down with all associated resources removed once completed
+- A shift in ownership and responsibility of cloud resources back to the teams that own the data
+- We will need to understand what account owners need outside of single sign on, and account bootstrap
+- Cost will be visible to owners and aligns with the Technology Code of Practice point 12, [make your service sustainable](https://www.gov.uk/guidance/the-technology-code-of-practice#make-your-technology-sustainable)
+- Align with [NCSC cloud security guidance](https://www.ncsc.gov.uk/collection/cloud/the-cloud-security-principles/principle-3-separation-between-customers) on separation between customers (in our case domains) to defend against another customer having e.g. malicious code execution
+- We will need to work with Modernisation Platform on improving our ability to offer the dispensing accounts, ensure that we do no impact their own operations or support
+- We will define [Service Control Policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html) against [AWS Organizations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html)
+- We will need to add functionality to our platform for users to request and manage data requests
+- We will be able to give teams access to a project or temporary accounts for research (this could include other managed analytical tooling) which then can be securely closed down with all associated resources
+- Observability of data is simplified for account owners
 
 Using separate AWS (Amazon Web Services) accounts for storing data will serve several purposes for MoJ, each contributing to improved governance, security, manageability, and efficiency.
 
