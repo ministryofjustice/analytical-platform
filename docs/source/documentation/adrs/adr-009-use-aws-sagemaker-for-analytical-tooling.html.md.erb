@@ -13,7 +13,7 @@ review_in: 6 months
 
 ## Context
 
-Our Data Scientist want the ability to make use modelling with GPU which is not currently available, and the options with specialised CPU and higher memory to aid analytical applications.
+Our user want features not available on our existing platform. SageMaker provides a managed service for these tools and provides instances with higher resources and GPU to aid research.
 
 ## Decision
 
@@ -22,7 +22,10 @@ Our Data Scientist want the ability to make use modelling with GPU which is not 
 ## Proposal Consequences
 
 - Leverage managed services like SageMaker Studio
-- SageMaker pricing is based on usage and can vary significantly month-to-month depending on your application's usage, instance type and costs could spike unexpectedly
-- Workloads will be run in isolation mode without access to the internet to secure sensitive data
+- SageMaker cost is based on usage and can vary significantly month-to-month depending on your application's usage, instance type and costs could spike unexpectedly
+- Improved Security, workloads will run in isolation mode (without access to internet) to further secure sensitive data
 - Users can make use of services when available and require development of front and backend service
 - Greater choice in open source Foundation Models and VPC isolation for highly sensitive data
+- Reduced operational cost and complexity
+- Agility and change readiness, additional analytical services can be offered when available
+- Better cost transparency, we will understand our tooling compute costs
