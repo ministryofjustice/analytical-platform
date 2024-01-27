@@ -11,6 +11,18 @@ class CatalogueMetadata:
 
 
 @dataclass
+class DataLocation:
+    """
+    A representation of where the data can be found
+    (in our case, glue/athena)
+    """
+
+    fully_qualified_name: str
+    platform_type: str = "glue"
+    platform_id: str = "glue"
+
+
+@dataclass
 class DataProductMetadata:
     name: str
     description: str
@@ -55,6 +67,7 @@ class TableMetadata:
     column_details: list
     retention_period_in_days: int | None
     tags: list[str] = field(default_factory=list)
+    major_version: int = 1
 
     @staticmethod
     def from_data_product_schema_dict(

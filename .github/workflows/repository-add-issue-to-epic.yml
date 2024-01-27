@@ -1,21 +1,28 @@
-name: Add Issue to Epic
+---
+name: Add issue to epic
 
-on:
+on: # yamllint disable-line rule:truthy
   issues:
-    types: [labeled]
+    types:
+      - labeled
 
 concurrency:
   group: add-issue-to-epic
   cancel-in-progress: false
 
+permissions: read-all
+
 jobs:
-  update_epic_description:
+  add-issue-to-epic:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
-      - name: Amend Epic Description with New Item
-        uses: actions/github-script@v7.0.1
+      - name: Add issue to Epic
+        id: add_issue_to_epic
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             console.log("Starting script...");
             const payload = context.payload;

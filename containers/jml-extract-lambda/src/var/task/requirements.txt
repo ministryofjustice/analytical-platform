@@ -1,0 +1,6 @@
+awswrangler==3.5.1
+boto3==1.34.19
+botocore==1.34.19
+pandas==2.1.4
+notifications-python-client==9.0.0
+openpyxl==3.1.2
