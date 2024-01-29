@@ -161,6 +161,13 @@ class SearchClient:
         tags = self._parse_tags(entity)
         last_updated = self._parse_last_updated(entity)
         name = entity["name"]
+        relationships = entity.get("relationships", {})
+        total_data_products = relationships.get("total", 0)
+        data_products = relationships.get("relationships", [])
+        data_products = [
+            {"id": i["entity"]["urn"], "name": i["entity"]["properties"]["name"]}
+            for i in data_products
+        ]
 
         return SearchResult(
             id=entity["urn"],
@@ -171,6 +178,8 @@ class SearchClient:
             metadata={
                 "owner": owner_name,
                 "owner_email": owner_email,
+                "total_data_products": total_data_products,
+                "data_products": data_products,
             },
             tags=tags,
             last_updated=last_updated,
