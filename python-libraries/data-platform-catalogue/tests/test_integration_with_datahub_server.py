@@ -142,7 +142,6 @@ def test_filter_by_urn():
         tags=["test"],
     )
     urn = client.upsert_data_product(data_product)
-    print(urn)
 
     response = client.search(
         filters=[MultiSelectFilter(filter_name="urn", included_values=[urn])]
@@ -150,6 +149,7 @@ def test_filter_by_urn():
     assert response.total_results == 1
 
 
+@runs_on_development_server
 def test_fetch_dataset_belonging_to_data_product():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 

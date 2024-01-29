@@ -2,7 +2,7 @@ import json
 import logging
 from datetime import datetime
 from importlib.resources import files
-from typing import Any, Literal, Sequence
+from typing import Any, Sequence
 
 from datahub.configuration.common import GraphError
 from datahub.ingestion.graph.client import DataHubGraph
