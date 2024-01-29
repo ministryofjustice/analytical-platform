@@ -5,6 +5,7 @@ from urllib.error import HTTPError
 import awswrangler as wr
 import boto3
 import pandas as pd
+
 from notifications_python_client import prepare_upload
 from notifications_python_client.notifications import NotificationsAPIClient
 
@@ -20,6 +21,7 @@ def handler(event, context):
     secret_id = SECRET_ID.split("|")
     secret_arn = secret_id[0]
     secret_version = secret_id[1]
+
     response = secrets_client.get_secret_value(SecretId=secret_arn, VersionStage=secret_version)
     api_key = response["SecretString"]
 
@@ -28,6 +30,7 @@ def handler(event, context):
     email_id = EMAIL_SECRET.split("|")
     email_arn = email_id[0]
     email_version = email_id[1]
+    
     response = secrets_client.get_secret_value(SecretId=email_arn, VersionStage=email_version)
     email_address = response["SecretString"]
 
