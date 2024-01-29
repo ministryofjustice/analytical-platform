@@ -5,6 +5,7 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_production_
     actions   = ["sts:AssumeRole"]
     resources = [format("arn:aws:iam::%s:role/github-actions-infrastructure", var.account_ids["analytical-platform-data-engineering-production"])]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid       = "AllowOIDCToDecryptKMS"
@@ -12,6 +13,7 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_production_
     actions   = ["kms:Decrypt"]
     resources = ["*"]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     sid    = "AllowOIDCReadState"
     effect = "Allow"
@@ -70,6 +72,7 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_sandbox_a_g
     actions   = ["sts:AssumeRole"]
     resources = [format("arn:aws:iam::%s:role/github-actions-infrastructure", var.account_ids["analytical-platform-data-engineering-sandbox-a"])]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid       = "AllowOIDCToDecryptKMS"
@@ -77,6 +80,7 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_sandbox_a_g
     actions   = ["kms:Decrypt"]
     resources = ["*"]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     sid    = "AllowOIDCReadState"
     effect = "Allow"
@@ -178,6 +182,7 @@ data "aws_iam_policy_document" "analytical_platform_management_production_github
     actions   = ["sts:AssumeRole"]
     resources = formatlist("arn:aws:iam::%s:role/github-actions-infrastructure", values(var.account_ids))
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid       = "AllowOIDCToDecryptKMS"
@@ -185,6 +190,7 @@ data "aws_iam_policy_document" "analytical_platform_management_production_github
     actions   = ["kms:Decrypt"]
     resources = ["*"]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     sid    = "AllowOIDCReadState"
     effect = "Allow"
