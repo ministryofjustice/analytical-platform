@@ -31,7 +31,8 @@ def handler(event, context):
     email_arn = email_id[0]
     email_version = email_id[1]
     response = secrets_client.get_secret_value(
-        SecretId=email_arn, VersionStage=email_version)
+        SecretId=email_arn, VersionStage=email_version
+    )
     email_address = response["SecretString"]
 
     now = dt.now()
