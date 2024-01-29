@@ -1,12 +1,12 @@
-
+import os
 from datetime import datetime as dt
 from urllib.error import HTTPError
-from notifications_python_client import prepare_upload
-from notifications_python_client.notifications import NotificationsAPIClient
 import awswrangler as wr
 import boto3
-import os
 import pandas as pd
+from notifications_python_client import prepare_upload
+from notifications_python_client.notifications import NotificationsAPIClient
+
 
 def handler(event, context):
     SECRET_ID = os.environ["SECRET_ID"]
@@ -21,7 +21,8 @@ def handler(event, context):
     secret_version = secret_id[1]
 
     response = secrets_client.get_secret_value(
-        SecretId=secret_arn, VersionStage=secret_version)
+        SecretId=secret_arn, VersionStage=secret_version
+    )
     api_key = response["SecretString"]
 
     notifications_client = NotificationsAPIClient(api_key)
