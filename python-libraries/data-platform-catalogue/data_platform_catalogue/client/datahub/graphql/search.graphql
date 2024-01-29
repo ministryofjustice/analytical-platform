@@ -3,13 +3,45 @@ query Search(
   $count: Int!
   $start: Int!
   $types: [EntityType!]
+  $filters: [FacetFilterInput!]
 ) {
   searchAcrossEntities(
-    input: { types: $types, query: $query, start: $start, count: $count }
+    input: {
+      types: $types
+      query: $query
+      start: $start
+      count: $count
+      filters: $filters
+    }
   ) {
     start
     count
     total
+    facets {
+      field
+      displayName
+      aggregations {
+        value
+        count
+        entity {
+          ... on Domain {
+            properties {
+              name
+            }
+          }
+          ... on Tag {
+            properties {
+              name
+            }
+          }
+          ... on GlossaryTerm {
+            properties {
+              name
+            }
+          }
+        }
+      }
+    }
     searchResults {
       insights {
         text

@@ -8,7 +8,7 @@ from ..entities import (
     DataProductMetadata,
     TableMetadata,
 )
-from ..search_types import ResultType, SearchResponse
+from ..search_types import MultiSelectFilter, ResultType, SearchResponse
 
 logger = logging.getLogger(__name__)
 
@@ -65,8 +65,12 @@ class BaseCatalogueClient(ABC):
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
         ),
+        filters: Sequence[MultiSelectFilter] = (),
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
         """
         raise NotImplementedError
+
+    def list_data_products(self) -> SearchResponse:
+        return self.search(count=500, result_types=[ResultType.DATA_PRODUCT])

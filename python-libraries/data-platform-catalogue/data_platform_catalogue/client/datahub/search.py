@@ -2,15 +2,18 @@ import json
 import logging
 from datetime import datetime
 from importlib.resources import files
-from typing import Any, Sequence
+from typing import Any, Literal, Sequence
 
-from data_platform_catalogue.search_types import (
+from datahub.configuration.common import GraphError
+from datahub.ingestion.graph.client import DataHubGraph
+
+from ...search_types import (
+    FacetOption,
+    MultiSelectFilter,
     ResultType,
     SearchResponse,
     SearchResult,
 )
-from datahub.configuration.common import GraphError
-from datahub.ingestion.graph.client import DataHubGraph
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +36,7 @@ class SearchClient:
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
         ),
+        filters: Sequence[MultiSelectFilter] = (),
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
@@ -43,8 +47,15 @@ class SearchClient:
             start = int(page)
 
         types = self._map_result_types(result_types)
+        formatted_filters = self._map_filters(filters)
 
-        variables = {"count": count, "query": query, "start": start, "types": types}
+        variables = {
+            "count": count,
+            "query": query,
+            "start": start,
+            "types": types,
+            "filters": formatted_filters,
+        }
 
         try:
             response = self.graph.execute_graphql(self.search_query, variables)
@@ -53,6 +64,7 @@ class SearchClient:
 
         page_results = []
         response = response["searchAcrossEntities"]
+        facets = self._parse_facets(response.get("facets", []))
 
         logger.debug(json.dumps(response, indent=2))
 
@@ -71,7 +83,7 @@ class SearchClient:
                 raise ValueError(f"Unexpected entity type: {entity_type}")
 
         return SearchResponse(
-            total_results=response["total"], page_results=page_results
+            total_results=response["total"], page_results=page_results, facets=facets
         )
 
     def _map_result_types(self, result_types: Sequence[ResultType]):
@@ -84,6 +96,14 @@ class SearchClient:
         if ResultType.TABLE in result_types:
             types.append("DATASET")
         return types
+
+    def _map_filters(self, filters: Sequence[MultiSelectFilter]):
+        result = []
+        for filter in filters:
+            result.append(
+                {"field": filter.filter_name, "values": filter.included_values}
+            )
+        return result
 
     def _parse_owner(self, entity: dict[str, Any]):
         """
@@ -180,3 +200,31 @@ class SearchClient:
             tags=tags,
             last_updated=last_updated,
         )
+
+    def _parse_facets(
+        self, facets: list[dict[str, Any]]
+    ) -> dict[
+        Literal["domains", "tags", "customProperties", "glossaryTerms"],
+        list[FacetOption],
+    ]:
+        """
+        Parse the facets and aggregate information from the query results
+        """
+        results = {}
+        for facet in facets:
+            field = facet["field"]
+            if field not in ("domains", "tags", "customProperties", "glossaryTerms"):
+                continue
+
+            options = []
+            for aggregate in facet["aggregations"]:
+                value = aggregate["value"]
+                count = aggregate["count"]
+                entity = aggregate.get("entity") or {}
+                properties = entity.get("properties") or {}
+                label = properties.get("name", value)
+                options.append(FacetOption(value=value, label=label, count=count))
+
+            results[field] = options
+
+        return results
