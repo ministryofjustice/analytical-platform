@@ -196,6 +196,7 @@ class SearchClient:
                 "owner": owner_name,
                 "owner_email": owner_email,
                 "domain": domain,
+                "number_of_assets": properties["numAssets"],
             },
             tags=tags,
             last_updated=last_updated,

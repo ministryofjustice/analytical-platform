@@ -106,6 +106,7 @@ def test_one_search_result(mock_graph, searcher):
                     },
                     "owner": "",
                     "owner_email": "",
+                    "number_of_assets": 7,
                 },
                 tags=["custody"],
             )
