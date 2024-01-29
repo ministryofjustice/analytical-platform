@@ -17,12 +17,18 @@ def handler(event, context):
 
     secrets_client = boto3.client("secretsmanager")
 
-    response = secrets_client.get_secret_value(SecretId=SECRET_ID)
+    secret_id = SECRET_ID.split("|")
+    secret_arn = secret_id[0]
+    secret_version = secret_id[1]
+    response = secrets_client.get_secret_value(SecretId=secret_arn, VersionStage=secret_version)
     api_key = response["SecretString"]
 
     notifications_client = NotificationsAPIClient(api_key)
 
-    response = secrets_client.get_secret_value(SecretId=EMAIL_SECRET)
+    email_id = EMAIL_SECRET.split("|")
+    email_arn = email_id[0]
+    email_version = email_id[1]
+    response = secrets_client.get_secret_value(SecretId=email_arn, VersionStage=email_version)
     email_address = response["SecretString"]
 
     now = dt.now()
