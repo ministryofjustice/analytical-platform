@@ -36,6 +36,7 @@ data "aws_iam_policy_document" "github_oidc_role" {
     for_each = each.value.stateConfig
 
     content {
+      #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
       sid    = "AllowOIDCWriteState"
       effect = "Allow"
       actions = [
@@ -76,6 +77,7 @@ data "aws_iam_policy_document" "github_oidc_role" {
     }
   }
   statement {
+    #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid       = "AllowOIDCToDecryptKMS"
     effect    = "Allow"
     resources = ["*"]
