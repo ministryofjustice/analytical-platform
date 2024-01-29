@@ -203,10 +203,7 @@ class SearchClient:
 
     def _parse_facets(
         self, facets: list[dict[str, Any]]
-    ) -> dict[
-        Literal["domains", "tags", "customProperties", "glossaryTerms"],
-        list[FacetOption],
-    ]:
+    ) -> dict[str, list[FacetOption],]:
         """
         Parse the facets and aggregate information from the query results
         """
