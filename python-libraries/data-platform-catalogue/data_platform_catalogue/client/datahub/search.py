@@ -27,6 +27,11 @@ class SearchClient:
             .joinpath("search.graphql")
             .read_text()
         )
+        self.facets_query = (
+            files("data_platform_catalogue.client.datahub.graphql")
+            .joinpath("facets.graphql")
+            .read_text()
+        )
 
     def search(
         self,
@@ -110,7 +115,7 @@ class SearchClient:
         }
 
         try:
-            response = self.graph.execute_graphql(self.search_query, variables)
+            response = self.graph.execute_graphql(self.facets_query, variables)
         except GraphError as e:
             raise Exception("Unable to execute facets query") from e
 
