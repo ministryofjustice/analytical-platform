@@ -128,6 +128,13 @@ def test_dataset_result(mock_graph, searcher):
                         "name": "calm-pagoda-323403.jaffle_shop.customers",
                         "properties": {
                             "name": "customers",
+                            "customProperties": [
+                                {"key": "StoredAsSubDirectories", "value": "False"},
+                                {
+                                    "key": "CreatedByJob",
+                                    "value": "moj-reg-prod-hmpps-assess-risks-and-needs-prod-glue-job",
+                                },
+                            ],
                         },
                         "domain": {
                             "domain": {
@@ -166,6 +173,8 @@ def test_dataset_result(mock_graph, searcher):
                     "total_data_products": 0,
                     "domain_name": "HMPPS",
                     "domain_id": "urn:li:domain:3dc18e48-c062-4407-84a9-73e23f768023",
+                    "StoredAsSubDirectories": "False",
+                    "CreatedByJob": "moj-reg-prod-hmpps-assess-risks-and-needs-prod-glue-job",
                 },
                 tags=[],
             ),

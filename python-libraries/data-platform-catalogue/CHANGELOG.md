@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Custom properties are now added to the metadata of each search result
 - Datasets return domain information
 - Domain information is now returned as `domain_id` and `domain_name` metadata
 
