@@ -356,11 +356,7 @@ def test_filter(searcher, mock_graph):
 
 def test_facets(searcher, mock_graph):
     datahub_response = {
-        "searchAcrossEntities": {
-            "start": 0,
-            "count": 10,
-            "total": 10,
-            "searchResults": [],
+        "aggregateAcrossEntities": {
             "facets": [
                 {
                     "field": "_entityType",

@@ -61,7 +61,7 @@ class SearchClient:
         try:
             response = self.graph.execute_graphql(self.search_query, variables)
         except GraphError as e:
-            raise Exception("Unable to execute search") from e
+            raise Exception("Unable to execute search query") from e
 
         page_results = []
         response = response["searchAcrossEntities"]
@@ -99,9 +99,23 @@ class SearchClient:
         """
         Returns facets that can be used to filter the search results.
         """
-        return self.search(
-            query=query, result_types=result_types, filters=filters
-        ).facets
+        types = self._map_result_types(result_types)
+        formatted_filters = self._map_filters(filters)
+
+        variables = {
+            "query": query,
+            "facets": [],
+            "types": types,
+            "filters": formatted_filters,
+        }
+
+        try:
+            response = self.graph.execute_graphql(self.search_query, variables)
+        except GraphError as e:
+            raise Exception("Unable to execute facets query") from e
+
+        response = response["aggregateAcrossEntities"]
+        return self._parse_facets(response.get("facets", []))
 
     def _map_result_types(self, result_types: Sequence[ResultType]):
         """

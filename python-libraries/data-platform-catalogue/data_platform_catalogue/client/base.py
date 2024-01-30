@@ -8,13 +8,7 @@ from ..entities import (
     DataProductMetadata,
     TableMetadata,
 )
-from ..search_types import (
-    FacetOption,
-    MultiSelectFilter,
-    ResultType,
-    SearchFacets,
-    SearchResponse,
-)
+from ..search_types import MultiSelectFilter, ResultType, SearchFacets, SearchResponse
 
 logger = logging.getLogger(__name__)
 

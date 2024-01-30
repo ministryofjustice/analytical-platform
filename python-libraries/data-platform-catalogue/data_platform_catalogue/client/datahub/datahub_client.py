@@ -24,13 +24,7 @@ from ...entities import (
     DataProductMetadata,
     TableMetadata,
 )
-from ...search_types import (
-    FacetOption,
-    MultiSelectFilter,
-    ResultType,
-    SearchFacets,
-    SearchResponse,
-)
+from ...search_types import MultiSelectFilter, ResultType, SearchFacets, SearchResponse
 from ..base import BaseCatalogueClient, CatalogueError, ReferencedEntityMissing, logger
 from .search import SearchClient
 
@@ -353,4 +347,4 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         """
         return self.search_client.search_facets(
             query=query, result_types=result_types, filters=filters
-        ).facets
+        )
