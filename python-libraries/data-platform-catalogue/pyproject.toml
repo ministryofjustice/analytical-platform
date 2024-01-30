@@ -21,3 +21,6 @@ pytest = "^7.4.2"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+data-platform = 'data_platform_catalogue.debug:run'
