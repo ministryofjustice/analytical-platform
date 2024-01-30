@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum, auto
-from typing import Any, Literal
+from typing import Any
 
 
 class ResultType(Enum):
@@ -15,7 +15,7 @@ class MultiSelectFilter:
     Values to filter the result set by
     """
 
-    filter_name: Literal["domains", "tags", "customProperties", "glossaryTerms"]
+    filter_name: str
     included_values: list[Any]
 
 
@@ -47,6 +47,6 @@ class SearchResponse:
     total_results: int
     page_results: list[SearchResult]
     facets: dict[
-        Literal["domains", "tags", "customProperties", "glossaryTerms"],
+        str,
         list[FacetOption],
     ] = field(default_factory=dict)

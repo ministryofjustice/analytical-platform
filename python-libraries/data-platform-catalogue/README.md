@@ -86,9 +86,41 @@ for item in response.page_results:
 for option in response.facets['domains']:
   print(option)
 
-# Filter by domain
+# Include a filter
 client.search(filters=[MultiSelectFilter("domains", [response.facets['domains'][0].value])])
 ```
+
+## Search filters
+
+### Datahub
+
+Basic filters:
+
+- urn
+- customProperties
+- browsePaths / browsePathsV2
+- deprecated (boolean)
+- removed (boolean)
+- typeNames
+- name, qualifiedName
+- description, hasDescription
+
+Timestamps:
+
+- lastOperationTime (datetime)
+- createdAt (timestamp)
+- lastModifiedAt (timestamp)
+
+URNs:
+
+- platform / platformInstance
+- tags, hasTags
+- glossaryTerms, hasGlossaryTerms
+- domains, hasDomain
+- siblings
+- owners, hasOwners
+- roles, hasRoles
+- container
 
 ## Catalogue Implementations
 

@@ -83,6 +83,7 @@ def test_search_for_data_product():
         retention_period_in_days=365,
         domain="Sample",
         dpia_required=False,
+        tags=["test"],
     )
     client.upsert_data_product(data_product)
 
@@ -108,6 +109,25 @@ def test_search_by_domain():
 def test_domain_facets_are_returned():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
+    data_product = DataProductMetadata(
+        name="lfdskjflkjflkjsdflksfjds",
+        description="lfdskjflkjflkjsdflksfjds",
+        version="v1.0.0",
+        owner="7804c127-d677-4900-82f9-83517e51bb94",
+        email="justice@justice.gov.uk",
+        retention_period_in_days=365,
+        domain="Sample",
+        dpia_required=False,
+        tags=["test"],
+    )
+    client.upsert_data_product(data_product)
+
+    response = client.search()
+    assert response.facets["domains"]
+
+
+@runs_on_development_server
+def test_filter_by_urn():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
     data_product = DataProductMetadata(
@@ -119,8 +139,54 @@ def test_domain_facets_are_returned():
         retention_period_in_days=365,
         domain="Sample",
         dpia_required=False,
+        tags=["test"],
     )
-    client.upsert_data_product(data_product)
+    urn = client.upsert_data_product(data_product)
 
-    response = client.search()
-    assert response.facets["domains"]
+    response = client.search(
+        filters=[MultiSelectFilter(filter_name="urn", included_values=[urn])]
+    )
+    assert response.total_results == 1
+
+
+@runs_on_development_server
+def test_fetch_dataset_belonging_to_data_product():
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+
+    data_product = DataProductMetadata(
+        name="test_data_product",
+        description="bla bla",
+        version="v1.0.0",
+        owner="7804c127-d677-4900-82f9-83517e51bb94",
+        email="justice@justice.gov.uk",
+        retention_period_in_days=365,
+        domain="Sample",
+        dpia_required=False,
+    )
+
+    table = TableMetadata(
+        name="test_table",
+        description="bla bla",
+        column_details=[
+            {"name": "foo", "type": "string", "description": "a"},
+            {"name": "bar", "type": "int", "description": "b"},
+        ],
+        retention_period_in_days=365,
+        tags=["test"],
+    )
+
+    urn = client.upsert_table(
+        metadata=table,
+        data_product_metadata=data_product,
+        location=DataLocation("test_data_product_v2"),
+    )
+
+    response = client.search(
+        filters=[MultiSelectFilter(filter_name="urn", included_values=[urn])]
+    )
+
+    assert response.total_results == 1
+
+    metadata = response.page_results[0].metadata
+    assert metadata["total_data_products"] == 1
+    assert metadata["data_products"][0]["name"] == "test_data_product"
