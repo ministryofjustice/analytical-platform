@@ -135,7 +135,7 @@ def test_dataset_result(mock_graph, searcher):
                                 "id": "3dc18e48-c062-4407-84a9-73e23f768023",
                                 "properties": {
                                     "name": "HMPPS",
-                                    "description": "HMPPS is an executive agency that carries out sentences given by the courts, in custody and the community, and rehabilitates people through education and employment.",
+                                    "description": "HMPPS is an executive agency that ...",
                                 },
                             },
                             "editableProperties": None,
