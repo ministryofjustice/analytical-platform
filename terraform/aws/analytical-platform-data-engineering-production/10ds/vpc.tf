@@ -19,3 +19,13 @@ module "vpc" {
     Name = local.name
   }
 }
+
+resource "aws_cloudwatch_log_group" "data_engineering_vpc" {
+  name = "/data_engineering_vpc_flow_logs"
+}
+
+resource "aws_flow_log" "data_engineering_vpc" {
+  log_destination = aws_cloudwatch_log_group.data_engineering_vpc.arn
+  traffic_type    = "ALL"
+  vpc_id          = module.vpc.vpc_id
+}
