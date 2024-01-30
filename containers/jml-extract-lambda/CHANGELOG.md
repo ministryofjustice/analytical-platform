@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Change the handler to updated the secret it needs to change the image as well
+- Trimmed the secrets environment variable and converted it to ARN and version for compatibility with the get_secret_value function.
 
 ## [1.0.1] - 2024-01-17
 
