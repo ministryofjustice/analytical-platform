@@ -124,6 +124,7 @@ def test_domain_facets_are_returned():
 
     response = client.search()
     assert response.facets.options("domains")
+    assert client.search_facets().options("domains")
 
 
 @runs_on_development_server
