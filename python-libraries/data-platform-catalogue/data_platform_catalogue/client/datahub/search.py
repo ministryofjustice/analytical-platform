@@ -11,6 +11,7 @@ from ...search_types import (
     FacetOption,
     MultiSelectFilter,
     ResultType,
+    SearchFacets,
     SearchResponse,
     SearchResult,
 )
@@ -85,6 +86,22 @@ class SearchClient:
         return SearchResponse(
             total_results=response["total"], page_results=page_results, facets=facets
         )
+
+    def search_facets(
+        self,
+        query: str = "*",
+        result_types: Sequence[ResultType] = (
+            ResultType.DATA_PRODUCT,
+            ResultType.TABLE,
+        ),
+        filters: Sequence[MultiSelectFilter] = (),
+    ) -> SearchFacets:
+        """
+        Returns facets that can be used to filter the search results.
+        """
+        return self.search(
+            query=query, result_types=result_types, filters=filters
+        ).facets
 
     def _map_result_types(self, result_types: Sequence[ResultType]):
         """
@@ -211,9 +228,7 @@ class SearchClient:
             last_updated=last_updated,
         )
 
-    def _parse_facets(
-        self, facets: list[dict[str, Any]]
-    ) -> dict[str, list[FacetOption],]:
+    def _parse_facets(self, facets: list[dict[str, Any]]) -> SearchFacets:
         """
         Parse the facets and aggregate information from the query results
         """
@@ -234,4 +249,4 @@ class SearchClient:
 
             results[field] = options
 
-        return results
+        return SearchFacets(results)

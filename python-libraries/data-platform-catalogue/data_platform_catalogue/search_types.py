@@ -43,33 +43,36 @@ class SearchResult:
 
 
 @dataclass
-class SearchResponse:
-    total_results: int
-    page_results: list[SearchResult]
-    facets: dict[
-        str,
-        list[FacetOption],
-    ] = field(default_factory=dict)
+class SearchFacets:
+    facets: dict[str, list[FacetOption]] = field(default_factory=dict)
 
-    def facet_options(self, field_name) -> list[FacetOption]:
+    def options(self, field_name) -> list[FacetOption]:
         """
         Return a list of FacetOptions to display in a search facet.
         Each option includes label, value and count.
+        Returns an empty list if there are no options to display.
         """
         return self.facets.get(field_name, [])
 
-    def facet_labels(self, field_name) -> list[str]:
+    def labels(self, field_name) -> list[str]:
         """
         Return a list of labels to display in a search facet.
         """
-        return [f.label for f in self.facet_options(field_name)]
+        return [f.label for f in self.options(field_name)]
 
-    def lookup_facet_label(self, field_name, label) -> FacetOption | None:
+    def lookup_label(self, field_name, label) -> FacetOption | None:
         """
         Return the FacetOption matching a particular label.
         """
-        options = self.facet_options(field_name)
+        options = self.options(field_name)
         for option in options:
             if option.label == label:
                 return option
         return None
+
+
+@dataclass
+class SearchResponse:
+    total_results: int
+    page_results: list[SearchResult]
+    facets: SearchFacets = field(default_factory=SearchFacets)

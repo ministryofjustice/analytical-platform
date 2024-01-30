@@ -8,7 +8,13 @@ from ..entities import (
     DataProductMetadata,
     TableMetadata,
 )
-from ..search_types import FacetOption, MultiSelectFilter, ResultType, SearchResponse
+from ..search_types import (
+    FacetOption,
+    MultiSelectFilter,
+    ResultType,
+    SearchFacets,
+    SearchResponse,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -80,13 +86,11 @@ class BaseCatalogueClient(ABC):
             ResultType.TABLE,
         ),
         filters: Sequence[MultiSelectFilter] = (),
-    ) -> dict[str, list[FacetOption],]:
+    ) -> SearchFacets:
         """
         Returns facets that can be used to filter the search results.
         """
-        return self.search(
-            query=query, result_types=result_types, filters=filters
-        ).facets
+        raise NotImplementedError
 
     def list_data_products(self) -> SearchResponse:
         return self.search(count=500, result_types=[ResultType.DATA_PRODUCT])
