@@ -34,4 +34,5 @@ resource "aws_flow_log" "data_engineering_vpc" {
 resource "aws_kms_key" "data_engineering_vpc_key" {
   description             = "KMS Key for CloudWatch Logs Encryption"
   deletion_window_in_days = 7
+  enable_key_rotation = true
 }
