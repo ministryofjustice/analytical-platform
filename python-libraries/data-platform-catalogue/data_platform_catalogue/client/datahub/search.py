@@ -11,6 +11,7 @@ from ...search_types import (
     FacetOption,
     MultiSelectFilter,
     ResultType,
+    SearchFacets,
     SearchResponse,
     SearchResult,
 )
@@ -60,7 +61,7 @@ class SearchClient:
         try:
             response = self.graph.execute_graphql(self.search_query, variables)
         except GraphError as e:
-            raise Exception("Unable to execute search") from e
+            raise Exception("Unable to execute search query") from e
 
         page_results = []
         response = response["searchAcrossEntities"]
@@ -85,6 +86,36 @@ class SearchClient:
         return SearchResponse(
             total_results=response["total"], page_results=page_results, facets=facets
         )
+
+    def search_facets(
+        self,
+        query: str = "*",
+        result_types: Sequence[ResultType] = (
+            ResultType.DATA_PRODUCT,
+            ResultType.TABLE,
+        ),
+        filters: Sequence[MultiSelectFilter] = (),
+    ) -> SearchFacets:
+        """
+        Returns facets that can be used to filter the search results.
+        """
+        types = self._map_result_types(result_types)
+        formatted_filters = self._map_filters(filters)
+
+        variables = {
+            "query": query,
+            "facets": [],
+            "types": types,
+            "filters": formatted_filters,
+        }
+
+        try:
+            response = self.graph.execute_graphql(self.search_query, variables)
+        except GraphError as e:
+            raise Exception("Unable to execute facets query") from e
+
+        response = response["aggregateAcrossEntities"]
+        return self._parse_facets(response.get("facets", []))
 
     def _map_result_types(self, result_types: Sequence[ResultType]):
         """
@@ -211,9 +242,7 @@ class SearchClient:
             last_updated=last_updated,
         )
 
-    def _parse_facets(
-        self, facets: list[dict[str, Any]]
-    ) -> dict[str, list[FacetOption],]:
+    def _parse_facets(self, facets: list[dict[str, Any]]) -> SearchFacets:
         """
         Parse the facets and aggregate information from the query results
         """
@@ -234,4 +263,4 @@ class SearchClient:
 
             results[field] = options
 
-        return results
+        return SearchFacets(results)
