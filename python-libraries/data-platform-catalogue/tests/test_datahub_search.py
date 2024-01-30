@@ -7,6 +7,7 @@ from data_platform_catalogue.search_types import (
     FacetOption,
     MultiSelectFilter,
     ResultType,
+    SearchFacets,
     SearchResponse,
     SearchResult,
 )
@@ -355,6 +356,87 @@ def test_filter(searcher, mock_graph):
 
 def test_facets(searcher, mock_graph):
     datahub_response = {
+        "aggregateAcrossEntities": {
+            "facets": [
+                {
+                    "field": "_entityType",
+                    "displayName": "Type",
+                    "aggregations": [
+                        {"value": "DATASET", "count": 1505, "entity": None}
+                    ],
+                },
+                {
+                    "field": "glossaryTerms",
+                    "displayName": "Glossary Term",
+                    "aggregations": [
+                        {
+                            "value": "urn:li:glossaryTerm:Classification.Sensitive",
+                            "count": 1,
+                            "entity": {"properties": {"name": "Sensitive"}},
+                        },
+                        {
+                            "value": "urn:li:glossaryTerm:Silver",
+                            "count": 1,
+                            "entity": {"properties": None},
+                        },
+                    ],
+                },
+                {
+                    "field": "domains",
+                    "displayName": "Domain",
+                    "aggregations": [
+                        {
+                            "value": "urn:li:domain:094dc54b-0ebc-40a6-a4cf-e1b75e8b8089",
+                            "count": 7,
+                            "entity": {"properties": {"name": "Pet Adoptions"}},
+                        },
+                        {
+                            "value": "urn:li:domain:7186eeff-a860-4b0a-989f-69473a0c9c67",
+                            "count": 4,
+                            "entity": {"properties": {"name": "E-Commerce"}},
+                        },
+                    ],
+                },
+            ],
+        }
+    }
+
+    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+    response = searcher.search_facets()
+
+    assert response == SearchFacets(
+        {
+            "glossaryTerms": [
+                FacetOption(
+                    value="urn:li:glossaryTerm:Classification.Sensitive",
+                    label="Sensitive",
+                    count=1,
+                ),
+                FacetOption(
+                    value="urn:li:glossaryTerm:Silver",
+                    label="urn:li:glossaryTerm:Silver",
+                    count=1,
+                ),
+            ],
+            "domains": [
+                FacetOption(
+                    value="urn:li:domain:094dc54b-0ebc-40a6-a4cf-e1b75e8b8089",
+                    label="Pet Adoptions",
+                    count=7,
+                ),
+                FacetOption(
+                    value="urn:li:domain:7186eeff-a860-4b0a-989f-69473a0c9c67",
+                    label="E-Commerce",
+                    count=4,
+                ),
+            ],
+        }
+    )
+
+
+def test_search_results_with_facets(searcher, mock_graph):
+    datahub_response = {
         "searchAcrossEntities": {
             "start": 0,
             "count": 10,
@@ -411,32 +493,34 @@ def test_facets(searcher, mock_graph):
     assert response == SearchResponse(
         total_results=10,
         page_results=[],
-        facets={
-            "glossaryTerms": [
-                FacetOption(
-                    value="urn:li:glossaryTerm:Classification.Sensitive",
-                    label="Sensitive",
-                    count=1,
-                ),
-                FacetOption(
-                    value="urn:li:glossaryTerm:Silver",
-                    label="urn:li:glossaryTerm:Silver",
-                    count=1,
-                ),
-            ],
-            "domains": [
-                FacetOption(
-                    value="urn:li:domain:094dc54b-0ebc-40a6-a4cf-e1b75e8b8089",
-                    label="Pet Adoptions",
-                    count=7,
-                ),
-                FacetOption(
-                    value="urn:li:domain:7186eeff-a860-4b0a-989f-69473a0c9c67",
-                    label="E-Commerce",
-                    count=4,
-                ),
-            ],
-        },
+        facets=SearchFacets(
+            {
+                "glossaryTerms": [
+                    FacetOption(
+                        value="urn:li:glossaryTerm:Classification.Sensitive",
+                        label="Sensitive",
+                        count=1,
+                    ),
+                    FacetOption(
+                        value="urn:li:glossaryTerm:Silver",
+                        label="urn:li:glossaryTerm:Silver",
+                        count=1,
+                    ),
+                ],
+                "domains": [
+                    FacetOption(
+                        value="urn:li:domain:094dc54b-0ebc-40a6-a4cf-e1b75e8b8089",
+                        label="Pet Adoptions",
+                        count=7,
+                    ),
+                    FacetOption(
+                        value="urn:li:domain:7186eeff-a860-4b0a-989f-69473a0c9c67",
+                        label="E-Commerce",
+                        count=4,
+                    ),
+                ],
+            }
+        ),
     )
 
 

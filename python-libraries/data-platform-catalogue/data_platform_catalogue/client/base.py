@@ -8,7 +8,7 @@ from ..entities import (
     DataProductMetadata,
     TableMetadata,
 )
-from ..search_types import MultiSelectFilter, ResultType, SearchResponse
+from ..search_types import MultiSelectFilter, ResultType, SearchFacets, SearchResponse
 
 logger = logging.getLogger(__name__)
 
@@ -69,6 +69,20 @@ class BaseCatalogueClient(ABC):
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
+        """
+        raise NotImplementedError
+
+    def search_facets(
+        self,
+        query: str = "*",
+        result_types: Sequence[ResultType] = (
+            ResultType.DATA_PRODUCT,
+            ResultType.TABLE,
+        ),
+        filters: Sequence[MultiSelectFilter] = (),
+    ) -> SearchFacets:
+        """
+        Returns facets that can be used to filter the search results.
         """
         raise NotImplementedError
 
