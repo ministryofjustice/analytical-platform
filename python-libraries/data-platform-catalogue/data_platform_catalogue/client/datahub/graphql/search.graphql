@@ -11,7 +11,7 @@ query Search(
       query: $query
       start: $start
       count: $count
-      filters: $filters
+      orFilters: [{ and: $filters }]
     }
   ) {
     start
@@ -57,6 +57,25 @@ query Search(
           type
           platform {
             name
+          }
+          relationships(
+            input: {
+              types: ["DataProductContains"]
+              direction: INCOMING
+              count: 10
+            }
+          ) {
+            total
+            relationships {
+              entity {
+                urn
+                ... on DataProduct {
+                  properties {
+                    name
+                  }
+                }
+              }
+            }
           }
           ownership {
             owners {
