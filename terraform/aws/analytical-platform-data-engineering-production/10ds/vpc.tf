@@ -21,8 +21,8 @@ module "vpc" {
 }
 
 resource "aws_cloudwatch_log_group" "data_engineering_vpc" {
-  name = "/data_engineering_vpc_flow_logs"
-   kms_key_id = aws_kms_key.data_engineering_vpc_key.key_id
+  name       = "/data_engineering_vpc_flow_logs"
+  kms_key_id = aws_kms_key.data_engineering_vpc_key.key_id
 }
 
 resource "aws_flow_log" "data_engineering_vpc" {
