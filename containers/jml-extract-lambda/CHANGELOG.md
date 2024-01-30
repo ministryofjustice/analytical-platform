@@ -13,8 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Trimmed the secrets environment variable and converted it to ARN
-and version for compatibility with the get_secret_value function.
+- Trimmed secrets env var, converted to ARN and version for get_secret_value compatibility.
 
 ## [1.0.1] - 2024-01-17
 
