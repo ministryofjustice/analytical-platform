@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Trimmed secrets env var, converted to ARN and version for get_secret_value compatibility.
+- Bugfix: resolved issue with incorrect parsing of ID strings
 
 ## [1.0.1] - 2024-01-17
 
