@@ -14,6 +14,7 @@ from ...search_types import (
     SearchFacets,
     SearchResponse,
     SearchResult,
+    SortOption,
 )
 
 logger = logging.getLogger(__name__)
@@ -43,6 +44,7 @@ class SearchClient:
             ResultType.TABLE,
         ),
         filters: Sequence[MultiSelectFilter] = (),
+        sort: SortOption | None = None,
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
@@ -62,6 +64,9 @@ class SearchClient:
             "types": types,
             "filters": formatted_filters,
         }
+
+        if sort:
+            variables.update({"sort": sort.format()})
 
         try:
             response = self.graph.execute_graphql(self.search_query, variables)

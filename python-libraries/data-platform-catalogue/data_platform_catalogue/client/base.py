@@ -8,7 +8,13 @@ from ..entities import (
     DataProductMetadata,
     TableMetadata,
 )
-from ..search_types import MultiSelectFilter, ResultType, SearchFacets, SearchResponse
+from ..search_types import (
+    MultiSelectFilter,
+    ResultType,
+    SearchFacets,
+    SearchResponse,
+    SortOption,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +72,7 @@ class BaseCatalogueClient(ABC):
             ResultType.TABLE,
         ),
         filters: Sequence[MultiSelectFilter] = (),
+        sort: SortOption | None = None,
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
