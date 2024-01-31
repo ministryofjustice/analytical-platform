@@ -44,7 +44,7 @@ class SearchClient:
             ResultType.TABLE,
         ),
         filters: Sequence[MultiSelectFilter] = (),
-        sort: SortOption = None,
+        sort: SortOption | None = None,
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
