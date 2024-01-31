@@ -18,11 +18,13 @@ class MultiSelectFilter:
     filter_name: str
     included_values: list[Any]
 
+
 @dataclass
 class SortOption:
     """Set the search result sorting."""
     field: str
     ascending: bool = True
+
 
 @dataclass
 class FacetOption:

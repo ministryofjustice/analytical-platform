@@ -13,7 +13,7 @@ from ..search_types import (
     ResultType,
     SearchFacets,
     SearchResponse,
-    SortOption
+    SortOption,
 )
 
 logger = logging.getLogger(__name__)
