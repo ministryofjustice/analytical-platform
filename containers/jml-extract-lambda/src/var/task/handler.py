@@ -62,7 +62,7 @@ def handler(event, context):
 
     # Read logs
     dataframe = wr.cloudwatch.read_logs(
-        log_group_names=LOG_GROUP_NAMES,
+        log_group_names=[LOG_GROUP_NAMES],
         query=query,
         start_time=start_datetime,
         end_time=end_datetime,
