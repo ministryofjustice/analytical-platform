@@ -26,6 +26,14 @@ class SortOption:
     field: str
     ascending: bool = True
 
+    def format(self):
+        return {
+            "sortCriterion": {
+                "field": self.field,
+                "sortOrder": "ASCENDING" if self.ascending else "DESCENDING",
+            }
+        }
+
 
 @dataclass
 class FacetOption:

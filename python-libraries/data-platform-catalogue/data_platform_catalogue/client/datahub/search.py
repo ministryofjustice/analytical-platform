@@ -66,7 +66,7 @@ class SearchClient:
         }
 
         if sort:
-            variables.update({"sort": sort})
+            variables.update({"sort": sort.format()})
 
         try:
             response = self.graph.execute_graphql(self.search_query, variables)
