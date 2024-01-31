@@ -35,4 +35,27 @@ resource "aws_kms_key" "data_engineering_vpc_key" {
   description             = "KMS Key for CloudWatch Logs Encryption"
   deletion_window_in_days = 7
   enable_key_rotation     = true
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Id": "vpc-flow-log-group",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "logs.amazonaws.com"
+      },
+      "Action": [
+        "kms:Encrypt",
+        "kms:Decrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*",
+        "kms:DescribeKey"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
 }
