@@ -10,11 +10,6 @@ data "aws_iam_policy_document" "source" {
       "sqs:SendMessage"
     ]
 
-    resources = [aws_sqs_queue.s3.arn,
-      aws_sqs_queue.iam.arn,
-      aws_sqs_queue.auth.arn
-    ]
-
     principals {
       type        = "AWS"
       identifiers = [local.control_panel_api_arn]
