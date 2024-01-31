@@ -22,6 +22,7 @@ class MultiSelectFilter:
 @dataclass
 class SortOption:
     """Set the search result sorting."""
+
     field: str
     ascending: bool = True
 
