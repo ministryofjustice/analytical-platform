@@ -31,31 +31,33 @@ resource "aws_flow_log" "data_engineering_vpc" {
   vpc_id          = module.vpc.vpc_id
 }
 
+data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
+
+  statement {
+    sid       = "LogGroupKMSPermissions"
+    effect    = "Allow"
+    actions   = ["kms:Encrypt", "kms:Decrypt", "kms:ReEncrypt*", "kms:GenerateDataKey*", "kms:DescribeKey"]
+    principals {
+      type        = "Service"
+      identifiers = ["logs.amazonaws.com"]
+    }
+    resources = ["*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["kms:Encrypt", "kms:Decrypt", "kms:ReEncrypt*", "kms:GenerateDataKey*", "kms:DescribeKey"]
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+    resources = ["*"]
+  }
+}
+
 resource "aws_kms_key" "data_engineering_vpc_key" {
   description             = "KMS Key for CloudWatch Logs Encryption"
   deletion_window_in_days = 7
   enable_key_rotation     = true
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Id": "vpc-flow-log-group",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "logs.amazonaws.com"
-      },
-      "Action": [
-        "kms:Encrypt",
-        "kms:Decrypt",
-        "kms:ReEncrypt*",
-        "kms:GenerateDataKey*",
-        "kms:DescribeKey"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-EOF
+  policy                  = data.aws_iam_policy_document.cloudwatch_kms_key_policy.json
 }
