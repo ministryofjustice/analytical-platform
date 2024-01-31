@@ -88,8 +88,11 @@ for option in response.facets.options('domains'):
   print(option.value)
   print(option.count)
 
-# Include a filter
-client.search(filters=[MultiSelectFilter("domains", [response.facets['domains'][0].value])])
+# Include a filter and sort
+client.search(
+  filters=[MultiSelectFilter("domains", [response.facets['domains'][0].value])],
+  sort=SortOption(field="name", ascending=False)
+)
 ```
 
 ## Search filters
