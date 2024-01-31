@@ -36,7 +36,6 @@ class SearchClient:
 
     def search(
         self,
-        sort: SortOption,
         query: str = "*",
         count: int = 20,
         page: str | None = None,
@@ -45,6 +44,7 @@ class SearchClient:
             ResultType.TABLE,
         ),
         filters: Sequence[MultiSelectFilter] = (),
+        sort: SortOption = None,
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
