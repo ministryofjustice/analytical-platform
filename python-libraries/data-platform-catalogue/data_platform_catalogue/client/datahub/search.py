@@ -14,6 +14,7 @@ from ...search_types import (
     SearchFacets,
     SearchResponse,
     SearchResult,
+    SortOption,
 )
 
 logger = logging.getLogger(__name__)
@@ -35,6 +36,7 @@ class SearchClient:
 
     def search(
         self,
+        sort: SortOption,
         query: str = "*",
         count: int = 20,
         page: str | None = None,
@@ -62,6 +64,9 @@ class SearchClient:
             "types": types,
             "filters": formatted_filters,
         }
+
+        if sort:
+            variables.update({"sort": sort})
 
         try:
             response = self.graph.execute_graphql(self.search_query, variables)
