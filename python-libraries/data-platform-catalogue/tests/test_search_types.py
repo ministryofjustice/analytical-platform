@@ -1,5 +1,6 @@
 from data_platform_catalogue.search_types import SortOption
 
+
 def test_format_sort_option():
     expected = {
         "sortCriterion": {
