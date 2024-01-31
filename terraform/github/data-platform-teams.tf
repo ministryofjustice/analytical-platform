@@ -45,6 +45,7 @@ locals {
       members = [
         "jemnery",         # Jeremy Collins
         "PriyaBasker23",   # Priya Basker
+        "seanprivett",     # Sean Privett
         "YvanMOJdigital",  # Yvan Smith
         "LavMatt",         # Matt Laverty
         "murdo-moj",       # Murdo Moyse

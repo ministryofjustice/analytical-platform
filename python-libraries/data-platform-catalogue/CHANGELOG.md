@@ -15,6 +15,8 @@ Enhanced the metadata returned with search results:
 
 - Added `number_of_assets` to data product metadata
 - Added `data_products` and `total_data_products` to dataset metadata
+- Added separate search_facets method
+- Added `SearchFacets`` class to make it easier to present facets
 
 ### Changed
 

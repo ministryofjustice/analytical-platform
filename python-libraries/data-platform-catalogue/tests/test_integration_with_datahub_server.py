@@ -123,7 +123,8 @@ def test_domain_facets_are_returned():
     client.upsert_data_product(data_product)
 
     response = client.search()
-    assert response.facets["domains"]
+    assert response.facets.options("domains")
+    assert client.search_facets().options("domains")
 
 
 @runs_on_development_server

@@ -83,8 +83,10 @@ for item in response.page_results:
   print(item)
 
 # Iterate over facet options
-for option in response.facets['domains']:
-  print(option)
+for option in response.facets.options('domains'):
+  print(option.label)
+  print(option.value)
+  print(option.count)
 
 # Include a filter
 client.search(filters=[MultiSelectFilter("domains", [response.facets['domains'][0].value])])
