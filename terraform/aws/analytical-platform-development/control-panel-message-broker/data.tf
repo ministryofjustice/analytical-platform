@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "source" {
       "sqs:ReceiveMessage",
       "sqs:SendMessage"
     ]
-    
+
     principals {
       type        = "AWS"
       identifiers = [local.control_panel_api_arn]
