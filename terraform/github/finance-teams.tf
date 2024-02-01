@@ -11,7 +11,9 @@ locals {
       description    = "Finance Team"
       parent_team_id = module.data_platform_team.id
       members = [
-        "Gary-H9" # Gary Henderson
+        "Gary-H9",     # Gary Henderson
+        "andrewc-moj", # Andrew Craik
+        "gwionap"      # Gwion ApRhobat
       ]
     }
   }
