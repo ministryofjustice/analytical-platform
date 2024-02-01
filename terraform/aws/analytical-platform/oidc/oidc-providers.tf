@@ -5,12 +5,15 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_production_
     actions   = ["sts:AssumeRole"]
     resources = [format("arn:aws:iam::%s:role/github-actions-infrastructure", var.account_ids["analytical-platform-data-engineering-production"])]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
+    #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid       = "AllowOIDCToDecryptKMS"
     effect    = "Allow"
     actions   = ["kms:Decrypt"]
     resources = ["*"]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     sid    = "AllowOIDCReadState"
     effect = "Allow"
@@ -21,6 +24,7 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_production_
     resources = ["arn:aws:s3:::global-tf-state-aqsvzyd5u9/*", "arn:aws:s3:::global-tf-state-aqsvzyd5u9/"]
   }
   statement {
+    #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
     sid    = "AllowOIDCWriteState"
     effect = "Allow"
     actions = [
@@ -42,6 +46,8 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_production_
 }
 
 module "analytical_platform_data_engineering_production_github_oidc_provider" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.1"
 
   providers = {
@@ -66,12 +72,15 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_sandbox_a_g
     actions   = ["sts:AssumeRole"]
     resources = [format("arn:aws:iam::%s:role/github-actions-infrastructure", var.account_ids["analytical-platform-data-engineering-sandbox-a"])]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
+    #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid       = "AllowOIDCToDecryptKMS"
     effect    = "Allow"
     actions   = ["kms:Decrypt"]
     resources = ["*"]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     sid    = "AllowOIDCReadState"
     effect = "Allow"
@@ -82,6 +91,7 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_sandbox_a_g
     resources = ["arn:aws:s3:::global-tf-state-aqsvzyd5u9/*", "arn:aws:s3:::global-tf-state-aqsvzyd5u9/"]
   }
   statement {
+    #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
     sid    = "AllowOIDCWriteState"
     effect = "Allow"
     actions = [
@@ -103,6 +113,8 @@ data "aws_iam_policy_document" "analytical_platform_data_engineering_sandbox_a_g
 }
 
 module "analytical_platform_data_engineering_sandbox_a_github_oidc_provider" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.1"
 
   providers = {
@@ -144,6 +156,8 @@ data "aws_iam_policy_document" "analytical_platform_data_production_github_oidc_
 }
 
 module "analytical_platform_data_production_github_oidc_provider" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.1"
 
   providers = {
@@ -168,12 +182,15 @@ data "aws_iam_policy_document" "analytical_platform_management_production_github
     actions   = ["sts:AssumeRole"]
     resources = formatlist("arn:aws:iam::%s:role/github-actions-infrastructure", values(var.account_ids))
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
+    #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid       = "AllowOIDCToDecryptKMS"
     effect    = "Allow"
     actions   = ["kms:Decrypt"]
     resources = ["*"]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     sid    = "AllowOIDCReadState"
     effect = "Allow"
@@ -187,6 +204,7 @@ data "aws_iam_policy_document" "analytical_platform_management_production_github
     ]
   }
   statement {
+    #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
     sid    = "AllowOIDCWriteState"
     effect = "Allow"
     actions = [
@@ -208,6 +226,8 @@ data "aws_iam_policy_document" "analytical_platform_management_production_github
 }
 
 module "analytical_platform_management_production_github_oidc_provider" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.0.1"
 
   providers = {

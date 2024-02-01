@@ -10,6 +10,7 @@ class TestCuratedDataQueryBuilder:
             column_metadata=[
                 {"Name": "foo", "Type": "string"},
                 {"Name": "bar", "Type": None},
+                {"Name": "value", "Type": "float"},
             ],
         )
         result = builder.sql_unload_table_partition(
@@ -21,17 +22,17 @@ class TestCuratedDataQueryBuilder:
             """
             UNLOAD (
                 SELECT
-                    CAST(NULLIF("foo",'') as VARCHAR) as "foo",CAST(NULLIF("bar",'') as None) as "bar",
-                    '20230101T000000Z' as extraction_timestamp
+                    CAST(NULLIF("foo",'') as VARCHAR) as "foo",CAST(NULLIF("bar",'') as None) as "bar",CAST(NULLIF("value",'') as real) as "value",
+                    '20230101T000000Z' as load_timestamp
                 FROM data_products_raw.table_raw
             )
             TO 's3://bucket_name/curated_data/database_name=dataproduct/table_name=table_name/'
             WITH(
                 format='parquet',
                 compression = 'SNAPPY',
-                partitioned_by=ARRAY['extraction_timestamp']
+                partitioned_by=ARRAY['load_timestamp']
             )
-            """
+            """  # noqa
         )
 
     def test_sql_create_table_partition(self):
@@ -56,11 +57,11 @@ class TestCuratedDataQueryBuilder:
                 format='parquet',
                 write_compression = 'SNAPPY',
                 external_location='s3://bucket_name/curated_data/database_name=dataproduct/table_name=table_name/',
-                partitioned_by=ARRAY['extraction_timestamp']
+                partitioned_by=ARRAY['load_timestamp']
             ) AS
             SELECT
                 CAST(NULLIF("foo",'') as VARCHAR) as "foo",CAST(NULLIF("bar",'') as None) as "bar",
-                '20230101T000000Z' as extraction_timestamp
+                '20230101T000000Z' as load_timestamp
             FROM data_products_raw.table_raw
             """
         )
@@ -84,13 +85,13 @@ class TestCuratedDataQueryBuilder:
                     format='parquet',
                     write_compression = 'SNAPPY',
                     external_location='s3://bucket_name/curated/v2/database_name=dataproduct/table_name=table_name/',
-                    partitioned_by=ARRAY['extraction_timestamp']
+                    partitioned_by=ARRAY['load_timestamp']
                 ) AS
                 SELECT
                     *
                 FROM dataproduct_v1.table_name
-                WHERE extraction_timestamp = (
-                    SELECT MAX(extraction_timestamp)
+                WHERE load_timestamp = (
+                    SELECT MAX(load_timestamp)
                     FROM dataproduct_v1.table_name
                 )
             """
@@ -114,8 +115,8 @@ class TestCuratedDataQueryBuilder:
                     SELECT
                         *
                     FROM dataproduct_v1.table_name
-                    WHERE extraction_timestamp = (
-                        SELECT MAX(extraction_timestamp)
+                    WHERE load_timestamp = (
+                        SELECT MAX(load_timestamp)
                         FROM dataproduct_v1.table_name
                     )
                 )
@@ -123,7 +124,7 @@ class TestCuratedDataQueryBuilder:
                 WITH(
                     format='parquet',
                     compression = 'SNAPPY',
-                    partitioned_by=ARRAY['extraction_timestamp']
+                    partitioned_by=ARRAY['load_timestamp']
                 )
             """
         )

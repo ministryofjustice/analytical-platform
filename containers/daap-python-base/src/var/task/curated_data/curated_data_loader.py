@@ -43,7 +43,7 @@ class CuratedDataLoader:
     def create_for_new_data_product(
         self,
         raw_data_table: QueryTable,
-        extraction_timestamp: str,
+        load_timestamp: str,
     ):
         """
         Create the partitions using athena for a new data product;
@@ -56,7 +56,7 @@ class CuratedDataLoader:
         qid = start_query_execution_and_wait(
             database_name=self.curated_data_table.database,
             sql=self.query_builder.sql_create_table_partition(
-                timestamp=extraction_timestamp,
+                timestamp=load_timestamp,
                 curated_table=self.curated_data_table,
                 raw_table=raw_data_table,
             ),
@@ -64,14 +64,14 @@ class CuratedDataLoader:
         )
         self.logger.info(f"Created {self.curated_data_table}, using query id {qid}")
 
-    def ingest_raw_data(self, raw_data_table: QueryTable, extraction_timestamp: str):
+    def ingest_raw_data(self, raw_data_table: QueryTable, load_timestamp: str):
         """
         Ingest raw data into the curated tables. This creates new partition files in s3.
         """
         qid = start_query_execution_and_wait(
             database_name=self.curated_data_table.database,
             sql=self.query_builder.sql_unload_table_partition(
-                timestamp=extraction_timestamp, raw_table=raw_data_table
+                timestamp=load_timestamp, raw_table=raw_data_table
             ),
             logger=self.logger,
         )
@@ -118,23 +118,24 @@ class CuratedDataLoader:
 class CuratedDataCopier:
     def __init__(
         self,
-        column_changes,
-        new_schema: DataProductSchema,
         element: DataProductElement,
         athena_client,
         glue_client,
+        new_schema: DataProductSchema,
         logger=DataPlatformLogger,
+        schemas_to_copy=None,
+        column_changes=None,
     ):
         """
         Copy data from existing version of data product to new version of
         data product.
         """
-        self.data_product_name = new_schema.data_product_name
-        self.column_changes = column_changes
         self.schema = new_schema
-        self.element = element
+        self.data_product_name = element.data_product.name
+        self.column_changes = column_changes
         self.new_curated_data_product_path = element.curated_data_prefix.uri
         self.new_database_name = element.database_name
+        self.schemas_to_copy = schemas_to_copy
         self.glue_client = glue_client
         self.athena_client = athena_client
         self.logger = logger
@@ -151,7 +152,7 @@ class CuratedDataCopier:
         Data types changed -> Not OK
         """
 
-        if self.column_changes["types_changed"]:
+        if self.column_changes is not None and self.column_changes["types_changed"]:
             return False
         else:
             return True
@@ -166,15 +167,16 @@ class CuratedDataCopier:
         returns a list of updated DataProductSchema objects to caller
         """
         # create new version database and table for updated schema
-        create_glue_database(self.glue_client, self.new_database_name, self.logger)
-        parquet_table_input = format_parquet_glue_table_input(
-            self.schema.data["TableInput"],
-            self.new_curated_data_product_path,
-        )
-        self.glue_client.create_table(
-            DatabaseName=self.new_database_name,
-            TableInput=parquet_table_input,
-        )
+        if self.column_changes is not None:
+            create_glue_database(self.glue_client, self.new_database_name, self.logger)
+            parquet_table_input = format_parquet_glue_table_input(
+                self.schema.data["TableInput"],
+                self.new_curated_data_product_path,
+            )
+            self.glue_client.create_table(
+                DatabaseName=self.new_database_name,
+                TableInput=parquet_table_input,
+            )
         schemas_for_rewrite = []
         for table in self.tables_to_copy:
             input_data = format_table_schema(
@@ -221,7 +223,9 @@ class CuratedDataCopier:
         """
         Creates a list of tables to copy into new version of data product database
         """
-        if self._is_updated_table_valid_for_copy():
+        if self.schemas_to_copy:
+            self.tables_to_copy = self.schemas_to_copy
+        elif self._is_updated_table_valid_for_copy():
             self.tables_to_copy = self.schema.parent_data_product_metadata["schemas"]
             self.copy_updated_table = True
         else:
@@ -255,7 +259,7 @@ def format_parquet_glue_table_input(schema: dict, location: str) -> dict:
         "classification": "parquet",
         "compressionType": "SNAPPY",
     }
-    schema["PartitionKeys"] = [{"Name": "extraction_timestamp", "Type": "varchar(16)"}]
+    schema["PartitionKeys"] = [{"Name": "load_timestamp", "Type": "varchar(16)"}]
     schema["Parameters"] = {"classification": "parquet"}
 
     return schema

@@ -1,4 +1,5 @@
 resource "aws_sagemaker_domain" "studio_domain" {
+  #checkov:skip=CKV_AWS_187: low severity change requires destroy and replace
   domain_name = var.domain_name
   auth_mode   = var.auth_mode
 

@@ -36,6 +36,7 @@ data "aws_iam_policy_document" "github_oidc_role" {
     for_each = each.value.stateConfig
 
     content {
+      #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
       sid    = "AllowOIDCWriteState"
       effect = "Allow"
       actions = [
@@ -76,6 +77,7 @@ data "aws_iam_policy_document" "github_oidc_role" {
     }
   }
   statement {
+    #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid       = "AllowOIDCToDecryptKMS"
     effect    = "Allow"
     resources = ["*"]
@@ -84,6 +86,8 @@ data "aws_iam_policy_document" "github_oidc_role" {
 }
 
 module "analytical_platform_data_engineering_production_github_oidc_role" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-engineering-production" }
 
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v3.2.0"
@@ -100,6 +104,8 @@ module "analytical_platform_data_engineering_production_github_oidc_role" {
 }
 
 module "analytical_platform_data_engineering_sandbox_a_github_oidc_role" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-engineering-sandbox-a" }
 
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v3.2.0"
@@ -116,6 +122,8 @@ module "analytical_platform_data_engineering_sandbox_a_github_oidc_role" {
 }
 
 module "analytical_platform_data_production_github_oidc_role" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-data-production" }
 
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v3.2.0"
@@ -132,6 +140,8 @@ module "analytical_platform_data_production_github_oidc_role" {
 }
 
 module "analytical_platform_management_production_github_oidc_role" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   for_each = { for role, config in local.oidc_roles : role => config if try(config.account, "analytical-platform-management-production") == "analytical-platform-management-production" }
 
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v3.2.0"

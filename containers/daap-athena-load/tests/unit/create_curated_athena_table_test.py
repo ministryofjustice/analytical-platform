@@ -23,7 +23,7 @@ class TestCreateCuratedAthenaTable:
         return dict(
             data_product_element=data_product_element,
             raw_data_table=data_product_element.raw_data_table_unique(),
-            extraction_timestamp="20230101T000000Z",
+            load_timestamp="20230101T000000Z",
             metadata={
                 "TableInput": {"Name": "table", "StorageDescriptor": {"Columns": []}},
                 "DatabaseName": "data_products_raw",
@@ -88,7 +88,7 @@ class TestCreateCuratedAthenaTable:
 
         # This assertion needs work following move to structlog
         # assert (
-        #     "partition for extraction_timestamp and table already exists so nothing more to be done."
+        #     "partition for load_timestamp and table already exists so nothing more to be done."
         #     in caplog.text
         # )
 
@@ -163,7 +163,7 @@ class TestCuratedDataLoader:
     ):
         loader.create_for_new_data_product(
             raw_data_table=QueryTable("data_products_raw", "table"),
-            extraction_timestamp="20000101T000000Z",
+            load_timestamp="20000101T000000Z",
         )
 
         assert len(athena_client.list_query_executions()["QueryExecutionIds"]) == 1
@@ -175,7 +175,7 @@ class TestCuratedDataLoader:
     ):
         loader.ingest_raw_data(
             raw_data_table=QueryTable("data_products_raw", "table"),
-            extraction_timestamp="20000101T000000Z",
+            load_timestamp="20000101T000000Z",
         )
 
         assert len(athena_client.list_query_executions()["QueryExecutionIds"]) == 2

@@ -1,12 +1,12 @@
-FROM docker.io/alpine:3.18.4
+FROM docker.io/alpine:3.19.1
 
 LABEL org.opencontainers.image.vendor="Ministry of Justice" \
       org.opencontainers.image.authors="Data Platform" \
-      org.opencontainers.image.title="Kubectl Image" \
-      org.opencontainers.image.description="Kubectl image for Data Platform" \
+      org.opencontainers.image.title="kubectl Image" \
+      org.opencontainers.image.description="kubectl image for Data Platform" \
       org.opencontainers.image.url="https://github.com/ministryofjustice/data-platform/tree/main/containers/kubectl"
 
-ARG KUBECTL_VERSION="v1.27.3"
+ARG KUBECTL_VERSION="v1.28.4"
 
 ENV CONTAINER_GID="10000" \
     CONTAINER_GROUP="nonroot" \
@@ -26,7 +26,7 @@ RUN addgroup \
     && mkdir --parents ${CONTAINER_HOME} \
     && chown --recursive ${CONTAINER_USER}:${CONTAINER_GROUP} ${CONTAINER_HOME} \
     && apk add --no-cache --virtual build \
-      curl==8.4.0-r0 \
+      curl==8.5.0-r0 \
     && curl --location "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" \
       --output /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \

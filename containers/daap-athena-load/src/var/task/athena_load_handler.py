@@ -77,7 +77,7 @@ def handler(
             raw_data_table=QueryTable(
                 database=temp_database_name, name=temp_table_name
             ),
-            extraction_timestamp=extraction.timestamp.strftime("%Y%m%dT%H%M%SZ"),
+            load_timestamp=extraction.timestamp.strftime("%Y%m%dT%H%M%SZ"),
             metadata=table_schema,
             logger=logger,
             glue_client=glue_client,

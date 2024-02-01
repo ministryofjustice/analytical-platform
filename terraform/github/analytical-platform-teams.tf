@@ -21,7 +21,6 @@ locals {
         "f-marry",           # Fabien Marry
         "alex-vonfeldmann",  # Alex von Feldmann
         "gfowler-moj",       # Greg Fowler
-        "ymao2",             # Yikang Mao
         "BrianEllwood",      # Brian Ellwood
         "Emterry",           # Emma Terry
         "michaeljcollinsuk", # Michael Collins
@@ -59,7 +58,6 @@ locals {
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
-        "tom-webber",
       ])
     },
     "analytical-platform-data-development-data-engineer" = {
@@ -67,7 +65,11 @@ locals {
       description    = "Analytical Platform Data Development Data Engineer"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
-        local.data_engineering_team_members
+        flatten([
+          for user in local.data_engineering_access : [
+            contains(user.access, "analytical-platform-data-development-data-engineer") ? [user.github] : []
+          ]
+        ])
       ])
     },
     "analytical-platform-data-production-administrator" = {
@@ -83,7 +85,11 @@ locals {
       description    = "Analytical Platform Data Production Data Engineer"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
-        local.data_engineering_team_members
+        flatten([
+          for user in local.data_engineering_access : [
+            contains(user.access, "analytical-platform-data-production-data-engineer") ? [user.github] : []
+          ]
+        ])
       ])
     },
     /* Analytical Platform Data Engineering */
@@ -94,7 +100,11 @@ locals {
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
         local.data_platform_teams["data-platform-labs"].members,
-        local.data_engineering_team_members
+        flatten([
+          for user in local.data_engineering_access : [
+            contains(user.access, "analytical-platform-data-engineering-sandboxa-administrator") ? [user.github] : []
+          ]
+        ])
       ])
     },
     "analytical-platform-data-engineering-sandboxa-data-engineer" = {
@@ -103,14 +113,24 @@ locals {
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
         local.data_platform_teams["data-platform-labs"].members,
-        local.data_engineering_team_members
+        flatten([
+          for user in local.data_engineering_access : [
+            contains(user.access, "analytical-platform-data-engineering-sandboxa-data-engineer") ? [user.github] : []
+          ]
+        ])
       ])
     },
     "analytical-platform-data-engineering-sandboxa-developer" = {
       name           = "analytical-platform-data-engineering-sandboxa-developer"
       description    = "Analytical Platform Data Engineering SandboxA Developer"
       parent_team_id = module.analytical_platform_team.id
-      members        = flatten([])
+      members = flatten([
+        flatten([
+          for user in local.data_engineering_access : [
+            contains(user.access, "analytical-platform-data-engineering-sandboxa-developer") ? [user.github] : []
+          ]
+        ])
+      ])
     },
     "analytical-platform-data-engineering-production-administrator" = {
       name           = "analytical-platform-data-engineering-production-administrator"
@@ -125,7 +145,11 @@ locals {
       description    = "Analytical Platform Data Engineering Production Data Engineer"
       parent_team_id = module.analytical_platform_team.id
       members = flatten([
-        local.data_engineering_team_members
+        flatten([
+          for user in local.data_engineering_access : [
+            contains(user.access, "analytical-platform-data-engineering-production-data-engineer") ? [user.github] : []
+          ]
+        ])
       ])
     },
     "analytical-platform-data-engineering-production-developer" = {
@@ -162,6 +186,8 @@ locals {
       ])
     }
   }
+
+  data_engineering_access = jsondecode(file("${path.module}/configuration/data-engineering-access.json"))
 }
 
 module "analytical_platform_team" {
@@ -170,7 +196,7 @@ module "analytical_platform_team" {
   name                             = "analytical-platform"
   description                      = "Analytical Platform"
   members                          = local.analytical_platform_all_teams_members
-  parent_team_id                   = module.data_platform_team.id
+  parent_team_id                   = null
   users_with_special_github_access = local.users_with_special_github_access
 }
 
