@@ -34,8 +34,8 @@ resource "aws_flow_log" "data_engineering_vpc" {
 data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
 
   statement {
-    sid     = "LogGroupKMSPermissions"
-    effect  = "Allow"
+    sid    = "LogGroupKMSPermissions"
+    effect = "Allow"
     actions = [
       "kms:Encrypt",
       "kms:Decrypt",
@@ -61,8 +61,8 @@ data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
   }
 
   statement {
-    sid     = "Allow access for Key Administrators"
-    effect  = "Allow"
+    sid    = "Allow access for Key Administrators"
+    effect = "Allow"
     actions = [
       "kms:Create*",
       "kms:Describe*",
