@@ -1,4 +1,5 @@
 resource "aws_vpc" "airflow_dev" {
+  #checkov:skip=CKV2_AWS_12: short lived env no plans to add further EC2
   cidr_block = var.dev_vpc_cidr_block
 
   tags = {
@@ -23,6 +24,7 @@ resource "aws_internet_gateway" "airflow_dev" {
 }
 
 resource "aws_eip" "airflow_dev_eip" {
+  #checkov:skip=CKV2_AWS_19:  EIPs are allocated to NAT gateways
   domain     = "vpc"
   count      = length(var.azs)
   depends_on = [aws_internet_gateway.airflow_dev]
@@ -137,6 +139,7 @@ resource "aws_cloudwatch_log_group" "airflow_dev_vpc_flow_log" {
   name              = "airflow-dev-vpc-flow-log"
   retention_in_days = 400
   skip_destroy      = true
+  kms_key_id        = aws_kms_key.cloudwatch.arn
 }
 
 resource "aws_flow_log" "airflow_dev" {
@@ -157,6 +160,7 @@ resource "aws_flow_log" "airflow_dev" {
 #  /_/   \_\|_||_|   |_|  |_| \___/  \_/\_/   |_|    |_|   \___/  \__,_| \__,_| \___| \__||_| \___/ |_| |_|
 
 resource "aws_vpc" "airflow_prod" {
+  #checkov:skip=CKV2_AWS_12: short lived env no plans to add further EC2
   cidr_block = var.prod_vpc_cidr_block
 
   tags = {
@@ -181,6 +185,7 @@ resource "aws_internet_gateway" "airflow_prod" {
 }
 
 resource "aws_eip" "airflow_prod_eip" {
+  #checkov:skip=CKV2_AWS_19:  EIPs are allocated to NAT gateways
   domain     = "vpc"
   count      = length(var.azs)
   depends_on = [aws_internet_gateway.airflow_prod]
@@ -189,7 +194,9 @@ resource "aws_eip" "airflow_prod_eip" {
   }
 }
 
+#tfsec:ignore:avd-aws-0164: we do want public access
 resource "aws_subnet" "prod_public_subnet" {
+  #checkov:skip=CKV_AWS_130: we do want public access
   vpc_id                  = aws_vpc.airflow_prod.id
   count                   = length(var.prod_public_subnet_cidrs)
   cidr_block              = element(var.prod_public_subnet_cidrs, count.index)

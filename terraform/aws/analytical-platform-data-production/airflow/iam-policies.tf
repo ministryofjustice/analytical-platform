@@ -1,4 +1,9 @@
+#tfsec:ignore:avd-aws-0057: Needs access to multiple resources
 data "aws_iam_policy_document" "airflow_analytical_platform_development" {
+  #checkov:skip=CKV_AWS_356: Needs access to multiple resources
+  #checkov:skip=CKV_AWS_111: Needs access to multiple resources
+  #checkov:skip=CKV_AWS_108: low severity
+  #checkov:skip=CKV_AWS_109: low severity
   statement {
     sid       = "AllowS3"
     effect    = "Allow"
@@ -115,6 +120,8 @@ data "aws_iam_policy_document" "airflow_dev_execution_assume_role_policy" {
 }
 
 data "aws_iam_policy_document" "airflow_dev_cluster_autoscaler_policy" {
+  #checkov:skip=CKV_AWS_356: Needs access to multiple resources
+  #checkov:skip=CKV_AWS_111: Needs access to multiple resources
   statement {
     sid    = ""
     effect = "Allow"
@@ -149,6 +156,8 @@ data "aws_iam_policy_document" "airflow_dev_cluster_autoscaler_assume_role_polic
 }
 
 data "aws_iam_policy_document" "airflow_dev_flow_log_role_policy" {
+  #checkov:skip=CKV_AWS_356: Needs access to multiple resources
+  #checkov:skip=CKV_AWS_111: Needs access to multiple resources
   statement {
     sid    = ""
     effect = "Allow"
@@ -371,6 +380,8 @@ data "aws_iam_policy_document" "airflow_prod_node_instance_assume_role_policy" {
 
 
 data "aws_iam_policy_document" "airflow_prod_flow_log_role_policy" {
+  #checkov:skip=CKV_AWS_356: Needs access to multiple resources
+  #checkov:skip=CKV_AWS_111: Needs access to multiple resources
   statement {
     sid    = ""
     effect = "Allow"
