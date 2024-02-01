@@ -375,6 +375,7 @@ locals {
       description         = "Analytical Platform Terraform Github ID Provider Config"
       topics              = ["ministryofjustice", "analytical-platform"]
       use_template        = true
+      archived            = true
       template_repository = "ap-terraform-module-template"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
@@ -386,6 +387,7 @@ locals {
       description         = "Analytical Platform Terraform AWS OIDC Provider"
       topics              = ["ministryofjustice", "analytical-platform"]
       use_template        = true
+      archived            = true
       template_repository = "ap-terraform-module-template"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
