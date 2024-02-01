@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
   }
 
   statement {
-    sid    = "Allow access for Key Administrators"
+    sid    = "AllowKeyManagement"
     effect = "Allow"
     actions = [
       "kms:Create*",
@@ -81,7 +81,10 @@ data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
     ]
     principals {
       type        = "AWS"
-      identifiers = data.aws_iam_roles.analytical_platform_data_engineering_sso_administrator_access_roles.arns
+      identifiers = concat(
+        tolist(data.aws_iam_roles.analytical_platform_data_engineering_sso_administrator_access_roles.arns),
+        ["arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/GlobalGitHubActionAdmin"]
+      )
     }
     resources = ["*"]
   }
