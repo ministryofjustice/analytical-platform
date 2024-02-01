@@ -1,6 +1,8 @@
 module "ec2" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "5.5.0"
+  version = "5.6.0"
 
   name                        = local.name
   ami                         = local.ami

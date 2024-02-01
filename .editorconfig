@@ -7,3 +7,7 @@ trim_trailing_whitespace = true
 
 [**/*.drawio]
 insert_final_newline = unset
+
+[**/tests/snapshots/*.json]
+end_of_line = unset
+insert_final_newline = unset

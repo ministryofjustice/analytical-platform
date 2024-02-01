@@ -3,6 +3,8 @@
 ##################################################
 
 module "eks" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source  = "terraform-aws-modules/eks/aws"
   version = "17.24.0"
 
@@ -65,6 +67,7 @@ module "eks" {
 }
 
 resource "aws_security_group" "allow_karpenter_communication" {
+  #checkov:skip=CKV2_AWS_5: skip not atttached to ec2
   description = " allows karpenter nodes  to communicate with infrastructure"
   vpc_id      = module.vpc.vpc_id
 }
@@ -76,4 +79,5 @@ resource "aws_security_group_rule" "allow_karpenter" {
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.karpenter.id
   security_group_id        = aws_security_group.allow_karpenter_communication.id
+  description              = "allow karpenter"
 }

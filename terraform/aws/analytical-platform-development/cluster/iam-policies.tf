@@ -83,7 +83,7 @@ data "aws_iam_policy_document" "efs_csi_driver" {
       "elasticfilesystem:DescribeAccessPoints",
       "elasticfilesystem:DescribeFileSystems"
     ]
-    resources = ["*"]
+    resources = [aws_efs_file_system.eks_user_homes.arn]
   }
   statement {
     effect = "Allow"
@@ -274,6 +274,8 @@ resource "aws_iam_policy" "superset" {
 ##################################################
 
 data "aws_iam_policy_document" "ebs_csi_driver" {
+  #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
+  #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
   statement {
     sid    = "EbsCsiDriver"
     effect = "Allow"

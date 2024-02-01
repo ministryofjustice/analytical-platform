@@ -1,0 +1,58 @@
+---
+name: Dependabot Docker
+
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    types:
+      - opened
+
+permissions: {}
+
+jobs:
+  dependabot-docker:
+    if: github.actor == 'dependabot[bot]'
+    name: Dependabot Docker
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Check for Docker Label
+        id: check_for_docker_label
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          result-encoding: string
+          script: |
+            const labels = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+
+            const docker = labels.data.find(label => {
+              return label.name === 'docker'
+            })
+
+            if (docker) {
+              console.log('Found label')
+              return "true"
+            } else {
+              console.log('Did not find label')
+              return "false"
+            }
+
+      - name: Comment on pull request
+        if: steps.check_for_docker_label.outputs.result == 'true'
+        id: comment
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            issue_number: context.issue.number,
+
+            await github.rest.issues.createComment({
+              owner: owner,
+              repo: repo,
+              issue_number: issue_number,
+              body: `Dependabot cannot automatically update Docker images. Please update the Docker image manually following our [documentation](https://technical-documentation.data-platform.service.justice.gov.uk/documentation/platform/infrastructure/containers.html#updating-a-container).`
+            });

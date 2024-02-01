@@ -10,6 +10,8 @@ module "karpenter" {
 }
 
 resource "aws_security_group" "karpenter" {
+  #checkov:skip=CKV2_AWS_5: skip not atttached to ec2
+
   description = "Provides karpenter with a map of subnets to deploy nodes"
   vpc_id      = module.vpc.vpc_id
 
@@ -25,6 +27,7 @@ resource "aws_security_group_rule" "karpenter" {
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.karpenter.id
   security_group_id        = aws_security_group.karpenter.id
+  description              = "karpenter"
 }
 
 resource "aws_security_group_rule" "eks_node_karpenter" {
@@ -34,6 +37,7 @@ resource "aws_security_group_rule" "eks_node_karpenter" {
   protocol                 = "tcp"
   source_security_group_id = module.eks.worker_security_group_id
   security_group_id        = aws_security_group.karpenter.id
+  description              = "eks node karpenter"
 }
 
 resource "aws_iam_service_linked_role" "spot" {
@@ -41,6 +45,8 @@ resource "aws_iam_service_linked_role" "spot" {
 }
 
 data "aws_iam_policy_document" "karpenter_controller" {
+  #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
+  #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
   statement {
     actions = [
       "ec2:CreateLaunchTemplate",
@@ -119,8 +125,10 @@ resource "aws_iam_policy" "karpenter_irsa" {
 }
 
 module "iam_karpenter_controller_irsa" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source                         = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                        = "5.32.0"
+  version                        = "5.33.1"
   create_role                    = true
   role_name_prefix               = "karpenter_controller"
   provider_url                   = module.eks.cluster_oidc_issuer_url
