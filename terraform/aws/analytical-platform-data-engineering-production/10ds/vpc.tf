@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
       "kms:CancelKeyDeletion"
     ]
     principals {
-      type        = "AWS"
+      type = "AWS"
       identifiers = concat(
         tolist(data.aws_iam_roles.analytical_platform_data_engineering_sso_administrator_access_roles.arns),
         ["arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/GlobalGitHubActionAdmin"]
