@@ -36,7 +36,13 @@ data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
   statement {
     sid     = "LogGroupKMSPermissions"
     effect  = "Allow"
-    actions = ["kms:Encrypt", "kms:Decrypt", "kms:ReEncrypt*", "kms:GenerateDataKey*", "kms:DescribeKey"]
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
     principals {
       type        = "Service"
       identifiers = ["logs.amazonaws.com"]
@@ -46,7 +52,7 @@ data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
 
   statement {
     effect  = "Allow"
-    actions = ["kms:Encrypt", "kms:Decrypt", "kms:ReEncrypt*", "kms:GenerateDataKey*", "kms:DescribeKey"]
+    actions = ["kms:*"]
     principals {
       type        = "AWS"
       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
