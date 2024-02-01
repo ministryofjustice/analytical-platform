@@ -59,6 +59,32 @@ data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
     }
     resources = ["*"]
   }
+
+  statement {
+    sid     = "Allow access for Key Administrators"
+    effect  = "Allow"
+    actions = [
+      "kms:Create*",
+      "kms:Describe*",
+      "kms:Enable*",
+      "kms:List*",
+      "kms:Put*",
+      "kms:Update*",
+      "kms:Revoke*",
+      "kms:Disable*",
+      "kms:Get*",
+      "kms:Delete*",
+      "kms:TagResource",
+      "kms:UntagResource",
+      "kms:ScheduleKeyDeletion",
+      "kms:CancelKeyDeletion"
+    ]
+    principals {
+      type        = "AWS"
+      identifiers = data.aws_iam_roles.analytical_platform_data_engineering_sso_administrator_access_roles.arn
+    }
+    resources = ["*"]
+  }
 }
 
 resource "aws_kms_key" "data_engineering_vpc_key" {
