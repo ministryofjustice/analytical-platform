@@ -378,22 +378,28 @@ locals {
       }
     },
     "ap-terraform-github-id-provider-config" = {
-      name                = "ap-terraform-github-id-provider-config"
-      description         = "Analytical Platform Terraform Github ID Provider Config"
-      topics              = ["ministryofjustice", "analytical-platform"]
-      use_template        = true
-      template_repository = "ap-terraform-module-template"
+      name                            = "ap-terraform-github-id-provider-config"
+      description                     = "Analytical Platform Terraform Github ID Provider Config"
+      topics                          = ["ministryofjustice", "analytical-platform"]
+      use_template                    = true
+      archived                        = true
+      vulnerability_alerts            = false
+      secret_scanning_push_protection = "disabled"
+      template_repository             = "ap-terraform-module-template"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
     },
     "ap-terraform-aws-oidc-provider" = {
-      name                = "ap-terraform-aws-oidc-provider"
-      description         = "Analytical Platform Terraform AWS OIDC Provider"
-      topics              = ["ministryofjustice", "analytical-platform"]
-      use_template        = true
-      template_repository = "ap-terraform-module-template"
+      name                            = "ap-terraform-aws-oidc-provider"
+      description                     = "Analytical Platform Terraform AWS OIDC Provider"
+      topics                          = ["ministryofjustice", "analytical-platform"]
+      use_template                    = true
+      archived                        = true
+      vulnerability_alerts            = false
+      secret_scanning_push_protection = "disabled"
+      template_repository             = "ap-terraform-module-template"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
