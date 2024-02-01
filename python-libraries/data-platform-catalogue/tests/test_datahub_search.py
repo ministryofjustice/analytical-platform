@@ -98,20 +98,86 @@ def test_one_search_result(mock_graph, searcher):
                 name="Use of force",
                 description="Prisons in England and Wales are required to record all instances of Use of Force within their establishment. Use of Force can be planned or unplanned and may involve various categories of control and restraint (C&R) techniques such as physical restraint or handcuffs.\n\nPlease refer to [PSO 1600](https://www.gov.uk/government/publications/use-of-force-in-prisons-pso-1600) for the current guidance.",  # noqa E501
                 metadata={
-                    "domain": {
-                        "id": "3dc18e48-c062-4407-84a9-73e23f768023",
-                        "properties": {
-                            "name": "HMPPS",
-                            "description": "HMPPS is an executive agency that carries out sentences given by the courts, in custody and the community, and rehabilitates people through education and employment.",  # noqa E501
-                        },
-                        "urn": "urn:li:domain:3dc18e48-c062-4407-84a9-73e23f768023",
-                    },
+                    "domain_id": "urn:li:domain:3dc18e48-c062-4407-84a9-73e23f768023",
+                    "domain_name": "HMPPS",
                     "owner": "",
                     "owner_email": "",
                     "number_of_assets": 7,
                 },
                 tags=["custody"],
             )
+        ],
+    )
+
+
+def test_dataset_result(mock_graph, searcher):
+    datahub_response = {
+        "searchAcrossEntities": {
+            "start": 0,
+            "count": 1,
+            "total": 1,
+            "searchResults": [
+                {
+                    "insights": [],
+                    "matchedFields": [],
+                    "entity": {
+                        "type": "DATASET",
+                        "urn": "urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",  # noqa E501
+                        "platform": {"name": "bigquery"},
+                        "ownership": None,
+                        "name": "calm-pagoda-323403.jaffle_shop.customers",
+                        "properties": {
+                            "name": "customers",
+                            "customProperties": [
+                                {"key": "StoredAsSubDirectories", "value": "False"},
+                                {
+                                    "key": "CreatedByJob",
+                                    "value": "moj-reg-prod-hmpps-assess-risks-and-needs-prod-glue-job",
+                                },
+                            ],
+                        },
+                        "domain": {
+                            "domain": {
+                                "urn": "urn:li:domain:3dc18e48-c062-4407-84a9-73e23f768023",
+                                "id": "3dc18e48-c062-4407-84a9-73e23f768023",
+                                "properties": {
+                                    "name": "HMPPS",
+                                    "description": "HMPPS is an executive agency that ...",
+                                },
+                            },
+                            "editableProperties": None,
+                            "tags": None,
+                            "lastIngested": 1705990502353,
+                        },
+                    },
+                }
+            ],
+        }
+    }
+    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+    response = searcher.search()
+    assert response == SearchResponse(
+        total_results=1,
+        page_results=[
+            SearchResult(
+                id="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
+                matches={},
+                result_type=ResultType.TABLE,
+                name="customers",
+                description="",
+                metadata={
+                    "owner": "",
+                    "owner_email": "",
+                    "data_products": [],
+                    "total_data_products": 0,
+                    "domain_name": "HMPPS",
+                    "domain_id": "urn:li:domain:3dc18e48-c062-4407-84a9-73e23f768023",
+                    "StoredAsSubDirectories": "False",
+                    "CreatedByJob": "moj-reg-prod-hmpps-assess-risks-and-needs-prod-glue-job",
+                },
+                tags=[],
+            ),
         ],
     )
 
@@ -184,6 +250,8 @@ def test_full_page(mock_graph, searcher):
                     "owner_email": "",
                     "data_products": [],
                     "total_data_products": 0,
+                    "domain_name": "",
+                    "domain_id": "",
                 },
                 tags=[],
                 last_updated=datetime(2024, 1, 23, 6, 15, 2, 353000),
@@ -199,6 +267,8 @@ def test_full_page(mock_graph, searcher):
                     "owner_email": "",
                     "data_products": [],
                     "total_data_products": 0,
+                    "domain_name": "",
+                    "domain_id": "",
                 },
                 tags=[],
                 last_updated=None,
@@ -214,6 +284,8 @@ def test_full_page(mock_graph, searcher):
                     "owner_email": "",
                     "data_products": [],
                     "total_data_products": 0,
+                    "domain_name": "",
+                    "domain_id": "",
                 },
                 tags=[],
                 last_updated=None,
@@ -271,6 +343,8 @@ def test_query_match(mock_graph, searcher):
                     "owner_email": "",
                     "data_products": [],
                     "total_data_products": 0,
+                    "domain_id": "",
+                    "domain_name": "",
                 },
                 tags=[],
             )
@@ -329,6 +403,8 @@ def test_result_with_owner(mock_graph, searcher):
                     "owner_email": "shannon@longtail.com",
                     "data_products": [],
                     "total_data_products": 0,
+                    "domain_id": "",
+                    "domain_name": "",
                 },
                 tags=[],
             )
@@ -593,6 +669,8 @@ def test_result_with_data_product(mock_graph, searcher):
                     "owner_email": "",
                     "data_products": [{"id": "urn:abc", "name": "abc"}],
                     "total_data_products": 1,
+                    "domain_id": "",
+                    "domain_name": "",
                 },
                 tags=[],
             )
