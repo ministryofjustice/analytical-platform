@@ -184,6 +184,16 @@ locals {
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
+    },
+    "data-platform-apps-and-tools-powerbi-authors" = {
+      name           = "data-platform-apps-and-tools-powerbi-authors"
+      description    = "Data Platform Apps and Tools PowerBI Authors"
+      parent_team_id = module.data_platform_teams["data-platform-apps-and-tools"].id
+      members = flatten([
+        local.data_platform_teams["data-platform-apps-and-tools"].members,
+        "andrewc-moj", # Andrew Craik
+        "gwionap"      # Gwion ApRhobat
+      ])
     }
   }
 }
