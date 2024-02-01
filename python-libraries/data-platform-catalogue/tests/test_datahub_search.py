@@ -10,6 +10,7 @@ from data_platform_catalogue.search_types import (
     SearchFacets,
     SearchResponse,
     SearchResult,
+    SortOption,
 )
 
 
@@ -347,6 +348,25 @@ def test_filter(searcher, mock_graph):
     mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
 
     response = searcher.search(filters=[MultiSelectFilter("domains", ["Abc", "Def"])])
+
+    assert response == SearchResponse(
+        total_results=0,
+        page_results=[],
+    )
+
+
+def test_sort(searcher, mock_graph):
+    datahub_response = {
+        "searchAcrossEntities": {
+            "start": 0,
+            "count": 0,
+            "total": 0,
+            "searchResults": [],
+        }
+    }
+    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+    response = searcher.search(sort=SortOption(field="name", ascending=False))
 
     assert response == SearchResponse(
         total_results=0,

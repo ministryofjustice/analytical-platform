@@ -24,7 +24,13 @@ from ...entities import (
     DataProductMetadata,
     TableMetadata,
 )
-from ...search_types import MultiSelectFilter, ResultType, SearchFacets, SearchResponse
+from ...search_types import (
+    MultiSelectFilter,
+    ResultType,
+    SearchFacets,
+    SearchResponse,
+    SortOption,
+)
 from ..base import BaseCatalogueClient, CatalogueError, ReferencedEntityMissing, logger
 from .search import SearchClient
 
@@ -321,6 +327,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             ResultType.TABLE,
         ),
         filters: Sequence[MultiSelectFilter] = (),
+        sort: SortOption | None = None,
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
@@ -331,6 +338,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             page=page,
             result_types=result_types,
             filters=filters,
+            sort=sort,
         )
 
     def search_facets(
