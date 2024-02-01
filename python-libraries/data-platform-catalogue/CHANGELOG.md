@@ -7,6 +7,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] 2024-01-31
+
+### Added
+
+Added the ability to sort search results
+
+- Added class `SortOption` to allow sorting of search results
+- Added parameter `sort` to `SearchClient.search()`
+
+## [0.8.0] 2024-01-29
+
+### Added
+
+Enhanced the metadata returned with search results:
+
+- Added `number_of_assets` to data product metadata
+- Added `data_products` and `total_data_products` to dataset metadata
+- Added separate search_facets method
+- Added `SearchFacets`` class to make it easier to present facets
+
+### Changed
+
+- Replaced deprecated Datahub `filters` parameter with `orFilters`
+
+## [0.7.0] 2024-01-25
+
+### Added
+
+- Added filters param to the search function
+- Return facets attribute to the search response. This is a dictionary mapping
+  fieldnames to `FacetOptions`, which expose values, display names and the
+  count of results with that value.
+
+## [0.6.0] 2024-01-24
+
+### Added
+
+- BaseCatalogueClient.list_data_products()
+
 ## [0.5.0] 2024-01-24
 
 ### Added

@@ -1,12 +1,6 @@
 import json
 from http import HTTPStatus
 
-from data_platform_catalogue.client.base import (
-    BaseCatalogueClient,
-    CatalogueError,
-    ReferencedEntityMissing,
-    logger,
-)
 from metadata.generated.schema.api.data.createDatabase import CreateDatabaseRequest
 from metadata.generated.schema.api.data.createDatabaseSchema import (
     CreateDatabaseSchemaRequest,
@@ -40,6 +34,7 @@ from ..entities import (
     DataProductMetadata,
     TableMetadata,
 )
+from .base import BaseCatalogueClient, CatalogueError, ReferencedEntityMissing, logger
 
 OMD_DATA_TYPE_MAPPING = {
     "boolean": OpenMetadataDataType.BOOLEAN,

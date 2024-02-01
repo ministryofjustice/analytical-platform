@@ -3,13 +3,47 @@ query Search(
   $count: Int!
   $start: Int!
   $types: [EntityType!]
+  $filters: [FacetFilterInput!]
+  $sort: SearchSortInput
 ) {
   searchAcrossEntities(
-    input: { types: $types, query: $query, start: $start, count: $count }
+    input: {
+      types: $types
+      query: $query
+      start: $start
+      count: $count
+      orFilters: [{ and: $filters }]
+      sortInput: $sort
+    }
   ) {
     start
     count
     total
+    facets {
+      field
+      displayName
+      aggregations {
+        value
+        count
+        entity {
+          ... on Domain {
+            properties {
+              name
+            }
+          }
+          ... on Tag {
+            properties {
+              name
+            }
+          }
+          ... on GlossaryTerm {
+            properties {
+              name
+            }
+          }
+        }
+      }
+    }
     searchResults {
       insights {
         text
@@ -25,6 +59,25 @@ query Search(
           type
           platform {
             name
+          }
+          relationships(
+            input: {
+              types: ["DataProductContains"]
+              direction: INCOMING
+              count: 10
+            }
+          ) {
+            total
+            relationships {
+              entity {
+                urn
+                ... on DataProduct {
+                  properties {
+                    name
+                  }
+                }
+              }
+            }
           }
           ownership {
             owners {

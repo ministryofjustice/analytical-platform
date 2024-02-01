@@ -224,14 +224,10 @@ locals {
       }
     },
     "analytics-platform-jupyter-notebook" = {
-      name                                   = "analytics-platform-jupyter-notebook"
-      description                            = "Analytical Platform Jupyter Notebook"
-      topics                                 = ["ministryofjustice", "analytical-platform"]
-      use_template                           = false
-      visibility                             = "internal"
-      advanced_security_status               = "disabled"
-      secret_scanning_status                 = "disabled"
-      secret_scanning_push_protection_status = "disabled"
+      name         = "analytics-platform-jupyter-notebook"
+      description  = "Analytical Platform Jupyter Notebook"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      use_template = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]

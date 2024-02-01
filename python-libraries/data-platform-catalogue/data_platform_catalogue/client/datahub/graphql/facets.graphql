@@ -1,0 +1,41 @@
+query Facets(
+  $query: String!
+  $facets: [String!]
+  $types: [EntityType!]
+  $filters: [FacetFilterInput!]
+) {
+  aggregateAcrossEntities(
+    input: {
+      types: $types
+      query: $query
+      facets: $facets
+      orFilters: [{ and: $filters }]
+    }
+  ) {
+    facets {
+      field
+      displayName
+      aggregations {
+        value
+        count
+        entity {
+          ... on Domain {
+            properties {
+              name
+            }
+          }
+          ... on Tag {
+            properties {
+              name
+            }
+          }
+          ... on GlossaryTerm {
+            properties {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}
