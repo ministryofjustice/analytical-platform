@@ -81,7 +81,7 @@ data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
     ]
     principals {
       type        = "AWS"
-      identifiers = data.aws_iam_roles.analytical_platform_data_engineering_sso_administrator_access_roles.arn
+      identifiers = data.aws_iam_roles.analytical_platform_data_engineering_sso_administrator_access_roles.arns
     }
     resources = ["*"]
   }
