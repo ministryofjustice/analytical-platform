@@ -102,7 +102,7 @@ data "aws_iam_policy_document" "flow_log" {
       "logs:DescribeLogGroups",
       "logs:DescribeLogStreams",
     ]
-
+    #tfsec:ignore:avd-aws-0057:needs to access multiple resources
     resources = ["*"]
   }
 }
