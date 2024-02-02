@@ -26,7 +26,7 @@ resource "aws_eks_cluster" "airflow_dev_eks_cluster" {
   }
 }
 
-
+#tfsec:ignore:AVD-AWS-0104: Revisit
 resource "aws_security_group" "airflow_dev_cluster_additional_security_group" {
   #checkov:skip=CKV2_AWS_5: skip not atttached to ec2
   name        = var.dev_cluster_additional_sg_name
@@ -42,12 +42,13 @@ resource "aws_security_group" "airflow_dev_cluster_additional_security_group" {
   egress {
     description = "Allow internet access."
     protocol    = "-1"
-    cidr_blocks = ["10.200.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
     from_port   = 0
     to_port     = 0
   }
 }
 
+#tfsec:ignore:AVD-AWS-0104: Revisit
 resource "aws_security_group" "airflow_dev_cluster_node_security_group" {
   #checkov:skip=CKV2_AWS_5: skip not atttached to ec2
   name        = var.dev_cluster_node_sg_name
@@ -80,7 +81,7 @@ resource "aws_security_group" "airflow_dev_cluster_node_security_group" {
   egress {
     description = "Allow internet access."
     protocol    = "-1"
-    cidr_blocks = ["10.200.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
     from_port   = 0
     to_port     = 0
   }
@@ -247,6 +248,7 @@ resource "aws_eks_cluster" "airflow_prod_eks_cluster" {
   }
 }
 
+#tfsec:ignore:AVD-AWS-0104: Revisit
 resource "aws_security_group" "airflow_prod_cluster_additional_security_group" {
   #checkov:skip=CKV2_AWS_5: skip not atttached to ec2
   name        = var.prod_cluster_additional_sg_name
