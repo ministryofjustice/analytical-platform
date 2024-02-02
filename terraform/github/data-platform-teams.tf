@@ -36,6 +36,7 @@ locals {
         "EO510",             # Eki Osehenye
         "AntFMoJ",           # Anthony Fitzroy
         "mitchdawson1982",   # Mitch Dawson
+        "jamesstottmoj",     # James Stott
       ]
     },
     "data-platform-labs" = {
