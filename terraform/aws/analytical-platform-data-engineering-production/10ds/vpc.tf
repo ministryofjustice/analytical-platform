@@ -26,6 +26,7 @@ resource "aws_cloudwatch_log_group" "data_engineering_vpc" {
 }
 
 resource "aws_flow_log" "data_engineering_vpc" {
+  iam_role_arn    = aws_iam_role.flow_log.arn
   log_destination = aws_cloudwatch_log_group.data_engineering_vpc.arn
   traffic_type    = "ALL"
   vpc_id          = module.vpc.vpc_id
@@ -70,4 +71,44 @@ resource "aws_kms_key" "data_engineering_vpc_key" {
   deletion_window_in_days = 7
   enable_key_rotation     = true
   policy                  = data.aws_iam_policy_document.cloudwatch_kms_key_policy.json
+}
+
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["vpc-flow-logs.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+resource "aws_iam_role" "flow_log" {
+  name               = "vpc_flow_log"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+data "aws_iam_policy_document" "flow_log" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+    ]
+    #tfsec:ignore:avd-aws-0057:needs to access multiple resources
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "flow_log" {
+  name   = "vpc_flow_log"
+  role   = aws_iam_role.flow_log.id
+  policy = data.aws_iam_policy_document.flow_log.json
 }
