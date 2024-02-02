@@ -73,6 +73,19 @@ resource "aws_kms_key" "data_engineering_vpc_key" {
   policy                  = data.aws_iam_policy_document.cloudwatch_kms_key_policy.json
 }
 
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["vpc-flow-logs.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
 resource "aws_iam_role" "flow_log" {
   name               = "vpc_flow_log"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
@@ -92,4 +105,10 @@ data "aws_iam_policy_document" "flow_log" {
 
     resources = ["*"]
   }
+}
+
+resource "aws_iam_role_policy" "flow_log" {
+  name   = "vpc_flow_log"
+  role   = aws_iam_role.flow_log.id
+  policy = data.aws_iam_policy_document.flow_log.json
 }
