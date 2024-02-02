@@ -1,22 +1,15 @@
 #tfsec:ignore:AVD-AWS-0089: S3 bucket logging not required
 #tfsec:ignore:AVD-AWS-0090: S3 bucket versioning not required
+#tfsec:ignore:AVD-AWS-0088: objects have server side encryption enabled
+#tfsec:ignore:AVD-AWS-0132: objects have server side encryption enabled
 resource "aws_s3_bucket" "mojap_airflow_dev" {
   #checkov:skip=CKV_AWS_18: access logging not required
   #checkov:skip=CKV2_AWS_62: event notification not required
   #checkov:skip=CKV_AWS_144: cross-region replication not required
   #checkov:skip=CKV2_AWS_61: bucket lifecycle configuration  not required
   #checkov:skip=CKV_AWS_21: S3 bucket have versioning enabled not required
+  #checkov:skip=CKV_AWS_145: objects have server side encryption enabled
   bucket = "mojap-airflow-dev"
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm     = "aws:kms"
-        kms_master_key_id = aws_kms_key.s3_mojap_airflow_dev.arn
-      }
-    }
-  }
-
 }
 
 resource "aws_s3_bucket_public_access_block" "mojap_airflow_dev_access_block" {
@@ -78,6 +71,9 @@ data "aws_iam_policy_document" "airflow_bucket_policy" {
 }
 
 ############################ AIRFLOW PRODUCTION INFRASTRUCTURE
+
+#tfsec:ignore:AVD-AWS-0088: objects have server side encryption enabled
+#tfsec:ignore:AVD-AWS-0132: objects have server side encryption enabled
 #tfsec:ignore:AVD-AWS-0089: S3 bucket logging not required
 #tfsec:ignore:AVD-AWS-0090: S3 bucket versioning not required
 resource "aws_s3_bucket" "mojap_airflow_prod" {
@@ -86,6 +82,7 @@ resource "aws_s3_bucket" "mojap_airflow_prod" {
   #checkov:skip=CKV_AWS_144: cross-region replication not required
   #checkov:skip=CKV2_AWS_61: bucket lifecycle configuration  not required
   #checkov:skip=CKV_AWS_21: S3 bucket have versioning enabled not required
+  #checkov:skip=CKV_AWS_145: objects have server side encryption enabled
   bucket = "mojap-airflow-prod"
 }
 

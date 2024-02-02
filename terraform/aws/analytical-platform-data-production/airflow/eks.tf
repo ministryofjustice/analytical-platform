@@ -18,8 +18,9 @@ resource "aws_eks_cluster" "airflow_dev_eks_cluster" {
 
 
   vpc_config {
-    subnet_ids             = aws_subnet.dev_private_subnet[*].id
-    public_access_cidrs    = ["10.200.0.0/16"]
+    subnet_ids = aws_subnet.dev_private_subnet[*].id
+    #public_access_cidrs    = ["10.200.0.0/16"]
+    public_access_cidrs    = var.dev_public_subnet_cidrs
     security_group_ids     = [var.dev_cluster_additional_sg_id]
     endpoint_public_access = false
   }
