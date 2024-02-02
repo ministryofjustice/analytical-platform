@@ -51,8 +51,8 @@ data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
   }
 
   statement {
-    sid    = "AllowKeyManagement"
-    effect = "Allow"
+    sid     = "AllowKeyManagement"
+    effect  = "Allow"
     actions = ["kms:*"]
     principals {
       type = "AWS"
