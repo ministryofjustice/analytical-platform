@@ -13,19 +13,24 @@ review_in: 6 months
 
 ## Context
 
-Our user want features not available on our existing platform. SageMaker provides a managed service for these tools and provides instances with higher resources and GPU to aid research.
+Our user want analytical features not available on our existing platform. The types of tools and underlying compute is changing rapidly. SageMaker provides a managed service for these tools and provides instances with higher resources and GPU to speed and aid research.
+
+There is also a lot of interest in using LLMs for e.g.semantic search of free text. SageMaker in VPC isolation mode makes sure sensitive workloads are secured and stay within the [instance](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi.html) and data is connected via PrivateLink.
 
 ## Decision
 
 - _proposed - We will look to offer [Amazon SageMaker](https://aws.amazon.com/bedrock/) to our users_
 
-## Proposal Consequences
+## Proposal General Consequences
 
-- Leverage managed services like SageMaker Studio
-- SageMaker cost is based on usage and can vary significantly month-to-month depending on your application's usage, instance type and costs could spike unexpectedly
+- [SageMaker cost](https://aws.amazon.com/sagemaker/pricing/) is based on usage and can vary significantly month-to-month depending on your application's usage, instance type and costs could spike unexpectedly
 - Improved Security, workloads will run in isolation mode (without access to internet) to further secure sensitive data
 - Users can make use of services when available and require development of front and backend service
 - Greater choice in open source Foundation Models and VPC isolation for highly sensitive data
 - Reduced operational cost and complexity
-- Agility and change readiness, additional analytical services can be offered when available
+- Agility and change readiness, additional analytical services can be offered when available without considerable effort that has lead to users having to work elsewhere
 - Better cost transparency, we will understand our tooling compute costs
+- SageMaker JumpStart does not download models from a public model zoo, it can be used in fully locked-down environments as well where there is **no internet access**
+- Network access can be limited and scoped down for SageMaker JumpStart models, this helps teams improve the security posture of the environment
+- Due to the VPC boundaries, access to the endpoint can also be limited via subnets and security groups, which adds an extra layer of security
+- Leverage managed services like [SageMaker Studio](https://aws.amazon.com/sagemaker/studio/)
