@@ -2,7 +2,7 @@ import json
 import logging
 from datetime import datetime
 from importlib.resources import files
-from typing import Any, Sequence
+from typing import Any, Sequence, Tuple
 
 from datahub.configuration.common import GraphError
 from datahub.ingestion.graph.client import DataHubGraph
@@ -184,21 +184,38 @@ class SearchClient:
                 tags.append(properties["name"])
         return tags
 
-    def _parse_properties(self, entity: dict[str, Any]) -> dict[str, Any]:
+    def _parse_properties(
+        self, entity: dict[str, Any]
+    ) -> Tuple[dict[str, Any], dict[str, Any]]:
         """
         Parse properties and editableProperties into a single dictionary.
         """
         properties = entity["properties"] or {}
         editable_properties = entity.get("editableProperties") or {}
         properties.update(editable_properties)
-        return properties
+        custom_properties = {
+            i["key"]: i["value"] for i in properties.get("customProperties", [])
+        }
+        return properties, custom_properties
+
+    def _parse_domain(self, entity: dict[str, Any]):
+        metadata = {}
+        domain = entity.get("domain") or {}
+        inner_domain = domain.get("domain") or {}
+        metadata["domain_id"] = inner_domain.get("urn", "")
+        if inner_domain:
+            domain_properties, _ = self._parse_properties(inner_domain)
+            metadata["domain_name"] = domain_properties.get("name", "")
+        else:
+            metadata["domain_name"] = ""
+        return metadata
 
     def _parse_dataset(self, entity: dict[str, Any], matches) -> SearchResult:
         """
         Map a dataset entity to a SearchResult
         """
         owner_email, owner_name = self._parse_owner(entity)
-        properties = self._parse_properties(entity)
+        properties, custom_properties = self._parse_properties(entity)
         tags = self._parse_tags(entity)
         last_updated = self._parse_last_updated(entity)
         name = entity["name"]
@@ -210,18 +227,22 @@ class SearchClient:
             for i in data_products
         ]
 
+        metadata = {
+            "owner": owner_name,
+            "owner_email": owner_email,
+            "total_data_products": total_data_products,
+            "data_products": data_products,
+        }
+        metadata.update(self._parse_domain(entity))
+        metadata.update(custom_properties)
+
         return SearchResult(
             id=entity["urn"],
             result_type=ResultType.TABLE,
             matches=matches,
             name=properties.get("name", name),
             description=properties.get("description", ""),
-            metadata={
-                "owner": owner_name,
-                "owner_email": owner_email,
-                "total_data_products": total_data_products,
-                "data_products": data_products,
-            },
+            metadata=metadata,
             tags=tags,
             last_updated=last_updated,
         )
@@ -230,11 +251,17 @@ class SearchClient:
         """
         Map a data product entity to a SearchResult
         """
-        domain = entity["domain"]["domain"]
         owner_email, owner_name = self._parse_owner(entity)
-        properties = self._parse_properties(entity)
+        properties, custom_properties = self._parse_properties(entity)
         tags = self._parse_tags(entity)
         last_updated = self._parse_last_updated(entity)
+        metadata = {
+            "owner": owner_name,
+            "owner_email": owner_email,
+            "number_of_assets": properties["numAssets"],
+        }
+        metadata.update(self._parse_domain(entity))
+        metadata.update(custom_properties)
 
         return SearchResult(
             id=entity["urn"],
@@ -242,12 +269,7 @@ class SearchClient:
             matches=matches,
             name=properties["name"],
             description=properties.get("description", ""),
-            metadata={
-                "owner": owner_name,
-                "owner_email": owner_email,
-                "domain": domain,
-                "number_of_assets": properties["numAssets"],
-            },
+            metadata=metadata,
             tags=tags,
             last_updated=last_updated,
         )
