@@ -29,7 +29,7 @@ locals {
         "Gary-H9",           # Gary Henderson
         "mitchdawson1982",   # Mitch Dawson
         "bagg3rs",           # Richard Baguley
-        "jamestottmoj",      # James Stott
+        "jamesstottmoj",     # James Stott
       ]
     }
   }
