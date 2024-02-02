@@ -51,34 +51,9 @@ data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
   }
 
   statement {
-    effect  = "Allow"
-    actions = ["kms:*"]
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-    }
-    resources = ["*"]
-  }
-
-  statement {
     sid    = "AllowKeyManagement"
     effect = "Allow"
-    actions = [
-      "kms:Create*",
-      "kms:Describe*",
-      "kms:Enable*",
-      "kms:List*",
-      "kms:Put*",
-      "kms:Update*",
-      "kms:Revoke*",
-      "kms:Disable*",
-      "kms:Get*",
-      "kms:Delete*",
-      "kms:TagResource",
-      "kms:UntagResource",
-      "kms:ScheduleKeyDeletion",
-      "kms:CancelKeyDeletion"
-    ]
+    actions = ["kms:*"]
     principals {
       type = "AWS"
       identifiers = concat(
