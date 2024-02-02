@@ -77,6 +77,16 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:catalog"
     ]
   }
+  statement {
+    sid    = "AirflowAccess"
+    effect = "Allow"
+    actions = [
+      "airflow:CreateCliToken"
+    ]
+    resources = [
+      "arn:aws:airflow:*:${var.account_ids["analytical-platform-data-production"]}:environment/dev"
+    ]
+  }
 }
 
 module "create_a_derived_table_iam_policy" {
