@@ -15,7 +15,7 @@ review_in: 6 months
 
 Our user want analytical features not available on our existing platform. The types of tools and underlying compute is changing rapidly. SageMaker provides a managed service for these tools and provides instances with higher resources and GPU to speed and aid research.
 
-There is also a lot of interest in using LLMs for e.g.semantic search of free text. SageMaker in VPC isolation mode makes sure sensitive workloads are secured and stay within the [instance](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi.html) and data is connected via PrivateLink.
+There is also a lot of interest in using LLMs for e.g.semantic search of free text. SageMaker in VPC isolation mode makes sure sensitive workloads are secured and stay within the [instance](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi.html), we can further secure data using [private VPC](https://aws.amazon.com/blogs/machine-learning/securing-amazon-sagemaker-studio-connectivity-using-a-private-vpc/) and [PrivateLink](https://aws.amazon.com/privatelink/)
 
 ## Decision
 
@@ -23,15 +23,13 @@ There is also a lot of interest in using LLMs for e.g.semantic search of free te
 
 ## Proposal General Consequences
 
-- [SageMaker cost](https://aws.amazon.com/sagemaker/pricing/) is based on usage and can vary significantly month-to-month depending on your application's usage, instance type and costs could spike unexpectedly
-- Improved Security, workloads will run in isolation mode (without access to internet) to further secure sensitive data
-- Users can make use of services when available and require development of front and backend service
-- Greater choice in open source Foundation Models and VPC isolation for highly sensitive data
-- Reduced operational cost and complexity
-- Agility and change readiness, additional analytical services can be offered when available without considerable effort that has lead to users having to work elsewhere
-- Better cost transparency, we will understand our tooling compute costs
-- SageMaker JumpStart does not download models from a public model zoo, it can be used in fully locked-down environments as well where there is **no internet access**
+- [SageMaker cost's](https://aws.amazon.com/sagemaker/pricing/) are based on usage and can vary significantly month-to-month depending on your application's usage, instance type. We can provide [proactive notifications](https://aws.amazon.com/blogs/mt/setting-up-an-amazon-cloudwatch-billing-alarm-to-proactively-monitor-estimated-charges/) that will for the first time allow our users to understand the cost of the work that they are doing
+- Improved Security, workloads will run in isolation mode (without access to internet) to further secure sensitive data and reduce fear of data exposure for [Data Owners](https://www.gov.uk/government/publications/essential-shared-data-assets-and-data-ownership-in-government/data-ownership-in-government-html)
+- Reduced [operational cost](https://aws.amazon.com/blogs/machine-learning/lowering-total-cost-of-ownership-for-machine-learning-and-increasing-productivity-with-amazon-sagemaker/) and complexity
+- Agility and change readiness, additional analytical services can be offered when available without considerable effort that has lead to users having to work elsewhere (extensive development of front and backend services)
+- Better cost transparency, we will understand our tooling compute costs which is currently very difficult to calculate
+- For Foundation Models, SageMaker JumpStart does not download models from a public model zoo, it can be used in fully locked-down e.g. **no internet access**
 - Network access can be limited and scoped down for SageMaker JumpStart models, this helps teams improve the security posture of the environment
 - Due to the VPC boundaries, access to the endpoint can also be limited via subnets and security groups, which adds an extra layer of security
 - Leverage managed services like [SageMaker Studio](https://aws.amazon.com/sagemaker/studio/)
-- If successful we can close down our current tooling [EKS](https://aws.amazon.com/eks/). EKS although managed still requires a considerable amount of effort to run with the endless upgrades taking away people from doing more useful tasks
+- If successful we can close down our current tooling [EKS](https://aws.amazon.com/eks/). EKS although managed still requires a considerable amount of effort to run with the endless upgrades and get on with more useful tasks
