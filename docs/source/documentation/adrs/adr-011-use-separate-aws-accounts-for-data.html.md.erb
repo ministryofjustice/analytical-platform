@@ -32,11 +32,11 @@ Using separate AWS (Amazon Web Services) accounts for storing data will serve se
 - We will need to understand what account owners need outside of single sign on, and account bootstrap
 - Cost will be visible to owners and aligns with the Technology Code of Practice point 12, [make your service sustainable](https://www.gov.uk/guidance/the-technology-code-of-practice#make-your-technology-sustainable)
 - Align with [NCSC cloud security guidance](https://www.ncsc.gov.uk/collection/cloud/the-cloud-security-principles/principle-3-separation-between-customers) on separation between customers (in our case domains) to defend against another customer having e.g. malicious code execution
-- We will need to work with Modernisation Platform on improving our ability to offer the dispensing accounts, ensure that we do no impact their own operations or support
+- We will need to work with Modernisation Platform on improving our ability to dispense data accounts and ensure we do not impact their support
 - We will define [Service Control Policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html) against [AWS Organizations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html)
-- We will need to add functionality to our platform for users to request and manage data requests
-- We will be able to give teams access to a project or temporary accounts for research (this could include other managed analytical tooling) which then can be securely closed down with all associated resources
-- Observability of data is simplified for account owners
+- We will need functionality for users to request access to data and for [Data Owners](https://www.gov.uk/government/publications/essential-shared-data-assets-and-data-ownership-in-government/data-ownership-in-government-html#data-owner-2) to approve
+- We will be able to give teams access to a project or temporary accounts for research (this could include other managed analytical tooling e.g. SageMaker) which then can be securely closed down with all associated resources removed
+- Observability of accounts and data is simplified for account owners
 
 Using separate AWS (Amazon Web Services) accounts for storing data will serve several purposes for MoJ, each contributing to improved governance, security, manageability, and efficiency.
 
