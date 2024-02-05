@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import datetime
 
 import pytest
 from data_platform_catalogue.client.datahub.datahub_client import DataHubCatalogueClient
@@ -6,11 +7,9 @@ from data_platform_catalogue.entities import (
     CatalogueMetadata,
     DataLocation,
     DataProductMetadata,
-    TableMetadata,
     DataProductStatus,
-    DataSensitivityLevel
+    TableMetadata,
 )
-from datetime import datetime
 
 
 class TestCatalogueClientWithDatahub:
