@@ -6,7 +6,12 @@
     "aspectName": "datasetProperties",
     "aspect": {
         "json": {
-            "customProperties": {},
+            "customProperties": {
+                "sourceDatasetName": "my_source_table",
+                "sourceDatasetLocation": "s3://databucket/table1",
+                "sensitivityLevel": "TOP SECRET",
+                "rowCount": "1177"
+            },
             "description": "bla bla",
             "tags": []
         }
@@ -100,9 +105,17 @@
     "aspect": {
         "json": {
             "customProperties": {
+                "owner_display_name": "April Gonzalez",
+                "maintainer": "j.shelvey@digital.justice.gov.uk",
+                "maintainer_display_name": "Jonjo Shelvey",
                 "email": "justice@justice.gov.uk",
                 "retention_period_in_days": "365",
-                "dpia_required": "False"
+                "dpia_required": "False",
+                "dpia_location": "None",
+                "last_updated": "2020-05-17 00:00:00",
+                "creation_date": "2020-05-17 00:00:00",
+                "s3_location": "s3://databucket/",
+                "status": "DataProductStatus.DRAFT"
             },
             "name": "my_data_product",
             "description": "bla bla"
@@ -133,7 +146,12 @@
     "aspectName": "datasetProperties",
     "aspect": {
         "json": {
-            "customProperties": {},
+            "customProperties": {
+                "sourceDatasetName": "my_source_table",
+                "sourceDatasetLocation": "s3://databucket/table2",
+                "sensitivityLevel": "OFFICIAL",
+                "rowCount": "1177"
+            },
             "description": "this is a different table",
             "tags": []
         }
@@ -216,23 +234,6 @@
             "domains": [
                 "urn:li:domain:legal-aid"
             ]
-        }
-    }
-},
-{
-    "entityType": "dataproduct",
-    "entityUrn": "urn:li:dataProduct:my_data_product",
-    "changeType": "UPSERT",
-    "aspectName": "dataProductProperties",
-    "aspect": {
-        "json": {
-            "customProperties": {
-                "email": "justice@justice.gov.uk",
-                "retention_period_in_days": "365",
-                "dpia_required": "False"
-            },
-            "name": "my_data_product",
-            "description": "bla bla"
         }
     }
 },

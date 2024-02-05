@@ -6,7 +6,9 @@ from data_platform_catalogue.entities import (
     DataLocation,
     DataProductMetadata,
     TableMetadata,
+    DataProductStatus,
 )
+from datetime import datetime
 
 
 class TestCatalogueClientWithOMD:
@@ -85,10 +87,18 @@ class TestCatalogueClientWithOMD:
             description="bla bla",
             version="v1.0.0",
             owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+            owner_display_name="April Gonzalez",
+            maintainer="j.shelvey@digital.justice.gov.uk",
+            maintainer_display_name="Jonjo Shelvey",
             email="justice@justice.gov.uk",
+            status=DataProductStatus.DRAFT,
             retention_period_in_days=365,
             domain="legal-aid",
             dpia_required=False,
+            dpia_location=None,
+            last_updated=datetime(2020, 5, 17),
+            creation_date=datetime(2020, 5, 17),
+            s3_location="s3://databucket/",
             tags=["test"],
         )
 
@@ -102,6 +112,8 @@ class TestCatalogueClientWithOMD:
                 {"name": "bar", "type": "int", "description": "b"},
             ],
             retention_period_in_days=365,
+            source_dataset_name="my_source_table",
+            source_dataset_location="s3://databucket/folder",
         )
 
     @pytest.fixture

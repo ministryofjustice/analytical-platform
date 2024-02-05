@@ -12,9 +12,10 @@ import os
 import pytest
 from data_platform_catalogue import DataProductMetadata, TableMetadata
 from data_platform_catalogue.client.datahub.datahub_client import DataHubCatalogueClient
-from data_platform_catalogue.entities import DataLocation
+from data_platform_catalogue.entities import DataLocation, DataProductStatus
 from data_platform_catalogue.search_types import MultiSelectFilter, ResultType
 from datahub.metadata.schema_classes import DatasetPropertiesClass, SchemaMetadataClass
+from datetime import datetime
 
 jwt_token = os.environ.get("JWT_TOKEN")
 api_url = os.environ.get("API_URL", "")
@@ -26,15 +27,24 @@ def test_upsert_test_hierarchy():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
     data_product = DataProductMetadata(
-        name="test_data_product",
-        description="bla bla",
-        version="v1.0.0",
-        owner="7804c127-d677-4900-82f9-83517e51bb94",
-        email="justice@justice.gov.uk",
-        retention_period_in_days=365,
-        domain="Sample",
-        dpia_required=False,
-    )
+            name="my_data_product",
+            description="bla bla",
+            version="v1.0.0",
+            owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+            owner_display_name="April Gonzalez",
+            maintainer="j.shelvey@digital.justice.gov.uk",
+            maintainer_display_name="Jonjo Shelvey",
+            email="justice@justice.gov.uk",
+            status=DataProductStatus.DRAFT,
+            retention_period_in_days=365,
+            domain="legal-aid",
+            dpia_required=False,
+            dpia_location=None,
+            last_updated=datetime(2020, 5, 17),
+            creation_date=datetime(2020, 5, 17),
+            s3_location="s3://databucket/",
+            tags=["test"],
+        )
 
     table = TableMetadata(
         name="test_table",
@@ -44,6 +54,8 @@ def test_upsert_test_hierarchy():
             {"name": "bar", "type": "int", "description": "b"},
         ],
         retention_period_in_days=365,
+        source_dataset_name="my_source_table",
+        source_dataset_location="s3://databucket/folder",
         tags=["test"],
     )
 
@@ -75,16 +87,24 @@ def test_search_for_data_product():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
     data_product = DataProductMetadata(
-        name="lfdskjflkjflkjsdflksfjds",
-        description="lfdskjflkjflkjsdflksfjds",
-        version="v1.0.0",
-        owner="7804c127-d677-4900-82f9-83517e51bb94",
-        email="justice@justice.gov.uk",
-        retention_period_in_days=365,
-        domain="Sample",
-        dpia_required=False,
-        tags=["test"],
-    )
+            name="my_data_product",
+            description="bla bla",
+            version="v1.0.0",
+            owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+            owner_display_name="April Gonzalez",
+            maintainer="j.shelvey@digital.justice.gov.uk",
+            maintainer_display_name="Jonjo Shelvey",
+            email="justice@justice.gov.uk",
+            status=DataProductStatus.DRAFT,
+            retention_period_in_days=365,
+            domain="legal-aid",
+            dpia_required=False,
+            dpia_location=None,
+            last_updated=datetime(2020, 5, 17),
+            creation_date=datetime(2020, 5, 17),
+            s3_location="s3://databucket/",
+            tags=["test"],
+        )
     client.upsert_data_product(data_product)
 
     response = client.search(
@@ -110,16 +130,24 @@ def test_domain_facets_are_returned():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
     data_product = DataProductMetadata(
-        name="lfdskjflkjflkjsdflksfjds",
-        description="lfdskjflkjflkjsdflksfjds",
-        version="v1.0.0",
-        owner="7804c127-d677-4900-82f9-83517e51bb94",
-        email="justice@justice.gov.uk",
-        retention_period_in_days=365,
-        domain="Sample",
-        dpia_required=False,
-        tags=["test"],
-    )
+            name="my_data_product",
+            description="bla bla",
+            version="v1.0.0",
+            owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+            owner_display_name="April Gonzalez",
+            maintainer="j.shelvey@digital.justice.gov.uk",
+            maintainer_display_name="Jonjo Shelvey",
+            email="justice@justice.gov.uk",
+            status=DataProductStatus.DRAFT,
+            retention_period_in_days=365,
+            domain="legal-aid",
+            dpia_required=False,
+            dpia_location=None,
+            last_updated=datetime(2020, 5, 17),
+            creation_date=datetime(2020, 5, 17),
+            s3_location="s3://databucket/",
+            tags=["test"],
+        )
     client.upsert_data_product(data_product)
 
     response = client.search()
@@ -132,16 +160,24 @@ def test_filter_by_urn():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
     data_product = DataProductMetadata(
-        name="lfdskjflkjflkjsdflksfjds",
-        description="lfdskjflkjflkjsdflksfjds",
-        version="v1.0.0",
-        owner="7804c127-d677-4900-82f9-83517e51bb94",
-        email="justice@justice.gov.uk",
-        retention_period_in_days=365,
-        domain="Sample",
-        dpia_required=False,
-        tags=["test"],
-    )
+            name="my_data_product",
+            description="bla bla",
+            version="v1.0.0",
+            owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+            owner_display_name="April Gonzalez",
+            maintainer="j.shelvey@digital.justice.gov.uk",
+            maintainer_display_name="Jonjo Shelvey",
+            email="justice@justice.gov.uk",
+            status=DataProductStatus.DRAFT,
+            retention_period_in_days=365,
+            domain="legal-aid",
+            dpia_required=False,
+            dpia_location=None,
+            last_updated=datetime(2020, 5, 17),
+            creation_date=datetime(2020, 5, 17),
+            s3_location="s3://databucket/",
+            tags=["test"],
+        )
     urn = client.upsert_data_product(data_product)
 
     response = client.search(
@@ -155,15 +191,24 @@ def test_fetch_dataset_belonging_to_data_product():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
     data_product = DataProductMetadata(
-        name="test_data_product",
-        description="bla bla",
-        version="v1.0.0",
-        owner="7804c127-d677-4900-82f9-83517e51bb94",
-        email="justice@justice.gov.uk",
-        retention_period_in_days=365,
-        domain="Sample",
-        dpia_required=False,
-    )
+            name="my_data_product",
+            description="bla bla",
+            version="v1.0.0",
+            owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+            owner_display_name="April Gonzalez",
+            maintainer="j.shelvey@digital.justice.gov.uk",
+            maintainer_display_name="Jonjo Shelvey",
+            email="justice@justice.gov.uk",
+            status=DataProductStatus.DRAFT,
+            retention_period_in_days=365,
+            domain="legal-aid",
+            dpia_required=False,
+            dpia_location=None,
+            last_updated=datetime(2020, 5, 17),
+            creation_date=datetime(2020, 5, 17),
+            s3_location="s3://databucket/",
+            tags=["test"],
+        )
 
     table = TableMetadata(
         name="test_table",
@@ -173,6 +218,8 @@ def test_fetch_dataset_belonging_to_data_product():
             {"name": "bar", "type": "int", "description": "b"},
         ],
         retention_period_in_days=365,
+        source_dataset_name="my_source_table",
+        source_dataset_location="s3://databucket/folder",
         tags=["test"],
     )
 

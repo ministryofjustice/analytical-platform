@@ -12,7 +12,8 @@ import os
 import pytest
 from data_platform_catalogue import DataProductMetadata, TableMetadata
 from data_platform_catalogue.client.openmetadata import OpenMetadataCatalogueClient
-from data_platform_catalogue.entities import DataLocation
+from data_platform_catalogue.entities import DataLocation, DataProductStatus
+from datetime import datetime
 
 jwt_token = os.environ.get("JWT_TOKEN")
 api_url = os.environ.get("API_URL", "")
@@ -26,26 +27,44 @@ def test_upsert_test_hierarchy():
     assert client.is_healthy()
 
     data_product = DataProductMetadata(
-        name="my_data_product",
-        description="bla bla",
-        version="v1.0.0",
-        owner="7804c127-d677-4900-82f9-83517e51bb94",
-        email="justice@justice.gov.uk",
-        retention_period_in_days=365,
-        domain="legal-aid",
-        dpia_required=False,
-    )
+            name="my_data_product",
+            description="bla bla",
+            version="v1.0.0",
+            owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+            owner_display_name="April Gonzalez",
+            maintainer="j.shelvey@digital.justice.gov.uk",
+            maintainer_display_name="Jonjo Shelvey",
+            email="justice@justice.gov.uk",
+            status=DataProductStatus.DRAFT,
+            retention_period_in_days=365,
+            domain="legal-aid",
+            dpia_required=False,
+            dpia_location=None,
+            last_updated=datetime(2020, 5, 17),
+            creation_date=datetime(2020, 5, 17),
+            s3_location="s3://databucket/",
+            tags=["test"],
+        )
 
     data_product_schema = DataProductMetadata(
-        name="Tables",
-        description="All the tables contained within my_data_product",
-        version="v1.0.0",
-        owner="7804c127-d677-4900-82f9-83517e51bb94",
-        email="justice@justice.gov.uk",
-        retention_period_in_days=365,
-        domain="legal-aid",
-        dpia_required=False,
-    )
+            name="my_data_product",
+            description="bla bla",
+            version="v1.0.0",
+            owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+            owner_display_name="April Gonzalez",
+            maintainer="j.shelvey@digital.justice.gov.uk",
+            maintainer_display_name="Jonjo Shelvey",
+            email="justice@justice.gov.uk",
+            status=DataProductStatus.DRAFT,
+            retention_period_in_days=365,
+            domain="legal-aid",
+            dpia_required=False,
+            dpia_location=None,
+            last_updated=datetime(2020, 5, 17),
+            creation_date=datetime(2020, 5, 17),
+            s3_location="s3://databucket/",
+            tags=["test"],
+        )
 
     table = TableMetadata(
         name="my_table",
@@ -55,6 +74,8 @@ def test_upsert_test_hierarchy():
             {"name": "bar", "type": "int", "description": "b"},
         ],
         retention_period_in_days=365,
+        source_dataset_name="my_source_table",
+        source_dataset_location="s3://databucket/folder",
     )
 
     service_fqn = client.upsert_database_service(name="data_platform")

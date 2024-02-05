@@ -6,7 +6,12 @@
     "aspectName": "datasetProperties",
     "aspect": {
         "json": {
-            "customProperties": {},
+            "customProperties": {
+                "sourceDatasetName": "my_source_table",
+                "sourceDatasetLocation": "s3://databucket/table1",
+                "sensitivityLevel": "TOP SECRET",
+                "rowCount": "1177"
+            },
             "description": "bla bla",
             "tags": []
         }
