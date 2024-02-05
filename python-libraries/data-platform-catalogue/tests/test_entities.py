@@ -1,20 +1,34 @@
 import pytest
-from data_platform_catalogue.entities import DataProductMetadata, TableMetadata
+from data_platform_catalogue.entities import (
+    DataProductMetadata,
+    DataProductStatus,
+    DataSensitivityLevel,
+    TableMetadata
+)
+from datetime import datetime
 
 
 @pytest.fixture
 def data_product():
     return DataProductMetadata(
-        name="my_data_product",
-        description="bla bla",
-        version="v1.0.0",
-        owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
-        email="justice@justice.gov.uk",
-        retention_period_in_days=365,
-        domain="legal-aid",
-        dpia_required=False,
-        tags=["test"],
-    )
+            name="my_data_product",
+            description="bla bla",
+            version="v1.0.0",
+            owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+            owner_display_name="April Gonzalez",
+            maintainer="j.shelvey@digital.justice.gov.uk",
+            maintainer_display_name="Jonjo Shelvey",
+            email="justice@justice.gov.uk",
+            status=DataProductStatus.DRAFT,
+            retention_period_in_days=365,
+            domain="legal-aid",
+            dpia_required=False,
+            dpia_location=None,
+            last_updated=datetime(2020, 5, 17),
+            creation_date=datetime(2020, 5, 17),
+            s3_location="s3://databucket/",
+            tags=["test"],
+        )
 
 
 @pytest.fixture
@@ -27,6 +41,9 @@ def table():
             {"name": "bar", "type": "int", "description": "b"},
         ],
         retention_period_in_days=None,
+        source_dataset_name="my_source_table",
+        source_dataset_location="s3://source-bucket/folder",
+        data_sensitivity_level=DataSensitivityLevel.OFFICIAL,
         tags=["test"],
     )
 
@@ -38,11 +55,16 @@ def test_from_data_product_metadata_dict(data_product):
             "description": "bla bla",
             "domain": "legal-aid",
             "dataProductOwner": "justice@justice.gov.uk",
-            "dataProductOwnerDisplayName": "justice",
+            "dataProductOwnerDisplayName": "April Gonzalez",
+            "dataProductMaintainer": "j.shelvey@digital.justice.gov.uk",
+            "dataProductMaintainerDisplayName": "Jonjo Shelvey",
             "email": "justice@justice.gov.uk",
-            "status": "draft",
+            "status": "DRAFT",
             "dpiaRequired": False,
             "retentionPeriod": 365,
+            "lastUpdated": "20200517",
+            "creationDate": "20200517",
+            "s3Location": "s3://databucket/",
             "tags": ["test"],
         },
         "v1.0.0",
@@ -60,6 +82,8 @@ def test_from_data_product_schema_dict(table):
                 {"name": "bar", "type": "int", "description": "b"},
             ],
             "tags": ["test"],
+            "sourceDatasetName": "my_source_table",
+            "sourceDatasetLocation": "s3://source-bucket/folder",
         },
         "my_table",
     )
