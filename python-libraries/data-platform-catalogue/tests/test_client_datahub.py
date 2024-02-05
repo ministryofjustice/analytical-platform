@@ -1,5 +1,5 @@
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 import pytest
 from data_platform_catalogue.client.datahub.datahub_client import DataHubCatalogueClient
@@ -61,7 +61,7 @@ class TestCatalogueClientWithDatahub:
             retention_period_in_days=365,
             source_dataset_name="my_source_table",
             source_dataset_location="s3://databucket/table1",
-            data_sensitivity_level="TOP SECRET"
+            data_sensitivity_level="TOP SECRET",
         )
 
     @pytest.fixture
@@ -76,7 +76,7 @@ class TestCatalogueClientWithDatahub:
             retention_period_in_days=1,
             source_dataset_name="my_source_table",
             source_dataset_location="s3://databucket/table2",
-            data_sensitivity_level="OFFICIAL"
+            data_sensitivity_level="OFFICIAL",
         )
 
     @pytest.fixture

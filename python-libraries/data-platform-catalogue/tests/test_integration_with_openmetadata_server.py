@@ -8,12 +8,12 @@ poetry run pytest tests/test_integration_with_server.py
 """
 
 import os
+from datetime import datetime
 
 import pytest
 from data_platform_catalogue import DataProductMetadata, TableMetadata
 from data_platform_catalogue.client.openmetadata import OpenMetadataCatalogueClient
 from data_platform_catalogue.entities import DataLocation, DataProductStatus
-from datetime import datetime
 
 jwt_token = os.environ.get("JWT_TOKEN")
 api_url = os.environ.get("API_URL", "")

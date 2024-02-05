@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from data_platform_catalogue.entities import (
     DataProductMetadata,
@@ -5,7 +7,6 @@ from data_platform_catalogue.entities import (
     DataSensitivityLevel,
     TableMetadata,
 )
-from datetime import datetime
 
 
 @pytest.fixture

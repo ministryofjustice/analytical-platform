@@ -37,7 +37,7 @@ class DataProductMetadata:
     version: str
     owner: str
     owner_display_name: str
-    maintainer: str| None
+    maintainer: str | None
     maintainer_display_name: str | None
     email: str
     retention_period_in_days: int
@@ -68,7 +68,9 @@ class DataProductMetadata:
             owner=owner_id,
             owner_display_name=metadata["dataProductOwnerDisplayName"],
             maintainer=metadata.get("dataProductMaintainer", None),
-            maintainer_display_name=metadata.get("dataProductMaintainerDisplayName", None),
+            maintainer_display_name=metadata.get(
+                "dataProductMaintainerDisplayName", None
+            ),
             email=metadata["email"],
             status=DataProductStatus[metadata["status"]],
             retention_period_in_days=metadata["retentionPeriod"],

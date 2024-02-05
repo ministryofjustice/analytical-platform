@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from data_platform_catalogue.client import ReferencedEntityMissing
 from data_platform_catalogue.client.openmetadata import OpenMetadataCatalogueClient
@@ -5,10 +7,9 @@ from data_platform_catalogue.entities import (
     CatalogueMetadata,
     DataLocation,
     DataProductMetadata,
-    TableMetadata,
     DataProductStatus,
+    TableMetadata,
 )
-from datetime import datetime
 
 
 class TestCatalogueClientWithOMD:
