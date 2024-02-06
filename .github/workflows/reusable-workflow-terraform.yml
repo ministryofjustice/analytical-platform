@@ -210,7 +210,7 @@ jobs:
       - name: Retrieve GitHub Robot Token
         if: github.ref != 'refs/heads/main'
         id: retrieve_github_robot_token
-        uses: aws-actions/aws-secretsmanager-get-secrets@90243ece4a7c48a91d34d9ac0d3949bb2fc5fc69 # v1.0.4
+        uses: aws-actions/aws-secretsmanager-get-secrets@5cb982bcb88b164e92093d4e3bee94b7b416731f # v1.0.4
         with:
           secret-ids: |
             GITHUB_ROBOT_TOKEN, github-token
