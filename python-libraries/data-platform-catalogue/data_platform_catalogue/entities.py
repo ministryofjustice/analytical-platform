@@ -77,8 +77,12 @@ class DataProductMetadata:
             domain=metadata["domain"],
             dpia_required=metadata["dpiaRequired"],
             dpia_location=metadata.get("dpiaLocation"),
-            last_updated=datetime.strptime(metadata["lastUpdated"], DATAHUB_DATE_FORMAT),
-            creation_date=datetime.strptime(metadata["creationDate"], DATAHUB_DATE_FORMAT),
+            last_updated=datetime.strptime(
+                metadata["lastUpdated"], DATAHUB_DATE_FORMAT
+            ),
+            creation_date=datetime.strptime(
+                metadata["creationDate"], DATAHUB_DATE_FORMAT
+            ),
             s3_location=metadata.get("s3Location"),
             tags=metadata.get("tags", []),
         )
