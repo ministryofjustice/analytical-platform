@@ -2,7 +2,7 @@
 nameOverride: ""
 fullnameOverride: ""
 
-replicaCount: 1
+replicaCount: 2
 
 image:
   pullPolicy: IfNotPresent
