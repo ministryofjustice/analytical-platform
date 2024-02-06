@@ -18,6 +18,11 @@ resource "helm_release" "create_a_derived_table" {
   namespace  = "data-platform-production"
 
   set {
+    name  = "replicaCount"
+    value = 2
+  }
+
+  set {
     name  = "github.organisation"
     value = "moj-analytical-services"
   }
