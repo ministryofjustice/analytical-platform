@@ -4,7 +4,7 @@ import pytest
 from data_platform_catalogue.entities import (
     DataProductMetadata,
     DataProductStatus,
-    DataSensitivityLevel,
+    SecurityClassification,
     TableMetadata,
 )
 
@@ -44,7 +44,7 @@ def table():
         retention_period_in_days=None,
         source_dataset_name="my_source_table",
         source_dataset_location="s3://source-bucket/folder",
-        data_sensitivity_level=DataSensitivityLevel.OFFICIAL,
+        data_sensitivity_level=SecurityClassification.OFFICIAL,
         tags=["test"],
     )
 
