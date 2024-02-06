@@ -3,7 +3,6 @@ from datetime import datetime
 from enum import Enum, auto
 from typing import Any
 
-
 DATAHUB_DATE_FORMAT = "%Y%m%d"
 
 
