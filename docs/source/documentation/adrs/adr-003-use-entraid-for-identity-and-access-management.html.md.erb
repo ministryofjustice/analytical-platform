@@ -1,7 +1,7 @@
 ---
 owner_slack: "#data-platform-notifications"
-title: ADR-003 Use AzureAD for Identity and Access Management
-last_reviewed_on: 2023-02-05
+title: ADR-003 Use EntraID (formally AzureAD) for Identity and Access Management
+last_reviewed_on: 2024-02-06
 review_in: 3 months
 ---
 
@@ -15,13 +15,14 @@ review_in: 3 months
 
 The Data Platform will need a way to verify users and provide access to resources.
 We want to simplify access for users by reducing the number of identities they need for services.
+
 We do not want to run an identity service.
 
 ## Decision
 
-We will use AzureAD for [Identity and Access Management](https://en.wikipedia.org/wiki/Identity_management) (IDAM).
+We will use [EntraID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id) (formally AzureAD) for [Identity and Access Management](https://en.wikipedia.org/wiki/Identity_management) (IDAM).
 Our users are already using a `@justice.gov.uk` account as their primary login.
-Our users can take advantage of their existing identity to gain access to the Data Platform.
+Our users can take advantage of their existing identity to gain access to the Data Platform and access services.
 
 ## Consequences
 
@@ -31,3 +32,4 @@ Our users can take advantage of their existing identity to gain access to the Da
 - Guest accounts are possible, but not managed which means we will need an alternative solution
 - There is no systematic way to create and manage AzureAD groups to provide authN, we will need to work with end user compute team.
 - Cross government AzureAD federation is not yet formalised, but in the future we could give other departments access to resources with their existing credentials
+- We can look to unlock [SCIM](https://docs.github.com/en/enterprise-cloud@latest/admin/identity-and-access-management/provisioning-user-accounts-for-enterprise-managed-users/configuring-scim-provisioning-for-enterprise-managed-users) to create, manage, and deactivate GitHub accounts based on [EntraID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id) group membership
