@@ -67,19 +67,17 @@ class DataProductMetadata:
             version=version,
             owner=owner_id,
             owner_display_name=metadata["dataProductOwnerDisplayName"],
-            maintainer=metadata.get("dataProductMaintainer", None),
-            maintainer_display_name=metadata.get(
-                "dataProductMaintainerDisplayName", None
-            ),
+            maintainer=metadata.get("dataProductMaintainer"),
+            maintainer_display_name=metadata.get("dataProductMaintainerDisplayName"),
             email=metadata["email"],
             status=DataProductStatus[metadata["status"]],
             retention_period_in_days=metadata["retentionPeriod"],
             domain=metadata["domain"],
             dpia_required=metadata["dpiaRequired"],
-            dpia_location=metadata.get("dpiaLocation", None),
+            dpia_location=metadata.get("dpiaLocation"),
             last_updated=datetime.strptime(metadata["lastUpdated"], "%Y%m%d"),
             creation_date=datetime.strptime(metadata["creationDate"], "%Y%m%d"),
-            s3_location=metadata.get("s3Location", None),
+            s3_location=metadata.get("s3Location"),
             tags=metadata.get("tags", []),
         )
 
@@ -123,8 +121,8 @@ class TableMetadata:
             description=metadata["tableDescription"],
             column_details=metadata["columns"],
             retention_period_in_days=retention_period,
-            source_dataset_name=metadata.get("sourceDatasetName", None),
-            source_dataset_location=metadata.get("sourceDatasetLocation", None),
+            source_dataset_name=metadata.get("sourceDatasetName"),
+            source_dataset_location=metadata.get("sourceDatasetLocation"),
             data_sensitivity_level=DataSensitivityLevel[
                 metadata.get("dataSensitivityLevel", "OFFICIAL")
             ],
