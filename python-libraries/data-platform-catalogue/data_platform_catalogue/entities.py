@@ -4,6 +4,9 @@ from enum import Enum, auto
 from typing import Any
 
 
+DATAHUB_DATE_FORMAT = "%Y%m%d"
+
+
 @dataclass
 class CatalogueMetadata:
     name: str
@@ -84,7 +87,7 @@ class DataProductMetadata:
         return new_metadata
 
 
-class DataSensitivityLevel(Enum):
+class SecurityClassification(Enum):
     OFFICIAL = auto()
     SECRET = auto()
     TOP_SECRET = auto()
@@ -98,7 +101,7 @@ class TableMetadata:
     retention_period_in_days: int | None
     source_dataset_name: str | None = None
     source_dataset_location: str | None = None
-    data_sensitivity_level: DataSensitivityLevel = DataSensitivityLevel["OFFICIAL"]
+    data_sensitivity_level: SecurityClassification = SecurityClassification["OFFICIAL"]
     tags: list[str] = field(default_factory=list)
     major_version: int = 1
 
@@ -123,8 +126,8 @@ class TableMetadata:
             retention_period_in_days=retention_period,
             source_dataset_name=metadata.get("sourceDatasetName"),
             source_dataset_location=metadata.get("sourceDatasetLocation"),
-            data_sensitivity_level=DataSensitivityLevel[
-                metadata.get("dataSensitivityLevel", "OFFICIAL")
+            data_sensitivity_level=SecurityClassification[
+                metadata.get("securityClassification", "OFFICIAL")
             ],
             tags=metadata.get("tags", []),
         )
