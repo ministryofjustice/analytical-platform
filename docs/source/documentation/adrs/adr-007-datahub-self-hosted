@@ -21,7 +21,7 @@ Since [Acryl Data](https://www.acryldata.io/acryl-datahub) offer a SAAS version 
 
 There are two options:
 
-- We use Acryl Data's managed SAAS offering
+- We use Acryl Data's managed SaaS offering
 - We host DataHub ourselves using one of our two strategic hosting platforms:
   - [Cloud platform](https://github.com/ministryofjustice/cloud-platform)
   - [Modernisation platform](https://github.com/ministryofjustice/modernisation-platform)
