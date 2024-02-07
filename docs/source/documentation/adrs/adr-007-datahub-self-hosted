@@ -15,7 +15,7 @@ review_in: 6 months
 
 A data catalogue for the MOJ is a critical pillar of the Data Platform. Following a review of open source catalogues, [DataHub](https://datahubproject.io/) was selected as the preferred tool.
 
-Since [Acryl Data](https://www.acryldata.io/acryl-datahub) offer a SAAS version of DataHub, this ADR is concerned with the choice of how we host our catagolue.
+Since [Acryl Data](https://www.acryldata.io/acryl-datahub) offer a SAAS version of DataHub, this ADR is concerned with the choice of how we host our catalogue.
 
 ## Analysis
 
