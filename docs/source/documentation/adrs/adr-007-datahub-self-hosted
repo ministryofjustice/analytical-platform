@@ -76,5 +76,5 @@ The Data Platform will need to:
 
 - Understand the DataHub deployment stack
 - Create Cloud Platform environments
-- Integration Azure AD SSO into the application
+- Integrate Entra ID into the application
 - Deploy the application
