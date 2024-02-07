@@ -1,0 +1,59 @@
+[
+    {
+        "entityType": "dataProduct",
+        "entityUrn": "urn:li:dataProduct:my_data_product",
+        "changeType": "UPSERT",
+        "aspectName": "dataProductProperties",
+        "aspect": {
+            "json": {
+                "customProperties": {
+                    "version": "2.0",
+                    "dpia": "false"
+                },
+                "externalUrl": "https://github.com/datahub-project/datahub",
+                "name": "my_data_product",
+                "description": "bla bla",
+                "assets": []
+            }
+        }
+    },
+    {
+        "entityType": "dataProduct",
+        "entityUrn": "urn:li:dataProduct:my_data_product",
+        "changeType": "UPSERT",
+        "aspectName": "domains",
+        "aspect": {
+            "json": {
+                "domains": [
+                    "urn:li:domain:legal-aid"
+                ]
+            }
+        }
+    },
+    {
+        "entityType": "dataProduct",
+        "entityUrn": "urn:li:dataProduct:my_data_product",
+        "changeType": "UPSERT",
+        "aspectName": "globalTags",
+        "aspect": {
+            "json": {
+                "tags": [
+                    {
+                        "tag": "urn:li:tag:awesome"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "entityType": "dataProduct",
+        "entityUrn": "urn:li:dataProduct:my_data_product",
+        "changeType": "UPSERT",
+        "aspectName": "status",
+        "aspect": {
+            "json": {
+                "removed": false
+            }
+        }
+    }
+    ]
