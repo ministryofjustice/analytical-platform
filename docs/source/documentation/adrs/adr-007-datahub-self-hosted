@@ -68,7 +68,7 @@ Both approaches have advantages and disadvantages:
 
 ## Decision
 
-The internal hosting advantages of cost, security and connectivity outweigh any advantaged of third-party SAAS hosting. The decision is to **host DataHub internally, using Cloud platform**.
+The internal hosting advantages of cost, security and connectivity outweigh any advantaged of third-party SAAS hosting. The decision is to **host DataHub internally, using Cloud Platform**.
 
 ## Consequences
 
