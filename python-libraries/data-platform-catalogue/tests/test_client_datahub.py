@@ -10,6 +10,7 @@ from data_platform_catalogue.entities import (
     DataProductStatus,
     TableMetadata,
 )
+from datahub.metadata.schema_classes import DataProductPropertiesClass
 
 
 class TestCatalogueClientWithDatahub:
@@ -85,12 +86,27 @@ class TestCatalogueClientWithDatahub:
             jwt_token="abc", api_url="http://example.com/api/gms", graph=base_mock_graph
         )
 
+    @pytest.fixture
+    def golden_file_in(self):
+        return Path(
+            Path(__file__).parent / "test_resources/golden_data_product_in.json"
+        )
+
     def test_create_table_datahub(
-        self, datahub_client, base_mock_graph, table, tmp_path, check_snapshot
+        self,
+        datahub_client,
+        base_mock_graph,
+        table,
+        tmp_path,
+        check_snapshot,
+        golden_file_in,
     ):
         """
         Case where we just create a dataset (no data product)
         """
+        mock_graph = base_mock_graph
+        mock_graph.import_file(golden_file_in)
+
         fqn = datahub_client.upsert_table(
             metadata=table,
             location=DataLocation(fully_qualified_name="my_database"),
@@ -111,10 +127,14 @@ class TestCatalogueClientWithDatahub:
         base_mock_graph,
         tmp_path,
         check_snapshot,
+        golden_file_in,
     ):
         """
         Case where we create a dataset, data product and domain
         """
+        mock_graph = base_mock_graph
+        mock_graph.import_file(golden_file_in)
+
         fqn = datahub_client.upsert_table(
             metadata=table,
             data_product_metadata=data_product,
@@ -124,6 +144,12 @@ class TestCatalogueClientWithDatahub:
 
         assert fqn == fqn_out
 
+        # check data product properties persist
+        dp_properties = mock_graph.get_aspect(
+            "urn:li:dataProduct:my_data_product", aspect_type=DataProductPropertiesClass
+        )
+        assert dp_properties.description == "bla bla"
+        assert dp_properties.customProperties == {"version": "2.0", "dpia": "false"}
         output_file = Path(tmp_path / "datahub_create_table_with_metadata.json")
         base_mock_graph.sink_to_file(output_file)
         check_snapshot("datahub_create_table_with_metadata.json", output_file)
@@ -137,10 +163,15 @@ class TestCatalogueClientWithDatahub:
         base_mock_graph,
         tmp_path,
         check_snapshot,
+        golden_file_in,
     ):
         """
         Case where we create a dataset, data product and domain
         """
+
+        mock_graph = base_mock_graph
+        mock_graph.import_file(golden_file_in)
+
         fqn = datahub_client.upsert_table(
             metadata=table,
             data_product_metadata=data_product,
@@ -171,10 +202,14 @@ class TestCatalogueClientWithDatahub:
         base_mock_graph,
         tmp_path,
         check_snapshot,
+        golden_file_in,
     ):
         """
         `create_table` should work even if the entities already exist in the metadata graph.
         """
+        mock_graph = base_mock_graph
+        mock_graph.import_file(golden_file_in)
+
         datahub_client.upsert_table(
             metadata=table,
             data_product_metadata=data_product,

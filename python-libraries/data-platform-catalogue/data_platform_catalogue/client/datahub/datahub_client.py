@@ -310,7 +310,12 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             else:
                 assets = [data_product_association]
 
-            data_product_properties = DataProductPropertiesClass(assets=assets)
+            data_product_properties = DataProductPropertiesClass(
+                description=data_product_existing_properties.description,
+                name=data_product_existing_properties.name,
+                customProperties=data_product_existing_properties.customProperties,
+                assets=assets,
+            )
 
             metadata_event = MetadataChangeProposalWrapper(
                 entityType="dataproduct",
