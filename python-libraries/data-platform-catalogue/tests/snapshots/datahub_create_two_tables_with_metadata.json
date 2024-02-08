@@ -253,7 +253,7 @@
                 "dpia": "false"
             },
             "name": "my_data_product",
-            "description": "bla bla.",
+            "description": "bla bla",
             "assets": [
                 {
                     "sourceUrn": "urn:li:dataProduct:my_data_product",
