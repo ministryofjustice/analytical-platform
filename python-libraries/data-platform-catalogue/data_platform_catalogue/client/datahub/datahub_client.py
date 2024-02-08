@@ -229,7 +229,12 @@ class DataHubCatalogueClient(BaseCatalogueClient):
 
         dataset_properties = DatasetPropertiesClass(
             description=metadata.description,
-            # customProperties={"dpia_required": "yes"},
+            customProperties={
+                "sourceDatasetName": metadata.source_dataset_name,
+                "sourceDatasetLocation": metadata.source_dataset_location,
+                "sensitivityLevel": metadata.data_sensitivity_level,
+                "rowCount": "1177",
+            },
         )
 
         metadata_event = MetadataChangeProposalWrapper(

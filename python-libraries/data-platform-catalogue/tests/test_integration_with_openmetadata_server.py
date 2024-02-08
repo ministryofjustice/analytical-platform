@@ -8,11 +8,12 @@ poetry run pytest tests/test_integration_with_server.py
 """
 
 import os
+from datetime import datetime
 
 import pytest
 from data_platform_catalogue import DataProductMetadata, TableMetadata
 from data_platform_catalogue.client.openmetadata import OpenMetadataCatalogueClient
-from data_platform_catalogue.entities import DataLocation
+from data_platform_catalogue.entities import DataLocation, DataProductStatus
 
 jwt_token = os.environ.get("JWT_TOKEN")
 api_url = os.environ.get("API_URL", "")
@@ -29,22 +30,40 @@ def test_upsert_test_hierarchy():
         name="my_data_product",
         description="bla bla",
         version="v1.0.0",
-        owner="7804c127-d677-4900-82f9-83517e51bb94",
+        owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+        owner_display_name="April Gonzalez",
+        maintainer="j.shelvey@digital.justice.gov.uk",
+        maintainer_display_name="Jonjo Shelvey",
         email="justice@justice.gov.uk",
+        status=DataProductStatus.DRAFT,
         retention_period_in_days=365,
         domain="legal-aid",
         dpia_required=False,
+        dpia_location=None,
+        last_updated=datetime(2020, 5, 17),
+        creation_date=datetime(2020, 5, 17),
+        s3_location="s3://databucket/",
+        tags=["test"],
     )
 
     data_product_schema = DataProductMetadata(
-        name="Tables",
-        description="All the tables contained within my_data_product",
+        name="my_data_product",
+        description="bla bla",
         version="v1.0.0",
-        owner="7804c127-d677-4900-82f9-83517e51bb94",
+        owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+        owner_display_name="April Gonzalez",
+        maintainer="j.shelvey@digital.justice.gov.uk",
+        maintainer_display_name="Jonjo Shelvey",
         email="justice@justice.gov.uk",
+        status=DataProductStatus.DRAFT,
         retention_period_in_days=365,
         domain="legal-aid",
         dpia_required=False,
+        dpia_location=None,
+        last_updated=datetime(2020, 5, 17),
+        creation_date=datetime(2020, 5, 17),
+        s3_location="s3://databucket/",
+        tags=["test"],
     )
 
     table = TableMetadata(
@@ -55,6 +74,8 @@ def test_upsert_test_hierarchy():
             {"name": "bar", "type": "int", "description": "b"},
         ],
         retention_period_in_days=365,
+        source_dataset_name="my_source_table",
+        source_dataset_location="s3://databucket/folder",
     )
 
     service_fqn = client.upsert_database_service(name="data_platform")
