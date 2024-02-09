@@ -506,5 +506,34 @@
       "analytical-platform-data-engineering-sandboxa-data-engineer",
       "analytical-platform-data-engineering-production-data-engineer"
     ]
-  }
+  },
+    {
+    "name": "Chris Sheldon",
+    "github": "csheldon155",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+    ]
+  },
+  {
+    "name": "Phillip Hall",
+    "github": "phil-hall-moj",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+    ]
+  },
+  {
+    "name": "Holly Furniss",
+    "github": "hollyfurniss-moj",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+    ]
+  },
+  {
+    "name": "Alex Pavlopoulos",
+    "github": "hollyfurniss-moj",
+    "access": [
+      "analytical-platform-data-development-data-engineer"
+    ]
+  },
+  
 ]
