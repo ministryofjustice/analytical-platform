@@ -171,8 +171,12 @@ locals {
       parent_team_id = module.data_platform_teams["data-platform-apps-and-tools"].id
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
-        "andrewc-moj", # Andrew Craik
-        "gwionap"      # Gwion ApRhobat
+        "andrewc-moj",   # Andrew Craik
+        "gwionap",       # Gwion ApRhobat
+        "phil-hall-moj", # Phillip Hall
+        "csheldon155",   # Chris Sheldon
+        "hollyfurniss-moj",
+        "alex-pavlopoulos"
       ])
     }
   }

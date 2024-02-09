@@ -129,7 +129,12 @@
     "aspectName": "dataProductProperties",
     "aspect": {
         "json": {
-            "customProperties": {},
+            "customProperties": {
+                "version": "2.0",
+                "dpia": "false"
+            },
+            "name": "my_data_product",
+            "description": "bla bla",
             "assets": [
                 {
                     "sourceUrn": "urn:li:dataProduct:my_data_product",

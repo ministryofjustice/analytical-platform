@@ -51,7 +51,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@94591e514230d9bb86d78af470b4ae69fc01b75f # v12.2663.0
+        uses: bridgecrewio/checkov-action@4fc35972a43e0622149fadb328d3a5123bfca03e # v12.2671.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -190,7 +190,7 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
@@ -198,7 +198,7 @@ jobs:
       - name: Assume GlobalGitHubActionAdmin Role
         if: github.ref != 'refs/heads/main'
         id: assume_global_github_action_admin_role
-        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
@@ -218,7 +218,7 @@ jobs:
       - name: Assume GlobalGitHubActionAccess Role
         if: github.ref != 'refs/heads/main'
         id: assume_global_github_action_access_role
-        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
