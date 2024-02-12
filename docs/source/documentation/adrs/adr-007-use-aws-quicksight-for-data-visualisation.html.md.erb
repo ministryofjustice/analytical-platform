@@ -29,17 +29,19 @@ We do not offer a managed data visualisation and reporting tool. Users need to b
 
 - Users can build and share dashboards from data stored on our platform
 - Operates on a pay-as-you-go [pricing](https://aws.amazon.com/quicksight/pricing/) model, which means we are billed based on actual usage
-- QuickSight is designed to be user-friendly, but users might face issues when dealing with more advanced or complex use cases
+- QuickSight is designed to be user-friendly (no coding required), but users might face issues when dealing with more advanced or complex use cases
 - We will need to start a QuickSight community for users to help and share their experiences and knowledge
-- There is already a public [QuickSight community](https://community.amazonquicksight.com/) and MoJ can get immersion days and free training for our users
+- There is already a public [QuickSight community](https://community.amazonquicksight.com/)
 
 ### Advantages
 
 - Serverless BI service, meaning we do not need to patch or maintain and [security and compliance](https://docs.aws.amazon.com/quicksight/latest/user/QS-compliance.html) is maintained by AWS
 - User friendly interface and extensive online training materials, we won't need to produce extensive documentation to support, AWS provides many resources for building and sharing dashboards
 - Reduced operational cost and complexity for users to create reports and visualisations
+- AWS provided immersion days and free training for our users
 - Cost transparency, the total cost of ownership and management of RShiny and other hosted solutions is hard to calculate
 
 ### Disadvantages
 
-- Creating [dashboards as code](https://github.com/aws-samples/amazon-quicksight-assets-as-code-sample) does not support all QuickSight resources and visual types
+- [Application configuration as code](https://github.com/aws-samples/amazon-quicksight-assets-as-code-sample) does not support all resources
+- The internal permission management is complex and difficult to understand
