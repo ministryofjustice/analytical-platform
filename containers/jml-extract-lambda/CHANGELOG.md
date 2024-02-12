@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-
 ## [1.1.0] - 2024-02-12
 
 ### Changed
 
-- Dependabots: Updates to `boto`, `botocore`, `pandas` and `awswrangler`. Additional bump to the Python image.
+- Dependabots: Updates to `boto`, `botocore`, `pandas` and `awswrangler`.
+Additional bump to the Python image.
 
 ## [1.0.3] - 2024-01-31
 
