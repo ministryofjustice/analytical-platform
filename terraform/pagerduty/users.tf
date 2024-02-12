@@ -33,6 +33,10 @@ locals {
       email = "jacob.hamblin-pyke@digital.justice.gov.uk"
     },
     {
+      name  = "Tom Webber"
+      email = "thomas.webber@digital.justice.gov.uk"
+    },
+    {
       name  = "Murad Ali"
       email = "murad.ali@digital.justice.gov.uk"
     }
