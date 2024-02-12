@@ -1,4 +1,4 @@
-awswrangler==3.5.1
+awswrangler==3.5.2
 boto3==1.34.19
 botocore==1.34.19
 pandas==2.1.4
