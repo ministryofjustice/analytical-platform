@@ -9,6 +9,7 @@ auth0-ministryofjustice-data-platform-development: terraform/auth0/ministryofjus
 aws-analytical-platform-baseline: terraform/aws/analytical-platform/baseline/**
 aws-analytical-platform-data-engineering-production-10ds: terraform/aws/analytical-platform-data-engineering-production/10ds/**
 aws-analytical-platform-data-production-airflow: terraform/aws/analytical-platform-data-production/airflow/**
+aws-analytical-platform-data-production-airflow-hmcts-sdp-load: terraform/aws/analytical-platform-data-production/airflow-hmcts-sdp-load/**
 aws-analytical-platform-data-production-artifact-repos: terraform/aws/analytical-platform-data-production/artifact-repos/**
 aws-analytical-platform-data-production-cjs-dashboard-app: terraform/aws/analytical-platform-data-production/cjs-dashboard-app/**
 aws-analytical-platform-data-production-control-panel-message-broker: terraform/aws/analytical-platform-data-production/control-panel-message-broker/**
