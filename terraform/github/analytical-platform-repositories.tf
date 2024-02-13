@@ -1,16 +1,37 @@
 locals {
+  /* New World */
   analytical_platform_repositories = {
     "analytical-platform" = {
       name         = "analytical-platform"
       description  = "Analytical Platform"
       topics       = ["ministryofjustice", "analytical-platform"]
-      has_issues   = false
+      homepage_url = "https://user-guidance.analytical-platform.service.justice.gov.uk"
+      has_projects = true
+      access = {
+        admins = [module.analytical_platform_team.id]
+      }
+    },
+    "analytical-platform-runbooks" = {
+      name         = "analytical-platform-runbooks"
+      description  = "Analytical Platform Runbooks"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      has_issues   = true
       homepage_url = "https://user-guidance.analytical-platform.service.justice.gov.uk"
       access = {
-        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
-        pushers = [module.data_platform_team.id]
+        admins = [module.analytical_platform_team.id]
       }
-    }
+    },
+    "analytical-platform-user-guide" = {
+      name         = "analytical-platform-user-guide"
+      description  = "Analytical Platform User Guide"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      has_issues   = true
+      homepage_url = "https://user-guidance.analytical-platform.service.justice.gov.uk"
+      access = {
+        admins = [module.analytical_platform_team.id]
+      }
+    },
+    /* Old World */
     "analytics-platform-infrastructure" = {
       name                                   = "analytics-platform-infrastructure"
       description                            = "Analytical Platform Infrastructure"
