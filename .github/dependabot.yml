@@ -287,7 +287,7 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-data-production/airflow"
+    directory: "terraform/aws/analytical-platform-data-engineering-sandbox-a/airflow-hmcts-sdp-load"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -298,7 +298,7 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-data-production/airflow-hmcts-sdp-load"
+    directory: "terraform/aws/analytical-platform-data-production/airflow"
     schedule:
       interval: "daily"
       time: "09:00"
