@@ -44,6 +44,7 @@ class DataProductMetadata:
     email: str
     retention_period_in_days: int
     domain: str
+    subdomain: str | None
     dpia_required: bool
     dpia_location: str | None
     last_updated: datetime
@@ -75,6 +76,7 @@ class DataProductMetadata:
             status=DataProductStatus[metadata["status"]],
             retention_period_in_days=metadata["retentionPeriod"],
             domain=metadata["domain"],
+            subdomain=metadata.get("subdomain"),
             dpia_required=metadata["dpiaRequired"],
             dpia_location=metadata.get("dpiaLocation"),
             last_updated=datetime.strptime(
