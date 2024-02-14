@@ -45,7 +45,8 @@ data_product = DataProductMetadata(
     owner = "7804c127-d677-4900-82f9-83517e51bb94",
     email = "justice@justice.gov.uk",
     retention_period_in_days = 365,
-    domain = "HMCTS",
+    domain = "LAA",
+    subdomain = "Legal Aid",
     dpia_required = False
 )
 

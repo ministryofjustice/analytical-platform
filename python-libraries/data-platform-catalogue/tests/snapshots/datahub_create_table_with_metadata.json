@@ -74,12 +74,12 @@
 },
 {
     "entityType": "domain",
-    "entityUrn": "urn:li:domain:legal-aid",
+    "entityUrn": "urn:li:domain:LAA",
     "changeType": "UPSERT",
     "aspectName": "domainProperties",
     "aspect": {
         "json": {
-            "name": "legal-aid",
+            "name": "LAA",
             "description": ""
         }
     }
@@ -92,7 +92,7 @@
     "aspect": {
         "json": {
             "domains": [
-                "urn:li:domain:legal-aid"
+                "urn:li:domain:LAA"
             ]
         }
     }
@@ -115,7 +115,8 @@
                 "last_updated": "2020-05-17 00:00:00",
                 "creation_date": "2020-05-17 00:00:00",
                 "s3_location": "s3://databucket/",
-                "status": "DataProductStatus.DRAFT"
+                "status": "DataProductStatus.DRAFT",
+                "subdomain": "Legal Aid"
             },
             "name": "my_data_product",
             "description": "bla bla"
