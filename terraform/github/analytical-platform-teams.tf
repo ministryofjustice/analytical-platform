@@ -175,16 +175,17 @@ locals {
   data_engineering_access = jsondecode(file("${path.module}/configuration/data-engineering-access.json"))
 }
 
+# Parent Team
 module "analytical_platform_team" {
   source = "./modules/team"
 
   name                             = "analytical-platform"
   description                      = "Analytical Platform"
   members                          = local.analytical_platform_all_teams_members
-  parent_team_id                   = null
   users_with_special_github_access = local.users_with_special_github_access
 }
 
+# Child Teams
 module "analytical_platform_teams" {
   source = "./modules/team"
 
@@ -192,7 +193,7 @@ module "analytical_platform_teams" {
 
   name                             = each.value.name
   description                      = each.value.description
-  parent_team_id                   = each.value.parent_team_id
+  parent_team_id                   = try(each.value.parent_team_id, null)
   members                          = each.value.members
   users_with_special_github_access = local.users_with_special_github_access
 }
