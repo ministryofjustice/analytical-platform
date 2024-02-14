@@ -5,8 +5,7 @@ locals {
       name         = "analytical-platform"
       description  = "Analytical Platform"
       topics       = ["ministryofjustice", "analytical-platform"]
-      homepage_url = "https://user-guidance.analytical-platform.service.justice.gov.uk"
-      has_projects = true
+      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
       access = {
         admins = [module.analytical_platform_team.id]
       }
