@@ -5,13 +5,22 @@
     "ghcr.io/ministryofjustice/devcontainer-feature/aws:0": {},
     "ghcr.io/ministryofjustice/devcontainer-feature/terraform:0": {}
   },
+  "containerEnv": {
+    "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}",
+    "GITHUB_USER": "${localEnv:GITHUB_USER}"
+  },
   "customizations": {
     "vscode": {
       "extensions": [
         "EditorConfig.EditorConfig",
         "GitHub.vscode-github-actions",
         "GitHub.vscode-pull-request-github"
-      ]
+      ],
+      "settings": {
+        "dotfiles.repository": "https://github.com/${localEnv:GITHUB_USER}/dotfiles",
+        "dotfiles.targetPath": "~/.dotfiles",
+        "dotfiles.installCommand": "setup.sh"
+      }
     }
   }
 }
