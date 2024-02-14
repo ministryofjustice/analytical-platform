@@ -8,6 +8,7 @@ poetry run pytest tests/test_integration_with_server.py
 """
 
 import os
+import time
 from datetime import datetime
 
 import pytest
@@ -110,10 +111,10 @@ def test_search_for_data_product():
     client.upsert_data_product(data_product)
 
     response = client.search(
-        query="lfdskjflkjflkjsdflksfjds", result_types=(ResultType.DATA_PRODUCT,)
+        query="my_data_product", result_types=(ResultType.DATA_PRODUCT,)
     )
     assert response.total_results >= 1
-    assert response.page_results[0].id == "urn:li:dataProduct:lfdskjflkjflkjsdflksfjds"
+    assert response.page_results[0].id == "urn:li:dataProduct:my_data_product"
 
 
 @runs_on_development_server
@@ -233,13 +234,14 @@ def test_fetch_dataset_belonging_to_data_product():
         data_product_metadata=data_product,
         location=DataLocation("test_data_product_v2"),
     )
+    # Introduce sleep to combat race conditions with table association
+    time.sleep(1)
 
     response = client.search(
         filters=[MultiSelectFilter(filter_name="urn", included_values=[urn])]
     )
-
     assert response.total_results == 1
 
     metadata = response.page_results[0].metadata
     assert metadata["total_data_products"] == 1
-    assert metadata["data_products"][0]["name"] == "test_data_product"
+    assert metadata["data_products"][0]["name"] == "my_data_product"

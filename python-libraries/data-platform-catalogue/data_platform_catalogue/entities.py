@@ -106,7 +106,7 @@ class TableMetadata:
     retention_period_in_days: int | None
     source_dataset_name: str | None = None
     source_dataset_location: str | None = None
-    data_sensitivity_level: SecurityClassification = SecurityClassification["OFFICIAL"]
+    data_sensitivity_level: SecurityClassification = SecurityClassification.OFFICIAL
     tags: list[str] = field(default_factory=list)
     major_version: int = 1
 
