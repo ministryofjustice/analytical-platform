@@ -12,21 +12,37 @@ locals {
       }
     },
     "analytical-platform-runbooks" = {
-      name         = "analytical-platform-runbooks"
-      description  = "Analytical Platform Runbooks"
-      topics       = ["ministryofjustice", "analytical-platform"]
-      has_issues   = true
-      homepage_url = "https://user-guidance.analytical-platform.service.justice.gov.uk"
+      name          = "analytical-platform-runbooks"
+      description   = "Analytical Platform Runbooks"
+      topics        = ["ministryofjustice", "analytical-platform"]
+      has_issues    = true
+      homepage_url  = "https://runbooks.analytical-platform.service.justice.gov.uk"
+      pages_enabled = true
+      pages_configuration = {
+        cname = "runbooks.analytical-platform.service.justice.gov.uk"
+        source = {
+          branch = "main"
+          path   = "/"
+        }
+      }
       access = {
         admins = [module.analytical_platform_team.id]
       }
     },
     "analytical-platform-user-guide" = {
-      name         = "analytical-platform-user-guide"
-      description  = "Analytical Platform User Guide"
-      topics       = ["ministryofjustice", "analytical-platform"]
-      has_issues   = true
-      homepage_url = "https://user-guidance.analytical-platform.service.justice.gov.uk"
+      name          = "analytical-platform-user-guide"
+      description   = "Analytical Platform User Guide"
+      topics        = ["ministryofjustice", "analytical-platform"]
+      has_issues    = true
+      homepage_url  = "https://user-guide.analytical-platform.service.justice.gov.uk"
+      pages_enabled = true
+      pages_configuration = {
+        cname = "user-guide.analytical-platform.service.justice.gov.uk"
+        source = {
+          branch = "main"
+          path   = "/"
+        }
+      }
       access = {
         admins = [module.analytical_platform_team.id]
       }
