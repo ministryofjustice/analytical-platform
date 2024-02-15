@@ -15,7 +15,7 @@ review_in: 6 months
 
 Our user want analytical features not available on our existing platform. The types of tools and underlying compute is changing rapidly. SageMaker provides a managed service for these tools and provides instances with higher resources and GPU to speed and aid research.
 
-There is also a lot of interest in using LLMs for e.g.semantic search of free text. SageMaker in VPC isolation mode makes sure sensitive workloads are secured and stay within the [instance](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi.html), we can further secure data using [private VPC](https://aws.amazon.com/blogs/machine-learning/securing-amazon-sagemaker-studio-connectivity-using-a-private-vpc/) and [PrivateLink](https://aws.amazon.com/privatelink/)
+There is also a lot of interest in using LLMs for e.g. semantic search of free text. SageMaker in VPC isolation mode makes sure sensitive workloads are secured and stay within the [instance](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi.html), we can further secure data using [private VPC](https://aws.amazon.com/blogs/machine-learning/securing-amazon-sagemaker-studio-connectivity-using-a-private-vpc/) and [PrivateLink](https://aws.amazon.com/privatelink/)
 
 ## Decision
 
@@ -24,7 +24,6 @@ There is also a lot of interest in using LLMs for e.g.semantic search of free te
 ## Proposal General Consequences
 
 - [SageMaker costs](https://aws.amazon.com/sagemaker/pricing/) are based on usage and can vary significantly month-to-month depending on your application's usage, instance type. We can provide [proactive notifications](https://aws.amazon.com/blogs/mt/setting-up-an-amazon-cloudwatch-billing-alarm-to-proactively-monitor-estimated-charges/) that will for the first time allow our users to understand the cost of the work that they are doing
-- Improved Security, workloads will run in isolation mode (without access to internet) to further secure sensitive data and reduce fear of data exposure for [Data Owners](https://www.gov.uk/government/publications/essential-shared-data-assets-and-data-ownership-in-government/data-ownership-in-government-html)
 - Reduced [operational cost](https://aws.amazon.com/blogs/machine-learning/lowering-total-cost-of-ownership-for-machine-learning-and-increasing-productivity-with-amazon-sagemaker/) and complexity
 - Agility and change readiness, additional analytical services can be offered when available without considerable effort that has lead to users having to work elsewhere (extensive development of front and backend services) e.g. [Control Panel](https://controlpanel.services.analytical-platform.service.justice.gov.uk/)
 - Better cost transparency, we will understand our tooling compute costs which is currently very difficult to calculate
