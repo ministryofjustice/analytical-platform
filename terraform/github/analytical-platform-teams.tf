@@ -7,9 +7,8 @@ locals {
 
   analytical_platform_teams = {
     "analytics-hq" = {
-      name           = "analytics-hq"
-      description    = "Analytics HQ"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytics-hq"
+      description = "Analytics HQ"
       members = [
         "julialawrence",     # Julia Lawrence
         "bagg3rs",           # Richard Baguley
@@ -30,6 +29,7 @@ locals {
         "mitchdawson1982",   # Mitch Dawson
         "bagg3rs",           # Richard Baguley
         "jamesstottmoj",     # James Stott
+        "Ed-Bajo",           # Edwin Bajomo
       ]
     }
   }
@@ -37,34 +37,30 @@ locals {
   analytical_platform_modernisation_platform_teams = {
     /* Analytical Platform */
     "analytical-platform-development-administrator" = {
-      name           = "analytical-platform-development-administrator"
-      description    = "Analytical Platform Development Administrator"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-development-administrator"
+      description = "Analytical Platform Development Administrator"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
     },
     "analytical-platform-production-administrator" = {
-      name           = "analytical-platform-production-administrator"
-      description    = "Analytical Platform Production Administrator"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-production-administrator"
+      description = "Analytical Platform Production Administrator"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
     },
     /* Analytical Platform Data */
     "analytical-platform-data-development-administrator" = {
-      name           = "analytical-platform-data-development-administrator"
-      description    = "Analytical Platform Data Development Administrator"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-data-development-administrator"
+      description = "Analytical Platform Data Development Administrator"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
       ])
     },
     "analytical-platform-data-development-data-engineer" = {
-      name           = "analytical-platform-data-development-data-engineer"
-      description    = "Analytical Platform Data Development Data Engineer"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-data-development-data-engineer"
+      description = "Analytical Platform Data Development Data Engineer"
       members = flatten([
         flatten([
           for user in local.data_engineering_access : [
@@ -74,17 +70,15 @@ locals {
       ])
     },
     "analytical-platform-data-production-administrator" = {
-      name           = "analytical-platform-data-production-administrator"
-      description    = "Analytical Platform Data Production Administrator"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-data-production-administrator"
+      description = "Analytical Platform Data Production Administrator"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
     },
     "analytical-platform-data-production-data-engineer" = {
-      name           = "analytical-platform-data-production-data-engineer"
-      description    = "Analytical Platform Data Production Data Engineer"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-data-production-data-engineer"
+      description = "Analytical Platform Data Production Data Engineer"
       members = flatten([
         flatten([
           for user in local.data_engineering_access : [
@@ -95,9 +89,8 @@ locals {
     },
     /* Analytical Platform Data Engineering */
     "analytical-platform-data-engineering-sandboxa-administrator" = {
-      name           = "analytical-platform-data-engineering-sandboxa-administrator"
-      description    = "Analytical Platform Data Engineering SandboxA Administrator"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-data-engineering-sandboxa-administrator"
+      description = "Analytical Platform Data Engineering SandboxA Administrator"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
         local.data_platform_teams["data-platform-labs"].members,
@@ -109,9 +102,8 @@ locals {
       ])
     },
     "analytical-platform-data-engineering-sandboxa-data-engineer" = {
-      name           = "analytical-platform-data-engineering-sandboxa-data-engineer"
-      description    = "Analytical Platform Data Engineering SandboxA Data Engineer"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-data-engineering-sandboxa-data-engineer"
+      description = "Analytical Platform Data Engineering SandboxA Data Engineer"
       members = flatten([
         local.data_platform_teams["data-platform-labs"].members,
         flatten([
@@ -122,9 +114,8 @@ locals {
       ])
     },
     "analytical-platform-data-engineering-sandboxa-developer" = {
-      name           = "analytical-platform-data-engineering-sandboxa-developer"
-      description    = "Analytical Platform Data Engineering SandboxA Developer"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-data-engineering-sandboxa-developer"
+      description = "Analytical Platform Data Engineering SandboxA Developer"
       members = flatten([
         flatten([
           for user in local.data_engineering_access : [
@@ -134,17 +125,15 @@ locals {
       ])
     },
     "analytical-platform-data-engineering-production-administrator" = {
-      name           = "analytical-platform-data-engineering-production-administrator"
-      description    = "Analytical Platform Data Engineering Production Administrator"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-data-engineering-production-administrator"
+      description = "Analytical Platform Data Engineering Production Administrator"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
     },
     "analytical-platform-data-engineering-production-data-engineer" = {
-      name           = "analytical-platform-data-engineering-production-data-engineer"
-      description    = "Analytical Platform Data Engineering Production Data Engineer"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-data-engineering-production-data-engineer"
+      description = "Analytical Platform Data Engineering Production Data Engineer"
       members = flatten([
         flatten([
           for user in local.data_engineering_access : [
@@ -154,34 +143,30 @@ locals {
       ])
     },
     "analytical-platform-data-engineering-production-developer" = {
-      name           = "analytical-platform-data-engineering-production-developer"
-      description    = "Analytical Platform Data Engineering Production Developer"
-      parent_team_id = module.analytical_platform_team.id
-      members        = flatten([])
+      name        = "analytical-platform-data-engineering-production-developer"
+      description = "Analytical Platform Data Engineering Production Developer"
+      members     = flatten([])
     },
     /* Analytical Platform Landing */
     "analytical-platform-landing-production-administrator" = {
-      name           = "analytical-platform-landing-production-administrator"
-      description    = "Analytical Platform Landing Development Administrator"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-landing-production-administrator"
+      description = "Analytical Platform Landing Development Administrator"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
     },
     /* Analytical Platform Management */
     "analytical-platform-management-production-administrator" = {
-      name           = "analytical-platform-management-production-administrator"
-      description    = "Analytical Platform Management Development Administrator"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "analytical-platform-management-production-administrator"
+      description = "Analytical Platform Management Development Administrator"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
     },
     /* MI Platform */
     "mi-platform-development-administrator" = {
-      name           = "mi-platform-development-administrator"
-      description    = "MI Platform Development Administrator"
-      parent_team_id = module.analytical_platform_team.id
+      name        = "mi-platform-development-administrator"
+      description = "MI Platform Development Administrator"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
       ])
@@ -191,16 +176,17 @@ locals {
   data_engineering_access = jsondecode(file("${path.module}/configuration/data-engineering-access.json"))
 }
 
+# Parent Team
 module "analytical_platform_team" {
   source = "./modules/team"
 
   name                             = "analytical-platform"
   description                      = "Analytical Platform"
   members                          = local.analytical_platform_all_teams_members
-  parent_team_id                   = null
   users_with_special_github_access = local.users_with_special_github_access
 }
 
+# Child Teams
 module "analytical_platform_teams" {
   source = "./modules/team"
 
@@ -208,7 +194,7 @@ module "analytical_platform_teams" {
 
   name                             = each.value.name
   description                      = each.value.description
-  parent_team_id                   = each.value.parent_team_id
+  parent_team_id                   = try(each.value.parent_team_id, null)
   members                          = each.value.members
   users_with_special_github_access = local.users_with_special_github_access
 }
@@ -221,7 +207,7 @@ module "analytical_platform_modernisation_platform_teams" {
 
   name                             = each.value.name
   description                      = each.value.description
-  parent_team_id                   = each.value.parent_team_id
+  parent_team_id                   = try(each.value.parent_team_id, null)
   members                          = each.value.members
   users_with_special_github_access = local.users_with_special_github_access
 }
