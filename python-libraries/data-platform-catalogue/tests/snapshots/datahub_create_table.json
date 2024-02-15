@@ -9,7 +9,7 @@
             "customProperties": {
                 "sourceDatasetName": "my_source_table",
                 "whereToAccessDataset": "s3://databucket/table1",
-                "sensitivityLevel": "TOP SECRET",
+                "sensitivityLevel": "TOP_SECRET",
                 "rowCount": "1177"
             },
             "description": "bla bla",

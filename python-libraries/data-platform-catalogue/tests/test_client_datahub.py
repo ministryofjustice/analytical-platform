@@ -8,6 +8,7 @@ from data_platform_catalogue.entities import (
     DataLocation,
     DataProductMetadata,
     DataProductStatus,
+    SecurityClassification,
     TableMetadata,
 )
 from datahub.metadata.schema_classes import DataProductPropertiesClass
@@ -63,7 +64,7 @@ class TestCatalogueClientWithDatahub:
             retention_period_in_days=365,
             source_dataset_name="my_source_table",
             where_to_access_dataset="s3://databucket/table1",
-            data_sensitivity_level="TOP SECRET",
+            data_sensitivity_level=SecurityClassification.TOP_SECRET,
         )
 
     @pytest.fixture
@@ -78,7 +79,7 @@ class TestCatalogueClientWithDatahub:
             retention_period_in_days=1,
             source_dataset_name="my_source_table",
             where_to_access_dataset="s3://databucket/table2",
-            data_sensitivity_level="OFFICIAL",
+            data_sensitivity_level=SecurityClassification.OFFICIAL,
         )
 
     @pytest.fixture

@@ -102,8 +102,8 @@ class TableMetadata:
     description: str
     column_details: list
     retention_period_in_days: int | None
-    source_dataset_name: str | None = None
-    where_to_access_dataset: str | None = None
+    source_dataset_name: str = ""
+    where_to_access_dataset: str = ""
     data_sensitivity_level: SecurityClassification = SecurityClassification.OFFICIAL
     tags: list[str] = field(default_factory=list)
     major_version: int = 1
@@ -127,8 +127,8 @@ class TableMetadata:
             description=metadata["tableDescription"],
             column_details=metadata["columns"],
             retention_period_in_days=retention_period,
-            source_dataset_name=metadata.get("sourceDatasetName"),
-            where_to_access_dataset=metadata.get("sourceDatasetLocation"),
+            source_dataset_name=metadata.get("sourceDatasetName", ""),
+            where_to_access_dataset=metadata.get("sourceDatasetLocation", ""),
             data_sensitivity_level=SecurityClassification[
                 metadata.get("securityClassification", "OFFICIAL")
             ],
