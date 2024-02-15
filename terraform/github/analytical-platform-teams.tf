@@ -29,6 +29,7 @@ locals {
         "mitchdawson1982",   # Mitch Dawson
         "bagg3rs",           # Richard Baguley
         "jamesstottmoj",     # James Stott
+        "Ed-Bajo",           # Edwin Bajomo
       ]
     }
   }
