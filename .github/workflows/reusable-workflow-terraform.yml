@@ -51,7 +51,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@8c66b89720750729664226ae360f6c8d82e190d5 # v12.2649.0
+        uses: bridgecrewio/checkov-action@d01b2bab9580b88f841e0207ddbc90de6930e4d0 # v12.2672.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -62,7 +62,7 @@ jobs:
       - name: Trivy
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_trivy
-        uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
+        uses: aquasecurity/trivy-action@84384bd6e777ef152729993b8145ea352e9dd3ef # v0.17.0
         with:
           scan-type: config
           scan-ref: ${{ env.working-directory }}
@@ -190,7 +190,7 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
@@ -198,7 +198,7 @@ jobs:
       - name: Assume GlobalGitHubActionAdmin Role
         if: github.ref != 'refs/heads/main'
         id: assume_global_github_action_admin_role
-        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
@@ -210,7 +210,7 @@ jobs:
       - name: Retrieve GitHub Robot Token
         if: github.ref != 'refs/heads/main'
         id: retrieve_github_robot_token
-        uses: aws-actions/aws-secretsmanager-get-secrets@022e8919774ecb75e8e375656d7b1898936ab878 # v1.0.4
+        uses: aws-actions/aws-secretsmanager-get-secrets@5cb982bcb88b164e92093d4e3bee94b7b416731f # v1.0.4
         with:
           secret-ids: |
             GITHUB_ROBOT_TOKEN, github-token
@@ -218,7 +218,7 @@ jobs:
       - name: Assume GlobalGitHubActionAccess Role
         if: github.ref != 'refs/heads/main'
         id: assume_global_github_action_access_role
-        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess

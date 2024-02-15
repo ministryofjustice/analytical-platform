@@ -90,6 +90,19 @@ locals {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
+    },
+    "data-platform-new-app-runthrough" = {
+      name                                   = "data-platform-new-app-runthrough"
+      description                            = "A lovely new application"
+      topics                                 = ["ministryofjustice", "data-platform"]
+      visibility                             = "internal"
+      advanced_security_status               = "disabled"
+      secret_scanning_status                 = "disabled"
+      secret_scanning_push_protection_status = "disabled"
+      access = {
+        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
+      }
     }
     /*
       Data Platform Repositories that could be managed in code:

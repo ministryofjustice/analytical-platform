@@ -1,5 +1,9 @@
 from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum, auto
 from typing import Any
+
+DATAHUB_DATE_FORMAT = "%Y%m%d"
 
 
 @dataclass
@@ -22,16 +26,30 @@ class DataLocation:
     platform_id: str = "glue"
 
 
+class DataProductStatus(Enum):
+    DRAFT = auto()
+    PUBLISHED = auto()
+    RETIRED = auto()
+
+
 @dataclass
 class DataProductMetadata:
     name: str
     description: str
     version: str
     owner: str
+    owner_display_name: str
+    maintainer: str | None
+    maintainer_display_name: str | None
     email: str
     retention_period_in_days: int
     domain: str
     dpia_required: bool
+    dpia_location: str | None
+    last_updated: datetime
+    creation_date: datetime
+    s3_location: str | None
+    status: DataProductStatus = DataProductStatus.DRAFT
     tags: list[str] = field(default_factory=list)
 
     @staticmethod
@@ -50,14 +68,32 @@ class DataProductMetadata:
             description=metadata["description"],
             version=version,
             owner=owner_id,
+            owner_display_name=metadata["dataProductOwnerDisplayName"],
+            maintainer=metadata.get("dataProductMaintainer"),
+            maintainer_display_name=metadata.get("dataProductMaintainerDisplayName"),
             email=metadata["email"],
+            status=DataProductStatus[metadata["status"]],
             retention_period_in_days=metadata["retentionPeriod"],
             domain=metadata["domain"],
             dpia_required=metadata["dpiaRequired"],
+            dpia_location=metadata.get("dpiaLocation"),
+            last_updated=datetime.strptime(
+                metadata["lastUpdated"], DATAHUB_DATE_FORMAT
+            ),
+            creation_date=datetime.strptime(
+                metadata["creationDate"], DATAHUB_DATE_FORMAT
+            ),
+            s3_location=metadata.get("s3Location"),
             tags=metadata.get("tags", []),
         )
 
         return new_metadata
+
+
+class SecurityClassification(Enum):
+    OFFICIAL = auto()
+    SECRET = auto()
+    TOP_SECRET = auto()
 
 
 @dataclass
@@ -66,6 +102,9 @@ class TableMetadata:
     description: str
     column_details: list
     retention_period_in_days: int | None
+    source_dataset_name: str | None = None
+    source_dataset_location: str | None = None
+    data_sensitivity_level: SecurityClassification = SecurityClassification["OFFICIAL"]
     tags: list[str] = field(default_factory=list)
     major_version: int = 1
 
@@ -88,6 +127,11 @@ class TableMetadata:
             description=metadata["tableDescription"],
             column_details=metadata["columns"],
             retention_period_in_days=retention_period,
+            source_dataset_name=metadata.get("sourceDatasetName"),
+            source_dataset_location=metadata.get("sourceDatasetLocation"),
+            data_sensitivity_level=SecurityClassification[
+                metadata.get("securityClassification", "OFFICIAL")
+            ],
             tags=metadata.get("tags", []),
         )
 

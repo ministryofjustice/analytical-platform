@@ -36,6 +36,7 @@ locals {
         "EO510",             # Eki Osehenye
         "AntFMoJ",           # Anthony Fitzroy
         "mitchdawson1982",   # Mitch Dawson
+        "jamesstottmoj",     # James Stott
       ]
     },
     "data-platform-labs" = {
@@ -45,6 +46,7 @@ locals {
       members = [
         "jemnery",         # Jeremy Collins
         "PriyaBasker23",   # Priya Basker
+        "seanprivett",     # Sean Privett
         "YvanMOJdigital",  # Yvan Smith
         "LavMatt",         # Matt Laverty
         "murdo-moj",       # Murdo Moyse
@@ -161,6 +163,20 @@ locals {
       description = "Data Platform Apps and Tools SageMaker Users"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members
+      ])
+    },
+    "data-platform-apps-and-tools-powerbi-authors" = {
+      name           = "data-platform-apps-and-tools-powerbi-authors"
+      description    = "Data Platform Apps and Tools PowerBI Authors"
+      parent_team_id = module.data_platform_teams["data-platform-apps-and-tools"].id
+      members = flatten([
+        local.data_platform_teams["data-platform-apps-and-tools"].members,
+        "andrewc-moj",   # Andrew Craik
+        "gwionap",       # Gwion ApRhobat
+        "phil-hall-moj", # Phillip Hall
+        "csheldon155",   # Chris Sheldon
+        "hollyfurniss-moj",
+        "alex-pavlopoulos"
       ])
     }
   }

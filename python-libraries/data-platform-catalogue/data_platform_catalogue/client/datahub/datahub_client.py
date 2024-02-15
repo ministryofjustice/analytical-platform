@@ -24,7 +24,13 @@ from ...entities import (
     DataProductMetadata,
     TableMetadata,
 )
-from ...search_types import MultiSelectFilter, ResultType, SearchResponse
+from ...search_types import (
+    MultiSelectFilter,
+    ResultType,
+    SearchFacets,
+    SearchResponse,
+    SortOption,
+)
 from ..base import BaseCatalogueClient, CatalogueError, ReferencedEntityMissing, logger
 from .search import SearchClient
 
@@ -223,7 +229,12 @@ class DataHubCatalogueClient(BaseCatalogueClient):
 
         dataset_properties = DatasetPropertiesClass(
             description=metadata.description,
-            # customProperties={"dpia_required": "yes"},
+            customProperties={
+                "sourceDatasetName": metadata.source_dataset_name,
+                "sourceDatasetLocation": metadata.source_dataset_location,
+                "sensitivityLevel": metadata.data_sensitivity_level,
+                "rowCount": "1177",
+            },
         )
 
         metadata_event = MetadataChangeProposalWrapper(
@@ -299,7 +310,12 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             else:
                 assets = [data_product_association]
 
-            data_product_properties = DataProductPropertiesClass(assets=assets)
+            data_product_properties = DataProductPropertiesClass(
+                description=data_product_existing_properties.description,
+                name=data_product_existing_properties.name,
+                customProperties=data_product_existing_properties.customProperties,
+                assets=assets,
+            )
 
             metadata_event = MetadataChangeProposalWrapper(
                 entityType="dataproduct",
@@ -321,6 +337,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             ResultType.TABLE,
         ),
         filters: Sequence[MultiSelectFilter] = (),
+        sort: SortOption | None = None,
     ) -> SearchResponse:
         """
         Wraps the catalogue's search function.
@@ -331,4 +348,21 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             page=page,
             result_types=result_types,
             filters=filters,
+            sort=sort,
+        )
+
+    def search_facets(
+        self,
+        query: str = "*",
+        result_types: Sequence[ResultType] = (
+            ResultType.DATA_PRODUCT,
+            ResultType.TABLE,
+        ),
+        filters: Sequence[MultiSelectFilter] = (),
+    ) -> SearchFacets:
+        """
+        Returns facets that can be used to filter the search results.
+        """
+        return self.search_client.search_facets(
+            query=query, result_types=result_types, filters=filters
         )

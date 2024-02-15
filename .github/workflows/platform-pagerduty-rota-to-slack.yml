@@ -40,14 +40,14 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
 
       - name: Assume GlobalGitHubActionAdmin Role
         id: assume_global_github_action_admin_role
-        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
@@ -58,7 +58,7 @@ jobs:
 
       - name: Get AWS Secrets
         id: get_aws_secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@022e8919774ecb75e8e375656d7b1898936ab878 # v1.0.4
+        uses: aws-actions/aws-secretsmanager-get-secrets@5cb982bcb88b164e92093d4e3bee94b7b416731f # v1.0.4
         with:
           secret-ids: |
             PAGERDUTY_TOKEN, pagerduty-token

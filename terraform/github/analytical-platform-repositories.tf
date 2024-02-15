@@ -1,16 +1,52 @@
 locals {
+  /* New World */
   analytical_platform_repositories = {
     "analytical-platform" = {
       name         = "analytical-platform"
       description  = "Analytical Platform"
       topics       = ["ministryofjustice", "analytical-platform"]
-      has_issues   = false
-      homepage_url = "https://user-guidance.analytical-platform.service.justice.gov.uk"
+      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
       access = {
-        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
-        pushers = [module.data_platform_team.id]
+        admins = [module.analytical_platform_team.id]
       }
-    }
+    },
+    "analytical-platform-runbooks" = {
+      name          = "analytical-platform-runbooks"
+      description   = "Analytical Platform Runbooks"
+      topics        = ["ministryofjustice", "analytical-platform"]
+      has_issues    = true
+      homepage_url  = "https://runbooks.analytical-platform.service.justice.gov.uk"
+      pages_enabled = true
+      pages_configuration = {
+        cname = "runbooks.analytical-platform.service.justice.gov.uk"
+        source = {
+          branch = "main"
+          path   = "/"
+        }
+      }
+      access = {
+        admins = [module.analytical_platform_team.id]
+      }
+    },
+    "analytical-platform-user-guide" = {
+      name          = "analytical-platform-user-guide"
+      description   = "Analytical Platform User Guide"
+      topics        = ["ministryofjustice", "analytical-platform"]
+      has_issues    = true
+      homepage_url  = "https://user-guide.analytical-platform.service.justice.gov.uk"
+      pages_enabled = true
+      pages_configuration = {
+        cname = "user-guide.analytical-platform.service.justice.gov.uk"
+        source = {
+          branch = "main"
+          path   = "/"
+        }
+      }
+      access = {
+        admins = [module.analytical_platform_team.id]
+      }
+    },
+    /* Old World */
     "analytics-platform-infrastructure" = {
       name                                   = "analytics-platform-infrastructure"
       description                            = "Analytical Platform Infrastructure"
@@ -224,14 +260,10 @@ locals {
       }
     },
     "analytics-platform-jupyter-notebook" = {
-      name                                   = "analytics-platform-jupyter-notebook"
-      description                            = "Analytical Platform Jupyter Notebook"
-      topics                                 = ["ministryofjustice", "analytical-platform"]
-      use_template                           = false
-      visibility                             = "internal"
-      advanced_security_status               = "disabled"
-      secret_scanning_status                 = "disabled"
-      secret_scanning_push_protection_status = "disabled"
+      name         = "analytics-platform-jupyter-notebook"
+      description  = "Analytical Platform Jupyter Notebook"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      use_template = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
@@ -382,22 +414,28 @@ locals {
       }
     },
     "ap-terraform-github-id-provider-config" = {
-      name                = "ap-terraform-github-id-provider-config"
-      description         = "Analytical Platform Terraform Github ID Provider Config"
-      topics              = ["ministryofjustice", "analytical-platform"]
-      use_template        = true
-      template_repository = "ap-terraform-module-template"
+      name                            = "ap-terraform-github-id-provider-config"
+      description                     = "Analytical Platform Terraform Github ID Provider Config"
+      topics                          = ["ministryofjustice", "analytical-platform"]
+      use_template                    = true
+      archived                        = true
+      vulnerability_alerts            = false
+      secret_scanning_push_protection = "disabled"
+      template_repository             = "ap-terraform-module-template"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
     },
     "ap-terraform-aws-oidc-provider" = {
-      name                = "ap-terraform-aws-oidc-provider"
-      description         = "Analytical Platform Terraform AWS OIDC Provider"
-      topics              = ["ministryofjustice", "analytical-platform"]
-      use_template        = true
-      template_repository = "ap-terraform-module-template"
+      name                            = "ap-terraform-aws-oidc-provider"
+      description                     = "Analytical Platform Terraform AWS OIDC Provider"
+      topics                          = ["ministryofjustice", "analytical-platform"]
+      use_template                    = true
+      archived                        = true
+      vulnerability_alerts            = false
+      secret_scanning_push_protection = "disabled"
+      template_repository             = "ap-terraform-module-template"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]

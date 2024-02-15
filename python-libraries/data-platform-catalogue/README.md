@@ -83,12 +83,49 @@ for item in response.page_results:
   print(item)
 
 # Iterate over facet options
-for option in response.facets['domains']:
-  print(option)
+for option in response.facets.options('domains'):
+  print(option.label)
+  print(option.value)
+  print(option.count)
 
-# Filter by domain
-client.search(filters=[MultiSelectFilter("domains", [response.facets['domains'][0].value])])
+# Include a filter and sort
+client.search(
+  filters=[MultiSelectFilter("domains", [response.facets['domains'][0].value])],
+  sort=SortOption(field="name", ascending=False)
+)
 ```
+
+## Search filters
+
+### Datahub
+
+Basic filters:
+
+- urn
+- customProperties
+- browsePaths / browsePathsV2
+- deprecated (boolean)
+- removed (boolean)
+- typeNames
+- name, qualifiedName
+- description, hasDescription
+
+Timestamps:
+
+- lastOperationTime (datetime)
+- createdAt (timestamp)
+- lastModifiedAt (timestamp)
+
+URNs:
+
+- platform / platformInstance
+- tags, hasTags
+- glossaryTerms, hasGlossaryTerms
+- domains, hasDomain
+- siblings
+- owners, hasOwners
+- roles, hasRoles
+- container
 
 ## Catalogue Implementations
 

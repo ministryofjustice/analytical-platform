@@ -2,7 +2,7 @@ module "airflow_analytical_platform_development_iam_role" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.33.0"
+  version = "5.34.0"
 
   create_role = true
 
@@ -104,7 +104,7 @@ resource "aws_iam_role" "airflow_prod_execution_role" {
 resource "aws_iam_role" "airflow_prod_flow_log_role" {
   name               = "airflow-prod-flow-log-role"
   description        = "Flow log role for Airflow Prod"
-  assume_role_policy = data.aws_iam_policy_document.airflow_dev_flow_log_assume_policy.json
+  assume_role_policy = data.aws_iam_policy_document.airflow_prod_flow_log_assume_policy.json
 
   inline_policy {
     name   = "airflow-prod-flow-log-policy"
