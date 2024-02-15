@@ -44,7 +44,7 @@ def table():
         ],
         retention_period_in_days=None,
         source_dataset_name="my_source_table",
-        source_dataset_location="s3://source-bucket/folder",
+        where_to_access_dataset="s3://source-bucket/folder",
         data_sensitivity_level=SecurityClassification.OFFICIAL,
         tags=["test"],
     )

@@ -62,7 +62,7 @@ class TestCatalogueClientWithDatahub:
             ],
             retention_period_in_days=365,
             source_dataset_name="my_source_table",
-            source_dataset_location="s3://databucket/table1",
+            where_to_access_dataset="s3://databucket/table1",
             data_sensitivity_level="TOP SECRET",
         )
 
@@ -77,7 +77,7 @@ class TestCatalogueClientWithDatahub:
             ],
             retention_period_in_days=1,
             source_dataset_name="my_source_table",
-            source_dataset_location="s3://databucket/table2",
+            where_to_access_dataset="s3://databucket/table2",
             data_sensitivity_level="OFFICIAL",
         )
 

@@ -36,7 +36,7 @@ def test_upsert_test_hierarchy():
         maintainer="j.shelvey@digital.justice.gov.uk",
         maintainer_display_name="Jonjo Shelvey",
         email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT,
+        status=DataProductStatus.DRAFT.name,
         retention_period_in_days=365,
         domain="LAA",
         subdomain="Legal Aid",
@@ -57,7 +57,7 @@ def test_upsert_test_hierarchy():
         ],
         retention_period_in_days=365,
         source_dataset_name="my_source_table",
-        source_dataset_location="s3://databucket/folder",
+        where_to_access_dataset="s3://databucket/folder",
         tags=["test"],
     )
 
@@ -97,7 +97,7 @@ def test_search_for_data_product():
         maintainer="j.shelvey@digital.justice.gov.uk",
         maintainer_display_name="Jonjo Shelvey",
         email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT,
+        status=DataProductStatus.DRAFT.name,
         retention_period_in_days=365,
         domain="LAA",
         subdomain="Legal Aid",
@@ -141,7 +141,7 @@ def test_domain_facets_are_returned():
         maintainer="j.shelvey@digital.justice.gov.uk",
         maintainer_display_name="Jonjo Shelvey",
         email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT,
+        status=DataProductStatus.DRAFT.name,
         retention_period_in_days=365,
         domain="LAA",
         subdomain="Legal Aid",
@@ -172,7 +172,7 @@ def test_filter_by_urn():
         maintainer="j.shelvey@digital.justice.gov.uk",
         maintainer_display_name="Jonjo Shelvey",
         email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT,
+        status=DataProductStatus.DRAFT.name,
         retention_period_in_days=365,
         domain="LAA",
         subdomain="Legal Aid",
@@ -204,7 +204,7 @@ def test_fetch_dataset_belonging_to_data_product():
         maintainer="j.shelvey@digital.justice.gov.uk",
         maintainer_display_name="Jonjo Shelvey",
         email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT,
+        status=DataProductStatus.DRAFT.name,
         retention_period_in_days=365,
         domain="LAA",
         subdomain="Legal Aid",
@@ -225,7 +225,7 @@ def test_fetch_dataset_belonging_to_data_product():
         ],
         retention_period_in_days=365,
         source_dataset_name="my_source_table",
-        source_dataset_location="s3://databucket/folder",
+        where_to_access_dataset="s3://databucket/folder",
         tags=["test"],
     )
 
@@ -235,7 +235,7 @@ def test_fetch_dataset_belonging_to_data_product():
         location=DataLocation("test_data_product_v2"),
     )
     # Introduce sleep to combat race conditions with table association
-    time.sleep(1)
+    time.sleep(2)
 
     response = client.search(
         filters=[MultiSelectFilter(filter_name="urn", included_values=[urn])]

@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Added subdomain property to dataproduct
+- Renamed `source_dataset_location` to `where_to_access_dataset`
+
+### Removed
+
+- openmetadata code
 
 ## [0.12.0] 2024-02-08
 

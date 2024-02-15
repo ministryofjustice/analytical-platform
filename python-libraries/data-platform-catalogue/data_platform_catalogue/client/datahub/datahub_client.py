@@ -241,7 +241,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             description=metadata.description,
             customProperties={
                 "sourceDatasetName": metadata.source_dataset_name,
-                "sourceDatasetLocation": metadata.source_dataset_location,
+                "whereToAccessDataset": metadata.where_to_access_dataset,
                 "sensitivityLevel": str(metadata.data_sensitivity_level),
                 "rowCount": "1177",
             },
