@@ -25,7 +25,7 @@
         "aspect": {
             "json": {
                 "domains": [
-                    "urn:li:domain:legal-aid"
+                    "urn:li:domain:LAA"
                 ]
             }
         }
@@ -56,4 +56,4 @@
             }
         }
     }
-    ]
+]

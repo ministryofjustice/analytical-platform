@@ -31,7 +31,7 @@ from ...search_types import (
     SearchResponse,
     SortOption,
 )
-from ..base import BaseCatalogueClient, CatalogueError, ReferencedEntityMissing, logger
+from ..base import BaseCatalogueClient, CatalogueError, logger
 from .search import SearchClient
 
 DATAHUB_DATA_TYPE_MAPPING = {
@@ -151,41 +151,51 @@ class DataHubCatalogueClient(BaseCatalogueClient):
 
         data_product_urn = "urn:li:dataProduct:" + "".join(name.split())
 
-        if metadata.domain:
-            domain = metadata_dict.pop("domain")
-            domain_urn = self.graph.get_domain_urn_by_name(domain_name=domain)
+        domain = metadata_dict.pop("domain")
+        domain_urn = self.graph.get_domain_urn_by_name(domain_name=domain)
 
-            if domain_urn is None:
-                logger.info(f"creating new domain {domain} for {name}")
-                domain_urn = self.create_domain(domain=domain)
+        if domain_urn is None:
+            logger.info(f"creating new domain {domain} for {name}")
+            domain_urn = self.create_domain(domain=domain)
 
-            data_product_domain = DomainsClass(domains=[domain_urn])
-            metadata_event = MetadataChangeProposalWrapper(
-                entityType="dataproduct",
-                changeType=ChangeTypeClass.UPSERT,
-                entityUrn=data_product_urn,
-                aspect=data_product_domain,
-            )
-            self.graph.emit(metadata_event)
-            logger.info(f"Data Product {name} associated with domain {domain}")
+        subdomain_urn = None
+        if metadata.subdomain:
+            subdomain = metadata_dict.pop("subdomain")
+            subdomain_urn = self.graph.get_domain_urn_by_name(domain_name=subdomain)
 
-            data_product_properties = DataProductPropertiesClass(
-                customProperties={key: str(val) for key, val in metadata_dict.items()},
-                description=description,
-                name=name,
-            )
-            metadata_event = MetadataChangeProposalWrapper(
-                entityType="dataproduct",
-                changeType=ChangeTypeClass.UPSERT,
-                entityUrn=data_product_urn,
-                aspect=data_product_properties,
-            )
-            self.graph.emit(metadata_event)
-            logger.info(f"Properties updated for Data Product {name} ")
+            if subdomain_urn is None:
+                logger.info(f"creating new subdomain {domain} for {name}")
+                domain_urn = self.create_domain(
+                    domain=subdomain, parentDomain=domain_urn
+                )
 
-            return data_product_urn
-        else:
-            raise ReferencedEntityMissing("Data Product must belong to a Domain")
+        data_product_domain = DomainsClass(
+            domains=[subdomain_urn if subdomain_urn else domain_urn]
+        )
+        metadata_event = MetadataChangeProposalWrapper(
+            entityType="dataproduct",
+            changeType=ChangeTypeClass.UPSERT,
+            entityUrn=data_product_urn,
+            aspect=data_product_domain,
+        )
+        self.graph.emit(metadata_event)
+        logger.info(f"Data Product {name} associated with domain {domain}")
+
+        data_product_properties = DataProductPropertiesClass(
+            customProperties={key: str(val) for key, val in metadata_dict.items()},
+            description=description,
+            name=name,
+        )
+        metadata_event = MetadataChangeProposalWrapper(
+            entityType="dataproduct",
+            changeType=ChangeTypeClass.UPSERT,
+            entityUrn=data_product_urn,
+            aspect=data_product_properties,
+        )
+        self.graph.emit(metadata_event)
+        logger.info(f"Properties updated for Data Product {name} ")
+
+        return data_product_urn
 
     def upsert_table(
         self,
@@ -231,8 +241,8 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             description=metadata.description,
             customProperties={
                 "sourceDatasetName": metadata.source_dataset_name,
-                "sourceDatasetLocation": metadata.source_dataset_location,
-                "sensitivityLevel": metadata.data_sensitivity_level,
+                "whereToAccessDataset": metadata.where_to_access_dataset,
+                "sensitivityLevel": metadata.data_sensitivity_level.name,
                 "rowCount": "1177",
             },
         )

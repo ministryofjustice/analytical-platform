@@ -8,8 +8,8 @@
         "json": {
             "customProperties": {
                 "sourceDatasetName": "my_source_table",
-                "sourceDatasetLocation": "s3://databucket/table1",
-                "sensitivityLevel": "TOP SECRET",
+                "whereToAccessDataset": "s3://databucket/table1",
+                "sensitivityLevel": "TOP_SECRET",
                 "rowCount": "1177"
             },
             "description": "bla bla",

@@ -7,6 +7,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0] 2024-02-14
+
+### Changed
+
+- Added subdomain property to dataproduct
+- Renamed `source_dataset_location` to `where_to_access_dataset`
+
+### Removed
+
+- openmetadata code
+
 ## [0.12.0] 2024-02-08
 
 ### Changed
