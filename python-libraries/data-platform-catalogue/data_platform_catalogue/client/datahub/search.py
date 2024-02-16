@@ -52,7 +52,7 @@ class SearchClient:
         if page is None:
             start = 0
         else:
-            start = int(page)
+            start = int(page) * count
 
         types = self._map_result_types(result_types)
         formatted_filters = self._map_filters(filters)
