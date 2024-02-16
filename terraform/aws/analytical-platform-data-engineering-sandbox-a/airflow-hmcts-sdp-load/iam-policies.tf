@@ -1,42 +1,42 @@
 data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
   statement {
-    Sid: "AllowListAllMyBuckets"
-    Effect: "Allow"
-    actions: [
+    sid = "AllowListAllMyBuckets"
+    effect = "Allow"
+    actions = [
       "s3:GetBucketLocation",
       "s3:ListAllMyBuckets"
     ],
-    Resource: [
+    resources = [
       "*"
     ]
   }
   statement {
-    Sid: "AllowGetPutObject"
-    Effect: "Allow"
-    actions: [
+    sid = "AllowGetPutObject"
+    effect = "Allow"
+    actions = [
       "s3:GetObject",
       "s3:PutObject"
     ]
-    resources: [
+    resources = [
       "arn:aws:s3:::aws-athena-query-results-*"
     ]
   }
   statement {
-    Sid: "AllowGetPutDeleteObject"
-    Effect: "Allow"
-    actions: [
+    sid = "AllowGetPutDeleteObject"
+    effect = "Allow"
+    actions = [
       "s3:GetObject",
       "s3:PutObject",
       "s3:DeleteObject"
     ]
-    resources: [
+    resources = [
       "arn:aws:s3:::mojap-athena-query-dump-sandbox/${aws:userid}/*"
     ]
   }
   statement {
-    Sid: "AllowReadAthenaGlue"
-    Effect: "Allow"
-    actions: [
+    sid = "AllowReadAthenaGlue"
+    effect = "Allow"
+    actions = [
       "athena:BatchGetNamedQuery",
       "athena:BatchGetQueryExecution",
       "athena:GetNamedQuery",
@@ -68,14 +68,14 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
       "glue:GetUserDefinedFunction",
       "glue:GetUserDefinedFunctions"
     ]
-    resources: [
+    resources = [
       "*"
     ]
   }
   statement {
-    Sid: "AllowWriteAthenaGlue"
-    Effect: "Allow"
-    actions: [
+    sid = "AllowWriteAthenaGlue"
+    effect = "Allow"
+    actions = [
       "athena:DeleteNamedQuery",
       "glue:BatchCreatePartition",
       "glue:BatchDeletePartition",
@@ -93,14 +93,14 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
       "glue:DeleteUserDefinedFunction",
       "glue:UpdateUserDefinedFunction"
     ]
-    resources: [
+    resources = [
       "*"
     ]
   }
   statement {
-    Sid: "readwrite"
-    Effect: "Allow"
-    actions: [
+    sid = "readwrite"
+    effect = "Allow"
+    actions = [
       "s3:GetObject",
       "s3:GetObjectAcl",
       "s3:GetObjectVersion",
@@ -116,14 +116,14 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
     ]
   }
   statement {
-    Sid: "list"
-    Effect: "Allow"
-    actions: [
+    sid = "list"
+    effect = "Allow"
+    actions = [
       "s3:ListBucket",
       "s3:ListAllMyBuckets",
       "s3:GetBucketLocation"
     ]
-    resources: [
+    resources = [
       "arn:aws:s3:::mojap-athena-query-dump-sandbox",
       "arn:aws:s3:::alpha-hmcts-de-testing-sandbox",
       "arn:aws:s3:::alpha-hmcts-de-testing-sandbox/*"
