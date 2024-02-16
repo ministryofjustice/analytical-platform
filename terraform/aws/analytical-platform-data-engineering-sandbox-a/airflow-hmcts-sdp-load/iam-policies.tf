@@ -1,13 +1,130 @@
 data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
   statement {
-    sid    = "BucketAccess"
-    effect = "Allow"
-    actions = [
-      "s3:ListBucket",
+    Sid: "AllowListAllMyBuckets"
+    Effect: "Allow"
+    actions: [
+      "s3:GetBucketLocation",
+      "s3:ListAllMyBuckets"
+    ],
+    Resource: [
+      "*"
+    ]
+  }
+  statement {
+    Sid: "AllowGetPutObject"
+    Effect: "Allow"
+    actions: [
       "s3:GetObject",
+      "s3:PutObject"
+    ]
+    resources: [
+      "arn:aws:s3:::aws-athena-query-results-*"
+    ]
+  }
+  statement {
+    Sid: "AllowGetPutDeleteObject"
+    Effect: "Allow"
+    actions: [
+      "s3:GetObject",
+      "s3:PutObject",
       "s3:DeleteObject"
     ]
+    resources: [
+      "arn:aws:s3:::mojap-athena-query-dump-sandbox/${aws:userid}/*"
+    ]
+  }
+  statement {
+    Sid: "AllowReadAthenaGlue"
+    Effect: "Allow"
+    actions: [
+      "athena:BatchGetNamedQuery",
+      "athena:BatchGetQueryExecution",
+      "athena:GetNamedQuery",
+      "athena:GetQueryExecution",
+      "athena:GetQueryResults",
+      "athena:GetQueryResultsStream",
+      "athena:GetWorkGroup",
+      "athena:ListNamedQueries",
+      "athena:ListWorkGroups",
+      "athena:StartQueryExecution",
+      "athena:StopQueryExecution",
+      "athena:CancelQueryExecution",
+      "athena:GetCatalogs",
+      "athena:GetExecutionEngine",
+      "athena:GetExecutionEngines",
+      "athena:GetNamespace",
+      "athena:GetNamespaces",
+      "athena:GetTable",
+      "athena:GetTables",
+      "athena:RunQuery",
+      "glue:GetDatabase",
+      "glue:GetDatabases",
+      "glue:GetTable",
+      "glue:GetTables",
+      "glue:GetPartition",
+      "glue:GetPartitions",
+      "glue:BatchGetPartition",
+      "glue:GetCatalogImportStatus",
+      "glue:GetUserDefinedFunction",
+      "glue:GetUserDefinedFunctions"
+    ]
+    resources: [
+      "*"
+    ]
+  }
+  statement {
+    Sid: "AllowWriteAthenaGlue"
+    Effect: "Allow"
+    actions: [
+      "athena:DeleteNamedQuery",
+      "glue:BatchCreatePartition",
+      "glue:BatchDeletePartition",
+      "glue:BatchDeleteTable",
+      "glue:CreateDatabase",
+      "glue:CreatePartition",
+      "glue:CreateTable",
+      "glue:DeleteDatabase",
+      "glue:DeletePartition",
+      "glue:DeleteTable",
+      "glue:UpdateDatabase",
+      "glue:UpdatePartition",
+      "glue:UpdateTable",
+      "glue:CreateUserDefinedFunction",
+      "glue:DeleteUserDefinedFunction",
+      "glue:UpdateUserDefinedFunction"
+    ]
+    resources: [
+      "*"
+    ]
+  }
+  statement {
+    Sid: "readwrite"
+    Effect: "Allow"
+    actions: [
+      "s3:GetObject",
+      "s3:GetObjectAcl",
+      "s3:GetObjectVersion",
+      "s3:DeleteObject",
+      "s3:DeleteObjectVersion",
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+      "s3:RestoreObject"
+    ]     
     resources = [
+      "arn:aws:s3:::alpha-hmcts-de-testing-sandbox",
+      "arn:aws:s3:::alpha-hmcts-de-testing-sandbox/*"
+    ]
+  }
+  statement {
+    Sid: "list"
+    Effect: "Allow"
+    actions: [
+      "s3:ListBucket",
+      "s3:ListAllMyBuckets",
+      "s3:GetBucketLocation"
+    ]
+    resources: [
+      "arn:aws:s3:::mojap-athena-query-dump-sandbox",
       "arn:aws:s3:::alpha-hmcts-de-testing-sandbox",
       "arn:aws:s3:::alpha-hmcts-de-testing-sandbox/*"
     ]
