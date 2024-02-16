@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
       "s3:PutObject"
     ]
     resources = [
-      "arn:aws:s3:::aws-athena-query-results-*"
+      "arn:aws:s3:::aws-athena-query-results-684969100054-eu-west-1"
     ]
   }
   statement {
@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
       "s3:DeleteObject"
     ]
     resources = [
-      "arn:aws:s3:::mojap-athena-query-dump-sandbox/${aws:userid}/*"
+      "arn:aws:s3:::mojap-athena-query-dump-sandbox/$${aws:userid}/*"
     ]
   }
   statement {
