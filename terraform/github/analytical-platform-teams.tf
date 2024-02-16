@@ -30,6 +30,8 @@ locals {
         "bagg3rs",           # Richard Baguley
         "jamesstottmoj",     # James Stott
         "Ed-Bajo",           # Edwin Bajomo
+        "RNTjustice,         # Richard Trist
+        "alex-vonfeldmann,   # Alex von Feldman
       ]
     }
   }
