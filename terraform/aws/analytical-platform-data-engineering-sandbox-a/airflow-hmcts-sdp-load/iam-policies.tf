@@ -5,7 +5,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
     actions = [
       "s3:GetBucketLocation",
       "s3:ListAllMyBuckets"
-    ],
+    ]
     resources = [
       "*"
     ]
@@ -109,7 +109,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
       "s3:PutObject",
       "s3:PutObjectAcl",
       "s3:RestoreObject"
-    ]     
+    ]
     resources = [
       "arn:aws:s3:::alpha-hmcts-de-testing-sandbox",
       "arn:aws:s3:::alpha-hmcts-de-testing-sandbox/*"
