@@ -283,8 +283,8 @@ locals {
         pushers = [module.data_platform_team.id]
       }
     },
-    "analytical-platform-vscode" = {
-      name        = "analytical-platform-vscode"
+    "analytical-platform-visual-studio-code" = {
+      name        = "analytical-platform-visual-studio-code"
       description = "Analytical Platform Visual Studio Code"
       topics      = ["ministryofjustice", "analytical-platform"]
       access = {
