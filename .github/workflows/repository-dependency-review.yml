@@ -22,6 +22,6 @@ jobs:
 
       - name: Dependency review
         id: dependency_review
-        uses: actions/dependency-review-action@80f10bf419f34980065523f5efca7ebed17576aa # v4.1.0
+        uses: actions/dependency-review-action@fd07d42ce87ab09f10c61a2d1a5e59e6c655620a # v4.1.1
         with:
           fail-on-severity: critical
