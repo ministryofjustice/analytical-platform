@@ -260,3 +260,10 @@ def test_fetch_dataset_belonging_to_data_product():
     metadata = response.page_results[0].metadata
     assert metadata["total_data_products"] == 1
     assert metadata["data_products"][0]["name"] == "my_data_product"
+
+
+def test_paginated_search_results_unique():
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+    results1 = client.search(page="1").page_results
+    results2 = client.search(page="2").page_results
+    assert not any(x in results1 for x in results2)
