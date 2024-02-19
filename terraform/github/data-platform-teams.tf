@@ -39,13 +39,12 @@ locals {
         "jamesstottmoj",     # James Stott
       ]
     },
-    "data-platform-labs" = {
-      name           = "data-platform-labs"
-      description    = "Data Platform Labs"
+    "data-catalogue" = {
+      name           = "data-catalogue"
+      description    = "Data Catalogue"
       parent_team_id = module.data_platform_team.id
       members = [
         "jemnery",         # Jeremy Collins
-        "PriyaBasker23",   # Priya Basker
         "seanprivett",     # Sean Privett
         "YvanMOJdigital",  # Yvan Smith
         "LavMatt",         # Matt Laverty
@@ -54,7 +53,7 @@ locals {
         "mitchdawson1982", # Mitch Dawson
         "MatMoore",        # Mat Moore
       ]
-    },
+    }
     "data-platform-audit-and-security" = {
       name           = "data-platform-audit-and-security"
       description    = "Data Platform Audit and Security"
@@ -79,6 +78,21 @@ locals {
         "BrianEllwood",      # Brian Ellwood
         "murad-ali-MoJ",     # Murad Ali
         "EO510",             # Eki Osehenye
+      ]
+    },
+    "data-platform-labs" = {
+      name           = "data-platform-labs"
+      description    = "Data Platform Labs"
+      parent_team_id = module.data_platform_team.id
+      members = [
+        "jemnery",         # Jeremy Collins
+        "seanprivett",     # Sean Privett
+        "YvanMOJdigital",  # Yvan Smith
+        "LavMatt",         # Matt Laverty
+        "murdo-moj",       # Murdo Moyse
+        "tom-webber",      # Tom Webber
+        "mitchdawson1982", # Mitch Dawson
+        "MatMoore",        # Mat Moore
       ]
     }
   }
