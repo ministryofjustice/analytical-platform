@@ -11,10 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- bug fix - search now returns correct page results, where start is
+- bugfix - search now returns correct page results, where start is
 individual search result index.
-- bug fix - `upsert_table` client method now adds dataset name to datahub.
-- bug fix - `upsert_table` client method no longer duplicates assets assocaited
+- bugfix - `upsert_table` client method now adds dataset name to datahub.
+- bugfix - `upsert_table` client method no longer duplicates assets assocaited
 with data product.
 
 ## [0.13.0] 2024-02-14
