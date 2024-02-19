@@ -112,7 +112,6 @@ locals {
       has_discussions = true
       has_projects    = true
       homepage_url    = null
-      pages_enabled   = true
       access = {
         admins  = [module.data_platform_teams["data-catalogue"].id]
         pushers = [module.data_platform_team.id]
