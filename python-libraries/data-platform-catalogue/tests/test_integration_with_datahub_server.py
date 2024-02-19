@@ -262,6 +262,7 @@ def test_fetch_dataset_belonging_to_data_product():
     assert metadata["data_products"][0]["name"] == "my_data_product"
 
 
+@runs_on_development_server
 def test_paginated_search_results_unique():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
     results1 = client.search(page="1").page_results
