@@ -283,6 +283,15 @@ locals {
         pushers = [module.data_platform_team.id]
       }
     },
+    "analytical-platform-vscode" = {
+      name        = "analytical-platform-vscode"
+      description = "Analytical Platform Visual Studio Code"
+      topics      = ["ministryofjustice", "analytical-platform"]
+      access = {
+        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
+      }
+    },
     "ap-terraform-module-template" = {
       name                                   = "ap-terraform-module-template"
       description                            = "Analytical Platform Terraform Module Template"
