@@ -238,6 +238,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         )
 
         dataset_properties = DatasetPropertiesClass(
+            name=metadata.name,
             description=metadata.description,
             customProperties={
                 "sourceDatasetName": metadata.source_dataset_name,
@@ -316,7 +317,8 @@ class DataHubCatalogueClient(BaseCatalogueClient):
                 and data_product_existing_properties.assets is not None
             ):
                 assets = data_product_existing_properties.assets[::]
-                assets.append(data_product_association)
+                if data_product_association not in assets:
+                    assets.append(data_product_association)
             else:
                 assets = [data_product_association]
 

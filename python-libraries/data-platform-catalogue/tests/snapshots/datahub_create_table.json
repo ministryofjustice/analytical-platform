@@ -12,6 +12,7 @@
                 "sensitivityLevel": "TOP_SECRET",
                 "rowCount": "1177"
             },
+            "name": "my_table",
             "description": "bla bla",
             "tags": []
         }

@@ -4,7 +4,7 @@ Integration test that runs against a DataHub server
 Run with:
 export API_URL='https://catalogue.apps-tools.development.data-platform.service.justice.gov.uk/api'
 export JWT_TOKEN=******
-poetry run pytest tests/test_integration_with_server.py
+poetry run pytest tests/test_integration_with_datahub_server.py
 """
 
 import os
@@ -74,6 +74,21 @@ def test_upsert_test_hierarchy():
     # Ensure data went through
     assert client.graph.get_aspect(table_fqn, DatasetPropertiesClass)
     assert client.graph.get_aspect(table_fqn, SchemaMetadataClass)
+
+    dataset_properties = client.graph.get_aspect(
+        table_fqn, aspect_type=DatasetPropertiesClass
+    )
+    # check properties been loaded to datahub dataset
+    assert dataset_properties.description == table.description
+    assert dataset_properties.name == table.name
+    assert (
+        dataset_properties.customProperties["sourceDatasetName"]
+        == table.source_dataset_name
+    )
+    assert (
+        dataset_properties.customProperties["whereToAccessDataset"]
+        == table.where_to_access_dataset
+    )
 
 
 @runs_on_development_server
@@ -245,3 +260,11 @@ def test_fetch_dataset_belonging_to_data_product():
     metadata = response.page_results[0].metadata
     assert metadata["total_data_products"] == 1
     assert metadata["data_products"][0]["name"] == "my_data_product"
+
+
+@runs_on_development_server
+def test_paginated_search_results_unique():
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+    results1 = client.search(page="1").page_results
+    results2 = client.search(page="2").page_results
+    assert not any(x in results1 for x in results2)
