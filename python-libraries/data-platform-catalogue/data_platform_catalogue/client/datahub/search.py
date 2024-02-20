@@ -155,7 +155,7 @@ class SearchClient:
         for result in response["listDataProductAssets"]["searchResults"]:
             entity = result["entity"]
             entity_type = entity["type"]
-            matched_fields = {}
+            matched_fields: dict = {}
             if entity_type == "DATASET":
                 page_results.append(self._parse_dataset(entity, matched_fields))
             else:
