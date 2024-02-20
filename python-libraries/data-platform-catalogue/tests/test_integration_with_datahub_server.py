@@ -268,3 +268,12 @@ def test_paginated_search_results_unique():
     results1 = client.search(page="1").page_results
     results2 = client.search(page="2").page_results
     assert not any(x in results1 for x in results2)
+
+
+@runs_on_development_server
+def test_list_data_product_assets_returns():
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+    assets = client.list_data_product_assets(
+        urn="urn:li:dataProduct:my_data_product", count=20
+    )
+    assert assets
