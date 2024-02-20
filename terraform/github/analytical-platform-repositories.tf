@@ -288,7 +288,7 @@ locals {
       description = "Analytical Platform Visual Studio Code"
       topics      = ["ministryofjustice", "analytical-platform"]
       access = {
-        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        admins  = [module.analytical_platform_team.id]
         pushers = [module.data_platform_team.id]
       }
     },
@@ -412,11 +412,14 @@ locals {
       }
     },
     "ap-terraform-ecr-repository" = {
-      name                = "ap-terraform-ecr-repository"
-      description         = "Analytical Platform Terraform ECR Repository"
-      topics              = ["ministryofjustice", "analytical-platform"]
-      use_template        = true
-      template_repository = "ap-terraform-module-template"
+      name                                   = "ap-terraform-ecr-repository"
+      description                            = "Analytical Platform Terraform ECR Repository"
+      topics                                 = ["ministryofjustice", "analytical-platform"]
+      use_template                           = true
+      template_repository                    = "ap-terraform-module-template"
+      archived                               = true
+      vulnerability_alerts                   = false
+      secret_scanning_push_protection_status = "disabled"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
