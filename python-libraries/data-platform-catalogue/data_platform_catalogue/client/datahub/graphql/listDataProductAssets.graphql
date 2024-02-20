@@ -1,4 +1,4 @@
-query search($urn: String!, $query: String!, $count: Int!, $start: Int!) {
+query dataProductDetails($urn: String!, $query: String!, $count: Int!, $start: Int!) {
   listDataProductAssets(
     urn: $urn
     input: {query: $query, start: $start, count: $count}
@@ -84,60 +84,6 @@ query search($urn: String!, $query: String!, $count: Int!, $start: Int!) {
               properties {
                 name
                 description
-              }
-            }
-          }
-        }
-        ... on DataProduct {
-          urn
-          type
-          ownership {
-            owners {
-              owner {
-                ... on CorpUser {
-                  urn
-                  properties {
-                    fullName
-                    email
-                  }
-                }
-                ... on CorpGroup {
-                  urn
-                  properties {
-                    displayName
-                    email
-                  }
-                }
-              }
-            }
-          }
-          properties {
-            name
-            description
-            customProperties {
-              key
-              value
-            }
-            numAssets
-          }
-          domain {
-            domain {
-              urn
-              id
-              properties {
-                name
-                description
-              }
-            }
-          }
-          tags {
-            tags {
-              tag {
-                urn
-                properties {
-                  name
-                  description
-                }
               }
             }
           }
