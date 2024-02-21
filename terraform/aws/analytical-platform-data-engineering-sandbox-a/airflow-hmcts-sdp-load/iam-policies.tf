@@ -1,6 +1,6 @@
 data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
   statement {
-    sid = "AllowListAllMyBuckets"
+    sid    = "AllowListAllMyBuckets"
     effect = "Allow"
     actions = [
       "s3:GetBucketLocation",
@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
     ]
   }
   statement {
-    sid = "AllowGetPutObject"
+    sid    = "AllowGetPutObject"
     effect = "Allow"
     actions = [
       "s3:GetObject",
@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
     ]
   }
   statement {
-    sid = "AllowGetPutDeleteObject"
+    sid    = "AllowGetPutDeleteObject"
     effect = "Allow"
     actions = [
       "s3:GetObject",
@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
     ]
   }
   statement {
-    sid = "AllowReadAthenaGlue"
+    sid    = "AllowReadAthenaGlue"
     effect = "Allow"
     actions = [
       "athena:BatchGetNamedQuery",
@@ -73,7 +73,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
     ]
   }
   statement {
-    sid = "AllowWriteAthenaGlue"
+    sid    = "AllowWriteAthenaGlue"
     effect = "Allow"
     actions = [
       "athena:DeleteNamedQuery",
@@ -98,7 +98,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
     ]
   }
   statement {
-    sid = "readwrite"
+    sid    = "readwrite"
     effect = "Allow"
     actions = [
       "s3:GetObject",
@@ -116,7 +116,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
     ]
   }
   statement {
-    sid = "list"
+    sid    = "list"
     effect = "Allow"
     actions = [
       "s3:ListBucket",
