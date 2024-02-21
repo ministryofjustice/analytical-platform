@@ -1,5 +1,6 @@
 data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
   statement {
+    #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid    = "AllowListAllMyBuckets"
     effect = "Allow"
     actions = [
@@ -22,6 +23,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
     ]
   }
   statement {
+    #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
     sid    = "AllowGetPutDeleteObject"
     effect = "Allow"
     actions = [
@@ -34,6 +36,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
     ]
   }
   statement {
+    #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid    = "AllowReadAthenaGlue"
     effect = "Allow"
     actions = [
@@ -73,6 +76,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
     ]
   }
   statement {
+    #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid    = "AllowWriteAthenaGlue"
     effect = "Allow"
     actions = [
