@@ -1,4 +1,5 @@
 data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid    = "AllowListAllMyBuckets"
@@ -22,6 +23,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
       "arn:aws:s3:::aws-athena-query-results-684969100054-eu-west-1"
     ]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
     sid    = "AllowGetPutDeleteObject"
@@ -76,6 +78,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
       "*"
     ]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid    = "AllowWriteAthenaGlue"
@@ -102,6 +105,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
       "*"
     ]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     sid    = "readwrite"
     effect = "Allow"
@@ -120,6 +124,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
       "arn:aws:s3:::alpha-hmcts-de-testing-sandbox/*"
     ]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     sid    = "list"
     effect = "Allow"
