@@ -35,6 +35,7 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
       "arn:aws:s3:::mojap-athena-query-dump-sandbox/$${aws:userid}/*"
     ]
   }
+  #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
     sid    = "AllowReadAthenaGlue"
