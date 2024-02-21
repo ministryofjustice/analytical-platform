@@ -22,7 +22,8 @@ def data_product():
         email="justice@justice.gov.uk",
         status=DataProductStatus.DRAFT,
         retention_period_in_days=365,
-        domain="legal-aid",
+        domain="LAA",
+        subdomain="Legal Aid",
         dpia_required=False,
         dpia_location=None,
         last_updated=datetime(2020, 5, 17),
@@ -43,7 +44,7 @@ def table():
         ],
         retention_period_in_days=None,
         source_dataset_name="my_source_table",
-        source_dataset_location="s3://source-bucket/folder",
+        where_to_access_dataset="s3://source-bucket/folder",
         data_sensitivity_level=SecurityClassification.OFFICIAL,
         tags=["test"],
     )
@@ -54,7 +55,8 @@ def test_from_data_product_metadata_dict(data_product):
         {
             "name": "my_data_product",
             "description": "bla bla",
-            "domain": "legal-aid",
+            "domain": "LAA",
+            "subdomain": "Legal Aid",
             "dataProductOwner": "justice@justice.gov.uk",
             "dataProductOwnerDisplayName": "April Gonzalez",
             "dataProductMaintainer": "j.shelvey@digital.justice.gov.uk",

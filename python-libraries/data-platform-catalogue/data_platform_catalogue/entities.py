@@ -44,6 +44,7 @@ class DataProductMetadata:
     email: str
     retention_period_in_days: int
     domain: str
+    subdomain: str | None
     dpia_required: bool
     dpia_location: str | None
     last_updated: datetime
@@ -59,8 +60,6 @@ class DataProductMetadata:
         required fields in the json schema at
         https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/data-platform/data-product-metadata-json-schema
 
-        and should be pass version and owner id as in openmetadata.
-
         Then populates a DataProductMetadata object with the given data.
         """
         new_metadata = DataProductMetadata(
@@ -75,6 +74,7 @@ class DataProductMetadata:
             status=DataProductStatus[metadata["status"]],
             retention_period_in_days=metadata["retentionPeriod"],
             domain=metadata["domain"],
+            subdomain=metadata.get("subdomain"),
             dpia_required=metadata["dpiaRequired"],
             dpia_location=metadata.get("dpiaLocation"),
             last_updated=datetime.strptime(
@@ -102,9 +102,9 @@ class TableMetadata:
     description: str
     column_details: list
     retention_period_in_days: int | None
-    source_dataset_name: str | None = None
-    source_dataset_location: str | None = None
-    data_sensitivity_level: SecurityClassification = SecurityClassification["OFFICIAL"]
+    source_dataset_name: str = ""
+    where_to_access_dataset: str = ""
+    data_sensitivity_level: SecurityClassification = SecurityClassification.OFFICIAL
     tags: list[str] = field(default_factory=list)
     major_version: int = 1
 
@@ -127,8 +127,8 @@ class TableMetadata:
             description=metadata["tableDescription"],
             column_details=metadata["columns"],
             retention_period_in_days=retention_period,
-            source_dataset_name=metadata.get("sourceDatasetName"),
-            source_dataset_location=metadata.get("sourceDatasetLocation"),
+            source_dataset_name=metadata.get("sourceDatasetName", ""),
+            where_to_access_dataset=metadata.get("sourceDatasetLocation", ""),
             data_sensitivity_level=SecurityClassification[
                 metadata.get("securityClassification", "OFFICIAL")
             ],

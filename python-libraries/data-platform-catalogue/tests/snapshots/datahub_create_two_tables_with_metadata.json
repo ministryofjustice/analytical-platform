@@ -8,10 +8,11 @@
         "json": {
             "customProperties": {
                 "sourceDatasetName": "my_source_table",
-                "sourceDatasetLocation": "s3://databucket/table1",
-                "sensitivityLevel": "TOP SECRET",
+                "whereToAccessDataset": "s3://databucket/table1",
+                "sensitivityLevel": "TOP_SECRET",
                 "rowCount": "1177"
             },
+            "name": "my_table",
             "description": "bla bla",
             "tags": []
         }
@@ -74,13 +75,26 @@
 },
 {
     "entityType": "domain",
-    "entityUrn": "urn:li:domain:legal-aid",
+    "entityUrn": "urn:li:domain:LAA",
     "changeType": "UPSERT",
     "aspectName": "domainProperties",
     "aspect": {
         "json": {
-            "name": "legal-aid",
+            "name": "LAA",
             "description": ""
+        }
+    }
+},
+{
+    "entityType": "domain",
+    "entityUrn": "urn:li:domain:Legal Aid",
+    "changeType": "UPSERT",
+    "aspectName": "domainProperties",
+    "aspect": {
+        "json": {
+            "name": "Legal Aid",
+            "description": "",
+            "parentDomain": "urn:li:domain:LAA"
         }
     }
 },
@@ -92,7 +106,7 @@
     "aspect": {
         "json": {
             "domains": [
-                "urn:li:domain:legal-aid"
+                "urn:li:domain:Legal Aid"
             ]
         }
     }
@@ -153,10 +167,11 @@
         "json": {
             "customProperties": {
                 "sourceDatasetName": "my_source_table",
-                "sourceDatasetLocation": "s3://databucket/table2",
+                "whereToAccessDataset": "s3://databucket/table2",
                 "sensitivityLevel": "OFFICIAL",
                 "rowCount": "1177"
             },
+            "name": "my_table2",
             "description": "this is a different table",
             "tags": []
         }
@@ -213,31 +228,6 @@
                     "recursive": false,
                     "isPartOfKey": false
                 }
-            ]
-        }
-    }
-},
-{
-    "entityType": "domain",
-    "entityUrn": "urn:li:domain:legal-aid",
-    "changeType": "UPSERT",
-    "aspectName": "domainProperties",
-    "aspect": {
-        "json": {
-            "name": "legal-aid",
-            "description": ""
-        }
-    }
-},
-{
-    "entityType": "dataproduct",
-    "entityUrn": "urn:li:dataProduct:my_data_product",
-    "changeType": "UPSERT",
-    "aspectName": "domains",
-    "aspect": {
-        "json": {
-            "domains": [
-                "urn:li:domain:legal-aid"
             ]
         }
     }
