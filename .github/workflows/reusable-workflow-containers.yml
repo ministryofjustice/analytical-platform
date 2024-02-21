@@ -150,7 +150,7 @@ jobs:
 
           if [[ "${{ env.changelog_updated }}" == "true" ]]; then
             echo "::notice::OK: CHANGELOG.md has been updated"
-            export failBuild="false"
+            [[ "$failBuild" != "true" ]] && export failBuild="false"
           elif [[ "${{ env.changelog_updated }}" == "false" ]]; then
             echo "::error::FAIL: CHANGELOG.md needs to be updated"
             export failBuild="true"
