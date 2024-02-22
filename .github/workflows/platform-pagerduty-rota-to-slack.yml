@@ -20,8 +20,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - pagerduty-schedule-id: POE95CC # Data Platform
-            slack-channel: C04M8224WCV # data-platform-apps-and-tools
+          - pagerduty-schedule-id: POE95CC # Analytical Platform
+            slack-channel: C04M8224WCV # analytical-platform
     steps:
       - name: Checkout
         id: checkout
