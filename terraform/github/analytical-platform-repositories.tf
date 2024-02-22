@@ -1,16 +1,52 @@
 locals {
+  /* New World */
   analytical_platform_repositories = {
     "analytical-platform" = {
       name         = "analytical-platform"
       description  = "Analytical Platform"
       topics       = ["ministryofjustice", "analytical-platform"]
-      has_issues   = false
-      homepage_url = "https://user-guidance.analytical-platform.service.justice.gov.uk"
+      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
       access = {
-        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
-        pushers = [module.data_platform_team.id]
+        admins = [module.analytical_platform_team.id]
       }
-    }
+    },
+    "analytical-platform-runbooks" = {
+      name          = "analytical-platform-runbooks"
+      description   = "Analytical Platform Runbooks"
+      topics        = ["ministryofjustice", "analytical-platform"]
+      has_issues    = true
+      homepage_url  = "https://runbooks.analytical-platform.service.justice.gov.uk"
+      pages_enabled = true
+      pages_configuration = {
+        cname = "runbooks.analytical-platform.service.justice.gov.uk"
+        source = {
+          branch = "main"
+          path   = "/"
+        }
+      }
+      access = {
+        admins = [module.analytical_platform_team.id]
+      }
+    },
+    "analytical-platform-user-guide" = {
+      name          = "analytical-platform-user-guide"
+      description   = "Analytical Platform User Guide"
+      topics        = ["ministryofjustice", "analytical-platform"]
+      has_issues    = true
+      homepage_url  = "https://user-guide.analytical-platform.service.justice.gov.uk"
+      pages_enabled = true
+      pages_configuration = {
+        cname = "user-guide.analytical-platform.service.justice.gov.uk"
+        source = {
+          branch = "main"
+          path   = "/"
+        }
+      }
+      access = {
+        admins = [module.analytical_platform_team.id]
+      }
+    },
+    /* Old World */
     "analytics-platform-infrastructure" = {
       name                                   = "analytics-platform-infrastructure"
       description                            = "Analytical Platform Infrastructure"
@@ -247,6 +283,15 @@ locals {
         pushers = [module.data_platform_team.id]
       }
     },
+    "analytical-platform-visual-studio-code" = {
+      name        = "analytical-platform-visual-studio-code"
+      description = "Analytical Platform Visual Studio Code"
+      topics      = ["ministryofjustice", "analytical-platform"]
+      access = {
+        admins  = [module.analytical_platform_team.id]
+        pushers = [module.data_platform_team.id]
+      }
+    },
     "ap-terraform-module-template" = {
       name                                   = "ap-terraform-module-template"
       description                            = "Analytical Platform Terraform Module Template"
@@ -367,11 +412,14 @@ locals {
       }
     },
     "ap-terraform-ecr-repository" = {
-      name                = "ap-terraform-ecr-repository"
-      description         = "Analytical Platform Terraform ECR Repository"
-      topics              = ["ministryofjustice", "analytical-platform"]
-      use_template        = true
-      template_repository = "ap-terraform-module-template"
+      name                                   = "ap-terraform-ecr-repository"
+      description                            = "Analytical Platform Terraform ECR Repository"
+      topics                                 = ["ministryofjustice", "analytical-platform"]
+      use_template                           = true
+      template_repository                    = "ap-terraform-module-template"
+      archived                               = true
+      vulnerability_alerts                   = false
+      secret_scanning_push_protection_status = "disabled"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]

@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] - 2024-02-19
+
+### Changed
+
+- Dependabots: Updates to `awswrangler`, `boto` and `botocore`.
+
 ## [1.1.1] - 2024-02-13
 
 ### Changed

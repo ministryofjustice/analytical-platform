@@ -1,0 +1,94 @@
+query dataProductDetails($urn: String!, $query: String!, $count: Int!, $start: Int!) {
+  listDataProductAssets(
+    urn: $urn
+    input: {query: $query, start: $start, count: $count}
+  ) {
+    start
+    count
+    total
+    searchResults {
+      entity {
+        type
+        ... on Dataset {
+          urn
+          type
+          platform {
+            name
+          }
+          relationships(
+            input: {types: ["DataProductContains"], direction: INCOMING, count: 10}
+          ) {
+            total
+            relationships {
+              entity {
+                urn
+                ... on DataProduct {
+                  properties {
+                    name
+                  }
+                }
+              }
+            }
+          }
+          ownership {
+            owners {
+              owner {
+                ... on CorpUser {
+                  urn
+                  properties {
+                    fullName
+                    email
+                  }
+                }
+                ... on CorpGroup {
+                  urn
+                  properties {
+                    displayName
+                    email
+                  }
+                }
+              }
+            }
+          }
+          name
+          properties {
+            name
+            qualifiedName
+            description
+            customProperties {
+              key
+              value
+            }
+            created
+            lastModified
+          }
+          editableProperties {
+            description
+          }
+          tags {
+            tags {
+              tag {
+                urn
+                properties {
+                  name
+                  description
+                }
+              }
+            }
+          }
+          lastIngested
+          domain {
+            domain {
+              urn
+              id
+              properties {
+                name
+                description
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

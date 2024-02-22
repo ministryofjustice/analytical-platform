@@ -8,10 +8,11 @@
         "json": {
             "customProperties": {
                 "sourceDatasetName": "my_source_table",
-                "sourceDatasetLocation": "s3://databucket/table1",
-                "sensitivityLevel": "TOP SECRET",
+                "whereToAccessDataset": "s3://databucket/table1",
+                "sensitivityLevel": "TOP_SECRET",
                 "rowCount": "1177"
             },
+            "name": "my_table",
             "description": "bla bla",
             "tags": []
         }
@@ -74,13 +75,26 @@
 },
 {
     "entityType": "domain",
-    "entityUrn": "urn:li:domain:legal-aid",
+    "entityUrn": "urn:li:domain:LAA",
     "changeType": "UPSERT",
     "aspectName": "domainProperties",
     "aspect": {
         "json": {
-            "name": "legal-aid",
+            "name": "LAA",
             "description": ""
+        }
+    }
+},
+{
+    "entityType": "domain",
+    "entityUrn": "urn:li:domain:Legal Aid",
+    "changeType": "UPSERT",
+    "aspectName": "domainProperties",
+    "aspect": {
+        "json": {
+            "name": "Legal Aid",
+            "description": "",
+            "parentDomain": "urn:li:domain:LAA"
         }
     }
 },
@@ -92,7 +106,7 @@
     "aspect": {
         "json": {
             "domains": [
-                "urn:li:domain:legal-aid"
+                "urn:li:domain:Legal Aid"
             ]
         }
     }

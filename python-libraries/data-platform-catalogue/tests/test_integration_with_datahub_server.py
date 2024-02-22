@@ -4,10 +4,11 @@ Integration test that runs against a DataHub server
 Run with:
 export API_URL='https://catalogue.apps-tools.development.data-platform.service.justice.gov.uk/api'
 export JWT_TOKEN=******
-poetry run pytest tests/test_integration_with_server.py
+poetry run pytest tests/test_integration_with_datahub_server.py
 """
 
 import os
+import time
 from datetime import datetime
 
 import pytest
@@ -35,9 +36,10 @@ def test_upsert_test_hierarchy():
         maintainer="j.shelvey@digital.justice.gov.uk",
         maintainer_display_name="Jonjo Shelvey",
         email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT,
+        status=DataProductStatus.DRAFT.name,
         retention_period_in_days=365,
-        domain="legal-aid",
+        domain="LAA",
+        subdomain="Legal Aid",
         dpia_required=False,
         dpia_location=None,
         last_updated=datetime(2020, 5, 17),
@@ -55,7 +57,7 @@ def test_upsert_test_hierarchy():
         ],
         retention_period_in_days=365,
         source_dataset_name="my_source_table",
-        source_dataset_location="s3://databucket/folder",
+        where_to_access_dataset="s3://databucket/folder",
         tags=["test"],
     )
 
@@ -72,6 +74,21 @@ def test_upsert_test_hierarchy():
     # Ensure data went through
     assert client.graph.get_aspect(table_fqn, DatasetPropertiesClass)
     assert client.graph.get_aspect(table_fqn, SchemaMetadataClass)
+
+    dataset_properties = client.graph.get_aspect(
+        table_fqn, aspect_type=DatasetPropertiesClass
+    )
+    # check properties been loaded to datahub dataset
+    assert dataset_properties.description == table.description
+    assert dataset_properties.name == table.name
+    assert (
+        dataset_properties.customProperties["sourceDatasetName"]
+        == table.source_dataset_name
+    )
+    assert (
+        dataset_properties.customProperties["whereToAccessDataset"]
+        == table.where_to_access_dataset
+    )
 
 
 @runs_on_development_server
@@ -95,9 +112,10 @@ def test_search_for_data_product():
         maintainer="j.shelvey@digital.justice.gov.uk",
         maintainer_display_name="Jonjo Shelvey",
         email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT,
+        status=DataProductStatus.DRAFT.name,
         retention_period_in_days=365,
-        domain="legal-aid",
+        domain="LAA",
+        subdomain="Legal Aid",
         dpia_required=False,
         dpia_location=None,
         last_updated=datetime(2020, 5, 17),
@@ -108,10 +126,10 @@ def test_search_for_data_product():
     client.upsert_data_product(data_product)
 
     response = client.search(
-        query="lfdskjflkjflkjsdflksfjds", result_types=(ResultType.DATA_PRODUCT,)
+        query="my_data_product", result_types=(ResultType.DATA_PRODUCT,)
     )
     assert response.total_results >= 1
-    assert response.page_results[0].id == "urn:li:dataProduct:lfdskjflkjflkjsdflksfjds"
+    assert response.page_results[0].id == "urn:li:dataProduct:my_data_product"
 
 
 @runs_on_development_server
@@ -138,9 +156,10 @@ def test_domain_facets_are_returned():
         maintainer="j.shelvey@digital.justice.gov.uk",
         maintainer_display_name="Jonjo Shelvey",
         email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT,
+        status=DataProductStatus.DRAFT.name,
         retention_period_in_days=365,
-        domain="legal-aid",
+        domain="LAA",
+        subdomain="Legal Aid",
         dpia_required=False,
         dpia_location=None,
         last_updated=datetime(2020, 5, 17),
@@ -168,9 +187,10 @@ def test_filter_by_urn():
         maintainer="j.shelvey@digital.justice.gov.uk",
         maintainer_display_name="Jonjo Shelvey",
         email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT,
+        status=DataProductStatus.DRAFT.name,
         retention_period_in_days=365,
-        domain="legal-aid",
+        domain="LAA",
+        subdomain="Legal Aid",
         dpia_required=False,
         dpia_location=None,
         last_updated=datetime(2020, 5, 17),
@@ -199,9 +219,10 @@ def test_fetch_dataset_belonging_to_data_product():
         maintainer="j.shelvey@digital.justice.gov.uk",
         maintainer_display_name="Jonjo Shelvey",
         email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT,
+        status=DataProductStatus.DRAFT.name,
         retention_period_in_days=365,
-        domain="legal-aid",
+        domain="LAA",
+        subdomain="Legal Aid",
         dpia_required=False,
         dpia_location=None,
         last_updated=datetime(2020, 5, 17),
@@ -219,7 +240,7 @@ def test_fetch_dataset_belonging_to_data_product():
         ],
         retention_period_in_days=365,
         source_dataset_name="my_source_table",
-        source_dataset_location="s3://databucket/folder",
+        where_to_access_dataset="s3://databucket/folder",
         tags=["test"],
     )
 
@@ -228,13 +249,31 @@ def test_fetch_dataset_belonging_to_data_product():
         data_product_metadata=data_product,
         location=DataLocation("test_data_product_v2"),
     )
+    # Introduce sleep to combat race conditions with table association
+    time.sleep(2)
 
     response = client.search(
         filters=[MultiSelectFilter(filter_name="urn", included_values=[urn])]
     )
-
     assert response.total_results == 1
 
     metadata = response.page_results[0].metadata
     assert metadata["total_data_products"] == 1
-    assert metadata["data_products"][0]["name"] == "test_data_product"
+    assert metadata["data_products"][0]["name"] == "my_data_product"
+
+
+@runs_on_development_server
+def test_paginated_search_results_unique():
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+    results1 = client.search(page="1").page_results
+    results2 = client.search(page="2").page_results
+    assert not any(x in results1 for x in results2)
+
+
+@runs_on_development_server
+def test_list_data_product_assets_returns():
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+    assets = client.list_data_product_assets(
+        urn="urn:li:dataProduct:my_data_product", count=20
+    )
+    assert assets
