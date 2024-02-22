@@ -139,24 +139,22 @@ jobs:
         id: evaluate_checks
         run: |
           echo "::notice::# Preflight Checks"
-
+          failBuild=0
           if [[ "${{ env.tag_exists }}" == "true" ]]; then
             echo "::error::FAIL: Container tag already exists"
-            export failBuild="true"
+            failBuild=$((failBuild + 1))
           else
             echo "::notice::OK: Container tag does not exist"
-            export failBuild="false"
           fi
 
           if [[ "${{ env.changelog_updated }}" == "true" ]]; then
             echo "::notice::OK: CHANGELOG.md has been updated"
-            [[ "$failBuild" != "true" ]] && export failBuild="false"
+            failBuild=$((failBuild + 1))
           elif [[ "${{ env.changelog_updated }}" == "false" ]]; then
             echo "::error::FAIL: CHANGELOG.md needs to be updated"
-            export failBuild="true"
           fi
 
-          if [[ "${failBuild}" == "true" ]]; then
+          if [[ $failBuild -gt 0 ]]; then
             exit 1
           fi
 
