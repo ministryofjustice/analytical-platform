@@ -1,9 +1,9 @@
 locals {
   escalation_policies = [
     {
-      name        = "Data Platform"
-      description = "Escalation policy for the Data Platform team"
-      team        = module.teams["Data Platform"].id
+      name        = "Analytical Platform"
+      description = "Escalation policy for the Analytical Platform team"
+      team        = module.teams["Analytical Platform"].id
       num_loops   = 2
       rules = [
         {
@@ -11,7 +11,7 @@ locals {
           targets = [
             {
               type = "schedule_reference"
-              id   = module.schedules["Data Platform"].id
+              id   = module.schedules["Analytical Platform"].id
             }
           ]
         }

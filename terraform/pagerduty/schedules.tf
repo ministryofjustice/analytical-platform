@@ -1,8 +1,8 @@
 locals {
   schedules = [
     {
-      name = "Data Platform"
-      team = module.teams["Data Platform"].id
+      name = "Analytical Platform"
+      team = module.teams["Analytical Platform"].id
       layers = [
         {
           name                         = "Daily Support Rota"
