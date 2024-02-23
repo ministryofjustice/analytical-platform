@@ -1,10 +1,10 @@
 locals {
   business_services = [
     {
-      name             = "Data Platform"
-      description      = "Connecting the right people, systems, and data to improve justice outcomes"
-      point_of_contact = "#ask-data-platform"
-      team             = module.teams["Data Platform"].id
+      name             = "Analytical Platform"
+      description      = "Ministry of Justice's data analysis platform."
+      point_of_contact = "#analytical-platform"
+      team             = module.teams["Analytical Platform"].id
       supporting_services = [
         {
           name = "Cloud Platform"

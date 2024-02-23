@@ -1,7 +1,7 @@
 locals {
   teams = [
     {
-      name = "Data Platform"
+      name = "Analytical Platform"
       managers = [
         module.users["jacob.woffenden@digital.justice.gov.uk"].id,
         module.users["julia.lawrence@digital.justice.gov.uk"].id,
