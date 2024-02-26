@@ -358,7 +358,7 @@ class SearchClient:
             last_updated=None,
         )
 
-    def get_glossary_terms(self, count: int = 1000)-> SearchResult:
+    def get_glossary_terms(self, count: int=1000)-> SearchResponse:
         "Get some number of glossary terms from DataHub"
         variables = {"count": count}
         try:

@@ -278,6 +278,7 @@ def test_list_data_product_assets_returns():
     )
     assert assets
 
+
 @runs_on_development_server
 def test_get_glossary_terms_returns():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)

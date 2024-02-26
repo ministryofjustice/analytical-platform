@@ -745,42 +745,42 @@ def test_list_data_product_assets(mock_graph, searcher):
 def test_get_glossary_terms(mock_graph, searcher):
     datahub_response = {
         "searchAcrossEntities": {
-        "start": 0,
-        "count": 2,
-        "total": 2,
-        "searchResults": [
-            {
-            "entity": {
-                "urn": "urn:li:glossaryTerm:022b9b68-c211-47ae-aef0-2db13acfeca8",
-                "properties": {
-                "name": "IAO",
-                "description": "Information asset owner.\n"
-                },
-                "parentNodes": {
-                "nodes": [
-                    {
-                    "properties": {
-                        "name": "Data protection terms",
-                        "description": "Data protection terms, people and processes referenced in the catalogue."
+            "start": 0,
+            "count": 2,
+            "total": 2,
+            "searchResults": [
+                {
+                    "entity": {
+                        "urn": "urn:li:glossaryTerm:022b9b68-c211-47ae-aef0-2db13acfeca8",
+                        "properties": {
+                            "name": "IAO",
+                            "description": "Information asset owner.\n"
+                        },
+                        "parentNodes": {
+                            "nodes": [
+                                {
+                                    "properties": {
+                                        "name": "Data protection terms",
+                                        "description": "Data protection terms, people and processes referenced in the catalogue."
+                                    }
+                                }
+                            ]
+                        }
                     }
-                    }
-                ]
-                }
-            }
-            },
-            {
-            "entity": {
-                "urn": "urn:li:glossaryTerm:0eb7af28-62b4-4149-a6fa-72a8f1fea1e6",
-                "properties": {
-                "name": "Security classification",
-                "description": "Only data that is 'official' (including official-sensitive) is presented in the catalogue."
                 },
-                "parentNodes": {
-                "nodes": []
-                }
-            }
-            },
-        ]
+                {
+                    "entity": {
+                        "urn": "urn:li:glossaryTerm:0eb7af28-62b4-4149-a6fa-72a8f1fea1e6",
+                        "properties": {
+                            "name": "Security classification",
+                            "description": "Only data that is 'official' (including official-sensitive) is presented in the catalogue."
+                        },
+                        "parentNodes": {
+                            "nodes": []
+                        }
+                    }
+                },
+            ]
         }
     }
 
