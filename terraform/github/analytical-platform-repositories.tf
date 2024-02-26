@@ -457,9 +457,9 @@ locals {
       name                                   = "analytical-platform-image-build-template"
       description                            = "Analytical Platform Image Build Template"
       is_template                            = true
-      use_template                           = false
+      use_template                           = true
+      template_repository                    = "template-repository"
       visibility                             = "public"
-      advanced_security_status               = "disabled"
       secret_scanning_status                 = "disabled"
       secret_scanning_push_protection_status = "disabled"
       access = {
