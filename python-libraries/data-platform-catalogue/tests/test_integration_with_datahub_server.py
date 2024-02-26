@@ -277,3 +277,10 @@ def test_list_data_product_assets_returns():
         urn="urn:li:dataProduct:my_data_product", count=20
     )
     assert assets
+
+
+@runs_on_development_server
+def test_get_glossary_terms_returns():
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+    assets = client.get_glossary_terms(count=20)
+    assert assets
