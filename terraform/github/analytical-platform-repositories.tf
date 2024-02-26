@@ -453,8 +453,8 @@ locals {
         pushers = [module.data_platform_team.id]
       }
     },
-    "analytical-platform-image-builder" = {
-      name                                   = "analytical-platform-image-builder"
+    "analytical-platform-image-build-template" = {
+      name                                   = "analytical-platform-image-build-template"
       description                            = "Analytical Platform Image Build Template"
       is_template                            = true
       use_template                           = false
