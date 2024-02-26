@@ -15,6 +15,7 @@ aws-analytical-platform-data-production-cjs-dashboard-app: terraform/aws/analyti
 aws-analytical-platform-data-production-control-panel-message-broker: terraform/aws/analytical-platform-data-production/control-panel-message-broker/**
 aws-analytical-platform-data-production-create-a-derived-table: terraform/aws/analytical-platform-data-production/create-a-derived-table/**
 aws-analytical-platform-data-production-openmetadata: terraform/aws/analytical-platform-data-production/openmetadata/**
+aws-analytical-platform-data-production-powerbi-gateway: terraform/aws/analytical-platform-data-production/powerbi-gateway/**
 aws-analytical-platform-data-production-rds-s3-exports: terraform/aws/analytical-platform-data-production/rds-s3-exports/**
 aws-analytical-platform-data-production-s3-glue-crawler: terraform/aws/analytical-platform-data-production/s3-glue-crawler/**
 aws-analytical-platform-development-auth0-log-streams: terraform/aws/analytical-platform-development/auth0-log-streams/**
