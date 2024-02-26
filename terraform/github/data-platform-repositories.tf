@@ -103,19 +103,6 @@ locals {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
-    },
-    "data-platform-image_builder" = {
-      name                                   = "data-platform-image-build-template"
-      description                            = "Data Platform Image Build Template"
-      topics                                 = ["ministryofjustice", "data-platform"]
-      visibility                             = "internal"
-      advanced_security_status               = "disabled"
-      secret_scanning_status                 = "disabled"
-      secret_scanning_push_protection_status = "disabled"
-      access = {
-        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
-        pushers = [module.data_platform_team.id]
-      }
     }
     /*
       Data Platform Repositories that could be managed in code:

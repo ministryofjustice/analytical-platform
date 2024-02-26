@@ -452,6 +452,20 @@ locals {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
+    },
+    "analytical-platform-image-builder" = {
+      name                                   = "analytical-platform-image-builder"
+      description                            = "Analytical Platform Image Build Template"
+      is_template                            = true
+      use_template                           = false
+      visibility                             = "internal"
+      advanced_security_status               = "disabled"
+      secret_scanning_status                 = "disabled"
+      secret_scanning_push_protection_status = "disabled"
+      access = {
+        admins  = [module.analytical_platform_team.id]
+        pushers = [module.data_platform_team.id]
+      }
     }
     /*
       Analytical Platform Repositories that could be managed in code:
