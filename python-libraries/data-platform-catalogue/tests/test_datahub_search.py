@@ -761,7 +761,7 @@ def test_get_glossary_terms(mock_graph, searcher):
                                 {
                                     "properties": {
                                         "name": "Data protection terms",
-                                        "description": "Data protection terms, people and processes referenced in the catalogue.",
+                                        "description": "Data protection terms",
                                     }
                                 }
                             ]
@@ -773,7 +773,7 @@ def test_get_glossary_terms(mock_graph, searcher):
                         "urn": "urn:li:glossaryTerm:0eb7af28-62b4-4149-a6fa-72a8f1fea1e6",
                         "properties": {
                             "name": "Security classification",
-                            "description": "Only data that is 'official' (including official-sensitive) is presented in the catalogue.",
+                            "description": "Only data that is 'official'",
                         },
                         "parentNodes": {"nodes": []},
                     }
@@ -798,7 +798,7 @@ def test_get_glossary_terms(mock_graph, searcher):
                         {
                             "properties": {
                                 "name": "Data protection terms",
-                                "description": "Data protection terms, people and processes referenced in the catalogue.",
+                                "description": "Data protection terms",
                             }
                         }
                     ]
@@ -808,7 +808,7 @@ def test_get_glossary_terms(mock_graph, searcher):
             SearchResult(
                 id="urn:li:glossaryTerm:0eb7af28-62b4-4149-a6fa-72a8f1fea1e6",
                 name="Security classification",
-                description="Only data that is 'official' (including official-sensitive) is presented in the catalogue.",
+                description="Only data that is 'official'",
                 metadata={"parentNodes": []},
                 result_type=ResultType.GLOSSARY_TERM,
             ),
