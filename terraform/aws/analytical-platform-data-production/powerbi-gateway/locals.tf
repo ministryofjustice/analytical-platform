@@ -1,17 +1,13 @@
 locals {
-  name          = "data-production-powerbi-vpc"
-  instance_name = "powerbi-gateway"
+  name = "data-production-powerbi-vpc"
 
   vpc_cidr = "10.0.0.0/16"
   azs      = slice(data.aws_availability_zones.available.names, 0, 2)
 
-  powerbi_gateway_role = "dpat-production-powerbi"
-  powerbi_target_accounts = [
-    var.account_ids["analytical-platform-data-production"]
-  ]
+  powerbi_gateway_role = "data-production-powerbi"
 
   powerbi_gateway_ec2 = {
-    instance_name       = "dpat-production-powerbi"
+    instance_name       = "data-production-powerbi"
     most_recent         = true
     name                = ["Windows_Server-2022-English-Full-Base-*"]
     virtualization_type = "hvm"
