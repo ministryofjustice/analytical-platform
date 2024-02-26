@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2024-02-26
+
+### Changed
+
+- Dependabots: Updates to `panda`
+
+## [1.2.1] - 2024-02-26
+
+### Changed
+
+- Dependabots: Updates to `botocore`
+
 ## [1.2.0] - 2024-02-23
 
 ### Changed
