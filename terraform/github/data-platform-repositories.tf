@@ -104,7 +104,6 @@ locals {
         pushers = [module.data_platform_team.id]
       }
     }
-    }
     /*
       Data Platform Repositories that could be managed in code:
         - data-platform-terraform-modularisation-spike
