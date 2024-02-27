@@ -269,6 +269,17 @@
     ]
   },
   {
+    "name": "Robin Linacre",
+    "github": "robinL",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer",
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer",
+      "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
     "name": "Afua Kokayi",
     "github": "afua-moj",
     "access": [
@@ -468,7 +479,7 @@
       "analytical-platform-data-engineering-production-data-engineer"
     ]
   },
-    {
+  {
     "name": "Chris Sheldon",
     "github": "csheldon155",
     "access": [
