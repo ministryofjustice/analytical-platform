@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- a get_glossary_terms to ABC for catalogue client for mocking the catalogue in the tests
+- a get_glossary_terms to catalogue ABC for mocking in pytest
 
 ## [0.16.0] 2024-02-20
 
