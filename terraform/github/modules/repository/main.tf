@@ -83,12 +83,10 @@ resource "github_branch_protection" "this" {
   allows_deletions                = var.branch_protection_allows_deletions
   enforce_admins                  = var.branch_protection_enforce_admins
   force_push_bypassers            = var.branch_protection_force_push_bypassers
-  push_restrictions               = var.branch_protection_push_restrictions
   require_signed_commits          = var.branch_protection_require_signed_commits
   required_linear_history         = var.branch_protection_required_linear_history
   require_conversation_resolution = var.branch_protection_require_conversation_resolution
   allows_force_pushes             = var.branch_protection_allows_force_pushes
-  blocks_creations                = var.branch_protection_blocks_creations
   lock_branch                     = var.branch_protection_lock_branch
 
   required_pull_request_reviews {

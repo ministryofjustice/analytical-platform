@@ -7,15 +7,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.1] 2024-02-20
+
+### Added
+
+- a get_glossary_terms to catalogue ABC for mocking in pytest
+
+## [0.16.0] 2024-02-20
+
+### Added
+
+- a get_glossary method in the datahub client and SearchClient
+
+## [0.15.0] 2024-02-20
+
+### Added
+
+- a list_data_product_assets method the the datahub client and SearchClient
+
 ## [0.14.0] 2024-02-19
 
 ### Changed
 
 - bugfix - search now returns correct page results, where start is
-individual search result index.
+  individual search result index.
 - bugfix - `upsert_table` client method now adds dataset name to datahub.
 - bugfix - `upsert_table` client method no longer duplicates assets assocaited
-with data product.
+  with data product.
 
 ## [0.13.0] 2024-02-14
 

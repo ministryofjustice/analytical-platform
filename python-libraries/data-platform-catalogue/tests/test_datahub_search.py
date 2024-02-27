@@ -676,3 +676,141 @@ def test_result_with_data_product(mock_graph, searcher):
             )
         ],
     )
+
+
+def test_list_data_product_assets(mock_graph, searcher):
+    datahub_response = {
+        "listDataProductAssets": {
+            "start": 0,
+            "count": 20,
+            "total": 1,
+            "searchResults": [
+                {
+                    "entity": {
+                        "type": "DATASET",
+                        "urn": "urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",  # noqa E501
+                        "name": "calm-pagoda-323403.jaffle_shop.customers",
+                        "relationships": {
+                            "total": 1,
+                            "relationships": [
+                                {
+                                    "entity": {
+                                        "urn": "urn:abc",
+                                        "properties": {"name": "abc"},
+                                    }
+                                }
+                            ],
+                        },
+                        "properties": {
+                            "name": "customers",
+                            "description": "just some customers",
+                        },
+                    },
+                }
+            ],
+        }
+    }
+
+    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+    response = searcher.list_data_product_assets(
+        urn="urn:li:dataProduct:test",
+        start=0,
+        count=20,
+    )
+
+    assert response == SearchResponse(
+        total_results=1,
+        page_results=[
+            SearchResult(
+                id="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
+                matches={},
+                result_type=ResultType.TABLE,
+                name="customers",
+                description="just some customers",
+                metadata={
+                    "owner": "",
+                    "owner_email": "",
+                    "data_products": [{"id": "urn:abc", "name": "abc"}],
+                    "total_data_products": 1,
+                    "domain_id": "",
+                    "domain_name": "",
+                },
+                tags=[],
+            )
+        ],
+    )
+
+
+def test_get_glossary_terms(mock_graph, searcher):
+    datahub_response = {
+        "searchAcrossEntities": {
+            "start": 0,
+            "count": 2,
+            "total": 2,
+            "searchResults": [
+                {
+                    "entity": {
+                        "urn": "urn:li:glossaryTerm:022b9b68-c211-47ae-aef0-2db13acfeca8",
+                        "properties": {
+                            "name": "IAO",
+                            "description": "Information asset owner.\n",
+                        },
+                        "parentNodes": {
+                            "nodes": [
+                                {
+                                    "properties": {
+                                        "name": "Data protection terms",
+                                        "description": "Data protection terms",
+                                    }
+                                }
+                            ]
+                        },
+                    }
+                },
+                {
+                    "entity": {
+                        "urn": "urn:li:glossaryTerm:0eb7af28-62b4-4149-a6fa-72a8f1fea1e6",
+                        "properties": {
+                            "name": "Security classification",
+                            "description": "Only data that is 'official'",
+                        },
+                        "parentNodes": {"nodes": []},
+                    }
+                },
+            ],
+        }
+    }
+
+    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+    response = searcher.get_glossary_terms(count=2)
+    print(response)
+    assert response == SearchResponse(
+        total_results=2,
+        page_results=[
+            SearchResult(
+                id="urn:li:glossaryTerm:022b9b68-c211-47ae-aef0-2db13acfeca8",
+                name="IAO",
+                description="Information asset owner.\n",
+                metadata={
+                    "parentNodes": [
+                        {
+                            "properties": {
+                                "name": "Data protection terms",
+                                "description": "Data protection terms",
+                            }
+                        }
+                    ]
+                },
+                result_type=ResultType.GLOSSARY_TERM,
+            ),
+            SearchResult(
+                id="urn:li:glossaryTerm:0eb7af28-62b4-4149-a6fa-72a8f1fea1e6",
+                name="Security classification",
+                description="Only data that is 'official'",
+                metadata={"parentNodes": []},
+                result_type=ResultType.GLOSSARY_TERM,
+            ),
+        ],
+    )

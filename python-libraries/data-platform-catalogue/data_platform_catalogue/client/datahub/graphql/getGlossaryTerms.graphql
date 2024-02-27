@@ -1,0 +1,28 @@
+query getGlossaryTerms($count: Int!) {
+  searchAcrossEntities(
+    input: { types: GLOSSARY_TERM, query: "*", start: 0, count: $count }
+  ) {
+    start
+    count
+    total
+    searchResults {
+      entity {
+        ... on GlossaryTerm {
+          urn
+          properties {
+            name
+            description
+          }
+          parentNodes {
+            nodes {
+              properties {
+                name
+                description
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

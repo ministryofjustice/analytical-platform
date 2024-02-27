@@ -7,6 +7,7 @@ from typing import Any
 class ResultType(Enum):
     DATA_PRODUCT = auto()
     TABLE = auto()
+    GLOSSARY_TERM = auto()
 
 
 @dataclass

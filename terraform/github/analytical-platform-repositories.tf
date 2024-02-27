@@ -283,6 +283,15 @@ locals {
         pushers = [module.data_platform_team.id]
       }
     },
+    "analytical-platform-visual-studio-code" = {
+      name        = "analytical-platform-visual-studio-code"
+      description = "Analytical Platform Visual Studio Code"
+      topics      = ["ministryofjustice", "analytical-platform"]
+      access = {
+        admins  = [module.analytical_platform_team.id]
+        pushers = [module.data_platform_team.id]
+      }
+    },
     "ap-terraform-module-template" = {
       name                                   = "ap-terraform-module-template"
       description                            = "Analytical Platform Terraform Module Template"
@@ -403,11 +412,14 @@ locals {
       }
     },
     "ap-terraform-ecr-repository" = {
-      name                = "ap-terraform-ecr-repository"
-      description         = "Analytical Platform Terraform ECR Repository"
-      topics              = ["ministryofjustice", "analytical-platform"]
-      use_template        = true
-      template_repository = "ap-terraform-module-template"
+      name                                   = "ap-terraform-ecr-repository"
+      description                            = "Analytical Platform Terraform ECR Repository"
+      topics                                 = ["ministryofjustice", "analytical-platform"]
+      use_template                           = true
+      template_repository                    = "ap-terraform-module-template"
+      archived                               = true
+      vulnerability_alerts                   = false
+      secret_scanning_push_protection_status = "disabled"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
@@ -438,6 +450,20 @@ locals {
       template_repository             = "ap-terraform-module-template"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
+      }
+    },
+    "analytical-platform-image-build-template" = {
+      name                                   = "analytical-platform-image-build-template"
+      description                            = "Analytical Platform Image Build Template"
+      is_template                            = true
+      use_template                           = true
+      template_repository                    = "template-repository"
+      visibility                             = "public"
+      secret_scanning_status                 = "disabled"
+      secret_scanning_push_protection_status = "disabled"
+      access = {
+        admins  = [module.analytical_platform_team.id]
         pushers = [module.data_platform_team.id]
       }
     }

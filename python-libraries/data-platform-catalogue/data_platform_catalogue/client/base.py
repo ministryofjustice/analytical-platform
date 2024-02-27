@@ -95,3 +95,17 @@ class BaseCatalogueClient(ABC):
 
     def list_data_products(self) -> SearchResponse:
         return self.search(count=500, result_types=[ResultType.DATA_PRODUCT])
+
+    @abstractmethod
+    def list_data_product_assets(self, urn, count, start=0) -> SearchResponse:
+        """
+        returns a list of data product children
+        """
+        pass
+
+    @abstractmethod
+    def get_glossary_terms(self, count: int) -> SearchResponse:
+        """
+        returns a searchresponse of glossary terms
+        """
+        pass

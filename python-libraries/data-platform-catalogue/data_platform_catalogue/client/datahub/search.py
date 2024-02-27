@@ -34,6 +34,17 @@ class SearchClient:
             .read_text()
         )
 
+        self.data_product_asset_query = (
+            files("data_platform_catalogue.client.datahub.graphql")
+            .joinpath("listDataProductAssets.graphql")
+            .read_text()
+        )
+        self.get_glossary_terms_query = (
+            files("data_platform_catalogue.client.datahub.graphql")
+            .joinpath("getGlossaryTerms.graphql")
+            .read_text()
+        )
+
     def search(
         self,
         query: str = "*",
@@ -127,6 +138,39 @@ class SearchClient:
         response = response["aggregateAcrossEntities"]
         return self._parse_facets(response.get("facets", []))
 
+    def list_data_product_assets(
+        self, urn: str, count: int, start: int = 0
+    ) -> SearchResponse:
+        """
+        returns a SearchResponse containing all assets in given data product (by urn)
+        """
+        variables = {
+            "urn": urn,
+            "query": "*",
+            "start": start,
+            "count": count,
+        }
+        try:
+            response = self.graph.execute_graphql(
+                self.data_product_asset_query, variables
+            )
+        except GraphError as e:
+            raise Exception("Unable to execute listDataProductAssets query") from e
+        page_results = []
+        for result in response["listDataProductAssets"]["searchResults"]:
+            entity = result["entity"]
+            entity_type = entity["type"]
+            matched_fields: dict = {}
+            if entity_type == "DATASET":
+                page_results.append(self._parse_dataset(entity, matched_fields))
+            else:
+                raise ValueError(f"Unexpected entity type: {entity_type}")
+
+        return SearchResponse(
+            total_results=response["listDataProductAssets"]["total"],
+            page_results=page_results,
+        )
+
     def _map_result_types(self, result_types: Sequence[ResultType]):
         """
         Map result types to Datahub EntityTypes
@@ -136,6 +180,8 @@ class SearchClient:
             types.append("DATA_PRODUCT")
         if ResultType.TABLE in result_types:
             types.append("DATASET")
+        if ResultType.GLOSSARY_TERM in result_types:
+            types.append("GLOSSARY_TERM")
         return types
 
     def _map_filters(self, filters: Sequence[MultiSelectFilter]):
@@ -296,3 +342,39 @@ class SearchClient:
             results[field] = options
 
         return SearchFacets(results)
+
+    def _parse_glossary_term(self, entity) -> SearchResult:
+        properties, custom_properties = self._parse_properties(entity)
+        metadata = {"parentNodes": entity["parentNodes"]["nodes"]}
+
+        return SearchResult(
+            id=entity["urn"],
+            result_type=ResultType.GLOSSARY_TERM,
+            matches={},
+            name=properties["name"],
+            description=properties.get("description", ""),
+            metadata=metadata,
+            tags=[],
+            last_updated=None,
+        )
+
+    def get_glossary_terms(self, count: int = 1000) -> SearchResponse:
+        "Get some number of glossary terms from DataHub"
+        variables = {"count": count}
+        try:
+            response = self.graph.execute_graphql(
+                self.get_glossary_terms_query, variables
+            )
+        except GraphError as e:
+            raise Exception("Unable to execute getGlossaryTerms query") from e
+
+        page_results = []
+        response = response["searchAcrossEntities"]
+        logger.debug(json.dumps(response, indent=2))
+
+        for result in response["searchResults"]:
+            page_results.append(self._parse_glossary_term(entity=result["entity"]))
+
+        return SearchResponse(
+            total_results=response["total"], page_results=page_results
+        )

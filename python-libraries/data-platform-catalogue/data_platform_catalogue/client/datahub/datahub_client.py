@@ -378,3 +378,15 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         return self.search_client.search_facets(
             query=query, result_types=result_types, filters=filters
         )
+
+    def list_data_product_assets(self, urn, count, start=0) -> SearchResponse:
+        """
+        returns a list of data product children
+        """
+        return self.search_client.list_data_product_assets(
+            urn=urn, count=count, start=start
+        )
+
+    def get_glossary_terms(self, count: int = 1000) -> SearchResponse:
+        """Wraps the client's glossary terms query"""
+        return self.search_client.get_glossary_terms(count)
