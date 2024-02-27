@@ -103,19 +103,7 @@ locals {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
-    },
-    "data-catalogue" = {
-      name            = "data-catalogue"
-      description     = "Data Catalogue"
-      topics          = ["ministryofjustice", "data-platform"]
-      use_template    = true
-      has_discussions = true
-      has_projects    = true
-      homepage_url    = null
-      access = {
-        admins  = [module.data_platform_teams["data-catalogue"].id]
-        pushers = [module.data_platform_team.id]
-      }
+    }
     }
     /*
       Data Platform Repositories that could be managed in code:
