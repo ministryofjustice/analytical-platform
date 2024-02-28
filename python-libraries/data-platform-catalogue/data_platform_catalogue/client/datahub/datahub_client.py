@@ -238,7 +238,8 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         )
 
         dataset_properties = DatasetPropertiesClass(
-            name=name,
+            name=metadata.name,
+            qualifiedName=name,
             description=metadata.description,
             customProperties={
                 "sourceDatasetName": metadata.source_dataset_name,
