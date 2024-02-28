@@ -3,6 +3,8 @@ resource "auth0_client" "visual_studio_code" {
   app_type            = "regular_web"
   callbacks           = ["https://*-vscode.tools.analytical-platform.service.justice.gov.uk/callback"]
   allowed_logout_urls = ["https://*-vscode.tools.analytical-platform.service.justice.gov.uk"]
+  oidc_conformant     = true
+  sso                 = true
 }
 
 resource "auth0_connection_client" "visual_studio_code_github" {
