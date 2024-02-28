@@ -7,11 +7,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.16.2] 2024-02-28
+## [0.17.0] 2024-02-28
 
-### Changed
+### Added
 
-- upsert_table sets datset name as fully qualified name
+- upsert_table now sets datset name as single table name and
+ `qualifiedName` as the fully qualified name we define.
 
 ## [0.16.1] 2024-02-20
 
