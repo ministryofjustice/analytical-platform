@@ -102,3 +102,10 @@ class BaseCatalogueClient(ABC):
         returns a list of data product children
         """
         pass
+
+    @abstractmethod
+    def get_glossary_terms(self, count: int) -> SearchResponse:
+        """
+        returns a searchresponse of glossary terms
+        """
+        pass

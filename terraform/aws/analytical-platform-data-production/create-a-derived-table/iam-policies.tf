@@ -84,7 +84,8 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "airflow:CreateCliToken"
     ]
     resources = [
-      "arn:aws:airflow:*:${var.account_ids["analytical-platform-data-production"]}:environment/dev"
+      "arn:aws:airflow:*:${var.account_ids["analytical-platform-data-production"]}:environment/dev",
+      "arn:aws:airflow:*:${var.account_ids["analytical-platform-data-production"]}:environment/prod"
     ]
   }
 }
@@ -93,7 +94,7 @@ module "create_a_derived_table_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.34.0"
+  version = "5.35.0"
 
   name_prefix = "create-a-derived-table"
 
