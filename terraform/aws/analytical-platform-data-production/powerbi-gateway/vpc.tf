@@ -111,6 +111,7 @@ data "aws_iam_policy_document" "flow_log" {
     ]
     #tfsec:ignore:avd-aws-0057:needs to access multiple resources
     #checkov:skip=CKV_AWS_356:Needs to access multiple resources
+    #checkov:skip=CKV_AWS_111:Needs to access multiple resources
     resources = ["*"]
   }
 }

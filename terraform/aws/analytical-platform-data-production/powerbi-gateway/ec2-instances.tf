@@ -42,6 +42,7 @@ module "ec2" {
   iam_role_policies = {
     SSMCore            = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
     PowerBI_DataAccess = data.aws_iam_policy.powerbi_user.arn
+    ReadOnlyAccess     = "arn:aws:iam::aws:policy/ReadOnlyAccess"
   }
   root_block_device = [
     {
