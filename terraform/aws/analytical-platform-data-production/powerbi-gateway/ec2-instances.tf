@@ -49,7 +49,6 @@ module "ec2" {
       encrypted   = true
       volume_type = "gp3"
       volume_size = 100
-      encrypted   = true
       tags = merge({
         Name = "${local.powerbi_gateway_ec2.instance_name}-root-volume"
       }, var.tags)
