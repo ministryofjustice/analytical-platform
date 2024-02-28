@@ -7,8 +7,8 @@ module "vpc" {
   name                   = local.name
   cidr                   = local.vpc_cidr
   azs                    = local.azs
-  private_subnets        = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
-  public_subnets         = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k + 1)]
+  private_subnets        = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k + 2)]
+  public_subnets         = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
   enable_dns_hostnames   = true
   enable_dns_support     = true
   enable_nat_gateway     = true
