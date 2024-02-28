@@ -21,8 +21,9 @@ module "vpc" {
 }
 
 resource "aws_cloudwatch_log_group" "vpc" {
-  name       = "data_production_powerbi_vpc_flow_logs"
-  kms_key_id = aws_kms_key.data_production_vpc_key.arn
+  name              = "data_production_powerbi_vpc_flow_logs"
+  kms_key_id        = aws_kms_key.data_production_vpc_key.arn
+  retention_in_days = 365
 }
 
 resource "aws_flow_log" "vpc" {
@@ -48,6 +49,9 @@ data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
       type        = "Service"
       identifiers = ["logs.amazonaws.com"]
     }
+    #checkov:skip=CKV_AWS_356:Constrained via resource policy
+    #checkov:skip=CKV_AWS_111:Constrained via resource policy
+    #checkov:skip=CKV_AWS_109:Constrained via resource policy
     resources = ["*"]
   }
 
@@ -62,6 +66,9 @@ data "aws_iam_policy_document" "cloudwatch_kms_key_policy" {
         ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/GlobalGitHubActionAdmin"]
       )
     }
+    #checkov:skip=CKV_AWS_356:Constrained via resource policy
+    #checkov:skip=CKV_AWS_111:Constrained via resource policy
+    #checkov:skip=CKV_AWS_109:Constrained via resource policy
     resources = ["*"]
   }
 }
@@ -103,6 +110,7 @@ data "aws_iam_policy_document" "flow_log" {
       "logs:DescribeLogStreams",
     ]
     #tfsec:ignore:avd-aws-0057:needs to access multiple resources
+    #checkov:skip=CKV_AWS_356:Needs to access multiple resources
     resources = ["*"]
   }
 }
