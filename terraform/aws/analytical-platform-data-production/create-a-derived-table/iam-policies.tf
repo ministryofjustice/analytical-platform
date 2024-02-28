@@ -84,7 +84,8 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "airflow:CreateCliToken"
     ]
     resources = [
-      "arn:aws:airflow:*:${var.account_ids["analytical-platform-data-production"]}:environment/dev"
+      "arn:aws:airflow:*:${var.account_ids["analytical-platform-data-production"]}:environment/dev",
+      "arn:aws:airflow:*:${var.account_ids["analytical-platform-data-production"]}:environment/prod"
     ]
   }
 }
