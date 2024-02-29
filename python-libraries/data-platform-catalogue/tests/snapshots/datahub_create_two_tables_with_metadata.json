@@ -13,6 +13,7 @@
                 "rowCount": "1177"
             },
             "name": "my_table",
+            "qualifiedName": "my_database.my_table",
             "description": "bla bla",
             "tags": []
         }
@@ -172,6 +173,7 @@
                 "rowCount": "1177"
             },
             "name": "my_table2",
+            "qualifiedName": "my_database.my_table2",
             "description": "this is a different table",
             "tags": []
         }

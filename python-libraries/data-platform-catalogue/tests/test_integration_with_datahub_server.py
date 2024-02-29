@@ -80,6 +80,7 @@ def test_upsert_test_hierarchy():
     )
     # check properties been loaded to datahub dataset
     assert dataset_properties.description == table.description
+    assert dataset_properties.qualifiedName == f"test_data_product_v2.{table.name}"
     assert dataset_properties.name == table.name
     assert (
         dataset_properties.customProperties["sourceDatasetName"]
