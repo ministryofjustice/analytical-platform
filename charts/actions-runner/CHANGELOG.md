@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2024-02-29
+
+### Changed
+
+- Bump actions runner to 2.314.1
+
 ## [2.0.0] - 2023-12-18
 
 ### Changed
