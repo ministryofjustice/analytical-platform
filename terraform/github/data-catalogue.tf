@@ -32,7 +32,7 @@ module "data_catalogue_repository" {
   }
 }
 
-module "data_catalogue_metadata" {
+module "data_catalogue_metadata_repository" {
   source = "./modules/repository"
 
   name        = "data-catalogue-metadata"
@@ -53,7 +53,3 @@ module "data_catalogue_metadata" {
   }
 }
 
-moved {
-  from = module.data_catalogue_metadata
-  to   = module.data_catalogue_metadata_repository
-}
