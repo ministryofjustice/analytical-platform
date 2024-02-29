@@ -35,6 +35,20 @@ locals {
         pushers     = [module.data_platform_team.id]
       }
     }
+
+    "find-moj-data" = {
+      name            = "find-moj-data"
+      description     = "Django frontend app for Find MOJ Data"
+      topics          = ["ministryofjustice", "data-platform"]
+      has_projects    = true
+      has_discussions = true
+      use_template    = false
+      access = {
+        admins  = [module.data_platform_teams["data-platform-labs"].id]
+        pushers = [module.data_platform_team.id]
+      }
+    }
+
     "data-platform-support" = {
       name                                   = "data-platform-support"
       description                            = "Data Platform Support"
