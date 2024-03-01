@@ -9,3 +9,15 @@ module "ithc_iam_user" {
   force_destroy                 = true
 
 }
+
+resource "aws_iam_group_membership" "ithc" {
+  count = length(local.pentester_groups)
+  name  = "${local.pentester_groups[count.index]}-membership"
+  users = values(nonsensitive(local.ithc_testers))
+
+  group = local.pentester_groups[count.index]
+  depends_on = [
+    module.ithc_iam_user
+  ]
+
+}
