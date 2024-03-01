@@ -3,18 +3,14 @@ terraform {
     acl            = "private"
     bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "auth0/ministryofjustice-data-platform/terraform.tfstate"
+    key            = "aws/analytical-platform-data-production/powerbi-gateway/terraform.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.39.0"
-    }
-    auth0 = {
-      source  = "auth0/auth0"
-      version = "1.2.0"
+      version = "5.38.0"
     }
   }
   required_version = "~> 1.5"
@@ -22,6 +18,16 @@ terraform {
 
 provider "aws" {
   alias = "session"
+}
+
+provider "aws" {
+  region = "eu-west-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/GlobalGitHubActionAdmin"
+  }
+  default_tags {
+    tags = var.tags
+  }
 }
 
 provider "aws" {
@@ -33,10 +39,4 @@ provider "aws" {
   default_tags {
     tags = var.tags
   }
-}
-
-provider "auth0" {
-  domain        = data.aws_secretsmanager_secret_version.auth0_domain.secret_string
-  client_id     = data.aws_secretsmanager_secret_version.auth0_client_id.secret_string
-  client_secret = data.aws_secretsmanager_secret_version.auth0_client_secret.secret_string
 }
