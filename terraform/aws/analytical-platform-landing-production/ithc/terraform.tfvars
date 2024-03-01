@@ -6,6 +6,9 @@ account_ids = {
   analytical-platform-data-engineering-production = "189157455002"
   analytical-platform-management-production       = "042130406152"
   analytical-platform-landing-production          = "335823981503"
+  analytical-platform-development                 = "525294151996"
+  analytical-platform-production                  = "312423030077"
+  analytical-platform-data-production             = "593291632749"
 }
 
 tags = {
