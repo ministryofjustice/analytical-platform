@@ -13,6 +13,7 @@
                 "rowCount": "1177"
             },
             "name": "my_table",
+            "qualifiedName": "my_database.my_table",
             "description": "bla bla",
             "tags": []
         }

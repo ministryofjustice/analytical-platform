@@ -30,34 +30,34 @@ tags = {
 pagerduty_services = {
   analytical-platform-data-development = {
     guardduty     = "analytical-platform-security"
-    cost-explorer = "data-platform"
+    cost-explorer = "analytical-platform-compute"
   }
   analytical-platform-data-engineering-production = {
     guardduty     = "analytical-platform-security"
-    cost-explorer = "data-platform"
+    cost-explorer = "analytical-platform-compute"
   }
   analytical-platform-data-engineering-sandbox-a = {
     guardduty     = "analytical-platform-security"
-    cost-explorer = "data-platform"
+    cost-explorer = "analytical-platform-compute"
   }
   analytical-platform-data-production = {
     guardduty     = "analytical-platform-security"
-    cost-explorer = "data-platform"
+    cost-explorer = "analytical-platform-compute"
   }
   analytical-platform-development = {
     guardduty     = "analytical-platform-security"
-    cost-explorer = "data-platform"
+    cost-explorer = "analytical-platform-compute"
   }
   analytical-platform-landing-production = {
     guardduty     = "analytical-platform-security"
-    cost-explorer = "data-platform"
+    cost-explorer = "analytical-platform-compute"
   }
   analytical-platform-management-production = {
     guardduty     = "analytical-platform-security"
-    cost-explorer = "data-platform"
+    cost-explorer = "analytical-platform-compute"
   }
   analytical-platform-production = {
     guardduty     = "analytical-platform-security"
-    cost-explorer = "data-platform"
+    cost-explorer = "analytical-platform-compute"
   }
 }

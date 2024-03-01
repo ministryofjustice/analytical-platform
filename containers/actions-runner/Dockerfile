@@ -12,8 +12,8 @@ ENV CONTAINER_USER="runner" \
     CONTAINER_GID="10000" \
     CONTAINER_HOME="/actions-runner" \
     DEBIAN_FRONTEND="noninteractive" \
-    ACTIONS_RUNNER_VERSION="2.311.0" \
-    ACTIONS_RUNNER_PKG_SHA="29fc8cf2dab4c195bb147384e7e2c94cfd4d4022c793b346a6175435265aa278"
+    ACTIONS_RUNNER_VERSION="2.314.1" \
+    ACTIONS_RUNNER_PKG_SHA="6c726a118bbe02cd32e222f890e1e476567bf299353a96886ba75b423c1137b5"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -34,7 +34,7 @@ COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} src/usr/local/bin/actions-runn
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
       ca-certificates=20230311ubuntu0.22.04.1 \
-      curl=7.81.0-1ubuntu1.14 \
+      curl=7.81.0-1ubuntu1.15 \
       git=1:2.34.1-1ubuntu1.10 \
       jq=1.6-2.1ubuntu3 \
       libicu-dev=70.1-2 \
