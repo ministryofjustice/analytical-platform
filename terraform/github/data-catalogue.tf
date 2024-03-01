@@ -4,14 +4,15 @@ module "data_catalogue_team" {
   name        = "data-catalogue"
   description = "Data Catalogue Team"
   members = [
-    "jemnery",         # Jeremy Collins
-    "seanprivett",     # Sean Privett
-    "YvanMOJdigital",  # Yvan Smith
-    "LavMatt",         # Matt Laverty
-    "murdo-moj",       # Murdo Moyse
-    "tom-webber",      # Tom Webber
-    "mitchdawson1982", # Mitch Dawson
-    "MatMoore",        # Mat Moore
+    "jemnery",          # Jeremy Collins
+    "seanprivett",      # Sean Privett
+    "YvanMOJdigital",   # Yvan Smith
+    "LavMatt",          # Matt Laverty
+    "murdo-moj",        # Murdo Moyse
+    "tom-webber",       # Tom Webber
+    "mitchdawson1982",  # Mitch Dawson
+    "MatMoore",         # Mat Moore
+    "alex-vonfeldmann", # Alex Von Feldmann
   ]
 }
 
