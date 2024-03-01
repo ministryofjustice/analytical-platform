@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+# [1.3.0] - 2024-03-01
+
+### Changed
+
+- Dependabots: Updates to `boto`
+
 ## [1.2.3] - 2024-03-01
 
 ### Changed
