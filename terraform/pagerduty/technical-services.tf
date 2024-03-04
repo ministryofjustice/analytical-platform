@@ -1,8 +1,8 @@
 locals {
   technical_services = [
     {
-      name              = "Analytical Platform"
-      description       = "Generic alerts for the Analytical Platform"
+      name              = "Analytical Platform Compute"
+      description       = "Compute alerts for the Analytical Platform"
       escalation_policy = module.escalation_policies["Analytical Platform"].id
       auto_pause_notifications_parameters = [
         {
@@ -36,7 +36,128 @@ locals {
           ]
         }
       ]
-      enable_email_integration = true
+      enable_cloudwatch_integration    = true
+      enable_email_integration         = true
+      enable_alert_manager_integration = true
+    },
+    {
+      name              = "Analytical Platform Identity"
+      description       = "Identity alerts for the Analytical Platform"
+      escalation_policy = module.escalation_policies["Analytical Platform"].id
+      auto_pause_notifications_parameters = [
+        {
+          enabled = true
+          timeout = 600
+        }
+      ]
+      support_hours = [
+        {
+          type         = "fixed_time_per_day"
+          start_time   = "09:00:00"
+          end_time     = "17:00:00"
+          time_zone    = "Europe/London"
+          days_of_week = [1, 2, 3, 4, 5]
+        }
+      ]
+      incident_urgency_rules = [
+        {
+          type = "use_support_hours"
+          during_support_hours = [
+            {
+              type    = "constant"
+              urgency = "high"
+            }
+          ]
+          outside_support_hours = [
+            {
+              type    = "constant"
+              urgency = "low"
+            }
+          ]
+        }
+      ]
+      enable_cloudwatch_integration    = true
+      enable_email_integration         = true
+      enable_alert_manager_integration = true
+    },
+    {
+      name              = "Analytical Platform Ingestion"
+      description       = "Ingestion alerts for the Analytical Platform"
+      escalation_policy = module.escalation_policies["Analytical Platform"].id
+      auto_pause_notifications_parameters = [
+        {
+          enabled = true
+          timeout = 600
+        }
+      ]
+      support_hours = [
+        {
+          type         = "fixed_time_per_day"
+          start_time   = "09:00:00"
+          end_time     = "17:00:00"
+          time_zone    = "Europe/London"
+          days_of_week = [1, 2, 3, 4, 5]
+        }
+      ]
+      incident_urgency_rules = [
+        {
+          type = "use_support_hours"
+          during_support_hours = [
+            {
+              type    = "constant"
+              urgency = "high"
+            }
+          ]
+          outside_support_hours = [
+            {
+              type    = "constant"
+              urgency = "low"
+            }
+          ]
+        }
+      ]
+      enable_cloudwatch_integration    = true
+      enable_email_integration         = true
+      enable_alert_manager_integration = true
+    },
+    {
+      name              = "Analytical Platform Networking"
+      description       = "Networking alerts for the Analytical Platform"
+      escalation_policy = module.escalation_policies["Analytical Platform"].id
+      auto_pause_notifications_parameters = [
+        {
+          enabled = true
+          timeout = 600
+        }
+      ]
+      support_hours = [
+        {
+          type         = "fixed_time_per_day"
+          start_time   = "09:00:00"
+          end_time     = "17:00:00"
+          time_zone    = "Europe/London"
+          days_of_week = [1, 2, 3, 4, 5]
+        }
+      ]
+      incident_urgency_rules = [
+        {
+          type = "use_support_hours"
+          during_support_hours = [
+            {
+              type    = "constant"
+              urgency = "high"
+            }
+          ]
+          outside_support_hours = [
+            {
+              type    = "constant"
+              urgency = "low"
+            }
+          ]
+        }
+      ]
+      enable_cloudwatch_integration = true
+      enable_email_integration      = true
     },
     {
       name              = "Analytical Platform Security"
@@ -81,87 +202,8 @@ locals {
       enable_email_integration        = true
     },
     {
-      name              = "Analytical Platform Networking"
-      description       = "Networking alerts for the Analytical Platform"
-      escalation_policy = module.escalation_policies["Analytical Platform"].id
-      auto_pause_notifications_parameters = [
-        {
-          enabled = true
-          timeout = 600
-        }
-      ]
-      support_hours = [
-        {
-          type         = "fixed_time_per_day"
-          start_time   = "09:00:00"
-          end_time     = "17:00:00"
-          time_zone    = "Europe/London"
-          days_of_week = [1, 2, 3, 4, 5]
-        }
-      ]
-      incident_urgency_rules = [
-        {
-          type = "use_support_hours"
-          during_support_hours = [
-            {
-              type    = "constant"
-              urgency = "high"
-            }
-          ]
-          outside_support_hours = [
-            {
-              type    = "constant"
-              urgency = "low"
-            }
-          ]
-        }
-      ]
-      enable_cloudwatch_integration = true
-      enable_email_integration      = true
-    },
-    {
-      name              = "Analytical Platform Compute"
-      description       = "Compute alerts for the Analytical Platform"
-      escalation_policy = module.escalation_policies["Analytical Platform"].id
-      auto_pause_notifications_parameters = [
-        {
-          enabled = true
-          timeout = 600
-        }
-      ]
-      support_hours = [
-        {
-          type         = "fixed_time_per_day"
-          start_time   = "09:00:00"
-          end_time     = "17:00:00"
-          time_zone    = "Europe/London"
-          days_of_week = [1, 2, 3, 4, 5]
-        }
-      ]
-      incident_urgency_rules = [
-        {
-          type = "use_support_hours"
-          during_support_hours = [
-            {
-              type    = "constant"
-              urgency = "high"
-            }
-          ]
-          outside_support_hours = [
-            {
-              type    = "constant"
-              urgency = "low"
-            }
-          ]
-        }
-      ]
-      enable_cloudwatch_integration    = true
-      enable_email_integration         = true
-      enable_alert_manager_integration = true
-    },
-    {
       name              = "Analytical Platform Storage"
-      description       = "Compute alerts for the Analytical Platform"
+      description       = "Storage alerts for the Analytical Platform"
       escalation_policy = module.escalation_policies["Analytical Platform"].id
       auto_pause_notifications_parameters = [
         {
