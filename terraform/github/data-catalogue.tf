@@ -20,7 +20,23 @@ module "data_catalogue_repository" {
   source = "./modules/repository"
 
   name        = "data-catalogue"
-  description = "Data Catalogue"
+  description = "Data catalogue"
+  topics      = ["data-catalogue"]
+
+  use_template = true
+  has_projects = "true"
+  homepage_url = null
+
+  access = {
+    admins = [module.data_catalogue_team.id]
+  }
+}
+
+module "find_moj_data_repository" {
+  source = "./modules/repository"
+
+  name        = "find-moj-data"
+  description = "Find MOJ data service"
   topics      = ["data-catalogue"]
 
   use_template        = true
