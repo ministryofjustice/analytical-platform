@@ -598,7 +598,7 @@ module "analytical_platform_repositories" {
   branch_protection_enforce_admins                                                = lookup(each.value, "branch_protection_enforce_admins", true)
   branch_protection_force_push_bypassers                                          = lookup(each.value, "branch_protection_force_push_bypassers", [])
   branch_protection_push_restrictions                                             = lookup(each.value, "branch_protection_push_restrictions", [])
-  branch_protection_require_signed_commits                                        = lookup(each.value, "branch_protection_require_signed_commits", false)
+  branch_protection_require_signed_commits                                        = lookup(each.value, "branch_protection_require_signed_commits", true)
   branch_protection_required_linear_history                                       = lookup(each.value, "branch_protection_required_linear_history", false)
   branch_protection_require_conversation_resolution                               = lookup(each.value, "branch_protection_require_conversation_resolution", true)
   branch_protection_allows_force_pushes                                           = lookup(each.value, "branch_protection_allows_force_pushes", false)
