@@ -1,23 +1,83 @@
 locals {
   business_services = [
     {
-      name             = "Analytical Platform"
-      description      = "Ministry of Justice's data analysis platform."
+      name             = "Analytical Platform Compute"
+      description      = "Analytical Platform Compute"
       point_of_contact = "#analytical-platform"
       team             = module.teams["Analytical Platform"].id
       supporting_services = [
         {
-          name = "Cloud Platform"
-          id   = data.pagerduty_business_service.cloud_platform.id
-          type = data.pagerduty_business_service.cloud_platform.type
-        },
-        {
-          name = "Modernisation Platform"
-          id   = data.pagerduty_business_service.modernisation_platform.id
-          type = data.pagerduty_business_service.modernisation_platform.type
+          name = "Analytical Platform Compute"
+          id   = module.technical_services["Analytical Platform Compute"].id
+          type = "service"
         }
       ]
-    }
+    },
+    {
+      name             = "Analytical Platform Identity"
+      description      = "Analytical Platform Identity"
+      point_of_contact = "#analytical-platform"
+      team             = module.teams["Analytical Platform"].id
+      supporting_services = [
+        {
+          name = "Analytical Platform Identity"
+          id   = module.technical_services["Analytical Platform Identity"].id
+          type = "service"
+        }
+      ]
+    },
+    {
+      name             = "Analytical Platform Ingestion"
+      description      = "Analytical Platform Ingestion"
+      point_of_contact = "#analytical-platform"
+      team             = module.teams["Analytical Platform"].id
+      supporting_services = [
+        {
+          name = "Analytical Platform Ingestion"
+          id   = module.technical_services["Analytical Platform Ingestion"].id
+          type = "service"
+        }
+      ]
+    },
+    {
+      name             = "Analytical Platform Networking"
+      description      = "Analytical Platform Networking"
+      point_of_contact = "#analytical-platform"
+      team             = module.teams["Analytical Platform"].id
+      supporting_services = [
+        {
+          name = "Analytical Platform Networking"
+          id   = module.technical_services["Analytical Platform Networking"].id
+          type = "service"
+        }
+      ]
+    },
+    {
+      name             = "Analytical Platform Security"
+      description      = "Analytical Platform Security"
+      point_of_contact = "#analytical-platform"
+      team             = module.teams["Analytical Platform"].id
+      supporting_services = [
+        {
+          name = "Analytical Platform Security"
+          id   = module.technical_services["Analytical Platform Security"].id
+          type = "service"
+        }
+      ]
+    },
+    {
+      name             = "Analytical Platform Storage"
+      description      = "Analytical Platform Storage"
+      point_of_contact = "#analytical-platform"
+      team             = module.teams["Analytical Platform"].id
+      supporting_services = [
+        {
+          name = "Analytical Platform Storage"
+          id   = module.technical_services["Analytical Platform Storage"].id
+          type = "service"
+        }
+      ]
+    },
   ]
 }
 
