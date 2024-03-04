@@ -1,7 +1,7 @@
 name: Feature Request
 description: ✨ Create a Feature Request
 title: " ✨ <title>"
-labels: ["enhancement", "feature-request"]
+labels: ["feature-request", "triage"]
 body:
   - type: textarea
     id: description
