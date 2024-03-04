@@ -10,6 +10,9 @@ on: # yamllint disable-line rule:truthy
 
 permissions: read-all
 
+
+
+
 jobs:
   container-configuration-generator:
     if: github.actor != 'dependabot[bot]'
