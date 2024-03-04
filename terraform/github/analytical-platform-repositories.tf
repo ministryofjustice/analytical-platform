@@ -1,6 +1,7 @@
 locals {
   /* New World */
   analytical_platform_repositories = {
+    /* New World */
     "analytical-platform" = {
       name         = "analytical-platform"
       description  = "Analytical Platform"
@@ -42,6 +43,16 @@ locals {
           path   = "/"
         }
       }
+      access = {
+        admins = [module.analytical_platform_team.id]
+      }
+    },
+    "analytical-platform-dashboard" = {
+      name         = "analytical-platform-dashboard"
+      description  = "Analytical Platform Dashboard"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      has_issues   = true
+      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
       access = {
         admins = [module.analytical_platform_team.id]
       }
@@ -586,12 +597,10 @@ module "analytical_platform_repositories" {
   branch_protection_allows_deletions                                              = lookup(each.value, "branch_protection_allows_deletions", false)
   branch_protection_enforce_admins                                                = lookup(each.value, "branch_protection_enforce_admins", true)
   branch_protection_force_push_bypassers                                          = lookup(each.value, "branch_protection_force_push_bypassers", [])
-  branch_protection_push_restrictions                                             = lookup(each.value, "branch_protection_push_restrictions", [])
-  branch_protection_require_signed_commits                                        = lookup(each.value, "branch_protection_require_signed_commits", false)
+  branch_protection_require_signed_commits                                        = lookup(each.value, "branch_protection_require_signed_commits", true)
   branch_protection_required_linear_history                                       = lookup(each.value, "branch_protection_required_linear_history", false)
   branch_protection_require_conversation_resolution                               = lookup(each.value, "branch_protection_require_conversation_resolution", true)
   branch_protection_allows_force_pushes                                           = lookup(each.value, "branch_protection_allows_force_pushes", false)
-  branch_protection_blocks_creations                                              = lookup(each.value, "branch_protection_blocks_creations", false)
   branch_protection_lock_branch                                                   = lookup(each.value, "branch_protection_lock_branch", false)
   branch_protection_required_pull_request_reviews_dismiss_stale_reviews           = lookup(each.value, "branch_protection_required_pull_request_reviews_dismiss_stale_reviews", true)
   branch_protection_required_pull_request_reviews_restrict_dismissals             = lookup(each.value, "branch_protection_required_pull_request_reviews_restrict_dismissals", false)

@@ -79,18 +79,6 @@ locals {
         pushers = [module.data_platform_team.id]
       }
     },
-    "data-platform-control-panel" = {
-      name                                              = "data-platform-control-panel"
-      description                                       = "Data Platform Control Panel"
-      topics                                            = ["ministryofjustice", "data-platform"]
-      has_projects                                      = false
-      has_issues                                        = false
-      branch_protection_required_status_checks_contexts = ["Super-Linter"]
-      access = {
-        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
-        pushers = [module.data_platform_team.id]
-      }
-    },
     "data-platform-new-app-runthrough" = {
       name                                   = "data-platform-new-app-runthrough"
       description                            = "A lovely new application"
@@ -166,12 +154,10 @@ module "data_platform_repositories" {
   branch_protection_allows_deletions                                              = lookup(each.value, "branch_protection_allows_deletions", false)
   branch_protection_enforce_admins                                                = lookup(each.value, "branch_protection_enforce_admins", true)
   branch_protection_force_push_bypassers                                          = lookup(each.value, "branch_protection_force_push_bypassers", [])
-  branch_protection_push_restrictions                                             = lookup(each.value, "branch_protection_push_restrictions", [])
-  branch_protection_require_signed_commits                                        = lookup(each.value, "branch_protection_require_signed_commits", false)
+  branch_protection_require_signed_commits                                        = lookup(each.value, "branch_protection_require_signed_commits", true)
   branch_protection_required_linear_history                                       = lookup(each.value, "branch_protection_required_linear_history", false)
   branch_protection_require_conversation_resolution                               = lookup(each.value, "branch_protection_require_conversation_resolution", true)
   branch_protection_allows_force_pushes                                           = lookup(each.value, "branch_protection_allows_force_pushes", false)
-  branch_protection_blocks_creations                                              = lookup(each.value, "branch_protection_blocks_creations", false)
   branch_protection_lock_branch                                                   = lookup(each.value, "branch_protection_lock_branch", false)
   branch_protection_required_pull_request_reviews_dismiss_stale_reviews           = lookup(each.value, "branch_protection_required_pull_request_reviews_dismiss_stale_reviews", true)
   branch_protection_required_pull_request_reviews_restrict_dismissals             = lookup(each.value, "branch_protection_required_pull_request_reviews_restrict_dismissals", false)
