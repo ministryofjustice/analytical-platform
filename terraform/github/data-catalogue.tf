@@ -39,9 +39,10 @@ module "find_moj_data_repository" {
   description = "Find MOJ data service"
   topics      = ["data-catalogue"]
 
-  use_template = true
-  has_projects = "true"
-  homepage_url = null
+  use_template        = true
+  template_repository = "data-platform-app-template"
+  has_projects        = "true"
+  homepage_url        = null
 
   access = {
     admins = [module.data_catalogue_team.id]

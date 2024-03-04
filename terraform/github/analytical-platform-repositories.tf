@@ -59,16 +59,17 @@ locals {
     },
     /* Old World */
     "analytics-platform-infrastructure" = {
-      name                                   = "analytics-platform-infrastructure"
-      description                            = "Analytical Platform Infrastructure"
-      topics                                 = ["ministryofjustice", "analytical-platform"]
-      visibility                             = "internal"
-      archived                               = true
-      use_template                           = false
-      vulnerability_alerts                   = false
-      advanced_security_status               = "disabled"
-      secret_scanning_status                 = "disabled"
-      secret_scanning_push_protection_status = "disabled"
+      name                                     = "analytics-platform-infrastructure"
+      description                              = "Analytical Platform Infrastructure"
+      topics                                   = ["ministryofjustice", "analytical-platform"]
+      visibility                               = "internal"
+      archived                                 = true
+      use_template                             = false
+      vulnerability_alerts                     = false
+      advanced_security_status                 = "disabled"
+      secret_scanning_status                   = "disabled"
+      secret_scanning_push_protection_status   = "disabled"
+      branch_protection_require_signed_commits = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
@@ -113,15 +114,16 @@ locals {
       }
     }
     "analytics-platform-control-panel-public" = {
-      name                                   = "analytics-platform-control-panel-public"
-      description                            = "Analytical Platform Control Panel Public"
-      topics                                 = ["ministryofjustice", "analytical-platform"]
-      archived                               = true
-      use_template                           = false
-      vulnerability_alerts                   = false
-      advanced_security_status               = "disabled"
-      secret_scanning_status                 = "enabled"
-      secret_scanning_push_protection_status = "disabled"
+      name                                     = "analytics-platform-control-panel-public"
+      description                              = "Analytical Platform Control Panel Public"
+      topics                                   = ["ministryofjustice", "analytical-platform"]
+      archived                                 = true
+      use_template                             = false
+      vulnerability_alerts                     = false
+      advanced_security_status                 = "disabled"
+      secret_scanning_status                   = "enabled"
+      secret_scanning_push_protection_status   = "disabled"
+      branch_protection_require_signed_commits = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
@@ -142,15 +144,16 @@ locals {
       }
     },
     "analytics-platform-ops" = {
-      name                                   = "analytics-platform-ops"
-      description                            = "Analytical Platform Ops"
-      topics                                 = ["ministryofjustice", "analytical-platform"]
-      archived                               = true
-      use_template                           = false
-      vulnerability_alerts                   = false
-      advanced_security_status               = "disabled"
-      secret_scanning_status                 = "disabled"
-      secret_scanning_push_protection_status = "disabled"
+      name                                     = "analytics-platform-ops"
+      description                              = "Analytical Platform Ops"
+      topics                                   = ["ministryofjustice", "analytical-platform"]
+      archived                                 = true
+      use_template                             = false
+      vulnerability_alerts                     = false
+      advanced_security_status                 = "disabled"
+      secret_scanning_status                   = "disabled"
+      secret_scanning_push_protection_status   = "disabled"
+      branch_protection_require_signed_commits = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
@@ -181,16 +184,17 @@ locals {
       }
     },
     "analytical-platform-iam" = {
-      name                                   = "analytical-platform-iam"
-      description                            = "Analytical Platform IAM"
-      topics                                 = ["ministryofjustice", "analytical-platform"]
-      archived                               = true
-      use_template                           = false
-      visibility                             = "internal"
-      vulnerability_alerts                   = false
-      advanced_security_status               = "disabled"
-      secret_scanning_status                 = "disabled"
-      secret_scanning_push_protection_status = "disabled"
+      name                                     = "analytical-platform-iam"
+      description                              = "Analytical Platform IAM"
+      topics                                   = ["ministryofjustice", "analytical-platform"]
+      archived                                 = true
+      use_template                             = false
+      visibility                               = "internal"
+      vulnerability_alerts                     = false
+      advanced_security_status                 = "disabled"
+      secret_scanning_status                   = "disabled"
+      secret_scanning_push_protection_status   = "disabled"
+      branch_protection_require_signed_commits = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
@@ -304,32 +308,34 @@ locals {
       }
     },
     "ap-terraform-module-template" = {
-      name                                   = "ap-terraform-module-template"
-      description                            = "Analytical Platform Terraform Module Template"
-      topics                                 = ["ministryofjustice", "analytical-platform"]
-      is_template                            = true
-      use_template                           = false
-      archived                               = true
-      vulnerability_alerts                   = false
-      advanced_security_status               = "disabled"
-      secret_scanning_status                 = "disabled"
-      secret_scanning_push_protection_status = "disabled"
+      name                                     = "ap-terraform-module-template"
+      description                              = "Analytical Platform Terraform Module Template"
+      topics                                   = ["ministryofjustice", "analytical-platform"]
+      is_template                              = true
+      use_template                             = false
+      archived                                 = true
+      vulnerability_alerts                     = false
+      advanced_security_status                 = "disabled"
+      secret_scanning_status                   = "disabled"
+      secret_scanning_push_protection_status   = "disabled"
+      branch_protection_require_signed_commits = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
     },
     "ap-test-github-workflow" = {
-      name                                   = "ap-test-github-workflow"
-      description                            = "Analytical Platform Test Github Workflow"
-      topics                                 = ["ministryofjustice", "analytical-platform"]
-      visibility                             = "internal"
-      archived                               = true
-      use_template                           = false
-      vulnerability_alerts                   = false
-      advanced_security_status               = "disabled"
-      secret_scanning_status                 = "disabled"
-      secret_scanning_push_protection_status = "disabled"
+      name                                     = "ap-test-github-workflow"
+      description                              = "Analytical Platform Test Github Workflow"
+      topics                                   = ["ministryofjustice", "analytical-platform"]
+      visibility                               = "internal"
+      archived                                 = true
+      use_template                             = false
+      vulnerability_alerts                     = false
+      advanced_security_status                 = "disabled"
+      secret_scanning_status                   = "disabled"
+      secret_scanning_push_protection_status   = "disabled"
+      branch_protection_require_signed_commits = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
@@ -423,42 +429,45 @@ locals {
       }
     },
     "ap-terraform-ecr-repository" = {
-      name                                   = "ap-terraform-ecr-repository"
-      description                            = "Analytical Platform Terraform ECR Repository"
-      topics                                 = ["ministryofjustice", "analytical-platform"]
-      use_template                           = true
-      template_repository                    = "ap-terraform-module-template"
-      archived                               = true
-      vulnerability_alerts                   = false
-      secret_scanning_push_protection_status = "disabled"
+      name                                     = "ap-terraform-ecr-repository"
+      description                              = "Analytical Platform Terraform ECR Repository"
+      topics                                   = ["ministryofjustice", "analytical-platform"]
+      use_template                             = true
+      template_repository                      = "ap-terraform-module-template"
+      archived                                 = true
+      vulnerability_alerts                     = false
+      secret_scanning_push_protection_status   = "disabled"
+      branch_protection_require_signed_commits = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
     },
     "ap-terraform-github-id-provider-config" = {
-      name                            = "ap-terraform-github-id-provider-config"
-      description                     = "Analytical Platform Terraform Github ID Provider Config"
-      topics                          = ["ministryofjustice", "analytical-platform"]
-      use_template                    = true
-      archived                        = true
-      vulnerability_alerts            = false
-      secret_scanning_push_protection = "disabled"
-      template_repository             = "ap-terraform-module-template"
+      name                                     = "ap-terraform-github-id-provider-config"
+      description                              = "Analytical Platform Terraform Github ID Provider Config"
+      topics                                   = ["ministryofjustice", "analytical-platform"]
+      use_template                             = true
+      archived                                 = true
+      vulnerability_alerts                     = false
+      secret_scanning_push_protection          = "disabled"
+      template_repository                      = "ap-terraform-module-template"
+      branch_protection_require_signed_commits = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
     },
     "ap-terraform-aws-oidc-provider" = {
-      name                            = "ap-terraform-aws-oidc-provider"
-      description                     = "Analytical Platform Terraform AWS OIDC Provider"
-      topics                          = ["ministryofjustice", "analytical-platform"]
-      use_template                    = true
-      archived                        = true
-      vulnerability_alerts            = false
-      secret_scanning_push_protection = "disabled"
-      template_repository             = "ap-terraform-module-template"
+      name                                     = "ap-terraform-aws-oidc-provider"
+      description                              = "Analytical Platform Terraform AWS OIDC Provider"
+      topics                                   = ["ministryofjustice", "analytical-platform"]
+      use_template                             = true
+      archived                                 = true
+      vulnerability_alerts                     = false
+      secret_scanning_push_protection          = "disabled"
+      template_repository                      = "ap-terraform-module-template"
+      branch_protection_require_signed_commits = false
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
