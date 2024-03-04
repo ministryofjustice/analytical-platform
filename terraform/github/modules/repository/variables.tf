@@ -189,7 +189,7 @@ variable "branch_protection_push_restrictions" {
 
 variable "branch_protection_require_signed_commits" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "branch_protection_required_linear_history" {
