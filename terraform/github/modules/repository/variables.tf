@@ -182,11 +182,6 @@ variable "branch_protection_force_push_bypassers" {
   default = []
 }
 
-variable "branch_protection_push_restrictions" {
-  type    = list(string)
-  default = []
-}
-
 variable "branch_protection_require_signed_commits" {
   type    = bool
   default = true
@@ -203,11 +198,6 @@ variable "branch_protection_require_conversation_resolution" {
 }
 
 variable "branch_protection_allows_force_pushes" {
-  type    = bool
-  default = false
-}
-
-variable "branch_protection_blocks_creations" {
   type    = bool
   default = false
 }
