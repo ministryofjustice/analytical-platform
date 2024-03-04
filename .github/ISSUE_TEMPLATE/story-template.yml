@@ -1,6 +1,6 @@
 name: Story
 description: 📖 Create a Story
-title: "[gitmoji] <title>"
+title: "📖 <title>"
 labels: ["story", "triage"]
 body:
   - type: markdown
