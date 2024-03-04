@@ -70,7 +70,7 @@ jobs:
             checkTag=$(skopeo list-tags docker://ghcr.io/ministryofjustice/data-platform-${{ needs.prepare-environment.outputs.name }} | jq -r --arg imageTag "${{ needs.prepare-environment.outputs.version }}" '.Tags | index($imageTag)')
             export checkTag
 
-            if [[ -z "${imageTag}" ]]; then
+            if [[ "${checkTag}" == "null" ]]; then
               echo "tag_exists=false" >>"${GITHUB_ENV}"
             else
               echo "tag_exists=true" >>"${GITHUB_ENV}"
@@ -180,7 +180,7 @@ jobs:
 
       - name: Scan Image
         id: scan_image
-        uses: aquasecurity/trivy-action@84384bd6e777ef152729993b8145ea352e9dd3ef # v0.17.0
+        uses: aquasecurity/trivy-action@062f2592684a31eb3aa050cc61e7ca1451cecd3d # v0.18.0
         with:
           image-ref: ${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
           exit-code: 1
@@ -192,7 +192,7 @@ jobs:
       - name: Scan Image (On SARIF Scan Failure)
         if: failure() && steps.scan_image.outcome == 'failure'
         id: scan_image_on_failure
-        uses: aquasecurity/trivy-action@84384bd6e777ef152729993b8145ea352e9dd3ef # v0.17.0
+        uses: aquasecurity/trivy-action@062f2592684a31eb3aa050cc61e7ca1451cecd3d # v0.18.0
         with:
           image-ref: ${{ needs.prepare-environment.outputs.name }}:${{ needs.prepare-environment.outputs.version }}
           exit-code: 1
