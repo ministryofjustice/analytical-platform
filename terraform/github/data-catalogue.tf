@@ -16,21 +16,21 @@ module "data_catalogue_team" {
   ]
 }
 
-# module "data_catalogue_parent_repository" {
-#   source = "./modules/repository"
+module "data_catalogue_repository" {
+  source = "./modules/repository"
 
-#   name        = "data-catalogue"
-#   description = "Data catalogue"
-#   topics      = ["data-catalogue"]
+  name        = "data-catalogue"
+  description = "Data catalogue"
+  topics      = ["data-catalogue"]
 
-#   use_template = true
-#   has_projects = "true"
-#   homepage_url = null
+  use_template = true
+  has_projects = "true"
+  homepage_url = null
 
-#   access = {
-#     admins = [module.data_catalogue_team.id]
-#   }
-# }
+  access = {
+    admins = [module.data_catalogue_team.id]
+  }
+}
 
 module "find_moj_data_repository" {
   source = "./modules/repository"
@@ -46,11 +46,6 @@ module "find_moj_data_repository" {
   access = {
     admins = [module.data_catalogue_team.id]
   }
-}
-
-moved {
-  from = module.data_catalogue_repository
-  to   = module.find_moj_data_repository
 }
 
 module "datahub_custom_api_source_repository" {
