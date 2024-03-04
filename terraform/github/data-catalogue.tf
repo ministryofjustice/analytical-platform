@@ -33,6 +33,22 @@ module "data_catalogue_repository" {
   }
 }
 
+module "datahub_custom_api_source_repository" {
+  source = "./modules/repository"
+
+  name        = "datahub-custom-api-source"
+  description = "Custom ingestion source for Datahub to consume from https://data.justice.gov.uk/api"
+  topics      = ["data-catalogue"]
+
+  use_template = true
+  has_projects = "true"
+  homepage_url = null
+
+  access = {
+    admins = [module.data_catalogue_team.id]
+  }
+}
+
 module "data_catalogue_metadata_repository" {
   source = "./modules/repository"
 
@@ -53,4 +69,3 @@ module "data_catalogue_metadata_repository" {
     admins = [module.data_catalogue_team.id]
   }
 }
-
