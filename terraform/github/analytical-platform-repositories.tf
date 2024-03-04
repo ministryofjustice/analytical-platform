@@ -1,6 +1,7 @@
 locals {
   /* New World */
   analytical_platform_repositories = {
+    /* New World */
     "analytical-platform" = {
       name         = "analytical-platform"
       description  = "Analytical Platform"
@@ -42,6 +43,16 @@ locals {
           path   = "/"
         }
       }
+      access = {
+        admins = [module.analytical_platform_team.id]
+      }
+    },
+    "analytical-platform-dashboard" = {
+      name         = "analytical-platform-dashboard"
+      description  = "Analytical Platform Dashboard"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      has_issues   = true
+      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
       access = {
         admins = [module.analytical_platform_team.id]
       }
