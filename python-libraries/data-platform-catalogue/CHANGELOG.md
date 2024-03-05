@@ -7,6 +7,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.18.0] 2024-03-04
+
+### Added
+
+- `SearchResult` now returns a fully qualified name along with name
+ for datasets and data products. This is implemented in the clients
+ `search` method. We default fully_qualified_name for a data product
+ entity to `name`
+
 ## [0.17.0] 2024-02-28
 
 ### Added
