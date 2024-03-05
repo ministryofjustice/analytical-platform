@@ -2,7 +2,7 @@
 name: Epic
 description: ⛰ Create an Epic
 title: "[gitmoji] <title>"
-labels: ["epic", "triage"]
+labels: ["epic"]
 body:
   - type: markdown
     attributes:
