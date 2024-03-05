@@ -57,6 +57,23 @@ locals {
         admins = [module.analytical_platform_team.id]
       }
     },
+    "analytical-platform-visual-studio-code" = {
+      name        = "analytical-platform-visual-studio-code"
+      description = "Analytical Platform Visual Studio Code"
+      topics      = ["ministryofjustice", "analytical-platform"]
+      access = {
+        admins  = [module.analytical_platform_team.id]
+        pushers = [module.data_platform_team.id]
+      }
+    },
+    "analytical-platform-ingestion-scanner" = {
+      name        = "analytical-platform-ingestion-scanner"
+      description = "Analytical Platform Ingestion Scanner"
+      topics      = ["ministryofjustice", "analytical-platform"]
+      access = {
+        admins = [module.analytical_platform_team.id]
+      }
+    },
     /* Old World */
     "analytics-platform-infrastructure" = {
       name                                     = "analytics-platform-infrastructure"
@@ -295,15 +312,6 @@ locals {
       secret_scanning_push_protection_status = "disabled"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
-        pushers = [module.data_platform_team.id]
-      }
-    },
-    "analytical-platform-visual-studio-code" = {
-      name        = "analytical-platform-visual-studio-code"
-      description = "Analytical Platform Visual Studio Code"
-      topics      = ["ministryofjustice", "analytical-platform"]
-      access = {
-        admins  = [module.analytical_platform_team.id]
         pushers = [module.data_platform_team.id]
       }
     },
