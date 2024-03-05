@@ -217,9 +217,7 @@ def test_full_page(mock_graph, searcher):
                         "type": "DATASET",
                         "urn": "urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers2,PROD)",  # noqa E501
                         "name": "calm-pagoda-323403.jaffle_shop.customers2",
-                        "properties": {
-                            "name": "customers2",
-                        },
+                        "properties": {"name": "customers2", "qualifiedName": None},
                     },
                 },
                 {
