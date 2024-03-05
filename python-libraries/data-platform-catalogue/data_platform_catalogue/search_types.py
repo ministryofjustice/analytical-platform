@@ -52,6 +52,7 @@ class SearchResult:
     id: str
     result_type: ResultType
     name: str
+    fully_qualified_name: str = ""
     description: str = ""
     matches: dict[str, str] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
