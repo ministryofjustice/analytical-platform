@@ -1,8 +1,7 @@
 import json
 import logging
-from datetime import datetime
 from importlib.resources import files
-from typing import Any, Sequence, Tuple
+from typing import Any, Sequence
 
 from datahub.configuration.common import GraphError
 from datahub.ingestion.graph.client import DataHubGraph
@@ -15,6 +14,13 @@ from ...search_types import (
     SearchResponse,
     SearchResult,
     SortOption,
+)
+from .graphql_helpers import (
+    parse_domain,
+    parse_last_updated,
+    parse_owner,
+    parse_properties,
+    parse_tags,
 )
 
 logger = logging.getLogger(__name__)
@@ -192,78 +198,14 @@ class SearchClient:
             )
         return result
 
-    def _parse_owner(self, entity: dict[str, Any]):
-        """
-        Parse ownership information, if it is set.
-        """
-        ownership = entity.get("ownership") or {}
-        owners = [i["owner"] for i in ownership.get("owners", [])]
-        if owners:
-            properties = owners[0].get("properties") or {}
-            owner_email = properties.get("email", "")
-            owner_name = properties.get("fullName", properties.get("displayName", ""))
-        else:
-            owner_email = ""
-            owner_name = ""
-
-        return owner_email, owner_name
-
-    def _parse_last_updated(self, entity: dict[str, Any]) -> datetime | None:
-        """
-        Parse the last updated timestamp, if available
-        """
-        timestamp = entity.get("lastIngested")
-        if timestamp is None:
-            return None
-        return datetime.utcfromtimestamp(timestamp / 1000)
-
-    def _parse_tags(self, entity: dict[str, Any]) -> list[str]:
-        """
-        Parse tag information into a flat list of strings for displaying
-        as part of the search result.
-        """
-        outer_tags = entity.get("tags") or {}
-        tags = []
-        for tag in outer_tags.get("tags", []):
-            properties = tag["tag"]["properties"]
-            if properties:
-                tags.append(properties["name"])
-        return tags
-
-    def _parse_properties(
-        self, entity: dict[str, Any]
-    ) -> Tuple[dict[str, Any], dict[str, Any]]:
-        """
-        Parse properties and editableProperties into a single dictionary.
-        """
-        properties = entity["properties"] or {}
-        editable_properties = entity.get("editableProperties") or {}
-        properties.update(editable_properties)
-        custom_properties = {
-            i["key"]: i["value"] for i in properties.get("customProperties", [])
-        }
-        return properties, custom_properties
-
-    def _parse_domain(self, entity: dict[str, Any]):
-        metadata = {}
-        domain = entity.get("domain") or {}
-        inner_domain = domain.get("domain") or {}
-        metadata["domain_id"] = inner_domain.get("urn", "")
-        if inner_domain:
-            domain_properties, _ = self._parse_properties(inner_domain)
-            metadata["domain_name"] = domain_properties.get("name", "")
-        else:
-            metadata["domain_name"] = ""
-        return metadata
-
     def _parse_dataset(self, entity: dict[str, Any], matches) -> SearchResult:
         """
         Map a dataset entity to a SearchResult
         """
-        owner_email, owner_name = self._parse_owner(entity)
-        properties, custom_properties = self._parse_properties(entity)
-        tags = self._parse_tags(entity)
-        last_updated = self._parse_last_updated(entity)
+        owner_email, owner_name = parse_owner(entity)
+        properties, custom_properties = parse_properties(entity)
+        tags = parse_tags(entity)
+        last_updated = parse_last_updated(entity)
         name = entity["name"]
         relationships = entity.get("relationships", {})
         total_data_products = relationships.get("total", 0)
@@ -279,7 +221,7 @@ class SearchClient:
             "total_data_products": total_data_products,
             "data_products": data_products,
         }
-        metadata.update(self._parse_domain(entity))
+        metadata.update(parse_domain(entity))
         metadata.update(custom_properties)
 
         fqn = (
@@ -304,16 +246,16 @@ class SearchClient:
         """
         Map a data product entity to a SearchResult
         """
-        owner_email, owner_name = self._parse_owner(entity)
-        properties, custom_properties = self._parse_properties(entity)
-        tags = self._parse_tags(entity)
-        last_updated = self._parse_last_updated(entity)
+        owner_email, owner_name = parse_owner(entity)
+        properties, custom_properties = parse_properties(entity)
+        tags = parse_tags(entity)
+        last_updated = parse_last_updated(entity)
         metadata = {
             "owner": owner_name,
             "owner_email": owner_email,
             "number_of_assets": properties["numAssets"],
         }
-        metadata.update(self._parse_domain(entity))
+        metadata.update(parse_domain(entity))
         metadata.update(custom_properties)
 
         fqn = (
@@ -358,7 +300,7 @@ class SearchClient:
         return SearchFacets(results)
 
     def _parse_glossary_term(self, entity) -> SearchResult:
-        properties, custom_properties = self._parse_properties(entity)
+        properties, custom_properties = parse_properties(entity)
         metadata = {"parentNodes": entity["parentNodes"]["nodes"]}
 
         return SearchResult(
