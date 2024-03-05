@@ -96,6 +96,7 @@ def test_one_search_result(mock_graph, searcher):
                 matches={},
                 result_type=ResultType.DATA_PRODUCT,
                 name="Use of force",
+                fully_qualified_name="Use of force",
                 description="Prisons in England and Wales are required to record all instances of Use of Force within their establishment. Use of Force can be planned or unplanned and may involve various categories of control and restraint (C&R) techniques such as physical restraint or handcuffs.\n\nPlease refer to [PSO 1600](https://www.gov.uk/government/publications/use-of-force-in-prisons-pso-1600) for the current guidance.",  # noqa E501
                 metadata={
                     "domain_id": "urn:li:domain:3dc18e48-c062-4407-84a9-73e23f768023",
@@ -128,6 +129,7 @@ def test_dataset_result(mock_graph, searcher):
                         "name": "calm-pagoda-323403.jaffle_shop.customers",
                         "properties": {
                             "name": "customers",
+                            "qualifiedName": "jaffle_shop.customers",
                             "customProperties": [
                                 {"key": "StoredAsSubDirectories", "value": "False"},
                                 {
@@ -165,6 +167,7 @@ def test_dataset_result(mock_graph, searcher):
                 matches={},
                 result_type=ResultType.TABLE,
                 name="customers",
+                fully_qualified_name="jaffle_shop.customers",
                 description="",
                 metadata={
                     "owner": "",
@@ -200,6 +203,7 @@ def test_full_page(mock_graph, searcher):
                         "name": "calm-pagoda-323403.jaffle_shop.customers",
                         "properties": {
                             "name": "customers",
+                            "qualifiedName": "jaffle_shop.customers",
                         },
                         "editableProperties": None,
                         "tags": None,
@@ -244,6 +248,7 @@ def test_full_page(mock_graph, searcher):
                 matches={},
                 result_type=ResultType.TABLE,
                 name="customers",
+                fully_qualified_name="jaffle_shop.customers",
                 description="",
                 metadata={
                     "owner": "",
@@ -261,6 +266,7 @@ def test_full_page(mock_graph, searcher):
                 matches={},
                 result_type=ResultType.TABLE,
                 name="customers2",
+                fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers2",
                 description="",
                 metadata={
                     "owner": "",
@@ -278,6 +284,7 @@ def test_full_page(mock_graph, searcher):
                 matches={},
                 result_type=ResultType.TABLE,
                 name="customers3",
+                fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers3",
                 description="",
                 metadata={
                     "owner": "",
@@ -337,6 +344,7 @@ def test_query_match(mock_graph, searcher):
                 },
                 result_type=ResultType.TABLE,
                 name="customers",
+                fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers",
                 description="",
                 metadata={
                     "owner": "",
@@ -397,6 +405,7 @@ def test_result_with_owner(mock_graph, searcher):
                 matches={},
                 result_type=ResultType.TABLE,
                 name="customers",
+                fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers",
                 description="",
                 metadata={
                     "owner": "Shannon Lovett",
@@ -663,6 +672,7 @@ def test_result_with_data_product(mock_graph, searcher):
                 matches={},
                 result_type=ResultType.TABLE,
                 name="customers",
+                fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers",
                 description="",
                 metadata={
                     "owner": "",
@@ -727,6 +737,7 @@ def test_list_data_product_assets(mock_graph, searcher):
                 matches={},
                 result_type=ResultType.TABLE,
                 name="customers",
+                fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers",
                 description="just some customers",
                 metadata={
                     "owner": "",
