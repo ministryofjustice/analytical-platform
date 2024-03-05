@@ -282,12 +282,18 @@ class SearchClient:
         metadata.update(self._parse_domain(entity))
         metadata.update(custom_properties)
 
+        fqn = (
+            properties.get("qualifiedName", name)
+            if properties.get("qualifiedName") is not None
+            else name
+        )
+
         return SearchResult(
             id=entity["urn"],
             result_type=ResultType.TABLE,
             matches=matches,
             name=properties.get("name", name),
-            fully_qualified_name=properties.get("qualifiedName", name),
+            fully_qualified_name=fqn,
             description=properties.get("description", ""),
             metadata=metadata,
             tags=tags,
@@ -310,12 +316,18 @@ class SearchClient:
         metadata.update(self._parse_domain(entity))
         metadata.update(custom_properties)
 
+        fqn = (
+            properties.get("qualifiedName", properties["name"])
+            if properties.get("qualifiedName") is not None
+            else properties["name"]
+        )
+
         return SearchResult(
             id=entity["urn"],
             result_type=ResultType.DATA_PRODUCT,
             matches=matches,
             name=properties["name"],
-            fully_qualified_name=properties.get("qualifiedName", properties["name"]),
+            fully_qualified_name=fqn,
             description=properties.get("description", ""),
             metadata=metadata,
             tags=tags,
