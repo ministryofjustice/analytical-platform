@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Dependabots: Updates to `awswrangler`
-  
+
 ## [1.3.0] - 2024-03-01
 
 ### Changed
