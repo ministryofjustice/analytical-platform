@@ -109,3 +109,10 @@ class BaseCatalogueClient(ABC):
         returns a searchresponse of glossary terms
         """
         pass
+
+    @abstractmethod
+    def get_table_details(self, urn) -> TableMetadata:
+        """
+        returns the schema and detailed information about a table
+        """
+        pass

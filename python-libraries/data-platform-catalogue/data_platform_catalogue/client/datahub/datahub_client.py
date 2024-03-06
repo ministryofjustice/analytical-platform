@@ -1,7 +1,9 @@
+from importlib.resources import files
 from typing import Sequence
 
 import datahub.emitter.mce_builder as mce_builder
 import datahub.metadata.schema_classes as schema_classes
+from datahub.configuration.common import GraphError
 from datahub.emitter.mce_builder import make_data_platform_urn
 from datahub.emitter.mcp import MetadataChangeProposalWrapper
 from datahub.ingestion.graph.client import DatahubClientConfig, DataHubGraph
@@ -32,6 +34,7 @@ from ...search_types import (
     SortOption,
 )
 from ..base import BaseCatalogueClient, CatalogueError, logger
+from .graphql_helpers import parse_columns, parse_properties
 from .search import SearchClient
 
 DATAHUB_DATA_TYPE_MAPPING = {
@@ -87,6 +90,12 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         )
         self.graph = graph or DataHubGraph(self.server_config)
         self.search_client = SearchClient(self.graph)
+
+        self.dataset_query = (
+            files("data_platform_catalogue.client.datahub.graphql")
+            .joinpath("getDatasetDetails.graphql")
+            .read_text()
+        )
 
     def upsert_database_service(self, platform: str = "glue", *args, **kwargs) -> str:
         """
@@ -391,3 +400,20 @@ class DataHubCatalogueClient(BaseCatalogueClient):
     def get_glossary_terms(self, count: int = 1000) -> SearchResponse:
         """Wraps the client's glossary terms query"""
         return self.search_client.get_glossary_terms(count)
+
+    def get_table_details(self, urn) -> TableMetadata:
+        try:
+            response = self.graph.execute_graphql(self.dataset_query, {"urn": urn})[
+                "data"
+            ]["dataset"]
+            properties, custom_properties = parse_properties(response)
+            columns = parse_columns(response)
+
+            return TableMetadata(
+                name=properties["name"],
+                description=properties.get("description", ""),
+                column_details=columns,
+                retention_period_in_days=custom_properties.get("retentionPeriodInDays"),
+            )
+        except GraphError as e:
+            raise Exception("Unable to execute getDataset query") from e
