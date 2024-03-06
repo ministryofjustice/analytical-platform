@@ -1,4 +1,5 @@
 resource "aws_iam_policy" "quicksight_user" {
+  provider    = aws.analytical-platform-data-production
   name        = "QuickSightPenTesterPolicy"
   path        = "/"
   description = "Create Admin QS User"
