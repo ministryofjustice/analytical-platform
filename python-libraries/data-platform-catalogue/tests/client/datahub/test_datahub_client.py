@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 from data_platform_catalogue.client.datahub.datahub_client import DataHubCatalogueClient
@@ -91,7 +92,7 @@ class TestCatalogueClientWithDatahub:
     @pytest.fixture
     def golden_file_in(self):
         return Path(
-            Path(__file__).parent / "test_resources/golden_data_product_in.json"
+            Path(__file__).parent / "../../test_resources/golden_data_product_in.json"
         )
 
     def test_create_table_datahub(
@@ -230,3 +231,105 @@ class TestCatalogueClientWithDatahub:
         output_file = Path(tmp_path / "datahub_create_table_with_metadata.json")
         base_mock_graph.sink_to_file(output_file)
         check_snapshot("datahub_create_table_with_metadata.json", output_file)
+
+    def test_get_dataset(
+        self,
+        datahub_client,
+        base_mock_graph,
+    ):
+        urn = "abc"
+        datahub_response = {
+            "data": {
+                "dataset": {
+                    "platform": {"name": "datahub"},
+                    "ownership": None,
+                    "name": "Dataset",
+                    "properties": {
+                        "name": "Dataset",
+                        "qualifiedName": None,
+                        "description": "Dataset",
+                    },
+                    "editableProperties": None,
+                    "tags": {
+                        "tags": [
+                            {"tag": {"urn": "urn:li:tag:Entity", "properties": None}}
+                        ]
+                    },
+                    "lastIngested": 1709619407814,
+                    "domain": None,
+                    "schemaMetadata": {
+                        "fields": [
+                            {
+                                "fieldPath": "urn",
+                                "label": None,
+                                "nullable": False,
+                                "description": "The primary identifier for the dataset entity.",
+                                "type": "STRING",
+                                "nativeDataType": "string",
+                            },
+                            {
+                                "fieldPath": "upstreamLineage",
+                                "label": None,
+                                "nullable": False,
+                                "description": "Upstream lineage of a dataset",
+                                "type": "STRUCT",
+                                "nativeDataType": "upstreamLineage",
+                            },
+                        ],
+                        "primaryKeys": ["urn"],
+                        "foreignKeys": [
+                            {
+                                "name": "DownstreamOf",
+                                "foreignFields": [{"fieldPath": "urn"}],
+                                "foreignDataset": {
+                                    "urn": "urn:li:dataset:(urn:li:dataPlatform:datahub,Dataset,PROD)",
+                                    "properties": {
+                                        "name": "Dataset",
+                                        "qualifiedName": None,
+                                    },
+                                },
+                                "sourceFields": [{"fieldPath": "upstreamLineage"}],
+                            },
+                        ],
+                    },
+                }
+            }
+        }
+        base_mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+        dataset = datahub_client.get_table_details(urn)
+
+        assert dataset == TableMetadata(
+            name="Dataset",
+            description="Dataset",
+            column_details=[
+                {
+                    "name": "urn",
+                    "type": "STRING",
+                    "description": "The primary identifier for the dataset entity.",
+                    "isPrimaryKey": True,
+                    "foreignKeys": [],
+                    "nullable": False,
+                },
+                {
+                    "name": "upstreamLineage",
+                    "type": "STRUCT",
+                    "description": "Upstream lineage of a dataset",
+                    "foreignKeys": [
+                        {
+                            "tableId": "urn:li:dataset:(urn:li:dataPlatform:datahub,Dataset,PROD)",
+                            "fieldName": "urn",
+                            "tableName": "Dataset",
+                        }
+                    ],
+                    "isPrimaryKey": False,
+                    "nullable": False,
+                },
+            ],
+            retention_period_in_days=None,
+            source_dataset_name="",
+            where_to_access_dataset="",
+            data_sensitivity_level=SecurityClassification.OFFICIAL,
+            tags=[],
+            major_version=1,
+        )
