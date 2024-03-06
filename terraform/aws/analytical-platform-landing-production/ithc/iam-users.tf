@@ -4,9 +4,10 @@ module "ithc_iam_user" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-user"
   name                          = each.value
   create_user                   = true
-  create_iam_access_key         = true
+  create_iam_access_key         = false
   create_iam_user_login_profile = true
   force_destroy                 = true
+  aws_iam_access_key_status     = "Inactive"
 
 }
 
