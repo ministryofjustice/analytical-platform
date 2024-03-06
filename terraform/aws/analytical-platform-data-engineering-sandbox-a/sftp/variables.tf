@@ -11,17 +11,18 @@ variable "tags" {
 variable "environment" {
   type        = string
   description = "Name of the environment"
+  default     = "sandbox"
 }
 
-variable "supplier" {
-  type        = string
-  description = "Name of the supplier"
-}
+# variable "supplier" {
+#   type        = string
+#   description = "Name of the supplier"
+# }
 
-variable "user_name" {
-  description = "The user name for the SFTP server account"
-  type        = string
-}
+# variable "user_name" {
+#   description = "The user name for the SFTP server account"
+#   type        = string
+# }
 
 ##################################################
 # VPC

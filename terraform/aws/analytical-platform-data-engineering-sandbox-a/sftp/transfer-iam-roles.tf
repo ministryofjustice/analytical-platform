@@ -11,7 +11,9 @@ module "transfer_family_service_role" {
 
   trusted_role_services = ["transfer.amazonaws.com"]
 
-  custom_role_policy_arns = [module.transfer_family_service_policy.arn]
+  custom_role_policy_arns = ["arn:aws:iam::aws:policy/service-role/AWSTransferLoggingAccess"]
+
+
   # TODO: Tagging
   #   tags = local.tags
 }
