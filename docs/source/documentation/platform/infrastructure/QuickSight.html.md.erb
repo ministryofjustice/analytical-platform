@@ -47,7 +47,7 @@ Using Brian’s account with increasing levels of access.
 
 1. Created a new policy for s3 access `poc-quicksight-user-access` granting access to BucketA
 2. Created new QS group called user_access
-3. Removed Brian’s user from the  QS admin group and added to user_access group 
+3. Removed Brian's user from the  QS admin group and added to user_access group 
 4. Tested s3 bucket access using this policy and Brian was able to access one S3 BucketA but not BucketB
 5. Added BucketB into the policy  `poc-quicksight-user-access` and then could access BucketB via QS 
 6. Created new policy for Athena access `poc-quicksight-user-access-athena` assigned to the user access group. So user user_access group has two policies assigned `poc-quicksight-user-access` & `poc-quicksight-user-access-athena`.
@@ -68,11 +68,174 @@ Using Brian’s account with increasing levels of access.
 
 ## Test user account deletion
 
-Prior to deleting Brian’s email user account, he shared the following dashboards, analyses and datasets with my account (admin). He shared one of each resource with my user as a co-owner, and additionally as a viewer for a dashboard and dataset.
+Prior to deleting Brian's email user account, he shared the following dashboards, analyses and datasets with my account (admin). He shared one of each resource with my user as a co-owner, and additionally as a viewer for a dashboard and dataset.
 
 
 ![QuickSight resource deletion](../images/quicksight-image4.png "QuickSight resource deletion")
 
-When deleting Brian’s user, the below options were provided. The option to delete orphaned resources was selected.
+When deleting Brian's user, the below options were provided. The option to delete orphaned resources was selected.
 
 ![QuickSight delete user](../images/quicksight-image5.png "QuickSight delete user")
+
+When deleting Brian's user, the below options were provided. The option to delete orphaned resources was selected.
+
+![QuickSight resource transfer](../images/quicksight-image6.png "QuickSight resource transfer")
+
+After deleting the user account, I still had the ability to access the resources shared with my user. For the resources I was shared as a viewer, this means I wouldn't be able to edit these resources and they would no longer maintainable follow the user deletion.
+
+In the event that an account was to be deleted from QS, the first option to transfer ownership for orphaned resources should be used, except in the scenario that all resources have already been co-owned with another user.
+
+## Conclusions/Findings
+
+
+### Scenarios from the Ticket
+
+User has IAM permission but not QS permissions, can they see data in a shared dataset
+
+* A data set is data pulled into QS by a user that has access to the datasource ie S3 
+* This can then be shared with a QS User that has Author access - they do not need any QS or IAM permissions
+
+User has QS permissions but not IAM permissions, can they see data in a shared dataset
+
+* Again any author can have a data set shared with them regardless of the users QS/IAM permissions
+
+Users have IAM permissions but not QS can they create datasources
+
+* No - to access a data source an S3 bucket for example the bucket must be in the QS S3 Access list, an appropriate IAM policy with access to the bucket must granted to the user/group and only if both are in place can a datasource be accessed.
+
+### Findings
+
+* A users with access to a datasource can create a QS dataset and share that with any QS Author regardless of that users access to the datasource thus bypassing any current application access control.
+* QS groups can contain multiple users
+* Database access is restricted by the S3 policy not the Athena policy.
+* Each Application/team would need its own QS group and  a IAM S3 policy granting access to one or many S3 buckets.
+* Any access to s3 is by having access granted in both QS group and IAM policy 
+* A dataset can be shared by the owner within QS with another user who does not have IAM access to the data source.
+* A data source owner cannot share a data source only a dataset within QS
+
+## Annex - IAM policies created for this test.
+
+poc-quicksight-user-access
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "GetObjects",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObjectVersion",
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::dev-quicksight-test",
+                "arn:aws:s3:::dev-quicksight-test/"
+            ]
+        },
+        {
+            "Sid": "ListBucket",
+            "Effect": "Allow",
+            "Action": "s3:ListBucket",
+            "Resource": [
+                "arn:aws:s3:::dev-quicksight-test",
+                "arn:aws:s3:::dev-quicksight-test/"
+            ]
+        }
+    ]
+}
+```
+
+poc-quicksight-user-access-athena
+
+```
+{
+   "Version":"2012-10-17",
+   "Statement":[
+      {
+         "Effect":"Allow",
+         "Action":[
+            "athena:BatchGetQueryExecution",
+            "athena:CancelQueryExecution",
+            "athena:GetCatalogs",
+            "athena:GetExecutionEngine",
+            "athena:GetExecutionEngines",
+            "athena:GetNamespace",
+            "athena:GetNamespaces",
+            "athena:GetQueryExecution",
+            "athena:GetQueryExecutions",
+            "athena:GetQueryResults",
+            "athena:GetQueryResultsStream",
+            "athena:GetTable",
+            "athena:GetTables",
+            "athena:ListQueryExecutions",
+            "athena:RunQuery",
+            "athena:StartQueryExecution",
+            "athena:StopQueryExecution",
+            "athena:ListWorkGroups",
+            "athena:ListEngineVersions",
+            "athena:GetWorkGroup",
+            "athena:GetDataCatalog",
+            "athena:GetDatabase",
+            "athena:GetTableMetadata",
+            "athena:ListDataCatalogs",
+            "athena:ListDatabases",
+            "athena:ListTableMetadata"
+         ],
+         "Resource":[
+            "*"
+         ]
+      },
+      {
+         "Effect":"Allow",
+         "Action":[
+            "glue:GetDatabase",
+            "glue:GetDatabases",
+            "glue:GetTable",
+            "glue:GetTables",
+            "glue:GetPartition",
+            "glue:GetPartitions",
+            "glue:BatchGetPartition"
+         ],
+         "Resource":[
+            "*"
+         ]
+      },
+      {
+         "Effect":"Allow",
+         "Action":[
+            "s3:GetBucketLocation",
+            "s3:GetObject",
+            "s3:ListBucket",
+            "s3:ListBucketMultipartUploads",
+            "s3:ListMultipartUploadParts",
+            "s3:AbortMultipartUpload",
+            "s3:CreateBucket",
+            "s3:PutObject",
+            "s3:PutBucketPublicAccessBlock"
+         ],
+         "Resource":[
+            "arn:aws:s3:::aws-athena-query-results-*"
+         ]
+      }
+   ]
+}
+```
+
+Deny policy tested:
+
+```
+{
+   "Version":"2012-10-17",
+   "Statement":[
+      {
+         "Sid":"denyS3",
+         "Effect":"Deny",
+         "Action":"s3:*",
+         "Resource":"*"
+      }
+   ]
+}
+```
+
+
