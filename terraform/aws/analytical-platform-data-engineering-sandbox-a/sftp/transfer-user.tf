@@ -61,7 +61,7 @@ resource "aws_transfer_user" "jacobwoffenden" {
   user_name = "jacobwoffenden"
   role      = module.transfer_user_jacobwoffenden_role.iam_role_arn
 
-  # This doesn't work
+  # This doesn't work unless optimised directory is disabled
   home_directory_type = "LOGICAL"
   home_directory_mappings {
     entry  = "/upload"
