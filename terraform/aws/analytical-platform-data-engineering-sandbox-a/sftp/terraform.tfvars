@@ -1,6 +1,7 @@
 account_ids = {
   analytical-platform-data-engineering-sandbox-a = "684969100054"
   analytical-platform-management-production      = "042130406152"
+  analytical-platform-production                 = "312423030077"
 }
 
 tags = {
@@ -18,8 +19,7 @@ tags = {
 # VPC
 ##################################################
 
-vpc_cidr                              = "10.69.0.0/16"
-vpc_private_subnets                   = ["10.69.96.0/20", "10.69.112.0/20", "10.69.128.0/20"]
-vpc_public_subnets                    = ["10.69.144.0/20", "10.69.160.0/20", "10.69.176.0/20"]
-vpc_database_subnets                  = ["10.69.0.0/28", "10.69.0.16/28", "10.69.0.32/28"]
-nat_gateway_bandwidth_alarm_threshold = 90
+vpc_cidr             = "10.69.0.0/16"
+vpc_private_subnets  = ["10.69.96.0/20", "10.69.112.0/20", "10.69.128.0/20"]
+vpc_public_subnets   = ["10.69.144.0/20", "10.69.160.0/20", "10.69.176.0/20"]
+vpc_database_subnets = ["10.69.0.0/28", "10.69.0.16/28", "10.69.0.32/28"]

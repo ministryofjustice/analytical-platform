@@ -14,16 +14,6 @@ variable "environment" {
   default     = "sandbox"
 }
 
-# variable "supplier" {
-#   type        = string
-#   description = "Name of the supplier"
-# }
-
-# variable "user_name" {
-#   description = "The user name for the SFTP server account"
-#   type        = string
-# }
-
 ##################################################
 # VPC
 ##################################################
@@ -46,9 +36,4 @@ variable "vpc_public_subnets" {
 variable "vpc_database_subnets" {
   type        = list(string)
   description = "List of database subnets"
-}
-
-variable "nat_gateway_bandwidth_alarm_threshold" {
-  type        = number
-  description = "Threshold value of how much bandwidth should trigger alert"
 }
