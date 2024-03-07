@@ -99,9 +99,7 @@ class SearchClient:
         for result in response["searchResults"]:
             entity = result["entity"]
             entity_type = entity["type"]
-            matched_fields = {
-                i["name"]: i["value"] for i in result.get("matchedFields", [])
-            }
+            matched_fields = self._get_matched_fields(result=result)
 
             if entity_type == "DATA_PRODUCT":
                 page_results.append(self._parse_data_product(entity, matched_fields))
@@ -113,6 +111,18 @@ class SearchClient:
         return SearchResponse(
             total_results=response["total"], page_results=page_results, facets=facets
         )
+
+    @staticmethod
+    def _get_matched_fields(result: dict) -> dict:
+        fields = result.get("matchedFields", [])
+        matched_fields = {}
+        for field in fields:
+            name = field.get("name")
+            value = field.get("value")
+            if name == "customProperties" and value != "":
+                name, value = value.split("=")
+            matched_fields[name] = value
+        return matched_fields
 
     def search_facets(
         self,
