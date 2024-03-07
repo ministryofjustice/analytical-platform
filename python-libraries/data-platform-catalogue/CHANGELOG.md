@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Fix error executing getDataset query and added end to end test
+- Fix error executing getDataset query and added end-to-end test
 
 ## [0.19.0] 2024-03-06
 
