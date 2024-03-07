@@ -39,7 +39,11 @@ locals {
     {
       name  = "Murad Ali"
       email = "murad.ali@digital.justice.gov.uk"
-    }
+    },
+    {
+      name  = "James Stott"
+      email = "james.stott@digital.justice.gov.uk"
+    },
   ]
 }
 
