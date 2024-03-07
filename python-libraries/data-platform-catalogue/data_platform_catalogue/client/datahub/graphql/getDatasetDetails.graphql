@@ -33,9 +33,7 @@ query getDatasetDetails($urn: String!) {
         value
       }
       created
-      lastModified {
-        actor
-      }
+      lastModified
     }
     editableProperties {
       description

@@ -86,7 +86,7 @@ def parse_columns(entity: dict[str, Any]) -> list[dict[str, Any]]:
     if not schema_metadata:
         return []
 
-    primary_keys = set(schema_metadata.get("primaryKeys", ()))
+    primary_keys = set(schema_metadata.get("primaryKeys") or ())
 
     foreign_keys = defaultdict(list)
 
@@ -97,7 +97,7 @@ def parse_columns(entity: dict[str, Any]) -> list[dict[str, Any]]:
     # - Some foreign keys will not match on fieldPath, because fields
     #   may be defined using STRUCT types and foreign keys can reference
     #   subfields within the struct. We will simply ignore these.
-    for foreign_key in schema_metadata.get("foreignKeys", ()):
+    for foreign_key in schema_metadata.get("foreignKeys") or ():
         if not foreign_key["sourceFields"] or not foreign_key["foreignFields"]:
             continue
 
