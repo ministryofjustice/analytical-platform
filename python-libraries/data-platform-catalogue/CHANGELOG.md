@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `_get_matched_fields` static method to return matched fields including logic
   for the values of custom property fields.
 
+### Changed
+
+- changed query test matches to include a customProperties field with value
+
 ## [0.19.1] 2024-03-07
 
 ### Changed
