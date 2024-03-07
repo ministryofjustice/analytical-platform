@@ -404,8 +404,8 @@ class DataHubCatalogueClient(BaseCatalogueClient):
     def get_table_details(self, urn) -> TableMetadata:
         try:
             response = self.graph.execute_graphql(self.dataset_query, {"urn": urn})[
-                "data"
-            ]["dataset"]
+                "dataset"
+            ]
             properties, custom_properties = parse_properties(response)
             columns = parse_columns(response)
 

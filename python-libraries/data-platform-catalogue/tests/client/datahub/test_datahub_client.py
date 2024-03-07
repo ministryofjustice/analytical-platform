@@ -239,60 +239,56 @@ class TestCatalogueClientWithDatahub:
     ):
         urn = "abc"
         datahub_response = {
-            "data": {
-                "dataset": {
-                    "platform": {"name": "datahub"},
-                    "ownership": None,
+            "dataset": {
+                "platform": {"name": "datahub"},
+                "ownership": None,
+                "name": "Dataset",
+                "properties": {
                     "name": "Dataset",
-                    "properties": {
-                        "name": "Dataset",
-                        "qualifiedName": None,
-                        "description": "Dataset",
-                    },
-                    "editableProperties": None,
-                    "tags": {
-                        "tags": [
-                            {"tag": {"urn": "urn:li:tag:Entity", "properties": None}}
-                        ]
-                    },
-                    "lastIngested": 1709619407814,
-                    "domain": None,
-                    "schemaMetadata": {
-                        "fields": [
-                            {
-                                "fieldPath": "urn",
-                                "label": None,
-                                "nullable": False,
-                                "description": "The primary identifier for the dataset entity.",
-                                "type": "STRING",
-                                "nativeDataType": "string",
-                            },
-                            {
-                                "fieldPath": "upstreamLineage",
-                                "label": None,
-                                "nullable": False,
-                                "description": "Upstream lineage of a dataset",
-                                "type": "STRUCT",
-                                "nativeDataType": "upstreamLineage",
-                            },
-                        ],
-                        "primaryKeys": ["urn"],
-                        "foreignKeys": [
-                            {
-                                "name": "DownstreamOf",
-                                "foreignFields": [{"fieldPath": "urn"}],
-                                "foreignDataset": {
-                                    "urn": "urn:li:dataset:(urn:li:dataPlatform:datahub,Dataset,PROD)",
-                                    "properties": {
-                                        "name": "Dataset",
-                                        "qualifiedName": None,
-                                    },
+                    "qualifiedName": None,
+                    "description": "Dataset",
+                },
+                "editableProperties": None,
+                "tags": {
+                    "tags": [{"tag": {"urn": "urn:li:tag:Entity", "properties": None}}]
+                },
+                "lastIngested": 1709619407814,
+                "domain": None,
+                "schemaMetadata": {
+                    "fields": [
+                        {
+                            "fieldPath": "urn",
+                            "label": None,
+                            "nullable": False,
+                            "description": "The primary identifier for the dataset entity.",
+                            "type": "STRING",
+                            "nativeDataType": "string",
+                        },
+                        {
+                            "fieldPath": "upstreamLineage",
+                            "label": None,
+                            "nullable": False,
+                            "description": "Upstream lineage of a dataset",
+                            "type": "STRUCT",
+                            "nativeDataType": "upstreamLineage",
+                        },
+                    ],
+                    "primaryKeys": ["urn"],
+                    "foreignKeys": [
+                        {
+                            "name": "DownstreamOf",
+                            "foreignFields": [{"fieldPath": "urn"}],
+                            "foreignDataset": {
+                                "urn": "urn:li:dataset:(urn:li:dataPlatform:datahub,Dataset,PROD)",
+                                "properties": {
+                                    "name": "Dataset",
+                                    "qualifiedName": None,
                                 },
-                                "sourceFields": [{"fieldPath": "upstreamLineage"}],
                             },
-                        ],
-                    },
-                }
+                            "sourceFields": [{"fieldPath": "upstreamLineage"}],
+                        },
+                    ],
+                },
             }
         }
         base_mock_graph.execute_graphql = MagicMock(return_value=datahub_response)

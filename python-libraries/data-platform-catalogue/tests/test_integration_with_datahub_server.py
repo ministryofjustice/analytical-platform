@@ -285,3 +285,12 @@ def test_get_glossary_terms_returns():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
     assets = client.get_glossary_terms(count=20)
     assert assets
+
+
+@runs_on_development_server
+def test_get_dataset():
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+    table = client.get_table_details(
+        urn="urn:li:dataset:(urn:li:dataPlatform:glue,nomis.agency_release_beds,PROD)"
+    )
+    assert table
