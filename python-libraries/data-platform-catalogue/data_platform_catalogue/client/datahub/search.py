@@ -120,8 +120,8 @@ class SearchClient:
             name = field.get("name")
             value = field.get("value")
             if name == "customProperties" and value != "":
-                name, _ = value.split("=")
-            matched_fields[name] = ""
+                name, value = value.split("=")
+            matched_fields[name] = value
         return matched_fields
 
     def search_facets(
