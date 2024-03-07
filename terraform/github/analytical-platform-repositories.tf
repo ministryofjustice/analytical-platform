@@ -74,6 +74,22 @@ locals {
         admins = [module.analytical_platform_team.id]
       }
     },
+    "analytical-platform-ingestion-syncer" = {
+      name        = "analytical-platform-ingestion-syncer"
+      description = "Analytical Platform Ingestion Syncer"
+      topics      = ["ministryofjustice", "analytical-platform"]
+      access = {
+        admins = [module.analytical_platform_team.id]
+      }
+    },
+    "analytical-platform-ingestion-notifier" = {
+      name        = "analytical-platform-ingestion-notifier"
+      description = "Analytical Platform Ingestion Notifier"
+      topics      = ["ministryofjustice", "analytical-platform"]
+      access = {
+        admins = [module.analytical_platform_team.id]
+      }
+    },
     /* Old World */
     "analytics-platform-infrastructure" = {
       name                                     = "analytics-platform-infrastructure"
