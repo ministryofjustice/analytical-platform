@@ -62,19 +62,19 @@ resource "aws_transfer_user" "jacobwoffenden" {
   role      = module.transfer_user_jacobwoffenden_role.iam_role_arn
 
   # This doesn't work unless optimised directory is disabled
-  home_directory_type = "LOGICAL"
-  home_directory_mappings {
-    entry  = "/upload"
-    target = "/${module.landing_bucket.s3_bucket_id}/jacobwoffenden/upload"
-  }
+  # home_directory_type = "LOGICAL"
+  # home_directory_mappings {
+  #   entry  = "/upload"
+  #   target = "/${module.landing_bucket.s3_bucket_id}/jacobwoffenden/upload"
+  # }
 
-  home_directory_mappings {
-    entry  = "/download"
-    target = "/${module.landing_bucket.s3_bucket_id}/jacobwoffenden/download"
-  }
+  # home_directory_mappings {
+  #   entry  = "/download"
+  #   target = "/${module.landing_bucket.s3_bucket_id}/jacobwoffenden/download"
+  # }
 
   # This works
-  # home_directory = "/${module.landing_bucket.s3_bucket_id}/jacobwoffenden"
+  home_directory = "/${module.landing_bucket.s3_bucket_id}/jacobwoffenden" # TODO: do we need an SFTP specific landing bucket?
 
   # TODO: Tagging
 }
