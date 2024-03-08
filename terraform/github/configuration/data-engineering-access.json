@@ -468,7 +468,7 @@
       "analytical-platform-data-engineering-production-data-engineer"
     ]
   },
-    {
+  {
     "name": "Chris Sheldon",
     "github": "csheldon155",
     "access": [
@@ -505,6 +505,78 @@
       "analytical-platform-data-engineering-sandboxa-administrator",
       "analytical-platform-data-engineering-sandboxa-data-engineer",
       "analytical-platform-data-engineering-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Katy Louise",
+    "github": "katylouise",
+    "access": [
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer"
+    ]
+  },
+  {
+    "name": "Daniel Featherstone",
+    "github": "df-just",
+    "access": [
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer"
+    ]
+  },
+  {
+    "name": "Daoud Choudry",
+    "github": "DaoudC",
+    "access": [
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer"
+    ]
+  },
+  {
+    "name": "Marco Surace",
+    "github": "ms130",
+    "access": [
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer"
+    ]
+  },
+  {
+    "name": "Billy Crawford",
+    "github": "bcrawford-moj",
+    "access": [
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer"
+    ]
+  },
+  {
+    "name": "William Martin",
+    "github": "wmartin-gss",
+    "access": [
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer"
+    ]
+  },
+  {
+    "name": "Aditya Upmanyu",
+    "github": "adityadsgit",
+    "access": [
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer"
+    ]
+  },
+  {
+    "name": "Dean Lundie",
+    "github": "d-lundie",
+    "access": [
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer"
+    ]
+  },
+  {
+    "name": "Holly Furniss",
+    "github": "hollyfurniss-moj",
+    "access": [
+      "analytical-platform-data-engineering-sandboxa-administrator",
+      "analytical-platform-data-engineering-sandboxa-data-engineer"
     ]
   }
 ]
