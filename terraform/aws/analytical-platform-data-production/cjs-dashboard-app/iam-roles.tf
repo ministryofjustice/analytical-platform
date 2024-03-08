@@ -6,7 +6,7 @@ module "cjs_dashboard_app_iam_role" {
 
   name = "github-cjs-dashboard-app"
 
-  subjects = ["ministryofjustice/cjs_scorecard_exploratory_analysis:*"]
+  subjects = ["ministryofjustice/cjs-dashboard:*"]
 
   policies = {
     cjs_dashboard_app = module.cjs_dashboard_app_iam_policy.arn
