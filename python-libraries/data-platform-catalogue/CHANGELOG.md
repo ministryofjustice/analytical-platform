@@ -7,6 +7,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.19.2] 2024-03-07
+
+### Added
+
+- `_get_matched_fields` static method to return matched fields including logic
+  for the values of custom property fields.
+
+### Changed
+
+- changed query test matches to include a customProperties field with value
+
 ## [0.19.1] 2024-03-07
 
 ### Changed
