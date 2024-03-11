@@ -1,5 +1,6 @@
 module "sns_topic" {
-  source = "terraform-aws-modules/sns/aws"
+  source  = "terraform-aws-modules/sns/aws"
+  version = "6.0.1"
 
   name              = "ingestion-notifications"
   display_name      = "ingestion-notifications"

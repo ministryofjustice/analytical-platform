@@ -25,3 +25,7 @@ variable "landing_bucket" {
 variable "landing_bucket_kms_key" {
   type = string
 }
+
+variable "supplier_data_kms_key" {
+  type = string
+}

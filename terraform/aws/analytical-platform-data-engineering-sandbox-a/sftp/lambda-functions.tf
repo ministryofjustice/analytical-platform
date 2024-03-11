@@ -1,7 +1,7 @@
 module "definition_upload_lambda" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   source  = "terraform-aws-modules/lambda/aws"
-  version = "~> 7.0"
+  version = "7.2.1"
 
   publish        = true
   create_package = false
@@ -54,7 +54,7 @@ module "definition_upload_lambda" {
 module "scan_lambda" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   source  = "terraform-aws-modules/lambda/aws"
-  version = "~> 7.0"
+  version = "7.2.1"
 
   publish        = true
   create_package = false
@@ -134,7 +134,7 @@ module "scan_lambda" {
 module "notify_lambda" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   source  = "terraform-aws-modules/lambda/aws"
-  version = "~> 7.0"
+  version = "7.2.1"
 
   publish        = true
   create_package = false
@@ -169,8 +169,15 @@ module "notify_lambda" {
         "kms:Decrypt"
       ]
       resources = [
-        module.sns_kms.key_arn
+        module.sns_kms.key_arn,
+        module.supplier_data_kms.key_arn
       ]
+    },
+    secretsmanager_access = {
+      sid       = "AllowSecretsManager"
+      effect    = "Allow"
+      actions   = ["secretsmanager:GetSecretValue"]
+      resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:ingestion/*"]
     },
     sns_access = {
       sid    = "AllowSNS"

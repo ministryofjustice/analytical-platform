@@ -2,7 +2,8 @@
   This will not carry over to the proper environment.
 */
 module "ecr" {
-  source = "terraform-aws-modules/ecr/aws"
+  source  = "terraform-aws-modules/ecr/aws"
+  version = "1.6.0"
 
   repository_name                 = "analytical-platform-family-transfer-server"
   repository_image_tag_mutability = "MUTABLE"
@@ -31,7 +32,8 @@ module "ecr" {
 }
 
 module "notify" {
-  source = "terraform-aws-modules/ecr/aws"
+  source  = "terraform-aws-modules/ecr/aws"
+  version = "1.6.0"
 
   repository_name                 = "analytical-platform-notify"
   repository_image_tag_mutability = "MUTABLE"
