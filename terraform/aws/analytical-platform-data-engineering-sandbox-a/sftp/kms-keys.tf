@@ -58,6 +58,18 @@ module "sns_kms" {
   deletion_window_in_days = 7
 }
 
+module "govuk_notifiy_kms" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  source  = "terraform-aws-modules/kms/aws"
+  version = "2.2.1"
+
+  aliases               = ["secretsmanager/govuk-notify"]
+  description           = "Key for GOV.UK Notify data"
+  enable_default_policy = true
+
+  deletion_window_in_days = 7
+}
+
 module "supplier_data_kms" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   source  = "terraform-aws-modules/kms/aws"
