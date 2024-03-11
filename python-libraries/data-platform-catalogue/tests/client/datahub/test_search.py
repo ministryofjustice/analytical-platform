@@ -314,6 +314,10 @@ def test_query_match(mock_graph, searcher):
                             "value": "urn:li:dataset:(urn:li:dataPlatform:looker,long_tail_companions.view.customer_focused,PROD)",  # noqa E501
                         },
                         {"name": "name", "value": "customer_focused"},
+                        {
+                            "name": "customProperties",
+                            "value": "sensitivityLevel=OFFICIAL",
+                        },
                     ],
                     "entity": {
                         "type": "DATASET",
@@ -339,6 +343,7 @@ def test_query_match(mock_graph, searcher):
                 matches={
                     "urn": "urn:li:dataset:(urn:li:dataPlatform:looker,long_tail_companions.view.customer_focused,PROD)",  # noqa E501
                     "name": "customer_focused",
+                    "sensitivityLevel": "OFFICIAL",
                 },
                 result_type=ResultType.TABLE,
                 name="customers",
