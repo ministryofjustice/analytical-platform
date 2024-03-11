@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.5] - 2024-03-11
+
+### Changed
+
+- Dependabots: Updates boto3 from 1.34.58 to 1.34.59
+
 ## [1.3.4] - 2024-03-08
 
 ### Changed
