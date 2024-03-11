@@ -85,3 +85,19 @@ module "data_catalogue_metadata_repository" {
     admins = [module.data_catalogue_team.id]
   }
 }
+
+module "datahub_custom_api_source_repository" {
+  source = "./modules/repository"
+
+  name        = "datahub-custom-domain-source"
+  description = "Custom ingestion source for Datahub to get domains as set in the create-a-derived-table service"
+  topics      = ["data-catalogue"]
+
+  use_template = true
+  has_projects = "true"
+  homepage_url = null
+
+  access = {
+    admins = [module.data_catalogue_team.id]
+  }
+}
