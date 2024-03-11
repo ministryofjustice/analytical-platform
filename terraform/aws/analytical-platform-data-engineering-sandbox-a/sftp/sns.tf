@@ -6,4 +6,11 @@ module "sns_topic" {
   signature_version = 2
 
   kms_master_key_id = module.sns_kms.key_id
+
+  subscriptions = {
+    lambda = {
+      protocol = "lambda"
+      endpoint = module.notify_lambda.lambda_function_arn
+    }
+  }
 }
