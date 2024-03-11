@@ -45,3 +45,15 @@ module "s3_definitions_kms" {
 
   deletion_window_in_days = 7
 }
+
+module "sns_kms" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  source  = "terraform-aws-modules/kms/aws"
+  version = "~> 2.0"
+
+  aliases               = ["sns/queue"]
+  description           = "Key for SNS queue"
+  enable_default_policy = true
+
+  deletion_window_in_days = 7
+}

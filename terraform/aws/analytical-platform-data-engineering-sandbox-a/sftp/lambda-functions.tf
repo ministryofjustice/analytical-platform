@@ -73,6 +73,7 @@ module "scan_lambda" {
     LANDING_BUCKET_NAME          = module.landing_bucket.s3_bucket_id
     QUARANTINE_BUCKET_NAME       = module.quarantine_bucket.s3_bucket_id
     PROCESSED_BUCKET_NAME        = module.processed_bucket.s3_bucket_id
+    SNS_TOPIC_ARN                = module.sns_topic.topic_arn
   }
 
   attach_policy_statements = true
@@ -91,7 +92,8 @@ module "scan_lambda" {
         module.s3_definitions_kms.key_arn,
         module.s3_landing_kms.key_arn,
         module.s3_quarantine_kms.key_arn,
-        module.s3_processed_kms.key_arn
+        module.s3_processed_kms.key_arn,
+        module.sns_kms.key_arn
       ]
     },
     s3_access = {
@@ -110,6 +112,14 @@ module "scan_lambda" {
         "arn:aws:s3:::${module.quarantine_bucket.s3_bucket_id}/*",
         "arn:aws:s3:::${module.processed_bucket.s3_bucket_id}/*"
       ]
+    },
+    sns_access = {
+      sid    = "AllowSNS"
+      effect = "Allow"
+      actions = [
+        "sns:Publish"
+      ]
+      resources = [module.sns_topic.topic_arn]
     }
   }
 
