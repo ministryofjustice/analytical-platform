@@ -86,7 +86,7 @@ module "data_catalogue_metadata_repository" {
   }
 }
 
-module "datahub_custom_api_source_repository" {
+module "datahub_custom_domain_source_repository" {
   source = "./modules/repository"
 
   name        = "datahub-custom-domain-source"
