@@ -65,7 +65,7 @@ module "scan_lambda" {
   memory_size            = 2048
   ephemeral_storage_size = 10240
   timeout                = 900
-  image_uri              = "684969100054.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-family-transfer-server:python-27" # TODO: Remove hardcoding and use data source
+  image_uri              = "684969100054.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-family-transfer-server:pythonjw-5" # TODO: Remove hardcoding and use data source
 
   environment_variables = {
     MODE                         = "scan",
@@ -131,7 +131,6 @@ module "scan_lambda" {
   }
 }
 
-
 module "notify_lambda" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   source  = "terraform-aws-modules/lambda/aws"
@@ -146,7 +145,7 @@ module "notify_lambda" {
   memory_size            = 2048
   ephemeral_storage_size = 10240
   timeout                = 900
-  image_uri              = "684969100054.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-family-transfer-server:10" # TODO: Remove hardcoding and use data source
+  image_uri              = "684969100054.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-notify:4" # TODO: Remove hardcoding and use data source
 
   environment_variables = {
     CLAMAV_DEFINITON_BUCKET_NAME = module.definitions_bucket.s3_bucket_id
