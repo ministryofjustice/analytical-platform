@@ -94,6 +94,15 @@ locals {
         admins = [module.analytical_platform_team.id]
       }
     },
+    "analytical-platform-jml-report" = {
+      name         = "analytical-platform-jml-report"
+      description  = "Analytical Platform JML Report"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
+      access = {
+        admins = [module.analytical_platform_team.id]
+      }
+    },
     /* Old World */
     "analytics-platform-infrastructure" = {
       name                                     = "analytics-platform-infrastructure"
