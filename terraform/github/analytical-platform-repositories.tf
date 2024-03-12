@@ -58,34 +58,38 @@ locals {
       }
     },
     "analytical-platform-visual-studio-code" = {
-      name        = "analytical-platform-visual-studio-code"
-      description = "Analytical Platform Visual Studio Code"
-      topics      = ["ministryofjustice", "analytical-platform"]
+      name         = "analytical-platform-visual-studio-code"
+      description  = "Analytical Platform Visual Studio Code"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
       access = {
         admins  = [module.analytical_platform_team.id]
         pushers = [module.data_platform_team.id]
       }
     },
-    "analytical-platform-ingestion-scanner" = {
-      name        = "analytical-platform-ingestion-scanner"
-      description = "Analytical Platform Ingestion Scanner"
-      topics      = ["ministryofjustice", "analytical-platform"]
+    "analytical-platform-ingestion-scan" = {
+      name         = "analytical-platform-ingestion-scan"
+      description  = "Analytical Platform Ingestion Scan"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
       access = {
         admins = [module.analytical_platform_team.id]
       }
     },
-    "analytical-platform-ingestion-syncer" = {
-      name        = "analytical-platform-ingestion-syncer"
-      description = "Analytical Platform Ingestion Syncer"
-      topics      = ["ministryofjustice", "analytical-platform"]
+    "analytical-platform-ingestion-transfer" = {
+      name         = "analytical-platform-ingestion-transfer"
+      description  = "Analytical Platform Ingestion Transfer"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
       access = {
         admins = [module.analytical_platform_team.id]
       }
     },
-    "analytical-platform-ingestion-notifier" = {
-      name        = "analytical-platform-ingestion-notifier"
-      description = "Analytical Platform Ingestion Notifier"
-      topics      = ["ministryofjustice", "analytical-platform"]
+    "analytical-platform-ingestion-notify" = {
+      name         = "analytical-platform-ingestion-notify"
+      description  = "Analytical Platform Ingestion Notify"
+      topics       = ["ministryofjustice", "analytical-platform"]
+      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
       access = {
         admins = [module.analytical_platform_team.id]
       }
