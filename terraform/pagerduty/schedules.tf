@@ -18,7 +18,8 @@ locals {
             module.users["gary.henderson@digital.justice.gov.uk"].id,
             module.users["jacob.hamblin-pyke@digital.justice.gov.uk"].id,
             module.users["murad.ali@digital.justice.gov.uk"].id,
-            module.users["thomas.webber@digital.justice.gov.uk"].id
+            module.users["thomas.webber@digital.justice.gov.uk"].id,
+            module.users["james.stott@digital.justice.gov.uk"].id,
           ]
           restrictions = [
             {
