@@ -13,7 +13,6 @@ locals {
       members = [
         "gfowler-moj",      # Greg Fowler
         "alex-vonfeldmann", # Alex von Feldmann
-        "hrahim-moj",       # Haymon Rahim
         "f-marry",          # Fabien Marry
         "seanprivett",      # Sean Privett
         "Ed-Bajo",          # Edwin Bajomo
