@@ -578,18 +578,10 @@
       "analytical-platform-data-engineering-sandboxa-administrator",
       "analytical-platform-data-engineering-sandboxa-data-engineer"
     ]
-  },  
+  }, 
   {
     "name": "Kimberley Brett",
     "github": "k1br",
-    "access": [
-      "analytical-platform-data-engineering-sandboxa-administrator",
-      "analytical-platform-data-engineering-sandboxa-data-engineer"
-    ]
-  },
-  {
-    "name": "Marco Suarce",
-    "github": "ms130",
     "access": [
       "analytical-platform-data-engineering-sandboxa-administrator",
       "analytical-platform-data-engineering-sandboxa-data-engineer"
