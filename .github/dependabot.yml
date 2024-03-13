@@ -45,20 +45,6 @@ updates:
       - "docker"
       - "needs-human-intervention"
   - package-ecosystem: "docker"
-    directory: "containers/jml-extract-lambda"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "docker"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-apps-and-tools"
-    labels:
-      - "docker"
-      - "needs-human-intervention"
-  - package-ecosystem: "docker"
     directory: "containers/kubectl"
     schedule:
       interval: "daily"
@@ -198,17 +184,6 @@ updates:
     labels:
       - "docker"
       - "needs-human-intervention"
-  - package-ecosystem: "pip"
-    directory: "containers/jml-extract-lambda/src/var/task"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "pip"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "pip"
     directory: "scripts/pagerduty/rota-to-slack"
     schedule:
