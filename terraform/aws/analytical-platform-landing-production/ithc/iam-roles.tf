@@ -7,7 +7,7 @@ resource "aws_iam_policy" "quicksight_user" {
 }
 module "analytical_platform_development_pen_tester" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.35.0"
+  version = "5.37.1"
   providers = {
     aws = aws.analytical-platform-deveopment
   }
@@ -24,7 +24,7 @@ module "analytical_platform_development_pen_tester" {
 
 module "analytical_platform_production_pen_tester" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.35.0"
+  version = "5.37.1"
   providers = {
     aws = aws.analytical-platform-production
   }
@@ -44,7 +44,7 @@ module "analytical_platform_production_pen_tester" {
 
 module "analytical_platform_data_production_pen_tester" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.35.0"
+  version = "5.37.1"
   providers = {
     aws = aws.analytical-platform-data-production
   }
