@@ -2,7 +2,7 @@ module "security_group" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.1"
+  version = "5.1.2"
 
   name        = local.name
   description = "Data Engineering App SG"
