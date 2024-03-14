@@ -300,10 +300,20 @@ class TestCatalogueClientWithDatahub:
                     "name": "Dataset",
                     "qualifiedName": None,
                     "description": "Dataset",
+                    "customProperties": [
+                        {"key": "sensitivityLevel", "value": "OFFICIAL-SENSITIVE"}
+                    ],
                 },
                 "editableProperties": None,
                 "tags": {
-                    "tags": [{"tag": {"urn": "urn:li:tag:Entity", "properties": None}}]
+                    "tags": [
+                        {
+                            "tag": {
+                                "urn": "urn:li:tag:Entity",
+                                "properties": {"name": "some-tag"},
+                            }
+                        }
+                    ]
                 },
                 "lastIngested": 1709619407814,
                 "domain": None,
@@ -379,7 +389,7 @@ class TestCatalogueClientWithDatahub:
             source_dataset_name="",
             where_to_access_dataset="",
             data_sensitivity_level=SecurityClassification.OFFICIAL,
-            tags=[],
+            tags=["some-tag"],
             major_version=1,
             relationships={
                 RelationshipType.PARENT: [
