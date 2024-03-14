@@ -35,7 +35,6 @@ def parse_last_updated(entity: dict[str, Any]) -> datetime | None:
 def parse_created_and_modified(
     properties: dict[str, Any]
 ) -> Tuple[datetime | None, datetime | None]:
-
     created = properties.get("created")
     modified = properties.get("lastModified")
 
