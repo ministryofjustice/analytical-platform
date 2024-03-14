@@ -66,9 +66,9 @@ Using Test-user’s account with increasing levels of access.
 3. Within QuickSight individual users or user group be granted access to the IAM policy
 4. In addition if Athena access is required a IAM policy to list databases/tables must be created in AWS and granted to the QuickSight group. This is generic and not specific to individual databases and does <b>NOT</b> grant access to any data.
 
-## Test user account deletion
+## Test User Account Deletion
 
-Prior to deleting Test-user's email user account, he shared the following dashboards, analyses and datasets with my account (admin). He shared one of each resource with my user as a co-owner, and additionally as a viewer for a dashboard and dataset.
+Prior to deleting Test-user's email user account, they shared the following dashboards, analyses and datasets with my account (admin). They shared one of each resource with my user as a co-owner, and additionally as a viewer for a dashboard and dataset.
 
 
 ![QuickSight resource deletion](../images/quicksight-image4.png "QuickSight resource deletion")
@@ -83,35 +83,35 @@ When deleting Test-user's account, the below options were provided. The option t
 
 After deleting the Test-user's account, I still had the ability to access the resources shared with my user. For the resources I was shared as a viewer, this means I wouldn't be able to edit these resources and they would no longer maintainable follow the user deletion.
 
-In the event that an account was to be deleted from QS, the first option to transfer ownership for orphaned resources should be used, except in the scenario that all resources have already been co-owned with another user.
+In the event that an account was to be deleted from QuickSight, the first option to transfer ownership for orphaned resources should be used, except in the scenario that all resources have already been co-owned with another user.
 
 ## Conclusions/Findings
 
 
-### Scenarios from the Ticket
+### Scenarios
 
-User has IAM permission but not QS permissions, can they see data in a shared dataset
+User has IAM permission but not QuickSight permissions, can they see data in a shared dataset
 
-* A data set is data pulled into QS by a user that has access to the datasource ie S3
-* This can then be shared with a QS User that has Author access - they do not need any QS or IAM permissions
+* A data set is data pulled into QuickSight by a user that has access to the data source in S3
+* This can then be shared with a QuickSight User that has Author access - they do not need any QuickSight or IAM permissions
 
-User has QS permissions but not IAM permissions, can they see data in a shared dataset
+User has QuickSight permissions but not IAM permissions, can they see data in a shared dataset
 
-* Again any author can have a data set shared with them regardless of the users QS/IAM permissions
+* Again any author can have a data set shared with them regardless of the users QuickSight/IAM permissions
 
-Users have IAM permissions but not QS can they create datasources
+Users have IAM permissions but not QuickSight can they create data sources
 
-* No - to access a data source an S3 bucket for example the bucket must be in the QS S3 Access list, an appropriate IAM policy with access to the bucket must granted to the user/group and only if both are in place can a datasource be accessed.
+* No - to access a data source, an S3 bucket for example, the bucket must be in the QuickSight S3 access list, an appropriate IAM policy with access to the bucket must granted to the user/group and only if both are in place can a data source be accessed.
 
 ### Findings
 
-* A users with access to a datasource can create a QS dataset and share that with any QS Author regardless of that users access to the datasource thus bypassing any current application access control.
-* QS groups can contain multiple users
+* A user with access to a data source can create a QuickSight dataset and share that with any QuickSight Author regardless of that users access to the data source, thus bypassing any current application access control.
+* QuickSight groups can contain multiple users
 * Database access is restricted by the S3 policy not the Athena policy.
-* Each Application/team would need its own QS group and  a IAM S3 policy granting access to one or many S3 buckets.
-* Any access to s3 is by having access granted in both QS group and IAM policy
-* A dataset can be shared by the owner within QS with another user who does not have IAM access to the data source.
-* A data source owner cannot share a data source only a dataset within QS
+* Each application/team would need its own QuickSight group and an IAM S3 policy granting access to one or many S3 buckets.
+* Any access to S3 is by having access granted in both QuickSight group and IAM policy
+* A dataset can be shared by the owner within QuickSight with another user who does not have IAM access to the data source.
+* A data source owner cannot share a data source only a dataset within QuickSight
 
 ## Annex A - IAM policies created for this test.
 
@@ -237,5 +237,3 @@ Deny policy tested:
    ]
 }
 ```
-
-
