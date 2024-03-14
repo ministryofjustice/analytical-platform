@@ -13,6 +13,7 @@ module "data_catalogue_team" {
     "mitchdawson1982",  # Mitch Dawson
     "MatMoore",         # Mat Moore
     "alex-vonfeldmann", # Alex Von Feldmann
+    "Tod-Christov",     # Todor Christov
   ]
 }
 
