@@ -49,7 +49,7 @@ Using Test-user’s account with increasing levels of access.
 2. Created new QS group called user_access
 3. Removed Test-user's user from the  QS admin group and added to user_access group
 4. Tested s3 bucket access using this policy and Test-user was able to access one S3 BucketA but not BucketB
-5. Added BucketB into the policy  `poc-quicksight-user-access` and then could access BucketB via QS
+5. Added BucketB into the policy  `poc-quicksight-user-access` and then could access BucketB via QuickSight
 6. Created new policy for Athena access `poc-quicksight-user-access-athena` (see Annex A) assigned to the user access group. So user user_access group has two policies assigned `poc-quicksight-user-access` & `poc-quicksight-user-access-athena`.
 7. Test-user could create datasets via Athena for both databases/S3
 8. Removed access from the S3 policy `poc-quicksight-user-access` for the BucketB bucket.
