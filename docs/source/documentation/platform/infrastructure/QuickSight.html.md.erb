@@ -48,7 +48,7 @@ Using Test-user’s account with increasing levels of access.
 1. Created a new policy for S3 access `poc-quicksight-user-access` (see Annex A) granting access to BucketA
 2. Created new QuickSight group called user_access
 3. Removed Test-user's user from the QuickSight admin group and added to user_access group
-4. Tested s3 bucket access using this policy and Test-user was able to access one S3 BucketA but not BucketB
+4. Tested S3 bucket access using this policy and Test-user was able to access one S3 BucketA but not BucketB
 5. Added BucketB into the policy  `poc-quicksight-user-access` and then could access BucketB via QuickSight
 6. Created new policy for Athena access `poc-quicksight-user-access-athena` (see Annex A) assigned to the user access group. So user user_access group has two policies assigned `poc-quicksight-user-access` & `poc-quicksight-user-access-athena`.
 7. Test-user could create datasets via Athena for both databases/S3
