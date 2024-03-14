@@ -170,7 +170,7 @@ module "notify_lambda" {
       ]
       resources = [
         module.sns_kms.key_arn,
-        module.govuk_notifiy_kms.key_arn,
+        module.govuk_notify_kms.key_arn,
         module.supplier_data_kms.key_arn
       ]
     },
