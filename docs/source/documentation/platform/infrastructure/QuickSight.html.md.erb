@@ -55,7 +55,7 @@ Using Test-user’s account with increasing levels of access.
 8. Removed access from the S3 policy `poc-quicksight-user-access` for the BucketB bucket.
 9. Tried to create a dataset via Athena Test-user could still see both Databases<sup>*</sup> but was unable to retrieve data from the database where access had been removed to the S3.
 
-<sup>*</sup> QS has access to list Athena databases using the IAM policy `poc-quicksight-user-access-athena` which will allow users to see multiple Databases/tables to which they may not have access, <b>BUT</b> they will only be able to retrieve data from  Databases/tables to which they have been granted access via the IAM policy  `poc-quicksight-user-access` .
+<sup>*</sup> QuickSight has access to list Athena databases using the IAM policy `poc-quicksight-user-access-athena` which will allow users to see multiple databases/tables to which they may not have access, <b>BUT</b> they will only be able to retrieve data from databases/tables to which they have been granted access via the IAM policy `poc-quicksight-user-access`.
 
 ## QuickSight access flow
 
