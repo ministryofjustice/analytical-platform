@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -303,6 +303,7 @@ class TestCatalogueClientWithDatahub:
                     "customProperties": [
                         {"key": "sensitivityLevel", "value": "OFFICIAL-SENSITIVE"}
                     ],
+                    "lastModified": 1709619407814,
                 },
                 "editableProperties": None,
                 "tags": {
@@ -398,6 +399,7 @@ class TestCatalogueClientWithDatahub:
                 ]
             },
             domain="",
+            last_updated=datetime(2024, 3, 5, 6, 16, 47, 814000, tzinfo=timezone.utc),
         )
 
     def test_get_chart_details(self, datahub_client, base_mock_graph):

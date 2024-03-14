@@ -126,9 +126,10 @@ class TableMetadata:
     tags: list[str] = field(default_factory=list)
     major_version: int = 1
     row_count: int | None = None
-    last_updated: datetime | None = None
     owner: str = ""
     owner_email: str = ""
+    last_updated: datetime | None = None
+    first_created: datetime | None = None
 
     @staticmethod
     def from_data_product_schema_dict(

@@ -1,5 +1,8 @@
+from datetime import datetime, timezone
+
 from data_platform_catalogue.client.datahub.graphql_helpers import (
     parse_columns,
+    parse_created_and_modified,
     parse_relations,
 )
 from data_platform_catalogue.entities import RelatedEntity, RelationshipType
@@ -150,3 +153,12 @@ def test_parse_relations_blank():
     relations = {"relationships": {"total": 0, "relationships": []}}
     result = parse_relations(RelationshipType.PARENT, relations["relationships"])
     assert result == {RelationshipType.PARENT: []}
+
+
+def test_parse_created_and_modified():
+    properties = {"created": 1710426920000, "lastModified": 1710426921000}
+
+    created, modified = parse_created_and_modified(properties)
+
+    assert created == datetime(2024, 3, 14, 14, 35, 20, tzinfo=timezone.utc)
+    assert modified == datetime(2024, 3, 14, 14, 35, 21, tzinfo=timezone.utc)

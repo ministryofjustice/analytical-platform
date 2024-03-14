@@ -47,6 +47,7 @@ from ...search_types import (
 from ..base import BaseCatalogueClient, CatalogueError, logger
 from .graphql_helpers import (
     parse_columns,
+    parse_created_and_modified,
     parse_domain,
     parse_owner,
     parse_properties,
@@ -665,6 +666,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             owner, owner_email = parse_owner(response)
             tags = parse_tags(response)
             name = properties["name"]
+            created, modified = parse_created_and_modified(properties)
 
             # A dataset can't have both a container and data product parent, but if we did
             # start to use in that we'd need to change this
@@ -685,9 +687,10 @@ class DataHubCatalogueClient(BaseCatalogueClient):
                 relationships=relations,
                 domain=domain["domain_name"],
                 tags=tags,
-                last_updated=None,  # we are not populating this and i think wouldn't refer to lastIngested
                 owner=owner,
                 owner_email=owner_email,
+                first_created=created,
+                last_updated=modified,
             )
         except GraphError as e:
             raise Exception("Unable to execute getDataset query") from e
