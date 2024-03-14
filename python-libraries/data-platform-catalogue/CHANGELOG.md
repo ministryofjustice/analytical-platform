@@ -7,21 +7,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.19.2] 2024-03-07
+
+### Added
+
+- `_get_matched_fields` static method to return matched fields including logic
+  for the values of custom property fields.
+
+### Changed
+
+- changed query test matches to include a customProperties field with value
+
+## [0.19.1] 2024-03-07
+
+### Changed
+
+- Fix error executing getDataset query and added end-to-end test
+
+## [0.19.0] 2024-03-06
+
+### Added
+
+- `get_table_details(urn)` method to fetch table details including column level metadata
+
+## [0.18.1] 2024-03-05
+
+### Changed
+
+- `SearchResult.fully_qualified_name` now returns `name` if datahub metadata
+  property `qualifiedName` has a value of `None`, which it can do in the
+  case of dbt ingestions.
+
 ## [0.18.0] 2024-03-04
 
 ### Added
 
 - `SearchResult` now returns a fully qualified name along with name
- for datasets and data products. This is implemented in the clients
- `search` method. We default fully_qualified_name for a data product
- entity to `name`
+  for datasets and data products. This is implemented in the clients
+  `search` method. We default fully_qualified_name for a data product
+  entity to `name`
 
 ## [0.17.0] 2024-02-28
 
 ### Added
 
 - upsert_table now sets datset name as single table name and
- `qualifiedName` as the fully qualified name we define.
+  `qualifiedName` as the fully qualified name we define.
 
 ## [0.16.1] 2024-02-20
 

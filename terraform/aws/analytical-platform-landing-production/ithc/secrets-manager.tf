@@ -1,6 +1,6 @@
 module "secrets_manager" {
   source  = "terraform-aws-modules/secrets-manager/aws"
-  version = "1.1.1"
+  version = "1.1.2"
 
   # Secret
   name_prefix             = "ithc-name-store"

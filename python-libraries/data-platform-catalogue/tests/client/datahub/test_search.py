@@ -217,9 +217,7 @@ def test_full_page(mock_graph, searcher):
                         "type": "DATASET",
                         "urn": "urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers2,PROD)",  # noqa E501
                         "name": "calm-pagoda-323403.jaffle_shop.customers2",
-                        "properties": {
-                            "name": "customers2",
-                        },
+                        "properties": {"name": "customers2", "qualifiedName": None},
                     },
                 },
                 {
@@ -316,6 +314,10 @@ def test_query_match(mock_graph, searcher):
                             "value": "urn:li:dataset:(urn:li:dataPlatform:looker,long_tail_companions.view.customer_focused,PROD)",  # noqa E501
                         },
                         {"name": "name", "value": "customer_focused"},
+                        {
+                            "name": "customProperties",
+                            "value": "sensitivityLevel=OFFICIAL",
+                        },
                     ],
                     "entity": {
                         "type": "DATASET",
@@ -341,6 +343,7 @@ def test_query_match(mock_graph, searcher):
                 matches={
                     "urn": "urn:li:dataset:(urn:li:dataPlatform:looker,long_tail_companions.view.customer_focused,PROD)",  # noqa E501
                     "name": "customer_focused",
+                    "sensitivityLevel": "OFFICIAL",
                 },
                 result_type=ResultType.TABLE,
                 name="customers",

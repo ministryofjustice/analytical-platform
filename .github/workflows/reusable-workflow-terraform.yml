@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
 
       - name: Build path-filters file
         id: build_path_filters
@@ -51,7 +51,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@1d2da0259b6c249e746f0b71408760a89dbd8ef1 # v12.2683.0
+        uses: bridgecrewio/checkov-action@8fb58d95bede56c68adad56930d1c977c91935e6 # v12.2689.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -173,7 +173,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
 
       - name: Build path-filters file
         id: build_path_filters

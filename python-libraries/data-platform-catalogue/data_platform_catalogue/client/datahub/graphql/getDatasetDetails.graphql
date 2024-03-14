@@ -1,0 +1,91 @@
+query getDatasetDetails($urn: String!) {
+  dataset(urn: $urn) {
+    platform {
+      name
+    }
+    ownership {
+      owners {
+        owner {
+          ... on CorpUser {
+            urn
+            properties {
+              fullName
+              email
+            }
+          }
+          ... on CorpGroup {
+            urn
+            properties {
+              displayName
+              email
+            }
+          }
+        }
+      }
+    }
+    name
+    properties {
+      name
+      qualifiedName
+      description
+      customProperties {
+        key
+        value
+      }
+      created
+      lastModified
+    }
+    editableProperties {
+      description
+    }
+    tags {
+      tags {
+        tag {
+          urn
+          properties {
+            name
+            description
+          }
+        }
+      }
+    }
+    lastIngested
+    domain {
+      domain {
+        urn
+        id
+        properties {
+          name
+          description
+        }
+      }
+    }
+    schemaMetadata {
+      fields {
+        fieldPath
+        label
+        nullable
+        description
+        type
+        nativeDataType
+      }
+      primaryKeys
+      foreignKeys {
+        name
+        foreignFields {
+          fieldPath
+        }
+        foreignDataset {
+          urn
+          properties {
+            name
+            qualifiedName
+          }
+        }
+        sourceFields {
+          fieldPath
+        }
+      }
+    }
+  }
+}
