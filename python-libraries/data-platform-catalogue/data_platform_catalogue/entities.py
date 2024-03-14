@@ -121,6 +121,7 @@ class TableMetadata:
     relationships: dict[RelationshipType, list[RelatedEntity]] | None = None
     source_dataset_name: str = ""
     where_to_access_dataset: str = ""
+    fully_qualified_name: str | None = None
     data_sensitivity_level: SecurityClassification = SecurityClassification.OFFICIAL
     tags: list[str] = field(default_factory=list)
     major_version: int = 1

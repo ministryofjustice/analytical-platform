@@ -298,7 +298,7 @@ class TestCatalogueClientWithDatahub:
                 "name": "Dataset",
                 "properties": {
                     "name": "Dataset",
-                    "qualifiedName": None,
+                    "qualifiedName": "Foo.Dataset",
                     "description": "Dataset",
                     "customProperties": [
                         {"key": "sensitivityLevel", "value": "OFFICIAL-SENSITIVE"}
@@ -361,6 +361,7 @@ class TestCatalogueClientWithDatahub:
         assert dataset == TableMetadata(
             name="Dataset",
             description="Dataset",
+            fully_qualified_name="Foo.Dataset",
             column_details=[
                 {
                     "name": "urn",

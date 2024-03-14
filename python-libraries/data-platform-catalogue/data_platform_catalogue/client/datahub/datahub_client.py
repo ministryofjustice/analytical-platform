@@ -664,6 +664,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             domain = parse_domain(response)
             owner, owner_email = parse_owner(response)
             tags = parse_tags(response)
+            name = properties["name"]
 
             # A dataset can't have both a container and data product parent, but if we did
             # start to use in that we'd need to change this
@@ -676,7 +677,8 @@ class DataHubCatalogueClient(BaseCatalogueClient):
                     RelationshipType.PARENT, response["data_product_relations"]
                 )
             return TableMetadata(
-                name=properties["name"],
+                name=name,
+                fully_qualified_name=properties.get("qualifiedName") or name,
                 description=properties.get("description", ""),
                 column_details=columns,
                 retention_period_in_days=custom_properties.get("retentionPeriodInDays"),
