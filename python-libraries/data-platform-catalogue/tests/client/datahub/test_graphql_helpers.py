@@ -48,7 +48,7 @@ def test_parse_columns_with_primary_key_and_foreign_key():
     assert parse_columns(entity) == [
         {
             "name": "urn",
-            "type": "STRING",
+            "type": "string",
             "isPrimaryKey": True,
             "foreignKeys": [],
             "nullable": False,
@@ -56,7 +56,7 @@ def test_parse_columns_with_primary_key_and_foreign_key():
         },
         {
             "name": "[version=2.0].[type=dataset].[type=UpstreamLineage].upstreamLineage",
-            "type": "STRUCT",
+            "type": "upstreamLineage",
             "description": "Upstream lineage of a dataset",
             "nullable": False,
             "isPrimaryKey": False,
@@ -100,7 +100,7 @@ def test_parse_columns_with_no_keys():
     assert parse_columns(entity) == [
         {
             "name": "[version=2.0].[type=dataset].[type=UpstreamLineage].upstreamLineage",
-            "type": "STRUCT",
+            "type": "upstreamLineage",
             "description": "Upstream lineage of a dataset",
             "nullable": False,
             "isPrimaryKey": False,
@@ -108,7 +108,7 @@ def test_parse_columns_with_no_keys():
         },
         {
             "name": "urn",
-            "type": "STRING",
+            "type": "string",
             "isPrimaryKey": False,
             "foreignKeys": [],
             "nullable": False,

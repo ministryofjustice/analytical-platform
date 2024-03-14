@@ -127,7 +127,7 @@ def parse_columns(entity: dict[str, Any]) -> list[dict[str, Any]]:
             {
                 "name": field["fieldPath"],
                 "description": field["description"],
-                "type": field["type"],
+                "type": field.get("nativeDataType", field["type"]),
                 "nullable": field["nullable"],
                 "isPrimaryKey": is_primary_key,
                 "foreignKeys": foreign_keys_for_field,

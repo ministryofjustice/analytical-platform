@@ -364,7 +364,7 @@ class TestCatalogueClientWithDatahub:
             column_details=[
                 {
                     "name": "urn",
-                    "type": "STRING",
+                    "type": "string",
                     "description": "The primary identifier for the dataset entity.",
                     "isPrimaryKey": True,
                     "foreignKeys": [],
@@ -372,7 +372,7 @@ class TestCatalogueClientWithDatahub:
                 },
                 {
                     "name": "upstreamLineage",
-                    "type": "STRUCT",
+                    "type": "upstreamLineage",
                     "description": "Upstream lineage of a dataset",
                     "foreignKeys": [
                         {
