@@ -170,7 +170,7 @@ jobs:
 
       - name: Build Image
         id: build_image
-        uses: docker/build-push-action@af5a7ed5ba88268d5278f7203fb52cd833f66d6e # v5.2.0
+        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5.3.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Dockerfile
@@ -225,7 +225,7 @@ jobs:
 
       - name: Build and Push
         id: build_and_push
-        uses: docker/build-push-action@af5a7ed5ba88268d5278f7203fb52cd833f66d6e # v5.2.0
+        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5.3.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Dockerfile
@@ -254,7 +254,7 @@ jobs:
 
       - name: Build and Push
         id: build_and_push
-        uses: docker/build-push-action@af5a7ed5ba88268d5278f7203fb52cd833f66d6e # v5.2.0
+        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5.3.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Dockerfile
@@ -296,7 +296,7 @@ jobs:
 
       - name: Build and Push
         id: build_and_push
-        uses: docker/build-push-action@af5a7ed5ba88268d5278f7203fb52cd833f66d6e # v5.2.0
+        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5.3.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Dockerfile
