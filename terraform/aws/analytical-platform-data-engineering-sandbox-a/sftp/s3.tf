@@ -14,8 +14,6 @@ module "landing_bucket" {
       }
     }
   }
-
-  # TODO: Tagging
 }
 
 module "quarantine_bucket" {
@@ -34,8 +32,6 @@ module "quarantine_bucket" {
       }
     }
   }
-
-  # TODO: Tagging
 }
 
 
@@ -55,8 +51,6 @@ module "definitions_bucket" {
       }
     }
   }
-
-  # TODO: Tagging
 }
 
 
@@ -77,6 +71,4 @@ module "processed_bucket" {
       }
     }
   }
-
-  # TODO: Tagging
 }

@@ -8,8 +8,8 @@ module "ecr" {
   repository_name                 = "analytical-platform-family-transfer-server"
   repository_image_tag_mutability = "MUTABLE"
 
-  repository_read_write_access_arns = [data.aws_caller_identity.current.arn]
-  create_lifecycle_policy           = true
+  repository_lambda_read_access_arns = ["arn:aws:lambda:eu-west-2:684969100054:function:*"]
+  create_lifecycle_policy            = true
   repository_lifecycle_policy = jsonencode({
     rules = [
       {
@@ -38,8 +38,8 @@ module "notify" {
   repository_name                 = "analytical-platform-notify"
   repository_image_tag_mutability = "MUTABLE"
 
-  repository_read_write_access_arns = [data.aws_caller_identity.current.arn]
-  create_lifecycle_policy           = true
+  repository_lambda_read_access_arns = ["arn:aws:lambda:eu-west-2:684969100054:function:*"]
+  create_lifecycle_policy            = true
   repository_lifecycle_policy = jsonencode({
     rules = [
       {

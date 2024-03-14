@@ -11,7 +11,7 @@ module "definition_upload_lambda" {
   package_type  = "Image"
   memory_size   = 2048
   timeout       = 900
-  image_uri     = "684969100054.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-family-transfer-server:python-27" # TODO: Remove hardcoding and use data source
+  image_uri     = "684969100054.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-family-transfer-server:release-0.0.3"
 
   environment_variables = {
     MODE                         = "definition-upload",
@@ -65,7 +65,7 @@ module "scan_lambda" {
   memory_size            = 2048
   ephemeral_storage_size = 10240
   timeout                = 900
-  image_uri              = "684969100054.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-family-transfer-server:pythonjw-5" # TODO: Remove hardcoding and use data source
+  image_uri              = "684969100054.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-family-transfer-server:release-0.0.3"
 
   environment_variables = {
     MODE                         = "scan",
@@ -73,7 +73,6 @@ module "scan_lambda" {
     LANDING_BUCKET_NAME          = module.landing_bucket.s3_bucket_id
     QUARANTINE_BUCKET_NAME       = module.quarantine_bucket.s3_bucket_id
     PROCESSED_BUCKET_NAME        = module.processed_bucket.s3_bucket_id
-    SNS_TOPIC_ARN                = module.sns_topic.topic_arn
   }
 
   attach_policy_statements = true
@@ -93,7 +92,6 @@ module "scan_lambda" {
         module.s3_landing_kms.key_arn,
         module.s3_quarantine_kms.key_arn,
         module.s3_processed_kms.key_arn,
-        module.sns_kms.key_arn
       ]
     },
     s3_access = {
@@ -112,14 +110,6 @@ module "scan_lambda" {
         "arn:aws:s3:::${module.quarantine_bucket.s3_bucket_id}/*",
         "arn:aws:s3:::${module.processed_bucket.s3_bucket_id}/*"
       ]
-    },
-    sns_access = {
-      sid    = "AllowSNS"
-      effect = "Allow"
-      actions = [
-        "sns:Publish"
-      ]
-      resources = [module.sns_topic.topic_arn]
     }
   }
 
@@ -145,14 +135,15 @@ module "notify_lambda" {
   memory_size            = 2048
   ephemeral_storage_size = 10240
   timeout                = 900
-  image_uri              = "684969100054.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-notify:4" # TODO: Remove hardcoding and use data source
+  image_uri              = "684969100054.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-notify:9"
 
   environment_variables = {
-    CLAMAV_DEFINITON_BUCKET_NAME = module.definitions_bucket.s3_bucket_id
-    LANDING_BUCKET_NAME          = module.landing_bucket.s3_bucket_id
-    QUARANTINE_BUCKET_NAME       = module.quarantine_bucket.s3_bucket_id
-    PROCESSED_BUCKET_NAME        = module.processed_bucket.s3_bucket_id
-    SNS_TOPIC_ARN                = module.sns_topic.topic_arn
+    CLAMAV_DEFINITON_BUCKET_NAME  = module.definitions_bucket.s3_bucket_id
+    LANDING_BUCKET_NAME           = module.landing_bucket.s3_bucket_id
+    QUARANTINE_BUCKET_NAME        = module.quarantine_bucket.s3_bucket_id
+    PROCESSED_BUCKET_NAME         = module.processed_bucket.s3_bucket_id
+    GOVUK_NOTIFY_API_KEY_SECRET   = "ingestion/govuk-notify/api-key"
+    GOVUK_NOTIFY_TEMPLATES_SECRET = "ingestion/govuk-notify/templates"
   }
 
   # TODO: Check if KMS key is actually needed below
@@ -179,21 +170,13 @@ module "notify_lambda" {
       effect    = "Allow"
       actions   = ["secretsmanager:GetSecretValue"]
       resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:ingestion/*"]
-    },
-    sns_access = {
-      sid    = "AllowSNS"
-      effect = "Allow"
-      actions = [
-        "sns:Publish"
-      ]
-      resources = [module.sns_topic.topic_arn]
     }
   }
 
   allowed_triggers = {
-    "sns" = {
-      principal  = "sns.amazonaws.com"
-      source_arn = module.sns_topic.topic_arn
+    "s3" = {
+      principal  = "s3.amazonaws.com"
+      source_arn = module.quarantine_bucket.s3_bucket_arn
     }
   }
 }
