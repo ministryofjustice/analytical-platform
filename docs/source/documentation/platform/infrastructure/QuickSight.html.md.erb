@@ -61,7 +61,7 @@ Using Test-user’s account with increasing levels of access.
 
 ![QuickSight acces flow](../images/quicksight-image3.png "QuickSight acces flow")
 
-1. QS must have any S3 bucket to which access is required added to the QS S3 Access list.
+1. QuickSight must have any S3 bucket to which access is required added to the QuickSight S3 access list.
 2. A IAM policy for access to the S3 Bucket must be created in AWS
 3. Within QS individual users or user group be granted access to the IAM policy
 4. In addition if Athena access is required a IAM policy to list databases/tables must be created in AWS and granted to the QuickSight group. This is generic and not specific to individual databases and does <b>NOT</b> grant access to any data.
