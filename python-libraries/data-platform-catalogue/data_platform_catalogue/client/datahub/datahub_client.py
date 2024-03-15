@@ -72,7 +72,8 @@ class InvalidDomain(Exception):
 
 class MissingDatabaseMetadata(Exception):
     """
-    Exception thrown when a database is attempted to be ingested without a given metadata specification
+    Exception thrown when a database is attempted to be ingested without
+    a given metadata specification
     """
 
 
@@ -261,7 +262,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
     def upsert_athena_table(
         self,
         metadata: TableMetadata,
-        database_metadata: DataProductMetadata | None = None,
+        database_metadata: DatabaseMetadata | None = None,
     ) -> str:
         if not metadata.parent_database_name:
             raise ValueError("parent_database_name needs to be set in TableMetadata")
