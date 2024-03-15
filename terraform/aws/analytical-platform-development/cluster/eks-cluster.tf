@@ -37,10 +37,6 @@ module "eks" {
         "system:bootstrappers",
         "system:nodes",
       ]
-      }, {
-      groups   = ["system:masters"]
-      username = "restricted-admin"
-      rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${one(data.aws_iam_roles.aws_pentester_access.names)}"
     }],
     var.eks_role_mappings
   )

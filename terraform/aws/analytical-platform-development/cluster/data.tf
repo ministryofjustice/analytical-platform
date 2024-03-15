@@ -32,11 +32,6 @@ data "aws_iam_roles" "aws_sso_administrator_access" {
   path_prefix = "/aws-reserved/sso.amazonaws.com/"
 }
 
-data "aws_iam_roles" "aws_pentester_access" {
-  name_regex  = "PenTester"
-  path_prefix = "/"
-}
-
 data "aws_secretsmanager_secret_version" "auth0_credentials" {
   secret_id = "${var.environment}/auth0-terraform/auth0-creds"
 }
