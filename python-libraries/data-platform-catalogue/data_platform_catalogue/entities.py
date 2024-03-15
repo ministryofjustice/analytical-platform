@@ -147,6 +147,7 @@ class TableMetadata:
         return new_metadata
 
 
+# jscpd:ignore-start
 @dataclass
 class DatabaseMetadata:
     """
@@ -172,3 +173,6 @@ class DatabaseMetadata:
     s3_location: str | None
     status: DataProductStatus = DataProductStatus.DRAFT
     tags: list[str] = field(default_factory=list)
+
+
+# jscpd:ignore-end

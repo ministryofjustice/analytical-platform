@@ -18,10 +18,7 @@ from data_platform_catalogue.entities import (
     SecurityClassification,
     TableMetadata,
 )
-from datahub.metadata.schema_classes import (
-    ContainerPropertiesClass,
-    DataProductPropertiesClass,
-)
+from datahub.metadata.schema_classes import DataProductPropertiesClass
 
 
 class TestCatalogueClientWithDatahub:

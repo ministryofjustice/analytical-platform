@@ -1,30 +1,5 @@
 [
 {
-    "entityType": "domain",
-    "entityUrn": "urn:li:domain:Legal Aid",
-    "changeType": "UPSERT",
-    "aspectName": "domainProperties",
-    "aspect": {
-        "json": {
-            "name": "Legal Aid",
-            "description": ""
-        }
-    }
-},
-{
-    "entityType": "container",
-    "entityUrn": "urn:li:container:my_database",
-    "changeType": "UPSERT",
-    "aspectName": "domains",
-    "aspect": {
-        "json": {
-            "domains": [
-                "urn:li:domain:Legal Aid"
-            ]
-        }
-    }
-},
-{
     "entityType": "container",
     "entityUrn": "urn:li:container:my_database",
     "changeType": "UPSERT",
@@ -37,6 +12,7 @@
                 "maintainer_display_name": "Jonjo Shelvey",
                 "email": "justice@justice.gov.uk",
                 "retention_period_in_days": "365",
+                "subdomain": "Legal Aid",
                 "dpia_required": "False",
                 "dpia_location": "None",
                 "last_updated": "2020-05-17 00:00:00",

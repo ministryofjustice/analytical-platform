@@ -201,29 +201,17 @@ class DataHubCatalogueClient(BaseCatalogueClient):
                 f"{domain} does not exist in datahub - please align data to an existing domain"
             )
 
-        subdomain_urn = None
-        if metadata.subdomain:
-            subdomain = metadata_dict.pop("subdomain")
-            subdomain_urn = self.graph.get_domain_urn_by_name(domain_name=subdomain)
+        database_domain = DomainsClass(domains=[domain_urn])
 
-            if subdomain_urn is None:
-                logger.info(f"creating new subdomain {domain} for {name}")
-                domain_urn = self.create_domain(
-                    domain=subdomain, parentDomain=domain_urn
-                )
-
-        database_domain = DomainsClass(
-            domains=[subdomain_urn if subdomain_urn else domain_urn]
-        )
-
-        metadata_event = MetadataChangeProposalWrapper(
-            entityType="container",
-            changeType=ChangeTypeClass.UPSERT,
-            entityUrn=database_urn,
-            aspect=database_domain,
-        )
-        self.graph.emit(metadata_event)
-        logger.info(f"Database {name} associated with domain {domain}")
+        if domain_urn is not None:
+            metadata_event = MetadataChangeProposalWrapper(
+                entityType="container",
+                changeType=ChangeTypeClass.UPSERT,
+                entityUrn=database_urn,
+                aspect=database_domain,
+            )
+            self.graph.emit(metadata_event)
+            logger.info(f"Database {name} associated with domain {domain}")
 
         database_properties = ContainerPropertiesClass(
             customProperties={key: str(val) for key, val in metadata_dict.items()},
@@ -664,3 +652,6 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             )
         except GraphError as e:
             raise Exception("Unable to execute getDataset query") from e
+
+    def _does_domain_exist(domain_name: str) -> bool:
+        pass
