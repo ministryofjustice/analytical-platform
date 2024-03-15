@@ -260,7 +260,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         dataset_urn = mce_builder.make_dataset_urn(
             platform="athena", name=fully_qualified_name, env="PROD"
         )
-
+        # jscpd:ignore-start
         dataset_properties = DatasetPropertiesClass(
             name=metadata.name,
             qualifiedName=fully_qualified_name,
@@ -329,6 +329,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
                 aspect=tags_to_add,
             )
             self.graph.emit(event)
+        # jscpd:ignore-end
 
         database_urn = "urn:li:container:" + "".join(
             metadata.parent_database_name.split()
@@ -367,7 +368,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             raise InvalidDomain(
                 f"{metadata.domain} does not exist in datahub - please align data to an existing domain"
             )
-        # domain_urn = f"urn:li:domain:{metadata.domain}"
+
         if domain_urn is not None:
             table_domain = DomainsClass(domains=[domain_urn])
             metadata_event = MetadataChangeProposalWrapper(
@@ -652,6 +653,3 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             )
         except GraphError as e:
             raise Exception("Unable to execute getDataset query") from e
-
-    def _does_domain_exist(domain_name: str) -> bool:
-        pass
