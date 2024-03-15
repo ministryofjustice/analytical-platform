@@ -442,3 +442,9 @@ class TestCatalogueClientWithDatahub:
     def test_domain_does_not_exist_error(self, datahub_client, database):
         with pytest.raises(InvalidDomain):
             datahub_client.upsert_athena_database(metadata=database)
+
+    def test_database_not_exist_with_no_metadata_given_error(
+        self, datahub_client, table
+    ):
+        with pytest.raises(MissingDatabaseMetadata):
+            datahub_client.upsert_athena_table(metadata=table)
