@@ -30,6 +30,7 @@ from datahub.metadata.schema_classes import (
 
 from ...entities import (
     CatalogueMetadata,
+    DatabaseMetadata,
     DataLocation,
     DataProductMetadata,
     TableMetadata,
@@ -174,7 +175,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
 
         return domain_urn
 
-    def upsert_athena_database(self, metadata: DataProductMetadata) -> str:
+    def upsert_athena_database(self, metadata: DatabaseMetadata) -> str:
         """
         Define a database. Must belong to a domain
         """
