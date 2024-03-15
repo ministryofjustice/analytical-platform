@@ -1,7 +1,7 @@
 [
 {
     "entityType": "dataset",
-    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table,PROD)",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)",
     "changeType": "UPSERT",
     "aspectName": "datasetProperties",
     "aspect": {
@@ -9,8 +9,7 @@
             "customProperties": {
                 "sourceDatasetName": "my_source_table",
                 "whereToAccessDataset": "s3://databucket/table1",
-                "sensitivityLevel": "OFFICIAL",
-                "rowCount": "1177"
+                "sensitivityLevel": "OFFICIAL"
             },
             "name": "my_table",
             "qualifiedName": "my_database.my_table",
@@ -21,13 +20,13 @@
 },
 {
     "entityType": "dataset",
-    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:glue,my_database.my_table,PROD)",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)",
     "changeType": "UPSERT",
     "aspectName": "schemaMetadata",
     "aspect": {
         "json": {
             "schemaName": "my_table",
-            "platform": "urn:li:dataPlatform:glue",
+            "platform": "urn:li:dataPlatform:athena",
             "version": 1,
             "created": {
                 "time": 0,
@@ -71,6 +70,30 @@
                     "isPartOfKey": false
                 }
             ]
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "subTypes",
+    "aspect": {
+        "json": {
+            "typeNames": [
+                "Table"
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "container",
+    "aspect": {
+        "json": {
+            "container": "urn:li:container:my_database"
         }
     }
 }

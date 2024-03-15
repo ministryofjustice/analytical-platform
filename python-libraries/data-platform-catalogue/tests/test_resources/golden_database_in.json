@@ -1,0 +1,59 @@
+[
+    {
+        "entityType": "container",
+        "entityUrn": "urn:li:container:my_database",
+        "changeType": "UPSERT",
+        "aspectName": "containerProperties",
+        "aspect": {
+            "json": {
+                "customProperties": {
+                    "version": "2.0",
+                    "dpia": "false"
+                },
+                "externalUrl": "https://github.com/datahub-project/datahub",
+                "name": "my_database",
+                "description": "little test db",
+                "assets": []
+            }
+        }
+    },
+    {
+        "entityType": "container",
+        "entityUrn": "urn:li:container:my_database",
+        "changeType": "UPSERT",
+        "aspectName": "domains",
+        "aspect": {
+            "json": {
+                "domains": [
+                    "urn:li:domain:LAA"
+                ]
+            }
+        }
+    },
+    {
+        "entityType": "container",
+        "entityUrn": "urn:li:container:my_database",
+        "changeType": "UPSERT",
+        "aspectName": "globalTags",
+        "aspect": {
+            "json": {
+                "tags": [
+                    {
+                        "tag": "urn:li:tag:awesome"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "entityType": "container",
+        "entityUrn": "urn:li:container:my_database",
+        "changeType": "UPSERT",
+        "aspectName": "status",
+        "aspect": {
+            "json": {
+                "removed": false
+            }
+        }
+    }
+]
