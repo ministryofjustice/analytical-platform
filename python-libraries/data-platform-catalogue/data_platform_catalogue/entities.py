@@ -32,6 +32,12 @@ class DataProductStatus(Enum):
     RETIRED = auto()
 
 
+class DatabaseStatus(Enum):
+    PROD = auto()
+    PREPROD = auto()
+    DEV = auto()
+
+
 @dataclass
 class DataProductMetadata:
     name: str
@@ -92,8 +98,6 @@ class DataProductMetadata:
 
 class SecurityClassification(Enum):
     OFFICIAL = auto()
-    SECRET = auto()
-    TOP_SECRET = auto()
 
 
 @dataclass
@@ -102,11 +106,14 @@ class TableMetadata:
     description: str
     column_details: list
     retention_period_in_days: int | None
+    domain: str | None = None
+    parent_database_name: str | None = None
     source_dataset_name: str = ""
     where_to_access_dataset: str = ""
     data_sensitivity_level: SecurityClassification = SecurityClassification.OFFICIAL
     tags: list[str] = field(default_factory=list)
     major_version: int = 1
+    row_count: int | None = None
 
     @staticmethod
     def from_data_product_schema_dict(
@@ -136,3 +143,34 @@ class TableMetadata:
         )
 
         return new_metadata
+
+
+# jscpd:ignore-start
+@dataclass
+class DatabaseMetadata:
+    """
+    For source system databases - currently matches DataProductMetadata
+    but will need to be revisted and refined potentially
+    """
+
+    name: str
+    description: str
+    version: str
+    owner: str
+    owner_display_name: str
+    maintainer: str | None
+    maintainer_display_name: str | None
+    email: str
+    retention_period_in_days: int
+    domain: str
+    subdomain: str | None
+    dpia_required: bool
+    dpia_location: str | None
+    last_updated: datetime
+    creation_date: datetime
+    s3_location: str | None
+    status: DataProductStatus = DataProductStatus.DRAFT
+    tags: list[str] = field(default_factory=list)
+
+
+# jscpd:ignore-end

@@ -1,11 +1,17 @@
 from datetime import datetime
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
-from data_platform_catalogue.client.datahub.datahub_client import DataHubCatalogueClient
+from data_platform_catalogue.client.datahub.datahub_client import (
+    DataHubCatalogueClient,
+    InvalidDomain,
+    MissingDatabaseMetadata,
+)
 from data_platform_catalogue.entities import (
     CatalogueMetadata,
+    DatabaseMetadata,
+    DatabaseStatus,
     DataLocation,
     DataProductMetadata,
     DataProductStatus,
@@ -54,6 +60,29 @@ class TestCatalogueClientWithDatahub:
         )
 
     @pytest.fixture
+    def database(self):
+        return DatabaseMetadata(
+            name="my_database",
+            description="little test db",
+            version="v1.0.0",
+            owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+            owner_display_name="April Gonzalez",
+            maintainer="j.shelvey@digital.justice.gov.uk",
+            maintainer_display_name="Jonjo Shelvey",
+            email="justice@justice.gov.uk",
+            status=DatabaseStatus.PROD.name,
+            retention_period_in_days=365,
+            domain="LAA",
+            subdomain="Legal Aid",
+            dpia_required=False,
+            dpia_location=None,
+            last_updated=datetime(2020, 5, 17),
+            creation_date=datetime(2020, 5, 17),
+            s3_location="s3://databucket/",
+            tags=["test"],
+        )
+
+    @pytest.fixture
     def table(self):
         return TableMetadata(
             name="my_table",
@@ -65,7 +94,9 @@ class TestCatalogueClientWithDatahub:
             retention_period_in_days=365,
             source_dataset_name="my_source_table",
             where_to_access_dataset="s3://databucket/table1",
-            data_sensitivity_level=SecurityClassification.TOP_SECRET,
+            data_sensitivity_level=SecurityClassification.OFFICIAL,
+            parent_database_name="my_database",
+            domain="LAA",
         )
 
     @pytest.fixture
@@ -90,9 +121,15 @@ class TestCatalogueClientWithDatahub:
         )
 
     @pytest.fixture
-    def golden_file_in(self):
+    def golden_file_in_dp(self):
         return Path(
             Path(__file__).parent / "../../test_resources/golden_data_product_in.json"
+        )
+
+    @pytest.fixture
+    def golden_file_in_db(self):
+        return Path(
+            Path(__file__).parent / "../../test_resources/golden_database_in.json"
         )
 
     def test_create_table_datahub(
@@ -102,13 +139,13 @@ class TestCatalogueClientWithDatahub:
         table,
         tmp_path,
         check_snapshot,
-        golden_file_in,
+        golden_file_in_dp,
     ):
         """
         Case where we just create a dataset (no data product)
         """
         mock_graph = base_mock_graph
-        mock_graph.import_file(golden_file_in)
+        mock_graph.import_file(golden_file_in_dp)
 
         fqn = datahub_client.upsert_table(
             metadata=table,
@@ -130,13 +167,13 @@ class TestCatalogueClientWithDatahub:
         base_mock_graph,
         tmp_path,
         check_snapshot,
-        golden_file_in,
+        golden_file_in_dp,
     ):
         """
         Case where we create a dataset, data product and domain
         """
         mock_graph = base_mock_graph
-        mock_graph.import_file(golden_file_in)
+        mock_graph.import_file(golden_file_in_dp)
 
         fqn = datahub_client.upsert_table(
             metadata=table,
@@ -166,14 +203,14 @@ class TestCatalogueClientWithDatahub:
         base_mock_graph,
         tmp_path,
         check_snapshot,
-        golden_file_in,
+        golden_file_in_dp,
     ):
         """
         Case where we create a dataset, data product and domain
         """
 
         mock_graph = base_mock_graph
-        mock_graph.import_file(golden_file_in)
+        mock_graph.import_file(golden_file_in_dp)
 
         fqn = datahub_client.upsert_table(
             metadata=table,
@@ -205,13 +242,13 @@ class TestCatalogueClientWithDatahub:
         base_mock_graph,
         tmp_path,
         check_snapshot,
-        golden_file_in,
+        golden_file_in_dp,
     ):
         """
         `create_table` should work even if the entities already exist in the metadata graph.
         """
         mock_graph = base_mock_graph
-        mock_graph.import_file(golden_file_in)
+        mock_graph.import_file(golden_file_in_dp)
 
         datahub_client.upsert_table(
             metadata=table,
@@ -329,3 +366,82 @@ class TestCatalogueClientWithDatahub:
             tags=[],
             major_version=1,
         )
+
+    def test_create_athena_database_and_table(
+        self,
+        datahub_client,
+        base_mock_graph,
+        database,
+        table,
+        tmp_path,
+        check_snapshot,
+        golden_file_in_db,
+    ):
+        """
+        Case where we create separate database and table
+        """
+        mock_graph = base_mock_graph
+        mock_graph.import_file(golden_file_in_db)
+        with patch(
+            "data_platform_catalogue.client.datahub.datahub_client.DataHubCatalogueClient.check_entity_exists_by_urn"
+        ) as mock_exists:
+            mock_exists.return_value = True
+            fqn_db = datahub_client.upsert_athena_database(metadata=database)
+            fqn_t = datahub_client.upsert_athena_table(metadata=table)
+
+        fqn_db_out = "urn:li:container:my_database"
+        assert fqn_db == fqn_db_out
+
+        fqn_t_out = (
+            "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)"
+        )
+        assert fqn_t == fqn_t_out
+
+        output_file = Path(tmp_path / "datahub_create_athena_table.json")
+        base_mock_graph.sink_to_file(output_file)
+        check_snapshot("datahub_create_athena_table.json", output_file)
+
+    def test_create_athena_table_with_metadata(
+        self,
+        datahub_client,
+        table,
+        database,
+        base_mock_graph,
+        tmp_path,
+        check_snapshot,
+        golden_file_in_db,
+    ):
+        """
+        Case where we create a dataset (athena table) and container (athena database)
+        via upsert_athena_table method
+        """
+        mock_graph = base_mock_graph
+        mock_graph.import_file(golden_file_in_db)
+
+        with patch(
+            "data_platform_catalogue.client.datahub.datahub_client.DataHubCatalogueClient.check_entity_exists_by_urn"
+        ) as mock_exists:
+            mock_exists.return_value = True
+            fqn = datahub_client.upsert_athena_table(
+                metadata=table,
+                database_metadata=database,
+            )
+        fqn_out = (
+            "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)"
+        )
+
+        assert fqn == fqn_out
+
+        output_file = Path(tmp_path / "datahub_create_athena_table_with_metadata.json")
+        base_mock_graph.sink_to_file(output_file)
+        check_snapshot("datahub_create_athena_table_with_metadata.json", output_file)
+
+    def test_domain_does_not_exist_error(self, datahub_client, database):
+        with pytest.raises(InvalidDomain):
+            datahub_client.upsert_athena_database(metadata=database)
+
+    def test_database_not_exist_with_no_metadata_given_error(
+        self, datahub_client, table
+    ):
+        with pytest.raises(MissingDatabaseMetadata):
+            datahub_client.upsert_athena_table(metadata=table)

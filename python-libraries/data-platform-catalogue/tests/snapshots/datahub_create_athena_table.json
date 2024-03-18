@@ -1,0 +1,150 @@
+[
+{
+    "entityType": "container",
+    "entityUrn": "urn:li:container:my_database",
+    "changeType": "UPSERT",
+    "aspectName": "containerProperties",
+    "aspect": {
+        "json": {
+            "customProperties": {
+                "owner_display_name": "April Gonzalez",
+                "maintainer": "j.shelvey@digital.justice.gov.uk",
+                "maintainer_display_name": "Jonjo Shelvey",
+                "email": "justice@justice.gov.uk",
+                "retention_period_in_days": "365",
+                "subdomain": "Legal Aid",
+                "dpia_required": "False",
+                "dpia_location": "None",
+                "last_updated": "2020-05-17 00:00:00",
+                "creation_date": "2020-05-17 00:00:00",
+                "s3_location": "s3://databucket/",
+                "status": "PROD"
+            },
+            "name": "my_database",
+            "description": "little test db"
+        }
+    }
+},
+{
+    "entityType": "container",
+    "entityUrn": "urn:li:container:my_database",
+    "changeType": "UPSERT",
+    "aspectName": "subTypes",
+    "aspect": {
+        "json": {
+            "typeNames": [
+                "Database"
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "datasetProperties",
+    "aspect": {
+        "json": {
+            "customProperties": {
+                "sourceDatasetName": "my_source_table",
+                "whereToAccessDataset": "s3://databucket/table1",
+                "sensitivityLevel": "OFFICIAL"
+            },
+            "name": "my_table",
+            "qualifiedName": "my_database.my_table",
+            "description": "bla bla",
+            "tags": []
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "schemaMetadata",
+    "aspect": {
+        "json": {
+            "schemaName": "my_table",
+            "platform": "urn:li:dataPlatform:athena",
+            "version": 1,
+            "created": {
+                "time": 0,
+                "actor": "urn:li:corpuser:unknown"
+            },
+            "lastModified": {
+                "time": 0,
+                "actor": "urn:li:corpuser:unknown"
+            },
+            "hash": "",
+            "platformSchema": {
+                "com.linkedin.schema.OtherSchema": {
+                    "rawSchema": ""
+                }
+            },
+            "fields": [
+                {
+                    "fieldPath": "foo",
+                    "nullable": false,
+                    "description": "a",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.StringType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "bar",
+                    "nullable": false,
+                    "description": "b",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NumberType": {}
+                        }
+                    },
+                    "nativeDataType": "int",
+                    "recursive": false,
+                    "isPartOfKey": false
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "subTypes",
+    "aspect": {
+        "json": {
+            "typeNames": [
+                "Table"
+            ]
+        }
+    }
+},
+{
+    "entityType": "container",
+    "entityUrn": "urn:li:container:my_database",
+    "changeType": "UPSERT",
+    "aspectName": "dataPlatformInstance",
+    "aspect": {
+        "json": {
+            "platform": "urn:li:dataPlatform:athena"
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "container",
+    "aspect": {
+        "json": {
+            "container": "urn:li:container:my_database"
+        }
+    }
+}
+]

@@ -7,8 +7,15 @@ from datahub.configuration.common import GraphError
 from datahub.emitter.mce_builder import make_data_platform_urn
 from datahub.emitter.mcp import MetadataChangeProposalWrapper
 from datahub.ingestion.graph.client import DatahubClientConfig, DataHubGraph
+from datahub.ingestion.source.common.subtypes import (
+    DatasetContainerSubTypes,
+    DatasetSubTypes,
+)
+from datahub.metadata.com.linkedin.pegasus2avro.common import DataPlatformInstance
 from datahub.metadata.schema_classes import (
     ChangeTypeClass,
+    ContainerClass,
+    ContainerPropertiesClass,
     DataProductAssociationClass,
     DataProductPropertiesClass,
     DatasetPropertiesClass,
@@ -18,10 +25,12 @@ from datahub.metadata.schema_classes import (
     SchemaFieldClass,
     SchemaFieldDataTypeClass,
     SchemaMetadataClass,
+    SubTypesClass,
 )
 
 from ...entities import (
     CatalogueMetadata,
+    DatabaseMetadata,
     DataLocation,
     DataProductMetadata,
     TableMetadata,
@@ -53,6 +62,19 @@ DATAHUB_DATA_TYPE_MAPPING = {
     "date": schema_classes.DateTypeClass(),
     "timestamp": schema_classes.TimeTypeClass(),
 }
+
+
+class InvalidDomain(Exception):
+    """
+    Exception thrown when a domain does not exist
+    """
+
+
+class MissingDatabaseMetadata(Exception):
+    """
+    Exception thrown when a database is attempted to be ingested without
+    a given metadata specification
+    """
 
 
 class DataHubCatalogueClient(BaseCatalogueClient):
@@ -96,6 +118,14 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             .joinpath("getDatasetDetails.graphql")
             .read_text()
         )
+
+    def check_entity_exists_by_urn(self, urn: str | None):
+        if urn is not None:
+            exists = self.graph.exists(entity_urn=urn)
+        else:
+            exists = False
+
+        return exists
 
     def upsert_database_service(self, platform: str = "glue", *args, **kwargs) -> str:
         """
@@ -145,6 +175,212 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         self.graph.emit(metadata_event)
 
         return domain_urn
+
+    def upsert_athena_database(self, metadata: DatabaseMetadata) -> str:
+        """
+        Define a database. Must belong to a domain
+        """
+        metadata_dict = dict(metadata.__dict__)
+        metadata_dict.pop("version")
+        metadata_dict.pop("owner")
+        metadata_dict.pop("tags")
+
+        name = metadata_dict.pop("name")
+        description = metadata_dict.pop("description")
+
+        database_urn = "urn:li:container:" + "".join(name.split())
+
+        domain = metadata_dict.pop("domain")
+        domain_urn = self.graph.get_domain_urn_by_name(domain_name=domain)
+
+        # domains are to be controlled and limited so we dont want to create one
+        # when it doesn't exist
+        domain_exists = self.check_entity_exists_by_urn(domain_urn)
+        if not domain_exists:
+            raise InvalidDomain(
+                f"{domain} does not exist in datahub - please align data to an existing domain"
+            )
+
+        database_domain = DomainsClass(domains=[domain_urn])
+
+        if domain_urn is not None:
+            metadata_event = MetadataChangeProposalWrapper(
+                entityType="container",
+                changeType=ChangeTypeClass.UPSERT,
+                entityUrn=database_urn,
+                aspect=database_domain,
+            )
+            self.graph.emit(metadata_event)
+            logger.info(f"Database {name} associated with domain {domain}")
+
+        database_properties = ContainerPropertiesClass(
+            customProperties={key: str(val) for key, val in metadata_dict.items()},
+            description=description,
+            name=name,
+        )
+        metadata_event = MetadataChangeProposalWrapper(
+            entityType="container",
+            changeType=ChangeTypeClass.UPSERT,
+            entityUrn=database_urn,
+            aspect=database_properties,
+        )
+        self.graph.emit(metadata_event)
+        logger.info(f"Properties updated for Database {name} ")
+
+        # set platform to athena
+        metadata_event = MetadataChangeProposalWrapper(
+            entityUrn=database_urn,
+            aspect=DataPlatformInstance(
+                platform="urn:li:dataPlatform:athena",
+            ),
+        )
+        self.graph.emit(metadata_event)
+        logger.info(f"Platform updated for Database {name} ")
+
+        # container type update
+        metadata_event = MetadataChangeProposalWrapper(
+            entityUrn=database_urn,
+            aspect=SubTypesClass(typeNames=[DatasetContainerSubTypes.DATABASE]),
+        )
+        self.graph.emit(metadata_event)
+        logger.info(f"Type updated for Database {name} ")
+
+        return database_urn
+
+    def upsert_athena_table(
+        self,
+        metadata: TableMetadata,
+        database_metadata: DatabaseMetadata | None = None,
+    ) -> str:
+        if not metadata.parent_database_name:
+            raise ValueError("parent_database_name needs to be set in TableMetadata")
+
+        fully_qualified_name = f"{metadata.parent_database_name}.{metadata.name}"
+
+        dataset_urn = mce_builder.make_dataset_urn(
+            platform="athena", name=fully_qualified_name, env="PROD"
+        )
+        # jscpd:ignore-start
+        dataset_properties = DatasetPropertiesClass(
+            name=metadata.name,
+            qualifiedName=fully_qualified_name,
+            description=metadata.description,
+            customProperties={
+                "sourceDatasetName": metadata.source_dataset_name,
+                "whereToAccessDataset": metadata.where_to_access_dataset,
+                "sensitivityLevel": metadata.data_sensitivity_level.name,
+                **(
+                    {"rowCount": str(metadata.row_count)}
+                    if metadata.row_count is not None
+                    else {}
+                ),
+            },
+        )
+
+        metadata_event = MetadataChangeProposalWrapper(
+            entityUrn=dataset_urn,
+            aspect=dataset_properties,
+        )
+        self.graph.emit(metadata_event)
+
+        dataset_schema_properties = SchemaMetadataClass(
+            schemaName=metadata.name,
+            platform="urn:li:dataPlatform:athena",
+            version=metadata.major_version,
+            hash="",
+            platformSchema=OtherSchemaClass(rawSchema=""),
+            fields=[
+                SchemaFieldClass(
+                    fieldPath=f"{column['name']}",
+                    type=SchemaFieldDataTypeClass(
+                        type=DATAHUB_DATA_TYPE_MAPPING[column["type"]]
+                    ),
+                    nativeDataType=column["type"],
+                    description=column["description"],
+                )
+                for column in metadata.column_details
+            ],
+        )
+
+        metadata_event = MetadataChangeProposalWrapper(
+            entityType="dataset",
+            changeType=ChangeTypeClass.UPSERT,
+            entityUrn=dataset_urn,
+            aspect=dataset_schema_properties,
+        )
+        self.graph.emit(metadata_event)
+
+        # set dataset type to table
+        metadata_event = MetadataChangeProposalWrapper(
+            entityUrn=dataset_urn,
+            aspect=SubTypesClass(typeNames=[DatasetSubTypes.TABLE]),
+        )
+
+        self.graph.emit(metadata_event)
+
+        if metadata.tags:
+            tags_to_add = mce_builder.make_global_tag_aspect_with_tag_list(
+                tags=metadata.tags
+            )
+            event: MetadataChangeProposalWrapper = MetadataChangeProposalWrapper(
+                entityType="dataset",
+                changeType=ChangeTypeClass.UPSERT,
+                entityUrn=dataset_urn,
+                aspect=tags_to_add,
+            )
+            self.graph.emit(event)
+        # jscpd:ignore-end
+
+        database_urn = "urn:li:container:" + "".join(
+            metadata.parent_database_name.split()
+        )
+
+        database_exists = self.check_entity_exists_by_urn(urn=database_urn)
+
+        if not database_exists and database_metadata:
+            database_urn = self.upsert_athena_database(metadata=database_metadata)
+            domain_urn = self.graph.get_domain_urn_by_name(
+                domain_name=database_metadata.domain
+            )
+        elif not database_exists and not database_metadata:
+            raise MissingDatabaseMetadata(
+                "DatabaseMetadata object needs to be passed in to create a database"
+            )
+
+        # add dataset to database
+        metadata_event = MetadataChangeProposalWrapper(
+            entityUrn=dataset_urn,
+            aspect=ContainerClass(container=database_urn),
+        )
+
+        self.graph.emit(metadata_event)
+
+        # add domain to table - tables inherit the domain of parent database if not given
+        if metadata.domain:
+            domain_urn = self.graph.get_domain_urn_by_name(domain_name=metadata.domain)
+        else:
+            domain_urn = self.graph.get_aspect(
+                entity_urn=database_urn, aspect_type=DomainsClass
+            ).domains[0]
+
+        domain_exists = self.check_entity_exists_by_urn(domain_urn)
+        if not domain_exists:
+            raise InvalidDomain(
+                f"{metadata.domain} does not exist in datahub - please align data to an existing domain"
+            )
+
+        if domain_urn is not None:
+            table_domain = DomainsClass(domains=[domain_urn])
+            metadata_event = MetadataChangeProposalWrapper(
+                entityType="dataset",
+                changeType=ChangeTypeClass.UPSERT,
+                entityUrn=dataset_urn,
+                aspect=table_domain,
+            )
+
+            self.graph.emit(metadata_event)
+
+        return dataset_urn
 
     def upsert_data_product(self, metadata: DataProductMetadata):
         """

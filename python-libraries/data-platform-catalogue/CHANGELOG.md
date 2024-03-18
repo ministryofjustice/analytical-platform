@@ -7,6 +7,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.20.0] 2024-03-15
+
+### Added
+
+- `upsert_athena_database` and `upsert_athena_table` methods to
+  `DataHubCatalogueClient` - to register/update databases or tables in
+  datahub. These methods do not create a domain if it does not exist.
+- `DatabaseMetadata` class to `entities.py` - for defining metadata for an
+  athena database
+- `DatabaseStatus` enum to `entities.py`
+- 2 custom exceptions in `datahub_client.py` for invalid domains and missing metadata.
+
+### Changed
+
+- `entities.TableMetadata` to have some optional properties to the class -
+  `parent_database_name`, `domain`, `row_count`
+- `entities.SecurityClassification` to remove classicifation we will not be using.
+
 ## [0.19.2] 2024-03-07
 
 ### Added

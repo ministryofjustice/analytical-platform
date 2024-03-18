@@ -12,9 +12,13 @@ import time
 from datetime import datetime
 
 import pytest
-from data_platform_catalogue import DataProductMetadata, TableMetadata
+from data_platform_catalogue import DatabaseMetadata, DataProductMetadata, TableMetadata
 from data_platform_catalogue.client.datahub.datahub_client import DataHubCatalogueClient
-from data_platform_catalogue.entities import DataLocation, DataProductStatus
+from data_platform_catalogue.entities import (
+    DatabaseStatus,
+    DataLocation,
+    DataProductStatus,
+)
 from data_platform_catalogue.search_types import MultiSelectFilter, ResultType
 from datahub.metadata.schema_classes import DatasetPropertiesClass, SchemaMetadataClass
 
@@ -24,7 +28,7 @@ runs_on_development_server = pytest.mark.skipif("not jwt_token or not api_url")
 
 
 @runs_on_development_server
-def test_upsert_test_hierarchy():
+def test_data_product_upsert_test_hierarchy():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
     data_product = DataProductMetadata(
@@ -294,3 +298,71 @@ def test_get_dataset():
         urn="urn:li:dataset:(urn:li:dataPlatform:glue,nomis.agency_release_beds,PROD)"
     )
     assert table
+
+
+@runs_on_development_server
+def test_athena_upsert_test_hierarchy():
+    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+
+    database = DatabaseMetadata(
+        name="my_database",
+        description="testing",
+        version="v1.0.0",
+        owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+        owner_display_name="April Gonzalez",
+        maintainer="j.shelvey@digital.justice.gov.uk",
+        maintainer_display_name="Jonjo Shelvey",
+        email="justice@justice.gov.uk",
+        status=DatabaseStatus.PROD.name,
+        retention_period_in_days=365,
+        domain="prison",
+        subdomain=None,
+        dpia_required=False,
+        dpia_location=None,
+        last_updated=datetime(2020, 5, 17),
+        creation_date=datetime(2020, 5, 17),
+        s3_location="s3://databucket/",
+        tags=["test"],
+    )
+
+    table = TableMetadata(
+        name="test_table",
+        parent_database_name="my_database",
+        description="bla bla",
+        column_details=[
+            {"name": "foo", "type": "string", "description": "a"},
+            {"name": "bar", "type": "int", "description": "b"},
+        ],
+        retention_period_in_days=365,
+        where_to_access_dataset="analytical_platform",
+        tags=["test"],
+    )
+
+    table_fqn = client.upsert_athena_table(
+        metadata=table,
+        database_metadata=database,
+    )
+    assert (
+        table_fqn
+        == "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.test_table,PROD)"
+    )
+
+    # Ensure data went through
+    assert client.graph.get_aspect(table_fqn, DatasetPropertiesClass)
+    assert client.graph.get_aspect(table_fqn, SchemaMetadataClass)
+
+    dataset_properties = client.graph.get_aspect(
+        table_fqn, aspect_type=DatasetPropertiesClass
+    )
+    # check properties been loaded to datahub dataset
+    assert dataset_properties.description == table.description
+    assert dataset_properties.qualifiedName == f"{database.name}.{table.name}"
+    assert dataset_properties.name == table.name
+    assert (
+        dataset_properties.customProperties["sourceDatasetName"]
+        == table.source_dataset_name
+    )
+    assert (
+        dataset_properties.customProperties["whereToAccessDataset"]
+        == table.where_to_access_dataset
+    )
