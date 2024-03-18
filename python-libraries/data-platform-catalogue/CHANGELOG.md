@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   datahub. These methods do not create a domain if it does not exist.
 - `DatabaseMetadata` class to `entities.py` - for defining metadata for an
   athena database
-  `DatabaseStatus` enum to `entities.py`
+- `DatabaseStatus` enum to `entities.py`
 - 2 custom exceptions in `datahub_client.py` for invalid domains and missing metadata.
 
 ### Changed
