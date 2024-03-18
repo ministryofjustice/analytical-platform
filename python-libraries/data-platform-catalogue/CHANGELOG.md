@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `entities.TableMetadata` to have some optional properties to the class -
   `parent_database_name`, `domain`, `row_count`
+- `entities.SecurityClassification` to remove classicifation we will not be using.
 
 ## [0.19.2] 2024-03-07
 

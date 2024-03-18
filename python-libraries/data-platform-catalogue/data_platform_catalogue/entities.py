@@ -98,8 +98,6 @@ class DataProductMetadata:
 
 class SecurityClassification(Enum):
     OFFICIAL = auto()
-    SECRET = auto()
-    TOP_SECRET = auto()
 
 
 @dataclass
