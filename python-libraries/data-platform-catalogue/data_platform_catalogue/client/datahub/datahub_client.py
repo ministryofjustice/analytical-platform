@@ -30,6 +30,7 @@ from datahub.metadata.schema_classes import (
 
 from ...entities import (
     CatalogueMetadata,
+    ChartMetadata,
     DatabaseMetadata,
     DataLocation,
     DataProductMetadata,
@@ -116,6 +117,11 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         self.dataset_query = (
             files("data_platform_catalogue.client.datahub.graphql")
             .joinpath("getDatasetDetails.graphql")
+            .read_text()
+        )
+        self.chart_query = (
+            files("data_platform_catalogue.client.datahub.graphql")
+            .joinpath("getChartDetails.graphql")
             .read_text()
         )
 
@@ -593,6 +599,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         result_types: Sequence[ResultType] = (
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
+            ResultType.CHART,
         ),
         filters: Sequence[MultiSelectFilter] = (),
         sort: SortOption | None = None,
@@ -615,6 +622,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         result_types: Sequence[ResultType] = (
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
+            ResultType.CHART,
         ),
         filters: Sequence[MultiSelectFilter] = (),
     ) -> SearchFacets:
@@ -650,6 +658,21 @@ class DataHubCatalogueClient(BaseCatalogueClient):
                 description=properties.get("description", ""),
                 column_details=columns,
                 retention_period_in_days=custom_properties.get("retentionPeriodInDays"),
+            )
+        except GraphError as e:
+            raise Exception("Unable to execute getDataset query") from e
+
+    def get_chart_details(self, urn) -> ChartMetadata:
+        try:
+            response = self.graph.execute_graphql(self.chart_query, {"urn": urn})[
+                "chart"
+            ]
+            properties, custom_properties = parse_properties(response)
+
+            return ChartMetadata(
+                name=properties["name"],
+                description=properties.get("description", ""),
+                external_url=properties["externalUrl"],
             )
         except GraphError as e:
             raise Exception("Unable to execute getDataset query") from e

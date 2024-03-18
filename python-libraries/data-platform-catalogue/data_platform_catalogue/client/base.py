@@ -116,3 +116,10 @@ class BaseCatalogueClient(ABC):
         returns the schema and detailed information about a table
         """
         pass
+
+    @abstractmethod
+    def get_chart_details(self, urn) -> TableMetadata:
+        """
+        returns detailed information about a chart
+        """
+        pass

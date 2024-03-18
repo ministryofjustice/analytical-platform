@@ -17,6 +17,7 @@ from data_platform_catalogue.entities import (
     DataProductStatus,
     SecurityClassification,
     TableMetadata,
+    ChartMetadata,
 )
 from datahub.metadata.schema_classes import DataProductPropertiesClass
 
@@ -365,6 +366,42 @@ class TestCatalogueClientWithDatahub:
             data_sensitivity_level=SecurityClassification.OFFICIAL,
             tags=[],
             major_version=1,
+        )
+
+    def test_get_chart_details(self, datahub_client, base_mock_graph):
+        urn = "urn:li:chart:(justice-data,absconds)"
+        datahub_response = {
+            "chart": {
+                "urn": "urn:li:chart:(justice-data,absconds)",
+                "type": "CHART",
+                "platform": {
+                    "name": "justice-data"
+                },
+                "relationships": {
+                    "total": 0,
+                    "relationships": []
+                },
+                "ownership": None,
+                "properties": {
+                    "name": "Absconds",
+                    "externalUrl": "https://data.justice.gov.uk/prisons/public-protection/absconds",
+                    "description": "a test description",
+                    "customProperties": [],
+                    "lastModified": {
+                    "time": 0
+                    }
+                }
+            },
+            "extensions": {}
+        }
+        base_mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+        chart = datahub_client.get_chart_details(urn)
+        print(chart)
+        assert chart == ChartMetadata(
+            name="Absconds",
+            description="a test description",
+            external_url="https://data.justice.gov.uk/prisons/public-protection/absconds",
         )
 
     def test_create_athena_database_and_table(
