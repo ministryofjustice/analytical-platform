@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "datahub_ingest_athena_datasets" {
 }
 
 resource "aws_iam_policy" "datahub_ingest_athena_datasets" {
-  name   = datahub_ingest_athena_datasets
+  name   = "datahub_ingest_athena_datasets"
   policy = data.aws_iam_policy_document.datahub_ingest_athena_datasets.json
 }
 
@@ -74,7 +74,7 @@ data "aws_iam_policy_document" "datahub_ingest_athena_query_results" {
 }
 
 resource "aws_iam_policy" "datahub_ingest_athena_query_results" {
-  name   = datahub_ingest_athena_query_results
+  name   = "datahub_ingest_athena_query_results"
   policy = data.aws_iam_policy_document.datahub_ingest_athena_query_results.json
 }
 
@@ -87,7 +87,7 @@ data "aws_iam_policy_document" "datahub_assume_ingestion_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = var.datahub_cp_irsa_arns.values
+      identifiers = values(var.datahub_cp_irsa_arns)
     }
   }
 }
@@ -106,11 +106,11 @@ data "aws_iam_policy_document" "datahub_read_CaDeT_bucket" {
 }
 
 resource "aws_iam_policy" "datahub_ingest_CaDeT_bucket" {
-  name   = datahub_ingest_CaDeT_bucket
+  name   = "datahub_ingest_CaDeT_bucket"
   policy = data.aws_iam_policy_document.datahub_ingest_CaDeT_bucket.json
 }
 
-
+#trivy:ignore:avd-aws-0057:sensitive action 'glue:GetDatabases' on wildcarded resource
 data "aws_iam_policy_document" "datahub_ingest_glue_datasets" {
   statement {
     sid    = "datahubIngestGlueDatasets"
@@ -128,7 +128,7 @@ data "aws_iam_policy_document" "datahub_ingest_glue_datasets" {
 }
 
 resource "aws_iam_policy" "datahub_ingest_glue_datasets" {
-  name   = datahub_ingest_glue_datasets
+  name   = "datahub_ingest_glue_datasets"
   policy = data.aws_iam_policy_document.datahub_ingest_glue_datasets.json
 }
 
@@ -146,7 +146,7 @@ data "aws_iam_policy_document" "datahub_ingest_glue_jobs" {
 }
 
 resource "aws_iam_policy" "datahub_ingest_glue_jobs" {
-  name   = datahub_ingest_glue_jobs
+  name   = "datahub_ingest_glue_jobs"
   policy = data.aws_iam_policy_document.datahub_ingest_glue_jobs.json
 }
 
