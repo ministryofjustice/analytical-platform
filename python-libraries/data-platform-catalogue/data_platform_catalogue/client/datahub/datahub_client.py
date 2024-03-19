@@ -600,6 +600,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
             ResultType.CHART,
+            ResultType.DATABASE,
         ),
         filters: Sequence[MultiSelectFilter] = (),
         sort: SortOption | None = None,
@@ -676,3 +677,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             )
         except GraphError as e:
             raise Exception("Unable to execute getDataset query") from e
+
+    def list_database_tables(self, urn: str, count: int) -> SearchResponse:
+        """Wraps the client's listDatabaseEntities query"""
+        return self.search_client.list_database_tables(urn=urn, count=count)

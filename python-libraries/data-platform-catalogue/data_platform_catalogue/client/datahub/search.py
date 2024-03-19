@@ -51,6 +51,12 @@ class SearchClient:
             .read_text()
         )
 
+        self.get_database_tables_query = (
+            files("data_platform_catalogue.client.datahub.graphql")
+            .joinpath("listContainerEntities.graphql")
+            .read_text()
+        )
+
     def search(
         self,
         query: str = "*",
@@ -60,6 +66,7 @@ class SearchClient:
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
             ResultType.CHART,
+            ResultType.DATABASE,
         ),
         filters: Sequence[MultiSelectFilter] = (),
         sort: SortOption | None = None,
@@ -108,6 +115,8 @@ class SearchClient:
                 page_results.append(self._parse_dataset(entity, matched_fields))
             elif entity_type == "CHART":
                 page_results.append(self._parse_chart(entity, matched_fields))
+            elif entity_type == "CONTAINER":
+                page_results.append(self._parse_container(entity, matched_fields))
             else:
                 raise ValueError(f"Unexpected entity type: {entity_type}")
 
@@ -190,6 +199,36 @@ class SearchClient:
             page_results=page_results,
         )
 
+    def list_database_tables(
+        self, urn: str, count: int, start: int = 0
+    ) -> SearchResponse:
+        variables = {
+            "urn": urn,
+            "start": start,
+            "count": count,
+        }
+
+        try:
+            response = self.graph.execute_graphql(
+                self.get_database_tables_query, variables
+            )
+        except GraphError as e:
+            raise Exception("Unable to execute listDatabaseEntities query") from e
+        page_results = []
+        for result in response["container"]["entities"]["searchResults"]:
+            entity = result["entity"]
+            entity_type = entity["type"]
+            matched_fields: dict = {}
+            if entity_type == "DATASET":
+                page_results.append(self._parse_dataset(entity, matched_fields))
+            else:
+                raise ValueError(f"Unexpected entity type: {entity_type}")
+
+        return SearchResponse(
+            total_results=response["container"]["entities"]["total"],
+            page_results=page_results,
+        )
+
     def _map_result_types(self, result_types: Sequence[ResultType]):
         """
         Map result types to Datahub EntityTypes
@@ -203,6 +242,8 @@ class SearchClient:
             types.append("GLOSSARY_TERM")
         if ResultType.CHART in result_types:
             types.append("CHART")
+        if ResultType.DATABASE in result_types:
+            types.append("CONTAINER")
 
         return types
 
@@ -223,20 +264,30 @@ class SearchClient:
         tags = parse_tags(entity)
         last_updated = parse_last_updated(entity)
         name = entity["name"]
-        relationships = entity.get("relationships", {})
-        total_data_products = relationships.get("total", 0)
-        data_products = relationships.get("relationships", [])
-        data_products = [
-            {"id": i["entity"]["urn"], "name": i["entity"]["properties"]["name"]}
-            for i in data_products
-        ]
+        if entity.get("platform", {}).get("name") == "athena":
+            metadata = {
+                "owner": owner_name,
+                "owner_email": owner_email,
+                "entity_sub_type": entity.get("subTypes", {}).get("typeNames"),
+            }
+        else:
+            relationships = entity.get("relationships", {})
+            total_data_products = relationships.get("total", 0)
+            data_products = relationships.get("relationships", [])
+            data_products = [
+                {"id": i["entity"]["urn"], "name": i["entity"]["properties"]["name"]}
+                for i in data_products
+            ]
 
-        metadata = {
-            "owner": owner_name,
-            "owner_email": owner_email,
-            "total_data_products": total_data_products,
-            "data_products": data_products,
-        }
+            metadata = {
+                "owner": owner_name,
+                "owner_email": owner_email,
+                "total_data_products": total_data_products,
+                "data_products": data_products,
+                "entity_sub_type": entity.get("subTypes", {}).get(
+                    "typeNames", ["Dataset"]
+                ),
+            }
         metadata.update(parse_domain(entity))
         metadata.update(custom_properties)
 
@@ -364,4 +415,40 @@ class SearchClient:
 
         return SearchResponse(
             total_results=response["total"], page_results=page_results
+        )
+
+    def _parse_container(self, entity: dict[str, Any], matches) -> SearchResult:
+        """
+        Map a Container entity to a SearchResult
+        """
+        owner_email, owner_name = parse_owner(entity)
+        properties, custom_properties = parse_properties(entity)
+        tags = parse_tags(entity)
+        last_updated = parse_last_updated(entity)
+        metadata = {
+            "owner": owner_name,
+            "owner_email": owner_email,
+            "entity_sub_type": entity.get("subTypes", {}).get(
+                "typeNames", ["Container"]
+            ),
+        }
+        metadata.update(parse_domain(entity))
+        metadata.update(custom_properties)
+
+        fqn = (
+            properties.get("qualifiedName", properties["name"])
+            if properties.get("qualifiedName") is not None
+            else properties["name"]
+        )
+
+        return SearchResult(
+            id=entity["urn"],
+            result_type=ResultType.DATABASE,
+            matches=matches,
+            name=properties["name"],
+            fully_qualified_name=fqn,
+            description=properties.get("description", ""),
+            metadata=metadata,
+            tags=tags,
+            last_updated=last_updated,
         )
