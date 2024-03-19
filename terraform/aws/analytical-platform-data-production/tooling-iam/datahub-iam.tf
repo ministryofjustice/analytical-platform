@@ -145,20 +145,22 @@ resource "aws_iam_policy" "datahub_ingest_glue_jobs" {
 }
 
 
-resource "aws_iam_role" "datahub_ingestion_roles" {
+module "datahub_ingestion_roles" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  source  = "terraform-aws-modules/iam/aws/modules/iam-assumable-role"
+  version = "~> 5.0"
+
   for_each = var.datahub_cp_irsa_arns
-  name     = "datahub_ingestion_${each.key}"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = {
-      Action = ["sts:AssumeRole", "sts:TagSession"]
-      Effect = "Allow"
-      Principal = {
-        AWS = each.value
-      }
-    }
-  })
-  managed_policy_arns = [
+
+  create_role = true
+
+  role_name     = "datahub_ingestion_${each.key}"
+
+  role_requires_mfa = false
+
+  trusted_role_arns = [each.value]
+
+  custom_role_policy_arns = [
     aws_iam_policy.datahub_read_cadet_bucket.arn,
     aws_iam_policy.datahub_ingest_athena_datasets.arn,
     aws_iam_policy.datahub_ingest_athena_query_results.arn,
