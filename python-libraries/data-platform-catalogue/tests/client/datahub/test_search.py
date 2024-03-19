@@ -178,6 +178,7 @@ def test_dataset_result(mock_graph, searcher):
                     "domain_id": "urn:li:domain:3dc18e48-c062-4407-84a9-73e23f768023",
                     "StoredAsSubDirectories": "False",
                     "CreatedByJob": "moj-reg-prod-hmpps-assess-risks-and-needs-prod-glue-job",
+                    "entity_sub_type": ["Dataset"],
                 },
                 tags=[],
             ),
@@ -255,6 +256,7 @@ def test_full_page(mock_graph, searcher):
                     "total_data_products": 0,
                     "domain_name": "",
                     "domain_id": "",
+                    "entity_sub_type": ["Dataset"],
                 },
                 tags=[],
                 last_updated=datetime(2024, 1, 23, 6, 15, 2, 353000),
@@ -273,6 +275,7 @@ def test_full_page(mock_graph, searcher):
                     "total_data_products": 0,
                     "domain_name": "",
                     "domain_id": "",
+                    "entity_sub_type": ["Dataset"],
                 },
                 tags=[],
                 last_updated=None,
@@ -291,6 +294,7 @@ def test_full_page(mock_graph, searcher):
                     "total_data_products": 0,
                     "domain_name": "",
                     "domain_id": "",
+                    "entity_sub_type": ["Dataset"],
                 },
                 tags=[],
                 last_updated=None,
@@ -356,6 +360,7 @@ def test_query_match(mock_graph, searcher):
                     "total_data_products": 0,
                     "domain_id": "",
                     "domain_name": "",
+                    "entity_sub_type": ["Dataset"],
                 },
                 tags=[],
             )
@@ -417,6 +422,7 @@ def test_result_with_owner(mock_graph, searcher):
                     "total_data_products": 0,
                     "domain_id": "",
                     "domain_name": "",
+                    "entity_sub_type": ["Dataset"],
                 },
                 tags=[],
             )
@@ -684,6 +690,7 @@ def test_result_with_data_product(mock_graph, searcher):
                     "total_data_products": 1,
                     "domain_id": "",
                     "domain_name": "",
+                    "entity_sub_type": ["Dataset"],
                 },
                 tags=[],
             )
@@ -749,6 +756,7 @@ def test_list_data_product_assets(mock_graph, searcher):
                     "total_data_products": 1,
                     "domain_id": "",
                     "domain_name": "",
+                    "entity_sub_type": ["Dataset"],
                 },
                 tags=[],
             )
@@ -885,6 +893,165 @@ def test_search_for_charts(mock_graph, searcher):
                     "title": "Absconds",
                 },
                 result_type=ResultType.CHART,
+            )
+        ],
+    )
+
+
+def test_search_for_container(mock_graph, searcher):
+    datahub_response = {
+        "searchAcrossEntities": {
+            "start": 0,
+            "count": 1,
+            "total": 1,
+            "searchResults": [
+                {
+                    "insights": [],
+                    "matchedFields": [
+                        {
+                            "name": "urn",
+                            "value": "urn:li:container:test_db",
+                        },
+                        {
+                            "name": "description",
+                            "value": "test",
+                        },
+                        {"name": "name", "value": "test_db"},
+                    ],
+                    "entity": {
+                        "type": "CONTAINER",
+                        "urn": "urn:li:container:test_db",
+                        "platform": {"name": "athena"},
+                        "subTypes": {"typeNames": ["Database"]},
+                        "ownership": {
+                            "owners": [
+                                {
+                                    "owner": {
+                                        "urn": "urn:li:corpuser:shannon@longtail.com",
+                                        "properties": {
+                                            "fullName": "Shannon Lovett",
+                                            "email": "shannon@longtail.com",
+                                        },
+                                    }
+                                }
+                            ]
+                        },
+                        "properties": {
+                            "name": "test_db",
+                            "description": "test",
+                            "customProperties": [
+                                {"key": "dpia_required", "value": "False"},
+                            ],
+                        },
+                        "domain": {
+                            "domain": {
+                                "urn": "urn:li:domain:testdom",
+                                "id": "general",
+                                "properties": {"name": "testdom", "description": ""},
+                            }
+                        },
+                        "tags": {
+                            "tags": [
+                                {
+                                    "tag": {
+                                        "urn": "urn:li:tag:test",
+                                        "properties": {
+                                            "name": "test",
+                                            "description": "test tag",
+                                        },
+                                    }
+                                }
+                            ]
+                        },
+                    },
+                }
+            ],
+        }
+    }
+
+    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+    response = searcher.search()
+    assert response == SearchResponse(
+        total_results=1,
+        page_results=[
+            SearchResult(
+                id="urn:li:container:test_db",
+                name="test_db",
+                fully_qualified_name="test_db",
+                description="test",
+                matches={
+                    "urn": "urn:li:container:test_db",
+                    "description": "test",
+                    "name": "test_db",
+                },
+                result_type=ResultType.DATABASE,
+                metadata={
+                    "owner": "Shannon Lovett",
+                    "owner_email": "shannon@longtail.com",
+                    "domain_id": "urn:li:domain:testdom",
+                    "domain_name": "testdom",
+                    "dpia_required": "False",
+                    "entity_sub_type": ["Database"],
+                },
+                tags=["test"],
+            )
+        ],
+    )
+
+
+def test_list_database_tables(mock_graph, searcher):
+    datahub_response = {
+        "container": {
+            "entities": {
+                "total": 1,
+                "searchResults": [
+                    {
+                        "entity": {
+                            "type": "DATASET",
+                            "urn": "urn:li:dataset:(urn:li:dataPlatform:athena,test_db.test_table,PROD)",
+                            "platform": {"name": "athena"},
+                            "name": "test_db.test_table",
+                            "subTypes": {"typeNames": ["Table"]},
+                            "properties": {
+                                "name": "test_table",
+                                "qualifiedName": "test_db.test_table",
+                                "description": "just for test",
+                                "customProperties": [
+                                    {
+                                        "key": "whereToAccessDataset",
+                                        "value": "analytical_platform",
+                                    },
+                                    {"key": "sensitivityLevel", "value": "OFFICIAL"},
+                                ],
+                            },
+                        }
+                    }
+                ],
+            }
+        }
+    }
+
+    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+    response = searcher.list_database_tables(urn="urn:li:athena:test", count=10)
+    assert response == SearchResponse(
+        total_results=1,
+        page_results=[
+            SearchResult(
+                id="urn:li:dataset:(urn:li:dataPlatform:athena,test_db.test_table,PROD)",
+                name="test_table",
+                fully_qualified_name="test_db.test_table",
+                description="just for test",
+                result_type=ResultType.TABLE,
+                metadata={
+                    "owner": "",
+                    "owner_email": "",
+                    "domain_id": "",
+                    "domain_name": "",
+                    "whereToAccessDataset": "analytical_platform",
+                    "sensitivityLevel": "OFFICIAL",
+                    "entity_sub_type": ["Table"],
+                },
             )
         ],
     )
