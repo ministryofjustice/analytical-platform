@@ -81,20 +81,6 @@ resource "aws_iam_policy" "datahub_ingest_athena_query_results" {
   policy = data.aws_iam_policy_document.datahub_ingest_athena_query_results.json
 }
 
-data "aws_iam_policy_document" "datahub_assume_ingestion_policy" {
-  version = "2012-10-17"
-
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRole", "sts:TagSession"]
-
-    principals {
-      type        = "AWS"
-      identifiers = values(var.datahub_cp_irsa_arns)
-    }
-  }
-}
-
 #trivy:ignore:avd-aws-0057:sensitive action 's3:*' on wildcarded resource
 data "aws_iam_policy_document" "datahub_read_cadet_bucket" {
   statement {
@@ -157,9 +143,22 @@ resource "aws_iam_policy" "datahub_ingest_glue_jobs" {
   policy = data.aws_iam_policy_document.datahub_ingest_glue_jobs.json
 }
 
-resource "aws_iam_role" "datahub_ingestion" {
-  name               = "datahub_ingestion"
-  assume_role_policy = data.aws_iam_policy_document.datahub_assume_ingestion_policy.json
+
+resource "aws_iam_role" "datahub_ingestion_roles" {
+  for_each = var.datahub_cp_irsa_arns
+  name     = "datahub_ingestion_${each.key}"
+  assume_role_policy = jsondecode({
+    version = "2012-10-17"
+    statement = {
+      effects = "Allow"
+      actions = ["sts:AssumeRole", "sts:TagSession"]
+
+      principals = {
+        type        = "AWS"
+        identifiers = each.value
+      }
+    }
+  })
   managed_policy_arns = [
     aws_iam_policy.datahub_read_cadet_bucket.arn,
     aws_iam_policy.datahub_ingest_athena_datasets.arn,
