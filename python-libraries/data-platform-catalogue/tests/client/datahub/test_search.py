@@ -871,7 +871,6 @@ def test_search_for_charts(mock_graph, searcher):
     mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
 
     response = searcher.search()
-    print(response)
     assert response == SearchResponse(
         total_results=1,
         page_results=[

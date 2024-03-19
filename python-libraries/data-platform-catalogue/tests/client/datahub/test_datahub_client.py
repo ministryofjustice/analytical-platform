@@ -390,7 +390,6 @@ class TestCatalogueClientWithDatahub:
         base_mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
 
         chart = datahub_client.get_chart_details(urn)
-        print(chart)
         assert chart == ChartMetadata(
             name="Absconds",
             description="a test description",
