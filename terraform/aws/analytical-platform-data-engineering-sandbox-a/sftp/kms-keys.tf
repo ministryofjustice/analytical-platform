@@ -16,7 +16,7 @@ module "s3_processed_kms" {
   version = "2.2.1"
 
   aliases               = ["s3/processed"]
-  description           = "Ingestion Scanning ClamAV S3 KMS Key"
+  description           = "Family SFTP Server, Processed S3 KMS Key"
   enable_default_policy = true
 
   deletion_window_in_days = 7
