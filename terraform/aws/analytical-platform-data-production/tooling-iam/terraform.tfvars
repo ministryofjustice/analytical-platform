@@ -9,17 +9,17 @@ account_ids = {
 }
 
 data_buckets = [
-    "moj-reg-dev-curated",
-    "moj-reg-preprod-curated",
-    "moj-reg-prod-curated"
-    ]
+  "moj-reg-dev-curated",
+  "moj-reg-preprod-curated",
+  "moj-reg-prod-curated"
+]
 
 athena_query_result_buckets = ["aws-athena-query-results-593291632749-eu-west-1"]
 
 datahub_cp_irsa_arns = {
-    dev = "arn:aws:iam::754256621582:role/cloud-platform-irsa-33e75989394c3a08-live"
-    test = "arn:aws:iam::754256621582:role/cloud-platform-irsa-fdce67955f41b322-live"
-    preprod = "arn:aws:iam::754256621582:role/cloud-platform-irsa-fe098636951cc219-live"
+  dev     = "arn:aws:iam::754256621582:role/cloud-platform-irsa-33e75989394c3a08-live"
+  test    = "arn:aws:iam::754256621582:role/cloud-platform-irsa-fdce67955f41b322-live"
+  preprod = "arn:aws:iam::754256621582:role/cloud-platform-irsa-fe098636951cc219-live"
 }
 
 tags = {
