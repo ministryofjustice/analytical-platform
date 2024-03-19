@@ -20,7 +20,8 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
       "s3:PutObject"
     ]
     resources = [
-      "arn:aws:s3:::aws-athena-query-results-684969100054-eu-west-1"
+      "arn:aws:s3:::aws-athena-query-results-684969100054-eu-west-1",
+      "arn:aws:s3:::aws-athena-query-results-684969100054-eu-west-1/*"
     ]
   }
   #tfsec:ignore:avd-aws-0057:needs to access multiple resources
