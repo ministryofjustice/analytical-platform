@@ -12,7 +12,7 @@ locals {
   ingest_athena_s3 = concat(
     formatlist("arn:aws:s3:::%s/*", var.data_buckets),
     formatlist("arn:aws:s3:::%s", var.data_buckets)
-    )
+  )
 }
 
 data "aws_iam_policy_document" "datahub_ingest_athena_datasets" {
@@ -108,7 +108,7 @@ data "aws_iam_policy_document" "datahub_read_cadet_bucket" {
     resources = [
       "arn:aws:s3:::mojap-derived-tables/*",
       "arn:aws:s3:::mojap-derived-tables"
-      ]
+    ]
   }
 }
 
