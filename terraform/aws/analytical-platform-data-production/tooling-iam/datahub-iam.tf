@@ -149,14 +149,12 @@ resource "aws_iam_role" "datahub_ingestion_roles" {
   for_each = var.datahub_cp_irsa_arns
   name     = "datahub_ingestion_${each.key}"
   assume_role_policy = jsonencode({
-    version = "2012-10-17"
-    statement = {
-      effects = "Allow"
-      actions = ["sts:AssumeRole", "sts:TagSession"]
-
-      principals = {
-        type        = "AWS"
-        identifiers = each.value
+    Version = "2012-10-17"
+    Statement = {
+      Action = ["sts:AssumeRole", "sts:TagSession"]
+      Effect = "Allow"
+      Principal = {
+        AWS = each.value
       }
     }
   })
