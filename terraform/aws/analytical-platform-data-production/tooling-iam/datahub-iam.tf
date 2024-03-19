@@ -147,7 +147,7 @@ resource "aws_iam_policy" "datahub_ingest_glue_jobs" {
 
 module "datahub_ingestion_roles" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
-  source  = "terraform-aws-modules/iam/aws/modules/iam-assumable-role"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "~> 5.0"
 
   for_each = var.datahub_cp_irsa_arns
