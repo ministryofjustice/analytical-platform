@@ -15,7 +15,7 @@ module "definition_upload_lambda" {
 
   environment_variables = {
     MODE                         = "definition-upload",
-    CLAMAV_DEFINITON_BUCKET_NAME = "${module.definitions_bucket.s3_bucket_id}"
+    CLAMAV_DEFINITON_BUCKET_NAME = module.definitions_bucket.s3_bucket_id
   }
 
   attach_policy_statements = true
@@ -195,7 +195,7 @@ module "transfer_lambda" {
   memory_size            = 2048
   ephemeral_storage_size = 10240
   timeout                = 900
-  image_uri              = "684969100054.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-transfer:10"
+  image_uri              = "684969100054.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-transfer:14"
 
   environment_variables = {
     PROCESSED_BUCKET_NAME = module.processed_bucket.s3_bucket_id
@@ -230,6 +230,7 @@ module "transfer_lambda" {
       effect = "Allow"
       actions = [
         "s3:GetObject",
+        "s3:DeleteObject",
         "s3:GetObjectTagging"
       ],
       resources = ["arn:aws:s3:::${module.processed_bucket.s3_bucket_id}/*"]
