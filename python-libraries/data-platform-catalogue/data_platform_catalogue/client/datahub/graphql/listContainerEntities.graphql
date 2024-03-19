@@ -1,0 +1,36 @@
+query getContainerEntities(
+  $urn: String!
+  $start: Int!
+  $count: Int!
+) {
+  container(urn: $urn) {
+    entities(input:{start:$start, count:$count}){
+    	total
+      searchResults {
+        entity {
+          type
+          ... on Dataset {
+            urn
+            type
+            subTypes {
+              typeNames
+            }
+            platform {
+              name
+            }
+            name
+            properties {
+              name
+              qualifiedName
+              description
+              customProperties {
+                key
+                value
+              }
+            }
+          }
+        }
+    	}
+    }
+  }
+}
