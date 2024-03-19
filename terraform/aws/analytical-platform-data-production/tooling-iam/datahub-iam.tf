@@ -2,12 +2,12 @@
 
 locals {
   ingest_athena_nons3 = [
-    "arn:aws:athena::${var.account_ids["cloud-platform"]}:datacatalog/*",
-    "arn:aws:athena::${var.account_ids["cloud-platform"]}:workgroup/*",
-    "arn:aws:glue::${var.account_ids["cloud-platform"]}:tableVersion/*/*/*",
-    "arn:aws:glue::${var.account_ids["cloud-platform"]}:table/*/*",
-    "arn:aws:glue::${var.account_ids["cloud-platform"]}:catalog",
-    "arn:aws:glue::${var.account_ids["cloud-platform"]}:database/*"
+    "arn:aws:athena::${var.account_ids["analytical-platform-data-production"]}:datacatalog/*",
+    "arn:aws:athena::${var.account_ids["analytical-platform-data-production"]}:workgroup/*",
+    "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:tableVersion/*/*/*",
+    "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:table/*/*",
+    "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:catalog",
+    "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:database/*"
   ]
   ingest_athena_s3 = concat(
     formatlist("arn:aws:s3:::%s/*", var.data_buckets),
@@ -81,6 +81,7 @@ resource "aws_iam_policy" "datahub_ingest_athena_query_results" {
   policy = data.aws_iam_policy_document.datahub_ingest_athena_query_results.json
 }
 
+
 #trivy:ignore:avd-aws-0057:sensitive action 's3:*' on wildcarded resource
 data "aws_iam_policy_document" "datahub_read_cadet_bucket" {
   statement {
@@ -113,9 +114,9 @@ data "aws_iam_policy_document" "datahub_ingest_glue_datasets" {
       "glue:GetTables"
     ]
     resources = [
-      "arn:aws:glue:$region-id:$account-id:catalog",
-      "arn:aws:glue:$region-id:$account-id:database/*",
-      "arn:aws:glue:$region-id:$account-id:table/*"
+      "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:catalog",
+      "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:database/*",
+      "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:table/*"
     ]
   }
 }
@@ -147,7 +148,7 @@ resource "aws_iam_policy" "datahub_ingest_glue_jobs" {
 resource "aws_iam_role" "datahub_ingestion_roles" {
   for_each = var.datahub_cp_irsa_arns
   name     = "datahub_ingestion_${each.key}"
-  assume_role_policy = jsondecode({
+  assume_role_policy = jsonencode({
     version = "2012-10-17"
     statement = {
       effects = "Allow"
