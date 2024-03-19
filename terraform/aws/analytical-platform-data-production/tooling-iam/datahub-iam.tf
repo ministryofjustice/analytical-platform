@@ -1,7 +1,7 @@
 #trivy:ignore:aws-iam-no-policy-wildcards
 
 locals {
-  ingest_athena_nonS3 = [
+  ingest_athena_nons3 = [
     "arn:aws:athena::${var.account_ids["cloud-platform"]}:datacatalog/*",
     "arn:aws:athena::${var.account_ids["cloud-platform"]}:workgroup/*",
     "arn:aws:glue::${var.account_ids["cloud-platform"]}:tableVersion/*/*/*",
@@ -9,7 +9,7 @@ locals {
     "arn:aws:glue::${var.account_ids["cloud-platform"]}:catalog",
     "arn:aws:glue::${var.account_ids["cloud-platform"]}:database/*"
   ]
-  ingest_athena_S3 = formatlist("arn:aws:s3:::%s", var.data_buckets)
+  ingest_athena_s3 = formatlist("arn:aws:s3:::%s", var.data_buckets)
 }
 
 data "aws_iam_policy_document" "datahub_ingest_athena_datasets" {
@@ -44,7 +44,7 @@ data "aws_iam_policy_document" "datahub_ingest_athena_datasets" {
       "s3:ListBucket",
       "s3:GetBucketLocation",
     ]
-    resources = concat(local.ingest_athena_nonS3, local.ingest_athena_S3)
+    resources = concat(local.ingest_athena_nons3, local.ingest_athena_s3)
   }
 }
 
@@ -92,7 +92,7 @@ data "aws_iam_policy_document" "datahub_assume_ingestion_policy" {
   }
 }
 
-data "aws_iam_policy_document" "datahub_read_CaDeT_bucket" {
+data "aws_iam_policy_document" "datahub_read_cadet_bucket" {
   statement {
     sid    = "datahubReadCaDeTBucket"
     effect = "Allow"
@@ -105,9 +105,9 @@ data "aws_iam_policy_document" "datahub_read_CaDeT_bucket" {
   }
 }
 
-resource "aws_iam_policy" "datahub_ingest_CaDeT_bucket" {
+resource "aws_iam_policy" "datahub_ingest_cadet_bucket" {
   name   = "datahub_ingest_CaDeT_bucket"
-  policy = data.aws_iam_policy_document.datahub_ingest_CaDeT_bucket.json
+  policy = data.aws_iam_policy_document.datahub_ingest_cadet_bucket.json
 }
 
 #trivy:ignore:avd-aws-0057:sensitive action 'glue:GetDatabases' on wildcarded resource
@@ -154,7 +154,7 @@ resource "aws_iam_role" "datahub_ingestion" {
   name               = "datahub_ingestion"
   assume_role_policy = data.aws_iam_policy_document.datahub_assume_ingestion_policy.json
   managed_policy_arns = [
-    aws_iam_policy.datahub_read_CaDeT_bucket.arn,
+    aws_iam_policy.datahub_read_cadet_bucket.arn,
     aws_iam_policy.datahub_ingest_athena_datasets.arn,
     aws_iam_policy.datahub_ingest_athena_query_results.arn,
     aws_iam_policy.datahub_ingest_glue_datasets.arn,
