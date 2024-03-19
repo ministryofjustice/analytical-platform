@@ -105,9 +105,9 @@ data "aws_iam_policy_document" "datahub_read_cadet_bucket" {
   }
 }
 
-resource "aws_iam_policy" "datahub_ingest_cadet_bucket" {
-  name   = "datahub_ingest_CaDeT_bucket"
-  policy = data.aws_iam_policy_document.datahub_ingest_cadet_bucket.json
+resource "aws_iam_policy" "datahub_read_cadet_bucket" {
+  name   = "datahub_read_CaDeT_bucket"
+  policy = data.aws_iam_policy_document.datahub_read_cadet_bucket.json
 }
 
 #trivy:ignore:avd-aws-0057:sensitive action 'glue:GetDatabases' on wildcarded resource
