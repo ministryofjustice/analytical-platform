@@ -8,6 +8,7 @@ class ResultType(Enum):
     DATA_PRODUCT = auto()
     TABLE = auto()
     GLOSSARY_TERM = auto()
+    CHART = auto()
 
 
 @dataclass

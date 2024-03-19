@@ -174,3 +174,11 @@ class DatabaseMetadata:
 
 
 # jscpd:ignore-end
+
+
+@dataclass
+class ChartMetadata:
+    name: str
+    description: str
+    external_url: str
+    tags: list[str] = field(default_factory=list)

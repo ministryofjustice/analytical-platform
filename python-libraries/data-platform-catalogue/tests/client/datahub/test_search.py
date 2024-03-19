@@ -828,3 +828,63 @@ def test_get_glossary_terms(mock_graph, searcher):
             ),
         ],
     )
+
+
+def test_search_for_charts(mock_graph, searcher):
+    datahub_response = {
+        "searchAcrossEntities": {
+            "start": 0,
+            "count": 1,
+            "total": 1,
+            "searchResults": [
+                {
+                    "insights": [],
+                    "matchedFields": [
+                        {
+                            "name": "urn",
+                            "value": "urn:li:chart:(justice-data,absconds)",
+                        },
+                        {
+                            "name": "description",
+                            "value": "test",
+                        },
+                        {"name": "title", "value": "absconds"},
+                        {"name": "title", "value": "Absconds"},
+                    ],
+                    "entity": {
+                        "type": "CHART",
+                        "urn": "urn:li:chart:(justice-data,absconds)",
+                        "platform": {"name": "justice-data"},
+                        "ownership": None,
+                        "properties": {
+                            "name": "Absconds",
+                            "description": "test",
+                            "externalUrl": "https://data.justice.gov.uk/prisons/public-protection/absconds",
+                            "customProperties": [],
+                        },
+                    },
+                }
+            ],
+        }
+    }
+
+    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+    response = searcher.search()
+    assert response == SearchResponse(
+        total_results=1,
+        page_results=[
+            SearchResult(
+                id="urn:li:chart:(justice-data,absconds)",
+                name="Absconds",
+                fully_qualified_name="Absconds",
+                description="test",
+                matches={
+                    "urn": "urn:li:chart:(justice-data,absconds)",
+                    "description": "test",
+                    "title": "Absconds",
+                },
+                result_type=ResultType.CHART,
+            )
+        ],
+    )
