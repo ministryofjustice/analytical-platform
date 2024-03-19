@@ -4,6 +4,7 @@ from typing import Sequence
 
 from ..entities import (
     CatalogueMetadata,
+    ChartMetadata,
     DataLocation,
     DataProductMetadata,
     TableMetadata,
@@ -114,5 +115,12 @@ class BaseCatalogueClient(ABC):
     def get_table_details(self, urn) -> TableMetadata:
         """
         returns the schema and detailed information about a table
+        """
+        pass
+
+    @abstractmethod
+    def get_chart_details(self, urn) -> ChartMetadata:
+        """
+        returns detailed information about a chart
         """
         pass

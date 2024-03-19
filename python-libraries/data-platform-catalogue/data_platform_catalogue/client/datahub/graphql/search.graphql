@@ -54,6 +54,42 @@ query Search(
       }
       entity {
         type
+        ... on Chart {
+          urn
+          type
+          platform {
+            name
+          }
+          ownership {
+            owners {
+              owner {
+                ... on CorpUser {
+                  urn
+                  properties {
+                    fullName
+                    email
+                  }
+                }
+                ... on CorpGroup {
+                  urn
+                  properties {
+                    displayName
+                    email
+                  }
+                }
+              }
+            }
+          }
+          properties {
+            name
+            description
+            externalUrl
+            customProperties {
+              key
+              value
+            }
+          }
+        }
         ... on Dataset {
           urn
           type

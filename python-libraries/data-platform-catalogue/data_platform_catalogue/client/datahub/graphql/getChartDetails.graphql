@@ -1,0 +1,41 @@
+query getChartDetails($urn: String!) {
+  chart(urn: $urn) {
+    urn
+    type
+    platform {
+      name
+    }
+    ownership {
+      owners {
+        owner {
+          ... on CorpUser {
+            urn
+            properties {
+              fullName
+              email
+            }
+          }
+          ... on CorpGroup {
+            urn
+            properties {
+              displayName
+              email
+            }
+          }
+        }
+      }
+    }
+    properties {
+      name
+      description
+      externalUrl
+      customProperties {
+        key
+        value
+      }
+      lastModified {
+        time
+      }
+    }
+  }
+}

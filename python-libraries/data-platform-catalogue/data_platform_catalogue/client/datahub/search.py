@@ -59,6 +59,7 @@ class SearchClient:
         result_types: Sequence[ResultType] = (
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
+            ResultType.CHART,
         ),
         filters: Sequence[MultiSelectFilter] = (),
         sort: SortOption | None = None,
@@ -105,6 +106,8 @@ class SearchClient:
                 page_results.append(self._parse_data_product(entity, matched_fields))
             elif entity_type == "DATASET":
                 page_results.append(self._parse_dataset(entity, matched_fields))
+            elif entity_type == "CHART":
+                page_results.append(self._parse_chart(entity, matched_fields))
             else:
                 raise ValueError(f"Unexpected entity type: {entity_type}")
 
@@ -198,6 +201,9 @@ class SearchClient:
             types.append("DATASET")
         if ResultType.GLOSSARY_TERM in result_types:
             types.append("GLOSSARY_TERM")
+        if ResultType.CHART in result_types:
+            types.append("CHART")
+
         return types
 
     def _map_filters(self, filters: Sequence[MultiSelectFilter]):
@@ -283,6 +289,21 @@ class SearchClient:
             description=properties.get("description", ""),
             metadata=metadata,
             tags=tags,
+            last_updated=last_updated,
+        )
+
+    def _parse_chart(self, entity: dict[str, Any], matches) -> SearchResult:
+        properties, custom_properties = parse_properties(entity)
+        last_updated = parse_last_updated(entity)
+
+        return SearchResult(
+            id=entity["urn"],
+            result_type=ResultType.CHART,
+            matches=matches,
+            name=properties["name"],
+            fully_qualified_name=properties["name"],
+            description=properties.get("description", ""),
+            metadata=custom_properties,
             last_updated=last_updated,
         )
 
