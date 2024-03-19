@@ -17,9 +17,9 @@ variable "athena_query_result_buckets" {
   description = "Athena query dump buckets"
 }
 
-variable "datahub_cp_irsa_arns" {
+variable "datahub_cp_irsa_role_names" {
   type        = map(string)
-  description = "Map of DataHub environments and their IRSA role arns"
+  description = "Map of DataHub environments and their IRSA role names"
 }
 
 variable "tags" {

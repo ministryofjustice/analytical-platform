@@ -150,7 +150,7 @@ module "datahub_ingestion_roles" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "~> 5.0"
 
-  for_each = var.datahub_cp_irsa_arns
+  for_each = local.datahub_cp_irsa_role_arns
 
   create_role = true
 
