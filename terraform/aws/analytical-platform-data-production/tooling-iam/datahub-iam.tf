@@ -1,20 +1,3 @@
-#trivy:ignore:aws-iam-no-policy-wildcards
-
-locals {
-  ingest_athena_nons3 = [
-    "arn:aws:athena::${var.account_ids["analytical-platform-data-production"]}:datacatalog/*",
-    "arn:aws:athena::${var.account_ids["analytical-platform-data-production"]}:workgroup/*",
-    "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:tableVersion/*/*/*",
-    "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:table/*/*",
-    "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:catalog",
-    "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:database/*"
-  ]
-  ingest_athena_s3 = concat(
-    formatlist("arn:aws:s3:::%s/*", var.data_buckets),
-    formatlist("arn:aws:s3:::%s", var.data_buckets)
-  )
-}
-
 data "aws_iam_policy_document" "datahub_ingest_athena_datasets" {
   statement {
     sid    = "datahubIngestAthenaDatasets"
@@ -81,7 +64,6 @@ resource "aws_iam_policy" "datahub_ingest_athena_query_results" {
   policy = data.aws_iam_policy_document.datahub_ingest_athena_query_results.json
 }
 
-
 #trivy:ignore:avd-aws-0057:sensitive action 's3:*' on wildcarded resource
 data "aws_iam_policy_document" "datahub_read_cadet_bucket" {
   statement {
@@ -126,7 +108,7 @@ resource "aws_iam_policy" "datahub_ingest_glue_datasets" {
   policy = data.aws_iam_policy_document.datahub_ingest_glue_datasets.json
 }
 
-
+#trivy:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "datahub_ingest_glue_jobs" {
   statement {
     sid    = "datahubIngestGlueJobs"
@@ -143,7 +125,6 @@ resource "aws_iam_policy" "datahub_ingest_glue_jobs" {
   name   = "datahub_ingest_glue_jobs"
   policy = data.aws_iam_policy_document.datahub_ingest_glue_jobs.json
 }
-
 
 module "datahub_ingestion_roles" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
