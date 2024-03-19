@@ -13,12 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A ChartMetadata class with very limited attributes
 - ResultType.CHART
-- A graphQL query for chart details
+- A GraphQL query for chart details
 - SearchClient._parse_chart, incorporated chart parsing into the normal search method
 - DataHubCatalogueClient.get_chart_details for the chart display page
 
 ### Changed
-- Altered graphQL search query to include chart parsing
+
+- Altered GraphQL search query to include chart parsing
 
 ## [0.20.0] 2024-03-15
 
