@@ -154,7 +154,7 @@ module "datahub_ingestion_roles" {
 
   create_role = true
 
-  role_name     = "datahub_ingestion_${each.key}"
+  role_name = "datahub_ingestion_${each.key}"
 
   role_requires_mfa = false
 
