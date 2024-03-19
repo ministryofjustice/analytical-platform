@@ -294,9 +294,7 @@ def test_get_glossary_terms_returns():
 @runs_on_development_server
 def test_get_chart():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
-    table = client.get_chart_details(
-        urn="urn:li:chart:(justice-data,absconds)"
-    )
+    table = client.get_chart_details(urn="urn:li:chart:(justice-data,absconds)")
     assert table
 
 

@@ -10,6 +10,7 @@ from data_platform_catalogue.client.datahub.datahub_client import (
 )
 from data_platform_catalogue.entities import (
     CatalogueMetadata,
+    ChartMetadata,
     DatabaseMetadata,
     DatabaseStatus,
     DataLocation,
@@ -17,7 +18,6 @@ from data_platform_catalogue.entities import (
     DataProductStatus,
     SecurityClassification,
     TableMetadata,
-    ChartMetadata,
 )
 from datahub.metadata.schema_classes import DataProductPropertiesClass
 
@@ -374,25 +374,18 @@ class TestCatalogueClientWithDatahub:
             "chart": {
                 "urn": "urn:li:chart:(justice-data,absconds)",
                 "type": "CHART",
-                "platform": {
-                    "name": "justice-data"
-                },
-                "relationships": {
-                    "total": 0,
-                    "relationships": []
-                },
+                "platform": {"name": "justice-data"},
+                "relationships": {"total": 0, "relationships": []},
                 "ownership": None,
                 "properties": {
                     "name": "Absconds",
                     "externalUrl": "https://data.justice.gov.uk/prisons/public-protection/absconds",
                     "description": "a test description",
                     "customProperties": [],
-                    "lastModified": {
-                    "time": 0
-                    }
-                }
+                    "lastModified": {"time": 0},
+                },
             },
-            "extensions": {}
+            "extensions": {},
         }
         base_mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
 

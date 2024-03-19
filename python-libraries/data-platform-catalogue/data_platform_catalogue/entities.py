@@ -175,6 +175,7 @@ class DatabaseMetadata:
 
 # jscpd:ignore-end
 
+
 @dataclass
 class ChartMetadata:
     name: str
