@@ -10,9 +10,10 @@
 
 {Please write here}
 
-> **_NOTE:_** Skipping below checks could delay your PR review!
 
 ## Checklist (check `x` in `[ ]` of list items)
+
+> **_NOTE:_** Skipping below checks could delay your PR review!
 
 - [ ] I have reviewed the [style guide](https://technical-documentation.data-platform.service.justice.gov.uk/documentation/platform/infrastructure/terraform.html#terraform) and ensured that my code complies with it
 - [ ] All checks have passed (or override label applied)
