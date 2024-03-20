@@ -14,7 +14,6 @@ locals {
         "bagg3rs",           # Richard Baguley
         "jacobwoffenden",    # Jacob Woffenden
         "SimonsMOJ",         # Simon Heron
-        "mshodge",           # Michael Hodges
         "YvanMOJdigital",    # Yvan Smith
         "EO510",             # Eki Osehenye
         "f-marry",           # Fabien Marry
@@ -32,6 +31,7 @@ locals {
         "Ed-Bajo",           # Edwin Bajomo
         "RNTjustice",        # Richard Trist
         "alex-vonfeldmann",  # Alex von Feldman
+        "AntFMoJ",           # Anthony Fitzroy
       ]
     }
   }
