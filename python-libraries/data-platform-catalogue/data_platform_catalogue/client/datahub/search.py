@@ -20,6 +20,7 @@ from .graphql_helpers import (
     parse_last_updated,
     parse_owner,
     parse_properties,
+    parse_relations,
     parse_tags,
 )
 
@@ -264,32 +265,20 @@ class SearchClient:
         tags = parse_tags(entity)
         last_updated = parse_last_updated(entity)
         name = entity["name"]
-        if entity.get("platform", {}).get("name") == "athena":
-            metadata = {
-                "owner": owner_name,
-                "owner_email": owner_email,
-                "entity_sub_type": entity.get("subTypes", {}).get("typeNames"),
-            }
-        else:
-            relationships = entity.get("relationships", {})
-            total_data_products = relationships.get("total", 0)
-            data_products = relationships.get("relationships", [])
-            data_products = [
-                {"id": i["entity"]["urn"], "name": i["entity"]["properties"]["name"]}
-                for i in data_products
-            ]
 
-            metadata = {
-                "owner": owner_name,
-                "owner_email": owner_email,
-                "total_data_products": total_data_products,
-                "data_products": data_products,
-                "entity_sub_type": (
-                    entity.get("subTypes", {}).get("typeNames", ["Dataset"])
-                    if entity.get("subTypes") is not None
-                    else ["Dataset"]
-                ),
-            }
+        total_parents, parents = parse_relations(entity.get("relationships", {}))
+
+        metadata = {
+            "owner": owner_name,
+            "owner_email": owner_email,
+            "total_parents": total_parents,
+            "parents": parents,
+            "entity_sub_type": (
+                entity.get("subTypes", {}).get("typeNames", ["Dataset"])
+                if entity.get("subTypes") is not None
+                else ["Dataset"]
+            ),
+        }
         metadata.update(parse_domain(entity))
         metadata.update(custom_properties)
 
