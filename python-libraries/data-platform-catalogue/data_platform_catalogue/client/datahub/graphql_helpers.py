@@ -134,3 +134,16 @@ def parse_columns(entity: dict[str, Any]) -> list[dict[str, Any]]:
 
     # Sort primary keys first, then sort alphabetically
     return sorted(result, key=lambda c: (0 if c["isPrimaryKey"] else 1, c["name"]))
+
+
+def parse_relations(relations_dict) -> Tuple[int, list[dict]]:
+    """
+    parse the relationships results returned from a graphql querys
+    """
+    total_relations = relations_dict.get("total", 0)
+    parent_entities = relations_dict.get("relationships", [])
+    parent_entities = [
+        {"id": i["entity"]["urn"], "name": i["entity"]["properties"]["name"]}
+        for i in parent_entities
+    ]
+    return total_relations, parent_entities
