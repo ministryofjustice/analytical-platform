@@ -128,7 +128,7 @@ class BaseCatalogueClient(ABC):
         pass
 
     @abstractmethod
-    def list_database_tables(self, urn) -> SearchResponse:
+    def list_database_tables(self, urn: str, count: int) -> SearchResponse:
         """
         returns a list of entities within a datahub container
         """

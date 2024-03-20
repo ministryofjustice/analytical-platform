@@ -1054,8 +1054,8 @@ def test_list_database_tables(mock_graph, searcher):
                     "whereToAccessDataset": "analytical_platform",
                     "sensitivityLevel": "OFFICIAL",
                     "entity_sub_type": ["Table"],
-                    'total_parents': 0,
-                    'parents': []
+                    "total_parents": 0,
+                    "parents": [],
                 },
             )
         ],

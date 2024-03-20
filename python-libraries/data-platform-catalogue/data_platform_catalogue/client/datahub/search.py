@@ -186,14 +186,9 @@ class SearchClient:
         except GraphError as e:
             raise Exception("Unable to execute listDataProductAssets query") from e
         page_results = []
-        for result in response["listDataProductAssets"]["searchResults"]:
-            entity = result["entity"]
-            entity_type = entity["type"]
-            matched_fields: dict = {}
-            if entity_type == "DATASET":
-                page_results.append(self._parse_dataset(entity, matched_fields))
-            else:
-                raise ValueError(f"Unexpected entity type: {entity_type}")
+        page_results = self._get_data_collection_page_results(
+            response, "listDataProductAssets"
+        )
 
         return SearchResponse(
             total_results=response["listDataProductAssets"]["total"],
@@ -215,8 +210,21 @@ class SearchClient:
             )
         except GraphError as e:
             raise Exception("Unable to execute listDatabaseEntities query") from e
+        page_results = self._get_data_collection_page_results(
+            response["container"], "entities"
+        )
+
+        return SearchResponse(
+            total_results=response["container"]["entities"]["total"],
+            page_results=page_results,
+        )
+
+    def _get_data_collection_page_results(self, response, key_for_results: str):
+        """
+        for use by entities that hold collections of data, eg. data product and container
+        """
         page_results = []
-        for result in response["container"]["entities"]["searchResults"]:
+        for result in response[key_for_results]["searchResults"]:
             entity = result["entity"]
             entity_type = entity["type"]
             matched_fields: dict = {}
@@ -224,11 +232,7 @@ class SearchClient:
                 page_results.append(self._parse_dataset(entity, matched_fields))
             else:
                 raise ValueError(f"Unexpected entity type: {entity_type}")
-
-        return SearchResponse(
-            total_results=response["container"]["entities"]["total"],
-            page_results=page_results,
-        )
+        return page_results
 
     def _map_result_types(self, result_types: Sequence[ResultType]):
         """
@@ -412,10 +416,11 @@ class SearchClient:
         """
         Map a Container entity to a SearchResult
         """
-        owner_email, owner_name = parse_owner(entity)
-        properties, custom_properties = parse_properties(entity)
         tags = parse_tags(entity)
         last_updated = parse_last_updated(entity)
+        properties, custom_properties = parse_properties(entity)
+        owner_email, owner_name = parse_owner(entity)
+
         metadata = {
             "owner": owner_name,
             "owner_email": owner_email,
@@ -425,14 +430,15 @@ class SearchClient:
                 else ["Container"]
             ),
         }
-        metadata.update(parse_domain(entity))
-        metadata.update(custom_properties)
 
         fqn = (
             properties.get("qualifiedName", properties["name"])
             if properties.get("qualifiedName") is not None
             else properties["name"]
         )
+
+        metadata.update(parse_domain(entity))
+        metadata.update(custom_properties)
 
         return SearchResult(
             id=entity["urn"],
