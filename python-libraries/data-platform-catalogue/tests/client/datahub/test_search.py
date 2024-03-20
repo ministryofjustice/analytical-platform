@@ -650,6 +650,7 @@ def test_result_with_data_product(mock_graph, searcher):
                         "type": "DATASET",
                         "urn": "urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",  # noqa E501
                         "name": "calm-pagoda-323403.jaffle_shop.customers",
+                        "subType": None,
                         "relationships": {
                             "total": 1,
                             "relationships": [

@@ -284,8 +284,10 @@ class SearchClient:
                 "owner_email": owner_email,
                 "total_data_products": total_data_products,
                 "data_products": data_products,
-                "entity_sub_type": entity.get("subTypes", {}).get(
-                    "typeNames", ["Dataset"]
+                "entity_sub_type": (
+                    entity.get("subTypes", {}).get("typeNames", ["Dataset"])
+                    if entity.get("subTypes") is not None
+                    else ["Dataset"]
                 ),
             }
         metadata.update(parse_domain(entity))
@@ -428,8 +430,10 @@ class SearchClient:
         metadata = {
             "owner": owner_name,
             "owner_email": owner_email,
-            "entity_sub_type": entity.get("subTypes", {}).get(
-                "typeNames", ["Container"]
+            "entity_sub_type": (
+                entity.get("subTypes", {}).get("typeNames", ["Container"])
+                if entity.get("subTypes") is not None
+                else ["Container"]
             ),
         }
         metadata.update(parse_domain(entity))
