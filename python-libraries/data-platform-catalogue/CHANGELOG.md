@@ -7,6 +7,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.22.0] 2023-03-19
+
+### Added
+
+- New graphql query, `listContainerEntities.graphql` that lists all datasets in a
+  given container
+- `ResultType.DATABASE` enum to entities
+- The datahub container entity to the existing search graphql query
+- new method to search.py, `SearchClient.list_database_tables` which uses
+  `listContainerEntities.graphql`
+- `_parse_container` method to `search.SearchClient`
+- `_parse_relations` function to `graphql_helpers`
+- `relationships`, `last_updated`, `owner`, `owner_email` to `entities.TableMetadata`
+
+### Changed
+
+- `parent_database_name` to `parent_entity_name` within `entities.TableMetadata`
+- `search.graphql` query to return containers.
+- `SearchClient.search` to return containers and subTypes within results
+
 ## [0.21.0] 2023-03-19
 
 ### Added
