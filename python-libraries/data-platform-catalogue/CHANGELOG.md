@@ -11,10 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- New graphql query, `listContainerEntities.graphql` that lists all datasets in a
+- New GraphQL query, `listContainerEntities.graphql` that lists all datasets in a
   given container
 - `ResultType.DATABASE` enum to entities
-- The datahub container entity to the existing search graphql query
+- The datahub container entity to the existing search GraphQL query
 - new method to search.py, `SearchClient.list_database_tables` which uses
   `listContainerEntities.graphql`
 - `_parse_container` method to `search.SearchClient`
