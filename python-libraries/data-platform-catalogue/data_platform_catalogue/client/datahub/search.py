@@ -285,11 +285,7 @@ class SearchClient:
         metadata.update(parse_domain(entity))
         metadata.update(custom_properties)
 
-        fqn = (
-            properties.get("qualifiedName", name)
-            if properties.get("qualifiedName") is not None
-            else name
-        )
+        fqn = self._get_fully_qualified_name(properties, name)
 
         return SearchResult(
             id=entity["urn"],
@@ -319,11 +315,7 @@ class SearchClient:
         metadata.update(parse_domain(entity))
         metadata.update(custom_properties)
 
-        fqn = (
-            properties.get("qualifiedName", properties["name"])
-            if properties.get("qualifiedName") is not None
-            else properties["name"]
-        )
+        fqn = self._get_fully_qualified_name(properties, properties["name"])
 
         return SearchResult(
             id=entity["urn"],
@@ -426,11 +418,7 @@ class SearchClient:
             "entity_types": self._parse_types_and_sub_types(entity, "Container"),
         }
 
-        fqn = (
-            properties.get("qualifiedName", properties["name"])
-            if properties.get("qualifiedName") is not None
-            else properties["name"]
-        )
+        fqn = self._get_fully_qualified_name(properties, properties["name"])
 
         metadata.update(parse_domain(entity))
         metadata.update(custom_properties)
@@ -454,3 +442,11 @@ class SearchClient:
             else [entity_type]
         )
         return {"entity_type": entity_type, "entity_sub_types": entity_sub_type}
+
+    def _get_fully_qualified_name(self, entity_properties: dict, name: str) -> str:
+        fqn = (
+            entity_properties.get("qualifiedName", name)
+            if entity_properties.get("qualifiedName") is not None
+            else name
+        )
+        return fqn
