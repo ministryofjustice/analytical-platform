@@ -379,10 +379,11 @@ class TestCatalogueClientWithDatahub:
             data_sensitivity_level=SecurityClassification.OFFICIAL,
             tags=[],
             major_version=1,
-            relationships=(1, [{"id": "urn:li:container:databse", "name": "database"}]),
+            relationships={
+                "total": 1,
+                "entities": [{"id": "urn:li:container:databse", "name": "database"}],
+            },
             domain="",
-            # owner="",
-            # owner_email="",
         )
 
     def test_get_chart_details(self, datahub_client, base_mock_graph):

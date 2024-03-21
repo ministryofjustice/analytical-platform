@@ -146,4 +146,5 @@ def parse_relations(relations_dict) -> Tuple[int, list[dict]]:
         {"id": i["entity"]["urn"], "name": i["entity"]["properties"]["name"]}
         for i in parent_entities
     ]
-    return total_relations, parent_entities
+    relations_return = {"total": total_relations, "entities": parent_entities}
+    return relations_return

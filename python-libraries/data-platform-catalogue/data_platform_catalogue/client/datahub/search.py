@@ -270,13 +270,13 @@ class SearchClient:
         last_updated = parse_last_updated(entity)
         name = entity["name"]
 
-        total_parents, parents = parse_relations(entity.get("relationships", {}))
+        relations_dict = parse_relations(entity.get("relationships", {}))
 
         metadata = {
             "owner": owner_name,
             "owner_email": owner_email,
-            "total_parents": total_parents,
-            "parents": parents,
+            "total_parents": relations_dict["total"],
+            "parents": relations_dict["entities"],
             "entity_sub_type": (
                 entity.get("subTypes", {}).get("typeNames", ["Dataset"])
                 if entity.get("subTypes") is not None

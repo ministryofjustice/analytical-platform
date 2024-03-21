@@ -108,7 +108,7 @@ class TableMetadata:
     retention_period_in_days: int | None
     domain: str | None = None
     parent_entity_name: str | None = None
-    relationships: tuple[int, list[dict]] | None = None
+    relationships: dict | None = None
     source_dataset_name: str = ""
     where_to_access_dataset: str = ""
     data_sensitivity_level: SecurityClassification = SecurityClassification.OFFICIAL

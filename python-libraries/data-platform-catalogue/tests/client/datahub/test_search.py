@@ -179,8 +179,6 @@ def test_dataset_result(mock_graph, searcher):
                     "StoredAsSubDirectories": "False",
                     "CreatedByJob": "moj-reg-prod-hmpps-assess-risks-and-needs-prod-glue-job",
                     "entity_sub_type": ["Dataset"],
-                    # "total_parents": 1,
-                    # "parents": [{"id": "urn:li:container:databse", "name": "database"}],
                 },
                 tags=[],
             ),

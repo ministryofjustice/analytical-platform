@@ -1,4 +1,7 @@
-from data_platform_catalogue.client.datahub.graphql_helpers import parse_columns
+from data_platform_catalogue.client.datahub.graphql_helpers import (
+    parse_columns,
+    parse_relations,
+)
 
 
 def test_parse_columns_with_primary_key_and_foreign_key():
@@ -118,3 +121,33 @@ def test_parse_columns_with_no_schema():
 
     assert parse_columns(entity) == []
     assert parse_columns(entity) == []
+
+
+def test_parse_relations():
+    relations = {
+        "relationships": {
+            "total": 1,
+            "relationships": [
+                {
+                    "entity": {
+                        "urn": "urn:li:dataProduct:test",
+                        "properties": {"name": "test_dataset"},
+                    }
+                }
+            ],
+        }
+    }
+    result = parse_relations(relations["relationships"])
+    assert result == {
+        "total": 1,
+        "entities": [{"id": "urn:li:dataProduct:test", "name": "test_dataset"}],
+    }
+
+
+def test_parse_relations_blank():
+    relations = {"relationships": {"total": 0, "relationships": []}}
+    result = parse_relations(relations["relationships"])
+    assert result == {
+        "total": 0,
+        "entities": [],
+    }
