@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 
 import pytest
 from data_platform_catalogue.client.datahub.search import SearchClient
-from data_platform_catalogue.entities import RelatedEntity, RelationshipType
+from data_platform_catalogue.entities import RelatedEntity
 from data_platform_catalogue.search_types import (
     FacetOption,
     MultiSelectFilter,
