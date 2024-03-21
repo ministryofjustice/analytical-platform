@@ -91,7 +91,21 @@ locals {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
       }
-    }
+    },
+    "data-platform-github-access" = {
+      name                                   = "data-platform-github-access"
+      description                            = "Data Platform Github Access repository"
+      topics                                 = ["ministryofjustice", "data-platform"]
+      visibility                             = "internal"
+      advanced_security_status               = "disabled"
+      secret_scanning_status                 = "disabled"
+      secret_scanning_push_protection_status = "disabled"
+      homepage_url                           = "https://technical-documentation.data-platform.service.justice.gov.uk"
+      access = {
+        admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
+        pushers = [module.data_platform_team.id]
+      }
+    },
     /*
       Data Platform Repositories that could be managed in code:
         - data-platform-terraform-modularisation-spike
