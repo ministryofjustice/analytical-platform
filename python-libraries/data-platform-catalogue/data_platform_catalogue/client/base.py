@@ -71,6 +71,8 @@ class BaseCatalogueClient(ABC):
         result_types: Sequence[ResultType] = (
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
+            ResultType.CHART,
+            ResultType.DATABASE,
         ),
         filters: Sequence[MultiSelectFilter] = (),
         sort: SortOption | None = None,
@@ -122,5 +124,12 @@ class BaseCatalogueClient(ABC):
     def get_chart_details(self, urn) -> ChartMetadata:
         """
         returns detailed information about a chart
+        """
+        pass
+
+    @abstractmethod
+    def list_database_tables(self, urn: str, count: int) -> SearchResponse:
+        """
+        returns a list of entities within a datahub container
         """
         pass

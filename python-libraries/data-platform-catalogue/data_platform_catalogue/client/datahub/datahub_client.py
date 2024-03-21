@@ -34,6 +34,7 @@ from ...entities import (
     DatabaseMetadata,
     DataLocation,
     DataProductMetadata,
+    RelationshipType,
     TableMetadata,
 )
 from ...search_types import (
@@ -44,7 +45,14 @@ from ...search_types import (
     SortOption,
 )
 from ..base import BaseCatalogueClient, CatalogueError, logger
-from .graphql_helpers import parse_columns, parse_properties
+from .graphql_helpers import (
+    parse_columns,
+    parse_domain,
+    parse_owner,
+    parse_properties,
+    parse_relations,
+    parse_tags,
+)
 from .search import SearchClient
 
 DATAHUB_DATA_TYPE_MAPPING = {
@@ -258,10 +266,10 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         metadata: TableMetadata,
         database_metadata: DatabaseMetadata | None = None,
     ) -> str:
-        if not metadata.parent_database_name:
-            raise ValueError("parent_database_name needs to be set in TableMetadata")
+        if not metadata.parent_entity_name:
+            raise ValueError("parent_entity_name needs to be set in TableMetadata")
 
-        fully_qualified_name = f"{metadata.parent_database_name}.{metadata.name}"
+        fully_qualified_name = f"{metadata.parent_entity_name}.{metadata.name}"
 
         dataset_urn = mce_builder.make_dataset_urn(
             platform="athena", name=fully_qualified_name, env="PROD"
@@ -338,7 +346,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
         # jscpd:ignore-end
 
         database_urn = "urn:li:container:" + "".join(
-            metadata.parent_database_name.split()
+            metadata.parent_entity_name.split()
         )
 
         database_exists = self.check_entity_exists_by_urn(urn=database_urn)
@@ -600,6 +608,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
             ResultType.CHART,
+            ResultType.DATABASE,
         ),
         filters: Sequence[MultiSelectFilter] = (),
         sort: SortOption | None = None,
@@ -652,12 +661,31 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             ]
             properties, custom_properties = parse_properties(response)
             columns = parse_columns(response)
+            domain = parse_domain(response)
+            owner, owner_email = parse_owner(response)
+            tags = parse_tags(response)
 
+            # A dataset can't have both a container and data product parent, but if we did
+            # start to use in that we'd need to change this
+            if response["container_relations"]["total"] > 0:
+                relations = parse_relations(
+                    RelationshipType.PARENT, response["container_relations"]
+                )
+            elif response["data_product_relations"]["total"] > 0:
+                relations = parse_relations(
+                    RelationshipType.PARENT, response["data_product_relations"]
+                )
             return TableMetadata(
                 name=properties["name"],
                 description=properties.get("description", ""),
                 column_details=columns,
                 retention_period_in_days=custom_properties.get("retentionPeriodInDays"),
+                relationships=relations,
+                domain=domain["domain_name"],
+                tags=tags,
+                last_updated=None,  # we are not populating this and i think wouldn't refer to lastIngested
+                owner=owner,
+                owner_email=owner_email,
             )
         except GraphError as e:
             raise Exception("Unable to execute getDataset query") from e
@@ -676,3 +704,7 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             )
         except GraphError as e:
             raise Exception("Unable to execute getDataset query") from e
+
+    def list_database_tables(self, urn: str, count: int) -> SearchResponse:
+        """Wraps the client's listDatabaseEntities query"""
+        return self.search_client.list_database_tables(urn=urn, count=count)

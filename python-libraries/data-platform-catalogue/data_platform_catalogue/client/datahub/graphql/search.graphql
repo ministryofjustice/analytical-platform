@@ -96,6 +96,9 @@ query Search(
           platform {
             name
           }
+          subTypes {
+            typeNames
+          }
           relationships(
             input: {
               types: ["DataProductContains"]
@@ -204,6 +207,62 @@ query Search(
               value
             }
             numAssets
+          }
+          domain {
+            domain {
+              urn
+              id
+              properties {
+                name
+                description
+              }
+            }
+          }
+          tags {
+            tags {
+              tag {
+                urn
+                properties {
+                  name
+                  description
+                }
+              }
+            }
+          }
+        }
+       ... on Container {
+          urn
+          type
+          subTypes {
+            typeNames
+          }
+          ownership {
+            owners {
+              owner {
+                ... on CorpUser {
+                  urn
+                  properties {
+                    fullName
+                    email
+                  }
+                }
+                ... on CorpGroup {
+                  urn
+                  properties {
+                    displayName
+                    email
+                  }
+                }
+              }
+            }
+          }
+          properties {
+            name
+            description
+            customProperties {
+              key
+              value
+            }
           }
           domain {
             domain {

@@ -16,6 +16,8 @@ from data_platform_catalogue.entities import (
     DataLocation,
     DataProductMetadata,
     DataProductStatus,
+    RelatedEntity,
+    RelationshipType,
     SecurityClassification,
     TableMetadata,
 )
@@ -96,7 +98,7 @@ class TestCatalogueClientWithDatahub:
             source_dataset_name="my_source_table",
             where_to_access_dataset="s3://databucket/table1",
             data_sensitivity_level=SecurityClassification.OFFICIAL,
-            parent_database_name="my_database",
+            parent_entity_name="my_database",
             domain="LAA",
         )
 
@@ -280,6 +282,19 @@ class TestCatalogueClientWithDatahub:
             "dataset": {
                 "platform": {"name": "datahub"},
                 "ownership": None,
+                "subTypes": None,
+                "container_relations": {
+                    "total": 1,
+                    "relationships": [
+                        {
+                            "entity": {
+                                "urn": "urn:li:container:databse",
+                                "properties": {"name": "database"},
+                            }
+                        }
+                    ],
+                },
+                "data_product_relations": {"total": 0, "relationships": []},
                 "name": "Dataset",
                 "properties": {
                     "name": "Dataset",
@@ -366,6 +381,12 @@ class TestCatalogueClientWithDatahub:
             data_sensitivity_level=SecurityClassification.OFFICIAL,
             tags=[],
             major_version=1,
+            relationships={
+                RelationshipType.PARENT: [
+                    RelatedEntity(id="urn:li:container:databse", name="database")
+                ]
+            },
+            domain="",
         )
 
     def test_get_chart_details(self, datahub_client, base_mock_graph):

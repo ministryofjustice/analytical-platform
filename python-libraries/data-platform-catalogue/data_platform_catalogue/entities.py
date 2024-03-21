@@ -38,6 +38,16 @@ class DatabaseStatus(Enum):
     DEV = auto()
 
 
+class RelationshipType(Enum):
+    PARENT = auto()
+
+
+@dataclass
+class RelatedEntity:
+    id: str
+    name: str
+
+
 @dataclass
 class DataProductMetadata:
     name: str
@@ -107,13 +117,17 @@ class TableMetadata:
     column_details: list
     retention_period_in_days: int | None
     domain: str | None = None
-    parent_database_name: str | None = None
+    parent_entity_name: str | None = None
+    relationships: dict[RelationshipType, list[RelatedEntity]] | None = None
     source_dataset_name: str = ""
     where_to_access_dataset: str = ""
     data_sensitivity_level: SecurityClassification = SecurityClassification.OFFICIAL
     tags: list[str] = field(default_factory=list)
     major_version: int = 1
     row_count: int | None = None
+    last_updated: datetime | None = None
+    owner: str = ""
+    owner_email: str = ""
 
     @staticmethod
     def from_data_product_schema_dict(
