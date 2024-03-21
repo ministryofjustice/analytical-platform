@@ -211,6 +211,7 @@ class SearchClient:
             )
         except GraphError as e:
             raise Exception("Unable to execute listDatabaseEntities query") from e
+
         page_results = self._get_data_collection_page_results(
             response["container"], "entities"
         )
