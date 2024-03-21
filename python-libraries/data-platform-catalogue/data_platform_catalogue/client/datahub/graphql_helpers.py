@@ -2,6 +2,8 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Any, Tuple
 
+from data_platform_catalogue.entities import RelatedEntity, RelationshipType
+
 
 def parse_owner(entity: dict[str, Any]):
     """
@@ -136,15 +138,20 @@ def parse_columns(entity: dict[str, Any]) -> list[dict[str, Any]]:
     return sorted(result, key=lambda c: (0 if c["isPrimaryKey"] else 1, c["name"]))
 
 
-def parse_relations(relations_dict) -> dict:
+def parse_relations(
+    relationship_type: RelationshipType, relations_dict: dict
+) -> dict[RelationshipType, list[RelatedEntity]]:
     """
     parse the relationships results returned from a graphql querys
     """
-    total_relations = relations_dict.get("total", 0)
+    # # we may want to do soemthing with total realtion if we are returning child relations
+    # #  and need to paginate through relations - 10 relations returned as is
+    # total_relations = relations_dict.get("total", 0)
     parent_entities = relations_dict.get("relationships", [])
-    parent_entities = [
-        {"id": i["entity"]["urn"], "name": i["entity"]["properties"]["name"]}
+    related_entities = [
+        RelatedEntity(id=i["entity"]["urn"], name=i["entity"]["properties"]["name"])
         for i in parent_entities
     ]
-    relations_return = {"total": total_relations, "entities": parent_entities}
+
+    relations_return = {relationship_type: related_entities}
     return relations_return

@@ -3,6 +3,7 @@ import logging
 from importlib.resources import files
 from typing import Any, Sequence
 
+from data_platform_catalogue.entities import RelationshipType
 from datahub.configuration.common import GraphError
 from datahub.ingestion.graph.client import DataHubGraph
 
@@ -270,13 +271,15 @@ class SearchClient:
         last_updated = parse_last_updated(entity)
         name = entity["name"]
 
-        relations_dict = parse_relations(entity.get("relationships", {}))
+        relations = parse_relations(
+            RelationshipType.PARENT, entity.get("relationships", {})
+        )
 
         metadata = {
             "owner": owner_name,
             "owner_email": owner_email,
-            "total_parents": relations_dict["total"],
-            "parents": relations_dict["entities"],
+            "total_parents": entity.get("relationships", {}).get("total", 0),
+            "parents": relations[RelationshipType.PARENT],
             "entity_sub_type": (
                 entity.get("subTypes", {}).get("typeNames", ["Dataset"])
                 if entity.get("subTypes") is not None

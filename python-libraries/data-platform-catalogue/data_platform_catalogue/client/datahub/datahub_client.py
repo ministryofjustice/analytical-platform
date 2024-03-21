@@ -34,6 +34,7 @@ from ...entities import (
     DatabaseMetadata,
     DataLocation,
     DataProductMetadata,
+    RelationshipType,
     TableMetadata,
 )
 from ...search_types import (
@@ -667,9 +668,13 @@ class DataHubCatalogueClient(BaseCatalogueClient):
             # A dataset can't have both a container and data product parent, but if we did
             # start to use in that we'd need to change this
             if response["container_relations"]["total"] > 0:
-                relations = parse_relations(response["container_relations"])
+                relations = parse_relations(
+                    RelationshipType.PARENT, response["container_relations"]
+                )
             elif response["data_product_relations"]["total"] > 0:
-                relations = parse_relations(response["data_product_relations"])
+                relations = parse_relations(
+                    RelationshipType.PARENT, response["data_product_relations"]
+                )
             return TableMetadata(
                 name=properties["name"],
                 description=properties.get("description", ""),

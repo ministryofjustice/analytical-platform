@@ -16,6 +16,8 @@ from data_platform_catalogue.entities import (
     DataLocation,
     DataProductMetadata,
     DataProductStatus,
+    RelatedEntity,
+    RelationshipType,
     SecurityClassification,
     TableMetadata,
 )
@@ -380,8 +382,9 @@ class TestCatalogueClientWithDatahub:
             tags=[],
             major_version=1,
             relationships={
-                "total": 1,
-                "entities": [{"id": "urn:li:container:databse", "name": "database"}],
+                RelationshipType.PARENT: [
+                    RelatedEntity(id="urn:li:container:databse", name="database")
+                ]
             },
             domain="",
         )

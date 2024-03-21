@@ -2,6 +2,7 @@ from data_platform_catalogue.client.datahub.graphql_helpers import (
     parse_columns,
     parse_relations,
 )
+from data_platform_catalogue.entities import RelatedEntity, RelationshipType
 
 
 def test_parse_columns_with_primary_key_and_foreign_key():
@@ -131,23 +132,21 @@ def test_parse_relations():
                 {
                     "entity": {
                         "urn": "urn:li:dataProduct:test",
-                        "properties": {"name": "test_dataset"},
+                        "properties": {"name": "test"},
                     }
                 }
             ],
         }
     }
-    result = parse_relations(relations["relationships"])
+    result = parse_relations(RelationshipType.PARENT, relations["relationships"])
     assert result == {
-        "total": 1,
-        "entities": [{"id": "urn:li:dataProduct:test", "name": "test_dataset"}],
+        RelationshipType.PARENT: [
+            RelatedEntity(id="urn:li:dataProduct:test", name="test")
+        ]
     }
 
 
 def test_parse_relations_blank():
     relations = {"relationships": {"total": 0, "relationships": []}}
-    result = parse_relations(relations["relationships"])
-    assert result == {
-        "total": 0,
-        "entities": [],
-    }
+    result = parse_relations(RelationshipType.PARENT, relations["relationships"])
+    assert result == {RelationshipType.PARENT: []}

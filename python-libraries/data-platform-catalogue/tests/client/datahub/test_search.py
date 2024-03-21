@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 
 import pytest
 from data_platform_catalogue.client.datahub.search import SearchClient
+from data_platform_catalogue.entities import RelatedEntity, RelationshipType
 from data_platform_catalogue.search_types import (
     FacetOption,
     MultiSelectFilter,
@@ -172,8 +173,8 @@ def test_dataset_result(mock_graph, searcher):
                 metadata={
                     "owner": "",
                     "owner_email": "",
-                    "parents": [],
                     "total_parents": 0,
+                    "parents": [],
                     "domain_name": "HMPPS",
                     "domain_id": "urn:li:domain:3dc18e48-c062-4407-84a9-73e23f768023",
                     "StoredAsSubDirectories": "False",
@@ -687,7 +688,7 @@ def test_result_with_data_product(mock_graph, searcher):
                 metadata={
                     "owner": "",
                     "owner_email": "",
-                    "parents": [{"id": "urn:abc", "name": "abc"}],
+                    "parents": [RelatedEntity(id="urn:abc", name="abc")],
                     "total_parents": 1,
                     "domain_id": "",
                     "domain_name": "",
@@ -753,7 +754,7 @@ def test_list_data_product_assets(mock_graph, searcher):
                 metadata={
                     "owner": "",
                     "owner_email": "",
-                    "parents": [{"id": "urn:abc", "name": "abc"}],
+                    "parents": [RelatedEntity(id="urn:abc", name="abc")],
                     "total_parents": 1,
                     "domain_id": "",
                     "domain_name": "",
