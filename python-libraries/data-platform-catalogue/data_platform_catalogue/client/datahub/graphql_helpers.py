@@ -136,7 +136,7 @@ def parse_columns(entity: dict[str, Any]) -> list[dict[str, Any]]:
     return sorted(result, key=lambda c: (0 if c["isPrimaryKey"] else 1, c["name"]))
 
 
-def parse_relations(relations_dict) -> Tuple[int, list[dict]]:
+def parse_relations(relations_dict) -> dict:
     """
     parse the relationships results returned from a graphql querys
     """
