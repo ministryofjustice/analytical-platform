@@ -280,11 +280,7 @@ class SearchClient:
             "owner_email": owner_email,
             "total_parents": entity.get("relationships", {}).get("total", 0),
             "parents": relations[RelationshipType.PARENT],
-            "entity_sub_type": (
-                entity.get("subTypes", {}).get("typeNames", ["Dataset"])
-                if entity.get("subTypes") is not None
-                else ["Dataset"]
-            ),
+            "entity_types": self._parse_types_and_sub_types(entity, "Dataset"),
         }
         metadata.update(parse_domain(entity))
         metadata.update(custom_properties)
@@ -427,11 +423,7 @@ class SearchClient:
         metadata = {
             "owner": owner_name,
             "owner_email": owner_email,
-            "entity_sub_type": (
-                entity.get("subTypes", {}).get("typeNames", ["Container"])
-                if entity.get("subTypes") is not None
-                else ["Container"]
-            ),
+            "entity_types": self._parse_types_and_sub_types(entity, "Container"),
         }
 
         fqn = (
@@ -454,3 +446,11 @@ class SearchClient:
             tags=tags,
             last_updated=last_updated,
         )
+
+    def _parse_types_and_sub_types(self, entity: dict, entity_type: str) -> dict:
+        entity_sub_type = (
+            entity.get("subTypes", {}).get("typeNames", [entity_type])
+            if entity.get("subTypes") is not None
+            else [entity_type]
+        )
+        return {"entity_type": entity_type, "entity_sub_types": entity_sub_type}

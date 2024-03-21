@@ -179,7 +179,10 @@ def test_dataset_result(mock_graph, searcher):
                     "domain_id": "urn:li:domain:3dc18e48-c062-4407-84a9-73e23f768023",
                     "StoredAsSubDirectories": "False",
                     "CreatedByJob": "moj-reg-prod-hmpps-assess-risks-and-needs-prod-glue-job",
-                    "entity_sub_type": ["Dataset"],
+                    "entity_types": {
+                        "entity_type": "Dataset",
+                        "entity_sub_types": ["Dataset"],
+                    },
                 },
                 tags=[],
             ),
@@ -257,7 +260,10 @@ def test_full_page(mock_graph, searcher):
                     "total_parents": 0,
                     "domain_name": "",
                     "domain_id": "",
-                    "entity_sub_type": ["Dataset"],
+                    "entity_types": {
+                        "entity_type": "Dataset",
+                        "entity_sub_types": ["Dataset"],
+                    },
                 },
                 tags=[],
                 last_updated=datetime(2024, 1, 23, 6, 15, 2, 353000),
@@ -276,7 +282,10 @@ def test_full_page(mock_graph, searcher):
                     "total_parents": 0,
                     "domain_name": "",
                     "domain_id": "",
-                    "entity_sub_type": ["Dataset"],
+                    "entity_types": {
+                        "entity_type": "Dataset",
+                        "entity_sub_types": ["Dataset"],
+                    },
                 },
                 tags=[],
                 last_updated=None,
@@ -295,7 +304,10 @@ def test_full_page(mock_graph, searcher):
                     "total_parents": 0,
                     "domain_name": "",
                     "domain_id": "",
-                    "entity_sub_type": ["Dataset"],
+                    "entity_types": {
+                        "entity_type": "Dataset",
+                        "entity_sub_types": ["Dataset"],
+                    },
                 },
                 tags=[],
                 last_updated=None,
@@ -361,7 +373,10 @@ def test_query_match(mock_graph, searcher):
                     "total_parents": 0,
                     "domain_id": "",
                     "domain_name": "",
-                    "entity_sub_type": ["Dataset"],
+                    "entity_types": {
+                        "entity_type": "Dataset",
+                        "entity_sub_types": ["Dataset"],
+                    },
                 },
                 tags=[],
             )
@@ -423,7 +438,10 @@ def test_result_with_owner(mock_graph, searcher):
                     "total_parents": 0,
                     "domain_id": "",
                     "domain_name": "",
-                    "entity_sub_type": ["Dataset"],
+                    "entity_types": {
+                        "entity_type": "Dataset",
+                        "entity_sub_types": ["Dataset"],
+                    },
                 },
                 tags=[],
             )
@@ -692,7 +710,10 @@ def test_result_with_data_product(mock_graph, searcher):
                     "total_parents": 1,
                     "domain_id": "",
                     "domain_name": "",
-                    "entity_sub_type": ["Dataset"],
+                    "entity_types": {
+                        "entity_type": "Dataset",
+                        "entity_sub_types": ["Dataset"],
+                    },
                 },
                 tags=[],
             )
@@ -758,7 +779,10 @@ def test_list_data_product_assets(mock_graph, searcher):
                     "total_parents": 1,
                     "domain_id": "",
                     "domain_name": "",
-                    "entity_sub_type": ["Dataset"],
+                    "entity_types": {
+                        "entity_type": "Dataset",
+                        "entity_sub_types": ["Dataset"],
+                    },
                 },
                 tags=[],
             )
@@ -994,7 +1018,10 @@ def test_search_for_container(mock_graph, searcher):
                     "domain_id": "urn:li:domain:testdom",
                     "domain_name": "testdom",
                     "dpia_required": "False",
-                    "entity_sub_type": ["Database"],
+                    "entity_types": {
+                        "entity_type": "Container",
+                        "entity_sub_types": ["Database"],
+                    },
                 },
                 tags=["test"],
             )
@@ -1052,7 +1079,10 @@ def test_list_database_tables(mock_graph, searcher):
                     "domain_name": "",
                     "whereToAccessDataset": "analytical_platform",
                     "sensitivityLevel": "OFFICIAL",
-                    "entity_sub_type": ["Table"],
+                    "entity_types": {
+                        "entity_type": "Dataset",
+                        "entity_sub_types": ["Table"],
+                    },
                     "total_parents": 0,
                     "parents": [],
                 },
