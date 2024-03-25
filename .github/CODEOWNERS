@@ -5,4 +5,5 @@
 /scripts/simulated-data-producer/ @ministryofjustice/data-platform-labs
 /terraform/ @ministryofjustice/data-platform-apps-and-tools
 /python-libraries/data-platform-catalogue/ @ministryofjustice/data-platform-labs
-/terraform/github/configuration/data-engineering-access.json @calumabarnett
+#/terraform/github/configuration/data-engineering-access.json @calumabarnett
+/terraform/github/configuration/data-engineering-access.json @ministryofjustice/data-platform-apps-and-tools
