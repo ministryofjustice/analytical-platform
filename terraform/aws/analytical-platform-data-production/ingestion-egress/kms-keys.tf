@@ -1,5 +1,6 @@
 module "development_kms" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source  = "terraform-aws-modules/kms/aws"
   version = "2.2.1"
 
@@ -12,6 +13,7 @@ module "development_kms" {
 
 module "production_kms" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source  = "terraform-aws-modules/kms/aws"
   version = "2.2.1"
 
