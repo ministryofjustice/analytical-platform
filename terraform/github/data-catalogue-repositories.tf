@@ -129,27 +129,27 @@ locals {
 
 moved {
   from = module.data_catalogue_repository
-  to   = module.data_catalogue_repositories
+  to   = module.data_catalogue_repositories[0]
 }
 
 moved {
   from = module.find_moj_data_repository
-  to   = module.data_catalogue_repositories
+  to   = module.data_catalogue_repositories[1]
 }
 
 moved {
   from = module.datahub_custom_api_source_repository
-  to   = module.data_catalogue_repositories
+  to   = module.data_catalogue_repositories[2]
 }
 
 moved {
   from = module.data_catalogue_metadata_repository
-  to   = module.data_catalogue_repositories
+  to   = module.data_catalogue_repositories[3]
 }
 
 moved {
   from = module.datahub_custom_domain_source_repository
-  to   = module.data_catalogue_repositories
+  to   = module.data_catalogue_repositories[4]
 }
 
 module "data_catalogue_repositories" {
