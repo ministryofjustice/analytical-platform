@@ -240,17 +240,6 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform/baseline"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "ministryofjustice/data-platform-apps-and-tools"
-  - package-ecosystem: "terraform"
     directory: "terraform/aws/analytical-platform-data-engineering-production/10ds"
     schedule:
       interval: "daily"
@@ -328,7 +317,7 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-data-production/ingestion-egress"
+    directory: "terraform/aws/analytical-platform-data-production/data-engineering-pipelines"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -449,7 +438,7 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform/oidc"
+    directory: "terraform/aws/analytical-platform-production/cluster"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -460,7 +449,18 @@ updates:
     reviewers:
       - "ministryofjustice/data-platform-apps-and-tools"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/analytical-platform-production/cluster"
+    directory: "terraform/aws/analytical-platform/baseline"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/data-platform-apps-and-tools"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/analytical-platform/oidc"
     schedule:
       interval: "daily"
       time: "09:00"

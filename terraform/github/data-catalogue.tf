@@ -4,16 +4,16 @@ module "data_catalogue_team" {
   name        = "data-catalogue"
   description = "Data Catalogue Team"
   members = [
-    "jemnery",          # Jeremy Collins
-    "seanprivett",      # Sean Privett
-    "YvanMOJdigital",   # Yvan Smith
-    "LavMatt",          # Matt Laverty
-    "murdo-moj",        # Murdo Moyse
-    "tom-webber",       # Tom Webber
-    "mitchdawson1982",  # Mitch Dawson
-    "MatMoore",         # Mat Moore
     "alex-vonfeldmann", # Alex Von Feldmann
+    "jemnery",          # Jeremy Collins
+    "LavMatt",          # Matt Laverty
+    "MatMoore",         # Mat Moore
+    "mitchdawson1982",  # Mitch Dawson
+    "murdo-moj",        # Murdo Moyse
+    "seanprivett",      # Sean Privett
     "Tod-Christov",     # Todor Christov
+    "tom-webber",       # Tom Webber
+    "YvanMOJdigital",   # Yvan Smith
   ]
 }
 
@@ -100,5 +100,57 @@ module "datahub_custom_domain_source_repository" {
 
   access = {
     admins = [module.data_catalogue_team.id]
+  }
+}
+
+module "data_catalogue_runbooks_repository" {
+  source = "./modules/repository"
+
+  name        = "data-catalogue-runbooks"
+  description = "Data Catalogue Runbooks"
+  topics      = ["ministryofjustice", "data-platform", "data-catalogue"]
+
+  has_issues   = true
+  homepage_url = "https://runbooks.data-catalogue.service.justice.gov.uk"
+
+  template_repository = "template-documentation-site"
+
+  pages_enabled = true
+  pages_configuration = {
+    cname = "runbooks.data-catalogue.service.justice.gov.uk"
+    source = {
+      branch = "main"
+      path   = "/"
+    }
+  }
+  access = {
+    admins  = [module.data_catalogue_team.id]
+    pushers = [module.data_platform_team.id]
+  }
+}
+
+module "data_catalogue_user_guide_repository" {
+  source = "./modules/repository"
+
+  name        = "data-catalogue-user-guide"
+  description = "Data Catalogue User guide"
+  topics      = ["ministryofjustice", "data-platform", "data-catalogue"]
+
+  has_issues   = true
+  homepage_url = "https://user-guide.data-catalogue.service.justice.gov.uk"
+
+  template_repository = "template-documentation-site"
+
+  pages_enabled = true
+  pages_configuration = {
+    cname = "user-guide.data-catalogue.service.justice.gov.uk"
+    source = {
+      branch = "main"
+      path   = "/"
+    }
+  }
+  access = {
+    admins  = [module.data_catalogue_team.id]
+    pushers = [module.data_platform_team.id]
   }
 }

@@ -60,6 +60,7 @@ class SearchResult:
     metadata: dict[str, Any] = field(default_factory=dict)
     tags: list[str] = field(default_factory=list)
     last_updated: datetime | None = None
+    first_created: datetime | None = None
 
 
 @dataclass
