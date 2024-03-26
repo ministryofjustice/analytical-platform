@@ -412,23 +412,10 @@
     ]
   },
   {
-    "name": "Toby Petty",
-    "github": "Staberinde",
-    "access": [
-      "analytical-platform-data-production-data-engineer"
-    ]
-  },
-  {
-    "name": "Kaleb Sofer",
-    "github": "kalebsofer",
-    "access": [
-      "analytical-platform-data-production-data-engineer"
-    ]
-  },
-  {
     "name": "David Arrowsmith",
     "github": "devarrowsmith",
     "access": [
+      "analytical-platform-data-development-data-engineer",
       "analytical-platform-data-production-data-engineer"
     ]
   },
@@ -436,6 +423,7 @@
     "name": "Jasper Jackson",
     "github": "jazjax",
     "access": [
+      "analytical-platform-data-development-data-engineer",
       "analytical-platform-data-production-data-engineer"
     ]
   },
@@ -443,6 +431,15 @@
     "name": "Lee Broadhurst",
     "github": "lee-250",
     "access": [
+      "analytical-platform-data-development-data-engineer",
+      "analytical-platform-data-production-data-engineer"
+    ]
+  },
+  {
+    "name": "Madhu Kadiri",
+    "github": "madhu-k-sr2",
+    "access": [
+      "analytical-platform-data-development-data-engineer",
       "analytical-platform-data-production-data-engineer"
     ]
   },
