@@ -78,6 +78,52 @@ locals {
         pushers = [module.data_platform_team.id]
       }
     }
+    "data-catalogue-user-guide" = {
+      name        = "data-catalogue-user-guide"
+      description = "Data Catalogue User Guide"
+      topics      = ["ministryofjustice", "data-platform", "data-catalogue"]
+
+      has_issues   = true
+      homepage_url = "https://user-guide.data-catalogue.service.justice.gov.uk"
+
+      template_repository = "template-documentation-site"
+
+      pages_enabled = true
+      pages_configuration = {
+        cname = "user-guide.data-catalogue.service.justice.gov.uk"
+        source = {
+          branch = "main"
+          path   = "/"
+        }
+      }
+      access = {
+        admins  = [module.data_platform_teams["data-catalogue"].id]
+        pushers = [module.data_platform_team.id]
+      }
+    }
+    "data-catalogue-runbooks" = {
+      name        = "data-catalogue-runbooks"
+      description = "Data Catalogue Runbooks"
+      topics      = ["ministryofjustice", "data-platform", "data-catalogue"]
+
+      has_issues   = true
+      homepage_url = "https://runbooks.data-catalogue.service.justice.gov.uk"
+
+      template_repository = "template-documentation-site"
+
+      pages_enabled = true
+      pages_configuration = {
+        cname = "runbooks.data-catalogue.service.justice.gov.uk"
+        source = {
+          branch = "main"
+          path   = "/"
+        }
+      }
+      access = {
+        admins  = [module.data_platform_teams["data-catalogue"].id]
+        pushers = [module.data_platform_team.id]
+      }
+    }
   }
 }
 
