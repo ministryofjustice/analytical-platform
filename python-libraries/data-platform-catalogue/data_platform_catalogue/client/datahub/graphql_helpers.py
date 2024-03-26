@@ -1,5 +1,5 @@
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Tuple
 
 from data_platform_catalogue.entities import RelatedEntity, RelationshipType
@@ -29,7 +29,21 @@ def parse_last_updated(entity: dict[str, Any]) -> datetime | None:
     timestamp = entity.get("lastIngested")
     if timestamp is None:
         return None
-    return datetime.utcfromtimestamp(timestamp / 1000)
+    return datetime.fromtimestamp(timestamp / 1000, timezone.utc)
+
+
+def parse_created_and_modified(
+    properties: dict[str, Any]
+) -> Tuple[datetime | None, datetime | None]:
+    created = properties.get("created")
+    modified = properties.get("lastModified")
+
+    if created is not None:
+        created = datetime.fromtimestamp(created / 1000, timezone.utc)
+    if modified is not None:
+        modified = datetime.fromtimestamp(modified / 1000, timezone.utc)
+
+    return created, modified
 
 
 def parse_tags(entity: dict[str, Any]) -> list[str]:
@@ -127,7 +141,7 @@ def parse_columns(entity: dict[str, Any]) -> list[dict[str, Any]]:
             {
                 "name": field["fieldPath"],
                 "description": field["description"],
-                "type": field["type"],
+                "type": field.get("nativeDataType", field["type"]),
                 "nullable": field["nullable"],
                 "isPrimaryKey": is_primary_key,
                 "foreignKeys": foreign_keys_for_field,
