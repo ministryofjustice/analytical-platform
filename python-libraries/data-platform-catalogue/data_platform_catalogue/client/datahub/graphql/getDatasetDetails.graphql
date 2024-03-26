@@ -3,6 +3,7 @@ query getDatasetDetails($urn: String!) {
     platform {
       name
     }
+    name # Deprecated - prefer properties.name
     domain {
       domain {
         urn
@@ -16,12 +17,8 @@ query getDatasetDetails($urn: String!) {
     subTypes {
       typeNames
     }
-    container_relations:relationships(
-      input: {
-        types: ["IsPartOf"]
-        direction: OUTGOING
-        count: 10
-      }
+    container_relations: relationships(
+      input: { types: ["IsPartOf"], direction: OUTGOING, count: 10 }
     ) {
       total
       relationships {
@@ -35,12 +32,8 @@ query getDatasetDetails($urn: String!) {
         }
       }
     }
-    data_product_relations:relationships(
-      input: {
-        types: ["DataProductContains"]
-        direction: INCOMING
-        count: 10
-      }
+    data_product_relations: relationships(
+      input: { types: ["DataProductContains"], direction: INCOMING, count: 10 }
     ) {
       total
       relationships {
