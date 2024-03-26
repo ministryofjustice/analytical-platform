@@ -3,7 +3,7 @@ terraform {
     acl            = "private"
     bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "aws/analytical-platform-data-production/create-a-derived-table/terraform.tfstate"
+    key            = "aws/analytical-platform-data-production/ingestion-egress/terraform.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
