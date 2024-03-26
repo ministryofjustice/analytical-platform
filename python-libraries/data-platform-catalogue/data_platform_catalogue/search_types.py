@@ -9,6 +9,7 @@ class ResultType(Enum):
     TABLE = auto()
     GLOSSARY_TERM = auto()
     CHART = auto()
+    DATABASE = auto()
 
 
 @dataclass

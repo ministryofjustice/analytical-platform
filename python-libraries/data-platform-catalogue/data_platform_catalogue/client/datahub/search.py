@@ -3,6 +3,7 @@ import logging
 from importlib.resources import files
 from typing import Any, Sequence
 
+from data_platform_catalogue.entities import RelationshipType
 from datahub.configuration.common import GraphError
 from datahub.ingestion.graph.client import DataHubGraph
 
@@ -20,6 +21,7 @@ from .graphql_helpers import (
     parse_last_updated,
     parse_owner,
     parse_properties,
+    parse_relations,
     parse_tags,
 )
 
@@ -51,6 +53,12 @@ class SearchClient:
             .read_text()
         )
 
+        self.get_database_tables_query = (
+            files("data_platform_catalogue.client.datahub.graphql")
+            .joinpath("listContainerEntities.graphql")
+            .read_text()
+        )
+
     def search(
         self,
         query: str = "*",
@@ -60,6 +68,7 @@ class SearchClient:
             ResultType.DATA_PRODUCT,
             ResultType.TABLE,
             ResultType.CHART,
+            ResultType.DATABASE,
         ),
         filters: Sequence[MultiSelectFilter] = (),
         sort: SortOption | None = None,
@@ -108,6 +117,8 @@ class SearchClient:
                 page_results.append(self._parse_dataset(entity, matched_fields))
             elif entity_type == "CHART":
                 page_results.append(self._parse_chart(entity, matched_fields))
+            elif entity_type == "CONTAINER":
+                page_results.append(self._parse_container(entity, matched_fields))
             else:
                 raise ValueError(f"Unexpected entity type: {entity_type}")
 
@@ -176,7 +187,46 @@ class SearchClient:
         except GraphError as e:
             raise Exception("Unable to execute listDataProductAssets query") from e
         page_results = []
-        for result in response["listDataProductAssets"]["searchResults"]:
+        page_results = self._get_data_collection_page_results(
+            response, "listDataProductAssets"
+        )
+
+        return SearchResponse(
+            total_results=response["listDataProductAssets"]["total"],
+            page_results=page_results,
+        )
+
+    def list_database_tables(
+        self, urn: str, count: int, start: int = 0
+    ) -> SearchResponse:
+        variables = {
+            "urn": urn,
+            "start": start,
+            "count": count,
+        }
+
+        try:
+            response = self.graph.execute_graphql(
+                self.get_database_tables_query, variables
+            )
+        except GraphError as e:
+            raise Exception("Unable to execute listDatabaseEntities query") from e
+
+        page_results = self._get_data_collection_page_results(
+            response["container"], "entities"
+        )
+
+        return SearchResponse(
+            total_results=response["container"]["entities"]["total"],
+            page_results=page_results,
+        )
+
+    def _get_data_collection_page_results(self, response, key_for_results: str):
+        """
+        for use by entities that hold collections of data, eg. data product and container
+        """
+        page_results = []
+        for result in response[key_for_results]["searchResults"]:
             entity = result["entity"]
             entity_type = entity["type"]
             matched_fields: dict = {}
@@ -184,11 +234,7 @@ class SearchClient:
                 page_results.append(self._parse_dataset(entity, matched_fields))
             else:
                 raise ValueError(f"Unexpected entity type: {entity_type}")
-
-        return SearchResponse(
-            total_results=response["listDataProductAssets"]["total"],
-            page_results=page_results,
-        )
+        return page_results
 
     def _map_result_types(self, result_types: Sequence[ResultType]):
         """
@@ -203,6 +249,8 @@ class SearchClient:
             types.append("GLOSSARY_TERM")
         if ResultType.CHART in result_types:
             types.append("CHART")
+        if ResultType.DATABASE in result_types:
+            types.append("CONTAINER")
 
         return types
 
@@ -223,28 +271,22 @@ class SearchClient:
         tags = parse_tags(entity)
         last_updated = parse_last_updated(entity)
         name = entity["name"]
-        relationships = entity.get("relationships", {})
-        total_data_products = relationships.get("total", 0)
-        data_products = relationships.get("relationships", [])
-        data_products = [
-            {"id": i["entity"]["urn"], "name": i["entity"]["properties"]["name"]}
-            for i in data_products
-        ]
+
+        relations = parse_relations(
+            RelationshipType.PARENT, entity.get("relationships", {})
+        )
 
         metadata = {
             "owner": owner_name,
             "owner_email": owner_email,
-            "total_data_products": total_data_products,
-            "data_products": data_products,
+            "total_parents": entity.get("relationships", {}).get("total", 0),
+            "parents": relations[RelationshipType.PARENT],
+            "entity_types": self._parse_types_and_sub_types(entity, "Dataset"),
         }
         metadata.update(parse_domain(entity))
         metadata.update(custom_properties)
 
-        fqn = (
-            properties.get("qualifiedName", name)
-            if properties.get("qualifiedName") is not None
-            else name
-        )
+        fqn = self._get_fully_qualified_name(properties, name)
 
         return SearchResult(
             id=entity["urn"],
@@ -274,11 +316,7 @@ class SearchClient:
         metadata.update(parse_domain(entity))
         metadata.update(custom_properties)
 
-        fqn = (
-            properties.get("qualifiedName", properties["name"])
-            if properties.get("qualifiedName") is not None
-            else properties["name"]
-        )
+        fqn = self._get_fully_qualified_name(properties, properties["name"])
 
         return SearchResult(
             id=entity["urn"],
@@ -365,3 +403,51 @@ class SearchClient:
         return SearchResponse(
             total_results=response["total"], page_results=page_results
         )
+
+    def _parse_container(self, entity: dict[str, Any], matches) -> SearchResult:
+        """
+        Map a Container entity to a SearchResult
+        """
+        tags = parse_tags(entity)
+        last_updated = parse_last_updated(entity)
+        properties, custom_properties = parse_properties(entity)
+        owner_email, owner_name = parse_owner(entity)
+
+        metadata = {
+            "owner": owner_name,
+            "owner_email": owner_email,
+            "entity_types": self._parse_types_and_sub_types(entity, "Container"),
+        }
+
+        fqn = self._get_fully_qualified_name(properties, properties["name"])
+
+        metadata.update(parse_domain(entity))
+        metadata.update(custom_properties)
+
+        return SearchResult(
+            id=entity["urn"],
+            result_type=ResultType.DATABASE,
+            matches=matches,
+            name=properties["name"],
+            fully_qualified_name=fqn,
+            description=properties.get("description", ""),
+            metadata=metadata,
+            tags=tags,
+            last_updated=last_updated,
+        )
+
+    def _parse_types_and_sub_types(self, entity: dict, entity_type: str) -> dict:
+        entity_sub_type = (
+            entity.get("subTypes", {}).get("typeNames", [entity_type])
+            if entity.get("subTypes") is not None
+            else [entity_type]
+        )
+        return {"entity_type": entity_type, "entity_sub_types": entity_sub_type}
+
+    def _get_fully_qualified_name(self, entity_properties: dict, name: str) -> str:
+        fqn = (
+            entity_properties.get("qualifiedName", name)
+            if entity_properties.get("qualifiedName") is not None
+            else name
+        )
+        return fqn

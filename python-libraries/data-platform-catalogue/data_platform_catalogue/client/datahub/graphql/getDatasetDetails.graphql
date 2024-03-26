@@ -3,6 +3,57 @@ query getDatasetDetails($urn: String!) {
     platform {
       name
     }
+    domain {
+      domain {
+        urn
+        id
+        properties {
+          name
+          description
+        }
+      }
+    }
+    subTypes {
+      typeNames
+    }
+    container_relations:relationships(
+      input: {
+        types: ["IsPartOf"]
+        direction: OUTGOING
+        count: 10
+      }
+    ) {
+      total
+      relationships {
+        entity {
+          urn
+          ... on Container {
+            properties {
+              name
+            }
+          }
+        }
+      }
+    }
+    data_product_relations:relationships(
+      input: {
+        types: ["DataProductContains"]
+        direction: INCOMING
+        count: 10
+      }
+    ) {
+      total
+      relationships {
+        entity {
+          urn
+          ... on DataProduct {
+            properties {
+              name
+            }
+          }
+        }
+      }
+    }
     ownership {
       owners {
         owner {
