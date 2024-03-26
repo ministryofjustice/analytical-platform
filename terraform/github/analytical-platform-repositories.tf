@@ -3,10 +3,9 @@ locals {
   analytical_platform_repositories = {
     /* New World */
     "analytical-platform" = {
-      name         = "analytical-platform"
-      description  = "Analytical Platform"
-      topics       = ["ministryofjustice", "analytical-platform"]
-      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
+      name        = "analytical-platform"
+      description = "Analytical Platform"
+      topics      = ["ministryofjustice", "analytical-platform"]
       access = {
         admins = [module.analytical_platform_team.id]
       }
@@ -34,7 +33,6 @@ locals {
       description   = "Analytical Platform User Guide"
       topics        = ["ministryofjustice", "analytical-platform"]
       has_issues    = true
-      homepage_url  = "https://user-guide.analytical-platform.service.justice.gov.uk"
       pages_enabled = true
       pages_configuration = {
         cname = "user-guide.analytical-platform.service.justice.gov.uk"
@@ -48,57 +46,51 @@ locals {
       }
     },
     "analytical-platform-dashboard" = {
-      name         = "analytical-platform-dashboard"
-      description  = "Analytical Platform Dashboard"
-      topics       = ["ministryofjustice", "analytical-platform"]
-      has_issues   = true
-      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
+      name        = "analytical-platform-dashboard"
+      description = "Analytical Platform Dashboard"
+      topics      = ["ministryofjustice", "analytical-platform"]
+      has_issues  = true
       access = {
         admins = [module.analytical_platform_team.id]
       }
     },
     "analytical-platform-visual-studio-code" = {
-      name         = "analytical-platform-visual-studio-code"
-      description  = "Analytical Platform Visual Studio Code"
-      topics       = ["ministryofjustice", "analytical-platform"]
-      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
+      name        = "analytical-platform-visual-studio-code"
+      description = "Analytical Platform Visual Studio Code"
+      topics      = ["ministryofjustice", "analytical-platform"]
       access = {
         admins  = [module.analytical_platform_team.id]
         pushers = [module.data_platform_team.id]
       }
     },
     "analytical-platform-ingestion-scan" = {
-      name         = "analytical-platform-ingestion-scan"
-      description  = "Analytical Platform Ingestion Scan"
-      topics       = ["ministryofjustice", "analytical-platform"]
-      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
+      name        = "analytical-platform-ingestion-scan"
+      description = "Analytical Platform Ingestion Scan"
+      topics      = ["ministryofjustice", "analytical-platform"]
       access = {
         admins = [module.analytical_platform_team.id]
       }
     },
     "analytical-platform-ingestion-transfer" = {
-      name         = "analytical-platform-ingestion-transfer"
-      description  = "Analytical Platform Ingestion Transfer"
-      topics       = ["ministryofjustice", "analytical-platform"]
-      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
+      name        = "analytical-platform-ingestion-transfer"
+      description = "Analytical Platform Ingestion Transfer"
+      topics      = ["ministryofjustice", "analytical-platform"]
       access = {
         admins = [module.analytical_platform_team.id]
       }
     },
     "analytical-platform-ingestion-notify" = {
-      name         = "analytical-platform-ingestion-notify"
-      description  = "Analytical Platform Ingestion Notify"
-      topics       = ["ministryofjustice", "analytical-platform"]
-      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
+      name        = "analytical-platform-ingestion-notify"
+      description = "Analytical Platform Ingestion Notify"
+      topics      = ["ministryofjustice", "analytical-platform"]
       access = {
         admins = [module.analytical_platform_team.id]
       }
     },
     "analytical-platform-jml-report" = {
-      name         = "analytical-platform-jml-report"
-      description  = "Analytical Platform JML Report"
-      topics       = ["ministryofjustice", "analytical-platform"]
-      homepage_url = "https://user-guide.analytical-platform.service.justice.gov.uk"
+      name        = "analytical-platform-jml-report"
+      description = "Analytical Platform JML Report"
+      topics      = ["ministryofjustice", "analytical-platform"]
       access = {
         admins = [module.analytical_platform_team.id]
       }
@@ -612,7 +604,7 @@ module "analytical_platform_repositories" {
   has_issues           = lookup(each.value, "has_issues", true)
   has_projects         = lookup(each.value, "has_projects", false)
   has_wiki             = lookup(each.value, "has_wiki", false)
-  homepage_url         = lookup(each.value, "homepage_url", "https://data-platform.service.justice.gov.uk")
+  homepage_url         = lookup(each.value, "homepage_url", "https://user-guide.analytical-platform.service.justice.gov.uk")
   vulnerability_alerts = lookup(each.value, "vulnerability_alerts", true)
 
   auto_init = lookup(each.value, "auto_init", true)
