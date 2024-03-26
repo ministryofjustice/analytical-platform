@@ -127,6 +127,31 @@ locals {
   }
 }
 
+moved {
+  from = module.data_catalogue_repository
+  to   = module.data_catalogue_repositories
+}
+
+moved {
+  from = module.find_moj_data_repository
+  to   = module.data_catalogue_repositories
+}
+
+moved {
+  from = module.datahub_custom_api_source_repository
+  to   = module.data_catalogue_repositories
+}
+
+moved {
+  from = module.data_catalogue_metadata_repository
+  to   = module.data_catalogue_repositories
+}
+
+moved {
+  from = module.datahub_custom_domain_source_repository
+  to   = module.data_catalogue_repositories
+}
+
 module "data_catalogue_repositories" {
   source = "./modules/repository"
 

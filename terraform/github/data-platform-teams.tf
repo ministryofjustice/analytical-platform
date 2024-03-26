@@ -182,6 +182,11 @@ locals {
   }
 }
 
+moved {
+  from = module.data_catalogue_team
+  to   = module.data_platform_teams
+}
+
 # Parent Team
 module "data_platform_team" {
   source = "./modules/team"
