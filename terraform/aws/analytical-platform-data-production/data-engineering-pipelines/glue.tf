@@ -43,7 +43,8 @@ data "aws_iam_policy_document" "glue_ireland" {
           ]],
           [
             data.aws_caller_identity.current.account_id,
-            data.aws_iam_role.aws_sso_modernisation_platform_data_eng.unique_id // data engineering role protection bypass
+            data.aws_iam_role.aws_sso_modernisation_platform_data_eng.unique_id,
+            "${data.aws_iam_role.aws_sso_modernisation_platform_data_eng.unique_id}:*" // data engineering role protection bypass
           ]
         ])
       }
