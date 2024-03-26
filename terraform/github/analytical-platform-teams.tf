@@ -97,7 +97,7 @@ locals {
       description = "Analytical Platform Data Engineering SandboxA Administrator"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
-        local.data_platform_teams["data-platform-labs"].members,
+        local.data_platform_teams["data-catalogue"].members,
         flatten([
           for user in local.data_engineering_access : [
             contains(user.access, "analytical-platform-data-engineering-sandboxa-administrator") ? [user.github] : []
@@ -109,7 +109,7 @@ locals {
       name        = "analytical-platform-data-engineering-sandboxa-data-engineer"
       description = "Analytical Platform Data Engineering SandboxA Data Engineer"
       members = flatten([
-        local.data_platform_teams["data-platform-labs"].members,
+        local.data_platform_teams["data-catalogue"].members,
         flatten([
           for user in local.data_engineering_access : [
             contains(user.access, "analytical-platform-data-engineering-sandboxa-data-engineer") ? [user.github] : []

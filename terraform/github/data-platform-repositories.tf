@@ -18,7 +18,7 @@ locals {
       }
       access = {
         admins      = [module.data_platform_teams["data-platform-apps-and-tools"].id]
-        maintainers = [module.data_platform_teams["data-platform-labs"].id]
+        maintainers = [module.data_platform_teams["data-catalogue"].id]
         pushers = [
           module.data_platform_team.id,
           data.github_team.data_engineering.id
@@ -31,7 +31,7 @@ locals {
       topics      = ["ministryofjustice", "data-platform"]
       access = {
         admins      = [module.data_platform_teams["data-platform-apps-and-tools"].id]
-        maintainers = [module.data_platform_teams["data-platform-labs"].id]
+        maintainers = [module.data_platform_teams["data-catalogue"].id]
         pushers     = [module.data_platform_team.id]
       }
     }

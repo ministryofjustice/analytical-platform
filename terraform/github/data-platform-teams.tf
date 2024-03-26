@@ -64,19 +64,21 @@ locals {
         "EO510",             # Eki Osehenye
       ]
     },
-    "data-platform-labs" = {
-      name           = "data-platform-labs"
-      description    = "Data Platform Labs"
+    "data-catalogue" = {
+      name           = "data-catalogue"
+      description    = "Data Catalogue"
       parent_team_id = module.data_platform_team.id
       members = [
-        "jemnery",         # Jeremy Collins
-        "seanprivett",     # Sean Privett
-        "YvanMOJdigital",  # Yvan Smith
-        "LavMatt",         # Matt Laverty
-        "murdo-moj",       # Murdo Moyse
-        "tom-webber",      # Tom Webber
-        "mitchdawson1982", # Mitch Dawson
-        "MatMoore",        # Mat Moore
+        "alex-vonfeldmann", # Alex Von Feldmann
+        "jemnery",          # Jeremy Collins
+        "LavMatt",          # Matt Laverty
+        "MatMoore",         # Mat Moore
+        "mitchdawson1982",  # Mitch Dawson
+        "murdo-moj",        # Murdo Moyse
+        "seanprivett",      # Sean Privett
+        "Tod-Christov",     # Todor Christov
+        "tom-webber",       # Tom Webber
+        "YvanMOJdigital",   # Yvan Smith
       ]
     }
   }
@@ -87,7 +89,7 @@ locals {
       description = "Data Platform Cloud Platform Development"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
-        local.data_platform_teams["data-platform-labs"].members
+        local.data_platform_teams["data-catalogue"].members
       ])
     },
     "data-platform-cloud-platform-production" = {
@@ -105,7 +107,7 @@ locals {
       description = "Data Platform Development Sandbox"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
-        local.data_platform_teams["data-platform-labs"].members
+        local.data_platform_teams["data-catalogue"].members
       ])
     },
     "data-platform-preproduction-developer" = {
@@ -113,7 +115,7 @@ locals {
       description = "Data Platform PreProduction Developer"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
-        local.data_platform_teams["data-platform-labs"].members
+        local.data_platform_teams["data-catalogue"].members
       ])
     },
     "data-platform-production-developer" = {
@@ -121,7 +123,7 @@ locals {
       description = "Data Platform Production Developer"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
-        local.data_platform_teams["data-platform-labs"].members
+        local.data_platform_teams["data-catalogue"].members
       ])
     },
     "data-platform-test-developer" = {
@@ -129,7 +131,7 @@ locals {
       description = "Data Platform Test Developer"
       members = flatten([
         local.data_platform_teams["data-platform-apps-and-tools"].members,
-        local.data_platform_teams["data-platform-labs"].members
+        local.data_platform_teams["data-catalogue"].members
       ])
     },
     "data-platform-apps-and-tools-development-sandbox" = {
