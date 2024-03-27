@@ -49,17 +49,14 @@ locals {
       }
     }
     "data-platform-user-guidance" = {
-      name          = "data-platform-user-guidance"
-      description   = "Data Platform User Guidance"
-      topics        = ["ministryofjustice", "data-platform"]
-      pages_enabled = true
-      pages_configuration = {
-        cname = "data-platform.service.justice.gov.uk"
-        source = {
-          branch = "main"
-          path   = "/"
-        }
-      }
+      name                                   = "data-platform-user-guidance"
+      description                            = "Data Platform User Guidance"
+      topics                                 = ["ministryofjustice", "data-platform"]
+      archived                               = true
+      vulnerability_alerts                   = false
+      advanced_security_status               = "disabled"
+      secret_scanning_status                 = "enabled"
+      secret_scanning_push_protection_status = "disabled"
       access = {
         admins  = [module.data_platform_teams["data-platform-apps-and-tools"].id]
         pushers = [module.data_platform_team.id]
@@ -137,7 +134,7 @@ module "data_platform_repositories" {
   has_issues           = lookup(each.value, "has_issues", true)
   has_projects         = lookup(each.value, "has_projects", false)
   has_wiki             = lookup(each.value, "has_wiki", false)
-  homepage_url         = lookup(each.value, "homepage_url", "https://data-platform.service.justice.gov.uk")
+  homepage_url         = lookup(each.value, "homepage_url", null)
   vulnerability_alerts = lookup(each.value, "vulnerability_alerts", true)
 
   auto_init = lookup(each.value, "auto_init", true)
