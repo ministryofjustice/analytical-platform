@@ -17,6 +17,7 @@ from ...search_types import (
     SortOption,
 )
 from .graphql_helpers import (
+    parse_created_and_modified,
     parse_domain,
     parse_last_updated,
     parse_owner,
@@ -288,6 +289,8 @@ class SearchClient:
 
         fqn = self._get_fully_qualified_name(properties, name)
 
+        created, modified = parse_created_and_modified(properties)
+
         return SearchResult(
             id=entity["urn"],
             result_type=ResultType.TABLE,
@@ -297,7 +300,8 @@ class SearchClient:
             description=properties.get("description", ""),
             metadata=metadata,
             tags=tags,
-            last_updated=last_updated,
+            last_updated=modified or last_updated,
+            first_created=created,
         )
 
     def _parse_data_product(self, entity: dict[str, Any], matches) -> SearchResult:

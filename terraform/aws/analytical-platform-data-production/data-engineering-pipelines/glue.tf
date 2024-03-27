@@ -41,20 +41,18 @@ data "aws_iam_policy_document" "glue_ireland" {
             data.aws_iam_role.glue_policy_role[user_id].unique_id,
             "${data.aws_iam_role.glue_policy_role[user_id].unique_id}:*"
           ]],
-          [data.aws_caller_identity.current.account_id]
+          [
+            data.aws_caller_identity.current.account_id,
+            data.aws_iam_role.aws_sso_modernisation_platform_data_eng.unique_id,
+            "${data.aws_iam_role.aws_sso_modernisation_platform_data_eng.unique_id}:*" // data engineering role protection bypass
+          ]
         ])
       }
     }
   }
 }
 
-
 resource "aws_glue_resource_policy" "ireland" {
   policy        = data.aws_iam_policy_document.glue_ireland.json
   enable_hybrid = "TRUE"
-}
-
-import {
-  to = aws_glue_resource_policy.ireland
-  id = data.aws_caller_identity.current.account_id
 }

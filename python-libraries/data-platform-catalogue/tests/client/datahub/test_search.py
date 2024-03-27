@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import MagicMock
 
 import pytest
@@ -266,7 +266,9 @@ def test_full_page(mock_graph, searcher):
                     },
                 },
                 tags=[],
-                last_updated=datetime(2024, 1, 23, 6, 15, 2, 353000),
+                last_updated=datetime(
+                    2024, 1, 23, 6, 15, 2, 353000, tzinfo=timezone.utc
+                ),
             ),
             SearchResult(
                 id="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers2,PROD)",
