@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -298,12 +298,23 @@ class TestCatalogueClientWithDatahub:
                 "name": "Dataset",
                 "properties": {
                     "name": "Dataset",
-                    "qualifiedName": None,
+                    "qualifiedName": "Foo.Dataset",
                     "description": "Dataset",
+                    "customProperties": [
+                        {"key": "sensitivityLevel", "value": "OFFICIAL-SENSITIVE"}
+                    ],
+                    "lastModified": 1709619407814,
                 },
                 "editableProperties": None,
                 "tags": {
-                    "tags": [{"tag": {"urn": "urn:li:tag:Entity", "properties": None}}]
+                    "tags": [
+                        {
+                            "tag": {
+                                "urn": "urn:li:tag:Entity",
+                                "properties": {"name": "some-tag"},
+                            }
+                        }
+                    ]
                 },
                 "lastIngested": 1709619407814,
                 "domain": None,
@@ -351,10 +362,11 @@ class TestCatalogueClientWithDatahub:
         assert dataset == TableMetadata(
             name="Dataset",
             description="Dataset",
+            fully_qualified_name="Foo.Dataset",
             column_details=[
                 {
                     "name": "urn",
-                    "type": "STRING",
+                    "type": "string",
                     "description": "The primary identifier for the dataset entity.",
                     "isPrimaryKey": True,
                     "foreignKeys": [],
@@ -362,7 +374,7 @@ class TestCatalogueClientWithDatahub:
                 },
                 {
                     "name": "upstreamLineage",
-                    "type": "STRUCT",
+                    "type": "upstreamLineage",
                     "description": "Upstream lineage of a dataset",
                     "foreignKeys": [
                         {
@@ -379,7 +391,7 @@ class TestCatalogueClientWithDatahub:
             source_dataset_name="",
             where_to_access_dataset="",
             data_sensitivity_level=SecurityClassification.OFFICIAL,
-            tags=[],
+            tags=["some-tag"],
             major_version=1,
             relationships={
                 RelationshipType.PARENT: [
@@ -387,6 +399,45 @@ class TestCatalogueClientWithDatahub:
                 ]
             },
             domain="",
+            last_updated=datetime(2024, 3, 5, 6, 16, 47, 814000, tzinfo=timezone.utc),
+        )
+
+    def test_get_dataset_minimal_properties(
+        self,
+        datahub_client,
+        base_mock_graph,
+    ):
+        urn = "abc"
+        datahub_response = {
+            "dataset": {
+                "platform": {"name": "datahub"},
+                "name": "notinproperties",
+                "properties": {},
+                "container_relations": {
+                    "total": 0,
+                },
+                "data_product_relations": {"total": 0, "relationships": []},
+                "schemaMetadata": {"fields": []},
+            }
+        }
+        base_mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+        dataset = datahub_client.get_table_details(urn)
+
+        assert dataset == TableMetadata(
+            name="notinproperties",
+            fully_qualified_name="notinproperties",
+            description="",
+            column_details=[],
+            retention_period_in_days=None,
+            source_dataset_name="",
+            where_to_access_dataset="",
+            data_sensitivity_level=SecurityClassification.OFFICIAL,
+            tags=[],
+            major_version=1,
+            relationships={},
+            domain="",
+            last_updated=None,
         )
 
     def test_get_chart_details(self, datahub_client, base_mock_graph):
