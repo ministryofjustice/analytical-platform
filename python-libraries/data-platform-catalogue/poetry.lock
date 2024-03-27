@@ -534,6 +534,23 @@ ssh = ["paramiko (>=2.4.3)"]
 websockets = ["websocket-client (>=1.3.0)"]
 
 [[package]]
+name = "erdantic"
+version = "0.7.0"
+description = "Entity relationship diagrams for Python data model classes like Pydantic."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "erdantic-0.7.0-py3-none-any.whl", hash = "sha256:0e65140a60d3cbaa46d66c3496fe5214387cda2c544d6c2659c04f76c31e8cc4"},
+    {file = "erdantic-0.7.0.tar.gz", hash = "sha256:7e011262a2882f2c23e1f21e92007be08f1646cb54e71460000bff72865878c2"},
+]
+
+[package.dependencies]
+pydantic = ">=2"
+pydantic-core = "*"
+pygraphviz = "*"
+typer = "*"
+
+[[package]]
 name = "exceptiongroup"
 version = "1.1.3"
 description = "Backport of PEP 654 (exception groups)"
@@ -1148,6 +1165,16 @@ files = [
 typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
+name = "pygraphviz"
+version = "1.12"
+description = "Python interface to Graphviz"
+optional = false
+python-versions = ">=3.10"
+files = [
+    {file = "pygraphviz-1.12.tar.gz", hash = "sha256:8b0b9207954012f3b670e53b8f8f448a28d12bdbbcf69249313bd8dbe680152f"},
+]
+
+[[package]]
 name = "pyreadline3"
 version = "3.4.1"
 description = "A python implementation of GNU readline."
@@ -1657,6 +1684,24 @@ files = [
 ]
 
 [[package]]
+name = "typer"
+version = "0.11.0"
+description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "typer-0.11.0-py3-none-any.whl", hash = "sha256:049cc47bef39f46b043eddd9165492209fdd9bc7d79afa7ba9cc5cd017caa817"},
+    {file = "typer-0.11.0.tar.gz", hash = "sha256:a6ce173c0f03d3a41b49c0a945874cc489e91f88faabf76517b2b91c670fcde7"},
+]
+
+[package.dependencies]
+click = ">=8.0.0"
+typing-extensions = ">=3.7.4.3"
+
+[package.extras]
+all = ["colorama (>=0.4.3,<0.5.0)", "rich (>=10.11.0,<14.0.0)", "shellingham (>=1.3.0,<2.0.0)"]
+
+[[package]]
 name = "typing-extensions"
 version = "4.10.0"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -1884,4 +1929,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "44316e3dd96581a6ccb7e42efbf2daa7b08c76da904fb72928425f7361195c3f"
+content-hash = "66fcf9de2a6271b4ecae79bde97bb9cb1d2d1a04bbd6a5ea2ff13afb5980d455"
