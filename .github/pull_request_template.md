@@ -1,6 +1,7 @@
+### Pull Request Objective
+
 This piece of work is being tracked in [this](https://github.com/ministryofjustice/data-platform/issues/<your_issue_number_here>)
 
-### Pull Request Objective
 Please describe the purpose of this pull request. Detail the problem it addresses or the functionality it adds. Highlight how this contributes to the project goals, improves performance, or solves a specific issue. Delete this text.
 
 #### If you're adding the `override-static-analysis` label, please explain why
