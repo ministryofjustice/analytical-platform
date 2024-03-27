@@ -9,7 +9,6 @@ packages = [{ include = "data_platform_catalogue" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-openmetadata-ingestion = "~1.2.0.1"
 acryl-datahub = { extras = ["datahub-rest"], version = "^0.12.1.3" }
 freezegun = "^1.4.0"
 deepdiff = "^6.7.1"
