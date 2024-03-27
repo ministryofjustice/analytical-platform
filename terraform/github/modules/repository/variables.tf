@@ -68,7 +68,7 @@ variable "has_wiki" {
 
 variable "homepage_url" {
   type    = string
-  default = "https://data-platform.service.justice.gov.uk"
+  default = null
 }
 
 variable "vulnerability_alerts" {
