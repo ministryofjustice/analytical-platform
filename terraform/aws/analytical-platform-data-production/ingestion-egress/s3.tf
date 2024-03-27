@@ -1,4 +1,3 @@
-
 #tfsec:ignore:AVD-AWS-0088:Bucket is encrypted with CMK KMS, but not detected by Trivy
 #tfsec:ignore:AVD-AWS-0089:Bucket logging not enabled right now
 #tfsec:ignore:AVD-AWS-0132:Bucket is encrypted with CMK KMS, but not detected by Trivy
