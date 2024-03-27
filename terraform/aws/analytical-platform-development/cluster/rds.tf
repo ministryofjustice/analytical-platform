@@ -45,3 +45,35 @@ module "rds" {
     Name = local.rds_identifier
   }
 }
+
+
+
+#------------------------------------------------------------------------------
+# Logging
+#------------------------------------------------------------------------------
+
+resource "aws_cloudwatch_log_group" "rds_logs" {
+  name              = "rds-${local.rds_identifier}-rdsLogs"
+  retention_in_days = "30"
+}
+
+resource "aws_cloudwatch_event_rule" "rds_events" {
+  name        = "rds-events"
+  description = "Capture all RDS events"
+
+  event_pattern = jsonencode({
+    "source" : ["aws.rds"],
+    "detail" : {
+      "eventSource" : ["db-instance"],
+      "resources" : [module.rds.db_instance_arn]
+    }
+  })
+}
+
+# AWS EventBridge target for RDS events
+resource "aws_cloudwatch_event_target" "rds_logs" {
+  depends_on = [aws_cloudwatch_log_group.rds_logs]
+  rule       = aws_cloudwatch_event_rule.rds_events.name
+  target_id  = "send-to-cloudwatch"
+  arn        = aws_cloudwatch_log_group.rds_logs.arn
+}
