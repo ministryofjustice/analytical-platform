@@ -1,6 +1,6 @@
 # hadolint global ignore=DL3008
 
-ARG r=4.1.3
+ARG r=4.3.2
 FROM rocker/r-ver:${r}
 
 ARG shinyserver=1.5.20.1002
