@@ -184,7 +184,7 @@ class Asset(BaseModel):
     may be related to other assets.
     """
 
-    id: str | None = Field("Unique identifier for the asset")
+    id: str | None = Field("Unique identifier for the asset. Relates to Datahub's urn")
     display_name: str = Field("Display name of the asset")
     description: str = Field(
         description="Detailed description about what functional area this asset is representing, what purpose it has and business related information.",
