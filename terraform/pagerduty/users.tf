@@ -44,6 +44,10 @@ locals {
       name  = "James Stott"
       email = "james.stott@digital.justice.gov.uk"
     },
+    {
+      name  = "Anthony Fitzroy"
+      email = "anthony.fitzroy@digital.justice.gov.uk"
+    },
   ]
 }
 
