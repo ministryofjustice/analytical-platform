@@ -5,8 +5,7 @@ from typing import Any
 DATAHUB_DATE_FORMAT = "%Y%m%d"
 
 
-from pydantic import BaseModel, ConfigDict, Field
-from pydantic.alias_generators import to_camel
+from pydantic import BaseModel, Field
 
 
 class DataProductStatus(Enum):
@@ -23,6 +22,7 @@ class DatabaseStatus(Enum):
 
 class RelationshipType(Enum):
     PARENT = auto()
+    PLATFORM = auto()
 
 
 # Needs refining
@@ -182,14 +182,22 @@ class Asset(BaseModel):
     """
     Any searchable data asset that is present in the metadata graph, which
     may be related to other assets.
+    Examples include platforms, databases, tables, data products
     """
 
     id: str | None = Field("Unique identifier for the asset. Relates to Datahub's urn")
-    display_name: str = Field("Display name of the asset")
+    display_name: str | None = Field("Display name of the asset")
+    name: str = Field("Actual name of the asset in its source platform")
+    fully_qualified_name: str | None = Field(
+        "Fully qualified name of the asset in its source platform"
+    )
     description: str = Field(
         description="Detailed description about what functional area this asset is representing, what purpose it has and business related information.",
     )
-    relationships: dict[RelationshipType, list[AssetRef]] | None = None
+    relationships: dict[RelationshipType, list[AssetRef]] | None = Field(
+        default=None,
+        description="References to related assets in the metadata graph, such as platform or parent assets",
+    )
     domain: DomainRef = Field(description="The domain this asset belongs to.")
     governance: Governance = Field(description="Information about governance")
     usage_restrictions: UsageRestrictions = Field(
@@ -227,7 +235,8 @@ class Table(Asset):
         description="A list of objects which relate to columns in your data, each list item will contain, a name of the column, data type of the column and description of the column."
     )
     fully_qualified_name: str | None = Field(
-        default=None, description="Fully qualified table name including database"
+        default=None,
+        description="Fully qualified table name as it appears in the source platform, including the database",
     )
     access_information: AccessInformation = Field(
         description="Metadata about how to access the data"
@@ -244,7 +253,8 @@ class Chart(Asset):
 
     external_url: str = Field("URL to view the chart")
     fully_qualified_name: str | None = Field(
-        default=None, description="Fully qualified name including dashboard"
+        default=None,
+        description="Fully qualified name as it appears in the source platform including the dashboard",
     )
     access_information: AccessInformation = Field(
         description="Metadata about how to access the data"
