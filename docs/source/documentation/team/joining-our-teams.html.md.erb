@@ -1,71 +1,10 @@
 ---
 owner_slack: "#data-platform-notifications"
 title: Joining our teams
-last_reviewed_on: 2023-10-24
+last_reviewed_on: 2024-04-03
 review_in: 6 months
 ---
 
 # <%= current_page.data.title %>
 
-## General Information
-
-- Our team have a stand up everyday at 10:00
-- We plan our sprints using GitHub Projects.
-- We have our team Retrospective every 2 weeks.
-
-## Tools
-
-### Communication
-
-Our main chat platform is Slack, and this is our preferred method of communication. This applies to our ceremonies as well, we have these in Huddles in the #data-platform-apps-and-tools channel.
-
-We use Slack huddles for pairing or direct calls and occassionally we use Google Meet.
-
-We have three main Slack channels listed below.
-
-#### #data-platform
-
-The [#data-platform](https://mojdt.slack.com/archives/C04BBJR3RPB) channel is the main channel with all members of the Data Platform.
-
-#### #data-platform-apps-and-tools
-
-The [#data-platform-apps-and-tools](https://mojdt.slack.com/archives/C04BRGD7KFH) channel is where the Data Platform Apps and Tools team have discussions about anything ranging from:
-
-- in-depth technical issues
-- our plans for the day
-- to request someone else from the team's help
-- when we're away for lunch
-- general musings
-
-If you can't make standup, post your standup update here.
-
-#### #ask-data-platform
-
-The [#ask-data-platform](https://mojdt.slack.com/archives/C04LY2RVCS2) channel is for anyone who isn't in the team to:
-
-- ask questions about the services we run
-- get advice from the team
-
-#### #data-platform-notifications
-
-The [#data-platform-notifications](https://mojdt.slack.com/archives/C04MUAV0QC8) channel is where we direct notifications from GitHub, such as pull requests or issues. This includes updates to Team Documentation and  [Architecture Decision Records (ADR)](/documentation/adrs/adr-index.html)
-
-It's a noisy channel, so it's up to you whether to join it.
-
-### GitHub
-
-Access to Data Platform's GitHub repositories and projects is managed in Terraform.
-
-To add a user to a team, add their GitHub username to the relevant team in in the [`data_platform_teams`](https://github.com/ministryofjustice/data-platform/blob/dfaf901feedb7617d1313dfbe76e832147b1f8f1/terraform/github/data-platform-teams.tf#L8) configuration.
-
-### PagerDuty
-
-Our PagerDuty configuration is managed in Terraform.
-
-To add a user, do the following:
-
-1. Add an entry into [`users.tf`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/pagerduty/users.tf)
-
-1. Add an entry into [`teams.tf`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/pagerduty/teams.tf)
-
-1. Add an entry into [`schedules.tf`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/pagerduty/schedules.tf)
+This has now moved to [Analytical Platform Runbooks](https://runbooks.analytical-platform.service.justice.gov.uk/documentation/joining-our-team)
