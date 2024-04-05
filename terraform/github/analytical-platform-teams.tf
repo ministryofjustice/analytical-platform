@@ -32,8 +32,6 @@ locals {
         "RNTjustice",        # Richard Trist
         "alex-vonfeldmann",  # Alex von Feldman
         "AntFMoJ",           # Anthony Fitzroy
-        "tamsinforbes",      # Tamsin Forbes
-
       ]
     }
   }
