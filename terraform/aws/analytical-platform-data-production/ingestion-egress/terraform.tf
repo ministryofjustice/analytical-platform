@@ -3,7 +3,7 @@ terraform {
     acl            = "private"
     bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "aws/analytical-platform-data-production/rds-s3-exports/terraform.tfstate"
+    key            = "aws/analytical-platform-data-production/ingestion-egress/terraform.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
@@ -21,7 +21,7 @@ provider "aws" {
 }
 
 provider "aws" {
-  region = "eu-west-1"
+  region = "eu-west-2"
   assume_role {
     role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/GlobalGitHubActionAdmin"
   }
@@ -32,7 +32,7 @@ provider "aws" {
 
 provider "aws" {
   alias  = "analytical-platform-management-production"
-  region = "eu-west-1"
+  region = "eu-west-2"
   assume_role {
     role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
   }
