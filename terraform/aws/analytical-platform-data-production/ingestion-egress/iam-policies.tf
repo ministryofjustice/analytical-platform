@@ -55,7 +55,7 @@ module "development_replication_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.38.0"
+  version = "5.39.0"
 
   name_prefix = "mojap-data-production-bold-egress-development"
 
@@ -119,7 +119,7 @@ module "production_replication_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.38.0"
+  version = "5.39.0"
 
   name_prefix = "mojap-data-production-bold-egress-production"
 
