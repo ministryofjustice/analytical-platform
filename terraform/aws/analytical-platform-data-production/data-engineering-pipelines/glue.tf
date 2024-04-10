@@ -43,16 +43,10 @@ data "aws_iam_policy_document" "glue_ireland" {
             data.aws_iam_role.glue_policy_role[role_arn].arn
           ]],
           [
-            data.aws_iam_role.aws_sso_modernisation_platform_data_eng.arn
+            data.aws_iam_role.aws_sso_modernisation_platform_data_eng.arn,
+            "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
           ]
         ])
-      }
-      condition {
-        test     = "StringNotEquals"
-        variable = "aws:PrincipalAccount"
-        values = [
-          data.aws_caller_identity.current.account_id
-        ]
       }
     }
   }
