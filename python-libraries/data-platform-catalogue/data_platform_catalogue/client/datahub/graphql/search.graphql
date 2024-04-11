@@ -148,7 +148,7 @@ query Search(
               value
             }
             created
-            lastModified{
+            lastModified {
               time
               actor
             }
