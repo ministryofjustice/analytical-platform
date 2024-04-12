@@ -156,7 +156,13 @@ def test_parse_relations_blank():
 
 
 def test_parse_created_and_modified():
-    properties = {"created": 1710426920000, "lastModified": {"time": 1710426921000, "actor": "Shakira"}}
+    properties = {
+        "created": 1710426920000,
+        "lastModified": {
+            "time": 1710426921000, 
+            "actor": "Shakira"
+        }
+    }
 
     created, modified = parse_created_and_modified(properties)
 
