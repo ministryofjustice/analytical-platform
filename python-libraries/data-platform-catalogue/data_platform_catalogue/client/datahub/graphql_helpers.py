@@ -36,7 +36,7 @@ def parse_created_and_modified(
     properties: dict[str, Any]
 ) -> Tuple[datetime | None, datetime | None]:
     created = properties.get("created")
-    modified = properties.get("lastModified")
+    modified = properties.get("lastModified", {}).get("time")
 
     if created is not None:
         created = datetime.fromtimestamp(created / 1000, timezone.utc)

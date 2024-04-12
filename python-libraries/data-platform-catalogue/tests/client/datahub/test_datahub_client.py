@@ -303,7 +303,7 @@ class TestCatalogueClientWithDatahub:
                     "customProperties": [
                         {"key": "sensitivityLevel", "value": "OFFICIAL-SENSITIVE"}
                     ],
-                    "lastModified": 1709619407814,
+                    "lastModified": {"time": 1709619407814},
                 },
                 "editableProperties": None,
                 "tags": {
