@@ -1,0 +1,32 @@
+name: ITHC Remediation
+description: 👮 Create an ITHC Issue
+title: "👮 <title>"
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      description: A clear and concise description of what the issue is.
+      label: Describe the issue.
+      value:
+    validations:
+      required: true
+  - type: dropdown
+    id: tool
+    attributes:
+      label: Risk Level
+      multiple: true
+      options:
+        - Low
+        - Medium
+        - High
+    validations:
+      required: true
+  - type: textarea
+    id: table
+    attributes:
+      description: Which table is this issue related to?
+      label: Table Number
+      value:
+    validations:
+      required: true
