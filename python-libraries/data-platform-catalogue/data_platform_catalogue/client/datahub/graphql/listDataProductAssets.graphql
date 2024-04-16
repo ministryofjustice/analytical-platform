@@ -1,7 +1,12 @@
-query dataProductDetails($urn: String!, $query: String!, $count: Int!, $start: Int!) {
+query dataProductDetails(
+  $urn: String!
+  $query: String!
+  $count: Int!
+  $start: Int!
+) {
   listDataProductAssets(
     urn: $urn
-    input: {query: $query, start: $start, count: $count}
+    input: { query: $query, start: $start, count: $count }
   ) {
     start
     count
@@ -16,7 +21,11 @@ query dataProductDetails($urn: String!, $query: String!, $count: Int!, $start: I
             name
           }
           relationships(
-            input: {types: ["DataProductContains"], direction: INCOMING, count: 10}
+            input: {
+              types: ["DataProductContains"]
+              direction: INCOMING
+              count: 10
+            }
           ) {
             total
             relationships {
@@ -60,7 +69,10 @@ query dataProductDetails($urn: String!, $query: String!, $count: Int!, $start: I
               value
             }
             created
-            lastModified
+            lastModified {
+              time
+              actor
+            }
           }
           editableProperties {
             description

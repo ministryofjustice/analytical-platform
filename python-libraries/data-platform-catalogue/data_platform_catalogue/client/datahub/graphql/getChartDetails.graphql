@@ -35,6 +35,7 @@ query getChartDetails($urn: String!) {
       }
       lastModified {
         time
+        actor
       }
     }
   }
