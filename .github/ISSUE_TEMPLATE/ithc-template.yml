@@ -1,7 +1,7 @@
 name: ITHC Remediation
 description: 👮 Create an ITHC Issue
 title: "👮 <title>"
-labels: ["ithc"]
+labels: ["ITHC"]
 body:
   - type: textarea
     id: description
