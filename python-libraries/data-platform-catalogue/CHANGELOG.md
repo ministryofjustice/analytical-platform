@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `lastModified` updated for getDatasetDetails, getChartDetails, listDataProductAssets
+- `lastModified` syntax updated for getDatasetDetails, getChartDetails,
+  listDataProductAssets, as per `0.24.0`
 
 ## [0.24.1] 2024-04-11
 
