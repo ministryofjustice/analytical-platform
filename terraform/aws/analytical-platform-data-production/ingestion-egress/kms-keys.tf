@@ -7,6 +7,7 @@ module "development_kms" {
   aliases               = ["s3/mojap-data-production-bold-egress-development"]
   description           = "MoJ AP BOLD Egress - Development"
   enable_default_policy = true
+  multi_region          = true
 
   deletion_window_in_days = 7
 }
@@ -20,6 +21,7 @@ module "production_kms" {
   aliases               = ["s3/mojap-data-production-bold-egress-production"]
   description           = "MoJ AP BOLD Egress - Production"
   enable_default_policy = true
+  multi_region          = true
 
   deletion_window_in_days = 7
 }
