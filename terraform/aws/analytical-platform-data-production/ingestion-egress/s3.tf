@@ -13,7 +13,7 @@ module "development_s3" {
   #checkov:skip=CKV2_AWS_62:Bucket notifications not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.1.1"
+  version = "4.1.2"
 
   bucket        = "mojap-data-production-bold-egress-development"
   force_destroy = true
@@ -84,7 +84,7 @@ module "production_s3" {
   #checkov:skip=CKV2_AWS_62:Bucket notifications not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.1.1"
+  version = "4.1.2"
 
   bucket        = "mojap-data-production-bold-egress-production"
   force_destroy = true
