@@ -14,11 +14,11 @@ resource "aws_athena_workgroup" "airflow_dev" {
 
   tags = merge(var.tags,
     {
-      "Name"             = "airflow-dev-workgroup"
-      "application"      = "airflow"
-      "environment-name" = "dev"
-      "is-production"    = "true"
-      "owner"            = "Data Engineering:dataengineering@digital.justice.gov.uk"
+      "Name"          = "airflow-dev-workgroup"
+      "application"   = "Data Engineering Airflow"
+      "environment"   = "development"
+      "is-production" = "true"
+      "owner"         = "data-engineering:dataengineering@digital.justice.gov.uk"
     }
   )
 }
@@ -39,11 +39,11 @@ resource "aws_athena_workgroup" "airflow_prod" {
 
   tags = merge(var.tags,
     {
-      "Name"             = "airflow-prod-workgroup"
-      "application"      = "airflow"
-      "environment-name" = "prod"
-      "is-production"    = "true"
-      "owner"            = "Data Engineering:dataengineering@digital.justice.gov.uk"
+      "Name"          = "airflow-prod-workgroup"
+      "application"   = "airflow"
+      "environment"   = "production"
+      "is-production" = "true"
+      "owner"         = "data-engineering:dataengineering@digital.justice.gov.uk"
     }
   )
 }
@@ -64,12 +64,12 @@ resource "aws_athena_workgroup" "airflow_dev_hmcts" {
 
   tags = merge(var.tags,
     {
-      "Name"             = "airflow-dev-workgroup-hmcts"
-      "application"      = "airflow"
-      "environment-name" = "dev"
-      "is-production"    = "true"
-      "owner"            = "Data Engineering:dataengineering@digital.justice.gov.uk"
-      "business-unit"    = "HMCTS"
+      "Name"          = "airflow-dev-workgroup-hmcts"
+      "application"   = "Data Engineering Airflow"
+      "environment"   = "development"
+      "is-production" = "true"
+      "owner"         = "data-engineering:dataengineering@digital.justice.gov.uk"
+      "business-unit" = "HMCTS"
     }
   )
 }
@@ -90,12 +90,12 @@ resource "aws_athena_workgroup" "airflow_prod_hmcts" {
 
   tags = merge(var.tags,
     {
-      "Name"             = "airflow-prod-workgroup"
-      "application"      = "airflow"
-      "environment-name" = "prod"
-      "is-production"    = "true"
-      "owner"            = "Data Engineering:dataengineering@digital.justice.gov.uk"
-      "business-unit"    = "HMCTS"
+      "Name"          = "airflow-prod-workgroup"
+      "application"   = "Data Engineering Airflow"
+      "environment"   = "production"
+      "is-production" = "true"
+      "owner"         = "data-engineering:dataengineering@digital.justice.gov.uk"
+      "business-unit" = "HMCTS"
     }
   )
 }
