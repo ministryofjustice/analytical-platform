@@ -178,27 +178,27 @@ class DataSummary(BaseModel):
     )
 
 
-class Asset(BaseModel):
+class Entity(BaseModel):
     """
-    Any searchable data asset that is present in the metadata graph, which
-    may be related to other assets.
+    Any searchable data entity that is present in the metadata graph, which
+    may be related to other entities.
     Examples include platforms, databases, tables, data products
     """
 
-    id: str | None = Field("Unique identifier for the asset. Relates to Datahub's urn")
-    display_name: str | None = Field("Display name of the asset")
-    name: str = Field("Actual name of the asset in its source platform")
+    id: str | None = Field("Unique identifier for the entity. Relates to Datahub's urn")
+    display_name: str | None = Field("Display name of the entity")
+    name: str = Field("Actual name of the entity in its source platform")
     fully_qualified_name: str | None = Field(
-        "Fully qualified name of the asset in its source platform"
+        "Fully qualified name of the entity in its source platform"
     )
     description: str = Field(
-        description="Detailed description about what functional area this asset is representing, what purpose it has and business related information.",
+        description="Detailed description about what functional area this entity is representing, what purpose it has and business related information.",
     )
-    relationships: dict[RelationshipType, list[AssetRef]] | None = Field(
+    relationships: dict[RelationshipType, list[EntityRef]] | None = Field(
         default=None,
-        description="References to related assets in the metadata graph, such as platform or parent assets",
+        description="References to related entities in the metadata graph, such as platform or parent entities",
     )
-    domain: DomainRef = Field(description="The domain this asset belongs to.")
+    domain: DomainRef = Field(description="The domain this entity belongs to.")
     governance: Governance = Field(description="Information about governance")
     usage_restrictions: UsageRestrictions = Field(
         description="Limitations on how the data may be used and accessed"
@@ -212,10 +212,10 @@ class Asset(BaseModel):
     last_updated: datetime = Field(
         description="When the metadata was last updated in the catalogue"
     )
-    first_created: datetime = Field(description="When the data asset was first created")
+    first_created: datetime = Field(description="When the data entity was first created")
 
 
-class Database(Asset):
+class Database(Entity):
     """
     For source system databases
     """
@@ -226,7 +226,7 @@ class Database(Asset):
     )
 
 
-class Table(Asset):
+class Table(Entity):
     """
     A table in a database or a tabular dataset
     """
@@ -246,7 +246,7 @@ class Table(Asset):
     )
 
 
-class Chart(Asset):
+class Chart(Entity):
     """
     A visualisation of a dataset
     """
