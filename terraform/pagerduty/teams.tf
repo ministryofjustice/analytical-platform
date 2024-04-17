@@ -5,7 +5,8 @@ locals {
       managers = [
         module.users["jacob.woffenden@digital.justice.gov.uk"].id,
         module.users["julia.lawrence@digital.justice.gov.uk"].id,
-        module.users["richard.baguley@digital.justice.gov.uk"].id
+        module.users["richard.baguley@digital.justice.gov.uk"].id,
+        module.users["eki.osehenye@digital.justice.gov.uk"].id
       ]
       responders = [
         module.users["emma.terry@digital.justice.gov.uk"].id,
