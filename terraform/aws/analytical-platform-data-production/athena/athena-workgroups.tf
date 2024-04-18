@@ -20,7 +20,7 @@ resource "aws_athena_workgroup" "airflow_dev" {
       "Name"          = "airflow-dev-workgroup"
       "application"   = "Data Engineering Airflow"
       "environment"   = "development"
-      "is-production" = "true"
+      "is-production" = "false"
       "owner"         = "Data Engineering:dataengineering@digital.justice.gov.uk"
     }
   )
@@ -75,10 +75,10 @@ resource "aws_athena_workgroup" "airflow_dev_hmcts" {
     {
       "Name"          = "airflow-dev-workgroup-hmcts"
       "application"   = "Data Engineering Airflow"
-      "environment"   = "development"
-      "is-production" = "true"
-      "owner"         = "Data Engineering:dataengineering@digital.justice.gov.uk"
       "business-unit" = "HMCTS"
+      "environment"   = "development"
+      "is-production" = "false"
+      "owner"         = "Data Engineering:dataengineering@digital.justice.gov.uk"
     }
   )
 }
@@ -104,10 +104,10 @@ resource "aws_athena_workgroup" "airflow_prod_hmcts" {
     {
       "Name"          = "airflow-prod-workgroup"
       "application"   = "Data Engineering Airflow"
+      "business-unit" = "HMCTS"
       "environment"   = "production"
       "is-production" = "true"
       "owner"         = "Data Engineering:dataengineering@digital.justice.gov.uk"
-      "business-unit" = "HMCTS"
     }
   )
 }
