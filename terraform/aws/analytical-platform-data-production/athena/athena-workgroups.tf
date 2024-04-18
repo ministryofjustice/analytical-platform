@@ -21,7 +21,7 @@ resource "aws_athena_workgroup" "airflow_dev" {
       "application"   = "Data Engineering Airflow"
       "environment"   = "development"
       "is-production" = "true"
-      "owner"         = "data-engineering:dataengineering@digital.justice.gov.uk"
+      "owner"         = "Data Engineering:dataengineering@digital.justice.gov.uk"
     }
   )
 }
@@ -46,10 +46,10 @@ resource "aws_athena_workgroup" "airflow_prod" {
   tags = merge(var.tags,
     {
       "Name"          = "airflow-prod-workgroup"
-      "application"   = "airflow"
+      "application"   = "Data Engineering Airflow"
       "environment"   = "production"
       "is-production" = "true"
-      "owner"         = "data-engineering:dataengineering@digital.justice.gov.uk"
+      "owner"         = "Data Engineering:dataengineering@digital.justice.gov.uk"
     }
   )
 }
@@ -77,7 +77,7 @@ resource "aws_athena_workgroup" "airflow_dev_hmcts" {
       "application"   = "Data Engineering Airflow"
       "environment"   = "development"
       "is-production" = "true"
-      "owner"         = "data-engineering:dataengineering@digital.justice.gov.uk"
+      "owner"         = "Data Engineering:dataengineering@digital.justice.gov.uk"
       "business-unit" = "HMCTS"
     }
   )
@@ -106,7 +106,7 @@ resource "aws_athena_workgroup" "airflow_prod_hmcts" {
       "application"   = "Data Engineering Airflow"
       "environment"   = "production"
       "is-production" = "true"
-      "owner"         = "data-engineering:dataengineering@digital.justice.gov.uk"
+      "owner"         = "Data Engineering:dataengineering@digital.justice.gov.uk"
       "business-unit" = "HMCTS"
     }
   )
