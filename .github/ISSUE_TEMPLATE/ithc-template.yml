@@ -23,10 +23,10 @@ body:
     validations:
       required: true
   - type: textarea
-    id: table
+    id: Finding ID
     attributes:
-      description: Which table is this issue related to?
-      label: Table Number
+      description: Finding ID
+      label: Finding ID
       value:
     validations:
       required: true
