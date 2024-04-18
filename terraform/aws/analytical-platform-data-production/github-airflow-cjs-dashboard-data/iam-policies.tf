@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "cjs_dashboard_airflow" {
+data "aws_iam_policy_document" "github_airflow_cjs_dashboard_data" {
   statement {
     sid    = "BucketAccess"
     effect = "Allow"
@@ -15,13 +15,13 @@ data "aws_iam_policy_document" "cjs_dashboard_airflow" {
   }
 }
 
-module "cjs_dashboard_airflow_iam_policy" {
+module "github_airflow_cjs_dashboard_data_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.39.0"
 
-  name_prefix = "github-cjs-dashboard-airflow"
+  name_prefix = "github-airflow-cjs-dashboard-data"
 
-  policy = data.aws_iam_policy_document.cjs_dashboard_airflow.json
+  policy = data.aws_iam_policy_document.github_airflow_cjs_dashboard_data.json
 }

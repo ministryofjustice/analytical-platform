@@ -6,10 +6,10 @@ account_ids = {
 tags = {
   business-unit          = "Platforms"
   application            = "Data Platform"
-  component              = "cjs-dashboard-airflow"
+  component              = "github-airflow-cjs-dashboard-data"
   environment            = "production"
   is-production          = "true"
   owner                  = "data-platform:data-platform-tech@digital.justice.gov.uk"
   infrastructure-support = "data-platform:data-platform-tech@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/cjs-dashboard-airflow"
+  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/github-airflow-cjs-dashboard-data"
 }
