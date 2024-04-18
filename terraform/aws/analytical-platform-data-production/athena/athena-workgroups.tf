@@ -40,7 +40,7 @@ resource "aws_athena_workgroup" "airflow" {
     {
       "Name"             = each.value.name
       "application"      = "airflow"
-      "business-unit"    = try(each.value.business_unit, "Platforms")
+      "business-unit"    = try(each.value.business_unit, var.tags["business-unit"])
       "environment-name" = strcontains(each.value.name, "prod") ? "prod" : "dev"
       "is-production"    = strcontains(each.value.name, "prod") ? "True" : "False"
       "owner"            = "Data Engineering:dataengineering@digital.justice.gov.uk"
