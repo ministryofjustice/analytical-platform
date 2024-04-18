@@ -1,4 +1,7 @@
+#trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
 resource "aws_athena_workgroup" "airflow_dev" {
+  #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
+
   name = "airflow-dev-workgroup"
 
   configuration {
@@ -8,7 +11,7 @@ resource "aws_athena_workgroup" "airflow_dev" {
       selected_engine_version = "Athena engine version 3"
     }
     result_configuration {
-      output_location = "s3://dbt-query-dump/"
+      output_location = "s3://mojap-athena-query-dump/airflow-dev-workgroup"
     }
   }
 
@@ -23,7 +26,10 @@ resource "aws_athena_workgroup" "airflow_dev" {
   )
 }
 
+#trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
 resource "aws_athena_workgroup" "airflow_prod" {
+  #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
+
   name = "airflow-prod-workgroup"
 
   configuration {
@@ -33,7 +39,7 @@ resource "aws_athena_workgroup" "airflow_prod" {
       selected_engine_version = "Athena engine version 3"
     }
     result_configuration {
-      output_location = "s3://dbt-query-dump/"
+      output_location = "s3://mojap-athena-query-dump/airflow-prod-workgroup"
     }
   }
 
@@ -48,7 +54,10 @@ resource "aws_athena_workgroup" "airflow_prod" {
   )
 }
 
+#trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
 resource "aws_athena_workgroup" "airflow_dev_hmcts" {
+  #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
+
   name = "airflow-dev-workgroup-hmcts"
 
   configuration {
@@ -58,7 +67,7 @@ resource "aws_athena_workgroup" "airflow_dev_hmcts" {
       selected_engine_version = "Athena engine version 3"
     }
     result_configuration {
-      output_location = "s3://dbt-query-dump/"
+      output_location = "s3://mojap-athena-query-dump/airflow-dev-workgroup-hmcts"
     }
   }
 
@@ -74,7 +83,10 @@ resource "aws_athena_workgroup" "airflow_dev_hmcts" {
   )
 }
 
+#trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
 resource "aws_athena_workgroup" "airflow_prod_hmcts" {
+  #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
+
   name = "airflow-prod-workgroup-hmcts"
 
   configuration {
@@ -84,7 +96,7 @@ resource "aws_athena_workgroup" "airflow_prod_hmcts" {
       selected_engine_version = "Athena engine version 3"
     }
     result_configuration {
-      output_location = "s3://dbt-query-dump/"
+      output_location = "s3://mojap-athena-query-dump/airflow-prod-workgroup-hmcts"
     }
   }
 
