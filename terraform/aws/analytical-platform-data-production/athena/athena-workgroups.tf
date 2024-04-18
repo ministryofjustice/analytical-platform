@@ -1,36 +1,29 @@
-#trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
-resource "aws_athena_workgroup" "airflow_dev" {
-  #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
-
-  name = "airflow-dev-workgroup"
-
-  configuration {
-    bytes_scanned_cutoff_per_query  = 1099511627776
-    enforce_workgroup_configuration = true
-    engine_version {
-      selected_engine_version = "Athena engine version 3"
+locals {
+  airflow_athena_workgroups = {
+    "airflow-dev" = {
+      name = "airflow-dev-workgroup"
     }
-    result_configuration {
-      output_location = "s3://mojap-athena-query-dump/airflow-dev-workgroup"
+    "airflow-prod" = {
+      name = "airflow-prod-workgroup"
+    }
+    "airflow-dev-hmcts" = {
+      name          = "airflow-dev-workgroup-hmcts"
+      business_unit = "HMCTS"
+    }
+    "airflow-prod-hmcts" = {
+      name          = "airflow-prod-workgroup-hmcts"
+      business_unit = "HMCTS"
     }
   }
-
-  tags = merge(var.tags,
-    {
-      "Name"          = "airflow-dev-workgroup"
-      "application"   = "Data Engineering Airflow"
-      "environment"   = "development"
-      "is-production" = "false"
-      "owner"         = "Data Engineering:dataengineering@digital.justice.gov.uk"
-    }
-  )
 }
 
 #trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
-resource "aws_athena_workgroup" "airflow_prod" {
+resource "aws_athena_workgroup" "airflow" {
   #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
 
-  name = "airflow-prod-workgroup"
+  for_each = local.airflow_athena_workgroups
+
+  name = each.value.name
 
   configuration {
     bytes_scanned_cutoff_per_query  = 1099511627776
@@ -39,75 +32,18 @@ resource "aws_athena_workgroup" "airflow_prod" {
       selected_engine_version = "Athena engine version 3"
     }
     result_configuration {
-      output_location = "s3://mojap-athena-query-dump/airflow-prod-workgroup"
+      output_location = "s3://mojap-athena-query-dump/${each.value.name}"
     }
   }
 
   tags = merge(var.tags,
     {
-      "Name"          = "airflow-prod-workgroup"
-      "application"   = "Data Engineering Airflow"
-      "environment"   = "production"
-      "is-production" = "true"
-      "owner"         = "Data Engineering:dataengineering@digital.justice.gov.uk"
-    }
-  )
-}
-
-#trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
-resource "aws_athena_workgroup" "airflow_dev_hmcts" {
-  #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
-
-  name = "airflow-dev-workgroup-hmcts"
-
-  configuration {
-    bytes_scanned_cutoff_per_query  = 1099511627776
-    enforce_workgroup_configuration = true
-    engine_version {
-      selected_engine_version = "Athena engine version 3"
-    }
-    result_configuration {
-      output_location = "s3://mojap-athena-query-dump/airflow-dev-workgroup-hmcts"
-    }
-  }
-
-  tags = merge(var.tags,
-    {
-      "Name"          = "airflow-dev-workgroup-hmcts"
-      "application"   = "Data Engineering Airflow"
-      "business-unit" = "HMCTS"
-      "environment"   = "development"
-      "is-production" = "false"
-      "owner"         = "Data Engineering:dataengineering@digital.justice.gov.uk"
-    }
-  )
-}
-
-#trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
-resource "aws_athena_workgroup" "airflow_prod_hmcts" {
-  #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
-
-  name = "airflow-prod-workgroup-hmcts"
-
-  configuration {
-    bytes_scanned_cutoff_per_query  = 1099511627776
-    enforce_workgroup_configuration = true
-    engine_version {
-      selected_engine_version = "Athena engine version 3"
-    }
-    result_configuration {
-      output_location = "s3://mojap-athena-query-dump/airflow-prod-workgroup-hmcts"
-    }
-  }
-
-  tags = merge(var.tags,
-    {
-      "Name"          = "airflow-prod-workgroup"
-      "application"   = "Data Engineering Airflow"
-      "business-unit" = "HMCTS"
-      "environment"   = "production"
-      "is-production" = "true"
-      "owner"         = "Data Engineering:dataengineering@digital.justice.gov.uk"
+      "Name"             = each.value.name
+      "application"      = "airflow"
+      "business-unit"    = try(each.value.business_unit, "Platforms")
+      "environment-name" = strcontains(each.value.name, "prod") ? "prod" : "dev"
+      "is-production"    = strcontains(each.value.name, "prod") ? "True" : "False"
+      "owner"            = "Data Engineering:dataengineering@digital.justice.gov.uk"
     }
   )
 }
