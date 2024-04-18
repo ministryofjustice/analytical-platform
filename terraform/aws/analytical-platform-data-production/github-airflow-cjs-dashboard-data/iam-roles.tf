@@ -6,7 +6,7 @@ module "github_airflow_cjs_dashboard_data_iam_role" {
 
   name = "github-airflow-cjs-dashboard-data"
 
-  subjects = ["ministryofjustice/airflow-cjs-dashboard-data:*"]
+  subjects = ["moj-analytical-services/airflow-cjs-dashboard-data:*"]
 
   policies = {
     github_airflow_cjs_dashboard_data = module.github_airflow_cjs_dashboard_data_iam_policy.arn
