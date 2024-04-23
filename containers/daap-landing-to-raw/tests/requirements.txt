@@ -1,3 +1,0 @@
--r ../src/var/task/requirements.txt
-moto==4.2.2
-pytest==7.4.1

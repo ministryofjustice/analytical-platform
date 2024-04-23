@@ -1,3 +1,0 @@
-boto3==1.28.9
-botocore==1.31.9
-structlog==23.2.0
