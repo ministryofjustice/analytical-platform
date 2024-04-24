@@ -47,10 +47,9 @@ data "aws_iam_policy_document" "github_airflow_cjs_dashboard_data" {
       "glue:BatchCreatePartition"
     ]
     resources = [
-      # todo database name for line 52 and 53
-      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:schema/*",
-      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:database/*",
-      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:table/*/cjs_dashboard_temp_table",
+      # "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:schema/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:database/cjs_dashboard_sandbox",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:table/cjs_dashboard_sandbox/cjs_dashboard_temp_table",
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:catalog"
     ]
   }
