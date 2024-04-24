@@ -18,8 +18,20 @@ data "aws_iam_policy_document" "github_airflow_cjs_dashboard_data" {
     sid    = "AthenaAccess"
     effect = "Allow"
     actions = [
-      "athena:List*",
-      "athena:Get*",
+      "athena:ListNamedQueries",
+      "athena:ListWorkGroups",
+      "athena:GetNamedQuery",
+      "athena:GetQueryExecution",
+      "athena:GetQueryResults",
+      "athena:GetQueryResultsStream",
+      "athena:GetWorkGroup",
+      "athena:GetCatalogs",
+      "athena:GetExecutionEngine",
+      "athena:GetExecutionEngines",
+      "athena:GetNamespace",
+      "athena:GetNamespaces",
+      "athena:GetTable",
+      "athena:GetTables",
       "athena:StartQueryExecution",
       "athena:StopQueryExecution"
     ]
@@ -32,7 +44,13 @@ data "aws_iam_policy_document" "github_airflow_cjs_dashboard_data" {
     sid    = "GlueAccess"
     effect = "Allow"
     actions = [
-      "glue:Get*",
+      "glue:GetTable",
+      "glue:GetTables",
+      "glue:GetDatabase",
+      "glue:GetDatabases",
+      "glue:GetPartition",
+      "glue:GetPartitions",
+      "glue:GetPartitionIndexes",
       "glue:DeleteTable",
       "glue:DeleteSchema",
       "glue:DeletePartition",
