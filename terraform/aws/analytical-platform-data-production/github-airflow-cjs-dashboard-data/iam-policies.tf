@@ -40,7 +40,7 @@ data "aws_iam_policy_document" "github_airflow_cjs_dashboard_data" {
       "arn:aws:athena:*:${var.account_ids["analytical-platform-data-production"]}:workgroup/primary"
     ]
   }
-  
+
   statement {
     sid    = "GlueAccess"
     effect = "Allow"
