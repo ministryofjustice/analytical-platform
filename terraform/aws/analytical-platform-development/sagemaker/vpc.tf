@@ -8,7 +8,7 @@ module "vpc" {
   #checkov:skip=CKV2_AWS_19:This is not production infrastructure
 
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.7.1"
+  version = "5.8.0"
 
   name = "sagemaker"
 
