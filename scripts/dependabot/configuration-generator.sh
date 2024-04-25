@@ -24,15 +24,11 @@ updates:
       - "ministryofjustice/data-platform-apps-and-tools"
 EOL
 
-for ecosystem in docker pip terraform; do
+for ecosystem in pip terraform; do
 
   echo "=== Ecosystem: ${ecosystem} ==="
 
   case ${ecosystem} in
-    docker)
-      SEARCH_PATTERN="*Dockerfile*"
-      SKIP_FILE=".dependabot-docker-ignore"
-    ;;
     pip)
       SEARCH_PATTERN="*requirements*.txt"
       SKIP_FILE=".dependabot-pip-ignore"
@@ -43,7 +39,7 @@ for ecosystem in docker pip terraform; do
     ;;
   esac
 
-  folders=$(find . -type f -name "${SEARCH_PATTERN}" -not -path "./containers/daap-*" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
+  folders=$(find . -type f -name "${SEARCH_PATTERN}" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
   export folders
 
   echo "=== Folders ==="
@@ -66,12 +62,6 @@ for ecosystem in docker pip terraform; do
     printf "      include: \"scope\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
     printf "    reviewers:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
     printf "      - \"ministryofjustice/data-platform-apps-and-tools\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-
-    if [[ "${ecosystem}" == "docker" ]]; then
-      printf "    labels:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-      printf "      - \"docker\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-      printf "      - \"needs-human-intervention\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    fi
 
   done
 
