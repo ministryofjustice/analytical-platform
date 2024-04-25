@@ -40,6 +40,7 @@ data "aws_iam_policy_document" "github_airflow_cjs_dashboard_data" {
       "arn:aws:athena:*:${var.account_ids["analytical-platform-data-production"]}:workgroup/primary"
     ]
   }
+  
   statement {
     sid    = "GlueAccess"
     effect = "Allow"
@@ -72,8 +73,6 @@ data "aws_iam_policy_document" "github_airflow_cjs_dashboard_data" {
   }
 }
 
-
-
 module "github_airflow_cjs_dashboard_data_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
@@ -84,4 +83,3 @@ module "github_airflow_cjs_dashboard_data_iam_policy" {
 
   policy = data.aws_iam_policy_document.github_airflow_cjs_dashboard_data.json
 }
-
