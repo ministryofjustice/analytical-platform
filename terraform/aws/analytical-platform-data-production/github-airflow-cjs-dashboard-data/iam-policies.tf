@@ -5,12 +5,15 @@ data "aws_iam_policy_document" "github_airflow_cjs_dashboard_data" {
     actions = [
       "s3:ListBucket",
       "s3:GetObject",
+      "s3:GetBucketLocation",
       "s3:PutObject",
       "s3:DeleteObject"
     ]
     resources = [
       "arn:aws:s3:::alpha-cjs-scorecard",
-      "arn:aws:s3:::alpha-cjs-scorecard/*"
+      "arn:aws:s3:::alpha-cjs-scorecard/*",
+      "arn:aws:s3:::mojap-athena-query-dump",
+      "arn:aws:s3:::mojap-athena-query-dump/*"
     ]
   }
 
