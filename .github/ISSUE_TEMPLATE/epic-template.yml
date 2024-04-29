@@ -1,7 +1,7 @@
 ---
-name: Epic
-description: ⛰ Create an Epic
-title: "[gitmoji] <title>"
+name: ⛰ Epic
+description: Create an Epic
+title: "⛰ <title>"
 labels: ["epic"]
 body:
   - type: markdown

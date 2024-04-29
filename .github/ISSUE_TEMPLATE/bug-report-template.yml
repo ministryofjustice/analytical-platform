@@ -1,5 +1,5 @@
-name: Bug Report
-description: 🐞 Create a Bug Report
+name: 🐞 Bug Report
+description: Create a Bug Report
 title: "🐞 <title>"
 labels: ["bug"]
 body:
