@@ -3,7 +3,7 @@ name: Update Issue Type
 
 on:
   issues:
-    types: [labeled, unlabeled]
+    types: [opened]
 
 permissions: read-all
 
