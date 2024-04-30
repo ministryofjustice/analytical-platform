@@ -33,5 +33,6 @@ jobs:
       - name: DEBUG
         id: debug
         run:
+          git diff .github/dependabot.yml
           echo "detect_changes_output ${{ steps.detect_changes.outcome }}"
 
