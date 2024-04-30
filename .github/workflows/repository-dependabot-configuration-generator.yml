@@ -18,3 +18,20 @@ jobs:
       - name: Checkout
         id: checkout
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+
+      - name: Run Dependabot Configuration Generator
+        id: run_dependabot_configuration_generator
+        run: |
+          bash scripts/dependabot/configuration-generator.sh
+
+      - name: Detect Changes in .github/dependabot.yml
+        id: detect_changes
+        run: |
+          git diff --quiet --exit-code .github/dependabot.yml
+        continue-on-error: true
+
+      - name: DEBUG
+        id: debug
+        run:
+          echo "detect_changes_output ${{ steps.detect_changes.outputs.exit_code }}"
+
