@@ -36,3 +36,13 @@ jobs:
           git diff .github/dependabot.yml
           echo "detect_changes_output ${{ steps.detect_changes.outcome }}"
 
+      - name: Commit Changes
+        id: commit_changes
+        uses: planetscale/ghcommit-action@21a8cda29f55e5cc2cdae0cdbdd08e38dd148c25 # v0.1.37
+        with:
+          commit_message: "🤖 Update .github/dependabot.yml"
+          file_pattern: ".github/dependabot.yml"
+          repo: ${{ github.repository }}
+          branch: ${{ github.head_ref || github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
