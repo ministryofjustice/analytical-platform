@@ -12,9 +12,9 @@ FROZEN_TIME = "2023-04-14 07:00:00"
 @pytest.fixture
 def base_entity_metadata():
     return {
-        "urn:li:domain:12345": {
+        "urn:li:domain:LAA": {
             "domainProperties": DomainPropertiesClass(
-                name="Marketing", description="Marketing Domain"
+                name="LAA", description="Legal Aid Authority"
             )
         }
     }

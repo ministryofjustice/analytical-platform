@@ -2,8 +2,12 @@ from datetime import datetime, timezone
 from unittest.mock import MagicMock
 
 import pytest
-from data_platform_catalogue.client.datahub.search import SearchClient
-from data_platform_catalogue.entities import RelatedEntity
+from data_platform_catalogue.client.search import SearchClient
+from data_platform_catalogue.entities import (
+    AccessInformation,
+    DataSummary,
+    UsageRestrictions,
+)
 from data_platform_catalogue.search_types import (
     FacetOption,
     MultiSelectFilter,
@@ -40,6 +44,26 @@ def test_empty_search_results(mock_graph, searcher):
     assert response == SearchResponse(total_results=0, page_results=[])
 
 
+def test_no_search_results(mock_graph, searcher):
+    datahub_response = {
+        "searchAcrossEntities": {
+            "start": 0,
+            "count": 0,
+            "total": 0,
+            "searchResults": [],
+        }
+    }
+    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
+
+    response = searcher.search()
+    expected = SearchResponse(
+        total_results=0,
+        page_results=[],
+        facets=SearchFacets(facets={}),
+    )
+    assert response == expected
+
+
 def test_one_search_result(mock_graph, searcher):
     datahub_response = {
         "searchAcrossEntities": {
@@ -49,14 +73,17 @@ def test_one_search_result(mock_graph, searcher):
             "searchResults": [
                 {
                     "entity": {
-                        "type": "DATA_PRODUCT",
-                        "urn": "urn:li:dataProduct:6cc5cbc4-c002-42c3-b80b-ed55df17d39f",
+                        "type": "DATASET",
+                        "urn": "urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",  # noqa E501
+                        "platform": {"name": "bigquery"},
                         "ownership": None,
+                        "name": "calm-pagoda-323403.jaffle_shop.customers",
                         "properties": {
-                            "name": "Use of force",
-                            "description": "Prisons in England and Wales are required to record all instances of Use of Force within their establishment. Use of Force can be planned or unplanned and may involve various categories of control and restraint (C&R) techniques such as physical restraint or handcuffs.\n\nPlease refer to [PSO 1600](https://www.gov.uk/government/publications/use-of-force-in-prisons-pso-1600) for the current guidance.",  # noqa E501
-                            "customProperties": [],
-                            "numAssets": 7,
+                            "name": "customers",
+                            "qualifiedName": "jaffle_shop.customers",
+                            "customProperties": [
+                                {"key": "dataSensitivity", "value": "OFFICIAL"},
+                            ],
                         },
                         "domain": {
                             "domain": {
@@ -64,24 +91,14 @@ def test_one_search_result(mock_graph, searcher):
                                 "id": "3dc18e48-c062-4407-84a9-73e23f768023",
                                 "properties": {
                                     "name": "HMPPS",
-                                    "description": "HMPPS is an executive agency that carries out sentences given by the courts, in custody and the community, and rehabilitates people through education and employment.",  # noqa E501
+                                    "description": "HMPPS is an executive agency that ...",
                                 },
-                            }
+                            },
+                            "editableProperties": None,
+                            "tags": None,
+                            "lastIngested": 1705990502353,
                         },
-                        "tags": {
-                            "tags": [
-                                {
-                                    "tag": {
-                                        "urn": "urn:li:tag:custody",
-                                        "properties": {
-                                            "name": "custody",
-                                            "description": "Data about prisons and prisoners. Not just NOMIS!",
-                                        },
-                                    }
-                                }
-                            ]
-                        },
-                    }
+                    },
                 }
             ],
         }
@@ -89,27 +106,42 @@ def test_one_search_result(mock_graph, searcher):
     mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
 
     response = searcher.search()
-    assert response == SearchResponse(
+    expected = SearchResponse(
         total_results=1,
         page_results=[
             SearchResult(
-                id="urn:li:dataProduct:6cc5cbc4-c002-42c3-b80b-ed55df17d39f",
+                urn="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
+                result_type=ResultType.TABLE,
+                name="customers",
+                fully_qualified_name="jaffle_shop.customers",
+                description="",
                 matches={},
-                result_type=ResultType.DATA_PRODUCT,
-                name="Use of force",
-                fully_qualified_name="Use of force",
-                description="Prisons in England and Wales are required to record all instances of Use of Force within their establishment. Use of Force can be planned or unplanned and may involve various categories of control and restraint (C&R) techniques such as physical restraint or handcuffs.\n\nPlease refer to [PSO 1600](https://www.gov.uk/government/publications/use-of-force-in-prisons-pso-1600) for the current guidance.",  # noqa E501
                 metadata={
-                    "domain_id": "urn:li:domain:3dc18e48-c062-4407-84a9-73e23f768023",
-                    "domain_name": "HMPPS",
                     "owner": "",
                     "owner_email": "",
-                    "number_of_assets": 7,
+                    "total_parents": 0,
+                    "parents": [],
+                    "domain_name": "HMPPS",
+                    "domain_id": "urn:li:domain:3dc18e48-c062-4407-84a9-73e23f768023",
+                    "entity_types": {
+                        "entity_type": "Dataset",
+                        "entity_sub_types": ["Dataset"],
+                    },
+                    "dpia_required": None,
+                    "dpia_location": None,
+                    "where_to_access_dataset": "",
+                    "source_dataset_name": "",
+                    "s3_location": None,
+                    "row_count": "",
                 },
-                tags=["custody"],
+                tags=[],
+                last_modified=None,
+                created=None,
             )
         ],
+        facets=SearchFacets(facets={}),
     )
+    assert response == expected
 
 
 def test_dataset_result(mock_graph, searcher):
@@ -160,16 +192,16 @@ def test_dataset_result(mock_graph, searcher):
     mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
 
     response = searcher.search()
-    assert response == SearchResponse(
+    expected = SearchResponse(
         total_results=1,
         page_results=[
             SearchResult(
-                id="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
-                matches={},
+                urn="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
                 result_type=ResultType.TABLE,
                 name="customers",
                 fully_qualified_name="jaffle_shop.customers",
                 description="",
+                matches={},
                 metadata={
                     "owner": "",
                     "owner_email": "",
@@ -177,17 +209,25 @@ def test_dataset_result(mock_graph, searcher):
                     "parents": [],
                     "domain_name": "HMPPS",
                     "domain_id": "urn:li:domain:3dc18e48-c062-4407-84a9-73e23f768023",
-                    "StoredAsSubDirectories": "False",
-                    "CreatedByJob": "moj-reg-prod-hmpps-assess-risks-and-needs-prod-glue-job",
                     "entity_types": {
                         "entity_type": "Dataset",
                         "entity_sub_types": ["Dataset"],
                     },
+                    "dpia_required": None,
+                    "dpia_location": None,
+                    "where_to_access_dataset": "",
+                    "source_dataset_name": "",
+                    "s3_location": None,
+                    "row_count": "",
                 },
                 tags=[],
-            ),
+                last_modified=None,
+                created=None,
+            )
         ],
+        facets=SearchFacets(facets={}),
     )
+    assert response == expected
 
 
 def test_full_page(mock_graph, searcher):
@@ -243,79 +283,103 @@ def test_full_page(mock_graph, searcher):
     mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
 
     response = searcher.search()
-    assert response == SearchResponse(
+    expected = SearchResponse(
         total_results=5,
         page_results=[
             SearchResult(
-                id="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
-                matches={},
+                urn="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
                 result_type=ResultType.TABLE,
                 name="customers",
                 fully_qualified_name="jaffle_shop.customers",
                 description="",
+                matches={},
                 metadata={
                     "owner": "",
                     "owner_email": "",
-                    "parents": [],
                     "total_parents": 0,
+                    "parents": [],
                     "domain_name": "",
                     "domain_id": "",
                     "entity_types": {
                         "entity_type": "Dataset",
                         "entity_sub_types": ["Dataset"],
                     },
+                    "dpia_required": None,
+                    "dpia_location": None,
+                    "where_to_access_dataset": "",
+                    "source_dataset_name": "",
+                    "s3_location": None,
+                    "row_count": "",
                 },
                 tags=[],
-                last_updated=datetime(
+                last_modified=datetime(
                     2024, 1, 23, 6, 15, 2, 353000, tzinfo=timezone.utc
                 ),
+                created=None,
             ),
             SearchResult(
-                id="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers2,PROD)",
-                matches={},
+                urn="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers2,PROD)",
                 result_type=ResultType.TABLE,
                 name="customers2",
-                fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers2",
+                fully_qualified_name=None,
                 description="",
+                matches={},
                 metadata={
                     "owner": "",
                     "owner_email": "",
-                    "parents": [],
                     "total_parents": 0,
+                    "parents": [],
                     "domain_name": "",
                     "domain_id": "",
                     "entity_types": {
                         "entity_type": "Dataset",
                         "entity_sub_types": ["Dataset"],
                     },
+                    "dpia_required": None,
+                    "dpia_location": None,
+                    "where_to_access_dataset": "",
+                    "source_dataset_name": "",
+                    "s3_location": None,
+                    "row_count": "",
                 },
                 tags=[],
-                last_updated=None,
+                last_modified=None,
+                created=None,
             ),
             SearchResult(
-                id="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers3,PROD)",
-                matches={},
+                urn="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers3,PROD)",
                 result_type=ResultType.TABLE,
                 name="customers3",
                 fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers3",
                 description="",
+                matches={},
                 metadata={
                     "owner": "",
                     "owner_email": "",
-                    "parents": [],
                     "total_parents": 0,
+                    "parents": [],
                     "domain_name": "",
                     "domain_id": "",
                     "entity_types": {
                         "entity_type": "Dataset",
                         "entity_sub_types": ["Dataset"],
                     },
+                    "dpia_required": None,
+                    "dpia_location": None,
+                    "where_to_access_dataset": "",
+                    "source_dataset_name": "",
+                    "s3_location": None,
+                    "row_count": "",
                 },
                 tags=[],
-                last_updated=None,
+                last_modified=None,
+                created=None,
             ),
         ],
+        facets=SearchFacets(facets={}),
     )
+
+    assert response == expected
 
 
 def test_query_match(mock_graph, searcher):
@@ -354,36 +418,46 @@ def test_query_match(mock_graph, searcher):
     mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
 
     response = searcher.search()
-    assert response == SearchResponse(
+    expected = SearchResponse(
         total_results=1,
         page_results=[
             SearchResult(
-                id="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
+                urn="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
+                result_type=ResultType.TABLE,
+                name="customers",
+                fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers",
+                description="",
                 matches={
                     "urn": "urn:li:dataset:(urn:li:dataPlatform:looker,long_tail_companions.view.customer_focused,PROD)",  # noqa E501
                     "name": "customer_focused",
                     "sensitivityLevel": "OFFICIAL",
                 },
-                result_type=ResultType.TABLE,
-                name="customers",
-                fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers",
-                description="",
                 metadata={
                     "owner": "",
                     "owner_email": "",
-                    "parents": [],
                     "total_parents": 0,
-                    "domain_id": "",
+                    "parents": [],
                     "domain_name": "",
+                    "domain_id": "",
                     "entity_types": {
                         "entity_type": "Dataset",
                         "entity_sub_types": ["Dataset"],
                     },
+                    "dpia_required": None,
+                    "dpia_location": None,
+                    "where_to_access_dataset": "",
+                    "source_dataset_name": "",
+                    "s3_location": None,
+                    "row_count": "",
                 },
                 tags=[],
+                last_modified=None,
+                created=None,
             )
         ],
+        facets=SearchFacets(facets={}),
     )
+    assert expected == response
 
 
 def test_result_with_owner(mock_graph, searcher):
@@ -423,32 +497,43 @@ def test_result_with_owner(mock_graph, searcher):
     mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
 
     response = searcher.search()
-    assert response == SearchResponse(
+    expected = SearchResponse(
         total_results=1,
         page_results=[
             SearchResult(
-                id="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
-                matches={},
+                urn="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
                 result_type=ResultType.TABLE,
                 name="customers",
                 fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers",
                 description="",
+                matches={},
                 metadata={
                     "owner": "Shannon Lovett",
                     "owner_email": "shannon@longtail.com",
-                    "parents": [],
                     "total_parents": 0,
-                    "domain_id": "",
+                    "parents": [],
                     "domain_name": "",
+                    "domain_id": "",
                     "entity_types": {
                         "entity_type": "Dataset",
                         "entity_sub_types": ["Dataset"],
                     },
+                    "dpia_required": None,
+                    "dpia_location": None,
+                    "where_to_access_dataset": "",
+                    "source_dataset_name": "",
+                    "s3_location": None,
+                    "row_count": "",
                 },
                 tags=[],
+                last_modified=None,
+                created=None,
             )
         ],
+        facets=SearchFacets(facets={}),
     )
+
+    assert response == expected
 
 
 def test_filter(searcher, mock_graph):
@@ -659,139 +744,6 @@ def test_search_results_with_facets(searcher, mock_graph):
     )
 
 
-def test_result_with_data_product(mock_graph, searcher):
-    datahub_response = {
-        "searchAcrossEntities": {
-            "start": 0,
-            "count": 1,
-            "total": 1,
-            "searchResults": [
-                {
-                    "entity": {
-                        "type": "DATASET",
-                        "urn": "urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",  # noqa E501
-                        "name": "calm-pagoda-323403.jaffle_shop.customers",
-                        "subType": None,
-                        "relationships": {
-                            "total": 1,
-                            "relationships": [
-                                {
-                                    "entity": {
-                                        "urn": "urn:abc",
-                                        "properties": {"name": "abc"},
-                                    }
-                                }
-                            ],
-                        },
-                        "properties": {
-                            "name": "customers",
-                        },
-                    },
-                }
-            ],
-        }
-    }
-
-    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
-
-    response = searcher.search()
-    assert response == SearchResponse(
-        total_results=1,
-        page_results=[
-            SearchResult(
-                id="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
-                matches={},
-                result_type=ResultType.TABLE,
-                name="customers",
-                fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers",
-                description="",
-                metadata={
-                    "owner": "",
-                    "owner_email": "",
-                    "parents": [RelatedEntity(id="urn:abc", name="abc")],
-                    "total_parents": 1,
-                    "domain_id": "",
-                    "domain_name": "",
-                    "entity_types": {
-                        "entity_type": "Dataset",
-                        "entity_sub_types": ["Dataset"],
-                    },
-                },
-                tags=[],
-            )
-        ],
-    )
-
-
-def test_list_data_product_assets(mock_graph, searcher):
-    datahub_response = {
-        "listDataProductAssets": {
-            "start": 0,
-            "count": 20,
-            "total": 1,
-            "searchResults": [
-                {
-                    "entity": {
-                        "type": "DATASET",
-                        "urn": "urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",  # noqa E501
-                        "name": "calm-pagoda-323403.jaffle_shop.customers",
-                        "relationships": {
-                            "total": 1,
-                            "relationships": [
-                                {
-                                    "entity": {
-                                        "urn": "urn:abc",
-                                        "properties": {"name": "abc"},
-                                    }
-                                }
-                            ],
-                        },
-                        "properties": {
-                            "name": "customers",
-                            "description": "just some customers",
-                        },
-                    },
-                }
-            ],
-        }
-    }
-
-    mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
-
-    response = searcher.list_data_product_assets(
-        urn="urn:li:dataProduct:test",
-        start=0,
-        count=20,
-    )
-
-    assert response == SearchResponse(
-        total_results=1,
-        page_results=[
-            SearchResult(
-                id="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
-                matches={},
-                result_type=ResultType.TABLE,
-                name="customers",
-                fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers",
-                description="just some customers",
-                metadata={
-                    "owner": "",
-                    "owner_email": "",
-                    "parents": [RelatedEntity(id="urn:abc", name="abc")],
-                    "total_parents": 1,
-                    "domain_id": "",
-                    "domain_name": "",
-                    "entity_types": {
-                        "entity_type": "Dataset",
-                        "entity_sub_types": ["Dataset"],
-                    },
-                },
-                tags=[],
-            )
-        ],
-    )
-
-
 def test_get_glossary_terms(mock_graph, searcher):
     datahub_response = {
         "searchAcrossEntities": {
@@ -840,7 +792,7 @@ def test_get_glossary_terms(mock_graph, searcher):
         total_results=2,
         page_results=[
             SearchResult(
-                id="urn:li:glossaryTerm:022b9b68-c211-47ae-aef0-2db13acfeca8",
+                urn="urn:li:glossaryTerm:022b9b68-c211-47ae-aef0-2db13acfeca8",
                 name="IAO",
                 description="Information asset owner.\n",
                 metadata={
@@ -856,7 +808,7 @@ def test_get_glossary_terms(mock_graph, searcher):
                 result_type=ResultType.GLOSSARY_TERM,
             ),
             SearchResult(
-                id="urn:li:glossaryTerm:0eb7af28-62b4-4149-a6fa-72a8f1fea1e6",
+                urn="urn:li:glossaryTerm:0eb7af28-62b4-4149-a6fa-72a8f1fea1e6",
                 name="Security classification",
                 description="Only data that is 'official'",
                 metadata={"parentNodes": []},
@@ -907,23 +859,47 @@ def test_search_for_charts(mock_graph, searcher):
     mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
 
     response = searcher.search()
-    assert response == SearchResponse(
+    expected = SearchResponse(
         total_results=1,
         page_results=[
             SearchResult(
-                id="urn:li:chart:(justice-data,absconds)",
+                urn="urn:li:chart:(justice-data,absconds)",
+                result_type=ResultType.CHART,
                 name="Absconds",
-                fully_qualified_name="Absconds",
+                fully_qualified_name=None,
                 description="test",
                 matches={
                     "urn": "urn:li:chart:(justice-data,absconds)",
                     "description": "test",
                     "title": "Absconds",
                 },
-                result_type=ResultType.CHART,
+                metadata={
+                    "owner": "",
+                    "owner_email": "",
+                    "total_parents": 0,
+                    "parents": [],
+                    "domain_name": "",
+                    "domain_id": "",
+                    "entity_types": {
+                        "entity_type": "Dataset",
+                        "entity_sub_types": ["Dataset"],
+                    },
+                    "dpia_required": None,
+                    "dpia_location": None,
+                    "where_to_access_dataset": "",
+                    "source_dataset_name": "",
+                    "s3_location": None,
+                    "row_count": "",
+                },
+                tags=[],
+                last_modified=None,
+                created=None,
             )
         ],
+        facets=SearchFacets(facets={}),
     )
+
+    assert expected == response
 
 
 def test_search_for_container(mock_graph, searcher):
@@ -1000,11 +976,12 @@ def test_search_for_container(mock_graph, searcher):
     mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
 
     response = searcher.search()
-    assert response == SearchResponse(
+    expected = SearchResponse(
         total_results=1,
         page_results=[
             SearchResult(
-                id="urn:li:container:test_db",
+                urn="urn:li:container:test_db",
+                result_type=ResultType.DATABASE,
                 name="test_db",
                 fully_qualified_name="test_db",
                 description="test",
@@ -1013,22 +990,41 @@ def test_search_for_container(mock_graph, searcher):
                     "description": "test",
                     "name": "test_db",
                 },
-                result_type=ResultType.DATABASE,
                 metadata={
                     "owner": "Shannon Lovett",
                     "owner_email": "shannon@longtail.com",
-                    "domain_id": "urn:li:domain:testdom",
                     "domain_name": "testdom",
-                    "dpia_required": "False",
+                    "domain_id": "urn:li:domain:testdom",
                     "entity_types": {
                         "entity_type": "Container",
                         "entity_sub_types": ["Database"],
                     },
+                    "dpia_required": "False",
+                    "dpia_location": None,
+                    "where_to_access_dataset": "",
+                    "source_dataset_name": "",
+                    "s3_location": None,
+                    "row_count": "",
+                    "usage_restrictions": UsageRestrictions(
+                        status=None,
+                        dpia_required="False",
+                        dpia_location=None,
+                    ),
+                    "access_information": AccessInformation(
+                        where_to_access_dataset="",
+                        source_dataset_name="",
+                        s3_location=None,
+                    ),
+                    "data_summary": DataSummary(),
                 },
                 tags=["test"],
+                last_modified=None,
+                created=None,
             )
         ],
+        facets=SearchFacets(facets={}),
     )
+    assert response == expected
 
 
 def test_list_database_tables(mock_graph, searcher):
@@ -1065,29 +1061,40 @@ def test_list_database_tables(mock_graph, searcher):
 
     mock_graph.execute_graphql = MagicMock(return_value=datahub_response)
     response = searcher.list_database_tables(urn="urn:li:athena:test", count=10)
-    assert response == SearchResponse(
+    expected = SearchResponse(
         total_results=1,
         page_results=[
             SearchResult(
-                id="urn:li:dataset:(urn:li:dataPlatform:athena,test_db.test_table,PROD)",
+                urn="urn:li:dataset:(urn:li:dataPlatform:athena,test_db.test_table,PROD)",
+                result_type=ResultType.TABLE,
                 name="test_table",
                 fully_qualified_name="test_db.test_table",
                 description="just for test",
-                result_type=ResultType.TABLE,
+                matches={},
                 metadata={
                     "owner": "",
                     "owner_email": "",
-                    "domain_id": "",
+                    "total_parents": 0,
+                    "parents": [],
                     "domain_name": "",
-                    "whereToAccessDataset": "analytical_platform",
-                    "sensitivityLevel": "OFFICIAL",
+                    "domain_id": "",
                     "entity_types": {
                         "entity_type": "Dataset",
                         "entity_sub_types": ["Table"],
                     },
-                    "total_parents": 0,
-                    "parents": [],
+                    "dpia_required": None,
+                    "dpia_location": None,
+                    "where_to_access_dataset": "",
+                    "source_dataset_name": "",
+                    "s3_location": None,
+                    "row_count": "",
                 },
+                tags=[],
+                last_modified=None,
+                created=None,
             )
         ],
+        facets=SearchFacets(facets={}),
     )
+
+    assert response == expected

@@ -1,200 +1,244 @@
-from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum, auto
-from typing import Any
+from enum import Enum
+from typing import Optional
+
+from pydantic import BaseModel, Field
 
 DATAHUB_DATE_FORMAT = "%Y%m%d"
 
 
-@dataclass
-class CatalogueMetadata:
-    name: str
-    description: str
-    owner: str
-    tags: list[str] = field(default_factory=list)
-
-
-@dataclass
-class DataLocation:
-    """
-    A representation of where the data can be found
-    (in our case, glue/athena)
-    """
-
-    fully_qualified_name: str
-    platform_type: str = "glue"
-    platform_id: str = "glue"
-
-
-class DataProductStatus(Enum):
-    DRAFT = auto()
-    PUBLISHED = auto()
-    RETIRED = auto()
-
-
-class DatabaseStatus(Enum):
-    PROD = auto()
-    PREPROD = auto()
-    DEV = auto()
-
-
 class RelationshipType(Enum):
-    PARENT = auto()
+    PARENT = "PARENT"
+    PLATFORM = "PLATFORM"
 
 
-@dataclass
-class RelatedEntity:
-    id: str
-    name: str
-
-
-@dataclass
-class DataProductMetadata:
-    name: str
-    description: str
-    version: str
-    owner: str
-    owner_display_name: str
-    maintainer: str | None
-    maintainer_display_name: str | None
-    email: str
-    retention_period_in_days: int
-    domain: str
-    subdomain: str | None
-    dpia_required: bool
-    dpia_location: str | None
-    last_updated: datetime
-    creation_date: datetime
-    s3_location: str | None
-    status: DataProductStatus = DataProductStatus.DRAFT
-    tags: list[str] = field(default_factory=list)
-
-    @staticmethod
-    def from_data_product_metadata_dict(metadata: dict, version, owner_id: str):
-        """
-        Expects a dict containing data product metatdata information as per the
-        required fields in the json schema at
-        https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/data-platform/data-product-metadata-json-schema
-
-        Then populates a DataProductMetadata object with the given data.
-        """
-        new_metadata = DataProductMetadata(
-            name=metadata["name"],
-            description=metadata["description"],
-            version=version,
-            owner=owner_id,
-            owner_display_name=metadata["dataProductOwnerDisplayName"],
-            maintainer=metadata.get("dataProductMaintainer"),
-            maintainer_display_name=metadata.get("dataProductMaintainerDisplayName"),
-            email=metadata["email"],
-            status=DataProductStatus[metadata["status"]],
-            retention_period_in_days=metadata["retentionPeriod"],
-            domain=metadata["domain"],
-            subdomain=metadata.get("subdomain"),
-            dpia_required=metadata["dpiaRequired"],
-            dpia_location=metadata.get("dpiaLocation"),
-            last_updated=datetime.strptime(
-                metadata["lastUpdated"], DATAHUB_DATE_FORMAT
-            ),
-            creation_date=datetime.strptime(
-                metadata["creationDate"], DATAHUB_DATE_FORMAT
-            ),
-            s3_location=metadata.get("s3Location"),
-            tags=metadata.get("tags", []),
-        )
-
-        return new_metadata
-
-
-class SecurityClassification(Enum):
-    OFFICIAL = auto()
-
-
-@dataclass
-class TableMetadata:
-    name: str
-    description: str
-    column_details: list
-    retention_period_in_days: int | None
-    domain: str | None = None
-    parent_entity_name: str | None = None
-    relationships: dict[RelationshipType, list[RelatedEntity]] | None = None
-    source_dataset_name: str = ""
-    where_to_access_dataset: str = ""
-    fully_qualified_name: str | None = None
-    data_sensitivity_level: SecurityClassification = SecurityClassification.OFFICIAL
-    tags: list[str] = field(default_factory=list)
-    major_version: int = 1
-    row_count: int | None = None
-    owner: str = ""
-    owner_email: str = ""
-    last_updated: datetime | None = None
-    first_created: datetime | None = None
-
-    @staticmethod
-    def from_data_product_schema_dict(
-        metadata: dict[str, Any], table_name, retention_period: int | None = None
-    ):
-        """
-        Expects a dict containing data product table schema information as per the
-        required fields in the json schema at
-        https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/data-platform/data-product-table-schema-json-schema
-
-        and should be passed table name and optionally a retention period
-
-        Then populates a TableMetadata object with the given data.
-        """
-
-        new_metadata = TableMetadata(
-            name=table_name,
-            description=metadata["tableDescription"],
-            column_details=metadata["columns"],
-            retention_period_in_days=retention_period,
-            source_dataset_name=metadata.get("sourceDatasetName", ""),
-            where_to_access_dataset=metadata.get("sourceDatasetLocation", ""),
-            data_sensitivity_level=SecurityClassification[
-                metadata.get("securityClassification", "OFFICIAL")
-            ],
-            tags=metadata.get("tags", []),
-        )
-
-        return new_metadata
-
-
-# jscpd:ignore-start
-@dataclass
-class DatabaseMetadata:
+class EntityRef(BaseModel):
     """
-    For source system databases - currently matches DataProductMetadata
-    but will need to be revisted and refined potentially
+    A reference to another entity in the metadata graph.
     """
 
-    name: str
-    description: str
-    version: str
-    owner: str
-    owner_display_name: str
-    maintainer: str | None
-    maintainer_display_name: str | None
-    email: str
-    retention_period_in_days: int
-    domain: str
-    subdomain: str | None
-    dpia_required: bool
-    dpia_location: str | None
-    last_updated: datetime
-    creation_date: datetime
-    s3_location: str | None
-    status: DataProductStatus = DataProductStatus.DRAFT
-    tags: list[str] = field(default_factory=list)
+    urn: str = Field(description="The identifier of the entity being linked to.")
+    display_name: str = Field(
+        description="Display name that can be used for link text."
+    )
 
 
-# jscpd:ignore-end
+class ColumnRef(BaseModel):
+    """
+    A reference to a column in a table
+    """
+
+    name: str = Field(description="The column name as it appears in the table")
+    display_name: str = Field(description="A user-friendly version of the name")
+    table: EntityRef = Field(description="Reference to the table the column belongs to")
 
 
-@dataclass
-class ChartMetadata:
-    name: str
-    description: str
-    external_url: str
-    tags: list[str] = field(default_factory=list)
+class Column(BaseModel):
+    """
+    A column definition in a table
+    """
+
+    name: str = Field(
+        pattern=r"^[\w.]+$",
+        description="The name of a column as it appears in the table.",
+    )
+    display_name: str = Field(description="A user-friendly version of the name")
+    type: str = Field(
+        description="The data type of the column as it appears in the table",
+    )
+    description: str = Field(description="A description of the column")
+    nullable: bool = Field(description="Whether the field is nullable or not")
+    is_primary_key: bool = Field(
+        description="Whether the field is part of the primary key"
+    )
+    foreign_keys: list[ColumnRef] | None = Field(
+        description="References to columns in other tables"
+    )
+
+
+class OwnerRef(BaseModel):
+    """
+    A reference to a named individual that performs some kind of governance
+    """
+
+    display_name: str = Field(
+        description="The full name of the user as it should be displayed"
+    )
+    email: str = Field("Contact email for the user")
+    urn: str = Field("Unique identifier for the user")
+
+
+class Governance(BaseModel):
+    """
+    Governance model for an entity or domain
+    """
+
+    data_owner: OwnerRef = Field(
+        description="The senior individual responsible for the data."
+    )
+    data_stewards: list[OwnerRef] = Field(
+        description="Experts who manage the data day-to-day."
+    )
+
+
+class DomainRef(BaseModel):
+    """
+    Reference to a domain that entities belong to
+    """
+
+    display_name: str = Field(
+        description="Display name", json_schema_extra={"example": "HMPPS"}
+    )
+    urn: str = Field(
+        description="The identifier of the domain.",
+        json_schema_extra={"example": "urn:li:domain:HMCTS"},
+    )
+
+
+class TagRef(BaseModel):
+    """
+    Reference to a tag
+    """
+
+    display_name: str = Field(
+        description="Human friendly tag name", json_schema_extra={"example": "PII"}
+    )
+    urn: str = Field(
+        description="The identifier of the tag",
+        json_schema_extra={"example": "urn:li:tag:PII"},
+    )
+
+
+class UsageRestrictions(BaseModel):
+    """
+    Metadata about how entities may be used.
+    """
+
+    dpia_required: bool | str | None = Field(
+        description="Bool for if a data privacy impact assessment (DPIA) is required to access this database",
+        default=None,
+    )
+    dpia_location: str | None = Field(
+        description="Where to find the DPIA document", default=None
+    )
+
+
+class AccessInformation(BaseModel):
+    """
+    Any metadata about how to access a data entity.
+    The same data entity may be accessable via multiple means.
+    """
+
+    where_to_access_dataset: str = Field(
+        description="User-friendly description of where the data can be accessed",
+        default="",
+    )
+    source_dataset_name: str = Field(
+        description="The name of a dataset this data was derived from", default=""
+    )
+    s3_location: str | None = Field(
+        description="Location of the data in s3", default=None
+    )
+
+
+class DataSummary(BaseModel):
+    """
+    Summarised information derived from the actual data.
+    """
+
+    row_count: int | str = Field(
+        description="Row count when the metadata was last updated", default=""
+    )
+
+
+class CustomEntityProperties(BaseModel):
+    """Custom entity properties not part of DataHub's entity model"""
+
+    usage_restrictions: UsageRestrictions = Field(
+        description="Limitations on how the data may be used and accessed",
+        default_factory=UsageRestrictions,
+    )
+    access_information: AccessInformation = Field(
+        description="Metadata about how to access a data entity",
+        default_factory=AccessInformation,
+    )
+    data_summary: DataSummary = Field(
+        description="Summary of data stored in this table", default_factory=DataSummary
+    )
+
+
+class Entity(BaseModel):
+    """
+    Any searchable data entity that is present in the metadata graph, which
+    may be related to other entities.
+    Examples include platforms, databases, tables
+    """
+
+    urn: str | None = Field(
+        "Unique identifier for the entity. Relates to Datahub's urn"
+    )
+    display_name: str | None = Field("Display name of the entity")
+    name: str = Field("Actual name of the entity in its source platform")
+    fully_qualified_name: str | None = Field(
+        "Fully qualified name of the entity in its source platform"
+    )
+    description: str = Field(
+        description="Detailed description about what functional area this entity is representing, what purpose it has"
+        " and business related information.",
+    )
+    relationships: dict[RelationshipType, list[EntityRef]] = Field(
+        default={},
+        description="References to related entities in the metadata graph, such as platform or parent entities",
+    )
+    domain: DomainRef = Field(description="The domain this entity belongs to.")
+    governance: Governance = Field(description="Information about governance")
+    tags: list[TagRef] = Field(
+        default_factory=list,
+        description="Additional tags to add.",
+    )
+    last_modified: Optional[datetime] = Field(
+        description="When the metadata was last updated in the catalogue",
+        default=None,
+    )
+    created: Optional[datetime] = Field(
+        description="When the data entity was first created",
+        default=None,
+    )
+    platform: EntityRef = Field(
+        description="The platform that an entity should belong to, e.g. Glue, Athena, DBT. Should exist in datahub",
+    )
+    custom_properties: CustomEntityProperties = Field(
+        description="Fields to add to DataHub custom properties",
+        default_factory=CustomEntityProperties,
+    )
+
+
+class Database(Entity):
+    """For source system databases"""
+
+
+class Table(Entity):
+    """A table in a database or a tabular dataset"""
+
+    column_details: list[Column] = Field(
+        description="A list of objects which relate to columns in your data, each list item will contain, a name of"
+        " the column, data type of the column and description of the column."
+    )
+
+
+class Chart(Entity):
+    """A visualisation of a dataset"""
+
+    external_url: str = Field("URL to view the chart")
+
+
+class Domain(Entity):
+    """Datahub domain"""
+
+
+# if __name__ == "__main__":
+#     import erdantic as erd
+
+#     erd.draw(Database, out="database.png")
+#     erd.draw(Table, out="table.png")
+#     erd.draw(Chart, out="chart.png")
