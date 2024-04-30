@@ -47,3 +47,5 @@ jobs:
           VALIDATE_OPENAPI: false
           VALIDATE_KUBERNETES_KUBECONFORM: false
           VALIDATE_TERRAFORM_TERRASCAN: false
+          VALIDATE_CHECKOV: false
+          VALIDATE_JSCPD: false
