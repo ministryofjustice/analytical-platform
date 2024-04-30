@@ -6,7 +6,7 @@ module "eks" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/eks/aws"
-  version = "17.24.0"
+  version = "20.8.5"
 
   cluster_name    = local.eks_cluster_name
   cluster_version = var.eks_versions["cluster"]
