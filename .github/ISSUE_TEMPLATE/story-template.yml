@@ -1,5 +1,5 @@
-name: Story
-description: 📖 Create a Story
+name: 📖 Story
+description: Create a Story
 title: "📖 <title>"
 labels: ["story"]
 body:

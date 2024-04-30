@@ -1,0 +1,6 @@
+---
+blank_issues_enabled: false
+contact_links:
+  - name: "🛟 Raise a Support Issue"
+    url: https://github.com/ministryofjustice/data-platform-support/issues/new/choose
+    about: If you need help from the Analytical Platform, please raise a support issue.
