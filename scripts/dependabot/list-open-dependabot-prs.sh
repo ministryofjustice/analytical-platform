@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 PAGER=""  # Disable pager for gh cli
 
 # Pulled from https://github.com/ministryofjustice/data-platform-github-access/blob/main/analytical-platform-repositories.tf
