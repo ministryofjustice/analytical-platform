@@ -1,5 +1,5 @@
 ---
-name: GitHub Super-Linter
+name: Super-Linter
 
 on: # yamllint disable-line rule:truthy
   pull_request:
@@ -15,7 +15,7 @@ permissions: read-all
 
 jobs:
   super-linter:
-    name: GitHub Super-Linter
+    name: Super-Linter
     runs-on: ubuntu-latest
     permissions:
       statuses: write
@@ -26,9 +26,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: GitHub Super-Linter
+      - name: Super-Linter
         id: super_linter
-        uses: github/super-linter/slim@4e51915f4a812abf59fed160bb14595c0a38a9e7 # v6
+        uses: super-linter/super-linter/slim@4758be622215d0954c8353ee4877ffd60111cf8e # v6.4.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: main
