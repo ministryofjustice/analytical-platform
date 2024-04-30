@@ -2,27 +2,42 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from typing import Any, Tuple
 
-from data_platform_catalogue.entities import RelatedEntity, RelationshipType
+from data_platform_catalogue.entities import (
+    AccessInformation,
+    Column,
+    ColumnRef,
+    CustomEntityProperties,
+    DataSummary,
+    DomainRef,
+    EntityRef,
+    OwnerRef,
+    RelationshipType,
+    TagRef,
+    UsageRestrictions,
+)
 
 
-def parse_owner(entity: dict[str, Any]):
+def parse_owner(entity: dict[str, Any]) -> OwnerRef:
     """
     Parse ownership information, if it is set.
+    If no owner information exists, return an OwnerRef populated with blank strings
     """
     ownership = entity.get("ownership") or {}
     owners = [i["owner"] for i in ownership.get("owners", [])]
     if owners:
         properties = owners[0].get("properties") or {}
-        owner_email = properties.get("email", "")
-        owner_name = properties.get("fullName", properties.get("displayName", ""))
+        owner_details = OwnerRef(
+            display_name=properties.get("displayName", properties.get("fullName", "")),
+            email=properties.get("email", ""),
+            urn=owners[0].get("urn", ""),
+        )
     else:
-        owner_email = ""
-        owner_name = ""
+        owner_details = OwnerRef(display_name="", email="", urn="")
 
-    return owner_email, owner_name
+    return owner_details
 
 
-def parse_last_updated(entity: dict[str, Any]) -> datetime | None:
+def parse_last_modified(entity: dict[str, Any]) -> datetime | None:
     """
     Parse the last updated timestamp, if available
     """
@@ -46,7 +61,7 @@ def parse_created_and_modified(
     return created, modified
 
 
-def parse_tags(entity: dict[str, Any]) -> list[str]:
+def parse_tags(entity: dict[str, Any]) -> list[TagRef]:
     """
     Parse tag information into a flat list of strings for displaying
     as part of the search result.
@@ -54,39 +69,57 @@ def parse_tags(entity: dict[str, Any]) -> list[str]:
     outer_tags = entity.get("tags") or {}
     tags = []
     for tag in outer_tags.get("tags", []):
-        properties = tag["tag"]["properties"]
+        properties = tag.get("tag", {}).get("properties", {})
         if properties:
-            tags.append(properties["name"])
+            tags.append(
+                TagRef(
+                    display_name=properties.get("name", ""),
+                    urn=tag.get("tag", {}).get("urn", ""),
+                )
+            )
     return tags
 
 
-def parse_properties(entity: dict[str, Any]) -> Tuple[dict[str, Any], dict[str, Any]]:
+def parse_properties(
+    entity: dict[str, Any]
+) -> Tuple[dict[str, Any], CustomEntityProperties]:
     """
     Parse properties and editableProperties into a single dictionary.
     """
     properties = entity["properties"] or {}
     editable_properties = entity.get("editableProperties") or {}
     properties.update(editable_properties)
-    custom_properties = {
+    custom_properties_dict = {
         i["key"]: i["value"] for i in properties.get("customProperties", [])
     }
+    properties.pop("customProperties", None)
+    access_information = AccessInformation.model_validate(custom_properties_dict)
+    usage_restrictions = UsageRestrictions.model_validate(custom_properties_dict)
+    data_summary = DataSummary.model_validate(custom_properties_dict)
+
+    custom_properties = CustomEntityProperties(
+        access_information=access_information,
+        usage_restrictions=usage_restrictions,
+        data_summary=data_summary,
+    )
+
     return properties, custom_properties
 
 
-def parse_domain(entity: dict[str, Any]):
-    metadata = {}
+def parse_domain(entity: dict[str, Any]) -> DomainRef:
     domain = entity.get("domain") or {}
     inner_domain = domain.get("domain") or {}
-    metadata["domain_id"] = inner_domain.get("urn", "")
+    domain_id = inner_domain.get("urn", "")
     if inner_domain:
         domain_properties, _ = parse_properties(inner_domain)
-        metadata["domain_name"] = domain_properties.get("name", "")
+        display_name = domain_properties.get("name", "")
     else:
-        metadata["domain_name"] = ""
-    return metadata
+        display_name = ""
+
+    return DomainRef(display_name=display_name, urn=domain_id)
 
 
-def parse_columns(entity: dict[str, Any]) -> list[dict[str, Any]]:
+def parse_columns(entity: dict[str, Any]) -> list[Column]:
     """
     Parse the schema metadata from Datahub into a flattened list of column
     information.
@@ -119,14 +152,15 @@ def parse_columns(entity: dict[str, Any]) -> list[dict[str, Any]]:
 
         source_path = foreign_key["sourceFields"][0]["fieldPath"]
         foreign_path = foreign_key["foreignFields"][0]["fieldPath"]
-        foreign_table_id = foreign_key["foreignDataset"]["urn"]
-        foreign_table_name = foreign_key["foreignDataset"]["properties"]["name"]
+
+        foreign_table = EntityRef(
+            urn=foreign_key["foreignDataset"]["urn"],
+            display_name=foreign_key["foreignDataset"]["properties"]["name"],
+        )
+
+        display_name = foreign_path.split(".")[-1]
         foreign_keys[source_path].append(
-            {
-                "tableId": foreign_table_id,
-                "fieldName": foreign_path,
-                "tableName": foreign_table_name,
-            }
+            ColumnRef(name=foreign_path, display_name=display_name, table=foreign_table)
         )
 
     for field in schema_metadata.get("fields", ()):
@@ -136,25 +170,28 @@ def parse_columns(entity: dict[str, Any]) -> list[dict[str, Any]]:
         # This is an oversimplification: in the case of a composite
         # primary key, we report that each component field is primary.
         is_primary_key = field["fieldPath"] in primary_keys
+        field_path = field["fieldPath"]
+        display_name = field_path.split(".")[-1]
 
         result.append(
-            {
-                "name": field["fieldPath"],
-                "description": field["description"],
-                "type": field.get("nativeDataType", field["type"]),
-                "nullable": field["nullable"],
-                "isPrimaryKey": is_primary_key,
-                "foreignKeys": foreign_keys_for_field,
-            }
+            Column(
+                name=field_path,
+                display_name=display_name,
+                description=field["description"],
+                type=field.get("nativeDataType", field["type"]),
+                nullable=field["nullable"],
+                is_primary_key=is_primary_key,
+                foreign_keys=foreign_keys_for_field,
+            )
         )
 
     # Sort primary keys first, then sort alphabetically
-    return sorted(result, key=lambda c: (0 if c["isPrimaryKey"] else 1, c["name"]))
+    return sorted(result, key=lambda c: (0 if c.is_primary_key else 1, c.name))
 
 
 def parse_relations(
     relationship_type: RelationshipType, relations_dict: dict
-) -> dict[RelationshipType, list[RelatedEntity]]:
+) -> dict[RelationshipType, list[EntityRef]]:
     """
     parse the relationships results returned from a graphql querys
     """
@@ -163,7 +200,9 @@ def parse_relations(
     # total_relations = relations_dict.get("total", 0)
     parent_entities = relations_dict.get("relationships", [])
     related_entities = [
-        RelatedEntity(id=i["entity"]["urn"], name=i["entity"]["properties"]["name"])
+        EntityRef(
+            urn=i["entity"]["urn"], display_name=i["entity"]["properties"]["name"]
+        )
         for i in parent_entities
     ]
 

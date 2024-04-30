@@ -40,7 +40,8 @@ class MockDataHubGraph(DataHubGraph):
         This function can be called repeatedly on the same
         Mock instance to load up metadata from multiple files."""
         file_source: GenericFileSource = GenericFileSource(
-            ctx=PipelineContext(run_id="test"), config=FileSourceConfig(path=str(file))
+            ctx=PipelineContext(run_id="test"),
+            config=FileSourceConfig(path=str(file), file_extension=file.suffix),
         )
         for wu in file_source.get_workunits():
             if isinstance(wu, MetadataWorkUnit):
@@ -79,8 +80,8 @@ class MockDataHubGraph(DataHubGraph):
         result = self.entity_graph.get(entity_urn, {}).get(aspect_name, None)
         if result is not None and isinstance(result, dict):
             return aspect_type.from_obj(result)
-        else:
-            return result
+
+        return result
 
     def get_domain_urn_by_name(self, domain_name: str) -> Optional[str]:
         domain_metadata = {
@@ -101,8 +102,8 @@ class MockDataHubGraph(DataHubGraph):
         ]
         if urn_match:
             return urn_match[0]
-        else:
-            return None
+
+        return None
 
     def emit(
         self,

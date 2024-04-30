@@ -1,31 +1,34 @@
 [
 {
     "entityType": "dataset",
-    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,database.Dataset,PROD)",
     "changeType": "UPSERT",
     "aspectName": "datasetProperties",
     "aspect": {
         "json": {
             "customProperties": {
-                "sourceDatasetName": "my_source_table",
-                "whereToAccessDataset": "s3://databucket/table1",
-                "sensitivityLevel": "OFFICIAL"
+                "dpia_required": "True",
+                "dpia_location": "None",
+                "where_to_access_dataset": "",
+                "source_dataset_name": "",
+                "s3_location": "None",
+                "row_count": "5"
             },
-            "name": "my_table",
-            "qualifiedName": "my_database.my_table",
-            "description": "bla bla",
+            "name": "Dataset",
+            "qualifiedName": "database.Dataset",
+            "description": "Dataset",
             "tags": []
         }
     }
 },
 {
     "entityType": "dataset",
-    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,database.Dataset,PROD)",
     "changeType": "UPSERT",
     "aspectName": "schemaMetadata",
     "aspect": {
         "json": {
-            "schemaName": "my_table",
+            "schemaName": "Dataset",
             "platform": "urn:li:dataPlatform:athena",
             "version": 1,
             "created": {
@@ -44,28 +47,15 @@
             },
             "fields": [
                 {
-                    "fieldPath": "foo",
+                    "fieldPath": "urn",
                     "nullable": false,
-                    "description": "a",
+                    "description": "The primary identifier for the dataset entity.",
                     "type": {
                         "type": {
                             "com.linkedin.schema.StringType": {}
                         }
                     },
                     "nativeDataType": "string",
-                    "recursive": false,
-                    "isPartOfKey": false
-                },
-                {
-                    "fieldPath": "bar",
-                    "nullable": false,
-                    "description": "b",
-                    "type": {
-                        "type": {
-                            "com.linkedin.schema.NumberType": {}
-                        }
-                    },
-                    "nativeDataType": "int",
                     "recursive": false,
                     "isPartOfKey": false
                 }
@@ -75,7 +65,7 @@
 },
 {
     "entityType": "dataset",
-    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,database.Dataset,PROD)",
     "changeType": "UPSERT",
     "aspectName": "subTypes",
     "aspect": {
@@ -88,12 +78,40 @@
 },
 {
     "entityType": "dataset",
-    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.my_table,PROD)",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,database.Dataset,PROD)",
     "changeType": "UPSERT",
     "aspectName": "container",
     "aspect": {
         "json": {
             "container": "urn:li:container:my_database"
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,database.Dataset,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "globalTags",
+    "aspect": {
+        "json": {
+            "tags": [
+                {
+                    "tag": "urn:li:tag:some-tag"
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,database.Dataset,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:LAA"
+            ]
         }
     }
 }

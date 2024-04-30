@@ -59,7 +59,7 @@ table = TableMetadata(
 
 try:
     table_fqn = client.upsert_table(
-        metadata=table,
+        table=table,
         data_product_metadata=data_product,
         location=DataLocation("test_data_product_v1"),
     )
