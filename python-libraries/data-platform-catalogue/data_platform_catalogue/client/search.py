@@ -3,13 +3,14 @@ import logging
 from importlib.resources import files
 from typing import Any, Sequence
 
-from data_platform_catalogue.client.exceptions import (  # pylint: disable=E0611
+from data_platform_catalogue.client.exceptions import (
     CatalogueError,
-)
+)  # pylint: disable=E0611
 from data_platform_catalogue.client.graphql_helpers import (
     parse_created_and_modified,
     parse_domain,
     parse_last_modified,
+    parse_names,
     parse_owner,
     parse_properties,
     parse_relations,
@@ -244,7 +245,7 @@ class SearchClient:
         properties, custom_properties = parse_properties(entity)
         tags = parse_tags(entity)
         last_modified = parse_last_modified(entity)
-        name = entity.get("name")
+        name, display_name, qualified_name = parse_names(entity, properties)
 
         relations = parse_relations(
             RelationshipType.PARENT, entity.get("relationships", {})
@@ -265,18 +266,15 @@ class SearchClient:
         metadata.update(custom_properties.access_information.model_dump())
         metadata.update(custom_properties.data_summary.model_dump())
 
-        # TODO: the way we return name/display name/qualified name should be
-        # consistent with the upsert/get methods
-        fqn = properties.get("qualifiedName", name)
-
         _, modified = parse_created_and_modified(properties)
 
         return SearchResult(
             urn=entity["urn"],
             result_type=result_type,
             matches=matches,
-            name=properties.get("name", name),
-            fully_qualified_name=fqn,
+            name=name,
+            display_name=display_name,
+            fully_qualified_name=qualified_name,
             description=properties.get("description", ""),
             metadata=metadata,
             tags=[tag_str.display_name for tag_str in tags],
@@ -309,12 +307,15 @@ class SearchClient:
     def _parse_glossary_term(self, entity) -> SearchResult:
         properties, _ = parse_properties(entity)
         metadata = {"parentNodes": entity["parentNodes"]["nodes"]}
+        name, display_name, qualified_name = parse_names(entity, properties)
 
         return SearchResult(
             urn=entity["urn"],
             result_type=ResultType.GLOSSARY_TERM,
             matches={},
-            name=properties["name"],
+            name=name,
+            display_name=display_name,
+            fully_qualified_name=qualified_name,
             description=properties.get("description", ""),
             metadata=metadata,
             tags=[],
@@ -351,10 +352,7 @@ class SearchClient:
         properties, custom_properties = parse_properties(entity)
         domain = parse_domain(entity)
         owner = parse_owner(entity)
-
-        # TODO: the way we return name/display name/qualified name should be
-        # consistent with the upsert/get methods
-        fqn = properties.get("qualifiedName", properties["name"])
+        name, display_name, qualified_name = parse_names(entity, properties)
 
         metadata = {
             "owner": owner.display_name,
@@ -373,8 +371,9 @@ class SearchClient:
             urn=entity["urn"],
             result_type=ResultType.DATABASE,
             matches=matches,
-            name=properties["name"],
-            fully_qualified_name=fqn,
+            name=name,
+            fully_qualified_name=qualified_name,
+            display_name=display_name,
             description=properties.get("description", ""),
             metadata=metadata,
             tags=[tag.display_name for tag in tags],
