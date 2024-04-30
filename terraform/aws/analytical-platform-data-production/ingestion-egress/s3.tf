@@ -28,7 +28,7 @@ module "development_s3" {
       {
         id                        = "mojap-ingestion-development-bold-egress"
         status                    = "Enabled"
-        delete_marker_replication = false
+        delete_marker_replication = true
 
         source_selection_criteria = {
           sse_kms_encrypted_objects = {
@@ -99,7 +99,7 @@ module "production_s3" {
       {
         id                        = "mojap-ingestion-production-bold-egress"
         status                    = "Enabled"
-        delete_marker_replication = false
+        delete_marker_replication = true
 
         source_selection_criteria = {
           sse_kms_encrypted_objects = {
