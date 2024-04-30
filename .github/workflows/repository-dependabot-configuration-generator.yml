@@ -33,5 +33,5 @@ jobs:
       - name: DEBUG
         id: debug
         run:
-          echo "detect_changes_output ${{ steps.detect_changes.outputs.exit_code }}"
+          echo "detect_changes_output ${{ steps.detect_changes.outcome }}"
 
