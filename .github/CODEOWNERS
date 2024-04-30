@@ -1,6 +1,1 @@
-/.devcontainer/ @ministryofjustice/data-platform-apps-and-tools
-/.github/ @ministryofjustice/data-platform-apps-and-tools
-/scripts/simulated-data-producer/ @ministryofjustice/data-platform-labs
-/terraform/ @ministryofjustice/data-platform-apps-and-tools
-/python-libraries/data-platform-catalogue/ @ministryofjustice/data-platform-labs
-#/terraform/github/configuration/data-engineering-access.json @calumabarnett
+* @ministryofjustice/analytical-platform
