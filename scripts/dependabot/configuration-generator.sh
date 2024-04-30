@@ -18,17 +18,17 @@ updates:
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: "github-actions"
+      prefix: ":dependabot: github-actions"
       include: "scope"
     reviewers:
       - "ministryofjustice/analytical-platform"
 EOL
 
-for ecosystem in pip terraform; do
+for package_ecosystem in pip terraform; do
 
-  echo "=== Ecosystem: ${ecosystem} ==="
+  echo "=== Ecosystem: ${package_ecosystem} ==="
 
-  case ${ecosystem} in
+  case ${package_ecosystem} in
     pip)
       SEARCH_PATTERN="*requirements*.txt"
       SKIP_FILE=".dependabot-pip-ignore"
@@ -38,6 +38,19 @@ for ecosystem in pip terraform; do
       SKIP_FILE=".dependabot-terraform-ignore"
     ;;
   esac
+
+  printf "  - package-ecosystem: \"%s\"\n" "${package_ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "    schedule:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "      interval: \"daily\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "      time: \"09:00\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "      timezone: \"Europe/London\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "    commit-message:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "      prefix: \":dependabot: %s\"\n" "${package_ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "      include: \"scope\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "    reviewers:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "      - \"ministryofjustice/analytical-platform\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "    directories:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+
 
   folders=$(find . -type f -name "${SEARCH_PATTERN}" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
   export folders
@@ -51,18 +64,7 @@ for ecosystem in pip terraform; do
     echo "Ignoring ${folder}"
     continue
   fi
-    printf "  - package-ecosystem: \"%s\"\n" "${ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "    directory: \"%s\"\n" "${folder}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "    schedule:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      interval: \"daily\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      time: \"09:00\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      timezone: \"Europe/London\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "    commit-message:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      prefix: \"%s\"\n" "${ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      include: \"scope\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "    reviewers:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      - \"ministryofjustice/analytical-platform\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-
+    printf "      - \"${folder}\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   done
 
 done
