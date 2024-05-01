@@ -200,7 +200,7 @@ def parse_columns(entity: dict[str, Any]) -> list[Column]:
             Column(
                 name=field_path,
                 display_name=display_name,
-                description=field["description"],
+                description=field.get("description") or "",
                 type=field.get("nativeDataType", field["type"]),
                 nullable=field["nullable"],
                 is_primary_key=is_primary_key,
