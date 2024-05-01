@@ -75,16 +75,6 @@ module "eks" {
       metadata_http_tokens                 = "required"
       metadata_http_put_response_hop_limit = 1
 
-      # Allow external changes without Terraform plan difference
-      lifecycle = {
-        ignore_changes = [
-          "desired_capacity",
-          "max_capacity",
-          "min_capacity",
-          "capacity_type"
-        ]
-      }
-
       update_config = {
         max_unavailable = 1
       }
