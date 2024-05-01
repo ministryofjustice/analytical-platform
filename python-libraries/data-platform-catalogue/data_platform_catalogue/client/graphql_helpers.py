@@ -90,8 +90,14 @@ def parse_properties(
     editable_properties = entity.get("editableProperties") or {}
     properties.update(editable_properties)
     custom_properties_dict = {
-        i["key"]: i["value"] for i in properties.get("customProperties", [])
+        i["key"]: i["value"] or "" for i in properties.get("customProperties", [])
     }
+
+    if "dpia_required" in custom_properties_dict:
+        custom_properties_dict["dpia_required"] = (
+            custom_properties_dict["dpia_required"] == "True"
+        )
+
     properties.pop("customProperties", None)
     access_information = AccessInformation.model_validate(custom_properties_dict)
     usage_restrictions = UsageRestrictions.model_validate(custom_properties_dict)
@@ -104,6 +110,29 @@ def parse_properties(
     )
 
     return properties, custom_properties
+
+
+def parse_names(
+    entity: dict[str, Any], properties: dict[str, Any]
+) -> Tuple[str, str, str]:
+    """
+    Returns a tuple of 3 name values.
+
+    The first value is the non-qualified version of the entity name,
+    and the second value is the human-friendly display name.
+
+    Either of these can be used when showing the entity providing it is within
+    the context of its container.
+
+    The third value is the fully qualified name (e.g. my_database.my_table), which
+    can be used to show the entity out of context.
+    """
+    top_level_name = entity.get("name")
+    name = properties.get("name", top_level_name)
+    display_name = properties.get("displayName") or name
+    qualified_name = properties.get("qualifiedName") or top_level_name or name
+
+    return name, display_name, qualified_name
 
 
 def parse_domain(entity: dict[str, Any]) -> DomainRef:
@@ -177,7 +206,7 @@ def parse_columns(entity: dict[str, Any]) -> list[Column]:
             Column(
                 name=field_path,
                 display_name=display_name,
-                description=field["description"],
+                description=field.get("description") or "",
                 type=field.get("nativeDataType", field["type"]),
                 nullable=field["nullable"],
                 is_primary_key=is_primary_key,
