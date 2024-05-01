@@ -86,6 +86,10 @@ module "eks" {
           effect = "NO_SCHEDULE"
         }
       ]
+
+      k8s_labels = {
+        gpu-compute = "true"
+      }
     }
   }
 
