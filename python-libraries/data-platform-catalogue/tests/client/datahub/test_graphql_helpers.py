@@ -133,6 +133,37 @@ def test_parse_columns_with_no_keys():
     ]
 
 
+def test_parse_columns_with_null_descriptions():
+    entity = {
+        "schemaMetadata": {
+            "fields": [
+                {
+                    "fieldPath": "urn",
+                    "label": None,
+                    "nullable": False,
+                    "description": None,
+                    "type": "STRING",
+                    "nativeDataType": "string",
+                }
+            ],
+            "primaryKeys": [],
+            "foreignKeys": [],
+        }
+    }
+
+    assert parse_columns(entity) == [
+        Column(
+            name="urn",
+            display_name="urn",
+            type="string",
+            description="",
+            nullable=False,
+            is_primary_key=False,
+            foreign_keys=[],
+        )
+    ]
+
+
 def test_parse_columns_with_no_schema():
     entity = {}
 
@@ -185,7 +216,7 @@ def test_parse_properties():
         "properties": {
             "customProperties": [
                 {"key": "dpia_required", "value": False},
-                {"key": "dpia_location", "value": None},
+                {"key": "dpia_location", "value": ""},
                 {"key": "data_sensitivity_level", "value": "OFFICIAL"},
                 {"key": "where_to_access_dataset", "value": "analytical_platform"},
                 {"key": "source_dataset_name", "value": ""},
@@ -209,7 +240,7 @@ def test_parse_properties():
     assert custom_properties == CustomEntityProperties(
         usage_restrictions=UsageRestrictions(
             dpia_required=False,
-            dpia_location=None,
+            dpia_location="",
         ),
         access_information=AccessInformation(
             where_to_access_dataset="analytical_platform",
