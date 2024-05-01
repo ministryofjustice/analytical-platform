@@ -2,6 +2,8 @@ data "aws_caller_identity" "current" {}
 
 data "aws_region" "current" {}
 
+data "aws_canonical_user_id" "current" {}
+
 data "aws_iam_role" "glue_policy_role" {
   for_each = toset(local.unique_role_names)
   name     = each.value
@@ -17,3 +19,8 @@ data "aws_iam_roles" "aws_sso_modernisation_platform_data_eng" {
 data "aws_iam_role" "aws_sso_modernisation_platform_data_eng" {
   name = one(data.aws_iam_roles.aws_sso_modernisation_platform_data_eng.names)
 }
+
+# data "aws_s3_bucket" "data_engineering_pipeline_buckets" {
+#   for_each = toset(local.data_engineering_pipeline_buckets)
+#   bucket   = each.value
+# }
