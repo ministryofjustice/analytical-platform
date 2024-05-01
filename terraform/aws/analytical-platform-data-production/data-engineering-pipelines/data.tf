@@ -19,8 +19,3 @@ data "aws_iam_roles" "aws_sso_modernisation_platform_data_eng" {
 data "aws_iam_role" "aws_sso_modernisation_platform_data_eng" {
   name = one(data.aws_iam_roles.aws_sso_modernisation_platform_data_eng.names)
 }
-
-# data "aws_s3_bucket" "data_engineering_pipeline_buckets" {
-#   for_each = toset(local.data_engineering_pipeline_buckets)
-#   bucket   = each.value
-# }

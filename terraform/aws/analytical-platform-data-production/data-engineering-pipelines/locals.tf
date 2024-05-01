@@ -119,26 +119,6 @@ locals {
 
   unique_role_names = distinct(flatten([for db in local.protected_dbs : db.role_names_to_exempt])) // to retrieve unique_ids
 
-  data_engineering_pipeline_buckets = [
-    "mojap-raw-hist-preprod",
-    "mojap-land-fail-preprod",
-    "mojap-land-preprod",
-    "mojap-metadata-preprod",
-    "moj-analytics-lookup-tables-preprod",
-    "mojap-raw-hist-dev",
-    "mojap-land-fail-dev",
-    "mojap-land-dev",
-    "mojap-metadata-dev",
-    "moj-analytics-lookup-tables-dev",
-    "alpha-data-engineer-logs",
-    "mojap-raw-hist",
-    "mojap-land-fail-prod",
-    "mojap-land",
-    "mojap-metadata-prod",
-    "moj-analytics-lookup-tables",
-    "mojap-athena-query-dump"
-  ]
-
   data-engineering-buckets = {
     "alpha-data-engineer-logs" = {
       grant = [{
