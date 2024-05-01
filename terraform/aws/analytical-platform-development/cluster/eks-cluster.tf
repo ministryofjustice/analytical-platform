@@ -60,17 +60,42 @@ module "eks" {
       metadata_http_put_response_hop_limit = 1
     }
     gpu_node_pool = {
-      name_prefix                          = var.eks_node_group_name_prefix
-      create_launch_template               = true
-      ami_type                             = "BOTTLEROCKET_x86_64_NVIDIA"
-      desired_capacity                     = 0
-      max_capacity                         = 2
-      min_capacity                         = 0
-      instance_types                       = ["p3.2xlarge"]
+      name_prefix            = var.eks_node_group_name_prefix
+      create_launch_template = true
+
+      ami_type       = "BOTTLEROCKET_x86_64_NVIDIA"
+      instance_types = ["p3.2xlarge"]
+
+      desired_capacity = 0
+      max_capacity     = 2
+      min_capacity     = 0
+      capacity_type    = "ON_DEMAND"
+
       metadata_http_endpoint               = "enabled"
       metadata_http_tokens                 = "required"
       metadata_http_put_response_hop_limit = 1
-      max_unavailable                      = 1
+
+      # Allow external changes without Terraform plan difference
+      lifecycle = {
+        ignore_changes = [
+          "desired_capacity",
+          "max_capacity",
+          "min_capacity",
+          "capacity_type"
+        ]
+      }
+
+      update_config = {
+        max_unavailable = 1
+      }
+
+      taints = [
+        {
+          key    = "gpu-compute"
+          value  = "true"
+          effect = "NO_SCHEDULE"
+        }
+      ]
     }
   }
 
