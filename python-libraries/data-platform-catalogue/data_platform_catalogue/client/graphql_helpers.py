@@ -90,8 +90,14 @@ def parse_properties(
     editable_properties = entity.get("editableProperties") or {}
     properties.update(editable_properties)
     custom_properties_dict = {
-        i["key"]: i["value"] for i in properties.get("customProperties", [])
+        i["key"]: i["value"] or "" for i in properties.get("customProperties", [])
     }
+
+    if "dpia_required" in custom_properties_dict:
+        custom_properties_dict["dpia_required"] = (
+            custom_properties_dict["dpia_required"] == "True"
+        )
+
     properties.pop("customProperties", None)
     access_information = AccessInformation.model_validate(custom_properties_dict)
     usage_restrictions = UsageRestrictions.model_validate(custom_properties_dict)

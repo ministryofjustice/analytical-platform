@@ -512,8 +512,7 @@ class DataHubCatalogueClient:
         )
         custom_properties_unnested = self._flatten_dict(custom_properties_dict)
         custom_properties_unnested_all_string_values = {
-            key: str(value)
-            # if value is not None else value
+            key: str(value) if value is not None else ""
             for key, value in custom_properties_unnested.items()
         }
 

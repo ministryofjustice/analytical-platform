@@ -64,7 +64,7 @@ class TestCatalogueClientWithDatahub:
             custom_properties=CustomEntityProperties(
                 usage_restrictions=UsageRestrictions(
                     dpia_required=False,
-                    dpia_location=None,
+                    dpia_location="",
                 ),
                 access_information=AccessInformation(
                     where_to_access_dataset="analytical_platform",
@@ -125,12 +125,12 @@ class TestCatalogueClientWithDatahub:
             platform=EntityRef(urn="urn:li:dataPlatform:athena", display_name="athena"),
             custom_properties=CustomEntityProperties(
                 access_information=AccessInformation(
-                    where_to_access_dataset="", source_dataset_name="", s3_location=None
+                    where_to_access_dataset="", source_dataset_name="", s3_location=""
                 ),
                 data_summary=DataSummary(row_count=5),
                 usage_restrictions=UsageRestrictions(
                     dpia_required=True,
-                    dpia_location=None,
+                    dpia_location="",
                 ),
             ),
         )
@@ -196,12 +196,12 @@ class TestCatalogueClientWithDatahub:
             platform=EntityRef(urn="athena", display_name="athena"),
             custom_properties=CustomEntityProperties(
                 access_information=AccessInformation(
-                    where_to_access_dataset="", source_dataset_name="", s3_location=None
+                    where_to_access_dataset="", source_dataset_name="", s3_location=""
                 ),
                 data_summary=DataSummary(row_count=5),
                 usage_restrictions=UsageRestrictions(
                     dpia_required=True,
-                    dpia_location=None,
+                    dpia_location="",
                 ),
             ),
         )
@@ -326,17 +326,6 @@ class TestCatalogueClientWithDatahub:
             last_modified=datetime(2024, 3, 5, 6, 16, 47, 814000, tzinfo=timezone.utc),
             created=None,
             platform=EntityRef(urn="datahub", display_name="datahub"),
-            custom_properties=CustomEntityProperties(
-                usage_restrictions=UsageRestrictions(
-                    status=None,
-                    dpia_required=None,
-                    dpia_location=None,
-                ),
-                access_information=AccessInformation(
-                    where_to_access_dataset="", source_dataset_name="", s3_location=None
-                ),
-                data_summary=DataSummary(),
-            ),
             column_details=[
                 Column(
                     name="urn",
@@ -405,10 +394,10 @@ class TestCatalogueClientWithDatahub:
                 usage_restrictions=UsageRestrictions(
                     status=None,
                     dpia_required=None,
-                    dpia_location=None,
+                    dpia_location="",
                 ),
                 access_information=AccessInformation(
-                    where_to_access_dataset="", source_dataset_name="", s3_location=None
+                    where_to_access_dataset="", source_dataset_name="", s3_location=""
                 ),
                 data_summary=DataSummary(),
             ),
@@ -466,10 +455,10 @@ class TestCatalogueClientWithDatahub:
                 usage_restrictions=UsageRestrictions(
                     status=None,
                     dpia_required=None,
-                    dpia_location=None,
+                    dpia_location="",
                 ),
                 access_information=AccessInformation(
-                    where_to_access_dataset="", source_dataset_name="", s3_location=None
+                    where_to_access_dataset="", source_dataset_name="", s3_location=""
                 ),
                 data_summary=DataSummary(),
             ),
