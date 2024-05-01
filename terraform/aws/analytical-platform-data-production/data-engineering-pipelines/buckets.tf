@@ -1,5 +1,5 @@
 module "data_engineering_pipeline_buckets" {
-  for_each = local.data-engineering-buckets
+  for_each = local.data_engineering_buckets
   source   = "terraform-aws-modules/s3-bucket/aws"
   version  = "4.1.2"
 
@@ -22,19 +22,19 @@ module "data_engineering_pipeline_buckets" {
 }
 
 import {
-  for_each = local.data-engineering-buckets
+  for_each = local.data_engineering_buckets
   to       = module.data_engineering_pipeline_buckets[each.key].aws_s3_bucket.this[0]
   id       = each.key
 }
 
 import {
-  for_each = local.data-engineering-buckets
+  for_each = local.data_engineering_buckets
   to       = module.data_engineering_pipeline_buckets[each.key].aws_s3_bucket_logging.this[0]
   id       = each.key
 }
 
 import {
-  for_each = local.data-engineering-buckets
+  for_each = local.data_engineering_buckets
   to       = module.data_engineering_pipeline_buckets[each.key].aws_s3_bucket_server_side_encryption_configuration.this[0]
   id       = each.key
 }
@@ -46,13 +46,13 @@ import {
 }
 
 import {
-  for_each = local.data-engineering-buckets
+  for_each = local.data_engineering_buckets
   to       = module.data_engineering_pipeline_buckets[each.key].aws_s3_bucket_public_access_block.this[0]
   id       = each.key
 }
 
 import {
-  for_each = local.data-engineering-buckets
+  for_each = local.data_engineering_buckets
   to       = module.data_engineering_pipeline_buckets[each.key].aws_s3_bucket_versioning.this[0]
   id       = each.key
 }
@@ -64,13 +64,13 @@ import {
 }
 
 import {
-  for_each = local.data-engineering-buckets
+  for_each = local.data_engineering_buckets
   to       = module.data_engineering_pipeline_buckets[each.key].aws_s3_bucket_public_access_block.this[0]
   id       = each.key
 }
 
 import {
-  for_each = local.data-engineering-buckets
+  for_each = local.data_engineering_buckets
   to       = module.data_engineering_pipeline_buckets[each.key].aws_s3_bucket_acl.this[0]
   id       = each.key
 }

@@ -119,7 +119,7 @@ locals {
 
   unique_role_names = distinct(flatten([for db in local.protected_dbs : db.role_names_to_exempt])) // to retrieve unique_ids
 
-  data-engineering-buckets = {
+  data_engineering_buckets = {
     "alpha-data-engineer-logs" = {
       grant = [{
         id         = data.aws_canonical_user_id.current.id
@@ -2461,12 +2461,12 @@ locals {
 
   }
   buckets_with_policies = [
-    for bucket_name, bucket_details in local.data-engineering-buckets :
+    for bucket_name, bucket_details in local.data_engineering_buckets :
     bucket_name
     if can(bucket_details.policy)
   ]
   buckets_with_lifecycles = [
-    for bucket_name, bucket_details in local.data-engineering-buckets :
+    for bucket_name, bucket_details in local.data_engineering_buckets :
     bucket_name
     if can(bucket_details.lifecycle_rule)
   ]
