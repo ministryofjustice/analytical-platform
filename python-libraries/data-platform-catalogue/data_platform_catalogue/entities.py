@@ -51,8 +51,8 @@ class Column(BaseModel):
     is_primary_key: bool = Field(
         description="Whether the field is part of the primary key"
     )
-    foreign_keys: list[ColumnRef] | None = Field(
-        description="References to columns in other tables"
+    foreign_keys: list[ColumnRef] = Field(
+        description="References to columns in other tables", default_factory=list
     )
 
 
