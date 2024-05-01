@@ -3,9 +3,7 @@ import logging
 from importlib.resources import files
 from typing import Any, Sequence
 
-from data_platform_catalogue.client.exceptions import (
-    CatalogueError,
-)  # pylint: disable=E0611
+from data_platform_catalogue.client.exceptions import CatalogueError
 from data_platform_catalogue.client.graphql_helpers import (
     parse_created_and_modified,
     parse_domain,
@@ -16,7 +14,7 @@ from data_platform_catalogue.client.graphql_helpers import (
     parse_relations,
     parse_tags,
 )
-from data_platform_catalogue.entities import RelationshipType  # pylint: disable=E0611
+from data_platform_catalogue.entities import RelationshipType
 from data_platform_catalogue.search_types import (
     FacetOption,
     MultiSelectFilter,
