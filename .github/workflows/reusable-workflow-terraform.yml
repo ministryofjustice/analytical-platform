@@ -10,6 +10,9 @@ on: # yamllint disable-line rule:truthy
         required: false
         type: string
 
+concurrency:
+  group: ${{ inputs.component }}
+
 jobs:
   determine-workflow-mode:
     name: Determine Workflow Mode
