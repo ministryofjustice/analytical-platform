@@ -106,6 +106,29 @@ def parse_properties(
     return properties, custom_properties
 
 
+def parse_names(
+    entity: dict[str, Any], properties: dict[str, Any]
+) -> Tuple[str, str, str]:
+    """
+    Returns a tuple of 3 name values.
+
+    The first value is the non-qualified version of the entity name,
+    and the second value is the human-friendly display name.
+
+    Either of these can be used when showing the entity providing it is within
+    the context of its container.
+
+    The third value is the fully qualified name (e.g. my_database.my_table), which
+    can be used to show the entity out of context.
+    """
+    top_level_name = entity.get("name")
+    name = properties.get("name", top_level_name)
+    display_name = properties.get("displayName") or name
+    qualified_name = properties.get("qualifiedName") or top_level_name or name
+
+    return name, display_name, qualified_name
+
+
 def parse_domain(entity: dict[str, Any]) -> DomainRef:
     domain = entity.get("domain") or {}
     inner_domain = domain.get("domain") or {}

@@ -113,6 +113,7 @@ def test_one_search_result(mock_graph, searcher):
                 urn="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
                 result_type=ResultType.TABLE,
                 name="customers",
+                display_name="customers",
                 fully_qualified_name="jaffle_shop.customers",
                 description="",
                 matches={},
@@ -199,6 +200,7 @@ def test_dataset_result(mock_graph, searcher):
                 urn="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
                 result_type=ResultType.TABLE,
                 name="customers",
+                display_name="customers",
                 fully_qualified_name="jaffle_shop.customers",
                 description="",
                 matches={},
@@ -291,6 +293,7 @@ def test_full_page(mock_graph, searcher):
                 result_type=ResultType.TABLE,
                 name="customers",
                 fully_qualified_name="jaffle_shop.customers",
+                display_name="customers",
                 description="",
                 matches={},
                 metadata={
@@ -321,7 +324,8 @@ def test_full_page(mock_graph, searcher):
                 urn="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers2,PROD)",
                 result_type=ResultType.TABLE,
                 name="customers2",
-                fully_qualified_name=None,
+                fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers2",
+                display_name="customers2",
                 description="",
                 matches={},
                 metadata={
@@ -351,6 +355,7 @@ def test_full_page(mock_graph, searcher):
                 result_type=ResultType.TABLE,
                 name="customers3",
                 fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers3",
+                display_name="customers3",
                 description="",
                 matches={},
                 metadata={
@@ -425,6 +430,7 @@ def test_query_match(mock_graph, searcher):
                 urn="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
                 result_type=ResultType.TABLE,
                 name="customers",
+                display_name="customers",
                 fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers",
                 description="",
                 matches={
@@ -504,6 +510,7 @@ def test_result_with_owner(mock_graph, searcher):
                 urn="urn:li:dataset:(urn:li:dataPlatform:bigquery,calm-pagoda-323403.jaffle_shop.customers,PROD)",
                 result_type=ResultType.TABLE,
                 name="customers",
+                display_name="customers",
                 fully_qualified_name="calm-pagoda-323403.jaffle_shop.customers",
                 description="",
                 matches={},
@@ -794,6 +801,8 @@ def test_get_glossary_terms(mock_graph, searcher):
             SearchResult(
                 urn="urn:li:glossaryTerm:022b9b68-c211-47ae-aef0-2db13acfeca8",
                 name="IAO",
+                display_name="IAO",
+                fully_qualified_name="IAO",
                 description="Information asset owner.\n",
                 metadata={
                     "parentNodes": [
@@ -810,6 +819,8 @@ def test_get_glossary_terms(mock_graph, searcher):
             SearchResult(
                 urn="urn:li:glossaryTerm:0eb7af28-62b4-4149-a6fa-72a8f1fea1e6",
                 name="Security classification",
+                display_name="Security classification",
+                fully_qualified_name="Security classification",
                 description="Only data that is 'official'",
                 metadata={"parentNodes": []},
                 result_type=ResultType.GLOSSARY_TERM,
@@ -866,7 +877,8 @@ def test_search_for_charts(mock_graph, searcher):
                 urn="urn:li:chart:(justice-data,absconds)",
                 result_type=ResultType.CHART,
                 name="Absconds",
-                fully_qualified_name=None,
+                display_name="Absconds",
+                fully_qualified_name="Absconds",
                 description="test",
                 matches={
                     "urn": "urn:li:chart:(justice-data,absconds)",
@@ -983,6 +995,7 @@ def test_search_for_container(mock_graph, searcher):
                 urn="urn:li:container:test_db",
                 result_type=ResultType.DATABASE,
                 name="test_db",
+                display_name="test_db",
                 fully_qualified_name="test_db",
                 description="test",
                 matches={
@@ -1068,6 +1081,7 @@ def test_list_database_tables(mock_graph, searcher):
                 urn="urn:li:dataset:(urn:li:dataPlatform:athena,test_db.test_table,PROD)",
                 result_type=ResultType.TABLE,
                 name="test_table",
+                display_name="test_table",
                 fully_qualified_name="test_db.test_table",
                 description="just for test",
                 matches={},

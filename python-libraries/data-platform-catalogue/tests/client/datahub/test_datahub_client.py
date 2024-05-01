@@ -308,7 +308,7 @@ class TestCatalogueClientWithDatahub:
 
         assert dataset == Table(
             urn=None,
-            display_name="Foo.Dataset",
+            display_name="Dataset",
             name="Dataset",
             fully_qualified_name="Foo.Dataset",
             description="Dataset",

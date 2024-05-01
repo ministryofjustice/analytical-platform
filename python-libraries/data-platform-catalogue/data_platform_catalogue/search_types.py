@@ -57,6 +57,7 @@ class SearchResult:
     urn: str
     result_type: ResultType
     name: str
+    display_name: str = ""
     fully_qualified_name: str = ""
     description: str = ""
     matches: dict[str, str] = field(default_factory=dict)

@@ -14,6 +14,7 @@ from data_platform_catalogue.client.graphql_helpers import (
     parse_columns,
     parse_created_and_modified,
     parse_domain,
+    parse_names,
     parse_owner,
     parse_properties,
     parse_relations,
@@ -222,8 +223,8 @@ class DataHubCatalogueClient:
             domain = parse_domain(response)
             owner = parse_owner(response)
             tags = parse_tags(response)
-            name = properties.get("name", response.get("name"))
             created, modified = parse_created_and_modified(properties)
+            name, display_name, qualified_name = parse_names(response, properties)
 
             # A dataset can't have multiple parents, but if we did
             # start to use in that we'd need to change this
@@ -235,9 +236,9 @@ class DataHubCatalogueClient:
                 relations = {}
             return Table(
                 urn=None,
-                display_name=properties.get("qualifiedName") or name,
+                display_name=display_name,
                 name=name,
-                fully_qualified_name=properties.get("qualifiedName") or name,
+                fully_qualified_name=qualified_name,
                 description=properties.get("description", ""),
                 relationships=relations,
                 domain=domain,
@@ -264,16 +265,15 @@ class DataHubCatalogueClient:
             domain = parse_domain(response)
             owner = parse_owner(response)
             tags = parse_tags(response)
+            name, display_name, qualified_name = parse_names(response, properties)
 
             return Chart(
                 urn=urn,
                 external_url=properties.get("externalUrl", ""),
                 description=properties.get("description", ""),
-                display_name=properties.get("displayName", properties.get("name")),
-                name=properties["name"],
-                fully_qualified_name=properties.get(
-                    "qualifiedName", properties.get("name")
-                ),
+                name=name,
+                display_name=display_name,
+                fully_qualified_name=qualified_name,
                 domain=domain,
                 governance=Governance(
                     data_owner=owner,
