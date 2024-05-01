@@ -120,6 +120,7 @@ data "aws_iam_policy_document" "airflow_dev_cluster_autoscaler_policy" {
     effect = "Allow"
     actions = [
       "ec2:DescribeInstanceTypes",
+      "ec2:DescribeLaunchTemplateVersions",
       "autoscaling:TerminateInstanceInAutoScalingGroup",
       "autoscaling:SetDesiredCapacity",
       "autoscaling:DescribeTags",

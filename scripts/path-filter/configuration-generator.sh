@@ -8,11 +8,6 @@ case ${MODE} in
     SEARCH_PATTERN="*Chart.yaml*"
     SKIP_FILE=".charts-path-filter-ignore"
   ;;
-  containers)
-    PATH_FILTER_CONFIGURATION_FILE=".github/path-filter/containers.yml"
-    SEARCH_PATTERN="*Dockerfile*"
-    SKIP_FILE=".containers-path-filter-ignore"
-  ;;
   terraform)
     PATH_FILTER_CONFIGURATION_FILE=".github/path-filter/terraform.yml"
     SEARCH_PATTERN=".terraform.lock.hcl"

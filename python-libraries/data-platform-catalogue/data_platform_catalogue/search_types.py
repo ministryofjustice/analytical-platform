@@ -1,3 +1,5 @@
+"""Search types module."""
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum, auto
@@ -5,7 +7,8 @@ from typing import Any
 
 
 class ResultType(Enum):
-    DATA_PRODUCT = auto()
+    """Result type."""
+
     TABLE = auto()
     GLOSSARY_TERM = auto()
     CHART = auto()
@@ -51,16 +54,17 @@ class FacetOption:
 
 @dataclass
 class SearchResult:
-    id: str
+    urn: str
     result_type: ResultType
     name: str
+    display_name: str = ""
     fully_qualified_name: str = ""
     description: str = ""
     matches: dict[str, str] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
     tags: list[str] = field(default_factory=list)
-    last_updated: datetime | None = None
-    first_created: datetime | None = None
+    last_modified: datetime | None = None
+    created: datetime | None = None
 
 
 @dataclass

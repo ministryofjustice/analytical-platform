@@ -19,10 +19,6 @@ pip install ministryofjustice-data-platform-catalogue
 ## Terminology
 
 - **Data assets** - Any databases, tables, or schemas within the metadata graph
-- **Data products** - Groupings of data assets that are published for
-  reuse across MOJ. In the data platform, the concepts of database and data
-  product are similar, but they may be represented as different entities in the
-  catalogue.
 - **Domains** - allow metadata to be grouped into different service areas that have
   their own governance, like HMCTS, HMPPS, OPG, etc.
 
@@ -132,13 +128,6 @@ URNs:
 
 ### DataHub
 
-- Each data product within the MOJ data platform is created as a data product entity
 - Each table is created as a dataset in DataHub
 - Tables that reside in the same athena database (data_product_v1) should
   be placed within the same DataHub container.
-
-## OpenMetadata
-
-- Each MOJ data product is mapped to a database in the OpenMetadata catalogue
-- We populate the schema level in openmetdata with a generic entry of `Tables`
-- Each table is mapped to a table in openmetadata

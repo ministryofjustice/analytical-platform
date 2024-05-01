@@ -7,6 +7,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] 2024-04-23
+
+Large refactor of DatahubClient with breaking changes.
+
+### Added
+
+- Pydantic entity types
+- `DataHubCatalogueClient`.`upsert_chart`
+
+### Changes
+
+- Exceptions thrown by DatahubClient are now imported from
+  `data_platform_catalogue.client.exceptions`
+- Upsert methods of `DatahubClient` simplified to `upsert_table`,
+  `upsert_database` etc
+- Renamed `last_updated` to datahub-friendly `last_modified`.
+- Renamed `first_created` to datahub-friendly `created`.
+- Use `urn` rather than `id` in datahub related contexts.
+
+### Removed
+
+- `BaseCatalogueClient` class
+- References to data products in methods and classes
+- `DataHubCatalogueClient`.`upsert_data_product`
+- `DataHubCatalogueClient`.`upsert_athena_table`
+- `DataHubCatalogueClient`.`upsert_athena_database`
+- `DataHubCatalogueClient`.`list_data_product_assets`
+- `DatabaseStatus`
+- `SecurityClassification`
+
 ## [0.24.2] 2024-04-16
 
 ### Changed
@@ -56,7 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `_parse_relations` function to `graphql_helpers`
 - `_parse_types_and_sub_types` method to `search.SearchClient`
 - `_get_fully_qualified_name` method to `search.SearchClient`
-- `relationships`, `last_updated`, `owner`, `owner_email` to `entities.TableMetadata`
+- `relationships`, `last_modified`, `owner`, `owner_email` to `entities.TableMetadata`
 
 ### Changed
 

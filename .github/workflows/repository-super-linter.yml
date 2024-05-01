@@ -1,0 +1,51 @@
+---
+name: Super-Linter
+
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+    types:
+      - edited
+      - opened
+      - reopened
+      - synchronize
+
+permissions: read-all
+
+jobs:
+  super-linter:
+    name: Super-Linter
+    runs-on: ubuntu-latest
+    permissions:
+      statuses: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+        with:
+          fetch-depth: 0
+
+      - name: Super-Linter
+        id: super_linter
+        uses: super-linter/super-linter/slim@4758be622215d0954c8353ee4877ffd60111cf8e # v6.4.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BRANCH: main
+          VALIDATE_ALL_CODEBASE: false
+          FILTER_REGEX_EXCLUDE: .*archive/.*
+          # yamllint disable rule:line-length
+          VALIDATE_GITHUB_ACTIONS: false # yaml This is disabled until Super-Linter ships with a newer version of actionlint supports the new `var` context
+          # yamllint enable rule:line-length
+          PYTHON_ISORT_CONFIG_FILE: pyproject.toml
+          # TODO: Fix all the shell scripts and re-enable these
+          VALIDATE_BASH: false
+          VALIDATE_BASH_EXEC: false
+          VALIDATE_SHELL_SHFMT: false
+          VALIDATE_HTML: false
+          VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_OPENAPI: false
+          VALIDATE_KUBERNETES_KUBECONFORM: false
+          VALIDATE_TERRAFORM_TERRASCAN: false
+          VALIDATE_CHECKOV: false
+          VALIDATE_JSCPD: false

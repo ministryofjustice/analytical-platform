@@ -7,3 +7,4 @@ env/
 *.code-workspace
 dist/
 __pycache__
+.idea/

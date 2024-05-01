@@ -1,82 +1,44 @@
 ---
 owner_slack: "#data-platform-notifications"
 title: Containers
-last_reviewed_on: 2023-07-25
+last_reviewed_on: 2024-04-23
 review_in: 6 months
 ---
 
 # <%= current_page.data.title %>
 
-Data Platform's Core Infrastructure team offer a managed pipeline for building, scanning and pushing containers to a registry. This is done via GitHub Actions and is available to all teams.
+The Analytical Platform team offers a managed pipeline for building, scanning and pushing containers to a registry. This is done via GitHub Actions and is available to all teams. This is managed in Terraform.
 
 Images are scanned for vulnerabilities using [Trivy](https://github.com/aquasecurity/trivy), currently with a default severity of `CRITICAL`
 
 Dockerfiles are linted by the Super Linter with [Hadolint](https://github.com/hadolint/hadolint)
 
-## Creating a new container
+## Creating a new container image repo
 
-To create a new container, you will need to:
+1. To create a new container image repo, clone the [data-platform-github-access](https://github.com/ministryofjustice/data-platform-github-access) repository.
 
-1. Create a directory in `containers`, e.g. `containers/example-application`
+2. There are two files for creating repositories, one for [Analytical Platform](https://github.com/ministryofjustice/data-platform-github-access/blob/main/analytical-platform-repositories.tf)
+and another for [Data Platform](https://github.com/ministryofjustice/data-platform-github-access/blob/main/data-platform-repositories.tf). See example below for creating an Analytical Platform container repo.
 
-1. Create the configuration file `containers/${CONTAINER_NAME}/config.json` with the following contents
-
-    If you are using DockerHub (public images):
-
-      ```json
-      {
-        "name": "example-application", # this will be appended to ministryofjustice/data-platform-${name}
-        "version": "1.0.0",            # this is the tag that will be applied to the image
-        "registry": "dockerhub"
-      }
-      ```
-
-    If you are using GitHub Container Registry (public images):
-
-      ```json
-      {
-        "name": "example-application", # this will be appended to ghcr.io/ministryofjustice/data-platform-${name}
-        "version": "1.0.0",            # this is the tag that will be applied to the image
-        "registry": "ghcr"
-      }
-      ```
-
-    If you are using Modernisation Platform's AWS ECR (internal images):
-
-      ```json
-      {
-        "name": "example-application", # this isn't used for ECR, but should be the same as the directory name
-        "version": "1.0.0",            # this is the tag that will be applied to the image
-        "registry": "ecr",
-        "ecr": {
-            "role": "arn:aws:iam::013433889002:role/modernisation-platform-oidc-cicd",
-            "account": "374269020027",
-            "region": "eu-west-2",
-            "repository": "data-platform-example-application-ecr-repo" # this is the name of the ECR repository in the Modernisation Platform
+    ```
+    "analytical-platform-<container-name>" = {
+          name                = "analytical-platform-<container-name>"
+          description         = "Analytical Platform <container-name>"
+          use_template        = true
+          template_repository = "analytical-platform-image-build-template"
+          access = {
+            admins = [module.analytical_platform_team.id]
+          }
         }
-      }
-      ```
-
-1. Create the CHANGELOG `containers/${CONTAINER_NAME}/CHANGELOG.md` following the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format
-
-1. Add your Dockerfile and source code
-
-    If you are using the `ADD` or `COPY` directives in your Dockerfile, the build context is relative to your container's directory
-
-1. Add an entry to `.github/dependabot.yml` by running
-
-    ```bash
-    bash scripts/dependabot/configuration-generator.sh
     ```
 
-1. Submit your changes using a pull request
+3. As shown in example above, use the `template_repository = "analytical-platform-image-build-template"` argument.
+The template equips you with the default initial files for building a container used in Analytical Platform.
+The template repo can be viewed [here](https://github.com/ministryofjustice/analytical-platform-image-build-template).
 
-## Updating a container
+4. Update the [Dockerfile](https://github.com/ministryofjustice/analytical-platform-image-build-template/blob/main/Dockerfile),
+[Makefile](https://github.com/ministryofjustice/analytical-platform-image-build-template/blob/main/Makefile),
+[container-structure-test.yml](https://github.com/ministryofjustice/analytical-platform-image-build-template/blob/main/test/container-structure-test.yml)
+and any other files as required in your new container repo.
 
-1. Make the changes required to the container
-
-1. Update the version in `containers/${CONTAINER_NAME}/config.yml`
-
-1. Update the CHANGELOG `containers/${CONTAINER_NAME}/CHANGELOG.md` following the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format
-
-1. Submit your changes using a pull request
+5. There is no longer a requirement for `config.json` or `CHANGELOG.md` files.

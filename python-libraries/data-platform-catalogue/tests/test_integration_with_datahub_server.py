@@ -9,91 +9,31 @@ poetry run pytest tests/test_integration_with_datahub_server.py
 
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
-from data_platform_catalogue import DatabaseMetadata, DataProductMetadata, TableMetadata
-from data_platform_catalogue.client.datahub.datahub_client import DataHubCatalogueClient
+from data_platform_catalogue.client.datahub_client import DataHubCatalogueClient
 from data_platform_catalogue.entities import (
-    DatabaseStatus,
-    DataLocation,
-    DataProductStatus,
+    AccessInformation,
+    Column,
+    ColumnRef,
+    CustomEntityProperties,
+    Database,
+    DataSummary,
+    DomainRef,
+    EntityRef,
+    Governance,
+    OwnerRef,
+    RelationshipType,
+    Table,
+    TagRef,
+    UsageRestrictions,
 )
 from data_platform_catalogue.search_types import MultiSelectFilter, ResultType
-from datahub.metadata.schema_classes import DatasetPropertiesClass, SchemaMetadataClass
 
 jwt_token = os.environ.get("JWT_TOKEN")
 api_url = os.environ.get("API_URL", "")
 runs_on_development_server = pytest.mark.skipif("not jwt_token or not api_url")
-
-
-@runs_on_development_server
-def test_data_product_upsert_test_hierarchy():
-    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
-
-    data_product = DataProductMetadata(
-        name="my_data_product",
-        description="bla bla",
-        version="v1.0.0",
-        owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
-        owner_display_name="April Gonzalez",
-        maintainer="j.shelvey@digital.justice.gov.uk",
-        maintainer_display_name="Jonjo Shelvey",
-        email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT.name,
-        retention_period_in_days=365,
-        domain="LAA",
-        subdomain="Legal Aid",
-        dpia_required=False,
-        dpia_location=None,
-        last_updated=datetime(2020, 5, 17),
-        creation_date=datetime(2020, 5, 17),
-        s3_location="s3://databucket/",
-        tags=["test"],
-    )
-
-    table = TableMetadata(
-        name="test_table",
-        description="bla bla",
-        column_details=[
-            {"name": "foo", "type": "string", "description": "a"},
-            {"name": "bar", "type": "int", "description": "b"},
-        ],
-        retention_period_in_days=365,
-        source_dataset_name="my_source_table",
-        where_to_access_dataset="s3://databucket/folder",
-        tags=["test"],
-    )
-
-    table_fqn = client.upsert_table(
-        metadata=table,
-        data_product_metadata=data_product,
-        location=DataLocation("test_data_product_v2"),
-    )
-    assert (
-        table_fqn
-        == "urn:li:dataset:(urn:li:dataPlatform:glue,test_data_product_v2.test_table,PROD)"
-    )
-
-    # Ensure data went through
-    assert client.graph.get_aspect(table_fqn, DatasetPropertiesClass)
-    assert client.graph.get_aspect(table_fqn, SchemaMetadataClass)
-
-    dataset_properties = client.graph.get_aspect(
-        table_fqn, aspect_type=DatasetPropertiesClass
-    )
-    # check properties been loaded to datahub dataset
-    assert dataset_properties.description == table.description
-    assert dataset_properties.qualifiedName == f"test_data_product_v2.{table.name}"
-    assert dataset_properties.name == table.name
-    assert (
-        dataset_properties.customProperties["sourceDatasetName"]
-        == table.source_dataset_name
-    )
-    assert (
-        dataset_properties.customProperties["whereToAccessDataset"]
-        == table.where_to_access_dataset
-    )
 
 
 @runs_on_development_server
@@ -105,45 +45,12 @@ def test_search():
 
 
 @runs_on_development_server
-def test_search_for_data_product():
-    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
-
-    data_product = DataProductMetadata(
-        name="my_data_product",
-        description="bla bla",
-        version="v1.0.0",
-        owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
-        owner_display_name="April Gonzalez",
-        maintainer="j.shelvey@digital.justice.gov.uk",
-        maintainer_display_name="Jonjo Shelvey",
-        email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT.name,
-        retention_period_in_days=365,
-        domain="LAA",
-        subdomain="Legal Aid",
-        dpia_required=False,
-        dpia_location=None,
-        last_updated=datetime(2020, 5, 17),
-        creation_date=datetime(2020, 5, 17),
-        s3_location="s3://databucket/",
-        tags=["test"],
-    )
-    client.upsert_data_product(data_product)
-
-    response = client.search(
-        query="my_data_product", result_types=(ResultType.DATA_PRODUCT,)
-    )
-    assert response.total_results >= 1
-    assert response.page_results[0].id == "urn:li:dataProduct:my_data_product"
-
-
-@runs_on_development_server
 def test_search_by_domain():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
     response = client.search(
         filters=[MultiSelectFilter("domains", ["does-not-exist"])],
-        result_types=(ResultType.DATA_PRODUCT,),
+        result_types=(ResultType.TABLE,),
     )
     assert response.total_results == 0
 
@@ -152,27 +59,43 @@ def test_search_by_domain():
 def test_domain_facets_are_returned():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
-    data_product = DataProductMetadata(
-        name="my_data_product",
-        description="bla bla",
-        version="v1.0.0",
-        owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
-        owner_display_name="April Gonzalez",
-        maintainer="j.shelvey@digital.justice.gov.uk",
-        maintainer_display_name="Jonjo Shelvey",
-        email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT.name,
-        retention_period_in_days=365,
-        domain="LAA",
-        subdomain="Legal Aid",
-        dpia_required=False,
-        dpia_location=None,
-        last_updated=datetime(2020, 5, 17),
+    database = Database(
+        name="my_database",
+        description="little test db",
+        governance=Governance(
+            data_owner=OwnerRef(
+                urn="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+                display_name="April Gonzalez",
+                email="abc@digital.justice.gov.uk",
+            ),
+            data_stewards=[
+                OwnerRef(
+                    urn="abc",
+                    display_name="Jonjo Shelvey",
+                    email="j.shelvey@digital.justice.gov.uk",
+                )
+            ],
+        ),
+        domain=DomainRef(urn="LAA", display_name="LAA"),
+        last_modified=datetime(2020, 5, 17),
         creation_date=datetime(2020, 5, 17),
-        s3_location="s3://databucket/",
-        tags=["test"],
+        access_information=AccessInformation(
+            s3_location="s3://databucket/",
+        ),
+        tags=[TagRef(urn="test", display_name="test")],
+        platform=EntityRef(urn="urn:li:dataPlatform:athena", display_name="athena"),
+        custom_properties=CustomEntityProperties(
+            usage_restrictions=UsageRestrictions(
+                dpia_required=False,
+                dpia_location=None,
+            ),
+            access_information=AccessInformation(
+                where_to_access_dataset="analytical_platform",
+                s3_location="s3://databucket/",
+            ),
+        ),
     )
-    client.upsert_data_product(data_product)
+    client.upsert_database(database)
 
     response = client.search()
     assert response.facets.options("domains")
@@ -183,27 +106,43 @@ def test_domain_facets_are_returned():
 def test_filter_by_urn():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
-    data_product = DataProductMetadata(
-        name="my_data_product",
-        description="bla bla",
-        version="v1.0.0",
-        owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
-        owner_display_name="April Gonzalez",
-        maintainer="j.shelvey@digital.justice.gov.uk",
-        maintainer_display_name="Jonjo Shelvey",
-        email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT.name,
-        retention_period_in_days=365,
-        domain="LAA",
-        subdomain="Legal Aid",
-        dpia_required=False,
-        dpia_location=None,
-        last_updated=datetime(2020, 5, 17),
+    database = Database(
+        name="my_database",
+        description="little test db",
+        governance=Governance(
+            data_owner=OwnerRef(
+                urn="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+                display_name="April Gonzalez",
+                email="abc@digital.justice.gov.uk",
+            ),
+            data_stewards=[
+                OwnerRef(
+                    urn="abc",
+                    display_name="Jonjo Shelvey",
+                    email="j.shelvey@digital.justice.gov.uk",
+                )
+            ],
+        ),
+        domain=DomainRef(urn="LAA", display_name="LAA"),
+        last_modified=datetime(2020, 5, 17),
         creation_date=datetime(2020, 5, 17),
-        s3_location="s3://databucket/",
-        tags=["test"],
+        access_information=AccessInformation(
+            s3_location="s3://databucket/",
+        ),
+        tags=[TagRef(urn="test", display_name="test")],
+        platform=EntityRef(urn="urn:li:dataPlatform:athena", display_name="athena"),
+        custom_properties=CustomEntityProperties(
+            usage_restrictions=UsageRestrictions(
+                dpia_required=False,
+                dpia_location=None,
+            ),
+            access_information=AccessInformation(
+                where_to_access_dataset="analytical_platform",
+                s3_location="s3://databucket/",
+            ),
+        ),
     )
-    urn = client.upsert_data_product(data_product)
+    urn = client.upsert_database(database)
 
     response = client.search(
         filters=[MultiSelectFilter(filter_name="urn", included_values=[urn])]
@@ -215,45 +154,101 @@ def test_filter_by_urn():
 def test_fetch_dataset_belonging_to_data_product():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
-    data_product = DataProductMetadata(
-        name="my_data_product",
-        description="bla bla",
-        version="v1.0.0",
-        owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
-        owner_display_name="April Gonzalez",
-        maintainer="j.shelvey@digital.justice.gov.uk",
-        maintainer_display_name="Jonjo Shelvey",
-        email="justice@justice.gov.uk",
-        status=DataProductStatus.DRAFT.name,
-        retention_period_in_days=365,
-        domain="LAA",
-        subdomain="Legal Aid",
-        dpia_required=False,
-        dpia_location=None,
-        last_updated=datetime(2020, 5, 17),
+    database = Database(
+        name="my_database",
+        description="little test db",
+        display_name="database",
+        governance=Governance(
+            data_owner=OwnerRef(
+                urn="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+                display_name="April Gonzalez",
+                email="abc@digital.justice.gov.uk",
+            ),
+            data_stewards=[
+                OwnerRef(
+                    urn="abc",
+                    display_name="Jonjo Shelvey",
+                    email="j.shelvey@digital.justice.gov.uk",
+                )
+            ],
+        ),
+        domain=DomainRef(urn="LAA", display_name="LAA"),
+        last_modified=datetime(2020, 5, 17),
         creation_date=datetime(2020, 5, 17),
-        s3_location="s3://databucket/",
-        tags=["test"],
+        access_information=AccessInformation(
+            s3_location="s3://databucket/",
+        ),
+        tags=[TagRef(urn="test", display_name="test")],
+        platform=EntityRef(urn="urn:li:dataPlatform:athena", display_name="athena"),
+        custom_properties=CustomEntityProperties(
+            usage_restrictions=UsageRestrictions(
+                dpia_required=False,
+                dpia_location=None,
+            ),
+            access_information=AccessInformation(
+                where_to_access_dataset="analytical_platform",
+                s3_location="s3://databucket/",
+            ),
+        ),
     )
+    client.upsert_database(database)
 
-    table = TableMetadata(
-        name="test_table",
-        description="bla bla",
+    table = Table(
+        urn=None,
+        display_name="Foo.Dataset",
+        name="Dataset",
+        fully_qualified_name="Foo.Dataset",
+        description="Dataset",
+        relationships={
+            RelationshipType.PARENT: [
+                EntityRef(urn="urn:li:container:my_database", display_name="database")
+            ]
+        },
+        domain=DomainRef(display_name="", urn=""),
+        governance=Governance(
+            data_owner=OwnerRef(
+                display_name="", email="Contact email for the user", urn=""
+            ),
+            data_stewards=[
+                OwnerRef(display_name="", email="Contact email for the user", urn="")
+            ],
+        ),
+        tags=[TagRef(display_name="some-tag", urn="urn:li:tag:Entity")],
+        last_modified=datetime(2024, 3, 5, 6, 16, 47, 814000, tzinfo=timezone.utc),
+        created=None,
         column_details=[
-            {"name": "foo", "type": "string", "description": "a"},
-            {"name": "bar", "type": "int", "description": "b"},
+            Column(
+                name="urn",
+                display_name="urn",
+                type="string",
+                description="The primary identifier for the dataset entity.",
+                nullable=False,
+                is_primary_key=True,
+                foreign_keys=[
+                    ColumnRef(
+                        name="urn",
+                        display_name="urn",
+                        table=EntityRef(
+                            urn="urn:li:dataset:(urn:li:dataPlatform:datahub,Dataset,PROD)",
+                            display_name="Dataset",
+                        ),
+                    )
+                ],
+            ),
         ],
-        retention_period_in_days=365,
-        source_dataset_name="my_source_table",
-        where_to_access_dataset="s3://databucket/folder",
-        tags=["test"],
+        platform=EntityRef(urn="urn:li:dataPlatform:athena", display_name="athena"),
+        custom_properties=CustomEntityProperties(
+            access_information=AccessInformation(
+                where_to_access_dataset="", source_dataset_name="", s3_location=None
+            ),
+            data_summary=DataSummary(row_count=5),
+            usage_restrictions=UsageRestrictions(
+                dpia_required=True,
+                dpia_location=None,
+            ),
+        ),
     )
-
-    urn = client.upsert_table(
-        metadata=table,
-        data_product_metadata=data_product,
-        location=DataLocation("test_data_product_v2"),
-    )
+    urn = client.upsert_table(table=table)
     # Introduce sleep to combat race conditions with table association
     time.sleep(2)
 
@@ -276,9 +271,9 @@ def test_paginated_search_results_unique():
 
 
 @runs_on_development_server
-def test_list_data_product_assets_returns():
+def test_list_database_tables():
     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
-    assets = client.list_data_product_assets(
+    assets = client.list_database_tables(
         urn="urn:li:dataProduct:my_data_product", count=20
     )
     assert assets
@@ -307,69 +302,69 @@ def test_get_dataset():
     assert table
 
 
-@runs_on_development_server
-def test_athena_upsert_test_hierarchy():
-    client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
+# @runs_on_development_server
+# def test_athena_upsert_test_hierarchy():
+#     client = DataHubCatalogueClient(jwt_token=jwt_token, api_url=api_url)
 
-    database = DatabaseMetadata(
-        name="my_database",
-        description="testing",
-        version="v1.0.0",
-        owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
-        owner_display_name="April Gonzalez",
-        maintainer="j.shelvey@digital.justice.gov.uk",
-        maintainer_display_name="Jonjo Shelvey",
-        email="justice@justice.gov.uk",
-        status=DatabaseStatus.PROD.name,
-        retention_period_in_days=365,
-        domain="prison",
-        subdomain=None,
-        dpia_required=False,
-        dpia_location=None,
-        last_updated=datetime(2020, 5, 17),
-        creation_date=datetime(2020, 5, 17),
-        s3_location="s3://databucket/",
-        tags=["test"],
-    )
+#     database = Database(
+#         name="my_database",
+#         description="testing",
+#         version="v1.0.0",
+#         owner="2e1fa91a-c607-49e4-9be2-6f072ebe27c7",
+#         owner_display_name="April Gonzalez",
+#         maintainer="j.shelvey@digital.justice.gov.uk",
+#         maintainer_display_name="Jonjo Shelvey",
+#         email="justice@justice.gov.uk",
+#         retention_period_in_days=365,
+#         domain="prison",
+#         subdomain=None,
+#         dpia_required=False,
+#         dpia_location=None,
+#         last_modified=datetime(2020, 5, 17),
+#         creation_date=datetime(2020, 5, 17),
+#         s3_location="s3://databucket/",
+#         tags=["test"],
+#     )
 
-    table = TableMetadata(
-        name="test_table",
-        parent_database_name="my_database",
-        description="bla bla",
-        column_details=[
-            {"name": "foo", "type": "string", "description": "a"},
-            {"name": "bar", "type": "int", "description": "b"},
-        ],
-        retention_period_in_days=365,
-        where_to_access_dataset="analytical_platform",
-        tags=["test"],
-    )
+#     table = Table(
+#         name="test_table",
+#         parent_database_name="my_database",
+#         description="bla bla",
+#         column_details=[
+#             {"name": "foo", "type": "string", "description": "a"},
+#             {"name": "bar", "type": "int", "description": "b"},
+#         ],
+#         retention_period_in_days=365,
+#         where_to_access_dataset="analytical_platform",
+#         tags=["test"],
+#     )
 
-    table_fqn = client.upsert_athena_table(
-        metadata=table,
-        database_metadata=database,
-    )
-    assert (
-        table_fqn
-        == "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.test_table,PROD)"
-    )
+#     # This function doesn't exist after the refactor. Unsure if we still need the test.
+#     table_fqn = client.upsert_athena_table(
+#         metadata=table,
+#         database_metadata=database,
+#     )
+#     assert (
+#         table_fqn
+#         == "urn:li:dataset:(urn:li:dataPlatform:athena,my_database.test_table,PROD)"
+#     )
 
-    # Ensure data went through
-    assert client.graph.get_aspect(table_fqn, DatasetPropertiesClass)
-    assert client.graph.get_aspect(table_fqn, SchemaMetadataClass)
+#     # Ensure data went through
+#     assert client.graph.get_aspect(table_fqn, DatasetPropertiesClass)
+#     assert client.graph.get_aspect(table_fqn, SchemaMetadataClass)
 
-    dataset_properties = client.graph.get_aspect(
-        table_fqn, aspect_type=DatasetPropertiesClass
-    )
-    # check properties been loaded to datahub dataset
-    assert dataset_properties.description == table.description
-    assert dataset_properties.qualifiedName == f"{database.name}.{table.name}"
-    assert dataset_properties.name == table.name
-    assert (
-        dataset_properties.customProperties["sourceDatasetName"]
-        == table.source_dataset_name
-    )
-    assert (
-        dataset_properties.customProperties["whereToAccessDataset"]
-        == table.where_to_access_dataset
-    )
+#     dataset_properties = client.graph.get_aspect(
+#         table_fqn, aspect_type=DatasetPropertiesClass
+#     )
+#     # check properties been loaded to datahub dataset
+#     assert dataset_properties.description == table.description
+#     assert dataset_properties.qualifiedName == f"{database.name}.{table.name}"
+#     assert dataset_properties.name == table.name
+#     assert (
+#         dataset_properties.customProperties["sourceDatasetName"]
+#         == table.source_dataset_name
+#     )
+#     assert (
+#         dataset_properties.customProperties["whereToAccessDataset"]
+#         == table.where_to_access_dataset
+#     )

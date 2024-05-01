@@ -1,0 +1,175 @@
+[
+{
+    "entityType": "container",
+    "entityUrn": "urn:li:container:my_database",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:LAA"
+            ]
+        }
+    }
+},
+{
+    "entityType": "container",
+    "entityUrn": "urn:li:container:my_database",
+    "changeType": "UPSERT",
+    "aspectName": "containerProperties",
+    "aspect": {
+        "json": {
+            "customProperties": {
+                "dpia_required": "False",
+                "dpia_location": "",
+                "where_to_access_dataset": "analytical_platform",
+                "source_dataset_name": "",
+                "s3_location": "s3://databucket/",
+                "row_count": ""
+            },
+            "name": "my_database",
+            "description": "little test db"
+        }
+    }
+},
+{
+    "entityType": "container",
+    "entityUrn": "urn:li:container:my_database",
+    "changeType": "UPSERT",
+    "aspectName": "subTypes",
+    "aspect": {
+        "json": {
+            "typeNames": [
+                "Database"
+            ]
+        }
+    }
+},
+{
+    "entityType": "container",
+    "entityUrn": "urn:li:container:my_database",
+    "changeType": "UPSERT",
+    "aspectName": "dataPlatformInstance",
+    "aspect": {
+        "json": {
+            "platform": "urn:li:dataPlatform:athena"
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,database.Dataset,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "datasetProperties",
+    "aspect": {
+        "json": {
+            "customProperties": {
+                "dpia_required": "True",
+                "dpia_location": "",
+                "where_to_access_dataset": "",
+                "source_dataset_name": "",
+                "s3_location": "",
+                "row_count": "5"
+            },
+            "name": "Dataset",
+            "qualifiedName": "database.Dataset",
+            "description": "Dataset",
+            "tags": []
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,database.Dataset,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "schemaMetadata",
+    "aspect": {
+        "json": {
+            "schemaName": "Dataset",
+            "platform": "urn:li:dataPlatform:athena",
+            "version": 1,
+            "created": {
+                "time": 0,
+                "actor": "urn:li:corpuser:unknown"
+            },
+            "lastModified": {
+                "time": 0,
+                "actor": "urn:li:corpuser:unknown"
+            },
+            "hash": "",
+            "platformSchema": {
+                "com.linkedin.schema.OtherSchema": {
+                    "rawSchema": ""
+                }
+            },
+            "fields": [
+                {
+                    "fieldPath": "urn",
+                    "nullable": false,
+                    "description": "The primary identifier for the dataset entity.",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.StringType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "isPartOfKey": false
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,database.Dataset,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "subTypes",
+    "aspect": {
+        "json": {
+            "typeNames": [
+                "Table"
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,database.Dataset,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "container",
+    "aspect": {
+        "json": {
+            "container": "urn:li:container:my_database"
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,database.Dataset,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "globalTags",
+    "aspect": {
+        "json": {
+            "tags": [
+                {
+                    "tag": "urn:li:tag:some-tag"
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:athena,database.Dataset,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:LAA"
+            ]
+        }
+    }
+}
+]
