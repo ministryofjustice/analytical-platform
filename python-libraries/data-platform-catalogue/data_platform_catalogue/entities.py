@@ -51,8 +51,8 @@ class Column(BaseModel):
     is_primary_key: bool = Field(
         description="Whether the field is part of the primary key"
     )
-    foreign_keys: list[ColumnRef] | None = Field(
-        description="References to columns in other tables"
+    foreign_keys: list[ColumnRef] = Field(
+        description="References to columns in other tables", default_factory=list
     )
 
 
@@ -114,12 +114,12 @@ class UsageRestrictions(BaseModel):
     Metadata about how entities may be used.
     """
 
-    dpia_required: bool | str | None = Field(
+    dpia_required: bool | None = Field(
         description="Bool for if a data privacy impact assessment (DPIA) is required to access this database",
         default=None,
     )
-    dpia_location: str | None = Field(
-        description="Where to find the DPIA document", default=None
+    dpia_location: str = Field(
+        description="Where to find the DPIA document", default=""
     )
 
 
@@ -136,9 +136,7 @@ class AccessInformation(BaseModel):
     source_dataset_name: str = Field(
         description="The name of a dataset this data was derived from", default=""
     )
-    s3_location: str | None = Field(
-        description="Location of the data in s3", default=None
-    )
+    s3_location: str = Field(description="Location of the data in s3", default="")
 
 
 class DataSummary(BaseModel):

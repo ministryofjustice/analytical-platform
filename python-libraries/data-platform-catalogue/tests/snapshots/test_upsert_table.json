@@ -8,10 +8,10 @@
         "json": {
             "customProperties": {
                 "dpia_required": "True",
-                "dpia_location": "None",
+                "dpia_location": "",
                 "where_to_access_dataset": "",
                 "source_dataset_name": "",
-                "s3_location": "None",
+                "s3_location": "",
                 "row_count": "5"
             },
             "name": "Dataset",

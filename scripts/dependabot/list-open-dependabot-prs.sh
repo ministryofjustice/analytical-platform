@@ -28,7 +28,7 @@ for REPO in "${REPOSITORIES[@]}"; do
     # Use gh cli to list pull requests with the label 'dependencies'
     pr_list=$(gh pr list --repo $REPO --label "dependencies" --state open --json number,title,url,createdAt -q '.[] | "\(.number) | \(.url) | \(.title)"')
 
-    pr_count=$(echo "$pr_list" | wc -l)
+    pr_count=$(echo "$pr_list" | grep -c " | ")
     total_open_prs=$((total_open_prs + pr_count))
     echo "$pr_list"
     echo ""
