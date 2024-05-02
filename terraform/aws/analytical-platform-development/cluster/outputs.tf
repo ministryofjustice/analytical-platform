@@ -9,3 +9,7 @@ output "eks_config_map_aws_auth" {
 output "control_panel_api_iam_role_arn" {
   value = module.iam_assumable_role_control_panel_api.iam_role_arn
 }
+
+output "ami_id_json" {
+  value = ["${values(data.external.ami_id_json.result)}"]
+}
