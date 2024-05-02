@@ -10,11 +10,10 @@ account_ids = {
 
 tags = {
   business-unit          = "Platforms"
-  application            = "Analytical Platform"
+  application            = "Data Engineering"
   component              = "Environment"
-  environment            = "production"
-  is-production          = "true"
-  owner                  = "analytical-platform:analytics-platform-tech@digital.justice.gov.uk"
-  infrastructure-support = "analytical-platform:analytics-platform-tech@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/analytical-platform-infrastructure"
+  buckettype             = "datawarehouse"
+  owner                  = "Data Engineering:dataengineering@digital.justice.gov.uk"
+  infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
+  source-code            = "github.com/ministryofjustice/data-platform"
 }
