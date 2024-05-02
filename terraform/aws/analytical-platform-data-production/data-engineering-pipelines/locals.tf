@@ -2480,14 +2480,4 @@ locals {
     }
 
   }
-  buckets_with_policies = [
-    for bucket_name, bucket_details in local.data_engineering_buckets :
-    bucket_name
-    if can(bucket_details.policy)
-  ]
-  buckets_with_lifecycles = [
-    for bucket_name, bucket_details in local.data_engineering_buckets :
-    bucket_name
-    if can(bucket_details.lifecycle_rule)
-  ]
 }
