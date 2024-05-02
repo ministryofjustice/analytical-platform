@@ -7,9 +7,8 @@ module "eks" {
   cluster_name    = local.eks_cluster_name
   cluster_version = "1.29"
 
-  cluster_endpoint_private_access      = true
-  cluster_endpoint_public_access       = true
-  cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
+  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access  = true
 
   vpc_id                   = module.vpc.vpc_id
   control_plane_subnet_ids = module.vpc.intra_subnets
@@ -34,6 +33,9 @@ module "eks" {
       most_recent = true
     }
     vpc-cni = {
+      most_recent = true
+    }
+    amazon-cloudwatch-observability = {
       most_recent = true
     }
   }

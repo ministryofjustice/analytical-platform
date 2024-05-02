@@ -16,7 +16,3 @@ data "aws_iam_roles" "eks_sso_access_role" {
   name_regex  = "AWSReservedSSO_${local.eks_sso_access_role}_.*"
   path_prefix = "/aws-reserved/sso.amazonaws.com/"
 }
-
-output "eks_sso_access_role" {
-  value = one(data.aws_iam_roles.eks_sso_access_role.names)
-}
