@@ -837,20 +837,6 @@ locals {
           Version = "2012-10-17"
         }
       )
-      replication_configuration = {
-        role = "arn:aws:iam::593291632749:role/sirius_replication_role-alpha"
-
-        rules = {
-          id       = "sirius_replication"
-          prefix   = "opg/sirius"
-          priority = 0
-          status   = "Enabled"
-
-          destination = {
-            bucket = "arn:aws:s3:::alpha-opg-sirius"
-          }
-        }
-      }
     }
     "mojap-land-dev" = {
       grant = [{
