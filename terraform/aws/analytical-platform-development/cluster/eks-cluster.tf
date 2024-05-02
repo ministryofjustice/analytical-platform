@@ -63,13 +63,12 @@ module "eks" {
       name_prefix            = var.eks_node_group_name_prefix
       create_launch_template = true
 
-      ami_type       = "BOTTLEROCKET_x86_64_NVIDIA"
-      instance_types = ["p3.2xlarge"]
+      ami_type       = var.eks_node_group_ami_type_gpu_node
+      instance_types = var.eks_node_group_instance_types_gpu_node
 
-      desired_capacity = 0
-      max_capacity     = 2
-      min_capacity     = 0
-      capacity_type    = "ON_DEMAND"
+      desired_capacity = var.eks_node_group_capacities_gpu_node["desired"]
+      max_capacity     = var.eks_node_group_capacities_gpu_node["max"]
+      min_capacity     = var.eks_node_group_capacities_gpu_node["min"]
 
       metadata_http_endpoint               = "enabled"
       metadata_http_tokens                 = "required"
