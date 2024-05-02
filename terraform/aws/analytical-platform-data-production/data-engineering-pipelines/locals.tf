@@ -833,6 +833,23 @@ locals {
               Resource = "arn:aws:s3:::mojap-land/hmpps/oasys/*"
               Sid      = "GetDeleteAccess-mojap-land-hmpps-oasys"
             },
+            {
+              Sid    = "AllowAnalyticalPlatformIngestionService"
+              Effect = "Allow"
+              Principal = {
+                AWS = "arn:aws:iam::471112983409:role/transfer"
+              }
+              Action = [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:PutObjectTagging"
+              ]
+              Resource = [
+                "arn:aws:s3:::mojap-land",
+                "arn:aws:s3:::mojap-land/bold/essex-police/*"
+              ]
+            }
           ]
           Version = "2012-10-17"
         }
@@ -1039,6 +1056,23 @@ locals {
               Resource = "arn:aws:s3:::mojap-land-dev/hmpps/oasys/*"
               Sid      = "GetDeleteAccess-mojap-land-dev-hmpps-oasys"
             },
+            {
+              Sid    = "AllowAnalyticalPlatformIngestionService"
+              Effect = "Allow"
+              Principal = {
+                AWS = "arn:aws:iam::730335344807:role/transfer"
+              }
+              Action = [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:PutObjectTagging"
+              ]
+              Resource = [
+                "arn:aws:s3:::mojap-land-dev",
+                "arn:aws:s3:::mojap-land-dev/bold/essex-police/*"
+              ]
+            }
           ]
           Version = "2012-10-17"
         }
