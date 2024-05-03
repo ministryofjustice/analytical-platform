@@ -187,6 +187,7 @@ eks_node_group_instance_types = ["r5.2xlarge"]
 ### GPU-enable node group
 eks_node_group_instance_types_gpu_node = ["p3.2xlarge"]
 eks_node_group_ami_type_gpu_node       = "AL2_x86_64_GPU"
+
 eks_node_group_capacities_gpu_node = {
   desired = 0
   max     = 2
