@@ -5,7 +5,6 @@ data "aws_iam_policy_document" "bedrock_integration" {
   statement {
     sid    = "AnalyticalPlatformBedrockIntegrtion"
     effect = "Allow"
-
     actions = [
       "bedrock:ListFoundationModels",
       "bedrock:GetFoundationModel",
@@ -51,17 +50,20 @@ data "aws_iam_policy_document" "bedrock_integration" {
       "bedrock:ListFoundationModelAgreementOffers",
       "bedrock:GetUseCaseForModelAccess"
     ]
-
     resources = ["*"]
     condition {
       test     = "StringEquals"
       variable = "aws:RequestedRegion"
-      values   = ["eu-central-1", "us-east-1"]
+      values = [
+        "eu-central-1",
+        "eu-west-3",
+        "us-east-1"
+      ]
     }
   }
 }
 resource "aws_iam_policy" "bedrock_integration" {
   name        = "analytical-platform-bedrock-integration"
-  description = "Permissions needed to allow access to Bedrock in Frankfurt from tooling."
+  description = "Permissions to allow access to Bedrock in Frankfurt, Paris and Virginia from tooling."
   policy      = data.aws_iam_policy_document.bedrock_integration.json
 }
