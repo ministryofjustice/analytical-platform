@@ -41,6 +41,14 @@ module "vpc_endpoints" {
         { Name = format("%s-eks-auth", module.vpc.name) }
       )
     },
+    guardduty-data = {
+      service             = "guardduty-data"
+      service_type        = "Interface"
+      private_dns_enabled = true
+      tags = merge(
+        { Name = format("%s-guardduty-data", module.vpc.name) }
+      )
+    }
     rds = {
       service             = "rds"
       service_type        = "Interface"

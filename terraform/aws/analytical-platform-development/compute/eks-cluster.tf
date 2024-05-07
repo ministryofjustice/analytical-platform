@@ -32,12 +32,23 @@ module "eks" {
     kube-proxy = {
       most_recent = true
     }
-    vpc-cni = {
+    eks-pod-identity-agent = {
       most_recent = true
+    }
+    vpc-cni = {
+      /* VPC CNI does not support EKS Pod Identity Agent as of 07/05/24 */
+      most_recent              = true
+      before_compute           = true
+      service_account_role_arn = module.vpc_cni_iam_role.iam_role_arn
     }
     amazon-cloudwatch-observability = {
       most_recent = true
     }
+    /* Disabled as this add-on just sits, I think because IIRC it needs a VPC endpoint
+    aws-guardduty-agent = {
+      most_recent = true
+    }
+    */
   }
 
   eks_managed_node_group_defaults = {
@@ -46,7 +57,7 @@ module "eks" {
     platform = "bottlerocket"
     metadata_options = {
       http_endpoint               = "enabled"
-      http_put_response_hop_limit = 2
+      http_put_response_hop_limit = 1 /* This stop pods inheriting the nodes IAM role https://aws.github.io/aws-eks-best-practices/security/docs/iam/#restrict-access-to-the-instance-profile-assigned-to-the-worker-node */
       http_tokens                 = "required"
       instance_metadata_tags      = "enabled"
     }
@@ -60,6 +71,7 @@ module "eks" {
       }
     }
 
+    iam_role_attach_cni_policy = false
     iam_role_additional_policies = {
       AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       CloudWatchAgentServerPolicy  = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
