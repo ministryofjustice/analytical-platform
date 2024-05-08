@@ -56,6 +56,7 @@ data "aws_iam_policy_document" "bedrock_integration" {
       variable = "aws:RequestedRegion"
       values = [
         "eu-central-1",
+        "eu-west-3",
         "us-east-1"
       ]
     }
