@@ -11,13 +11,11 @@ locals {
           rotation_turn_length_seconds = 86400
           users = [
             module.users["jacob.woffenden@digital.justice.gov.uk"].id,
-            module.users["julia.lawrence@digital.justice.gov.uk"].id,
             module.users["emma.terry@digital.justice.gov.uk"].id,
             module.users["brian.ellwood@digital.justice.gov.uk"].id,
             module.users["michael.collins@digital.justice.gov.uk"].id,
             module.users["gary.henderson@digital.justice.gov.uk"].id,
             module.users["jacob.hamblin-pyke@digital.justice.gov.uk"].id,
-            module.users["thomas.webber@digital.justice.gov.uk"].id,
             module.users["james.stott@digital.justice.gov.uk"].id,
             module.users["anthony.fitzroy@digital.justice.gov.uk"].id,
           ]
