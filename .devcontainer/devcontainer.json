@@ -7,6 +7,7 @@
     "ghcr.io/ministryofjustice/devcontainer-feature/static-analysis:0": {},
     "ghcr.io/ministryofjustice/devcontainer-feature/terraform:0": {}
   },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
   "customizations": {
     "vscode": {
       "extensions": [
