@@ -16,6 +16,18 @@ updates:
       include: "scope"
     reviewers:
       - "ministryofjustice/analytical-platform"
+
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: ":dependabot: devcontainers"
+      include: "scope"
+    reviewers:
+      - "ministryofjustice/analytical-platform"
   - package-ecosystem: "pip"
     schedule:
       interval: "daily"
@@ -43,6 +55,7 @@ updates:
       - "terraform/auth0/dev-analytics-moj"
       - "terraform/auth0/ministryofjustice-data-platform"
       - "terraform/auth0/ministryofjustice-data-platform-development"
+      - "terraform/aws/analytical-platform/baseline"
       - "terraform/aws/analytical-platform-data-engineering-production/10ds"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/airflow-hmcts-sdp-load"
       - "terraform/aws/analytical-platform-data-production/airflow"
@@ -64,9 +77,8 @@ updates:
       - "terraform/aws/analytical-platform-development/control-panel-message-broker"
       - "terraform/aws/analytical-platform-development/sagemaker"
       - "terraform/aws/analytical-platform-management-production/cluster"
-      - "terraform/aws/analytical-platform-production/cluster"
-      - "terraform/aws/analytical-platform/baseline"
       - "terraform/aws/analytical-platform/oidc"
+      - "terraform/aws/analytical-platform-production/cluster"
       - "terraform/cloud-platform/live/data-platform-development/static-assets"
       - "terraform/cloud-platform/live/data-platform-production/actions-runners"
       - "terraform/dpat-eks/production/actions-runners"
