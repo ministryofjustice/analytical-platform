@@ -13,7 +13,7 @@ data "aws_secretsmanager_secret_version" "github_actions_self_hosted_runner_crea
 resource "helm_release" "create_a_derived_table" {
   name       = "actions-runner-mojas-create-a-derived-table"
   repository = "oci://ghcr.io/ministryofjustice/data-platform-charts"
-  version    = "2.1.0"
+  version    = "2.316.1"
   chart      = "actions-runner"
   namespace  = "actions-runners"
 
