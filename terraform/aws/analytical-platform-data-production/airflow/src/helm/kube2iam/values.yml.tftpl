@@ -1,0 +1,35 @@
+---
+extraArgs:
+  base-role-arn: arn:aws:iam::593291632749:role/
+  default-role: airflow-dev-default-pod-role
+  namespace-restrictions: true
+
+host:
+  iptables: true
+  interface: eni+
+
+image:
+  repository: jtblin/kube2iam
+  tag: 0.11.0
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+# AWS Access keys to inject as environment variables
+aws:
+  secret_key: ""
+  access_key: ""
+  region: "eu-west-1"
+
+rbac:
+  ## If true, create & use RBAC resources
+  ##
+  create: True
+
+
+tolerations:
+- operator: Exists

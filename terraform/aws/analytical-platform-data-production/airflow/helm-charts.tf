@@ -1,3 +1,5 @@
+### Dev Resources
+
 resource "helm_release" "kyverno_dev" {
   name       = "kyverno"
   repository = "https://kyverno.github.io/kyverno/"
@@ -8,6 +10,20 @@ resource "helm_release" "kyverno_dev" {
   values = [
     templatefile(
       "${path.module}/src/helm/kyverno/values.yml.tftpl", {}
+    )
+  ]
+}
+
+resource "helm_release" "kube2iam_dev" {
+  name       = "kyverno"
+  repository = "https://jtblin.github.io/kube2iam"
+  chart      = "kube2iam"
+  version    = "3.2.0"
+  namespace  = kubernetes_namespace.dev_kube2iam.metadata[0].name
+  provider   = helm.dev-airflow-cluster
+  values = [
+    templatefile(
+      "${path.module}/src/helm/kube2iam/values.yml.tftpl", {}
     )
   ]
 }
