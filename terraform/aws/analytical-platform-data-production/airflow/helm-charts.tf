@@ -9,7 +9,10 @@ resource "helm_release" "kyverno_dev" {
   provider   = helm.dev-airflow-cluster
   values = [
     templatefile(
-      "${path.module}/src/helm/kyverno/values.yml.tftpl", {}
+      "${path.module}/src/helm/kyverno/values.yml.tftpl",
+      {
+        env = "dev"
+      }
     )
   ]
 }
