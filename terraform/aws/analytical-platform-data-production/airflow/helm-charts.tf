@@ -9,10 +9,7 @@ resource "helm_release" "kyverno_dev" {
   provider   = helm.dev-airflow-cluster
   values = [
     templatefile(
-      "${path.module}/src/helm/kyverno/values.yml.tftpl",
-      {
-        env = "dev"
-      }
+      "${path.module}/src/helm/kyverno/values.yml.tftpl", {}
     )
   ]
 }
@@ -26,7 +23,10 @@ resource "helm_release" "kube2iam_dev" {
   provider   = helm.dev-airflow-cluster
   values = [
     templatefile(
-      "${path.module}/src/helm/kube2iam/values.yml.tftpl", {}
+      "${path.module}/src/helm/kube2iam/values.yml.tftpl",
+      {
+        env = "dev"
+      }
     )
   ]
 }
