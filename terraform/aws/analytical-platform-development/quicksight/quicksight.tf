@@ -17,6 +17,8 @@ resource "aws_quicksight_account_subscription" "subscription" {
   account_name          = "analytical-platform-development" // CHANGE THIS IN MOD PLATFORM
   authentication_method = "IAM_IDENTITY_CENTER"
   edition               = "ENTERPRISE"
+  admin_group           = ["analytical-platform"]  // CHANGE THIS IN MOD PLATFORM
+  author_group          = ["analytical-platform"]  // CHANGE THIS IN MOD PLATFORM
   notification_email    = local.notification_email // CHANGE THIS IN MOD PLATFORM
 }
 
@@ -66,6 +68,7 @@ resource "aws_quicksight_account_subscription" "subscription" {
 #   type = "ATHENA"
 # }
 
+# NOT NEEDED
 # resource "aws_quicksight_user" "admin" {
 #   session_name  = "an-author"
 #   email         = "author@example.com"
