@@ -9,6 +9,7 @@ locals {
         "airflow_prod_xhibit_etl",
         "airflow_dev_xhibit_etl_athena",
         "restricted-admin",
+        "create-a-derived-table"
       ]
     },
     {
