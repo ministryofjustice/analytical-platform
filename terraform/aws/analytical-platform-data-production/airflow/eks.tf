@@ -111,7 +111,7 @@ resource "aws_eks_node_group" "dev_node_group_high_memory" {
 
   scaling_config {
     desired_size = 0
-    max_size     = 2
+    max_size     = 1
     min_size     = 0
   }
 
@@ -301,7 +301,7 @@ resource "aws_eks_node_group" "prod_node_group_high_memory" {
   scaling_config {
     desired_size = 1
     max_size     = 1
-    min_size     = 0
+    min_size     = 1
   }
 
   update_config {
