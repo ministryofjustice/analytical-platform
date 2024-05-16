@@ -9,6 +9,7 @@ locals {
         "airflow_prod_xhibit_etl",
         "airflow_dev_xhibit_etl_athena",
         "restricted-admin",
+        "create-a-derived-table"
       ]
     },
     {
@@ -843,7 +844,9 @@ locals {
                 "s3:GetObject",
                 "s3:PutObject",
                 "s3:DeleteObject",
-                "s3:PutObjectTagging"
+                "s3:PutObjectTagging",
+                "s3:GetObjectAcl",
+                "s3:PutObjectAcl"
               ]
               Resource = [
                 "arn:aws:s3:::mojap-land",
@@ -1066,7 +1069,9 @@ locals {
                 "s3:GetObject",
                 "s3:PutObject",
                 "s3:DeleteObject",
-                "s3:PutObjectTagging"
+                "s3:PutObjectTagging",
+                "s3:GetObjectAcl",
+                "s3:PutObjectAcl"
               ]
               Resource = [
                 "arn:aws:s3:::mojap-land-dev",
