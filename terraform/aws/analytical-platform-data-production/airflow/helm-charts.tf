@@ -15,7 +15,7 @@ resource "helm_release" "kyverno_dev" {
 }
 
 resource "helm_release" "kube2iam_dev" {
-  name       = "kyverno"
+  name       = "kube2iam"
   repository = "https://jtblin.github.io/kube2iam"
   chart      = "kube2iam"
   version    = "3.2.0"
