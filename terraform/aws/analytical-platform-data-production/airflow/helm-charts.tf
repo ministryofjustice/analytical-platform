@@ -13,12 +13,12 @@ resource "helm_release" "kyverno_dev" {
     )
   ]
 }
-
+/*
 resource "helm_release" "kube2iam_dev" {
   name       = "kube2iam"
   repository = "https://jtblin.github.io/kube2iam"
   chart      = "kube2iam"
-  version    = "3.2.0"
+  version    = "32.0"
   namespace  = kubernetes_namespace.dev_kube2iam.metadata[0].name
   provider   = helm.dev-airflow-cluster
   values = [
@@ -29,7 +29,7 @@ resource "helm_release" "kube2iam_dev" {
       }
     )
   ]
-}
+} */
 
 resource "helm_release" "kyverno_prod" {
   name       = "kyverno"
