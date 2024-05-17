@@ -111,3 +111,7 @@ resource "aws_security_group_rule" "allow_karpenter" {
   security_group_id        = aws_security_group.allow_karpenter_communication.id
   description              = "allow karpenter"
 }
+
+# data "external" "ami_id_json" {
+#   program = ["sh", "-c", "aws ssm get-parameter --name /aws/service/eks/optimized-ami/1.24/amazon-linux-2-gpu/recommended/image_id --region eu-west-1 --query 'Parameter.Value'  --output text | jq -nR '{'image_id':inputs}'"]
+# }
