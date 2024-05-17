@@ -1,7 +1,7 @@
 module "karpenter" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   source  = "terraform-aws-modules/eks/aws//modules/karpenter"
-  version = "19.15.3"
+  version = "20.11.0"
 
   cluster_name = local.eks_cluster_name
 
