@@ -63,7 +63,6 @@ module "eks" {
       name_prefix            = var.eks_node_group_name_prefix
       create_launch_template = true
 
-      # ami_id         = "ami-0461da68bcca9d885"
       ami_type       = var.eks_node_group_ami_type_gpu_node
       instance_types = var.eks_node_group_instance_types_gpu_node
 
@@ -78,18 +77,17 @@ module "eks" {
       update_config = {
         max_unavailable = 1
       }
-      ### Needs to be added back in
-      # taints = [
-      #   {
-      #     key    = "gpu-compute"
-      #     value  = "true"
-      #     effect = "NO_SCHEDULE"
-      #   }
-      # ]
+      taints = [
+        {
+          key    = "gpu-compute"
+          value  = "true"
+          effect = "NO_SCHEDULE"
+        }
+      ]
 
-      # k8s_labels = {
-      #   gpu-compute = "true"
-      # }
+      k8s_labels = {
+        gpu-compute = "true"
+      }
     }
   }
 
@@ -113,7 +111,3 @@ resource "aws_security_group_rule" "allow_karpenter" {
   security_group_id        = aws_security_group.allow_karpenter_communication.id
   description              = "allow karpenter"
 }
-
-# data "external" "ami_id_json" {
-#   program = ["sh", "-c", "aws ssm get-parameter --name /aws/service/eks/optimized-ami/1.24/amazon-linux-2-gpu/recommended/image_id --region eu-west-1 --query 'Parameter.Value'  --output text | jq -nR '{'image_id':inputs}'"]
-# }
