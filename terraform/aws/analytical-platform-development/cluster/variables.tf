@@ -319,6 +319,21 @@ variable "eks_node_group_capacities" {
   description = "The desired capacities for the EKS node group"
 }
 
+variable "eks_node_group_capacities_gpu_node" {
+  type        = map(number)
+  description = "The desired capacities for the EKS GPU node group"
+}
+
+variable "eks_node_group_instance_types_gpu_node" {
+  type        = list(string)
+  description = "The instance types for the EKS GPU node group"
+}
+
+variable "eks_node_group_ami_type_gpu_node" {
+  type        = string
+  description = "The type of AMI to use for the EKS GPU node group"
+}
+
 ##################################################
 # AWS SSO
 ##################################################
