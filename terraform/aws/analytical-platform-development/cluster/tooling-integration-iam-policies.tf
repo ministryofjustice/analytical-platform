@@ -62,6 +62,6 @@ data "aws_iam_policy_document" "bedrock_integration" {
 }
 resource "aws_iam_policy" "bedrock_integration" {
   name        = "analytical-platform-bedrock-integration"
-  description = "Permissions needed to allow access to Bedrock in Frankfurt and Paris from tooling."
+  description = "Permissions needed to allow access to Bedrock in Frankfurt from tooling."
   policy      = data.aws_iam_policy_document.bedrock_integration.json
 }
