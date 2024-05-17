@@ -56,12 +56,12 @@ data "aws_iam_policy_document" "bedrock_integration" {
     condition {
       test     = "StringEquals"
       variable = "aws:RequestedRegion"
-      values   = ["eu-central-1"]
+      values   = ["eu-central-1", "eu-west-3"]
     }
   }
 }
 resource "aws_iam_policy" "bedrock_integration" {
   name        = "analytical-platform-bedrock-integration"
-  description = "Permissions needed to allow access to Bedrock in Frankfurt from tooling."
+  description = "Permissions needed to allow access to Bedrock in Frankfurt and Paris from tooling."
   policy      = data.aws_iam_policy_document.bedrock_integration.json
 }
