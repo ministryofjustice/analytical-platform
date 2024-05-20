@@ -336,10 +336,17 @@ resource "kubernetes_namespace" "kyverno_prod" {
   timeouts {}
 }
 
+<<<<<<< Updated upstream
 resource "aws_eks_addon" "kube_proxy_dev" {
   cluster_name                = var.dev_eks_cluster_name
   addon_name                  = "kube-proxy"
   addon_version               = "v1.25.14-eksbuild.2"
+=======
+resource "aws_eks_addon" "kube_proxy" {
+  cluster_name                = var.dev_eks_cluster_name
+  addon_name                  = "kube-proxy"
+  addon_version               = "v1.25.16-minimal-eksbuild.1"
+>>>>>>> Stashed changes
   resolve_conflicts_on_create = "OVERWRITE"
 }
 
