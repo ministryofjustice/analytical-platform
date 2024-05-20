@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "bedrock_integration" {
     condition {
       test     = "StringEquals"
       variable = "aws:RequestedRegion"
-      values   = ["eu-central-1"]
+      values   = ["eu-central-1", "eu-west-3"]
     }
   }
 }
