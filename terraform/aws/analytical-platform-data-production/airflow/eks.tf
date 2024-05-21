@@ -673,7 +673,6 @@ import {
   id = "lt-0511e4a02a5dc055d"
 }
 
-
 resource "aws_launch_template" "sandpit_high_memory" {
   name          = "eks-50c306aa-05d8-6b86-cfe1-6007657b8987"
   image_id      = "ami-0aa9fe9eb35cf4eaf"
