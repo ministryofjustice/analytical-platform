@@ -1,0 +1,11 @@
+---
+affinity: {}
+nodeSelector:
+  gpu-compute: "true"
+tolerations:
+  - key: nvidia.com/gpu
+    operator: Exists
+    effect: NoSchedule
+  - key: gpu-compute
+    operator: Exists
+    effect: NoSchedule
