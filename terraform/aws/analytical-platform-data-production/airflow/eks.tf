@@ -616,7 +616,7 @@ import {
 
 resource "aws_launch_template" "sandpit_standard" {
   name          = "eks-dcc306aa-0520-d4e7-1ef0-b26027ceb6da"
-  image_id      = "ami-044d355a56926f0c6"
+  image_id      = "ami-0aa9fe9eb35cf4eaf"
   instance_type = "t3a.small"
 
   disable_api_stop        = false
