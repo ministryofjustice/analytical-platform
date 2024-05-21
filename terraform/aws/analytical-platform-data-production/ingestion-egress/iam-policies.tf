@@ -53,6 +53,7 @@ data "aws_iam_policy_document" "development_replication" {
 
 module "development_replication_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.39.1"
@@ -117,6 +118,7 @@ data "aws_iam_policy_document" "production_replication" {
 
 module "production_replication_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.39.1"
