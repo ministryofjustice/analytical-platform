@@ -2,7 +2,7 @@ module "development_replication_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.39.0"
+  version = "5.39.1"
 
   create_role = true
 
@@ -18,7 +18,7 @@ module "production_replication_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.39.0"
+  version = "5.39.1"
 
   create_role = true
 
