@@ -63,6 +63,7 @@ rds_db_name              = "controlpanel"
 rds_snapshot_identifier  = "eks-production-control-panelspsg-db-newly-encrypted"
 rds_maintenance_window   = "Mon:00:00-Mon:03:00"
 rds_backup_window        = "03:00-06:00"
+rds_ca_cert_identifier   = "rds-ca-rsa2048-g1"
 rds_monitoring_interval  = 30
 rds_monitoring_role_name = "ControlPanelRDSMonitoringRole_psgdb-encrypted"
 rds_paramaters = [

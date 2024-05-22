@@ -134,6 +134,11 @@ variable "rds_backup_window" {
   description = "Backup window for the RDS instance"
 }
 
+variable "rds_ca_cert_identifier" {
+  type        = string
+  description = "CA certificate for the RDS instance"
+}
+
 variable "rds_monitoring_interval" {
   type        = number
   description = "Monitoring interval for the RDS instance"
