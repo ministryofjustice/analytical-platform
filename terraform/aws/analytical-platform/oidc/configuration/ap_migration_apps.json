@@ -62,7 +62,7 @@
   {
     "name": "commuter-webapp-familyman",
     "source_repo_name": "commuter-webapp-familyman",
-    "team": ["data-engineers"],
+    "team": ["data-engineering"],
     "description": ""
   },
   {
@@ -104,7 +104,7 @@
   {
     "name": "data-discovery",
     "source_repo_name": "data-discovery",
-    "team": ["data-engineers"],
+    "team": ["data-engineering"],
     "description": "",
     "role_name_suffix": "data-discovery-tool"
   },
