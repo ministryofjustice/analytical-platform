@@ -36,7 +36,8 @@ data "aws_iam_policy_document" "github_airflow_cjs_dashboard_data" {
       "athena:GetTable",
       "athena:GetTables",
       "athena:StartQueryExecution",
-      "athena:StopQueryExecution"
+      "athena:StopQueryExecution",
+      "athena:GetTableMetadata"
     ]
     resources = [
       "arn:aws:athena:*:${var.account_ids["analytical-platform-data-production"]}:datacatalog/AwsDataCatalog",

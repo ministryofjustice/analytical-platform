@@ -6,7 +6,7 @@ module "rds" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/rds/aws"
-  version = "6.5.5"
+  version = "6.6.0"
 
   identifier          = local.rds_identifier
   engine              = var.rds_engine
@@ -20,6 +20,7 @@ module "rds" {
   snapshot_identifier = var.rds_snapshot_identifier
   maintenance_window  = var.rds_maintenance_window
   backup_window       = var.rds_backup_window
+  ca_cert_identifier  = var.rds_ca_cert_identifier
 
   subnet_ids             = module.vpc.database_subnets
   vpc_security_group_ids = [module.eks.worker_security_group_id]
