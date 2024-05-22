@@ -262,6 +262,8 @@ output "prod_kubeconfig_certificate_authority_data" {
   value = aws_eks_cluster.airflow_prod_eks_cluster.certificate_authority[0].data
 }
 
+/* This is the OLD Node Group */
+
 resource "aws_eks_node_group" "prod_node_group_standard" {
   cluster_name    = aws_eks_cluster.airflow_prod_eks_cluster.name
   node_group_name = "standard"
@@ -324,6 +326,69 @@ resource "aws_eks_node_group" "prod_node_group_high_memory" {
   }
 }
 
+/* This is the NEW Node Group */
+
+resource "aws_eks_node_group" "new_prod_node_group_standard" {
+  cluster_name    = aws_eks_cluster.airflow_prod_eks_cluster.name
+  node_group_name = "new-standard"
+  node_role_arn   = aws_iam_role.airflow_prod_node_instance_role.arn
+  subnet_ids      = aws_subnet.prod_private_subnet[*].id
+  ami_type        = "AL2_x86_64"
+  capacity_type   = "ON_DEMAND"
+  disk_size       = 150
+  instance_types  = var.node_group_instance_types["standard"]
+
+  scaling_config {
+    desired_size = 1
+    max_size     = 25
+    min_size     = 1
+  }
+
+  update_config {
+    max_unavailable = 1
+  }
+
+  # Allow external changes without Terraform plan difference
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
+  }
+}
+
+resource "aws_eks_node_group" "new_prod_node_group_high_memory" {
+  cluster_name    = aws_eks_cluster.airflow_prod_eks_cluster.name
+  node_group_name = "new-high-memory"
+  node_role_arn   = aws_iam_role.airflow_prod_node_instance_role.arn
+  subnet_ids      = aws_subnet.prod_private_subnet[*].id
+  ami_type        = "AL2_x86_64"
+  capacity_type   = "ON_DEMAND"
+  disk_size       = 200
+  instance_types  = var.node_group_instance_types["high-memory"]
+
+  scaling_config {
+    desired_size = 1
+    max_size     = 1
+    min_size     = 1
+  }
+
+  update_config {
+    max_unavailable = 1
+  }
+
+  # Allow external changes without Terraform plan difference
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
+  }
+
+  taint {
+    key    = "high-memory"
+    value  = "true"
+    effect = "NO_SCHEDULE"
+  }
+
+  labels = {
+    high-memory = "true"
+  }
+}
 
 resource "kubernetes_namespace" "kyverno_prod" {
   provider = kubernetes.prod-airflow-cluster
