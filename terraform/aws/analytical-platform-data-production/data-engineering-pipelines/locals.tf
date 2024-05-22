@@ -435,12 +435,8 @@ locals {
               Effect = "Allow"
               Principal = {
                 AWS = [
-                  "arn:aws:iam::649098267436:role/GlueJobRole20200409082701607800000004",
-                  "arn:aws:iam::492687888235:role/GlueJobRole20200409082023850700000002",
                   "arn:aws:iam::649098267436:role/glue-crawler-production",
                   "arn:aws:iam::649098267436:role/glue-job-production",
-                  "arn:aws:iam::492687888235:role/GlueServiceRole-preproduction20200409082023848800000001",
-                  "arn:aws:iam::649098267436:role/GlueServiceRole-production20200409082701606000000001",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land/opg/sirius/*"
@@ -456,12 +452,8 @@ locals {
               Effect = "Deny"
               Principal = {
                 AWS = [
-                  "arn:aws:iam::649098267436:role/GlueJobRole20200409082701607800000004",
-                  "arn:aws:iam::492687888235:role/GlueJobRole20200409082023850700000002",
                   "arn:aws:iam::649098267436:role/glue-crawler-production",
                   "arn:aws:iam::649098267436:role/glue-job-production",
-                  "arn:aws:iam::492687888235:role/GlueServiceRole-preproduction20200409082023848800000001",
-                  "arn:aws:iam::649098267436:role/GlueServiceRole-production20200409082701606000000001",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land/opg/sirius/*"
@@ -477,12 +469,8 @@ locals {
               Effect = "Deny"
               Principal = {
                 AWS = [
-                  "arn:aws:iam::649098267436:role/GlueJobRole20200409082701607800000004",
-                  "arn:aws:iam::492687888235:role/GlueJobRole20200409082023850700000002",
                   "arn:aws:iam::649098267436:role/glue-crawler-production",
                   "arn:aws:iam::649098267436:role/glue-job-production",
-                  "arn:aws:iam::492687888235:role/GlueServiceRole-preproduction20200409082023848800000001",
-                  "arn:aws:iam::649098267436:role/GlueServiceRole-production20200409082701606000000001",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land/opg/sirius/*"
@@ -498,13 +486,8 @@ locals {
               Effect = "Deny"
               Principal = {
                 AWS = [
-                  "arn:aws:iam::649098267436:role/GlueServiceRole-production20200409082701606000000001",
-                  "arn:aws:iam::492687888235:role/GlueJobRole20200409082023850700000002",
-                  "arn:aws:iam::492687888235:role/GlueServiceRole-preproduction20200409082023848800000001",
                   "arn:aws:iam::649098267436:role/glue-crawler-production",
                   "arn:aws:iam::649098267436:role/glue-job-production",
-                  "arn:aws:iam::649098267436:role/GlueJobRole20200409082701607800000004",
-                  "arn:aws:iam::492687888235:role/GlueJobRole20200409082023850700000002",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land/opg/sirius/*"
