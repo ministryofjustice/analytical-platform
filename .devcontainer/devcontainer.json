@@ -1,44 +1,21 @@
 {
-  "name": "data-platform",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "name": "analytical-platform",
+  "image": "ghcr.io/ministryofjustice/devcontainer-base:latest",
   "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": { "configureZshAsDefaultShell": true },
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/node:1": {},
-    "./features/src/base": {},
-    "./features/src/aws-tools": {},
-    "./features/src/cicd-tools": {},
-    "./features/src/container-tools": {},
-    "./features/src/git-tools": {},
-    "./features/src/kubernetes-tools": {},
-    "./features/src/policy-tools": {},
-    "./features/src/pulumi-tools": {},
-    "./features/src/sast-tools": {},
-    "./features/src/terraform-tools": {}
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/ministryofjustice/devcontainer-feature/aws:1": {},
+    "ghcr.io/ministryofjustice/devcontainer-feature/kubernetes:1": {},
+    "ghcr.io/ministryofjustice/devcontainer-feature/static-analysis:1": {},
+    "ghcr.io/ministryofjustice/devcontainer-feature/terraform:1": {}
   },
-  "containerEnv": {
-    "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}",
-    "GITHUB_USER": "${localEnv:GITHUB_USER}"
-  },
-  "overrideFeatureInstallOrder": [
-    "ghcr.io/devcontainers/features/common-utils",
-    "./features/src/base"
-  ],
-  "remoteUser": "vscode",
-  "runArgs": ["--name=data-platform-devcontainer"],
-  "mounts": [
-    { "source": "ministryofjustice-data-platform-devcontainer-persisted", "target": "/opt/vscode-dev-containers", "type": "volume" },
-    { "source": "ministryofjustice-data-platform-devcontainer-workspace", "target": "/home/vscode/workspace", "type": "volume" },
-    { "source": "ministryofjustice-data-platform-devcontainer-commandhistory", "target": "/home/vscode/.commandhistory", "type": "volume" }
-  ],
-  "workspaceFolder": "/home/vscode/workspace",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
   "customizations": {
     "vscode": {
-      "settings": {
-        "dotfiles.repository": "https://github.com/${localEnv:GITHUB_USER}/dotfiles",
-        "dotfiles.targetPath": "~/dotfiles",
-        "dotfiles.installCommand": "setup.sh"
-      }
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "GitHub.vscode-github-actions",
+        "GitHub.vscode-pull-request-github"
+      ]
     }
   }
 }
