@@ -8,9 +8,9 @@ host: https://technical-documentation.analytical-platform.service.justice.gov.uk
 
 # Header-related options
 show_govuk_logo: false
-service_name: Data Platform
+service_name: Analytical Platform
 service_link: /
-phase: Discovery
+phase: Alpha
 
 # Links to show on right-hand-side of header
 header_links:

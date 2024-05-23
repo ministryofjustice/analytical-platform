@@ -1,15 +1,17 @@
 <!-- markdownlint-disable MD013 -->
-# Contributing to the MoJ Data Platform
+# Contributing to the MoJ Analytical platform
 
 ## Table of contents
 
-* [Code of Conduct](#code-of-conduct)
-* [Standards](#standards)
-* [Reporting Bugs](#reporting-bugs)
-* [Reporting security issues](#reporting-security-issues)
-* [Signing Contributions](#signing-contributions)
-* [External Contributions](#external-contributions)
-* [Licence](#licence)
+- [Contributing to the MoJ Analytical platform](#contributing-to-the-moj-analytical-platform)
+  - [Table of contents](#table-of-contents)
+  - [Code of Conduct](#code-of-conduct)
+  - [Standards](#standards)
+  - [Reporting bugs](#reporting-bugs)
+  - [Reporting security issues](#reporting-security-issues)
+  - [Signing contributions](#signing-contributions)
+  - [External contributions](#external-contributions)
+  - [Licence](#licence)
 
 ## Code of Conduct
 
@@ -33,7 +35,7 @@ Please report any security issues inline with the Ministry of Justice [Vulnerabi
 ## Signing contributions
 
 In addition to following the above guidance,
-the data platform also requires that all git commits are signed.
+the analytical platform also requires that all git commits are signed.
 This will enable the project to improve project integrity,
 begin to secure the supply chain,
 and [provide assurances about security practices](https://slsa.dev/).
@@ -43,7 +45,7 @@ as they are very good.
 
 ## External contributions
 
-The Data Platform is developed [in the open](https://gds.blog.gov.uk/2014/07/22/making-things-open-making-things-better/),
+The Analytical platform is developed [in the open](https://gds.blog.gov.uk/2014/07/22/making-things-open-making-things-better/),
 but this is done primarily by Ministry of Justice staff.
 Although it's possible that external contributions may be accepted,
 please discuss your change [in an issue](/ministryofjustice/analytical-platform/issues) before submitting a pull request.
