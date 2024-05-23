@@ -28,6 +28,10 @@ terraform {
       source  = "hashicorp/tls"
       version = "4.0.5"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.13.2"
+    }
   }
   required_version = "~> 1.5"
 }
@@ -86,6 +90,14 @@ provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.cluster.token
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.cluster.token
+  }
 }
 
 provider "random" {}
