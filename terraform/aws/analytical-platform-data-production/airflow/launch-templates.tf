@@ -220,8 +220,6 @@ import {
   id = "lt-0ba6601ac92732c39"
 }
 
-/* New Launch Templates */
-
 resource "aws_launch_template" "new_prod_standard" {
   name          = "prod_standard"
   image_id      = "ami-03857889452e262ff"
