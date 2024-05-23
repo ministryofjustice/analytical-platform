@@ -1,6 +1,8 @@
 module "route53_zones" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+  #checkov:skip=CKV2_AWS_38:Will address in the future, this is just an import of the zone
+  #checkov:skip=CKV2_AWS_39:Will address in the future, this is just an import of the zone
 
   source  = "terraform-aws-modules/route53/aws//modules/zones"
   version = "2.11.1"
