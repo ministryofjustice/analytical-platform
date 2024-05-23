@@ -24,7 +24,7 @@ and also the MoJ [Cyber and Technical Security Guidance](https://security-guidan
 
 ## Reporting bugs
 
-Bugs are tracked on the [project issues](https://github.com/ministryofjustice/data-platform/issues) page. Please check if your issue has already been filed by someone else by searching the existing issues before filing a new one. Once your issue is filed, it will be triaged by another contributor or maintainer.
+Bugs are tracked on the [project issues](https://github.com/ministryofjustice/analytical-platform/issues) page. Please check if your issue has already been filed by someone else by searching the existing issues before filing a new one. Once your issue is filed, it will be triaged by another contributor or maintainer.
 
 ## Reporting security issues
 
@@ -46,8 +46,8 @@ as they are very good.
 The Data Platform is developed [in the open](https://gds.blog.gov.uk/2014/07/22/making-things-open-making-things-better/),
 but this is done primarily by Ministry of Justice staff.
 Although it's possible that external contributions may be accepted,
-please discuss your change [in an issue](/ministryofjustice/data-platform/issues) before submitting a pull request.
+please discuss your change [in an issue](/ministryofjustice/analytical-platform/issues) before submitting a pull request.
 
 ## Licence
 
-The software and assets within this repository are licensed under the [MIT Licence](https://github.com/ministryofjustice/data-platform/blob/main/LICENSE).
+The software and assets within this repository are licensed under the [MIT Licence](https://github.com/ministryofjustice/analytical-platform/blob/main/LICENSE).
