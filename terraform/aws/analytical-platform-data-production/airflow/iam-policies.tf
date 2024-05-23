@@ -119,14 +119,17 @@ data "aws_iam_policy_document" "airflow_dev_cluster_autoscaler_policy" {
     sid    = ""
     effect = "Allow"
     actions = [
-      "ec2:DescribeInstanceTypes",
-      "ec2:DescribeLaunchTemplateVersions",
-      "autoscaling:TerminateInstanceInAutoScalingGroup",
-      "autoscaling:SetDesiredCapacity",
-      "autoscaling:DescribeTags",
-      "autoscaling:DescribeLaunchConfigurations",
+      "autoscaling:DescribeAutoScalingGroups",
       "autoscaling:DescribeAutoScalingInstances",
-      "autoscaling:DescribeAutoScalingGroups"
+      "autoscaling:DescribeLaunchConfigurations",
+      "autoscaling:DescribeScalingActivities",
+      "autoscaling:DescribeTags",
+      "autoscaling:SetDesiredCapacity",
+      "ec2:DescribeLaunchTemplateVersions",
+      "ec2:DescribeInstanceTypes",
+      "ec2:DescribeImages",
+      "ec2:GetInstanceTypesFromInstanceRequirements",
+      "eks:DescribeNodegroup"
     ]
     resources = ["*"]
   }
