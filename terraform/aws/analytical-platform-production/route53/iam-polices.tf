@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "analytical_platform_compute_route53_access" {
+  #checkov:skip=CKV_AWS_356:Wildcard is suggested from listing zones
+
   statement {
     sid    = "AllowRoute53List"
     effect = "Allow"
