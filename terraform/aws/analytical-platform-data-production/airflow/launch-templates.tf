@@ -102,124 +102,6 @@ resource "aws_launch_template" "dev_high_memory" {
   }
 }
 
-resource "aws_launch_template" "prod_standard" {
-  name          = "eks-96c23b97-4a05-a3f8-c010-ef0900f70468"
-  image_id      = "ami-03857889452e262ff"
-  instance_type = "t3a.large"
-
-  disable_api_stop        = false
-  disable_api_termination = false
-
-  security_group_names = []
-
-  user_data = "TUlNRS1WZXJzaW9uOiAxLjAKQ29udGVudC1UeXBlOiBtdWx0aXBhcnQvbWl4ZWQ7IGJvdW5kYXJ5PSIvLyIKCi0tLy8KQ29udGVudC1UeXBlOiB0ZXh0L3gtc2hlbGxzY3JpcHQ7IGNoYXJzZXQ9InVzLWFzY2lpIgojIS9iaW4vYmFzaApzZXQgLWV4CkI2NF9DTFVTVEVSX0NBPUxTMHRMUzFDUlVkSlRpQkRSVkpVU1VaSlEwRlVSUzB0TFMwdENrMUpTVU0xZWtORFFXTXJaMEYzU1VKQlowbENRVVJCVGtKbmEzRm9hMmxIT1hjd1FrRlJjMFpCUkVGV1RWSk5kMFZSV1VSV1VWRkVSWGR3Y21SWFNtd0tZMjAxYkdSSFZucE5RalJZUkZSSmVVMUVUWGxOVkVVelRYcEJlVTVXYjFoRVZFMTVUVVJOZUU5RVJUTk5la0Y1VGxadmQwWlVSVlJOUWtWSFFURlZSUXBCZUUxTFlUTldhVnBZU25WYVdGSnNZM3BEUTBGVFNYZEVVVmxLUzI5YVNXaDJZMDVCVVVWQ1FsRkJSR2RuUlZCQlJFTkRRVkZ2UTJkblJVSkJTMVJVQ21acGRFUnJkRFUxY0RkYWFrcFBWMFo1YVRsdk0ySmpWV1pUTURGTWRWZG9hbUpYU1dabVlWQlRjR1JDVldkRmNVeFVjMk5TWjNveFZUVTFhRzF1Y25vS09ERldiblZtU2pnMk5UWnZSbTQ1WlhsMlVIUlFibFp2VTJkNk9EQmhjVTQ1VkZkaVJYTnVXR1ZDYVRsaFVXUlBiRmRoUTI1dEsyWk1kMEZGU21KbEt3bzBOM1UzV1cxSVRqbElUbE5hWVVSdFFTOVhkRmhTYzNNNU9GVmFWVXhhZGk5WlRuZ3phWGhuSzBOV1NXTlNheTl0VUZWVlZEVTJjbXhZSzI1S1NEUTBDbVF2ZUd4UFRXaE9iR3RCZFZWb2JtSnFOR016U1hoRmQxcDNlWGRYZVZOcGFXVk9ia1UyVFZsT2VrWnpiaTh3TVU5eVUwSjNSRzlWV0doaWVsaEpaR2tLVm5kR1VGaGFLMDg0VDNobFMzVkdNbnBzVFZsQ1UwUkVTV2hQTm0xMlowZHJTRGhXYWxWVlpUWXJhWGxOVFdWaE1GQm5MMGxYTVhWR2R6QjFiSHBVTndwR1dTdHpaRFEzV2s1M01UZE9jalZUU1dWelEwRjNSVUZCWVU1RFRVVkJkMFJuV1VSV1VqQlFRVkZJTDBKQlVVUkJaMHRyVFVFNFIwRXhWV1JGZDBWQ0NpOTNVVVpOUVUxQ1FXWTRkMGhSV1VSV1VqQlBRa0paUlVaTldYTmxjR0ZEZWtWcWEyMVFVbmRXTTNoVE5sbGlORWt6Y3poTlFUQkhRMU54UjFOSllqTUtSRkZGUWtOM1ZVRkJORWxDUVZGQmFqUmxZaTgzU1VNeFVsTlJXa05xZW5CaE5uSkZTV2hVWWxwc01YRTROaXR6TDB0blIwRkliWFlyWlZaQ2FtYzBSZ293WldKSFVFVnpaM05SVERscFNtZG5OMUkxTHpVdk4ydFZibVpEVlZwRlNWcExRMlJhY0ZSMGFrZHVWelJ1Y1hGSVVIY3lhRVUxY3pkRVFVcFNSSEpaQ25BMlVrVTJOemxTT1VWTVZUTm9TbVUxYjB0Uk9XUjFibXR0TWpsUWJWZHBhRzE1V1dzMmFraFlNMDEwVmpndlZqRmtSM0pQZVU0NGEyRkhjMXBKWTBZS1pHOHphMjgwVTJkR1VrOVdkMWR4YVRkTVFraHNWbE16VFRBMU5tdDBjbEpuWTNSMFRtUXZVRkE1VWpSU2IyY3JWalZvWlVOU2NtczFNMjVIZG1GQmR3b3lSRXQyVkhvNVZubHBlakJyWTB0TWFYcHZaREJyYjFwbkwwazFlSFYwWjNsbmRYQk1Za1pTZDFOT056WXhTbXhHU2xvcmFEaEhOVE4zY21OQ1IzcFFDamRyYkZVMVdqSnFVVk5sVTBGUGEwRXZUM3BUYzB4VWFWRTBNRXR4UzJSMVdYQXlUUW90TFMwdExVVk9SQ0JEUlZKVVNVWkpRMEZVUlMwdExTMHRDZz09CkFQSV9TRVJWRVJfVVJMPWh0dHBzOi8vRkMzRjdBODg1MDg2NzZBMzBEQ0FGRTdCMjYxOUI1NDQuZ3I3LmV1LXdlc3QtMS5la3MuYW1hem9uYXdzLmNvbQpLOFNfQ0xVU1RFUl9ETlNfSVA9MTcyLjIwLjAuMTAKL2V0Yy9la3MvYm9vdHN0cmFwLnNoIGFpcmZsb3ctcHJvZCAtLWt1YmVsZXQtZXh0cmEtYXJncyAnLS1ub2RlLWxhYmVscz1la3MuYW1hem9uYXdzLmNvbS9ub2RlZ3JvdXAtaW1hZ2U9YW1pLTAzODU3ODg5NDUyZTI2MmZmLGVrcy5hbWF6b25hd3MuY29tL2NhcGFjaXR5VHlwZT1PTl9ERU1BTkQsZWtzLmFtYXpvbmF3cy5jb20vbm9kZWdyb3VwPXN0YW5kYXJkIC0tbWF4LXBvZHM9MzUnIC0tYjY0LWNsdXN0ZXItY2EgJEI2NF9DTFVTVEVSX0NBIC0tYXBpc2VydmVyLWVuZHBvaW50ICRBUElfU0VSVkVSX1VSTCAtLWRucy1jbHVzdGVyLWlwICRLOFNfQ0xVU1RFUl9ETlNfSVAgLS11c2UtbWF4LXBvZHMgZmFsc2UKCi0tLy8tLQ=="
-
-  block_device_mappings {
-    device_name = "/dev/xvda"
-    ebs {
-      delete_on_termination = "true"
-      iops                  = 0
-      throughput            = 125
-      volume_size           = 150
-      volume_type           = "gp2"
-    }
-  }
-
-  iam_instance_profile {
-    name = "eks-96c23b97-4a05-a3f8-c010-ef0900f70468"
-  }
-
-  metadata_options {
-    http_put_response_hop_limit = 2
-    http_tokens                 = "optional"
-  }
-
-  network_interfaces {
-    device_index       = 0
-    ipv4_address_count = 0
-    ipv4_addresses     = []
-    ipv4_prefix_count  = 0
-    ipv4_prefixes      = []
-    ipv6_address_count = 0
-    ipv6_addresses     = []
-    ipv6_prefix_count  = 0
-    ipv6_prefixes      = []
-    network_card_index = 0
-    security_groups = [
-      "sg-0d3d0f70f95dc133f"
-    ]
-  }
-
-  tags = {
-    "eks:cluster-name"   = "airflow-prod"
-    "eks:nodegroup-name" = "standard"
-  }
-}
-
-import {
-  to = aws_launch_template.prod_standard
-  id = "lt-0758d29a39b41524d"
-}
-
-resource "aws_launch_template" "prod_high_memory" {
-  name          = "eks-d2c54715-411e-0d04-5a5a-bb0297c53971"
-  image_id      = "ami-03857889452e262ff"
-  instance_type = "r6i.8xlarge"
-
-  disable_api_stop        = false
-  disable_api_termination = false
-
-  security_group_names = []
-
-  user_data = "TUlNRS1WZXJzaW9uOiAxLjAKQ29udGVudC1UeXBlOiBtdWx0aXBhcnQvbWl4ZWQ7IGJvdW5kYXJ5PSIvLyIKCi0tLy8KQ29udGVudC1UeXBlOiB0ZXh0L3gtc2hlbGxzY3JpcHQ7IGNoYXJzZXQ9InVzLWFzY2lpIgojIS9iaW4vYmFzaApzZXQgLWV4CkI2NF9DTFVTVEVSX0NBPUxTMHRMUzFDUlVkSlRpQkRSVkpVU1VaSlEwRlVSUzB0TFMwdENrMUpTVU0xZWtORFFXTXJaMEYzU1VKQlowbENRVVJCVGtKbmEzRm9hMmxIT1hjd1FrRlJjMFpCUkVGV1RWSk5kMFZSV1VSV1VWRkVSWGR3Y21SWFNtd0tZMjAxYkdSSFZucE5RalJZUkZSSmVVMUVUWGxOVkVVelRYcEJlVTVXYjFoRVZFMTVUVVJOZUU5RVJUTk5la0Y1VGxadmQwWlVSVlJOUWtWSFFURlZSUXBCZUUxTFlUTldhVnBZU25WYVdGSnNZM3BEUTBGVFNYZEVVVmxLUzI5YVNXaDJZMDVCVVVWQ1FsRkJSR2RuUlZCQlJFTkRRVkZ2UTJkblJVSkJTMVJVQ21acGRFUnJkRFUxY0RkYWFrcFBWMFo1YVRsdk0ySmpWV1pUTURGTWRWZG9hbUpYU1dabVlWQlRjR1JDVldkRmNVeFVjMk5TWjNveFZUVTFhRzF1Y25vS09ERldiblZtU2pnMk5UWnZSbTQ1WlhsMlVIUlFibFp2VTJkNk9EQmhjVTQ1VkZkaVJYTnVXR1ZDYVRsaFVXUlBiRmRoUTI1dEsyWk1kMEZGU21KbEt3bzBOM1UzV1cxSVRqbElUbE5hWVVSdFFTOVhkRmhTYzNNNU9GVmFWVXhhZGk5WlRuZ3phWGhuSzBOV1NXTlNheTl0VUZWVlZEVTJjbXhZSzI1S1NEUTBDbVF2ZUd4UFRXaE9iR3RCZFZWb2JtSnFOR016U1hoRmQxcDNlWGRYZVZOcGFXVk9ia1UyVFZsT2VrWnpiaTh3TVU5eVUwSjNSRzlWV0doaWVsaEpaR2tLVm5kR1VGaGFLMDg0VDNobFMzVkdNbnBzVFZsQ1UwUkVTV2hQTm0xMlowZHJTRGhXYWxWVlpUWXJhWGxOVFdWaE1GQm5MMGxYTVhWR2R6QjFiSHBVTndwR1dTdHpaRFEzV2s1M01UZE9jalZUU1dWelEwRjNSVUZCWVU1RFRVVkJkMFJuV1VSV1VqQlFRVkZJTDBKQlVVUkJaMHRyVFVFNFIwRXhWV1JGZDBWQ0NpOTNVVVpOUVUxQ1FXWTRkMGhSV1VSV1VqQlBRa0paUlVaTldYTmxjR0ZEZWtWcWEyMVFVbmRXTTNoVE5sbGlORWt6Y3poTlFUQkhRMU54UjFOSllqTUtSRkZGUWtOM1ZVRkJORWxDUVZGQmFqUmxZaTgzU1VNeFVsTlJXa05xZW5CaE5uSkZTV2hVWWxwc01YRTROaXR6TDB0blIwRkliWFlyWlZaQ2FtYzBSZ293WldKSFVFVnpaM05SVERscFNtZG5OMUkxTHpVdk4ydFZibVpEVlZwRlNWcExRMlJhY0ZSMGFrZHVWelJ1Y1hGSVVIY3lhRVUxY3pkRVFVcFNSSEpaQ25BMlVrVTJOemxTT1VWTVZUTm9TbVUxYjB0Uk9XUjFibXR0TWpsUWJWZHBhRzE1V1dzMmFraFlNMDEwVmpndlZqRmtSM0pQZVU0NGEyRkhjMXBKWTBZS1pHOHphMjgwVTJkR1VrOVdkMWR4YVRkTVFraHNWbE16VFRBMU5tdDBjbEpuWTNSMFRtUXZVRkE1VWpSU2IyY3JWalZvWlVOU2NtczFNMjVIZG1GQmR3b3lSRXQyVkhvNVZubHBlakJyWTB0TWFYcHZaREJyYjFwbkwwazFlSFYwWjNsbmRYQk1Za1pTZDFOT056WXhTbXhHU2xvcmFEaEhOVE4zY21OQ1IzcFFDamRyYkZVMVdqSnFVVk5sVTBGUGEwRXZUM3BUYzB4VWFWRTBNRXR4UzJSMVdYQXlUUW90TFMwdExVVk9SQ0JEUlZKVVNVWkpRMEZVUlMwdExTMHRDZz09CkFQSV9TRVJWRVJfVVJMPWh0dHBzOi8vRkMzRjdBODg1MDg2NzZBMzBEQ0FGRTdCMjYxOUI1NDQuZ3I3LmV1LXdlc3QtMS5la3MuYW1hem9uYXdzLmNvbQpLOFNfQ0xVU1RFUl9ETlNfSVA9MTcyLjIwLjAuMTAKL2V0Yy9la3MvYm9vdHN0cmFwLnNoIGFpcmZsb3ctcHJvZCAtLWt1YmVsZXQtZXh0cmEtYXJncyAnLS1ub2RlLWxhYmVscz1la3MuYW1hem9uYXdzLmNvbS9ub2RlZ3JvdXAtaW1hZ2U9YW1pLTAzODU3ODg5NDUyZTI2MmZmLGVrcy5hbWF6b25hd3MuY29tL2NhcGFjaXR5VHlwZT1PTl9ERU1BTkQsaGlnaC1tZW1vcnk9dHJ1ZSxla3MuYW1hem9uYXdzLmNvbS9ub2RlZ3JvdXA9aGlnaC1tZW1vcnkgLS1yZWdpc3Rlci13aXRoLXRhaW50cz1oaWdoLW1lbW9yeT10cnVlOk5vU2NoZWR1bGUgLS1tYXgtcG9kcz0yMzQnIC0tYjY0LWNsdXN0ZXItY2EgJEI2NF9DTFVTVEVSX0NBIC0tYXBpc2VydmVyLWVuZHBvaW50ICRBUElfU0VSVkVSX1VSTCAtLWRucy1jbHVzdGVyLWlwICRLOFNfQ0xVU1RFUl9ETlNfSVAgLS11c2UtbWF4LXBvZHMgZmFsc2UKCi0tLy8tLQ=="
-
-  block_device_mappings {
-    device_name = "/dev/xvda"
-    ebs {
-      delete_on_termination = "true"
-      iops                  = 0
-      throughput            = 125
-      volume_size           = 200
-      volume_type           = "gp2"
-    }
-  }
-
-  iam_instance_profile {
-    name = "eks-d2c54715-411e-0d04-5a5a-bb0297c53971"
-  }
-
-  metadata_options {
-    http_put_response_hop_limit = 2
-    http_tokens                 = "optional"
-  }
-
-  network_interfaces {
-    device_index       = 0
-    ipv4_address_count = 0
-    ipv4_addresses     = []
-    ipv4_prefix_count  = 0
-    ipv4_prefixes      = []
-    ipv6_address_count = 0
-    ipv6_addresses     = []
-    ipv6_prefix_count  = 0
-    ipv6_prefixes      = []
-    network_card_index = 0
-    security_groups = [
-      "sg-0d3d0f70f95dc133f"
-    ]
-  }
-
-  tags = {
-    "eks:cluster-name"   = "airflow-prod"
-    "eks:nodegroup-name" = "high-memory"
-  }
-}
-
-import {
-  to = aws_launch_template.prod_high_memory
-  id = "lt-01bc64b02e52bb0d3"
-}
-
 resource "aws_launch_template" "sandpit_standard" {
   name          = "eks-dcc306aa-0520-d4e7-1ef0-b26027ceb6da"
   image_id      = "ami-0aa9fe9eb35cf4eaf"
@@ -303,7 +185,6 @@ resource "aws_launch_template" "sandpit_high_memory" {
   }
 
   iam_instance_profile {
-
     name = "eks-50c306aa-05d8-6b86-cfe1-6007657b8987"
   }
 
@@ -337,4 +218,110 @@ resource "aws_launch_template" "sandpit_high_memory" {
 import {
   to = aws_launch_template.sandpit_high_memory
   id = "lt-0ba6601ac92732c39"
+}
+
+/* New Launch Templates */
+
+resource "aws_launch_template" "new_prod_standard" {
+  name          = "prod_standard"
+  image_id      = "ami-03857889452e262ff"
+  instance_type = "t3a.large"
+
+  disable_api_stop        = false
+  disable_api_termination = false
+
+  security_group_names = []
+
+  user_data = "TUlNRS1WZXJzaW9uOiAxLjAKQ29udGVudC1UeXBlOiBtdWx0aXBhcnQvbWl4ZWQ7IGJvdW5kYXJ5PSIvLyIKCi0tLy8KQ29udGVudC1UeXBlOiB0ZXh0L3gtc2hlbGxzY3JpcHQ7IGNoYXJzZXQ9InVzLWFzY2lpIgojIS9iaW4vYmFzaApzZXQgLWV4CkI2NF9DTFVTVEVSX0NBPUxTMHRMUzFDUlVkSlRpQkRSVkpVU1VaSlEwRlVSUzB0TFMwdENrMUpTVU0xZWtORFFXTXJaMEYzU1VKQlowbENRVVJCVGtKbmEzRm9hMmxIT1hjd1FrRlJjMFpCUkVGV1RWSk5kMFZSV1VSV1VWRkVSWGR3Y21SWFNtd0tZMjAxYkdSSFZucE5RalJZUkZSSmVVMUVUWGxOVkVVelRYcEJlVTVXYjFoRVZFMTVUVVJOZUU5RVJUTk5la0Y1VGxadmQwWlVSVlJOUWtWSFFURlZSUXBCZUUxTFlUTldhVnBZU25WYVdGSnNZM3BEUTBGVFNYZEVVVmxLUzI5YVNXaDJZMDVCVVVWQ1FsRkJSR2RuUlZCQlJFTkRRVkZ2UTJkblJVSkJTMVJVQ21acGRFUnJkRFUxY0RkYWFrcFBWMFo1YVRsdk0ySmpWV1pUTURGTWRWZG9hbUpYU1dabVlWQlRjR1JDVldkRmNVeFVjMk5TWjNveFZUVTFhRzF1Y25vS09ERldiblZtU2pnMk5UWnZSbTQ1WlhsMlVIUlFibFp2VTJkNk9EQmhjVTQ1VkZkaVJYTnVXR1ZDYVRsaFVXUlBiRmRoUTI1dEsyWk1kMEZGU21KbEt3bzBOM1UzV1cxSVRqbElUbE5hWVVSdFFTOVhkRmhTYzNNNU9GVmFWVXhhZGk5WlRuZ3phWGhuSzBOV1NXTlNheTl0VUZWVlZEVTJjbXhZSzI1S1NEUTBDbVF2ZUd4UFRXaE9iR3RCZFZWb2JtSnFOR016U1hoRmQxcDNlWGRYZVZOcGFXVk9ia1UyVFZsT2VrWnpiaTh3TVU5eVUwSjNSRzlWV0doaWVsaEpaR2tLVm5kR1VGaGFLMDg0VDNobFMzVkdNbnBzVFZsQ1UwUkVTV2hQTm0xMlowZHJTRGhXYWxWVlpUWXJhWGxOVFdWaE1GQm5MMGxYTVhWR2R6QjFiSHBVTndwR1dTdHpaRFEzV2s1M01UZE9jalZUU1dWelEwRjNSVUZCWVU1RFRVVkJkMFJuV1VSV1VqQlFRVkZJTDBKQlVVUkJaMHRyVFVFNFIwRXhWV1JGZDBWQ0NpOTNVVVpOUVUxQ1FXWTRkMGhSV1VSV1VqQlBRa0paUlVaTldYTmxjR0ZEZWtWcWEyMVFVbmRXTTNoVE5sbGlORWt6Y3poTlFUQkhRMU54UjFOSllqTUtSRkZGUWtOM1ZVRkJORWxDUVZGQmFqUmxZaTgzU1VNeFVsTlJXa05xZW5CaE5uSkZTV2hVWWxwc01YRTROaXR6TDB0blIwRkliWFlyWlZaQ2FtYzBSZ293WldKSFVFVnpaM05SVERscFNtZG5OMUkxTHpVdk4ydFZibVpEVlZwRlNWcExRMlJhY0ZSMGFrZHVWelJ1Y1hGSVVIY3lhRVUxY3pkRVFVcFNSSEpaQ25BMlVrVTJOemxTT1VWTVZUTm9TbVUxYjB0Uk9XUjFibXR0TWpsUWJWZHBhRzE1V1dzMmFraFlNMDEwVmpndlZqRmtSM0pQZVU0NGEyRkhjMXBKWTBZS1pHOHphMjgwVTJkR1VrOVdkMWR4YVRkTVFraHNWbE16VFRBMU5tdDBjbEpuWTNSMFRtUXZVRkE1VWpSU2IyY3JWalZvWlVOU2NtczFNMjVIZG1GQmR3b3lSRXQyVkhvNVZubHBlakJyWTB0TWFYcHZaREJyYjFwbkwwazFlSFYwWjNsbmRYQk1Za1pTZDFOT056WXhTbXhHU2xvcmFEaEhOVE4zY21OQ1IzcFFDamRyYkZVMVdqSnFVVk5sVTBGUGEwRXZUM3BUYzB4VWFWRTBNRXR4UzJSMVdYQXlUUW90TFMwdExVVk9SQ0JEUlZKVVNVWkpRMEZVUlMwdExTMHRDZz09CkFQSV9TRVJWRVJfVVJMPWh0dHBzOi8vRkMzRjdBODg1MDg2NzZBMzBEQ0FGRTdCMjYxOUI1NDQuZ3I3LmV1LXdlc3QtMS5la3MuYW1hem9uYXdzLmNvbQpLOFNfQ0xVU1RFUl9ETlNfSVA9MTcyLjIwLjAuMTAKL2V0Yy9la3MvYm9vdHN0cmFwLnNoIGFpcmZsb3ctcHJvZCAtLWt1YmVsZXQtZXh0cmEtYXJncyAnLS1ub2RlLWxhYmVscz1la3MuYW1hem9uYXdzLmNvbS9ub2RlZ3JvdXAtaW1hZ2U9YW1pLTAzODU3ODg5NDUyZTI2MmZmLGVrcy5hbWF6b25hd3MuY29tL2NhcGFjaXR5VHlwZT1PTl9ERU1BTkQsZWtzLmFtYXpvbmF3cy5jb20vbm9kZWdyb3VwPXN0YW5kYXJkIC0tbWF4LXBvZHM9MzUnIC0tYjY0LWNsdXN0ZXItY2EgJEI2NF9DTFVTVEVSX0NBIC0tYXBpc2VydmVyLWVuZHBvaW50ICRBUElfU0VSVkVSX1VSTCAtLWRucy1jbHVzdGVyLWlwICRLOFNfQ0xVU1RFUl9ETlNfSVAgLS11c2UtbWF4LXBvZHMgZmFsc2UKCi0tLy8tLQ=="
+
+  block_device_mappings {
+    device_name = "/dev/xvda"
+    ebs {
+      delete_on_termination = "true"
+      iops                  = 3000
+      throughput            = 250
+      volume_size           = 150
+      volume_type           = "gp3"
+    }
+  }
+
+  metadata_options {
+    http_put_response_hop_limit = 2
+    http_tokens                 = "optional"
+  }
+
+  network_interfaces {
+    device_index       = 0
+    ipv4_address_count = 0
+    ipv4_addresses     = []
+    ipv4_prefix_count  = 0
+    ipv4_prefixes      = []
+    ipv6_address_count = 0
+    ipv6_addresses     = []
+    ipv6_prefix_count  = 0
+    ipv6_prefixes      = []
+    network_card_index = 0
+    security_groups = [
+      "sg-0d3d0f70f95dc133f"
+    ]
+  }
+
+  tags = {
+    "eks:cluster-name"                                       = "airflow-prod"
+    "eks:nodegroup-name"                                     = "standard"
+    "k8s.io/cluster-autoscaler/node-template/label/standard" = "true"
+    "k8s.io/cluster-autoscaler/node-template/taint/standard" = "true:NoSchedule"
+  }
+}
+
+resource "aws_launch_template" "new_prod_high_memory" {
+  name          = "prod_high_memory"
+  image_id      = "ami-03857889452e262ff"
+  instance_type = "r6i.8xlarge"
+
+  disable_api_stop        = false
+  disable_api_termination = false
+
+  security_group_names = []
+
+  user_data = "TUlNRS1WZXJzaW9uOiAxLjAKQ29udGVudC1UeXBlOiBtdWx0aXBhcnQvbWl4ZWQ7IGJvdW5kYXJ5PSIvLyIKCi0tLy8KQ29udGVudC1UeXBlOiB0ZXh0L3gtc2hlbGxzY3JpcHQ7IGNoYXJzZXQ9InVzLWFzY2lpIgojIS9iaW4vYmFzaApzZXQgLWV4CkI2NF9DTFVTVEVSX0NBPUxTMHRMUzFDUlVkSlRpQkRSVkpVU1VaSlEwRlVSUzB0TFMwdENrMUpTVU0xZWtORFFXTXJaMEYzU1VKQlowbENRVVJCVGtKbmEzRm9hMmxIT1hjd1FrRlJjMFpCUkVGV1RWSk5kMFZSV1VSV1VWRkVSWGR3Y21SWFNtd0tZMjAxYkdSSFZucE5RalJZUkZSSmVVMUVUWGxOVkVVelRYcEJlVTVXYjFoRVZFMTVUVVJOZUU5RVJUTk5la0Y1VGxadmQwWlVSVlJOUWtWSFFURlZSUXBCZUUxTFlUTldhVnBZU25WYVdGSnNZM3BEUTBGVFNYZEVVVmxLUzI5YVNXaDJZMDVCVVVWQ1FsRkJSR2RuUlZCQlJFTkRRVkZ2UTJkblJVSkJTMVJVQ21acGRFUnJkRFUxY0RkYWFrcFBWMFo1YVRsdk0ySmpWV1pUTURGTWRWZG9hbUpYU1dabVlWQlRjR1JDVldkRmNVeFVjMk5TWjNveFZUVTFhRzF1Y25vS09ERldiblZtU2pnMk5UWnZSbTQ1WlhsMlVIUlFibFp2VTJkNk9EQmhjVTQ1VkZkaVJYTnVXR1ZDYVRsaFVXUlBiRmRoUTI1dEsyWk1kMEZGU21KbEt3bzBOM1UzV1cxSVRqbElUbE5hWVVSdFFTOVhkRmhTYzNNNU9GVmFWVXhhZGk5WlRuZ3phWGhuSzBOV1NXTlNheTl0VUZWVlZEVTJjbXhZSzI1S1NEUTBDbVF2ZUd4UFRXaE9iR3RCZFZWb2JtSnFOR016U1hoRmQxcDNlWGRYZVZOcGFXVk9ia1UyVFZsT2VrWnpiaTh3TVU5eVUwSjNSRzlWV0doaWVsaEpaR2tLVm5kR1VGaGFLMDg0VDNobFMzVkdNbnBzVFZsQ1UwUkVTV2hQTm0xMlowZHJTRGhXYWxWVlpUWXJhWGxOVFdWaE1GQm5MMGxYTVhWR2R6QjFiSHBVTndwR1dTdHpaRFEzV2s1M01UZE9jalZUU1dWelEwRjNSVUZCWVU1RFRVVkJkMFJuV1VSV1VqQlFRVkZJTDBKQlVVUkJaMHRyVFVFNFIwRXhWV1JGZDBWQ0NpOTNVVVpOUVUxQ1FXWTRkMGhSV1VSV1VqQlBRa0paUlVaTldYTmxjR0ZEZWtWcWEyMVFVbmRXTTNoVE5sbGlORWt6Y3poTlFUQkhRMU54UjFOSllqTUtSRkZGUWtOM1ZVRkJORWxDUVZGQmFqUmxZaTgzU1VNeFVsTlJXa05xZW5CaE5uSkZTV2hVWWxwc01YRTROaXR6TDB0blIwRkliWFlyWlZaQ2FtYzBSZ293WldKSFVFVnpaM05SVERscFNtZG5OMUkxTHpVdk4ydFZibVpEVlZwRlNWcExRMlJhY0ZSMGFrZHVWelJ1Y1hGSVVIY3lhRVUxY3pkRVFVcFNSSEpaQ25BMlVrVTJOemxTT1VWTVZUTm9TbVUxYjB0Uk9XUjFibXR0TWpsUWJWZHBhRzE1V1dzMmFraFlNMDEwVmpndlZqRmtSM0pQZVU0NGEyRkhjMXBKWTBZS1pHOHphMjgwVTJkR1VrOVdkMWR4YVRkTVFraHNWbE16VFRBMU5tdDBjbEpuWTNSMFRtUXZVRkE1VWpSU2IyY3JWalZvWlVOU2NtczFNMjVIZG1GQmR3b3lSRXQyVkhvNVZubHBlakJyWTB0TWFYcHZaREJyYjFwbkwwazFlSFYwWjNsbmRYQk1Za1pTZDFOT056WXhTbXhHU2xvcmFEaEhOVE4zY21OQ1IzcFFDamRyYkZVMVdqSnFVVk5sVTBGUGEwRXZUM3BUYzB4VWFWRTBNRXR4UzJSMVdYQXlUUW90TFMwdExVVk9SQ0JEUlZKVVNVWkpRMEZVUlMwdExTMHRDZz09CkFQSV9TRVJWRVJfVVJMPWh0dHBzOi8vRkMzRjdBODg1MDg2NzZBMzBEQ0FGRTdCMjYxOUI1NDQuZ3I3LmV1LXdlc3QtMS5la3MuYW1hem9uYXdzLmNvbQpLOFNfQ0xVU1RFUl9ETlNfSVA9MTcyLjIwLjAuMTAKL2V0Yy9la3MvYm9vdHN0cmFwLnNoIGFpcmZsb3ctcHJvZCAtLWt1YmVsZXQtZXh0cmEtYXJncyAnLS1ub2RlLWxhYmVscz1la3MuYW1hem9uYXdzLmNvbS9ub2RlZ3JvdXAtaW1hZ2U9YW1pLTAzODU3ODg5NDUyZTI2MmZmLGVrcy5hbWF6b25hd3MuY29tL2NhcGFjaXR5VHlwZT1PTl9ERU1BTkQsaGlnaC1tZW1vcnk9dHJ1ZSxla3MuYW1hem9uYXdzLmNvbS9ub2RlZ3JvdXA9aGlnaC1tZW1vcnkgLS1yZWdpc3Rlci13aXRoLXRhaW50cz1oaWdoLW1lbW9yeT10cnVlOk5vU2NoZWR1bGUgLS1tYXgtcG9kcz0yMzQnIC0tYjY0LWNsdXN0ZXItY2EgJEI2NF9DTFVTVEVSX0NBIC0tYXBpc2VydmVyLWVuZHBvaW50ICRBUElfU0VSVkVSX1VSTCAtLWRucy1jbHVzdGVyLWlwICRLOFNfQ0xVU1RFUl9ETlNfSVAgLS11c2UtbWF4LXBvZHMgZmFsc2UKCi0tLy8tLQ=="
+
+  block_device_mappings {
+    device_name = "/dev/xvda"
+    ebs {
+      delete_on_termination = "true"
+      iops                  = 3000
+      throughput            = 250
+      volume_size           = 200
+      volume_type           = "gp3"
+    }
+  }
+
+  metadata_options {
+    http_put_response_hop_limit = 2
+    http_tokens                 = "optional"
+  }
+
+  network_interfaces {
+    device_index       = 0
+    ipv4_address_count = 0
+    ipv4_addresses     = []
+    ipv4_prefix_count  = 0
+    ipv4_prefixes      = []
+    ipv6_address_count = 0
+    ipv6_addresses     = []
+    ipv6_prefix_count  = 0
+    ipv6_prefixes      = []
+    network_card_index = 0
+    security_groups = [
+      "sg-0d3d0f70f95dc133f"
+    ]
+  }
+
+  tags = {
+    "eks:cluster-name"                                          = "airflow-prod"
+    "eks:nodegroup-name"                                        = "high-memory"
+    "k8s.io/cluster-autoscaler/node-template/label/high-memory" = "true"
+    "k8s.io/cluster-autoscaler/node-template/taint/high-memory" = "true:NoSchedule"
+  }
 }
