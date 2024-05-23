@@ -83,59 +83,59 @@ output "kubeconfig_certificate_authority_data" {
 
 /* This is the old Node Group */
 
-resource "aws_eks_node_group" "dev_node_group_standard" {
-  cluster_name    = aws_eks_cluster.airflow_dev_eks_cluster.name
-  node_group_name = "standard"
-  node_role_arn   = aws_iam_role.airflow_dev_node_instance_role.arn
-  subnet_ids      = aws_subnet.dev_private_subnet[*].id
+# resource "aws_eks_node_group" "dev_node_group_standard" {
+#   cluster_name    = aws_eks_cluster.airflow_dev_eks_cluster.name
+#   node_group_name = "standard"
+#   node_role_arn   = aws_iam_role.airflow_dev_node_instance_role.arn
+#   subnet_ids      = aws_subnet.dev_private_subnet[*].id
 
-  scaling_config {
-    desired_size = 1
-    max_size     = 10
-    min_size     = 1
-  }
+#   scaling_config {
+#     desired_size = 1
+#     max_size     = 10
+#     min_size     = 1
+#   }
 
-  update_config {
-    max_unavailable = 1
-  }
+#   update_config {
+#     max_unavailable = 1
+#   }
 
-  # Allow external changes without Terraform plan difference
-  lifecycle {
-    ignore_changes = [scaling_config[0].desired_size]
-  }
-}
+#   # Allow external changes without Terraform plan difference
+#   lifecycle {
+#     ignore_changes = [scaling_config[0].desired_size]
+#   }
+# }
 
-resource "aws_eks_node_group" "dev_node_group_high_memory" {
-  cluster_name    = aws_eks_cluster.airflow_dev_eks_cluster.name
-  node_group_name = "high-memory"
-  node_role_arn   = aws_iam_role.airflow_dev_node_instance_role.arn
-  subnet_ids      = aws_subnet.dev_private_subnet[*].id
+# resource "aws_eks_node_group" "dev_node_group_high_memory" {
+#   cluster_name    = aws_eks_cluster.airflow_dev_eks_cluster.name
+#   node_group_name = "high-memory"
+#   node_role_arn   = aws_iam_role.airflow_dev_node_instance_role.arn
+#   subnet_ids      = aws_subnet.dev_private_subnet[*].id
 
-  scaling_config {
-    desired_size = 0
-    max_size     = 1
-    min_size     = 0
-  }
+#   scaling_config {
+#     desired_size = 0
+#     max_size     = 1
+#     min_size     = 0
+#   }
 
-  update_config {
-    max_unavailable = 1
-  }
+#   update_config {
+#     max_unavailable = 1
+#   }
 
-  # Allow external changes without Terraform plan difference
-  lifecycle {
-    ignore_changes = [scaling_config[0].desired_size]
-  }
+#   # Allow external changes without Terraform plan difference
+#   lifecycle {
+#     ignore_changes = [scaling_config[0].desired_size]
+#   }
 
-  taint {
-    key    = "high-memory"
-    value  = "true"
-    effect = "NO_SCHEDULE"
-  }
+#   taint {
+#     key    = "high-memory"
+#     value  = "true"
+#     effect = "NO_SCHEDULE"
+#   }
 
-  labels = {
-    high-memory = "true"
-  }
-}
+#   labels = {
+#     high-memory = "true"
+#   }
+# }
 
 /* This is the NEW Node Group */
 
@@ -146,8 +146,8 @@ resource "aws_eks_node_group" "new_dev_node_group_standard" {
   subnet_ids      = aws_subnet.dev_private_subnet[*].id
 
   launch_template {
-    id      = aws_launch_template.new_dev_standard.id
-    version = aws_launch_template.new_dev_standard.latest_version
+    id      = aws_launch_template.dev_standard.id
+    version = aws_launch_template.dev_standard.latest_version
   }
 
   scaling_config {
@@ -173,8 +173,8 @@ resource "aws_eks_node_group" "new_dev_node_group_high_memory" {
   subnet_ids      = aws_subnet.dev_private_subnet[*].id
 
   launch_template {
-    id      = aws_launch_template.new_dev_high_memory.id
-    version = aws_launch_template.new_dev_high_memory.latest_version
+    id      = aws_launch_template.dev_high_memory.id
+    version = aws_launch_template.dev_high_memory.latest_version
   }
 
   scaling_config {
