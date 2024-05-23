@@ -2,10 +2,10 @@
   "name": "analytical-platform",
   "image": "ghcr.io/ministryofjustice/devcontainer-base:latest",
   "features": {
-    "ghcr.io/ministryofjustice/devcontainer-feature/aws:0": {},
-    "ghcr.io/ministryofjustice/devcontainer-feature/kubernetes:0": {},
-    "ghcr.io/ministryofjustice/devcontainer-feature/static-analysis:0": {},
-    "ghcr.io/ministryofjustice/devcontainer-feature/terraform:0": {}
+    "ghcr.io/ministryofjustice/devcontainer-feature/aws:1": {},
+    "ghcr.io/ministryofjustice/devcontainer-feature/kubernetes:1": {},
+    "ghcr.io/ministryofjustice/devcontainer-feature/static-analysis:1": {},
+    "ghcr.io/ministryofjustice/devcontainer-feature/terraform:1": {}
   },
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "customizations": {

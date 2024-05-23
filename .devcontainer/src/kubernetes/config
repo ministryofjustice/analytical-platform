@@ -9,27 +9,110 @@ preferences: {}
 #
 ####################################################################################################
 
+# Analytical Platform
+# current-context: arn:aws:eks:eu-west-2:381491960855:cluster/analytical-platform-compute-development
+# current-context: arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test
+# current-context: arn:aws:eks:eu-west-2:992382429243:cluster/analytical-platform-compute-production
 # current-context: arn:aws:eks:eu-west-1:525294151996:cluster/development-aWrhyc0m
-# current-context: arn:aws:eks:eu-west-1:042130406152:cluster/github-actions-moj-CoFBZ3xV
 # current-context: arn:aws:eks:eu-west-1:312423030077:cluster/production-dBSvju9Y
+# current-context: arn:aws:eks:eu-west-1:042130406152:cluster/github-actions-moj-CoFBZ3xV
+# Data Engineering Airflow
+# current-context: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-dev
+# current-context: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-sandpit
+# current-context: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-prod
 
 clusters:
+  - name: arn:aws:eks:eu-west-2:381491960855:cluster/analytical-platform-compute-development
+    cluster:
+      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJUmx2QVNELzBvaHd3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TkRBMU1UTXhNVFUxTVRCYUZ3MHpOREExTVRFeE1qQXdNVEJhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUUN5T2FqMlljdTFkQTVjRU5XbWo3b3oxY1k5bFBCNVpLMU8vZHF4QVlHSzRYYnZRR3p4VC9xdU1sRy8KVnJUS1k0dWdMdTUreWdQZ253WWcraGcwSms4ZHIrWnkxWUVQQnRITklwOXowSTNOcyt2NlF6WVlXUHBhMkE3Twp0YXdSdTNmSUs5S1EzY09QQmRzZXpTZld1QXpqVmZaYi9yd0ZBdjk4aExGbzJqNG9SaSs4OUYvRU9NUFFLS1lCClkwYnYyeGVjWk01S0NHSTVudEVZSkxFUXBhLzgrMWxlcW1tMERWSjk5b0EwcCt6N3BKOGxyUm9vejVkVS9XbUIKMGRiVzNQWDNJR3hvVC85UnFDMkZ4YjZDZURqOXZQTE5CaDV0RVowclUxUjU4cTZVV05oMTRKNlhxRlNOY2l6SApsYVp0aFE1VldmbDc0SmNoUnoweUY4UUFITlNMQWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJRU3htM1VyZXRDaGREVGZnUng0QmNHSTBKQjN6QVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQlRyV3QweUpXQQpjeGZFUkhzZ1BnZGUvdjhNdHQrU2lzUWRYSGdnamFUT25VMWlKVCtWbEhzKy8rU25HUmJpT0d0TEFxR1JkaXZyClBOOWx2QitvVm02Tk52eXhUQ1ltZVpwcnF1VTU3MWJHQjliY0h4SFFXTEt6cEpwMlNxR0ZJamZkOHhXdFBuREUKa3h4Vk8vSzVubFNnUXVIaHRlbDR0SElNRVBndHp2bDJ1NVF2Q0Vod1cwNzhqQiszeWo0YjZjV1hJUU1uUm0ydgpkajdLZTJ0eXhBd2JOMkFlbTN4NGVicllUWVlMNjBLVUVwblZWZ1RLeWxVcjhXd2k4ZXNpc0ZqaW4rUW96Tit1CmdHZ0pQVjc4NzRTRjhGajhWWEN2VFdEdkhRekRZZGkwcDZjb0ZsS254V0dOL00vdHA2ZHEzOFhHdmt2L2F1VjIKV05scDJ3NDFZemlGCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      server: https://1972AFFBD0701A0D1FD291E34F7D1287.gr7.eu-west-2.eks.amazonaws.com
+
+  - name: arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test
+    cluster:
+      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJUTUwdTVGL2hLbkF3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TkRBMU1UTXhNVFUwTkRoYUZ3MHpOREExTVRFeE1UVTVORGhhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUURmTTZmeTZSVnArNWl5OEpySm5sMHhmdWVnRVpmS1laL2ZsODY4Q09UTzMrMXgvemExeUQ0L1QvYU8KamE5VVViSUY1TUc2TGhya2JXYmpJWjJaY2Q0VGtjRERhRUZ4b2FtYkg2QVdvdzJ6UTF6K1F3YlhITGptenhwNwpCNmYzcEo1WWpIYkgwQkNWTUVDdXNIS2thQlVUZHl0ZVYzMGd4WjdtNnRwYjR0V1hJbExkLy9ETHFyUFlsVWtjCll5T0pkSzlaaGVrOXloc0phTHArTDhDc0VVSTBvZVd2ak5PR0lxL2NrNjFpOUUyYmZNZm9nT3FSMXhNWlJ6Z0oKd2JJMGZMdFd1eE51VmRtVmlqdi9ITGhLc3FDOWM4ZzcrTzV6My9sZWR2YlFVUERTaDU3d1hobVdDNUNPc1RSeApPcU5CazVVcVN6TnNDdzlJcGtjamwvOGdQdGJEQWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJUN3RlcXFjZURPTVMxMTl5M0RFNTA3cVVTQWx6QVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQStJcnZKZlJJRQpvVVp1aTEwYXpLQXk0YzdkWU8xaE5wdCtUcWRXVGpTSXpEaTN4TkxTNWt0TFB2K1FpNVQvVWVkZlE5RGZVcUNNCjJ3dGpqdkl4bVdzdG92R2NOcHNqUHNrZEc5aFcwWVZrQkhiR0JDOGZhZ010a2lNU3dmdmw4K3NvbDZ3RjBScmcKUzgxOEtZZ21BaWZxc3lhNnBDay9CUkVCZ1hXSVl6UVFKOXo5TmIySWZ0MFoweFA0eXpLSUxud3NMKytuTEhGNgpjOU56a3B4SFVvZ2NvOUNha3V3bXJQUEFWK1BYQTJxZFlpeUUzclpZQVQzdXdrVEVFVGI2K1NybFp3NmFNd3FRCjlub1R0S0Z1Sjg2UGRxcUsrd09hRHpqYXZVMlhoQmZ6WjY1OGVDVmwwWDVJVkN0TTBRT1pHWFFaL01NVGFPZmMKeVYrWUowb2lZSXI3Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      server: https://9FAFCA50C4DA68A8E75FD21EA53A4F2B.sk1.eu-west-2.eks.amazonaws.com
+
+  - name: arn:aws:eks:eu-west-2:992382429243:cluster/analytical-platform-compute-production
+    cluster:
+      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJSE9JT2lBSHBzYk13RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TkRBMU1UVXhNakU0TWpOYUZ3MHpOREExTVRNeE1qSXpNak5hTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUURDcE5ocEp3YnZodlRlL256dzRzUm5VNDl2MWdIT0dRUEhqOUNjSXdRODY2SW5Nc1hzNjlUakpNSngKdm5rSUZFdllNTUhIRGtjQ3l1MzdkV2lwRlNSRmNMWlhDOThXQXVCVUJvUDJOam1KaHg4QVB1NjJqOGZXWENvdwpFNVpMdUhIY0JsT2hpc3Q5elRzdTFubm5qVTkwaUFFSjVaU3Q1SUdrM1JwVVNWQm8rTE11dkR0YWJTaVNvL2xQCjd1VVkxUVNuRk5GZjBlWHd5SmdBWFlRWjMxZkRXUUpkSzgzeVY4SG5qYVFaNjlWTGp5S2YveW42eXVNTkdmNGUKRkk1OGw1c2s5eFhaT1YxOWJRdFpmSWxGemNMS3dPanVibGZQZWRaNWREN3lEdmc0L3poV2tDdzJWL1VYcStUVwpHSWlPeUo5NFp6RnVvMTZueTZnRWFvSGlub1REQWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJRczRZMTcvK0FWMCtXdnRrWDhDRWUwRzVoZi9UQVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ09IRGY4YVk3cQpCalhEQmEybVcxQklOY1gveU9rQ2NtVGRVb0pIZGJUZmlxZFc4SFFqL1VYRHpaNTZObXFFOVBVWCtOdDV6UFNyCkFkaUEyZyszeXJNMU9OSlV1TUpRcFl3NE9YTnZTSW5zT1lPYmkyQ3pia2dnODlzbmdyMGRzTjlCdWh3cCtlTFUKTHV4RHVZMkRSeFBoRWJHR0xzVFkyNlJZaHd6WXRJRTg1UEVoTUZWQjhtVEw5VEZoZ01nTyswSStIT21YRCtKcwpUcElNczYveFdIbkYzNkpxUk9vNlhNYnh6WGk1czJ3TG5XTFJvcFliVkhmNzZpdkZ1N2dLUzZwR2ZGYk5LSkRrCmhJa1JkSldSNFRhSkkwem05VG9GU3RqcFNzUWN2T1hsSjBTdHliL3dmRWpMemZpZ3g1N0JsQVNxdHRVY25lUzgKeEIybVVKUTFUT0dLCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      server: https://801920EDEF91E3CAB03E04C03A2DE2BB.yl4.eu-west-2.eks.amazonaws.com
+
   - name: arn:aws:eks:eu-west-1:525294151996:cluster/development-aWrhyc0m
     cluster:
       certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeE1USXdOVEE1TkRReU5sb1hEVE14TVRJd016QTVORFF5Tmxvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBSnlICmZ2MStZR0ZGZUpKbGJGUVVuK2N1N0hSRWRiTldHUzVSZWNCNlE3YWprNnYrT2xoZ3lZR0FzeXBiR291LzRUNXUKM2JSUjJYS1lkZk9tSmNSMzBVMUNzNExFZWJrSXVndERBenBvdW8yZHBPd3liMjJSVndwRWgvd1dUL1ZFV2ZjUQpwVEhkVEQ2RWQ4NkNGWEd0akxrTFN2UWtPQ0IzUnR4anZPOFlvSVZIaXdMWW4yenJmdytoTW9RSHhQRnh3UDRZCmJyTFkzZzJxVFArMjV4dE5TcDBua1IwQnZUMEwzazVRUTNNQUZ3RzBSWmhvRlBpNlJ2VzRPYWc2OFhFeHJVTUcKRE1YUXlEL3NsWGhtbVR2cjd3MHVtQlBSeHdZbFUxdzlkZFp0NjRDVytTeEdGUlRyNm41U1ZPWStDUjlhR2NuSgo4SDFMQ3J5RENuNnlHSDVBSHhrQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZNZFowR083STNDdFNKbDFHczRuaGt6US81WXNNQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFCSFNXK25OK01xeCtBT3R1aUhjQ3hEeXhvMU5VWXRtK29TaUthMm9kVEIrVTI4UFdOagpYUFMzamF4Nyt5K05MQ0psVENWcllxVHZhQit2V3pVV3lqVzBHZGN5K29TR3FWdTNvcXBuNDBVazkzWXRnRkZQCmIrRVdwbjZ4R1BodDVROGZ6ZE9adCtKbVQ5SElsYTVPSDJJejY5T2dtYjUvQU1YNW94ajlRZVFQVEh0Ym5DNDAKWlRRZHlXMTRQTXZwQmV1QnFQM3ZhZHRabHkvU1RLQnZzMk9qV3Y3WStNMXBtQWdFWHV4TTQ2Nzl6ZFpnbEdYegpFRm1mNTZlUmJLQXZyN3o3ZkpmV0dSNTRvdkpNZGJ0NFAxOWVxRm8vd05IRHNTK1ZuTVJ5azkxQUdBNmVwQWFDCjFyZVp5R3VUSnZuU0hxTzJ2VHBOdWhkWlo4RWtjSU03Vlk5KwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
       server: https://6F58D1C4FD8FAE6D3D9282A400EDCE79.gr7.eu-west-1.eks.amazonaws.com
-
-  - name: arn:aws:eks:eu-west-1:042130406152:cluster/github-actions-moj-CoFBZ3xV
-    cluster:
-      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5RENDQWJDZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeE1ERXlOekV4TXpJeU9Gb1hEVE14TURFeU5URXhNekl5T0Zvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTW1FCnRMVG5oUmNEZDA3Uk9pcllvellaK2F4dW82TmFDWHhVTDk5TFhkdE9TR0l6OVR1N0NRNHB4Mmc1dGl5bEsxR3EKV1hqZEZZR3BaMjV0N3VsQytHWTRSR3dwbHVwcWdIdmlXYVUrVlBXNHdzSWo3citwa2tSYzNpYU52MzIxdlVGaQpmbjVRVUlmVTZQN2xaU3VWbS9VS0Y4QXNxUDl2Q2xBZnlTak8xelJ3TkJFVVBSdGU1VExnNkNjejVqSU5tL1Y2Ck4vK2Q5TGZ6UGl2RnhKQU5DR2I3WGFkcWhGaUZuR2Z1SWo2RmhJb3F6WnN5QUxtOG81cGExaGdJRFE1elBVZlkKODkwdEJuWVI3LzUxODJjRWdXOHlZT2creHU3cWJndkJ1VzBVNTk1cmtuQTVoVTZGK05HSnRuTzlGUFVYQlo2UgpSakc3WjlQQXVkb3hmeVMwTE5FQ0F3RUFBYU1qTUNFd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFHOUlrZ2MzYWc4YnNZczZlcGJlc29mRVRrRHUKV0svNE5QbThDWjFaaVh6eFl0eVpIb0pJUEFJVGowaWFyUGJRd05sMW1BeEhtRnFFaU9CREZKS09SWFh4YlJQdApNWHgzV1o0a0JSZXR1WVprMW85cVdvNWJaMWJITnRxa2JZS0QxSTVIMWFJODdsNy9mSVFxVVAyMkRDTkUwc3dGClliamhsbEpBUk13SDFSNkQwd3hZUHhoS1V4MnFKM1lLMkdvZkV2TUw4MXNHVlpTUkZCSk02NCtvZE5UK1VscG8KV2w3N1JBNlZKdTEzVGdIUS8rM2RjMENKVDNtQUVHd1lzeXUrMVJ2aTg5Q2JEWDE2NldZZEVmSFpBdDZKTk45egprQyswSm81aC9paDE0cXVaNE83dGFDbGdBeDJaakYzQ2FlVGxZeHlVUkpEZXdvWFIrMUJZTmYxQ0wxOD0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
-      server: https://2CE598AB4F4281116DE892C9FE8E9737.gr7.eu-west-1.eks.amazonaws.com
 
   - name: arn:aws:eks:eu-west-1:312423030077:cluster/production-dBSvju9Y
     cluster:
       certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeE1EZ3lOREV5TVRBd05Gb1hEVE14TURneU1qRXlNVEF3TkZvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTGtyCllrNVhVT3VyU3M0T2o3aE5XRE0zSC9vUnhUMmY0c014eGJoMEEwM010OXQ5SUtBaWM2TFpiMlZJd3VobG14bUIKaVhuSEtXSHREbi85NUwwdEgvWURnN3VFSXVMa2xMS3F0NjRVWlFFWHNocElaakxpNFU1bW03WWttT1N4VjFYSQo4bXJ4VEhaRGZ1NHZwdURUSWdmR2szTE8rTXBBZVgrTFNFM1JVSWR4UFo1eDVzYloyU29NWkFYekRnaHEzOU9RCjY3WVNFdmRYS1Bkd1JDUnR0d2k4OGVuOGpxanRZMFB5dUVaMVQzRjVPeWhBMjNQWVBMam10aWt2akNwMmNKOTkKZnhUNG1NNWsyUUlxQmxZWTRzR0s3dzhTL1I2VGxtL1g4KzBjeWhyU2FmMjh2dUNVL0dXZVJ6MWhYa05rV2FKTQpkampuWElzeFRkc0tGc1RUMzVVQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZQVkpZMGlHcW9RODlmMy9sbkNsdUQ4NnZvUDNNQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFBb2tScklHRzRWbVBGMnBhV3dSdEdhU01NVnBaWDdRRGhEL0tSajY5NXZLOU1YaDJnSgpPeWR3enRJd2tMalNjZUhaZTJocE9DNkt3VUxMbFJYRzJRbXhzUnJtaEM5NU8xWEM1cURZV2JFRUoxUnpsUkJGCkdQT1FMQ0tWTnc4b21KTlRXcDdTTDgxeFBiZCtnNm1KSlB3UHQ2cVJHNTBaMnRVSzZVRnZSbVRUcXl3Z1U4UXkKemp5cFJMVkJtQWc3Tkw3MW9zS0x4T25qUHRHNDl4eVNTVExQaGpDSzlIUnM5bXJDaVJ0RWo1b2EwUHY3d2hIOQpWQS8yYVVmRTA5cjg4dXFYWHIvZlNoY1FXSlhmU1gvYVVIbFZwK0NJU2tHUkJscmFKc3ZHSlZ3UWJRR3ZvTGZmCnMyTFo3M1EzbHpDM2VOajJ6WTcrbTdlazVLOUJEc29oK2lWeAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
       server: https://EB06461747C1D40013EE978C4D8D1755.gr7.eu-west-1.eks.amazonaws.com
 
+  - name: arn:aws:eks:eu-west-1:042130406152:cluster/github-actions-moj-CoFBZ3xV
+    cluster:
+      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5RENDQWJDZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeE1ERXlOekV4TXpJeU9Gb1hEVE14TURFeU5URXhNekl5T0Zvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTW1FCnRMVG5oUmNEZDA3Uk9pcllvellaK2F4dW82TmFDWHhVTDk5TFhkdE9TR0l6OVR1N0NRNHB4Mmc1dGl5bEsxR3EKV1hqZEZZR3BaMjV0N3VsQytHWTRSR3dwbHVwcWdIdmlXYVUrVlBXNHdzSWo3citwa2tSYzNpYU52MzIxdlVGaQpmbjVRVUlmVTZQN2xaU3VWbS9VS0Y4QXNxUDl2Q2xBZnlTak8xelJ3TkJFVVBSdGU1VExnNkNjejVqSU5tL1Y2Ck4vK2Q5TGZ6UGl2RnhKQU5DR2I3WGFkcWhGaUZuR2Z1SWo2RmhJb3F6WnN5QUxtOG81cGExaGdJRFE1elBVZlkKODkwdEJuWVI3LzUxODJjRWdXOHlZT2creHU3cWJndkJ1VzBVNTk1cmtuQTVoVTZGK05HSnRuTzlGUFVYQlo2UgpSakc3WjlQQXVkb3hmeVMwTE5FQ0F3RUFBYU1qTUNFd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFHOUlrZ2MzYWc4YnNZczZlcGJlc29mRVRrRHUKV0svNE5QbThDWjFaaVh6eFl0eVpIb0pJUEFJVGowaWFyUGJRd05sMW1BeEhtRnFFaU9CREZKS09SWFh4YlJQdApNWHgzV1o0a0JSZXR1WVprMW85cVdvNWJaMWJITnRxa2JZS0QxSTVIMWFJODdsNy9mSVFxVVAyMkRDTkUwc3dGClliamhsbEpBUk13SDFSNkQwd3hZUHhoS1V4MnFKM1lLMkdvZkV2TUw4MXNHVlpTUkZCSk02NCtvZE5UK1VscG8KV2w3N1JBNlZKdTEzVGdIUS8rM2RjMENKVDNtQUVHd1lzeXUrMVJ2aTg5Q2JEWDE2NldZZEVmSFpBdDZKTk45egprQyswSm81aC9paDE0cXVaNE83dGFDbGdBeDJaakYzQ2FlVGxZeHlVUkpEZXdvWFIrMUJZTmYxQ0wxOD0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      server: https://2CE598AB4F4281116DE892C9FE8E9737.gr7.eu-west-1.eks.amazonaws.com
+
+  - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-dev
+    cluster:
+      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1ETXlNakU0TkRReE4xb1hEVE15TURNeE9URTRORFF4TjFvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTXhPCnl2aE1wZjRZSjM1aGZaOHNlVXMwMzR2ckJVa25weGdDNGJHVnU5dTMwejdXSysyb2k5VFV2WjVoSzF4VitCcUoKQndSUFlwVkgwUHJQUjBYZUJpS3ZrTTNuN0plSG8rWXoxZXl1OWJXeGhmbHhqb25Xb1FMTlBGNEVkUWcyR3dIMQpwbEwyNmwyZ0s0VzVYcERRZVNJV1VsUVFmbWE2NW4zd0dlbGttdUpySzJqMkJEZEFCK2pMRGZzV2oxSGlyTlBBCkdlOGpRam9zRWF5bUVWQTQ4d3U4UExQNUZCempnR2VNd2xaLzNWWER5YVNaM3pGeDhIdFhBNUtHNHM3Rk5OMEkKaWFPbTFNc1g0TWNxS1BFQU1XbDR1RUN2aTl5Q2dXbUtERU5BVk9HTFVvTGc0c28yZVRoL3MweUJJV0svdG0yVQpnbTVLam5MbFBrYmRER25VM0NFQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZJSk1VbUNUS2ptb0huMy90dk1OMmtsZUUvS25NQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFCekxFQ09NeWxZamg0ejBuOWpGOThEUGhoanBpejJPTVFxcG1aQndNV29UTFVDWmRGSApKWWpDQnB6R3ROQ1RxZDNnUHlQQ1lKdmt6bzhxR0hYcVVBTjJIRmx4STgzRHA5WFhMSExQVitqYWRQSWhmaXhICnFTQktITzBNSy8yTVprOVF6c2NFSnMzdk1kSmJxZHgvWWd3MHJXdE5LSG1oWExvYkpqK1BoTzZRY2ZXRysrTWkKTmE2M28zZkQzREtKOEZyRmtVcFlFQk00Vm1lNExrSThBVitFNXBVUGxnMGlCZHd3THhVM0F2LzRGcmNmd1U5cQpMZmlwbUlyS2owZGd0b1ovbW10WWJyLzY5UEtrbSt3VWdzSjBPN2g5bm9GdTE4N1ZNZ2U3ckk1aEZ1Q3NWS3NYCjZ1WEpET0tqVDEwVnpJcmJsblZqK05XeVpRM3lvNDkwV084NAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+      server: https://59429428EBABBB9F911A173D7B8E8179.gr7.eu-west-1.eks.amazonaws.com
+
+  - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-sandpit
+    cluster:
+      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMvakNDQWVhZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJek1ESXdNVEUwTVRBeE1Wb1hEVE16TURFeU9URTBNVEF4TVZvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTG1HCklZMHQzQTlERW5nTmVIK2MzeDVrcTFSL0djQ0JhT0I5eE8veGZMVUFxRk1ocml0NWd0dTVUOElLc3U5NGhKUC8KVmk0YVJXWlpzK1V1SkYyZ1BSVlR6NFNxQW9rNjcrdnlLRDBTOWNBeDJRM0NFUzJRSm5JZVB6YXB6UjFvOUp0RAo3cWxhd3lMSkpGU2hTTWdyWVgxNU9WS0NCUHNKcXkxazdBTXYzejlPdFFHYWRiT2ZveTJHNUFHVFp2VTQ3Mm5RCllXaG80UElaZ2dDQkFmSEdCU0dpK3llbi9xK3pZQTdweWFtaVdoQzBFc0o5bDdDWTZwdHhlL2hnQVFFOWR5U0kKK1FrOWJNdFVoamNtM3c3b3ZtSCtPdmhlZ20xS1Z2bFRRcUo3OEtTb2M3d3FqbCtwZk9iTmZvN0dMMVRoTTNKQQp2eXk0SUw4aFg0dWk1WlVDRUEwQ0F3RUFBYU5aTUZjd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZESy9XL1Erazl1R1pnc0g0Tng0Y1Y0VjBReEhNQlVHQTFVZEVRUU8KTUF5Q0NtdDFZbVZ5Ym1WMFpYTXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBRmsxNjJnVUZDMFdvbUl2Nk9ndApmZWhPQTN1dlFaN0V5MUV5a1EyTUcxaWlqZVdIMFNIU1JQajMzcTBZVjJNclhrQlBOanRyYnBWaDR1eVV6K0xzCnV6TXh6VzNpaVdVdkVQYWt5UTZFN3NTSER1WVYxaFovbEVWMUNQQWt5TlZSc2FtZzQzcnpzS2FBN1NKNFRMU2cKdi9RVkhobm5XcWxCTjRaQW5xT2x5Q3NwVVNlTGtOVFZ1c3NSWjRLSEFrT1Y4K3NLMGpLTHpmUzV3eVA0MzFXTgpmK2NXT0tWSGIvbWMrOWR1V3FRZE1nMWVQU3BuMTE0Y3o1ZzZCbDlQWkYwNm1ZQ1FualNEdzI5TEJYZG96Ry9BCnpzNUNaV0tnM1B4WnlWbUYxYisvcjFZUHFkeVVDWjFwZ2FrVG44V0Y1RFY2Y2xqaFNoZmNFVDh1RGlXMXY2NkcKLzBnPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+      server: https://BBF6A3CFA6FF57B1911F58D037ED3F54.gr7.eu-west-1.eks.amazonaws.com
+
+  - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-prod
+    cluster:
+      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1ETXlNVEUzTXpBeU5Wb1hEVE15TURNeE9ERTNNekF5TlZvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS1RUCmZpdERrdDU1cDdaakpPV0Z5aTlvM2JjVWZTMDFMdVdoamJXSWZmYVBTcGRCVWdFcUxUc2NSZ3oxVTU1aG1ucnoKODFWbnVmSjg2NTZvRm45ZXl2UHRQblZvU2d6ODBhcU45VFdiRXNuWGVCaTlhUWRPbFdhQ25tK2ZMd0FFSmJlKwo0N3U3WW1ITjlITlNaYURtQS9XdFhSc3M5OFVaVUxadi9ZTngzaXhnK0NWSWNSay9tUFVVVDU2cmxYK25KSDQ0CmQveGxPTWhObGtBdVVobmJqNGMzSXhFd1p3eXdXeVNpaWVObkU2TVlOekZzbi8wMU9yU0J3RG9VWGhielhJZGkKVndGUFhaK084T3hlS3VGMnpsTVlCU0RESWhPNm12Z0drSDhWalVVZTYraXlNTWVhMFBnL0lXMXVGdzB1bHpUNwpGWStzZDQ3Wk53MTdOcjVTSWVzQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZNWXNlcGFDekVqa21QUndWM3hTNlliNEkzczhNQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFBajRlYi83SUMxUlNRWkNqenBhNnJFSWhUYlpsMXE4NitzL0tnR0FIbXYrZVZCamc0RgowZWJHUEVzZ3NRTDlpSmdnN1I1LzUvN2tVbmZDVVpFSVpLQ2RacFR0akduVzRucXFIUHcyaEU1czdEQUpSRHJZCnA2UkU2NzlSOUVMVTNoSmU1b0tROWR1bmttMjlQbVdpaG15WWs2akhYM010VjgvVjFkR3JPeU44a2FHc1pJY0YKZG8za280U2dGUk9Wd1dxaTdMQkhsVlMzTTA1Nmt0clJnY3R0TmQvUFA5UjRSb2crVjVoZUNScms1M25HdmFBdwoyREt2VHo5VnlpejBrY0tMaXpvZDBrb1pnL0k1eHV0Z3lndXBMYkZSd1NONzYxSmxGSloraDhHNTN3cmNCR3pQCjdrbFU1WjJqUVNlU0FPa0EvT3pTc0xUaVE0MEtxS2R1WXAyTQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+      server: https://FC3F7A88508676A30DCAFE7B2619B544.gr7.eu-west-1.eks.amazonaws.com
+
 users:
+  - name: arn:aws:eks:eu-west-2:381491960855:cluster/analytical-platform-compute-development
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        command: /usr/local/bin/aws-sso-eks-auth
+        env:
+          - name: AWS_SSO_PROFILE
+            value: "analytical-platform-compute-development:modernisation-platform-sandbox"
+          - name: AWS_REGION
+            value: "eu-west-2"
+          - name: AWS_EKS_CLUSTER_NAME
+            value: "analytical-platform-compute-development"
+        interactiveMode: IfAvailable
+        provideClusterInfo: false
+
+  - name: arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        command: /usr/local/bin/aws-sso-eks-auth
+        env:
+          - name: AWS_SSO_PROFILE
+            value: "analytical-platform-compute-test:modernisation-platform-developer"
+          - name: AWS_REGION
+            value: "eu-west-2"
+          - name: AWS_EKS_CLUSTER_NAME
+            value: "analytical-platform-compute-test"
+        interactiveMode: IfAvailable
+        provideClusterInfo: false
+
+  - name: arn:aws:eks:eu-west-2:992382429243:cluster/analytical-platform-compute-production
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        command: /usr/local/bin/aws-sso-eks-auth
+        env:
+          - name: AWS_SSO_PROFILE
+            value: "analytical-platform-compute-production:modernisation-platform-developer"
+          - name: AWS_REGION
+            value: "eu-west-2"
+          - name: AWS_EKS_CLUSTER_NAME
+            value: "analytical-platform-compute-production"
+        interactiveMode: IfAvailable
+        provideClusterInfo: false
+
   - name: arn:aws:eks:eu-west-1:525294151996:cluster/development-aWrhyc0m
     user:
       exec:
@@ -42,21 +125,6 @@ users:
             value: "eu-west-1"
           - name: AWS_EKS_CLUSTER_NAME
             value: "development-aWrhyc0m"
-        interactiveMode: IfAvailable
-        provideClusterInfo: false
-
-  - name: arn:aws:eks:eu-west-1:042130406152:cluster/github-actions-moj-CoFBZ3xV
-    user:
-      exec:
-        apiVersion: client.authentication.k8s.io/v1beta1
-        command: /usr/local/bin/aws-sso-eks-auth
-        env:
-          - name: AWS_SSO_PROFILE
-            value: "analytical-platform-management-production:AdministratorAccess"
-          - name: AWS_REGION
-            value: "eu-west-1"
-          - name: AWS_EKS_CLUSTER_NAME
-            value: "github-actions-moj-CoFBZ3xV"
         interactiveMode: IfAvailable
         provideClusterInfo: false
 
@@ -75,18 +143,108 @@ users:
         interactiveMode: IfAvailable
         provideClusterInfo: false
 
+  - name: arn:aws:eks:eu-west-1:042130406152:cluster/github-actions-moj-CoFBZ3xV
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        command: /usr/local/bin/aws-sso-eks-auth
+        env:
+          - name: AWS_SSO_PROFILE
+            value: "analytical-platform-management-production:AdministratorAccess"
+          - name: AWS_REGION
+            value: "eu-west-1"
+          - name: AWS_EKS_CLUSTER_NAME
+            value: "github-actions-moj-CoFBZ3xV"
+        interactiveMode: IfAvailable
+        provideClusterInfo: false
+
+  - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-dev
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        command: /usr/local/bin/aws-sso-eks-auth
+        env:
+          - name: AWS_SSO_PROFILE
+            value: "analytical-platform-data-production:AdministratorAccess"
+          - name: AWS_REGION
+            value: "eu-west-1"
+          - name: AWS_EKS_CLUSTER_NAME
+            value: "airflow-dev"
+        interactiveMode: IfAvailable
+        provideClusterInfo: false
+
+  - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-sandpit
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        command: /usr/local/bin/aws-sso-eks-auth
+        env:
+          - name: AWS_SSO_PROFILE
+            value: "analytical-platform-data-production:AdministratorAccess"
+          - name: AWS_REGION
+            value: "eu-west-1"
+          - name: AWS_EKS_CLUSTER_NAME
+            value: "airflow-sandpit"
+        interactiveMode: IfAvailable
+        provideClusterInfo: false
+
+  - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-prod
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        command: /usr/local/bin/aws-sso-eks-auth
+        env:
+          - name: AWS_SSO_PROFILE
+            value: "analytical-platform-data-production:AdministratorAccess"
+          - name: AWS_REGION
+            value: "eu-west-1"
+          - name: AWS_EKS_CLUSTER_NAME
+            value: "airflow-prod"
+        interactiveMode: IfAvailable
+        provideClusterInfo: false
+
 contexts:
+  - name: arn:aws:eks:eu-west-2:381491960855:cluster/analytical-platform-compute-development
+    context:
+      cluster: arn:aws:eks:eu-west-2:381491960855:cluster/analytical-platform-compute-development
+      user: arn:aws:eks:eu-west-2:381491960855:cluster/analytical-platform-compute-development
+
+  - name: arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test
+    context:
+      cluster: arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test
+      user: arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test
+
+  - name: arn:aws:eks:eu-west-2:992382429243:cluster/analytical-platform-compute-production
+    context:
+      cluster: arn:aws:eks:eu-west-2:992382429243:cluster/analytical-platform-compute-production
+      user: arn:aws:eks:eu-west-2:992382429243:cluster/analytical-platform-compute-production
+
   - name: arn:aws:eks:eu-west-1:525294151996:cluster/development-aWrhyc0m
     context:
       cluster: arn:aws:eks:eu-west-1:525294151996:cluster/development-aWrhyc0m
       user: arn:aws:eks:eu-west-1:525294151996:cluster/development-aWrhyc0m
+
+  - name: arn:aws:eks:eu-west-1:312423030077:cluster/production-dBSvju9Y
+    context:
+      cluster: arn:aws:eks:eu-west-1:312423030077:cluster/production-dBSvju9Y
+      user: arn:aws:eks:eu-west-1:312423030077:cluster/production-dBSvju9Y
 
   - name: arn:aws:eks:eu-west-1:042130406152:cluster/github-actions-moj-CoFBZ3xV
     context:
       cluster: arn:aws:eks:eu-west-1:042130406152:cluster/github-actions-moj-CoFBZ3xV
       user: arn:aws:eks:eu-west-1:042130406152:cluster/github-actions-moj-CoFBZ3xV
 
-  - name: arn:aws:eks:eu-west-1:312423030077:cluster/production-dBSvju9Y
+  - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-dev
     context:
-      cluster: arn:aws:eks:eu-west-1:312423030077:cluster/production-dBSvju9Y
-      user: arn:aws:eks:eu-west-1:312423030077:cluster/production-dBSvju9Y
+      cluster: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-dev
+      user: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-dev
+
+  - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-sandpit
+    context:
+      cluster: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-sandpit
+      user: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-sandpit
+
+  - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-prod
+    context:
+      cluster: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-prod
+      user: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-prod
