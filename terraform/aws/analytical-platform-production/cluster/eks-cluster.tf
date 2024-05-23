@@ -51,6 +51,37 @@ module "eks" {
       metadata_http_tokens                 = "required"
       metadata_http_put_response_hop_limit = 1
     }
+    gpu_node_pool = {
+      name_prefix            = var.eks_node_group_name_prefix
+      create_launch_template = true
+
+      ami_type       = var.eks_node_group_ami_type_gpu_node
+      instance_types = var.eks_node_group_instance_types_gpu_node
+
+      desired_capacity = var.eks_node_group_capacities_gpu_node["desired"]
+      max_capacity     = var.eks_node_group_capacities_gpu_node["max"]
+      min_capacity     = var.eks_node_group_capacities_gpu_node["min"]
+
+      metadata_http_endpoint               = "enabled"
+      metadata_http_tokens                 = "required"
+      metadata_http_put_response_hop_limit = 1
+
+      update_config = {
+        max_unavailable = 1
+
+      }
+      taints = [
+        {
+          key    = "gpu-compute"
+          value  = "true"
+          effect = "NO_SCHEDULE"
+        }
+      ]
+
+      k8s_labels = {
+        gpu-compute = "true"
+      }
+    }
   }
 
   workers_additional_policies = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
