@@ -371,16 +371,16 @@ resource "aws_launch_template" "new_dev_standard" {
     device_name = "/dev/xvda"
     ebs {
       delete_on_termination = "true"
-      iops                  = 0
-      throughput            = 125
+      iops                  = 3000
+      throughput            = 250
       volume_size           = 150
-      volume_type           = "gp2"
+      volume_type           = "gp3"
     }
   }
 
-  iam_instance_profile {
-    name = "eks-d8c23b97-5136-a459-f1d9-415dc32b2860"
-  }
+  #   iam_instance_profile {
+  #     name = "eks-d8c23b97-5136-a459-f1d9-415dc32b2860"
+  #   }
 
   metadata_options {
     http_put_response_hop_limit = 2
@@ -404,7 +404,6 @@ resource "aws_launch_template" "new_dev_standard" {
   }
 }
 
-
 resource "aws_launch_template" "new_dev_high_memory" {
   name          = "new_dev_high_memory"
   image_id      = "ami-060fa526de0521c07"
@@ -421,16 +420,16 @@ resource "aws_launch_template" "new_dev_high_memory" {
     device_name = "/dev/xvda"
     ebs {
       delete_on_termination = "true"
-      iops                  = 0
-      throughput            = 125
+      iops                  = 3000
+      throughput            = 250
       volume_size           = 200
-      volume_type           = "gp2"
+      volume_type           = "gp3"
     }
   }
 
-  iam_instance_profile {
-    name = "eks-24c52109-babb-b0e8-bbd5-ad58f7d1ebf0"
-  }
+  #   iam_instance_profile {
+  #     name = "eks-24c52109-babb-b0e8-bbd5-ad58f7d1ebf0"
+  #   }
 
   metadata_options {
     http_put_response_hop_limit = 2
