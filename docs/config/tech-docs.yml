@@ -4,7 +4,7 @@
 # yamllint enable rule:line-length
 
 # Host to use for canonical URL generation (without trailing slash)
-host: https://technical-documentation.analytical-platform.service.justice.gov.uk
+host: https://technical-documentation.data-platform.service.justice.gov.uk
 
 # Header-related options
 show_govuk_logo: false
