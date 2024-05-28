@@ -113,8 +113,8 @@ It may be also useful to look at:
 We are currently in the research and design phase, and are not yet accepting
 requests to host new data products.
 
-In the meantime please get in touch via our `#analytical-platform` Slack channel with
-any questions.
+In the meantime please get in touch via our `#analytical-platform` Slack channel
+with any questions.
 
 <!--
 ## Service runbook information
