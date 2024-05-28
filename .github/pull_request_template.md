@@ -9,7 +9,7 @@ Detail the problem it addresses or the functionality it adds.
 Highlight how this contributes to the project goals,
 improves performance, or solves a specific issue. -->
 
-### Checklist
+## Checklist
 
 > [!NOTE]
 > Each items should be checked. Skipping below checks could delay your PR review!
