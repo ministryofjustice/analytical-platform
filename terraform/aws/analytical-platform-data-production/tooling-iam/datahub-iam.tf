@@ -86,6 +86,40 @@ resource "aws_iam_policy" "datahub_read_cadet_bucket" {
   policy = data.aws_iam_policy_document.datahub_read_cadet_bucket.json
 }
 
+# Allow Github actions to assume a role via OIDC.
+# So that scheduled jobs in the data-catalogue repo can access the CaDeT bucket.
+data "aws_iam_policy_document" "datahub_ingestion_github_actions" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type        = "Federated"
+      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:oidc-provider/token.actions.githubusercontent.com"]
+    }
+    condition {
+      test     = "StringEquals"
+      values   = ["sts.amazonaws.com"]
+      variable = "token.actions.githubusercontent.com:aud"
+    }
+    condition {
+      test     = "StringLike"
+      values   = ["repo:ministryofjustice/data-catalogue:*"]
+      variable = "token.actions.githubusercontent.com:sub"
+    }
+  }
+}
+
+resource "aws_iam_role" "datahub_ingestion_github_actions" {
+  name               = "datahub-ingestion-github-actions"
+  assume_role_policy = data.aws_iam_policy_document.datahub_ingestion_github_actions.json
+}
+
+resource "aws_iam_role_policy_attachment" "datahub_ingestion_github_actions" {
+  policy_arn = aws_iam_policy.datahub_read_cadet_bucket.arn
+  role       = aws_iam_role.datahub_ingestion_github_actions.name
+}
+
 #trivy:ignore:avd-aws-0057:sensitive action 'glue:GetDatabases' on wildcarded resource
 data "aws_iam_policy_document" "datahub_ingest_glue_datasets" {
   statement {
