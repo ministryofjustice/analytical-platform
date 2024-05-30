@@ -50,6 +50,8 @@ spec:
           env:
             - name: FAIL_ON_INIT_ERROR
               value: "false"
+            - name: CONFIG_FILE_DST
+              value: "src/kubernetes/nvidia-gpu-slicing.yml"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
