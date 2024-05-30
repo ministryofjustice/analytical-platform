@@ -47,68 +47,68 @@ spec:
       shareProcessNamespace: true
       serviceAccountName: nvidia-device-plugin-daemonset-service-account
       initContainers:
-      - image: nvcr.io/nvidia/k8s-device-plugin:v0.15.0
-        name: nvidia-device-plugin-init
-        command: ["config-manager"]
-        env:
-        - name: ONESHOT
-          value: "true"
-        - name: KUBECONFIG
-          value: ""
-        - name: NODE_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: "spec.nodeName"
-        - name: NODE_LABEL
-          value: "nvidia.com/device-plugin.config"
-        - name: CONFIG_FILE_SRCDIR
-          value: "/available-configs"
-        - name: CONFIG_FILE_DST
-          value: "/config/config.yaml"
-        - name: DEFAULT_CONFIG
-          value: ""
-        - name: FALLBACK_STRATEGIES
-          value: named,single
-        - name: SEND_SIGNAL
-          value: "false"
-        - name: SIGNAL
-          value: ""
-        - name: PROCESS_TO_SIGNAL
-          value: ""
-        volumeMounts:
-          - name: available-configs
-            mountPath: /available-configs
-          - name: config
-            mountPath: /config
+        - image: nvcr.io/nvidia/k8s-device-plugin:v0.15.0
+          name: nvidia-device-plugin-init
+          command: ["config-manager"]
+          env:
+            - name: ONESHOT
+              value: "true"
+            - name: KUBECONFIG
+              value: ""
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: "spec.nodeName"
+            - name: NODE_LABEL
+              value: "nvidia.com/device-plugin.config"
+            - name: CONFIG_FILE_SRCDIR
+              value: "/available-configs"
+            - name: CONFIG_FILE_DST
+              value: "/config/config.yaml"
+            - name: DEFAULT_CONFIG
+              value: ""
+            - name: FALLBACK_STRATEGIES
+              value: named,single
+            - name: SEND_SIGNAL
+              value: "false"
+            - name: SIGNAL
+              value: ""
+            - name: PROCESS_TO_SIGNAL
+              value: ""
+          volumeMounts:
+            - name: available-configs
+              mountPath: /available-configs
+            - name: config
+              mountPath: /config
       containers:
         - image: nvcr.io/nvidia/k8s-device-plugin:v0.15.0
           name: nvidia-device-plugin-sidecar
           command: ["config-manager"]
           env:
-          - name: ONESHOT
-            value: "false"
-          - name: KUBECONFIG
-            value: ""
-          - name: NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: "spec.nodeName"
-          - name: NODE_LABEL
-            value: "nvidia.com/device-plugin.config"
-          - name: CONFIG_FILE_SRCDIR
-            value: "/available-configs"
-          - name: CONFIG_FILE_DST
-            value: "/config/config.yaml"
-          - name: DEFAULT_CONFIG
-            value: ""
-          - name: FALLBACK_STRATEGIES
-            value: named,single
-          - name: SEND_SIGNAL
-            value: "true"
-          - name: SIGNAL
-            value: "1" # SIGHUP
-          - name: PROCESS_TO_SIGNAL
-            value: "nvidia-device-plugin"
+            - name: ONESHOT
+              value: "false"
+            - name: KUBECONFIG
+              value: ""
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: "spec.nodeName"
+            - name: NODE_LABEL
+              value: "nvidia.com/device-plugin.config"
+            - name: CONFIG_FILE_SRCDIR
+              value: "/available-configs"
+            - name: CONFIG_FILE_DST
+              value: "/config/config.yaml"
+            - name: DEFAULT_CONFIG
+              value: ""
+            - name: FALLBACK_STRATEGIES
+              value: named,single
+            - name: SEND_SIGNAL
+              value: "true"
+            - name: SIGNAL
+              value: "1" # SIGHUP
+            - name: PROCESS_TO_SIGNAL
+              value: "nvidia-device-plugin"
           volumeMounts:
             - name: available-configs
               mountPath: /available-configs
