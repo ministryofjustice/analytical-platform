@@ -44,12 +44,75 @@ spec:
       # be rescheduled after a failure.
       # See https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/
       priorityClassName: "system-node-critical"
+      shareProcessNamespace: true
+      serviceAccountName: nvidia-device-plugin-daemonset-service-account
+      initContainers:
+        - image: nvcr.io/nvidia/k8s-device-plugin:v0.15.0
+          name: nvidia-device-plugin-init
+          command: ["config-manager"]
+          env:
+            - name: ONESHOT
+              value: "true"
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: "spec.nodeName"
+            - name: NODE_LABEL
+              value: "nvidia.com/device-plugin.config"
+            - name: CONFIG_FILE_SRCDIR
+              value: "/available-configs"
+            - name: CONFIG_FILE_DST
+              value: "/config/config.yaml"
+            - name: FALLBACK_STRATEGIES
+              value: named,single
+            - name: SEND_SIGNAL
+              value: "false"
+          volumeMounts:
+            - name: available-configs
+              mountPath: /available-configs
+            - name: config
+              mountPath: /config
       containers:
+        - image: nvcr.io/nvidia/k8s-device-plugin:v0.15.0
+          name: nvidia-device-plugin-sidecar
+          command: ["config-manager"]
+          env:
+            - name: ONESHOT
+              value: "false"
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: "spec.nodeName"
+            - name: NODE_LABEL
+              value: "nvidia.com/device-plugin.config"
+            - name: CONFIG_FILE_SRCDIR
+              value: "/available-configs"
+            - name: CONFIG_FILE_DST
+              value: "/config/config.yaml"
+            - name: FALLBACK_STRATEGIES
+              value: named,single
+            - name: SEND_SIGNAL
+              value: "true"
+            - name: SIGNAL
+              value: "1" # SIGHUP
+            - name: PROCESS_TO_SIGNAL
+              value: "nvidia-device-plugin"
+          volumeMounts:
+            - name: available-configs
+              mountPath: /available-configs
+            - name: config
+              mountPath: /config
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
         - image: nvcr.io/nvidia/k8s-device-plugin:v0.15.0
           name: nvidia-device-plugin-ctr
           env:
             - name: FAIL_ON_INIT_ERROR
               value: "false"
+            - name: CONFIG_FILE
+              value: /config/config.yaml
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -57,7 +120,17 @@ spec:
           volumeMounts:
             - name: device-plugin
               mountPath: /var/lib/kubelet/device-plugins
+            - name: available-configs
+              mountPath: /available-configs
+            - name: config
+              mountPath: /config
       volumes:
         - name: device-plugin
           hostPath:
             path: /var/lib/kubelet/device-plugins
+        - name: available-configs
+          configMap:
+            name: nvidia-device-plugin-daemonset
+            defaultMode: 444
+        - name: config
+          emptyDir: {}
