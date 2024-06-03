@@ -63,7 +63,14 @@ data "aws_iam_policy_document" "bedrock_integration" {
     }
   }
 }
-#tfsec:ignore:aws-iam-no-policy-wildcards
+
+resource "aws_iam_policy" "bedrock_integration" {
+  name        = "analytical-platform-bedrock-integration"
+  description = "Permissions needed to allow access to Bedrock in Frankfurt from tooling."
+  policy      = data.aws_iam_policy_document.bedrock_integration.json
+}
+
+#trivy:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "quicksight_author" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
@@ -72,7 +79,7 @@ data "aws_iam_policy_document" "quicksight_author" {
     sid       = "CreateAuthor"
     effect    = "Allow"
     actions   = ["quicksight:CreateUser"]
-    resources = ["arn:aws:quicksight::593291632749:user/${data.aws_caller_identity.current.user_id}"]
+    resources = ["arn:aws:quicksight::${var.account_ids["analytical-platform-data-production"]}:user/$${aws:userid}"]
   }
 
   statement {
@@ -105,13 +112,8 @@ data "aws_iam_policy_document" "quicksight_author" {
     resources = ["*"]
   }
 }
-resource "aws_iam_policy" "bedrock_integration" {
-  name        = "analytical-platform-bedrock-integration"
-  description = "Permissions needed to allow access to Bedrock in Frankfurt from tooling."
-  policy      = data.aws_iam_policy_document.bedrock_integration.json
-}
+
 resource "aws_iam_policy" "quicksight_author" {
-  name        = "alpha-quicksight-author-access"
-  description = "Permissions needed to for author access to Quicksight"
-  policy      = data.aws_iam_policy_document.quicksight_author.json
+  name   = "alpha-quicksight-author-access"
+  policy = data.aws_iam_policy_document.quicksight_author.json
 }

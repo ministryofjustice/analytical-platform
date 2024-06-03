@@ -61,57 +61,8 @@ data "aws_iam_policy_document" "bedrock_integration" {
   }
 }
 
-#tfsec:ignore:aws-iam-no-policy-wildcards
-data "aws_iam_policy_document" "quicksight_author" {
-  #checkov:skip=CKV_AWS_111: This is a service policy
-  #checkov:skip=CKV_AWS_356: Needs to access multiple resources
-
-  statement {
-    sid       = "CreateAuthor"
-    effect    = "Allow"
-    actions   = ["quicksight:CreateUser"]
-    resources = ["arn:aws:quicksight::593291632749:user/${data.aws_caller_identity.current.user_id}"]
-  }
-
-  statement {
-    sid    = "QuicksightAuthor"
-    effect = "Allow"
-
-    actions = [
-      "quicksight:UpdateTemplate",
-      "quicksight:ListUsers",
-      "quicksight:UpdateDashboard",
-      "quicksight:CreateTemplate",
-      "quicksight:ListTemplates",
-      "quicksight:DescribeTemplate",
-      "quicksight:DescribeDataSource",
-      "quicksight:DescribeDataSourcePermissions",
-      "quicksight:PassDataSource",
-      "quicksight:UpdateDataSource",
-      "quicksight:UpdateDataSetPermissions",
-      "quicksight:DescribeDataSet",
-      "quicksight:DescribeDataSetPermissions",
-      "quicksight:PassDataSet",
-      "quicksight:DescribeIngestion",
-      "quicksight:ListIngestions",
-      "quicksight:UpdateDataSet",
-      "quicksight:DeleteDataSet",
-      "quicksight:CreateIngestion",
-      "quicksight:CancelIngestion"
-    ]
-
-    resources = ["*"]
-  }
-}
-
 resource "aws_iam_policy" "bedrock_integration" {
   name        = "analytical-platform-bedrock-integration"
   description = "Permissions needed to allow access to Bedrock in Frankfurt from tooling."
   policy      = data.aws_iam_policy_document.bedrock_integration.json
-}
-
-resource "aws_iam_policy" "quicksight_author" {
-  name        = "dev-quicksight-author-access"
-  description = "Permissions needed to for author access to Quicksight"
-  policy      = data.aws_iam_policy_document.quicksight_author.json
 }
