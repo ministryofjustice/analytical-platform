@@ -207,6 +207,19 @@ data "aws_iam_policy_document" "airflow_dev_node_instance_inline_role_policy" {
 
 }
 
+data "aws_iam_policy_document" "airflow_dev_monitoring_inline_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    resources = [
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:airflow-monitoring/airflow-scheduling-testing/*",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:airflow-monitoring/"
+    ]
+    actions = ["s3:GetObject", "s3:ListBucket", "s3:PutObject", "s3:DeleteObject"]
+  }
+
+}
+
 data "aws_iam_policy_document" "airflow_dev_node_instance_assume_role_policy" {
   statement {
     sid    = ""

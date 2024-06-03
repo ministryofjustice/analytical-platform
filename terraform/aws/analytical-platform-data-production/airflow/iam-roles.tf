@@ -137,3 +137,25 @@ resource "aws_iam_role" "airflow_prod_eks_role" {
     "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   ]
 }
+
+module "airflow_analytical_platform_dev_monitoring_iam_role" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.39.1"
+
+  create_role = true
+
+  role_name = "airflow-monitoring-dev"
+
+  role_policy_arns = {
+    policy = module.airflow_dev_monitoring_inline_role_policy.arn
+  }
+
+  oidc_providers = {
+    one = {
+      provider_arn               = resource.aws_iam_openid_connect_provider.analytical_platform_development.arn
+      namespace_service_accounts = ["airflow:airflow"]
+    }
+  }
+}
