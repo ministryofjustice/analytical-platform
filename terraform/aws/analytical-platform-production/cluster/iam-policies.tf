@@ -75,6 +75,15 @@ data "aws_iam_policy_document" "control_panel_api" {
     resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/${var.resource_prefix}-*"]
   }
   statement {
+    sid    = "CanReadIAMPolicies"
+    effect = "Allow"
+    actions = [
+      "iam:GetPolicy",
+      "iam:GetPolicyVersion",
+    ]
+    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/*"]
+  }
+  statement {
     sid     = "CanAttachPolicies"
     effect  = "Allow"
     actions = ["iam:AttachRolePolicy", ]
