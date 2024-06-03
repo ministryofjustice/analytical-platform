@@ -75,10 +75,10 @@ data "aws_iam_policy_document" "quicksight_author" {
   }
 
   statement {
-    sid       = "QuicksightAuthor"
-    effect    = "Allow"
+    sid    = "QuicksightAuthor"
+    effect = "Allow"
 
-    actions   = [
+    actions = [
       "quicksight:UpdateTemplate",
       "quicksight:ListUsers",
       "quicksight:UpdateDashboard",
