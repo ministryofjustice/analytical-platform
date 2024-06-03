@@ -43,6 +43,6 @@ data "aws_iam_policy_document" "quicksight_author" {
 }
 
 resource "aws_iam_policy" "quicksight_author" {
-  name   = "alpha-quicksight-author-access"
+  name   = "dev-quicksight-author-access"
   policy = data.aws_iam_policy_document.quicksight_author.json
 }
