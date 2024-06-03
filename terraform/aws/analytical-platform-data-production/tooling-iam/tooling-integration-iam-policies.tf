@@ -74,6 +74,7 @@ resource "aws_iam_policy" "bedrock_integration" {
 data "aws_iam_policy_document" "quicksight_author" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
+  #checkov:skip=CKV_AWS_109: Needs to access multiple resources
 
   statement {
     sid       = "CreateAuthor"
