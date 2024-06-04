@@ -9,6 +9,14 @@ module "route53_records" {
 
   records = [
     {
+      name = "docs"
+      type = "CNAME"
+      ttl  = 300
+      records = [
+        "ministryofjustice.github.io."
+      ]
+    },
+    {
       name = "compute.development"
       type = "NS"
       ttl  = 300
