@@ -49,3 +49,4 @@ jobs:
           VALIDATE_TERRAFORM_TERRASCAN: false
           VALIDATE_CHECKOV: false
           VALIDATE_JSCPD: false
+          VALIDATE_CSS: false
