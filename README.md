@@ -83,12 +83,12 @@ Office hours, usually 8am-5pm on working days
 
 ### Incident contact details
 
-Slack: `#analytical-platform`
+Slack: [#ask-analytical-platform](https://moj.enterprise.slack.com/archives/C06TFT94JTC)
 Email: `analytical-platform@digital.justice.gov.uk`
 
 ### Service team contact
 
-As above - preferably our Slack channel: `#analytical-platform` (or email `analytical-platform@digital.justice.gov.uk`)
+As above - preferably our Slack channel: [#ask-analytical-platform](https://moj.enterprise.slack.com/archives/C06TFT94JTC) (or email `analytical-platform@digital.justice.gov.uk`)
 
 ## Hosting environment
 
