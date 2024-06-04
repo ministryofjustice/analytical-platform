@@ -81,7 +81,7 @@ output "kubeconfig_certificate_authority_data" {
   value = aws_eks_cluster.airflow_dev_eks_cluster.certificate_authority[0].data
 }
 
-resource "aws_eks_node_group" "new_dev_node_group_standard" {
+resource "aws_eks_node_group" "dev_node_group_standard" {
   cluster_name    = aws_eks_cluster.airflow_dev_eks_cluster.name
   node_group_name = "standard"
   node_role_arn   = aws_iam_role.airflow_dev_node_instance_role.arn
@@ -108,7 +108,7 @@ resource "aws_eks_node_group" "new_dev_node_group_standard" {
   }
 }
 
-resource "aws_eks_node_group" "new_dev_node_group_high_memory" {
+resource "aws_eks_node_group" "dev_node_group_high_memory" {
   cluster_name    = aws_eks_cluster.airflow_dev_eks_cluster.name
   node_group_name = "high-memory"
   node_role_arn   = aws_iam_role.airflow_dev_node_instance_role.arn
@@ -271,15 +271,15 @@ output "prod_kubeconfig_certificate_authority_data" {
   value = aws_eks_cluster.airflow_prod_eks_cluster.certificate_authority[0].data
 }
 
-resource "aws_eks_node_group" "new_prod_node_group_standard" {
+resource "aws_eks_node_group" "prod_node_group_standard" {
   cluster_name    = aws_eks_cluster.airflow_prod_eks_cluster.name
   node_group_name = "new-standard"
   node_role_arn   = aws_iam_role.airflow_prod_node_instance_role.arn
   subnet_ids      = aws_subnet.prod_private_subnet[*].id
 
   launch_template {
-    id      = aws_launch_template.new_prod_standard.id
-    version = aws_launch_template.new_prod_standard.latest_version
+    id      = aws_launch_template.prod_standard.id
+    version = aws_launch_template.prod_standard.latest_version
   }
 
   scaling_config {
@@ -297,15 +297,15 @@ resource "aws_eks_node_group" "new_prod_node_group_standard" {
   }
 }
 
-resource "aws_eks_node_group" "new_prod_node_group_high_memory" {
+resource "aws_eks_node_group" "prod_node_group_high_memory" {
   cluster_name    = aws_eks_cluster.airflow_prod_eks_cluster.name
   node_group_name = "new-high-memory"
   node_role_arn   = aws_iam_role.airflow_prod_node_instance_role.arn
   subnet_ids      = aws_subnet.prod_private_subnet[*].id
 
   launch_template {
-    id      = aws_launch_template.new_prod_high_memory.id
-    version = aws_launch_template.new_prod_high_memory.latest_version
+    id      = aws_launch_template.prod_high_memory.id
+    version = aws_launch_template.prod_high_memory.latest_version
   }
 
   scaling_config {
