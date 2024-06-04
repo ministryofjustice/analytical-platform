@@ -90,7 +90,7 @@ Email: `analytical-platform@digital.justice.gov.uk`
 
 As above - preferably our Slack channel: `#analytical-platform` (or email `analytical-platform@digital.justice.gov.uk`)
 
-### Hosting environment
+## Hosting environment
 
 [Modernisation Platform](https://user-guide.modernisation-platform.service.justice.gov.uk/)
 
