@@ -261,6 +261,32 @@ data "aws_iam_policy_document" "airflow_dev_eks_assume_role_policy" {
 
 }
 
+##### Airflow Dev IRSA
+data "aws_iam_policy_document" "airflow_dev_monitoring_inline_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    resources = [
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:airflow-monitoring/airflow-scheduling-testing/*",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:airflow-monitoring/"
+    ]
+    actions = ["s3:GetObject", "s3:ListBucket", "s3:PutObject", "s3:DeleteObject"]
+  }
+
+}
+
+module "airflow_dev_monitoring_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.39.1"
+
+  name = "airflow_dev_monitoring"
+
+  policy = data.aws_iam_policy_document.airflow_dev_monitoring_inline_role_policy.json
+}
+
+
 ############################ AIRFLOW PRODUCTION INFRASTRUCTURE
 
 data "aws_iam_policy_document" "airflow_prod_execution_assume_role_policy" {
