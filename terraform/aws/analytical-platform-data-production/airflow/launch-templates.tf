@@ -52,7 +52,7 @@ resource "aws_launch_template" "dev_standard" {
 
 resource "aws_launch_template" "dev_high_memory" {
   name          = "dev_high_memory"
-  image_id      = "ami-060fa526de0521c07"
+  image_id      = "ami-03857889452e262ff"
   instance_type = "r6i.8xlarge"
 
   disable_api_stop        = false
@@ -220,7 +220,7 @@ import {
   id = "lt-0ba6601ac92732c39"
 }
 
-resource "aws_launch_template" "new_prod_standard" {
+resource "aws_launch_template" "prod_standard" {
   name          = "prod_standard"
   image_id      = "ami-03857889452e262ff"
   instance_type = "t3a.large"
@@ -272,7 +272,7 @@ resource "aws_launch_template" "new_prod_standard" {
   }
 }
 
-resource "aws_launch_template" "new_prod_high_memory" {
+resource "aws_launch_template" "prod_high_memory" {
   name          = "prod_high_memory"
   image_id      = "ami-03857889452e262ff"
   instance_type = "r6i.8xlarge"
