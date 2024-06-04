@@ -25,6 +25,7 @@ The repositories we manage with terraform see [here](https://github.com/ministry
 | -------------- | -------------- |
 | [Analytical Platform (this repository)](https://github.com/ministryofjustice/analytical-platform)          | Analytical Platform infrastructure, public facing documentation, feature work, enhancements, and issues  |
 | [Analytical Platform Actions Runner](https://github.com/ministryofjustice/analytical-platform-actions-runner)          | contains the GitHub Actions Runner image used by the Analytical Platform  |
+| [Analytical Platform App Cloud Platform Deployment](https://github.com/ministryofjustice/data-platform-app-template) | Template for Cloud Platform deployments of Analytical Platform Apps |
 | [Analytical Platform Auth Proxy](https://github.com/ministryofjustice/analytics-platform-auth-proxy)          | This repository contains the authentication proxy image used by the Analytical Platform  |
 | [Analytical Platform Control Panel](https://github.com/ministryofjustice/analytics-platform-control-panel)          | The Control Panel is a management tool which provides Data Analysts and Data Scientists data management and tooling  |
 | [Analytical Platform Dashboard](https://github.com/ministryofjustice/analytical-platform-dashboard)          | The AP Dashboard is still in development   |
@@ -42,7 +43,7 @@ The repositories we manage with terraform see [here](https://github.com/ministry
 | [Analytical Platform support](https://github.com/ministryofjustice/data-platform-support)            | This repository is used for support and provides templated forms for our users          |
 | [Analytical Platform User Guidancel](https://github.com/moj-analytical-services/user-guidance)          | User guidance for the Analytical Platform which is hosted on GitHub Pages [here](https://user-guidance.analytical-platform.service.justice.gov.uk/)  |
 | [Analytical Platform Visual Studio Code](https://github.com/ministryofjustice/analytical-platform-visual-studio-code)          | This repository contains the Visual Studio Code image used by the Analytical Platform  |
-| [Modernisation Platform environments repository](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform) | Hosting environment for the Analytical Platform |
+| [Modernisation Platform environments repository](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/data-platform) | Hosting environment for the Analytical Platform |
 
 ### Useful links
 
