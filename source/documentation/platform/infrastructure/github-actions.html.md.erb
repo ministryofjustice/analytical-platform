@@ -1,0 +1,86 @@
+---
+owner_slack: "#Analytical-platform-notifications"
+title: GitHub Actions
+last_reviewed_on: 2023-07-25
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+GitHub Actions is our CI/CD tool of choice. We use it for a variety of tasks such as
+building and publishing this documentation,
+building and publishing containers and running Terraform
+
+## Style guide
+
+### Structure
+
+* workflow files should be placed in `.github/workflows/`
+
+* workflow files should be named using kebab case, e.g. `build-and-push.yml`
+
+* workflow files should be named relative to what they are doing, e.g. `build-and-push.yml`
+
+## Syntax
+
+* workflow files should start with YAML's [document start marker](https://yaml.org/spec/1.2/spec.html#id2760395), `---`
+
+* `name` should be relative to what the workflow is doing, e.g. `name: Build and push`
+
+* `permissions` should default to `read-all` and be overridden if required
+
+* `jobs.<job_id>` should be named relative to what the job is doing, e.g. `jobs.build-and-push`
+
+* `jobs.<job_id>.name` should be relative to what the job is doing, e.g. `Build and push`
+
+* `jobs.<job_id>.steps[*].id` should be relative to what the step is doing, e.g. `checkout`
+
+* `jobs.<job_id>.steps[*].name` should be relative to what the step is doing, e.g. `Checkout`
+
+* `jobs.<job_id>.steps[*].uses` should use the SHA of the release of the action, e.g. `uses: actions/checkout@@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1`
+
+An example of the above can be seen below:
+
+```yaml
+---
+name: Build and push
+
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+
+permissions: read-all
+
+jobs:
+  build-and-push:
+    name: Build and push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Login to GitHub Container Registry
+        id: login_ghcr
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        id: build_and_push
+        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5.1.0
+        with:
+          context: .
+          file: Containerfile
+          push: true
+          tags: ghcr.io/ministryofjustice/analytical-platform:latest
+```
+
+And live examples can be found in [repository](https://github.com/ministryofjustice/analytical-platform/tree/main/.github/workflows)

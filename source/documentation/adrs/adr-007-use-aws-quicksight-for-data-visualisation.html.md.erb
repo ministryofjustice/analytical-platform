@@ -1,0 +1,47 @@
+---
+owner_slack: "#analytical-platform-notifications"
+title: ADR-007 Use AWS QuickSight-for-data-visualisation
+last_reviewed_on: 2024-05-24
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+## Status
+
+✅ Accepted
+
+## Context
+
+We do not offer a managed data visualisation and reporting tool. Users need to build and run these applications themselves using [R](https://en.wikipedia.org/wiki/R_(programming_language)) or [Python](https://en.wikipedia.org/wiki/Python_(programming_language)).
+
+[PowerBI](https://en.wikipedia.org/wiki/Microsoft_Power_BI) comes part of our Microsoft 365 subscription, but connecting to data on our platform requires additional [infrastructure](https://docs.aws.amazon.com/whitepapers/latest/using-power-bi-with-aws-cloud/connecting-the-microsoft-power-bi-service-to-aws-data-sources.html).
+
+ If we offered AWS QuickSight, we can reduce our current support burden from new RShiny deployments, and give new and existing users simpler visualisation and reporting capabilities.
+
+## Decision
+
+We will offer AWS QuickSight to our users. QuickSight is fully managed and can be integrated into our identity management system.
+
+## Consequences
+
+### General consequences
+
+- Users can build and share dashboards from data stored on our platform
+- Operates on a pay-as-you-go [pricing](https://aws.amazon.com/quicksight/pricing/) model, which means we are billed based on actual usage
+- QuickSight is designed to be user-friendly (no coding required), but users might face issues when dealing with more advanced or complex use cases
+- We will need to start a QuickSight community for users to help and share their experiences and knowledge
+- There is already a public [QuickSight community](https://community.amazonquicksight.com/)
+
+### Advantages
+
+- Serverless BI service, meaning we do not need to patch or maintain and [security and compliance](https://docs.aws.amazon.com/quicksight/latest/user/QS-compliance.html) is maintained by AWS
+- User friendly interface and extensive online training materials, we won't need to produce extensive documentation to support, AWS provides many resources for building and sharing dashboards
+- Reduced operational cost and complexity for users to create reports and visualisations
+- AWS provided immersion days and free training for our users
+- Cost transparency, the total cost of ownership and management of RShiny and other hosted solutions is hard to calculate
+
+### Disadvantages
+
+- [Application configuration as code](https://github.com/aws-samples/amazon-quicksight-assets-as-code-sample) does not support all resources
+- The internal permission management is complex and difficult to understand

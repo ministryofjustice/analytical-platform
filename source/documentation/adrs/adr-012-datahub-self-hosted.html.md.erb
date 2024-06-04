@@ -1,0 +1,81 @@
+---
+owner_slack: "#analytical-platform-notifications"
+title: ADR-012 We will host DataHub internally
+last_reviewed_on: 2024-02-07
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+## Status
+
+✅ Accepted
+
+## Context
+
+A data catalogue for the MOJ is a critical pillar of the Data Platform. Following a review of open source catalogues, [DataHub](https://datahubproject.io/) was selected as the preferred tool.
+
+Since [Acryl Data](https://www.acryldata.io/acryl-datahub) offer a SaaS version of DataHub, this ADR is concerned with the choice of how we host our catalogue.
+
+## Analysis
+
+There are two options:
+
+- We use Acryl Data's managed SaaS offering
+- We host DataHub ourselves using one of our two strategic hosting platforms:
+  - [Cloud Platform](https://github.com/ministryofjustice/cloud-platform)
+  - [Modernisation Platform](https://github.com/ministryofjustice/modernisation-platform)
+
+Both approaches have advantages and disadvantages:
+
+### SaaS (third-party managed) hosting
+
+#### Advantages
+
+- We do not have to provision and manage infrastructre
+- Availability and uptime are part of a paid-for SLA
+- Version updates and patches are managed for us
+- We do not need a deep understanding of the internals of the application
+- Team members do not have to spend time configuring and deploying the application
+
+#### Disadvantages
+
+- We have less control over what infrastructure is provisioned
+- Hosting costs will be higher
+- Procurement for a recurring, licensed product would cause significant delays in getting an application to users
+- A supplier relationship and contract will need to be managed and monitored
+- Private sector entities can be acquired by another entity, or IPOs can initiate unexpected changes to a service or its pricing
+
+### In-house hosting
+
+#### Advantages
+
+- We have much greater control over the provisioning of resources
+- Our strategic hosting platforms are security baselined
+- Our hosting costs will be lower, since they will include any volume discounts and not include third-party margins
+- Connecting the catalogue to our other internal systems will be more straightforward (i.e. our SSO service and catalogue metadata ingestion)
+- We are easily able to provision dev/test and staging instances
+- Acryl provide helm charts for self-hosting, so we are not required to create the deployments from scratch
+
+#### Disadvantages
+
+- We are responsible for SLAs, uptime etc.
+- We are responsible for updates and patches<sup>1</sup>
+- Our team requires a deep knowledge of the setup and configuation of the application<sup>2</sup>
+
+<sup>1</sup> Arguably, an advantage, in that we also gain control over **when** upgrades are rolled out, and they can be tested in a preprod environment beforehand.
+
+<sup>2</sup> Arguably, also an advantage.
+
+## Decision
+
+The internal hosting advantages of cost, security and connectivity outweigh any advantaged of third-party SaaS hosting. The decision is to **host DataHub internally, using Cloud Platform**.
+
+## Consequences
+
+The Data Platform teams will need to:
+
+- Understand the DataHub deployment stack
+- Create Cloud Platform environments
+- Integrate Entra ID into the application
+- Deploy the application

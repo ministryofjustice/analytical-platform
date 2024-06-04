@@ -1,0 +1,160 @@
+---
+owner_slack: "#data-platform-notifications"
+title: Developing the Analytical Platform
+last_reviewed_on: 2024-05-23
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+Analytical Platform is built using many differenct core technolgies (AWS, Kubernetes, Container and Python, etc.)
+
+To ease the development process of each component/repository, we have created a [dev container](https://containers.dev/) that contains all the tools required.
+
+There are two methods for using dev containers:
+
+- [GitHub Codespaces](https://github.com/features/codespaces), but this optional, as the Ministry of Justice doesn't pay for this, it is down to the user to pick up the cost.
+
+- Locally on macOS
+
+This documentation will cover running locally on macOS, because GitHub Codespaces is a one-click operation.
+
+## Getting Started on macOS
+
+### Prerequisites
+
+- macOS
+
+- Homebrew
+
+    ```bash
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
+
+- 1Password
+
+    [You will need to request access to 1Password via Operations Engineering](https://user-guide.operations-engineering.service.justice.gov.uk/documentation/services/1password.html#request-access).
+
+    ```bash
+    brew install 1password
+    ```
+
+- Docker
+
+    > If you are have an Apple Silicon Mac, you will need to enable Rosetta emulation, see Docker's [documentation](https://docs.docker.com/desktop/settings/mac/#general:~:text=Use%20Rosetta%20for%20x86/AMD64%20emulation%20on%20Apple%20Silicon) for more information.
+
+    ```bash
+    brew install --cask docker
+    ```
+
+- Node
+
+    ```bash
+    brew install node
+    ```
+
+- Dev Container CLI
+
+    ```bash
+    sudo npm install --location=global @devcontainers/cli@latest
+    ```
+
+- Visual Studio Code
+
+    ```bash
+    brew install --cask visual-studio-code
+    ```
+
+- Dev Containers Visual Studio Code Extension
+
+    ```bash
+    /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code --install-extension ms-vscode-remote.remote-containers
+    ```
+
+### Setup
+
+Your GPG and SSH agents are mounted from macOS, so GPG and SSH commands inside the container should work without any configuration updates
+
+> We recommend using 1Password to manage your SSH keys, and this document will reflect that
+
+1. Follow 1Password's instructions on how to setup SSH keys and their SSH agent ([link](https://developer.1password.com/docs/ssh/get-started/))
+
+> If you already have an existing key, you can add it to 1Password ([link](https://developer.1password.com/docs/ssh/manage-keys/#import-an-ssh-key)) and skip to step 3 of 1Password's instructions.
+
+1. Permanently set `SSH_AUTH_SOCK` by adding the following to your `~/.zshrc` or `~/.bashrc` file
+
+    ```bash
+    export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+    ```
+
+1. Clone one of the Analytical Platform repositories, for this example we'll use `analytical-platform`
+
+      <details>
+
+      <summary>Example</summary>
+
+      ```bash
+      mkdir -p ~/Developer/github.com/ministryofjustice
+
+      git clone git@github.com:ministryofjustice/analytical-platform.git ~/Developer/github.com/ministryofjustice/analytical-platform
+      ```
+
+      </details>
+
+1. Open the Analytical Platform repository in Visual Studio Code
+
+      <details>
+
+      <summary>Example</summary>
+
+      ```bash
+      cd ~/Developer/github.com/ministryofjustice/analytical-platform
+
+      /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code .
+      ```
+
+      </details>
+
+1. Open the Visual Studio Code Command Palette using `Shift-Command-P`
+
+1. Run `Dev Container: Reopen in Container`
+
+1. Wait for the container to build, it may take 5 to 10 minutes
+
+### Updating
+
+When new functionality is added you will need to rebuild the container, to do this:
+
+1. Pull the latest changes from the Analytical Platform repository on the host machine
+
+      <details>
+
+      <summary>Example</summary>
+
+      ```bash
+      cd ~/Developer/github.com/ministryofjustice/analytical-platform
+
+      git fetch
+
+      git pull
+      ```
+
+      </details>
+
+1. Open the Analytical Platform repository in Visual Studio Code
+
+      <details>
+
+      <summary>Example</summary>
+
+      ```bash
+      cd ~/Developer/github.com/ministryofjustice/analytical-platform
+
+      /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code .
+      ```
+
+      </details>
+
+1. Open the Visual Studio Code Command Palette using `Shift-Command-P`
+
+1. Run `Dev Container: Rebuild and Reopen in Container`
