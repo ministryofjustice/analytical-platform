@@ -264,15 +264,33 @@ data "aws_iam_policy_document" "airflow_dev_eks_assume_role_policy" {
 ##### Airflow Dev IRSA
 data "aws_iam_policy_document" "airflow_dev_monitoring_inline_role_policy" {
   statement {
-    sid    = ""
-    effect = "Allow"
-    resources = [
-      "arn:aws:s3:::airflow-monitoring/airflow-scheduling-testing/*",
-      "arn:aws:s3:::airflow-monitoring/"
+    sid = "readwrite"
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectAcl",
+      "s3:GetObjectVersion",
+      "s3:GetObjectTagging",
+      "s3:DeleteObject",
+      "s3:DeleteObjectVersion",
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+      "s3:PutObjectTagging",
+      "s3:RestoreObject"
     ]
-    actions = ["s3:GetObject", "s3:ListBucket", "s3:PutObject", "s3:DeleteObject"]
+    effect    = "Allow"
+    resources = ["arn:aws:s3:::airflow-monitoring/airflow-scheduling-testing/*"]
   }
 
+  statement {
+    sid = "list"
+    actions = [
+      "s3:ListBucket",
+      "s3:ListAllMyBuckets",
+      "s3:GetBucketLocation"
+    ]
+    effect    = "Allow"
+    resources = ["arn:aws:s3:::airflow-monitoring/"]
+  }
 }
 
 module "airflow_dev_monitoring_iam_policy" {
