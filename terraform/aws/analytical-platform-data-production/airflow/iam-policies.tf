@@ -207,18 +207,7 @@ data "aws_iam_policy_document" "airflow_dev_node_instance_inline_role_policy" {
 
 }
 
-data "aws_iam_policy_document" "airflow_dev_monitoring_inline_role_policy" {
-  statement {
-    sid    = ""
-    effect = "Allow"
-    resources = [
-      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:airflow-monitoring/airflow-scheduling-testing/*",
-      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:airflow-monitoring/"
-    ]
-    actions = ["s3:GetObject", "s3:ListBucket", "s3:PutObject", "s3:DeleteObject"]
-  }
-
-}
+# moved JHP code to bottom
 
 data "aws_iam_policy_document" "airflow_dev_node_instance_assume_role_policy" {
   statement {
@@ -453,4 +442,33 @@ data "aws_iam_policy_document" "airflow_prod_eks_assume_role_policy" {
     actions = ["sts:AssumeRole"]
   }
 
+}
+
+
+########## irsa from JHP code
+
+data "aws_iam_policy_document" "airflow_dev_monitoring_inline_role_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+    resources = [
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:airflow-monitoring/airflow-scheduling-testing/*",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:airflow-monitoring/"
+    ]
+    actions = ["s3:GetObject", "s3:ListBucket", "s3:PutObject", "s3:DeleteObject"]
+  }
+
+}
+
+
+# think we may need this
+module "airflow_dev_monitoring_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.39.1"
+
+  name = "airflow_dev_monitoring"
+
+  policy = data.aws_iam_policy_document.airflow_dev_monitoring_inline_role_policy.json
 }
