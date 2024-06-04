@@ -38,4 +38,3 @@ prevent_indexing: true
 show_contribution_banner: true
 github_repo: ministryofjustice/analytical-platform
 github_branch: main
-repo_directory: docs
