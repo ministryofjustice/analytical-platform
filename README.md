@@ -35,55 +35,6 @@ so that users can understand what a repository does through its name.
 | [Analytical Platform support](https://github.com/ministryofjustice/analytical-platform-support)            | This repository is used for support and provides templated forms for our users.           |
 | [Modernisation Platform environments repository](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform) | Hosting environment for the Analytical Platform |
 
-### OpenSSF Best Practices
-
-These are the requirements currently met by this repository in line with the
-FLOSS Best Practices Criteria (Passing Badge)
-
-Basic project site content:
-
-- The project site describes what the software does
-- Provides information on how to interact with the project
-- explains contribution process
-
-FLOSS license:
-
-- Uses MIT licence
-
-Documentation:
-
-- The project provides basic documentation
-
-Public version-controlled source repository
-
-- GIT version control
-
-Bug-reporting process:
-
-- The project provides a process for users to submit bug reports
-- The project uses GitHub issues/ zen hub to track issues
-
-Other security issues:
-
-- secured private credentials via Kuberentes secrets and GitHub secrets
-
-Secured delivery against man-in-the-middle (MITM) attacks:
-
-- Delivered via terraform secured by HTPPS and spcific IAM roles useable only
-  by the GitHub action
-- No Cryptographic hases transported over HTTP
-
-Static code analysis:
-
-- Use of CodeQL
-
-Other:
-
-- The project site supports HTTPS using TLS
-- The project is maintained
-
-  For more information please see [Criteria](https://bestpractices.coreinfrastructure.org/en/criteria/0#0.repo_track)
-
 ### Useful links
 
 It may be also useful to look at:
