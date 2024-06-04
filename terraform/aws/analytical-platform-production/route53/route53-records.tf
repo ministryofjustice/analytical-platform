@@ -15,7 +15,7 @@ module "route53_records" {
       records = [
         "ministryofjustice.github.io."
       ]
-    }
+    },
     {
       name = "compute.development"
       type = "NS"
