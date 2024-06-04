@@ -122,7 +122,7 @@ settings.
 Merging the changes to the `main` branch automatically publishes the
 changes via GH Action. See [publishing](#publishing).
 
-## Preview docs
+### Preview docs
 
 You can preview how your changes will look, if you've cloned this repository
 to your local machine, run this command:
@@ -144,12 +144,12 @@ For more details see the
 [tech-docs-github-pages-publisher](https://github.com/ministryofjustice/tech-docs-github-pages-publisher)
 repository.
 
-## Publishing
+### Publishing
 
 Any changes you push/merge into the
 `main` branch should be published to GitHub Pages site automatically.
 
-## Template configuration
+### Template configuration
 
 The web page layout is configured using the config/tech-docs.yml file.
 
