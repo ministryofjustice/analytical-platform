@@ -267,8 +267,8 @@ data "aws_iam_policy_document" "airflow_dev_monitoring_inline_role_policy" {
     sid    = ""
     effect = "Allow"
     resources = [
-      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:airflow-monitoring/airflow-scheduling-testing/*",
-      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:airflow-monitoring/"
+      "arn:aws:s3:::airflow-monitoring/airflow-scheduling-testing/*",
+      "arn:aws:s3:::airflow-monitoring/"
     ]
     actions = ["s3:GetObject", "s3:ListBucket", "s3:PutObject", "s3:DeleteObject"]
   }

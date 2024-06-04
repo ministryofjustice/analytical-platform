@@ -3,7 +3,7 @@ resource "kubernetes_service_account" "airflow" {
     namespace = kubernetes_namespace.dev_airflow.metadata[0].name
     name      = "airflow"
     annotations = {
-      "eks.amazonaws.com/role-arn" = "arn:aws:iam::593291632749:role/airflow_monitoring_dev"
+      "eks.amazonaws.com/role-arn" = module.airflow_dev_monitoring_iam_role.iam_role_arn
     }
   }
 }
