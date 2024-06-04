@@ -118,7 +118,7 @@ You can preview how your changes will look, if you've cloned this repository
 to your local machine, run this command:
 
 ```bash
-bash scripts/docs/docker.sh preview
+bash scripts/docs/local.sh
 ```
 
 This will run a preview web server on <http://localhost:4567> which you can
