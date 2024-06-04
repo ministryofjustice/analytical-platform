@@ -49,8 +49,8 @@ The repositories we manage with terraform see [here](https://github.com/ministry
 
 It may be also useful to look at:
 
-- [Technical documentation](https://technical-documentation.analytical-platform.service.justice.gov.uk/)
-- [Architecture Decision Records (ADRs)](https://technical-documentation.analytical-platform.service.justice.gov.uk/documentation/adrs/adr-index.html)
+- [Technical documentation](https://docs.analytical-platform.service.justice.gov.uk/)
+- [Architecture Decision Records (ADRs)](https://docs.analytical-platform.service.justice.gov.uk/documentation/adrs/adr-index.html)
 
 ## Getting in touch
 
@@ -96,13 +96,11 @@ As above - preferably our Slack channel: [#ask-analytical-platform](https://moj.
 
 ## Editing and publishing the Technical Documentation
 
-The [published](https://technical-documentation.analytical-platform.service.justice.gov.uk/)
+The [published](https://docs.analytical-platform.service.justice.gov.uk/)
 documentation is created by editing `*.html.md.erb` files,
 found in the [docs source](docs/source/) folder.
 
 The syntax is Markdown, more details can be found [here](https://daringfireball.net/projects/markdown/).
-
-For guidance see the Tech Docs Template [Write your content](https://tdt-documentation.london.cloudapps.digital/write_docs/content/).
 
 While editing the files locally, you can start a Docker container that will use
 Middleman to act as a server hosting the web pages. See [preview docs](#preview-docs).
@@ -148,7 +146,7 @@ The web page layout is configured using the config/tech-docs.yml file.
 The template can be configured in [config/tech-docs.yml](config/tech-docs.yml)
 
 Further configuration options are described on the Tech Docs Template
-website: [Global Configuration](https://tdt-documentation.london.cloudapps.digital/configure_project/global_configuration/).
+website: [Global Configuration](https://github.com/alphagov/tdt-documentation/blob/main/config/tech-docs.yml).
 
 ## Contributing
 

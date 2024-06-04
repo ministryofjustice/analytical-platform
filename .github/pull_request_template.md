@@ -14,7 +14,7 @@ improves performance, or solves a specific issue. -->
 > [!NOTE]
 > Each items should be checked. Skipping below checks could delay your PR review!
 
-- [ ] I have reviewed the [style guide](https://technical-documentation.analytical-platform.service.justice.gov.uk/documentation/platform/infrastructure/terraform.html#terraform)
+- [ ] I have reviewed the [style guide](https://docs.analytical-platform.service.justice.gov.uk/documentation/platform/infrastructure/terraform.html#terraform)
 and ensured that my code complies with it
 - [ ] All checks have passed (or override label applied, if I've
 used the `override-static-analysis` label, I've explained why)

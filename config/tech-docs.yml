@@ -14,7 +14,7 @@ phase: Alpha
 
 # Links to show on right-hand-side of header
 header_links:
-  🏠 Home: https://technical-documentation.analytical-platform.service.justice.gov.uk/
+  🏠 Home: https://docs.analytical-platform.service.justice.gov.uk/
   🔧 Our Main GitHub repo: https://github.com/ministryofjustice/analytical-platform
   💬 Ask Slack Channel: https://mojdt.slack.com/archives/C04VBJTKY58
 
