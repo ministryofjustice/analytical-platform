@@ -138,7 +138,10 @@ resource "aws_iam_role" "airflow_prod_eks_role" {
   ]
 }
 
+<<<<<<< HEAD
 #### irsa work
+=======
+>>>>>>> 6ce89494e4498e024210e44a7b611afc3056f25b
 module "airflow_analytical_platform_dev_monitoring_iam_role" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
@@ -149,11 +152,16 @@ module "airflow_analytical_platform_dev_monitoring_iam_role" {
 
   role_name = "airflow-monitoring-dev"
 
+<<<<<<< HEAD
 
   role_policy_arns = {
     #policy = data.aws_iam_policy_document.airflow_dev_monitoring_inline_role_policy.json
     #policy = module.aws_iam_policy_document.airflow_dev_monitoring_inline_role_policy.arn
     policy = module.airflow_dev_monitoring_iam_policy.arn
+=======
+  role_policy_arns = {
+    policy = module.airflow_dev_monitoring_inline_role_policy.arn
+>>>>>>> 6ce89494e4498e024210e44a7b611afc3056f25b
   }
 
   oidc_providers = {
@@ -163,4 +171,7 @@ module "airflow_analytical_platform_dev_monitoring_iam_role" {
     }
   }
 }
+<<<<<<< HEAD
 #### irsa work
+=======
+>>>>>>> 6ce89494e4498e024210e44a7b611afc3056f25b
