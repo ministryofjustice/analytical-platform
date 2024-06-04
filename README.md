@@ -31,7 +31,6 @@ so that users can understand what a repository does through its name.
 | Name | Description |
 | -------------- | -------------- |
 | [Analytical Platform (this repository)](https://github.com/ministryofjustice/analytical-platform)          | Core infrastructure, public facing documentation, feature work, enhancements, and issues  |
-| [Analytical Platform products](https://github.com/ministryofjustice/analytical-platform-products)          | User-created services that are hosted on the Analytical Platform                                |
 | [Analytical Platform support](https://github.com/ministryofjustice/analytical-platform-support)            | This repository is used for support and provides templated forms for our users.           |
 | [Modernisation Platform environments repository](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform) | Hosting environment for the Analytical Platform |
 
