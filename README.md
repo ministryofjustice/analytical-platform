@@ -139,7 +139,3 @@ The template can be configured in [config/tech-docs.yml](config/tech-docs.yml)
 
 Further configuration options are described on the Tech Docs Template
 website: [Global Configuration](https://tdt-documentation.london.cloudapps.digital/configure_project/global_configuration/).
-
-### Last review date
-
-10th August 2023
