@@ -1,6 +1,6 @@
 resource "aws_launch_template" "dev_standard" {
   name          = "dev_standard"
-  image_id      = "ami-0aa9fe9eb35cf4eaf"
+  image_id      = "ami-0e169b410a06c4a29"
   instance_type = "t3a.large"
 
   disable_api_stop        = false
@@ -52,7 +52,7 @@ resource "aws_launch_template" "dev_standard" {
 
 resource "aws_launch_template" "dev_high_memory" {
   name          = "dev_high_memory"
-  image_id      = "ami-03857889452e262ff"
+  image_id      = "ami-0e169b410a06c4a29"
   instance_type = "r6i.8xlarge"
 
   disable_api_stop        = false
