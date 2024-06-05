@@ -1,7 +1,7 @@
 ---
 owner_slack: "#analytical-platform-notifications"
-title: ADR-008 AWS Bedrock
-last_reviewed_on: 2024-01-17
+title: ADR-006 AWS Bedrock
+last_reviewed_on: 2024-06-05
 review_in: 6 months
 ---
 
@@ -9,7 +9,7 @@ review_in: 6 months
 
 ## Status
 
-🤔 Proposed
+✅ Accepted
 
 ## Context
 
@@ -19,7 +19,7 @@ Our platform lacks the resources required to run these models.
 
 ## Decision
 
-- _proposed - We will offer [Amazon Bedrock](https://aws.amazon.com/bedrock/) to our users.
+- We will offer [Amazon Bedrock](https://aws.amazon.com/bedrock/) to our users.
 Amazon Bedrock is fully managed large language model platform, which offers many foundation models which be customised privately using techniques such as fine tuning and [retrieval-augmented generation (RAG)](https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-customize-rag.html)._
 
 ## Consequences
@@ -38,5 +38,4 @@ Amazon Bedrock is fully managed large language model platform, which offers many
 ### Disadvantages
 
 - Limited model selection, Bedrock offers a few pre-trained models and new models can take time to reach all AWS regions
-- Frankfurt region doesn't currently offer functionality such as fine-tuning and model training
-- Service is currently only available in Frankfurt and Virginia which raises data sovereignty issues
+- Service is still in process of rolling out to more regions which means we need to be cognizant of data sovereignty issues
