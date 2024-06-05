@@ -1,4 +1,6 @@
-resource "kubernetes_service_account" "airflow" {
+resource "kubernetes_service_account" "dev_airflow" {
+  provider = kubernetes.dev-airflow-cluster
+
   metadata {
     namespace = kubernetes_namespace.dev_airflow.metadata[0].name
     name      = "airflow"
