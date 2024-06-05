@@ -1,8 +1,8 @@
 ---
 owner_slack: "#analytical-platform-notifications"
-title: ADR-003 Use EntraID (formally AzureAD) for Identity and Access Management
+title: ADR-003 Use EntraID (formerly AzureAD) for Identity and Access Management
 last_reviewed_on: 2024-06-05
-review_in: 3 months
+review_in: 6 months
 ---
 
 # <%= current_page.data.title %>
@@ -20,7 +20,7 @@ We do not want to run an identity service.
 
 ## Decision
 
-We will use [EntraID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id) (formally AzureAD) for [Identity and Access Management](https://en.wikipedia.org/wiki/Identity_management) (IDAM).
+We will use [EntraID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id) (formerly AzureAD) for [Identity and Access Management](https://en.wikipedia.org/wiki/Identity_management) (IDAM).
 Our users are already using a `@justice.gov.uk` account as their primary login.
 Our users can take advantage of their existing identity to gain access to the Data Platform and access services.
 
