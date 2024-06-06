@@ -18,7 +18,7 @@ resource "aws_eks_cluster" "airflow_dev_eks_cluster" {
 
 resource "aws_security_group" "airflow_dev_cluster_additional_security_group" {
   name        = var.dev_cluster_additional_sg_name
-  description = "Managed by Pulumi"
+  description = "Managed in Terraform"
   vpc_id      = aws_vpc.airflow_dev.id
   ingress {
     description     = "Allow pods to communicate with the cluster API Server"
@@ -38,7 +38,7 @@ resource "aws_security_group" "airflow_dev_cluster_additional_security_group" {
 
 resource "aws_security_group" "airflow_dev_cluster_node_security_group" {
   name        = var.dev_cluster_node_sg_name
-  description = "Managed by Pulumi"
+  description = "Managed in Terraform"
   vpc_id      = aws_vpc.airflow_dev.id
 
   ingress {
@@ -186,7 +186,7 @@ resource "aws_eks_cluster" "airflow_prod_eks_cluster" {
 
 resource "aws_security_group" "airflow_prod_cluster_additional_security_group" {
   name        = var.prod_cluster_additional_sg_name
-  description = "Managed by Pulumi"
+  description = "Managed in Terraform"
   vpc_id      = aws_vpc.airflow_prod.id
   ingress {
     description     = "Allow pods to communicate with the cluster API Server"
