@@ -103,7 +103,7 @@ module "airflow_dev_monitoring_iam_role" {
 
   oidc_providers = {
     one = {
-      provider_arn               = resource.aws_iam_openid_connect_provider.analytical_platform_development.arn
+      provider_arn               = resource.aws_iam_openid_connect_provider.airflow_dev.arn
       namespace_service_accounts = ["airflow:airflow"]
     }
   }
