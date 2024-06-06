@@ -3,6 +3,7 @@
 ##################################################
 
 account_ids = {
+  analytical-platform-compute-development   = "381491960855"
   analytical-platform-data-production       = "593291632749"
   analytical-platform-development           = "525294151996"
   analytical-platform-management-production = "042130406152"
