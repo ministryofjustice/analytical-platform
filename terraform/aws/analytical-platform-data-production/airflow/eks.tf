@@ -7,7 +7,7 @@ resource "aws_eks_cluster" "airflow_dev_eks_cluster" {
     "controllerManager",
     "scheduler",
   ]
-  version = "1.26"
+  version = "1.27"
 
   vpc_config {
     subnet_ids          = aws_subnet.dev_private_subnet[*].id
