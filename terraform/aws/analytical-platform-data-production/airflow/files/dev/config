@@ -1,46 +1,55 @@
-{
-    "clusters": [
-        {
-            "cluster": {
-                "server": "https://59429428EBABBB9F911A173D7B8E8179.gr7.eu-west-1.eks.amazonaws.com",
-                "certificate-authority-data": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1ETXlNakU0TkRReE4xb1hEVE15TURNeE9URTRORFF4TjFvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTXhPCnl2aE1wZjRZSjM1aGZaOHNlVXMwMzR2ckJVa25weGdDNGJHVnU5dTMwejdXSysyb2k5VFV2WjVoSzF4VitCcUoKQndSUFlwVkgwUHJQUjBYZUJpS3ZrTTNuN0plSG8rWXoxZXl1OWJXeGhmbHhqb25Xb1FMTlBGNEVkUWcyR3dIMQpwbEwyNmwyZ0s0VzVYcERRZVNJV1VsUVFmbWE2NW4zd0dlbGttdUpySzJqMkJEZEFCK2pMRGZzV2oxSGlyTlBBCkdlOGpRam9zRWF5bUVWQTQ4d3U4UExQNUZCempnR2VNd2xaLzNWWER5YVNaM3pGeDhIdFhBNUtHNHM3Rk5OMEkKaWFPbTFNc1g0TWNxS1BFQU1XbDR1RUN2aTl5Q2dXbUtERU5BVk9HTFVvTGc0c28yZVRoL3MweUJJV0svdG0yVQpnbTVLam5MbFBrYmRER25VM0NFQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZJSk1VbUNUS2ptb0huMy90dk1OMmtsZUUvS25NQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFCekxFQ09NeWxZamg0ejBuOWpGOThEUGhoanBpejJPTVFxcG1aQndNV29UTFVDWmRGSApKWWpDQnB6R3ROQ1RxZDNnUHlQQ1lKdmt6bzhxR0hYcVVBTjJIRmx4STgzRHA5WFhMSExQVitqYWRQSWhmaXhICnFTQktITzBNSy8yTVprOVF6c2NFSnMzdk1kSmJxZHgvWWd3MHJXdE5LSG1oWExvYkpqK1BoTzZRY2ZXRysrTWkKTmE2M28zZkQzREtKOEZyRmtVcFlFQk00Vm1lNExrSThBVitFNXBVUGxnMGlCZHd3THhVM0F2LzRGcmNmd1U5cQpMZmlwbUlyS2owZGd0b1ovbW10WWJyLzY5UEtrbSt3VWdzSjBPN2g5bm9GdTE4N1ZNZ2U3ckk1aEZ1Q3NWS3NYCjZ1WEpET0tqVDEwVnpJcmJsblZqK05XeVpRM3lvNDkwV084NAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
-            },
-            "name": "kubernetes"
-        }
-    ],
-    "current-context": "aws",
-    "kind": "Config",
-    "contexts": [
-        {
-            "context": {
-                "cluster": "kubernetes",
-                "user": "aws"
-            },
-            "name": "aws"
-        }
-    ],
-    "users": [
-        {
-            "user": {
-                "exec": {
-                    "env": [
-                        {
-                            "value": "{\"apiVersion\": \"client.authentication.k8s.io/v1beta1\"}",
-                            "name": "KUBERNETES_EXEC_INFO"
-                        }
-                    ],
-                    "args": [
-                        "eks",
-                        "get-token",
-                        "--cluster-name",
-                        "airflow-dev"
-                    ],
-                    "apiVersion": "client.authentication.k8s.io/v1beta1",
-                    "command": "aws"
-                }
-            },
-            "name": "aws"
-        }
-    ],
-    "apiVersion": "v1"
-}
+---
+apiVersion: v1
+kind: Config
+preferences: {}
+
+current-context: airflow-dev
+
+clusters:
+  - name: airflow-dev
+    cluster:
+      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1ETXlNakU0TkRReE4xb1hEVE15TURNeE9URTRORFF4TjFvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTXhPCnl2aE1wZjRZSjM1aGZaOHNlVXMwMzR2ckJVa25weGdDNGJHVnU5dTMwejdXSysyb2k5VFV2WjVoSzF4VitCcUoKQndSUFlwVkgwUHJQUjBYZUJpS3ZrTTNuN0plSG8rWXoxZXl1OWJXeGhmbHhqb25Xb1FMTlBGNEVkUWcyR3dIMQpwbEwyNmwyZ0s0VzVYcERRZVNJV1VsUVFmbWE2NW4zd0dlbGttdUpySzJqMkJEZEFCK2pMRGZzV2oxSGlyTlBBCkdlOGpRam9zRWF5bUVWQTQ4d3U4UExQNUZCempnR2VNd2xaLzNWWER5YVNaM3pGeDhIdFhBNUtHNHM3Rk5OMEkKaWFPbTFNc1g0TWNxS1BFQU1XbDR1RUN2aTl5Q2dXbUtERU5BVk9HTFVvTGc0c28yZVRoL3MweUJJV0svdG0yVQpnbTVLam5MbFBrYmRER25VM0NFQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZJSk1VbUNUS2ptb0huMy90dk1OMmtsZUUvS25NQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFCekxFQ09NeWxZamg0ejBuOWpGOThEUGhoanBpejJPTVFxcG1aQndNV29UTFVDWmRGSApKWWpDQnB6R3ROQ1RxZDNnUHlQQ1lKdmt6bzhxR0hYcVVBTjJIRmx4STgzRHA5WFhMSExQVitqYWRQSWhmaXhICnFTQktITzBNSy8yTVprOVF6c2NFSnMzdk1kSmJxZHgvWWd3MHJXdE5LSG1oWExvYkpqK1BoTzZRY2ZXRysrTWkKTmE2M28zZkQzREtKOEZyRmtVcFlFQk00Vm1lNExrSThBVitFNXBVUGxnMGlCZHd3THhVM0F2LzRGcmNmd1U5cQpMZmlwbUlyS2owZGd0b1ovbW10WWJyLzY5UEtrbSt3VWdzSjBPN2g5bm9GdTE4N1ZNZ2U3ckk1aEZ1Q3NWS3NYCjZ1WEpET0tqVDEwVnpJcmJsblZqK05XeVpRM3lvNDkwV084NAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+      server: https://59429428EBABBB9F911A173D7B8E8179.gr7.eu-west-1.eks.amazonaws.com
+
+  - name: analytical-platform-compute-development
+    cluster:
+      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJUmx2QVNELzBvaHd3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TkRBMU1UTXhNVFUxTVRCYUZ3MHpOREExTVRFeE1qQXdNVEJhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUUN5T2FqMlljdTFkQTVjRU5XbWo3b3oxY1k5bFBCNVpLMU8vZHF4QVlHSzRYYnZRR3p4VC9xdU1sRy8KVnJUS1k0dWdMdTUreWdQZ253WWcraGcwSms4ZHIrWnkxWUVQQnRITklwOXowSTNOcyt2NlF6WVlXUHBhMkE3Twp0YXdSdTNmSUs5S1EzY09QQmRzZXpTZld1QXpqVmZaYi9yd0ZBdjk4aExGbzJqNG9SaSs4OUYvRU9NUFFLS1lCClkwYnYyeGVjWk01S0NHSTVudEVZSkxFUXBhLzgrMWxlcW1tMERWSjk5b0EwcCt6N3BKOGxyUm9vejVkVS9XbUIKMGRiVzNQWDNJR3hvVC85UnFDMkZ4YjZDZURqOXZQTE5CaDV0RVowclUxUjU4cTZVV05oMTRKNlhxRlNOY2l6SApsYVp0aFE1VldmbDc0SmNoUnoweUY4UUFITlNMQWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJRU3htM1VyZXRDaGREVGZnUng0QmNHSTBKQjN6QVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQlRyV3QweUpXQQpjeGZFUkhzZ1BnZGUvdjhNdHQrU2lzUWRYSGdnamFUT25VMWlKVCtWbEhzKy8rU25HUmJpT0d0TEFxR1JkaXZyClBOOWx2QitvVm02Tk52eXhUQ1ltZVpwcnF1VTU3MWJHQjliY0h4SFFXTEt6cEpwMlNxR0ZJamZkOHhXdFBuREUKa3h4Vk8vSzVubFNnUXVIaHRlbDR0SElNRVBndHp2bDJ1NVF2Q0Vod1cwNzhqQiszeWo0YjZjV1hJUU1uUm0ydgpkajdLZTJ0eXhBd2JOMkFlbTN4NGVicllUWVlMNjBLVUVwblZWZ1RLeWxVcjhXd2k4ZXNpc0ZqaW4rUW96Tit1CmdHZ0pQVjc4NzRTRjhGajhWWEN2VFdEdkhRekRZZGkwcDZjb0ZsS254V0dOL00vdHA2ZHEzOFhHdmt2L2F1VjIKV05scDJ3NDFZemlGCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      server: https://1972AFFBD0701A0D1FD291E34F7D1287.gr7.eu-west-2.eks.amazonaws.com
+
+users:
+  - name: airflow-dev
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        command: aws
+        args:
+          - "eks"
+          - "get-token"
+          - "--cluster-name"
+          - "airflow-dev"
+          - "--region"
+          - "eu-west-1"
+
+  - name: analytical-platform-compute-development
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        command: aws
+        args:
+          - "eks"
+          - "get-token"
+          - "--cluster-name"
+          - "analytical-platform-compute-development"
+          - "--region"
+          - "eu-west-2"
+
+contexts:
+  - name: analytical-platform-compute-development
+    context:
+      cluster: analytical-platform-compute-development
+      user: analytical-platform-compute-development
+
+  - name: airflow-dev
+    context:
+      cluster: airflow-dev
+      user: airflow-dev
