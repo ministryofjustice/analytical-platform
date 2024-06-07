@@ -491,6 +491,27 @@ data "aws_iam_policy_document" "control_panel_api" {
     ]
     resources = ["arn:aws:sqs:${data.aws_region.sqs_region.name}:${var.account_ids["analytical-platform-development"]}:*"]
   }
+  statement {
+    sid    = "GluePolicies"
+    effect = "Allow"
+    actions = [
+      "glue:GetDatabases",
+      "glue:GetDatabase",
+      "glue:GetTables",
+      "glue:GetTable",
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid    = "LakeFormationPolicies"
+    effect = "Allow"
+    actions = [
+      "lakeformation:ListPermissions",
+      "lakeformation:GrantPermissions",
+      "lakeformation:RevokePermissions"
+    ]
+    resources = ["arn:aws:lakeformation:${data.aws_region.current.name}:${var.account_ids["analytical-platform-development"]}:*"]
+  }
 }
 
 resource "aws_iam_policy" "control_panel_api" {
