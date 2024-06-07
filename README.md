@@ -28,7 +28,7 @@ The repositories we manage with terraform see [here](https://github.com/ministry
 | [Analytical Platform App Cloud Platform Deployment](https://github.com/ministryofjustice/data-platform-app-template) | Template for Cloud Platform deployments of Analytical Platform Apps |
 | [Analytical Platform Auth Proxy](https://github.com/ministryofjustice/analytics-platform-auth-proxy)          | This repository contains the authentication proxy image used by the Analytical Platform  |
 | [Analytical Platform Control Panel](https://github.com/ministryofjustice/analytics-platform-control-panel)          | The Control Panel is a management tool which provides Data Analysts and Data Scientists data management and tooling  |
-| [Analytical Platform Dashboard](https://github.com/ministryofjustice/analytical-platform-dashboard)          | The AP Dashboard is still in development   |
+| [Analytical Platform Dashboard](https://github.com/ministryofjustice/analytical-platform-dashboard)          | The AP Dashboard is still in `development`   |
 | [Analytical Platform GitHub Access](https://github.com/ministryofjustice/data-platform-github-access)          | This repository controls access to the Data Platform Service Area's GitHub which includes, Analytical Platform, Data Catalogue and Data Engineering's access to the Analytical Platform  |
 | [Analytical Platform image build template](https://github.com/ministryofjustice/analytical-platform-image-build-template)          | contains the GitHub Actions Runner image used by the Analytical Platform  |
 | [Analytical Platform Ingestion Notify](https://github.com/ministryofjustice/analytical-platform-ingestion-notify)          | Image for the Analytical Platform Ingestion service. It is deployed as an AWS Lambda function within the analytical-platform-ingestion account  |
@@ -118,7 +118,7 @@ You can preview how your changes will look, if you've cloned this repository
 to your local machine, run this command:
 
 ```bash
-bash scripts/docs/docker.sh preview
+bash scripts/docs/local.sh
 ```
 
 This will run a preview web server on <http://localhost:4567> which you can
