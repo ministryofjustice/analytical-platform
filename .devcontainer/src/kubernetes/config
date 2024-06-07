@@ -18,7 +18,6 @@ preferences: {}
 # current-context: arn:aws:eks:eu-west-1:042130406152:cluster/github-actions-moj-CoFBZ3xV
 # Data Engineering Airflow
 # current-context: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-dev
-# current-context: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-sandpit
 # current-context: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-prod
 
 clusters:
@@ -56,11 +55,6 @@ clusters:
     cluster:
       certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1ETXlNakU0TkRReE4xb1hEVE15TURNeE9URTRORFF4TjFvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTXhPCnl2aE1wZjRZSjM1aGZaOHNlVXMwMzR2ckJVa25weGdDNGJHVnU5dTMwejdXSysyb2k5VFV2WjVoSzF4VitCcUoKQndSUFlwVkgwUHJQUjBYZUJpS3ZrTTNuN0plSG8rWXoxZXl1OWJXeGhmbHhqb25Xb1FMTlBGNEVkUWcyR3dIMQpwbEwyNmwyZ0s0VzVYcERRZVNJV1VsUVFmbWE2NW4zd0dlbGttdUpySzJqMkJEZEFCK2pMRGZzV2oxSGlyTlBBCkdlOGpRam9zRWF5bUVWQTQ4d3U4UExQNUZCempnR2VNd2xaLzNWWER5YVNaM3pGeDhIdFhBNUtHNHM3Rk5OMEkKaWFPbTFNc1g0TWNxS1BFQU1XbDR1RUN2aTl5Q2dXbUtERU5BVk9HTFVvTGc0c28yZVRoL3MweUJJV0svdG0yVQpnbTVLam5MbFBrYmRER25VM0NFQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZJSk1VbUNUS2ptb0huMy90dk1OMmtsZUUvS25NQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFCekxFQ09NeWxZamg0ejBuOWpGOThEUGhoanBpejJPTVFxcG1aQndNV29UTFVDWmRGSApKWWpDQnB6R3ROQ1RxZDNnUHlQQ1lKdmt6bzhxR0hYcVVBTjJIRmx4STgzRHA5WFhMSExQVitqYWRQSWhmaXhICnFTQktITzBNSy8yTVprOVF6c2NFSnMzdk1kSmJxZHgvWWd3MHJXdE5LSG1oWExvYkpqK1BoTzZRY2ZXRysrTWkKTmE2M28zZkQzREtKOEZyRmtVcFlFQk00Vm1lNExrSThBVitFNXBVUGxnMGlCZHd3THhVM0F2LzRGcmNmd1U5cQpMZmlwbUlyS2owZGd0b1ovbW10WWJyLzY5UEtrbSt3VWdzSjBPN2g5bm9GdTE4N1ZNZ2U3ckk1aEZ1Q3NWS3NYCjZ1WEpET0tqVDEwVnpJcmJsblZqK05XeVpRM3lvNDkwV084NAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
       server: https://59429428EBABBB9F911A173D7B8E8179.gr7.eu-west-1.eks.amazonaws.com
-
-  - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-sandpit
-    cluster:
-      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMvakNDQWVhZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJek1ESXdNVEUwTVRBeE1Wb1hEVE16TURFeU9URTBNVEF4TVZvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTG1HCklZMHQzQTlERW5nTmVIK2MzeDVrcTFSL0djQ0JhT0I5eE8veGZMVUFxRk1ocml0NWd0dTVUOElLc3U5NGhKUC8KVmk0YVJXWlpzK1V1SkYyZ1BSVlR6NFNxQW9rNjcrdnlLRDBTOWNBeDJRM0NFUzJRSm5JZVB6YXB6UjFvOUp0RAo3cWxhd3lMSkpGU2hTTWdyWVgxNU9WS0NCUHNKcXkxazdBTXYzejlPdFFHYWRiT2ZveTJHNUFHVFp2VTQ3Mm5RCllXaG80UElaZ2dDQkFmSEdCU0dpK3llbi9xK3pZQTdweWFtaVdoQzBFc0o5bDdDWTZwdHhlL2hnQVFFOWR5U0kKK1FrOWJNdFVoamNtM3c3b3ZtSCtPdmhlZ20xS1Z2bFRRcUo3OEtTb2M3d3FqbCtwZk9iTmZvN0dMMVRoTTNKQQp2eXk0SUw4aFg0dWk1WlVDRUEwQ0F3RUFBYU5aTUZjd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZESy9XL1Erazl1R1pnc0g0Tng0Y1Y0VjBReEhNQlVHQTFVZEVRUU8KTUF5Q0NtdDFZbVZ5Ym1WMFpYTXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBRmsxNjJnVUZDMFdvbUl2Nk9ndApmZWhPQTN1dlFaN0V5MUV5a1EyTUcxaWlqZVdIMFNIU1JQajMzcTBZVjJNclhrQlBOanRyYnBWaDR1eVV6K0xzCnV6TXh6VzNpaVdVdkVQYWt5UTZFN3NTSER1WVYxaFovbEVWMUNQQWt5TlZSc2FtZzQzcnpzS2FBN1NKNFRMU2cKdi9RVkhobm5XcWxCTjRaQW5xT2x5Q3NwVVNlTGtOVFZ1c3NSWjRLSEFrT1Y4K3NLMGpLTHpmUzV3eVA0MzFXTgpmK2NXT0tWSGIvbWMrOWR1V3FRZE1nMWVQU3BuMTE0Y3o1ZzZCbDlQWkYwNm1ZQ1FualNEdzI5TEJYZG96Ry9BCnpzNUNaV0tnM1B4WnlWbUYxYisvcjFZUHFkeVVDWjFwZ2FrVG44V0Y1RFY2Y2xqaFNoZmNFVDh1RGlXMXY2NkcKLzBnPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
-      server: https://BBF6A3CFA6FF57B1911F58D037ED3F54.gr7.eu-west-1.eks.amazonaws.com
 
   - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-prod
     cluster:
@@ -173,21 +167,6 @@ users:
         interactiveMode: IfAvailable
         provideClusterInfo: false
 
-  - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-sandpit
-    user:
-      exec:
-        apiVersion: client.authentication.k8s.io/v1beta1
-        command: /usr/local/bin/aws-sso-eks-auth
-        env:
-          - name: AWS_SSO_PROFILE
-            value: "analytical-platform-data-production:AdministratorAccess"
-          - name: AWS_REGION
-            value: "eu-west-1"
-          - name: AWS_EKS_CLUSTER_NAME
-            value: "airflow-sandpit"
-        interactiveMode: IfAvailable
-        provideClusterInfo: false
-
   - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-prod
     user:
       exec:
@@ -238,11 +217,6 @@ contexts:
     context:
       cluster: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-dev
       user: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-dev
-
-  - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-sandpit
-    context:
-      cluster: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-sandpit
-      user: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-sandpit
 
   - name: arn:aws:eks:eu-west-1:593291632749:cluster/airflow-prod
     context:
