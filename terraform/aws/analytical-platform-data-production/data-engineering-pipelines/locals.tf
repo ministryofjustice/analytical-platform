@@ -1719,7 +1719,7 @@ locals {
             {
               Action = [
                 "s3:PutObject",
-                "s3:PutObjectACL"
+                "s3:PutObjectAcl"
                 ]
               Effect = "Allow"
               Principal = {
@@ -1905,7 +1905,7 @@ locals {
             {
               Action = [
                 "s3:PutObject",
-                "s3:PutObjectACL"
+                "s3:PutObjectAcl"
                 ]
               Effect = "Allow"
               Principal = {
