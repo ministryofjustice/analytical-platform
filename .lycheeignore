@@ -7,3 +7,9 @@ https://github.com/ministryofjustice/analytics-platform-rstudio
 http://localhost:4567/
 file:///home/runner/work/analytical-platform/analytical-platform/docs/source
 https://design-system.service.gov.uk/components/
+https://github.com/ministryofjustice/analytics-platform-helm-charts/tree/main/charts/vscode
+https://github.com/ministryofjustice/analytics-platform-helm-charts/tree/master/charts/rstudio
+https://github.com/moj-analytical-services/create-a-derived-table
+https://github.com/ministryofjustice/analytics-platform-helm-charts/tree/main/charts/jupyter-lab-datascience-notebook
+https://github.com/ministryofjustice/analytics-platform-helm-charts/tree/main/charts/jupyter-lab-all-spark
+https://github.com/ministryofjustice/analytics-platform-helm-charts/tree/main/charts/jupyter-lab
