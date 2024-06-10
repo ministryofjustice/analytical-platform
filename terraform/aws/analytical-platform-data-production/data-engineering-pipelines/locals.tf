@@ -1906,7 +1906,7 @@ locals {
               Action = [
                 "s3:PutObject",
                 "s3:PutObjectAcl"
-                ]
+              ]
               Effect = "Allow"
               Principal = {
                 AWS = "arn:aws:iam::976799291502:role/send_metadata_to_ap"
