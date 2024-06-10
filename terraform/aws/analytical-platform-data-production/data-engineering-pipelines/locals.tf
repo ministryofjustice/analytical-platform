@@ -849,7 +849,7 @@ locals {
               ]
               Resource = [
                 "arn:aws:s3:::mojap-land",
-                "arn:aws:s3:::mojap-land/electronic-monitoring/load/*"
+                "arn:aws:s3:::mojap-land/electronic_monitoring/load/*"
               ]
             }
           ]
@@ -1090,7 +1090,7 @@ locals {
               ]
               Resource = [
                 "arn:aws:s3:::mojap-land",
-                "arn:aws:s3:::mojap-land/electronic-monitoring/load/*"
+                "arn:aws:s3:::mojap-land/electronic_monitoring/load/*"
               ]
             }
           ]
@@ -1725,7 +1725,7 @@ locals {
               Principal = {
                 AWS = "arn:aws:iam::800964199911:role/send_metadata_to_ap"
               }
-              Resource = "arn:aws:s3:::mojap-metadata-dev/electronic-monitoring/*"
+              Resource = "arn:aws:s3:::mojap-metadata-dev/electronic_monitoring/*"
               Sid      = "PutAccess-mojap-metadata-dev-electronic-monitoring"
             }
           ]
@@ -1911,7 +1911,7 @@ locals {
               Principal = {
                 AWS = "arn:aws:iam::976799291502:role/send_metadata_to_ap"
               }
-              Resource = "arn:aws:s3:::mojap-metadata-prod/electronic-monitoring/*"
+              Resource = "arn:aws:s3:::mojap-metadata-prod/electronic_monitoring/*"
               Sid      = "PutAccess-mojap-metadata-prod-electronic-monitoring"
             }
           ]
