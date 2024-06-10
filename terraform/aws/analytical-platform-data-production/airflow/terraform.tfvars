@@ -4,6 +4,8 @@
 
 account_ids = {
   analytical-platform-compute-development   = "381491960855"
+  analytical-platform-compute-production    = "992382429243"
+  analytical-platform-compute-test          = "767397661611"
   analytical-platform-data-production       = "593291632749"
   analytical-platform-development           = "525294151996"
   analytical-platform-management-production = "042130406152"

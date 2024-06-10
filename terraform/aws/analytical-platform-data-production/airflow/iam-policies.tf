@@ -97,7 +97,8 @@ data "aws_iam_policy_document" "airflow_dev_execution_role_policy" {
     actions = ["eks:DescribeCluster"]
     resources = [
       "arn:aws:eks:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:cluster/airflow-dev",
-      "arn:aws:eks:eu-west-2:${var.account_ids["analytical-platform-compute-development"]}:cluster/analytical-platform-compute-development"
+      "arn:aws:eks:eu-west-2:${var.account_ids["analytical-platform-compute-development"]}:cluster/analytical-platform-compute-development",
+      "arn:aws:eks:eu-west-2:${var.account_ids["analytical-platform-compute-test"]}:cluster/analytical-platform-compute-test"
     ]
   }
 }
@@ -397,10 +398,13 @@ data "aws_iam_policy_document" "airflow_prod_execution_role_policy" {
     }
   }
   statement {
-    sid       = ""
-    effect    = "Allow"
-    actions   = ["eks:DescribeCluster"]
-    resources = ["arn:aws:eks:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:cluster/airflow-prod"]
+    sid     = ""
+    effect  = "Allow"
+    actions = ["eks:DescribeCluster"]
+    resources = [
+      "arn:aws:eks:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:cluster/airflow-prod",
+      "arn:aws:eks:eu-west-2:${var.account_ids["analytical-platform-compute-production"]}:cluster/analytical-platform-compute-production"
+    ]
   }
 }
 
