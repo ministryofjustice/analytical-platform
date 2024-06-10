@@ -1,46 +1,56 @@
-{
-    "clusters": [
-        {
-            "cluster": {
-                "server": "https://FC3F7A88508676A30DCAFE7B2619B544.gr7.eu-west-1.eks.amazonaws.com",
-                "certificate-authority-data": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1ETXlNVEUzTXpBeU5Wb1hEVE15TURNeE9ERTNNekF5TlZvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS1RUCmZpdERrdDU1cDdaakpPV0Z5aTlvM2JjVWZTMDFMdVdoamJXSWZmYVBTcGRCVWdFcUxUc2NSZ3oxVTU1aG1ucnoKODFWbnVmSjg2NTZvRm45ZXl2UHRQblZvU2d6ODBhcU45VFdiRXNuWGVCaTlhUWRPbFdhQ25tK2ZMd0FFSmJlKwo0N3U3WW1ITjlITlNaYURtQS9XdFhSc3M5OFVaVUxadi9ZTngzaXhnK0NWSWNSay9tUFVVVDU2cmxYK25KSDQ0CmQveGxPTWhObGtBdVVobmJqNGMzSXhFd1p3eXdXeVNpaWVObkU2TVlOekZzbi8wMU9yU0J3RG9VWGhielhJZGkKVndGUFhaK084T3hlS3VGMnpsTVlCU0RESWhPNm12Z0drSDhWalVVZTYraXlNTWVhMFBnL0lXMXVGdzB1bHpUNwpGWStzZDQ3Wk53MTdOcjVTSWVzQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZNWXNlcGFDekVqa21QUndWM3hTNlliNEkzczhNQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFBajRlYi83SUMxUlNRWkNqenBhNnJFSWhUYlpsMXE4NitzL0tnR0FIbXYrZVZCamc0RgowZWJHUEVzZ3NRTDlpSmdnN1I1LzUvN2tVbmZDVVpFSVpLQ2RacFR0akduVzRucXFIUHcyaEU1czdEQUpSRHJZCnA2UkU2NzlSOUVMVTNoSmU1b0tROWR1bmttMjlQbVdpaG15WWs2akhYM010VjgvVjFkR3JPeU44a2FHc1pJY0YKZG8za280U2dGUk9Wd1dxaTdMQkhsVlMzTTA1Nmt0clJnY3R0TmQvUFA5UjRSb2crVjVoZUNScms1M25HdmFBdwoyREt2VHo5VnlpejBrY0tMaXpvZDBrb1pnL0k1eHV0Z3lndXBMYkZSd1NONzYxSmxGSloraDhHNTN3cmNCR3pQCjdrbFU1WjJqUVNlU0FPa0EvT3pTc0xUaVE0MEtxS2R1WXAyTQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
-            },
-            "name": "kubernetes"
-        }
-    ],
-    "contexts": [
-        {
-            "context": {
-                "cluster": "kubernetes",
-                "user": "aws"
-            },
-            "name": "aws"
-        }
-    ],
-    "current-context": "aws",
-    "kind": "Config",
-    "apiVersion": "v1",
-    "users": [
-        {
-            "user": {
-                "exec": {
-                    "env": [
-                        {
-                            "value": "{\"apiVersion\": \"client.authentication.k8s.io/v1beta1\"}",
-                            "name": "KUBERNETES_EXEC_INFO"
-                        }
-                    ],
-                    "args": [
-                        "eks",
-                        "get-token",
-                        "--cluster-name",
-                        "airflow-prod"
-                    ],
-                    "apiVersion": "client.authentication.k8s.io/v1beta1",
-                    "command": "aws"
-                }
-            },
-            "name": "aws"
-        }
-    ]
-}
+---
+apiVersion: v1
+kind: Config
+preferences: {}
+
+current-context: aws
+
+clusters:
+  - name: airflow-prod
+    cluster:
+      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1ETXlNVEUzTXpBeU5Wb1hEVE15TURNeE9ERTNNekF5TlZvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS1RUCmZpdERrdDU1cDdaakpPV0Z5aTlvM2JjVWZTMDFMdVdoamJXSWZmYVBTcGRCVWdFcUxUc2NSZ3oxVTU1aG1ucnoKODFWbnVmSjg2NTZvRm45ZXl2UHRQblZvU2d6ODBhcU45VFdiRXNuWGVCaTlhUWRPbFdhQ25tK2ZMd0FFSmJlKwo0N3U3WW1ITjlITlNaYURtQS9XdFhSc3M5OFVaVUxadi9ZTngzaXhnK0NWSWNSay9tUFVVVDU2cmxYK25KSDQ0CmQveGxPTWhObGtBdVVobmJqNGMzSXhFd1p3eXdXeVNpaWVObkU2TVlOekZzbi8wMU9yU0J3RG9VWGhielhJZGkKVndGUFhaK084T3hlS3VGMnpsTVlCU0RESWhPNm12Z0drSDhWalVVZTYraXlNTWVhMFBnL0lXMXVGdzB1bHpUNwpGWStzZDQ3Wk53MTdOcjVTSWVzQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZNWXNlcGFDekVqa21QUndWM3hTNlliNEkzczhNQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFBajRlYi83SUMxUlNRWkNqenBhNnJFSWhUYlpsMXE4NitzL0tnR0FIbXYrZVZCamc0RgowZWJHUEVzZ3NRTDlpSmdnN1I1LzUvN2tVbmZDVVpFSVpLQ2RacFR0akduVzRucXFIUHcyaEU1czdEQUpSRHJZCnA2UkU2NzlSOUVMVTNoSmU1b0tROWR1bmttMjlQbVdpaG15WWs2akhYM010VjgvVjFkR3JPeU44a2FHc1pJY0YKZG8za280U2dGUk9Wd1dxaTdMQkhsVlMzTTA1Nmt0clJnY3R0TmQvUFA5UjRSb2crVjVoZUNScms1M25HdmFBdwoyREt2VHo5VnlpejBrY0tMaXpvZDBrb1pnL0k1eHV0Z3lndXBMYkZSd1NONzYxSmxGSloraDhHNTN3cmNCR3pQCjdrbFU1WjJqUVNlU0FPa0EvT3pTc0xUaVE0MEtxS2R1WXAyTQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+      server: https://FC3F7A88508676A30DCAFE7B2619B544.gr7.eu-west-1.eks.amazonaws.com
+
+  - name: analytical-platform-compute-production
+    cluster:
+      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJSE9JT2lBSHBzYk13RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TkRBMU1UVXhNakU0TWpOYUZ3MHpOREExTVRNeE1qSXpNak5hTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUURDcE5ocEp3YnZodlRlL256dzRzUm5VNDl2MWdIT0dRUEhqOUNjSXdRODY2SW5Nc1hzNjlUakpNSngKdm5rSUZFdllNTUhIRGtjQ3l1MzdkV2lwRlNSRmNMWlhDOThXQXVCVUJvUDJOam1KaHg4QVB1NjJqOGZXWENvdwpFNVpMdUhIY0JsT2hpc3Q5elRzdTFubm5qVTkwaUFFSjVaU3Q1SUdrM1JwVVNWQm8rTE11dkR0YWJTaVNvL2xQCjd1VVkxUVNuRk5GZjBlWHd5SmdBWFlRWjMxZkRXUUpkSzgzeVY4SG5qYVFaNjlWTGp5S2YveW42eXVNTkdmNGUKRkk1OGw1c2s5eFhaT1YxOWJRdFpmSWxGemNMS3dPanVibGZQZWRaNWREN3lEdmc0L3poV2tDdzJWL1VYcStUVwpHSWlPeUo5NFp6RnVvMTZueTZnRWFvSGlub1REQWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJRczRZMTcvK0FWMCtXdnRrWDhDRWUwRzVoZi9UQVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ09IRGY4YVk3cQpCalhEQmEybVcxQklOY1gveU9rQ2NtVGRVb0pIZGJUZmlxZFc4SFFqL1VYRHpaNTZObXFFOVBVWCtOdDV6UFNyCkFkaUEyZyszeXJNMU9OSlV1TUpRcFl3NE9YTnZTSW5zT1lPYmkyQ3pia2dnODlzbmdyMGRzTjlCdWh3cCtlTFUKTHV4RHVZMkRSeFBoRWJHR0xzVFkyNlJZaHd6WXRJRTg1UEVoTUZWQjhtVEw5VEZoZ01nTyswSStIT21YRCtKcwpUcElNczYveFdIbkYzNkpxUk9vNlhNYnh6WGk1czJ3TG5XTFJvcFliVkhmNzZpdkZ1N2dLUzZwR2ZGYk5LSkRrCmhJa1JkSldSNFRhSkkwem05VG9GU3RqcFNzUWN2T1hsSjBTdHliL3dmRWpMemZpZ3g1N0JsQVNxdHRVY25lUzgKeEIybVVKUTFUT0dLCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      server: https://801920EDEF91E3CAB03E04C03A2DE2BB.yl4.eu-west-2.eks.amazonaws.com
+
+users:
+  - name: airflow-prod
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        command: aws
+        args:
+          - "eks"
+          - "get-token"
+          - "--cluster-name"
+          - "airflow-prod"
+          - "--region"
+          - "eu-west-1"
+
+  - name: analytical-platform-compute-production
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        command: aws
+        args:
+          - "eks"
+          - "get-token"
+          - "--cluster-name"
+          - "analytical-platform-compute-production"
+          - "--region"
+          - "eu-west-2"
+
+contexts:
+  - name: aws # `cluster_context="aws"` is used within DAGs
+    context:
+      cluster: airflow-prod
+      user: airflow-prod
+
+  - name: analytical-platform-compute-production
+    context:
+      cluster: analytical-platform-compute-production
+      user: analytical-platform-compute-production
+
