@@ -3,7 +3,7 @@ module "route53_records" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/route53/aws//modules/records"
-  version = "2.11.1"
+  version = "3.1.0"
 
   zone_id = module.route53_zones.route53_zone_zone_id["analytical-platform.service.justice.gov.uk"]
 
