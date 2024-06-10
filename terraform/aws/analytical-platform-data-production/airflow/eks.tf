@@ -289,7 +289,7 @@ resource "kubernetes_namespace" "kyverno_prod" {
 resource "aws_eks_addon" "kube_proxy_dev" {
   cluster_name                = var.dev_eks_cluster_name
   addon_name                  = "kube-proxy"
-  addon_version               = "v1.27.12-eksbuild.5"
+  addon_version               = "v1.28.8-eksbuild.5"
   resolve_conflicts_on_create = "OVERWRITE"
 }
 
