@@ -1089,8 +1089,8 @@ locals {
                 "s3:PutObjectAcl"
               ]
               Resource = [
-                "arn:aws:s3:::mojap-land",
-                "arn:aws:s3:::mojap-land/electronic_monitoring/load/*"
+                "arn:aws:s3:::mojap-land-dev",
+                "arn:aws:s3:::mojap-land-dev/electronic_monitoring/load/*"
               ]
             }
           ]
