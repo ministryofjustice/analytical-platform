@@ -1720,7 +1720,7 @@ locals {
               Action = [
                 "s3:PutObject",
                 "s3:PutObjectAcl"
-                ]
+              ]
               Effect = "Allow"
               Principal = {
                 AWS = "arn:aws:iam::800964199911:role/send_metadata_to_ap"
@@ -1814,7 +1814,7 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-metadata-preprod"
               Sid      = "ListBucketAccess-mojap-metadata-preprod"
-            },
+            }
           ]
           Version = "2012-10-17"
         }
