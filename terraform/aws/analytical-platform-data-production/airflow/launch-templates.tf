@@ -1,6 +1,6 @@
 resource "aws_launch_template" "dev_standard" {
   name          = "dev_standard"
-  image_id      = "ami-064e6ccd9f6d74534"
+  image_id      = "ami-0246ad1c10bc9a7ab"
   instance_type = "t3a.large"
 
   disable_api_stop        = false
