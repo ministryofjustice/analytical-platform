@@ -1720,7 +1720,7 @@ locals {
               Action = "s3:GetObject"
               Effect = "Allow"
               Principal = {
-                AWS = "AROASYCVJWSNFCCBEO2AN"
+                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev"
               }
               Resource = "arn:aws:s3:::mojap-metadata-dev/oasys/*"
               Sid      = "ReadOnlyAccess-mojap-metadata-dev-oasys"
@@ -1730,7 +1730,7 @@ locals {
               Effect = "Allow"
               Principal = {
                 AWS = [
-                  "AROASYCVJWSNFCCBEO2AN",
+                  "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev",
                   "AROASYCVJWSNN3REJ3AFS",
                 ]
               }
