@@ -837,6 +837,17 @@ locals {
               ]
             },
             {
+              Sid    = "ListBucketAccessElectronicMonitoringService"
+              Effect = "Allow"
+              Principal = {
+                AWS = "arn:aws:iam::976799291502:role/send_table_to_ap"
+              }
+              Action = "s3:ListBucket"
+              Resource = [
+                "arn:aws:s3:::mojap-land",
+              ]
+            },
+            {
               Sid    = "WriteOnlyAccessElectronicMonitoringService"
               Effect = "Allow"
               Principal = {
@@ -848,7 +859,6 @@ locals {
                 "s3:PutObjectAcl"
               ]
               Resource = [
-                "arn:aws:s3:::mojap-land",
                 "arn:aws:s3:::mojap-land/electronic_monitoring/load/*"
               ]
             }
@@ -1075,6 +1085,17 @@ locals {
               Resource = [
                 "arn:aws:s3:::mojap-land-dev",
                 "arn:aws:s3:::mojap-land-dev/bold/essex-police/*"
+              ]
+            },
+            {
+              Sid    = "ListBucketAccessElectronicMonitoringService"
+              Effect = "Allow"
+              Principal = {
+                AWS = "arn:aws:iam::800964199911:role/send_table_to_ap"
+              }
+              Action = "s3:ListBucket"
+              Resource = [
+                "arn:aws:s3:::mojap-land",
               ]
             },
             {
@@ -1717,6 +1738,15 @@ locals {
               Sid      = "ListBucketAccess-mojap-metadata-dev"
             },
             {
+              Action = "s3:ListBucket"
+              Effect = "Allow"
+              Principal = {
+                AWS = "arn:aws:iam::800964199911:role/send_metadata_to_ap"
+              }
+              Resource = "arn:aws:s3:::mojap-metadata-dev"
+              Sid      = "ListAccess-mojap-metadata-dev-electronic-monitoring"
+            },
+            {
               Action = [
                 "s3:PutObject",
                 "s3:PutObjectAcl"
@@ -1901,6 +1931,15 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-metadata-prod"
               Sid      = "ListBucketAccess-mojap-metadata-prod"
+            },
+            {
+              Action = "s3:ListBucket"
+              Effect = "Allow"
+              Principal = {
+                AWS = "arn:aws:iam::976799291502:role/send_metadata_to_ap"
+              }
+              Resource = "arn:aws:s3:::mojap-metadata-prod"
+              Sid      = "ListAccess-mojap-metadata-prod-electronic-monitoring"
             },
             {
               Action = [
