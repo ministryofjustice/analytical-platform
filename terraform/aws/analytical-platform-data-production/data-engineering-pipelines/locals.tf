@@ -1814,7 +1814,7 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-metadata-preprod"
               Sid      = "ListBucketAccess-mojap-metadata-preprod"
-            }
+            },
           ]
           Version = "2012-10-17"
         }
