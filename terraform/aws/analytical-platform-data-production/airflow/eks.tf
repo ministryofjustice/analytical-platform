@@ -175,7 +175,7 @@ resource "aws_eks_cluster" "airflow_prod_eks_cluster" {
     "controllerManager",
     "scheduler",
   ]
-  version = "1.27"
+  version = "1.28"
 
   vpc_config {
     subnet_ids          = aws_subnet.prod_private_subnet[*].id
@@ -310,7 +310,7 @@ resource "aws_eks_addon" "coredns_dev" {
 resource "aws_eks_addon" "kube_proxy_prod" {
   cluster_name                = var.prod_eks_cluster_name
   addon_name                  = "kube-proxy"
-  addon_version               = "v1.27.12-eksbuild.5"
+  addon_version               = "v1.28.8-eksbuild.5"
   resolve_conflicts_on_create = "OVERWRITE"
 }
 
