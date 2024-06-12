@@ -1711,7 +1711,7 @@ locals {
               Action = "s3:GetObject"
               Effect = "Allow"
               Principal = {
-                AWS = "AROASYCVJWSNN3REJ3AFS"
+                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-dev"
               }
               Resource = "arn:aws:s3:::mojap-metadata-dev/delius/*"
               Sid      = "ReadOnlyAccess-mojap-metadata-dev-delius"
