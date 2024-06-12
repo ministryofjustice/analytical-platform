@@ -54,7 +54,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@0949c8b1a5009aa45413a4f02bc82971aa0d7bd2 # v12.2776.0
+        uses: bridgecrewio/checkov-action@d5cf7815e6ec033e990dc1d66c346983339a912b # v12.2777.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -214,7 +214,7 @@ jobs:
       - name: Retrieve GitHub Robot Token
         if: github.ref != 'refs/heads/main'
         id: retrieve_github_robot_token
-        uses: aws-actions/aws-secretsmanager-get-secrets@ff26a0aa6bd4dd5e51326b5afb3f5f6874c958c7 # v1.0.4
+        uses: aws-actions/aws-secretsmanager-get-secrets@98c2d6bf1dd67c2575fa2bb14294aa64103d426c # v1.0.4
         with:
           secret-ids: |
             GITHUB_ROBOT_TOKEN, github-token
