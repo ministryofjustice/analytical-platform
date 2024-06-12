@@ -16,6 +16,7 @@ REPOSITORIES=(
     "ministryofjustice/analytical-platform-actions-runner"
     "ministryofjustice/analytical-platform-rshiny-open-source-base"
     "ministryofjustice/analytical-platform-kubectl"
+    "ministryofjustice/analytical-platform-mlflow"
 )
 
 echo -e "🤖 Open Dependabots \n"
