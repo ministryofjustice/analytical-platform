@@ -1095,7 +1095,7 @@ locals {
               }
               Action = "s3:ListBucket"
               Resource = [
-                "arn:aws:s3:::mojap-land",
+                "arn:aws:s3:::mojap-land-dev",
               ]
             },
             {
