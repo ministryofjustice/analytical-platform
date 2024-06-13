@@ -136,6 +136,7 @@ class S3Archiver:
                 f"❌ Error deleting bucket {bucket_name}: {e}"
             )
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Move contents of multiple S3 buckets and delete the source buckets."

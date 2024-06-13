@@ -110,6 +110,7 @@ class S3Archiver:
                 f"❌ Error deleting bucket {bucket_name}: {e}"
             )
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Move S3 bucket contents and delete the source bucket."
