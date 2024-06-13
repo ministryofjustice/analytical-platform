@@ -15,6 +15,7 @@ Requirements:
     - boto3 library installed (pip install boto3).
 """
 
+
 class S3Archiver:
 
     def __init__(self):
@@ -31,7 +32,7 @@ class S3Archiver:
             source_buckets_file: The file containing the names of the source buckets, one per line
             destination_bucket: The name of the destination bucket
         """
-        with open(source_buckets_file, 'r') as file:
+        with open(source_buckets_file, "r") as file:
             source_buckets = file.read().splitlines()
 
         for source_bucket in source_buckets:
@@ -61,19 +62,21 @@ class S3Archiver:
         versions = self.client.list_object_versions(Bucket=source)
         dest = self.s3.Bucket(destination)
 
-        if 'Versions' in versions:
-            for version in versions['Versions']:
+        if "Versions" in versions:
+            for version in versions["Versions"]:
                 new_key = f"{source}/{version['Key']}"
                 copy_source = {
-                    'Bucket': source,
-                    'Key': version['Key'],
-                    'VersionId': version['VersionId']
+                    "Bucket": source,
+                    "Key": version["Key"],
+                    "VersionId": version["VersionId"]
                 }
-                print(f"🚀 Copying version {version['VersionId']} of {version['Key']} to {destination}/{new_key}")
+                print(f"🚀 Copying version {version["VersionId"]} of {version["Key"]} to {destination}/{new_key}")
                 try:
                     dest.copy(copy_source, new_key)
                 except ClientError as e:
-                    print(f"❌ Error copying {version['Key']} (version {version['VersionId']}): {e}")
+                    print(
+                        f"❌ Error copying {version["Key"]} (version {version['VersionId']}): {e}"
+                        )
 
         # Note: We are not copying delete markers as they are not actual object versions
 
@@ -83,16 +86,22 @@ class S3Archiver:
         Arguments:
             bucket_name: The name of the bucket
         """
-        print(f"🗑️  Deleting all versions and delete markers from {bucket_name}...")
+        print(
+            f"🗑️  Deleting all versions and delete markers from {bucket_name}..."
+        )
         bucket = self.s3.Bucket(bucket_name)
         versions = bucket.object_versions.all()
 
         for version in versions:
             try:
-                print(f"🗑️  Deleting version {version.id} of object {version.object_key} from bucket {bucket_name}...")
+                print(
+                    f"🗑️  Deleting version {version.id} of object {version.object_key} from bucket {bucket_name}..."
+                )
                 version.delete()
             except ClientError as e:
-                print(f"❌ Error deleting version {version.id} of object {version.object_key}: {e}")
+                print(
+                    f"❌ Error deleting version {version.id} of object {version.object_key}: {e}"
+                )
 
     def _delete_bucket(self, bucket_name):
         """
@@ -117,9 +126,16 @@ class S3Archiver:
             print(f"❌ Error deleting bucket {bucket_name}: {e}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Move contents of multiple S3 buckets and delete the source buckets.")
-    parser.add_argument("source_buckets_file", help="The file containing the names of the source S3 buckets, one per line.")
-    parser.add_argument("destination_bucket", help="The name of the destination S3 bucket.")
+    parser = argparse.ArgumentParser(
+        description="Move contents of multiple S3 buckets and delete the source buckets."
+    )
+    parser.add_argument(
+        "source_buckets_file",
+        help="The file containing the names of the source S3 buckets, one per line."
+    )
+    parser.add_argument(
+        "destination_bucket", help="The name of the destination S3 bucket."
+    )
 
     args = parser.parse_args()
 

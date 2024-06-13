@@ -15,6 +15,7 @@ Requirements:
     - boto3 library installed (pip install boto3).
 """
 
+
 class S3Archiver:
 
     def __init__(self):
@@ -48,10 +49,7 @@ class S3Archiver:
 
         for obj in objects:
             new_key = f"{source}/{obj.key}"
-            copy_source = {
-                'Bucket': obj.bucket_name,
-                'Key': obj.key
-            }
+            copy_source = {'Bucket': obj.bucket_name, 'Key': obj.key}
             print(f"🚀 Copying {source}/{obj.key} to {destination}/{new_key}")
             try:
                 dest.copy(copy_source, new_key)
@@ -70,10 +68,14 @@ class S3Archiver:
 
         for version in versions:
             try:
-                print(f"🗑️  Deleting version {version.id} of object {version.object_key} from bucket {bucket_name}...")
+                print(
+                    f"🗑️  Deleting version {version.id} of object {version.object_key} from bucket {bucket_name}..."
+                )
                 version.delete()
             except ClientError as e:
-                print(f"❌ Error deleting version {version.id} of object {version.object_key}: {e}")
+                print(
+                    f"❌ Error deleting version {version.id} of object {version.object_key}: {e}"
+                )
 
     def _delete_bucket(self, bucket_name):
         """
@@ -98,9 +100,13 @@ class S3Archiver:
             print(f"❌ Error deleting bucket {bucket_name}: {e}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Move S3 bucket contents and delete the source bucket.")
+    parser = argparse.ArgumentParser(
+        description="Move S3 bucket contents and delete the source bucket."
+    )
     parser.add_argument("source_bucket", help="The name of the source S3 bucket.")
-    parser.add_argument("destination_bucket", help="The name of the destination S3 bucket.")
+    parser.add_argument(
+        "destination_bucket", help="The name of the destination S3 bucket."
+    )
 
     args = parser.parse_args()
 
