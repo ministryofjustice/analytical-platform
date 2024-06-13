@@ -32,7 +32,7 @@ class S3Archiver:
             source_buckets_file: The file containing the names of the source buckets, one per line
             destination_bucket: The name of the destination bucket
         """
-        with open(source_buckets_file, "r") as file:
+        with open(source_buckets_file, "r", encoding='utf-8') as file:
             source_buckets = file.read().splitlines()
 
         for source_bucket in source_buckets:
