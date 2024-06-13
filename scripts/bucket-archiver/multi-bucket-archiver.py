@@ -32,7 +32,7 @@ class S3Archiver:
             source_buckets_file: The file containing the names of the source buckets, one per line
             destination_bucket: The name of the destination bucket
         """
-        with open(source_buckets_file, "r", encoding='utf-8') as file:
+        with open(source_buckets_file, "r", encoding="utf-8") as file:
             source_buckets = file.read().splitlines()
 
         for source_bucket in source_buckets:
@@ -56,7 +56,9 @@ class S3Archiver:
             source: the source bucket
             destination: the destination bucket
         """
-        print(f"🚀 Copying objects from {source} to {destination}/{source}...")
+        print(
+            f"🚀 Copying objects from {source} to {destination}/{source}..."
+        )
 
         # Copy all versions of objects
         versions = self.client.list_object_versions(Bucket=source)
@@ -70,7 +72,9 @@ class S3Archiver:
                     "Key": version["Key"],
                     "VersionId": version["VersionId"]
                 }
-                print(f"🚀 Copying version {version["VersionId"]} of {version["Key"]} to {destination}/{new_key}")
+                print(
+                    f"🚀 Copying version {version["VersionId"]} of {version["Key"]} to {destination}/{new_key}"
+                )
                 try:
                     dest.copy(copy_source, new_key)
                 except ClientError as e:
@@ -117,13 +121,19 @@ class S3Archiver:
             bucket.objects.all().delete()
             bucket.object_versions.all().delete()
         except ClientError as e:
-            print(f"❌ Error ensuring bucket {bucket_name} is empty: {e}")
+            print(
+                f"❌ Error ensuring bucket {bucket_name} is empty: {e}"
+            )
 
         try:
             bucket.delete()
-            print(f"✅ Bucket {bucket_name} has been deleted.")
+            print(
+                f"✅ Bucket {bucket_name} has been deleted."
+            )
         except ClientError as e:
-            print(f"❌ Error deleting bucket {bucket_name}: {e}")
+            print(
+                f"❌ Error deleting bucket {bucket_name}: {e}"
+            )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(

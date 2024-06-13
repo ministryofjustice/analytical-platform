@@ -49,12 +49,16 @@ class S3Archiver:
 
         for obj in objects:
             new_key = f"{source}/{obj.key}"
-            copy_source = {'Bucket': obj.bucket_name, 'Key': obj.key}
-            print(f"🚀 Copying {source}/{obj.key} to {destination}/{new_key}")
+            copy_source = {"Bucket": obj.bucket_name, "Key": obj.key}
+            print(
+                f"🚀 Copying {source}/{obj.key} to {destination}/{new_key}"
+            )
             try:
                 dest.copy(copy_source, new_key)
             except ClientError as e:
-                print(f"❌ Error copying {obj.key}: {e}")
+                print(
+                    f"❌ Error copying {obj.key}: {e}"
+                )
 
     def _delete_all_versions_and_markers(self, bucket_name):
         """
@@ -91,13 +95,19 @@ class S3Archiver:
             bucket.objects.all().delete()
             bucket.object_versions.all().delete()
         except ClientError as e:
-            print(f"❌ Error ensuring bucket {bucket_name} is empty: {e}")
+            print(
+                f"❌ Error ensuring bucket {bucket_name} is empty: {e}"
+            )
 
         try:
             bucket.delete()
-            print(f"✅ Bucket {bucket_name} has been deleted.")
+            print(
+                f"✅ Bucket {bucket_name} has been deleted."
+            )
         except ClientError as e:
-            print(f"❌ Error deleting bucket {bucket_name}: {e}")
+            print(
+                f"❌ Error deleting bucket {bucket_name}: {e}"
+            )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
