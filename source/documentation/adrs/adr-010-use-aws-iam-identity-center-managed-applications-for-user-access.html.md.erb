@@ -1,0 +1,37 @@
+---
+owner_slack: "#analytical-platform-notifications"
+title: ADR-010 Use AWS IAM Identity Center customer managed applications for user access
+last_reviewed_on: 2024-06-14
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+## Status
+
+✅ Accepted
+
+## Context
+
+[AWS IAM Identity Center](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html) is integrating with Entra ID. We can simplify logon and access to the Analytical Platform by making use of [customer managed application](https://docs.aws.amazon.com/singlesignon/latest/userguide/customermanagedapps.html) registered with Identity Center for our users.
+
+## Decision
+
+  We will use a [Customer managed application](https://docs.aws.amazon.com/singlesignon/latest/userguide/customermanagedapps.html) registered with AWS Identity Center to authenticate and authorise their access to the Analytical Platform and [AWS managed applications](https://docs.aws.amazon.com/singlesignon/latest/userguide/awsapps.html).
+
+## Consequences
+
+### General consequences
+
+- [Trusted identity propagation](https://docs.aws.amazon.com/singlesignon/latest/userguide/trustedidentitypropagation.html) will authorise access to AWS resources based on the user’s identity context and securely share the user’s identity context with other AWS services.
+- We won't need to manage certificates for our applications against Entra ID, these will be managed by the [Modernisation Platform Team](https://user-guide.modernisation-platform.service.justice.gov.uk/).
+
+### Advantages
+
+- Centralised Cloudtrail logging against a single identity helps us identify requests made to AWS services
+- Our proposed solution will simplify the JML process by handling user removal through the existing JML processes and will not need to be handled by our team
+- Makes possible end-to-end auditing of users' AWS activities easily reconciled to their Entra ID identity
+
+### Disadvantages
+
+- We will continue to require additional services to maintain access to Analytical Platform for users outside of JusticeUK
