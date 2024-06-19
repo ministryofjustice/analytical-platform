@@ -61,3 +61,12 @@ pagerduty_services = {
     cost-explorer = "analytical-platform-compute"
   }
 }
+
+##################################################
+# Observability Platform
+##################################################
+
+observability_platform_account_ids = {
+  development = "915524366300"
+  production  = "319748487814"
+}
