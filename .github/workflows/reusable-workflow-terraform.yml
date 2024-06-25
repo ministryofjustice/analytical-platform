@@ -353,8 +353,8 @@ jobs:
         run: |
           terraform apply -input=false -auto-approve -no-color
 
-      - name: Get AWS Secrets
-        id: get_aws_secrets
+      - name: Retrieve Slack Webhook URL
+        id: retrieve_slack_webhook_url
         uses: aws-actions/aws-secretsmanager-get-secrets@98c2d6bf1dd67c2575fa2bb14294aa64103d426c # v1.0.4
         with:
           secret-ids: |
