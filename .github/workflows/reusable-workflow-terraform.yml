@@ -358,10 +358,9 @@ jobs:
         with:
           payload: |
             {
-              "run_id": "${{ github.run_id }}"
+              "run_id": "${{ github.run_id }}",
               "pull_request": "${{ github.event.pull_request.html_url }}",
               "event_number": "${{ github.event.number }}"
-
             }
         env:
           SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
