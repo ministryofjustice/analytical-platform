@@ -352,7 +352,7 @@ jobs:
           terraform apply -input=false -auto-approve -no-color
 
       - name: Notify Slack on Failure
-        if: steps.terraform_apply.outcome == 'failure'
+        # if: steps.terraform_apply.outcome == 'failure'
         id: slack_notification
         uses: slackapi/slack-github-action@70cd7be8e40a46e8b0eced40b0de447bdb42f68e # v1.26.0
         with:
