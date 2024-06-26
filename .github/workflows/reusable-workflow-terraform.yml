@@ -361,5 +361,5 @@ jobs:
               "run_id": "${{ github.run_id }}"
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: https://hooks.slack.com/triggers/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
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
