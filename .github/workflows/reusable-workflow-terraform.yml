@@ -351,6 +351,14 @@ jobs:
         run: |
           terraform apply -input=false -auto-approve -no-color
 
+      - name: Extract PR number from commit message
+        if: failure() && steps.terraform_apply.outcome == 'failure'
+        id: extract_pr
+        run: |
+          PR_NUMBER=$(git log -1 --pretty=%B | grep -oP 'Merge pull request #\K\d+')
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+          echo "::set-output name=pr_number::$PR_NUMBER"
+
       - name: Notify Slack on Failure
         # if: failure() && steps.terraform_apply.outcome == 'failure'
         id: slack_notification
@@ -359,8 +367,7 @@ jobs:
           payload: |
             {
               "run_id": "${{ github.run_id }}",
-              "pull_request": "${{ github.event.pull_request.html_url }}",
-              "event_number": "${{ github.event.number }}"
+              "pr_number": "${{ steps.extract_pr.outputs.pr_number }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
