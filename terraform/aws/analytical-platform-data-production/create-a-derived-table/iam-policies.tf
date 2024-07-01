@@ -70,7 +70,8 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "glue:CreatePartition",
       "glue:CreatePartitionIndex",
       "glue:BatchCreatePartition",
-      "glue:CreateDatabase"
+      "glue:CreateDatabase",
+      "glue:GetTableVersions"
     ]
     resources = [
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:schema/*",
