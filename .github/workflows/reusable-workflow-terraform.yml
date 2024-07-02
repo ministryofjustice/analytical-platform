@@ -200,7 +200,6 @@ jobs:
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
 
       - name: Assume GlobalGitHubActionAdmin Role
-        if: github.ref != 'refs/heads/main'
         id: assume_global_github_action_admin_role
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
@@ -211,16 +210,15 @@ jobs:
           aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
           role-skip-session-tagging: true
 
-      - name: Retrieve GitHub Robot Token
-        if: github.ref != 'refs/heads/main'
-        id: retrieve_github_robot_token
+      - name: Retrieve AWS Secrets Manager Secrets
+        id: retrieve_aws_secrets_manager_secrets
         uses: aws-actions/aws-secretsmanager-get-secrets@98c2d6bf1dd67c2575fa2bb14294aa64103d426c # v1.0.4
         with:
           secret-ids: |
             GITHUB_ROBOT_TOKEN, github-token
+            SLACK_WEBHOOK_URL, slack-webhook-url/terraform-failure
 
       - name: Assume GlobalGitHubActionAccess Role
-        if: github.ref != 'refs/heads/main'
         id: assume_global_github_action_access_role
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
@@ -352,3 +350,25 @@ jobs:
         shell: bash
         run: |
           terraform apply -input=false -auto-approve -no-color
+
+      - name: Extract PR number from commit message
+        if: failure() && steps.terraform_apply.outcome == 'failure'
+        id: extract_pr
+        run: |
+          PR_NUMBER=$(git log -1 --pretty=%B | grep -oP '#\K\d+')
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+          echo "::set-output name=pr_number::$PR_NUMBER"
+
+      - name: Notify Slack on Failure
+        if: failure() && steps.terraform_apply.outcome == 'failure'
+        id: slack_notification
+        uses: slackapi/slack-github-action@70cd7be8e40a46e8b0eced40b0de447bdb42f68e # v1.26.0
+        with:
+          payload: |
+            {
+              "run_id": "${{ github.run_id }}",
+              "pr_number": "${{ steps.extract_pr.outputs.pr_number }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
