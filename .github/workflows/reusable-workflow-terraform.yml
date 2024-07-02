@@ -355,7 +355,7 @@ jobs:
         if: failure() && steps.terraform_apply.outcome == 'failure'
         id: extract_pr
         run: |
-          PR_NUMBER=$(git log -1 --pretty=%B | grep -oP 'Merge pull request #\K\d+')
+          PR_NUMBER=$(git log -1 --pretty=%B | grep -oP '#\K\d+')
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
           echo "::set-output name=pr_number::$PR_NUMBER"
 
