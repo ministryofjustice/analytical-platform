@@ -58,7 +58,7 @@ jobs:
 
       - name: Get AWS Secrets
         id: get_aws_secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@98c2d6bf1dd67c2575fa2bb14294aa64103d426c # v1.0.4
+        uses: aws-actions/aws-secretsmanager-get-secrets@4e95aaf6ba8028772f5384971d4fedccfaab8621 # v1.0.4
         with:
           secret-ids: |
             PAGERDUTY_TOKEN, pagerduty-token
