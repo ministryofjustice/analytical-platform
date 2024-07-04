@@ -54,7 +54,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@51eec8d8295953afa4b0a0aa660cb01284b9f06c # v12.2804.0
+        uses: bridgecrewio/checkov-action@b055f975b2d4513fe4d3d856d30c73bf0ed28d92 # v12.2808.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
