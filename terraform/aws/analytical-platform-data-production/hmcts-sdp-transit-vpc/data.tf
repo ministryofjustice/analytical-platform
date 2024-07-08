@@ -8,9 +8,20 @@ data "aws_iam_session_context" "session" {
   arn = data.aws_caller_identity.session.arn
 }
 
+data "aws_region" "current" {}
+
+data "aws_caller_identity" "current" {}
+
+data "aws_availability_zones" "available" {}
+
 data "aws_secretsmanager_secret_version" "hmcts_cloudgateway_bgp_auth_key" {
   secret_id = "hmcts-cloudgateway-bgp-auth-key"
 }
+
+/*
+  Airflow's networking components are managed here https://github.com/ministryofjustice/analytical-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/network.tf
+  and are out of scope for management in this component
+*/
 
 data "aws_vpc" "airflow_dev" {
   provider = aws.analytical-platform-data-production-eu-west-1
