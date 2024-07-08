@@ -148,7 +148,7 @@ module "airflow_hmcts_sdp_load_iam_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.40.0"
 
-  name_prefix = "github-airflow-hmcts-sdp-load"
+  name_prefix = "github-airflow-create-a-pipeline"
 
   policy = data.aws_iam_policy_document.airflow_hmcts_sdp_load.json
 }

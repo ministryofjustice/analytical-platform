@@ -6,10 +6,10 @@ account_ids = {
 tags = {
   business-unit          = "Platforms"
   application            = "Data Platform"
-  component              = "airflow-hmcts-sdp-load"
+  component              = "airflow-create-a-pipeline"
   environment            = "sandbox-a"
   is-production          = "false"
   owner                  = "data-platform:data-platform-tech@digital.justice.gov.uk"
   infrastructure-support = "data-platform:data-platform-tech@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-engineering-sandbox-a/airflow-hmcts-sdp-load"
+  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-engineering-sandbox-a/airflow-create-a-pipeline"
 }
