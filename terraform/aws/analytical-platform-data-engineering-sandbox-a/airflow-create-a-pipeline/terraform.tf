@@ -3,14 +3,14 @@ terraform {
     acl            = "private"
     bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "aws/analytical-platform-data-production/airflow-hmcts-sdp-load/terraform.tfstate"
+    key            = "aws/analytical-platform-data-engineering-sandbox-a/airflow-create-a-pipeline/terraform.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.52.0"
+      version = "5.57.0"
     }
   }
   required_version = "~> 1.5"
