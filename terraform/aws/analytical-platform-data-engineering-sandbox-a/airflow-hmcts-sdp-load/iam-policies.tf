@@ -146,7 +146,7 @@ module "airflow_hmcts_sdp_load_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.39.1"
+  version = "5.40.0"
 
   name_prefix = "github-airflow-hmcts-sdp-load"
 
