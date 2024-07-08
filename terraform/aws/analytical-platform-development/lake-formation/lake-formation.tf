@@ -26,7 +26,7 @@ module "lake_formation" {
     }
   ]
   providers = {
-    aws = aws
+    aws.source = aws #eu-west-1
     # aws.target_account = aws.analytical-platform-management-production
     aws.target = aws.analytical-platform-management-production-eu-west-2
   }
