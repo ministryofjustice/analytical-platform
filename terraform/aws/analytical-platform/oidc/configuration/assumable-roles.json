@@ -183,16 +183,5 @@
     "stateLockingDetails": [],
     "ssmParameterConfig": [],
     "lakeFormationSharePolicy": true
-  },
-  "modernisation-platform-lake-formation-share-dev": {
-    "account": "analytical-platform-development",
-    "stateConfig": [],
-    "repositories": [
-      "ministryofjustice/modernisation-platform-environments"
-    ],
-    "targets": [],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": [],
-    "lakeFormationSharePolicy": true
   }
 }
