@@ -14,7 +14,7 @@ module "hmcts_sdp_nlb" {
   security_group_ingress_rules = {
     all_tcp = {
       from_port   = 443
-      to_port     = 443
+      to_port     = 445
       ip_protocol = "tcp"
       description = "TCP traffic"
       cidr_ipv4   = "0.0.0.0/0"
@@ -28,6 +28,32 @@ module "hmcts_sdp_nlb" {
   }
 
   target_groups = {
+    miexportstg = {
+      name              = "miexportstg"
+      target_type       = "ip"
+      target_id         = "10.168.3.7"
+      port              = 443
+      protocol          = "TCP"
+      availability_zone = "all"
+      health_check = {
+        enabled  = true
+        port     = "443"
+        protocol = "TCP"
+      }
+    }
+    miexportithc = {
+      name              = "miexportithc"
+      target_type       = "ip"
+      target_id         = "10.168.4.5"
+      port              = 443
+      protocol          = "TCP"
+      availability_zone = "all"
+      health_check = {
+        enabled  = true
+        port     = "443"
+        protocol = "TCP"
+      }
+    }
     mipersistentithc = {
       name              = "mipersistentithc"
       target_type       = "ip"
@@ -44,8 +70,22 @@ module "hmcts_sdp_nlb" {
   }
 
   listeners = {
-    mipersistentithc = {
+    miexportstg = {
       port     = 443
+      protocol = "TCP"
+      forward = {
+        target_group_key = "miexportstg"
+      }
+    }
+    miexportithc = {
+      port     = 444
+      protocol = "TCP"
+      forward = {
+        target_group_key = "miexportithc"
+      }
+    }
+    mipersistentithc = {
+      port     = 445
       protocol = "TCP"
       forward = {
         target_group_key = "mipersistentithc"
