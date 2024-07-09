@@ -1,7 +1,7 @@
 data "aws_iam_policy_document" "github_oidc_role" {
   for_each = local.oidc_roles
   dynamic "statement" {
-    for_each = length(each.value.targets) > 0 ? [1] : [0]
+    for_each = length(each.value.targets) > 0 ? [1] : []
 
     content {
       sid     = "AllowOIDCToAssumeRoles"
