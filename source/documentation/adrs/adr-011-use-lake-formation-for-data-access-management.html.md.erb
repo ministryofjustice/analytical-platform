@@ -1,7 +1,7 @@
 ---
 owner_slack: "#analytical-platform-notifications"
-title: ADR-011 Use Lake Formation for data access management
-last_reviewed_on: 2024-06-17
+title: ADR-011 Use Lake Formation access management
+last_reviewed_on: 2024-07-05
 review_in: 6 months
 ---
 
@@ -13,18 +13,29 @@ review_in: 6 months
 
 ## Context
 
-[Lake Formation](https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html)
+We have many methods for managing access to data which can be difficult for new users. [Lake Formation](https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html) will streamline data sharing capabilities while maintaining governance and security controls.
 
 ## Decision
 
-  We will use
+We will use Lake Formation to merge and simplify data sharing for our users.
 
 ## Consequences
 
 ### General consequences
 
-- [](l)
+- We will need to build and maintain a central tag repository to avoid tagging collisions
+- We will still require a solution for unstructured data
 
 ### Advantages
 
+- Enables secure data sharing across accounts without data duplication
+- We can make use of tag based access control [TBAC](https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html) also known as attribute-based access control [ABAC](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html#introduction_attribute-based-access-control_compare-rbac). This reduces the number of access policies that need to be added or changed as new database, table and columns are added
+- Simplifies compliance management and auditing
+- We cab give data owners control of who has access
+- Can apply row and column level security to restrict sensitive data
+- Fine and coarse-grain access control with attributes from users Entra ID profile
+
 ### Disadvantages
+
+- Onboarding of a dataset will require more up front work by engineers
+- Lake Formation tags are only available Lake Formation
