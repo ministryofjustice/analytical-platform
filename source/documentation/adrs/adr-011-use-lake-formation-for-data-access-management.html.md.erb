@@ -1,6 +1,6 @@
 ---
 owner_slack: "#analytical-platform-notifications"
-title: ADR-011 Use Lake Formation access management
+title: ADR-011 Use Lake Formation for data access management
 last_reviewed_on: 2024-07-05
 review_in: 6 months
 ---
@@ -28,14 +28,13 @@ We will use Lake Formation to merge and simplify data sharing for our users.
 
 ### Advantages
 
-- Enables secure data sharing across accounts without data duplication
-- We can make use of tag based access control [TBAC](https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html) also known as attribute-based access control [ABAC](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html#introduction_attribute-based-access-control_compare-rbac). This reduces the number of access policies that need to be added or changed as new database, table and columns are added
-- Simplifies compliance management and auditing
-- We cab give data owners control of who has access
-- Can apply row and column level security to restrict sensitive data
+- Enables secure data sharing across accounts reducing data duplication
+- Improved data compliance management and auditing
+- Data owners can control of who has access to their data
+- Row and column level security reduces need to duplicate non sensitive data
 - Fine and coarse-grain access control with attributes from users Entra ID profile
+- We can make use of tag based access control [TBAC](https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html) also known as attribute-based access control [ABAC](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html#introduction_attribute-based-access-control_compare-rbac). This reduces the number of access policies that need modification as new database, table and columns are added
 
 ### Disadvantages
 
-- Onboarding of a dataset will require more up front work by engineers
-- Lake Formation tags are only available Lake Formation
+- Onboarding of datasets will need more up front work by engineers
