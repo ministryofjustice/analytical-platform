@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
+data "aws_iam_policy_document" "airflow_create_a_pipeline" {
   #tfsec:ignore:avd-aws-0057:needs to access multiple resources
   statement {
     #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
@@ -142,13 +142,13 @@ data "aws_iam_policy_document" "airflow_hmcts_sdp_load" {
   }
 }
 
-module "airflow_hmcts_sdp_load_iam_policy" {
+module "airflow_create_a_pipeline_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.39.1"
+  version = "5.40.0"
 
-  name_prefix = "github-airflow-hmcts-sdp-load"
+  name_prefix = "github-airflow-create-a-pipeline"
 
-  policy = data.aws_iam_policy_document.airflow_hmcts_sdp_load.json
+  policy = data.aws_iam_policy_document.airflow_create_a_pipeline.json
 }

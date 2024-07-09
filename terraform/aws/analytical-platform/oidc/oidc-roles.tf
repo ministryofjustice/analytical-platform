@@ -1,8 +1,7 @@
 data "aws_iam_policy_document" "github_oidc_role" {
   for_each = local.oidc_roles
-
   dynamic "statement" {
-    for_each = length(each.value.targets) > 0 ? [1] : [0]
+    for_each = length(each.value.targets) > 0 ? [1] : []
 
     content {
       sid     = "AllowOIDCToAssumeRoles"
@@ -74,6 +73,26 @@ data "aws_iam_policy_document" "github_oidc_role" {
         "ssm:GetParametersByPath"
       ]
       resources = formatlist("arn:aws:ssm:%s:%s:parameter/%s*", statement.value.ssmParameterRegion, var.account_ids[try(each.value.account, "analytical-platform-management-production")], statement.value.ssmParameterArnPrefixes)
+    }
+  }
+
+  dynamic "statement" {
+    for_each = try(each.value.lakeFormationSharePolicy, false) == true ? [1] : []
+    content {
+      actions = [
+        "lakeformation:GrantPermissions",
+        "lakeformation:BatchGrantPermissions",
+        "lakeformation:RegisterResource",
+        "lakeformation:DeregisterResource",
+        "lakeformation:LisPermissions",
+        "glue:GetDatabase",
+        "glue:GetTable",
+        "glue:PutResourcePolicy",
+        "glue:DeleteResourcePolicy",
+        "iam:PassRole"
+      ]
+      effect    = "Allow"
+      resources = ["*"]
     }
   }
   statement {

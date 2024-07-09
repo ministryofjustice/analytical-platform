@@ -172,5 +172,16 @@
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
+  },
+  "modernisation-platform-lake-formation-share": {
+    "account": "analytical-platform-data-production",
+    "stateConfig": [],
+    "repositories": [
+      "ministryofjustice/modernisation-platform-environments"
+    ],
+    "targets": [],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": [],
+    "lakeFormationSharePolicy": true
   }
 }
