@@ -48,6 +48,28 @@ module "route53_records" {
         "ns-633.awsdns-15.net.",
         "ns-1852.awsdns-39.co.uk."
       ]
+    },
+    {
+      name = "development"
+      type = "CNAME"
+      ttl  = 300
+      records = [
+        "ingress.compute.development.analytical-platform.service.justice.gov.uk."
+      ]
+    },
+    {
+      name = "test"
+      type = "CNAME"
+      ttl  = 300
+      records = [
+        "ingress.compute.test.analytical-platform.service.justice.gov.uk."
+      ]
+    },
+    {
+      name    = ""
+      type    = "A"
+      ttl     = 300
+      records = tolist(data.dns_a_record_set.apc_ingress_prod.addrs)
     }
   ]
 }
