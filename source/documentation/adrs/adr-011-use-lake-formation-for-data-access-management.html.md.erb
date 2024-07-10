@@ -13,23 +13,25 @@ review_in: 6 months
 
 ## Context
 
-We have many methods for managing access to data which can be difficult for new users. [Lake Formation](https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html) will streamline data sharing capabilities while maintaining governance and security controls.
+We have many methods for managing access to data on the Analytical Platform. This can be difficult to for users of the Platform. [Lake Formation](https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html) streamlines data sharing capabilities while maintaining governance and security controls.
 
 ## Decision
 
-We will use Lake Formation to merge and simplify data sharing for our users.
+We will use Lake Formation to securely manage and govern data access on the Analytical Platform, enabling fine-grained control and simplified data sharing.
 
 ## Consequences
 
 ### General consequences
 
+- We will need to support and maintain a Terraform module for teams to enable and configure Lake Formation
 - We will need to build and maintain a central tag repository to avoid tagging collisions
 - We will still require a solution for unstructured data
 
 ### Advantages
 
-- Enables secure data sharing across accounts reducing data duplication
-- Improved data compliance management and auditing
+- Enables secure data sharing across accounts. Data can stay within the account it without the need for exporting or pipelines which reduces duplication
+- Integration with AWS Identity Center and our existing identity management system
+- Improved data compliance with improved [security event logging](https://docs.aws.amazon.com/lake-formation/latest/dg/security-event-logging.html) and auditing capabilities
 - Data owners can control of who has access to their data
 - Row and column level security reduces need to duplicate non sensitive data
 - Fine and coarse-grain access control with attributes from users Entra ID profile
