@@ -20,9 +20,9 @@ module "lake_formation" {
   ]
   databases_to_share = [
     {
-      name        = "antfmoj_test_db"
-      target_db   = "antfmoj_test_db_target"
-      permissions = ["DESCRIBE"]
+      name             = "antfmoj_test_db"
+      permissions      = ["DESCRIBE"]
+      share_all_tables = false
     }
   ]
   providers = {
