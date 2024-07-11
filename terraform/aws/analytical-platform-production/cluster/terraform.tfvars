@@ -129,9 +129,9 @@ eks_versions = {
   node-group = "1.27"
 }
 eks_addon_versions = {
-  coredns        = "v1.9.3-eksbuild.15"
+  coredns        = "v1.10.1-eksbuild.4"
   ebs-csi-driver = "v1.32.0-eksbuild.1"
-  kube-proxy     = "v1.26.15-eksbuild.5"
+  kube-proxy     = "v1.27.6-eksbuild.2"
   vpc-cni        = "v1.15.1-eksbuild.1"
 }
 eks_node_group_name_prefix = "prod"
