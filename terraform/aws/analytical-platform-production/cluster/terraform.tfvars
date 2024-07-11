@@ -126,7 +126,7 @@ redis_alarm_memory_threshold_bytes = 100000
 ##################################################
 eks_versions = {
   cluster    = "1.28"
-  node-group = "1.27"
+  node-group = "1.28"
 }
 eks_addon_versions = {
   coredns        = "v1.10.1-eksbuild.4"
