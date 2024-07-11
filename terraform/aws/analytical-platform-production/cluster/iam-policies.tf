@@ -268,8 +268,13 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
       "autoscaling:DescribeAutoScalingGroups",
       "autoscaling:DescribeAutoScalingInstances",
       "autoscaling:DescribeLaunchConfigurations",
+      "autoscaling:DescribeScalingActivities",
       "autoscaling:DescribeTags",
       "ec2:DescribeLaunchTemplateVersions",
+      "ec2:DescribeInstanceTypes",
+      "eks:DescribeNodegroup",
+      "ec2:DescribeImages",
+      "ec2:GetInstanceTypesFromInstanceRequirements"
     ]
     resources = ["*"]
   }
@@ -280,18 +285,12 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
     actions = [
       "autoscaling:SetDesiredCapacity",
       "autoscaling:TerminateInstanceInAutoScalingGroup",
-      "autoscaling:UpdateAutoScalingGroup",
     ]
     resources = ["*"]
     condition {
       test     = "StringEquals"
       variable = "autoscaling:ResourceTag/kubernetes.io/cluster/${module.eks.cluster_id}"
       values   = ["owned"]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "autoscaling:ResourceTag/k8s.io/cluster-autoscaler/enabled"
-      values   = ["true"]
     }
   }
 }
