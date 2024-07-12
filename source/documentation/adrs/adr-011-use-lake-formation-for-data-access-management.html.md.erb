@@ -13,29 +13,31 @@ review_in: 6 months
 
 ## Context
 
-We have many ways to assign permissions to data. We lack the ability to offer fine-grained access controls, column and row level security, which leads to data duplication. There are also getting more requests for sharing sensitive data [across accounts](/documentation/adrs/adr-009-use-separate-aws-accounts-for-data.html).
+We use [IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) to manage access to data based on resources. However, IAM lacks fine-grained access controls, such as column and row level permissions. Additionally, we are receiving increasing requests to share sensitive data [across accounts](/documentation/adrs/adr-009-use-separate-aws-accounts-for-data.html), where data producers want to control access to their own data. This highlights the need for solutions that allow more detailed access management and data governance.
 
 ## Decision
 
-We will use [Lake Formation](https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html) to secure and govern data access on the Analytical Platform. This will enable fine-grained control, including row and column level security to secure and reduce duplication. It also provides the ability to leave data in place, removing the need to set up pipelines to move data unnecessarily
+We have chosen to implement AWS [Lake Formation](https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html) to meet our needs for fine-grained data permissions and robust data governance. While IAM manages resource-based permissions, it does not offer the column and row level controls we require. Lake Formation addresses these gaps by providing fine-grained access management capabilities.
+
+Additionally, Lake Formation supports our growing need to share sensitive data across accounts, enabling data producers to govern their own data. This solution not only enhances security and compliance but also streamlines the process of data sharing and management within our organization.
 
 ## Consequences
 
 ### General consequences
 
 - We will need to support and maintain a Terraform module for teams to enable and configure Lake Formation
+- Current methods for granting and revoking will need to be reviewed with users
 - We will need to build and maintain a central tag repository to avoid tagging collisions
 - We will still require a solution for unstructured data
 
 ### Advantages
 
-- Enables secure data sharing across accounts. Data can stay within the account it without the need for exporting or pipelines which reduces duplication
+- Enables secure data sharing across accounts. Data can stay within the account without the need for exporting or data pipelines which reduces duplication
 - Integration with AWS Identity Center and our existing identity management system
-- Improved data compliance with improved [security event logging](https://docs.aws.amazon.com/lake-formation/latest/dg/security-event-logging.html) and auditing capabilities
-- Data owners can control of who has access to their data
-- Row and column level security reduces need to duplicate non sensitive data
+- Improved data compliance with [security event logging](https://docs.aws.amazon.com/lake-formation/latest/dg/security-event-logging.html) and auditing capabilities
+- We can give data owners direct control over who has access to their data
 - Fine and coarse-grain access control with attributes from users Entra ID profile
-- We can make use of tag based access control [TBAC](https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html) also known as attribute-based access control [ABAC](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html#introduction_attribute-based-access-control_compare-rbac). This reduces the number of access policies that need modification as new database, table and columns are added
+- We can make use of tag based access control [TBAC](https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html) also known as attribute-based access control [ABAC](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html#introduction_attribute-based-access-control_compare-rbac). This reduces the number of access policies and roles
 
 ### Disadvantages
 
