@@ -13,11 +13,11 @@ review_in: 6 months
 
 ## Context
 
-We have multiple ways to assign permissions to data, we are missing features like fine-grained access controls, column and row level security which leads to data being duplicated. We are also getting more requests for sensitive data to be shared [across accounts](/documentation/adrs/adr-009-use-separate-aws-accounts-for-data.html).
+We have many ways to assign permissions to data. We lack the ability to offer fine-grained access controls, column and row level security, which leads to data duplication. There are also getting more requests for sharing sensitive data [across accounts](/documentation/adrs/adr-009-use-separate-aws-accounts-for-data.html).
 
 ## Decision
 
-We will use [Lake Formation](https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html) to securely manage and govern data access on the Analytical Platform. This will enable fine-grained control, row and column level security the ability to leave data in place and remove the need to setup pipelines to move data unnecessarily.
+We will use [Lake Formation](https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html) to secure and govern data access on the Analytical Platform. This will enable fine-grained control, including row and column level security. It also provides the ability to leave data in place, removing the need to set up pipelines to move data unnecessarily
 
 ## Consequences
 
