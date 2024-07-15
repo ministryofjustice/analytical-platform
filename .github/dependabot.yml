@@ -55,7 +55,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/create-a-derived-table"
       - "terraform/aws/analytical-platform-data-production/data-engineering-pipelines"
       - "terraform/aws/analytical-platform-data-production/github-airflow-cjs-dashboard-data"
-      - "terraform/aws/analytical-platform-data-production/hmcts-sdp-transit-direct-connect"
+      - "terraform/aws/analytical-platform-data-production/hmcts-sdp-direct-connect"
       - "terraform/aws/analytical-platform-data-production/ingestion-egress"
       - "terraform/aws/analytical-platform-data-production/openmetadata"
       - "terraform/aws/analytical-platform-data-production/powerbi-gateway"
