@@ -75,7 +75,9 @@ data "aws_iam_policy_document" "datahub_read_cadet_bucket" {
       "s3:Describe*"
     ]
     resources = [
-      "arn:aws:s3:::mojap-derived-tables/*",
+      "arn:aws:s3:::mojap-derived-tables/prod/run_artefacts/*",
+      "arn:aws:s3:::mojap-derived-tables/dev/run_artefacts/*",
+      "arn:aws:s3:::mojap-derived-tables/catalogue_static_dbt_docs/*",
       "arn:aws:s3:::mojap-derived-tables"
     ]
   }
@@ -113,6 +115,7 @@ data "aws_iam_policy_document" "datahub_ingestion_github_actions" {
 resource "aws_iam_role" "datahub_ingestion_github_actions" {
   name               = "datahub-ingestion-github-actions"
   assume_role_policy = data.aws_iam_policy_document.datahub_ingestion_github_actions.json
+  max_session_duration = 14400
 }
 
 resource "aws_iam_role_policy_attachment" "datahub_ingestion_github_actions" {
