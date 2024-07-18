@@ -6,8 +6,6 @@ locals {
       database_string_pattern = ["xhibit_*"]
       role_names_to_exempt = [
         "courts-data-engineer",
-        "airflow_prod_xhibit_etl",
-        "airflow_dev_xhibit_etl_athena",
         "restricted-admin",
         "create-a-derived-table"
       ]
