@@ -113,8 +113,8 @@ data "aws_iam_policy_document" "datahub_ingestion_github_actions" {
 }
 
 resource "aws_iam_role" "datahub_ingestion_github_actions" {
-  name               = "datahub-ingestion-github-actions"
-  assume_role_policy = data.aws_iam_policy_document.datahub_ingestion_github_actions.json
+  name                 = "datahub-ingestion-github-actions"
+  assume_role_policy   = data.aws_iam_policy_document.datahub_ingestion_github_actions.json
   max_session_duration = 14400
 }
 
