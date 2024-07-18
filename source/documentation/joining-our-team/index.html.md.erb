@@ -1,0 +1,57 @@
+---
+owner_slack: "#analytical-platform"
+title: Joining Our Team
+last_reviewed_on: 2024-07-18
+review_in: 3 months
+---
+
+# <%= current_page.data.title %>
+
+## General Information
+
+- Our team have a stand up everyday at 10:00
+- We plan our sprints using GitHub Projects
+- We have 3 week sprints
+- We have our team Retrospective every 3 weeks
+
+## Tools
+
+### Communication
+
+Our main chat platform is Slack, and this is our preferred method of communication. This applies to our ceremonies as well, we have these in Huddles in the [`#analytical-platform`](https://moj.enterprise.slack.com/archives/C04M8224WCV) channel.
+
+We use Slack huddles for pairing or direct calls and occasionally we use Google Meet.
+
+Our main Slack channels are:
+
+#### #analytical-platform
+
+The [#analytical-platform](https://moj.enterprise.slack.com/archives/C04M8224WCV) channel is our team channel, where we have discussions about anything ranging from:
+
+- in-depth technical issues
+- our plans for the day
+- to request someone else from the team's help
+- when we're away for lunch
+- general musings
+
+If you can't make standup, post your standup update here.
+
+We have other channels we use listed in our slack canvas [here](https://moj.enterprise.slack.com/canvas/C04M8224WCV)
+
+### GitHub
+
+Access to Analytical Platform's GitHub repositories and projects is managed in Terraform.
+
+To add a user to a team, add their GitHub username to the relevant team in in the [`analytical-platform-teams.tf`](https://github.com/ministryofjustice/data-platform-github-access/blob/main/analytical-platform-teams.tf) configuration.
+
+### PagerDuty
+
+Our PagerDuty configuration is managed in Terraform.
+
+To add a user, do the following:
+
+1. Add an entry into [`users.tf`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/pagerduty/users.tf)
+
+1. Add an entry into [`teams.tf`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/pagerduty/teams.tf)
+
+1. Add an entry into [`schedules.tf`](https://github.com/ministryofjustice/data-platform/blob/main/terraform/pagerduty/schedules.tf)
