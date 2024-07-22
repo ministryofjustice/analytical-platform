@@ -205,6 +205,28 @@ locals {
         ignore_public_acls      = true
         restrict_public_buckets = true
       }
+      policy = jsonencode(
+        {
+          Statement = [
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Effect    = "Deny"
+              Principal = "*"
+              Resource = [
+                "arn:aws:s3:::moj-analytics-lookup-tables/*",
+                "arn:aws:s3:::moj-analytics-lookup-tables"
+              ]
+              Sid = "DenyInsecureTransport"
+            },
+          ]
+          Version = "2012-10-17"
+        }
+      )
     }
     "moj-analytics-lookup-tables-dev" = {
       grant = [{
