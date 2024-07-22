@@ -217,8 +217,11 @@ locals {
               }
               Effect    = "Deny"
               Principal = "*"
-              Resource  = "arn:aws:s3:::moj-analytics-lookup-tables"
-              Sid       = "DenyInsecureTransport"
+              Resource = [
+                "arn:aws:s3:::moj-analytics-lookup-tables/*",
+                "arn:aws:s3:::moj-analytics-lookup-tables"
+              ]
+              Sid = "DenyInsecureTransport"
             },
           ]
           Version = "2012-10-17"
