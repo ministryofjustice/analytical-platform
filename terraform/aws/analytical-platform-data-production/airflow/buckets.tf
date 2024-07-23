@@ -59,14 +59,6 @@ data "aws_iam_policy_document" "airflow_bucket_policy" {
       "${aws_s3_bucket.mojap_airflow_dev.arn}/*",
     ]
   }
-}
-
-resource "aws_s3_bucket_policy" "airflow_dev_bucket_securetransport_policy" {
-  bucket = aws_s3_bucket.mojap_airflow_dev.id
-  policy = data.aws_iam_policy_document.airflow_bucket_securetransport_policy.json
-}
-
-data "aws_iam_policy_document" "airflow_bucket_securetransport_policy" {
   statement {
     sid = "DenyInsecureTransport"
     actions = [
@@ -85,7 +77,6 @@ data "aws_iam_policy_document" "airflow_bucket_securetransport_policy" {
       "arn:aws:s3:::mojap-airflow-dev/*",
       "arn:aws:s3:::mojap-airflow-dev"
     ]
-
     condition {
       test     = "Bool"
       variable = "aws:SecureTransport"
@@ -93,9 +84,46 @@ data "aws_iam_policy_document" "airflow_bucket_securetransport_policy" {
         "false"
       ]
     }
-
   }
+
+
 }
+
+# resource "aws_s3_bucket_policy" "airflow_dev_bucket_securetransport_policy" {
+#   bucket = aws_s3_bucket.mojap_airflow_dev.id
+#   policy = data.aws_iam_policy_document.airflow_bucket_securetransport_policy.json
+# }
+
+# data "aws_iam_policy_document" "airflow_bucket_securetransport_policy" {
+#   statement {
+#     sid = "DenyInsecureTransport"
+#     actions = [
+#       "s3:*"
+#     ]
+
+#     effect = "Deny"
+
+#     principals {
+#       type = "*"
+#       identifiers = [
+#         "*"
+#       ]
+#     }
+#     resources = [
+#       "arn:aws:s3:::mojap-airflow-dev/*",
+#       "arn:aws:s3:::mojap-airflow-dev"
+#     ]
+
+#     condition {
+#       test     = "Bool"
+#       variable = "aws:SecureTransport"
+#       values = [
+#         "false"
+#       ]
+#     }
+
+#   }
+# }
 
 ############################ AIRFLOW PRODUCTION INFRASTRUCTURE
 
