@@ -2274,6 +2274,21 @@ locals {
               Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-dev-hmpps-oasys"
             },
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Principal = "*"
+              Effect    = "Deny"
+              Resource = [
+                "arn:aws:s3:::mojap-raw-hist-dev/*",
+                "arn:aws:s3:::mojap-raw-hist-dev"
+              ]
+              Sid = "DenyInsecureTransport"
+            },
           ]
           Version = "2012-10-17"
         }
