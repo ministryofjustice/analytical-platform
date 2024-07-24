@@ -2455,7 +2455,7 @@ locals {
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/oasys/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-preprod-hmpps-oasys"
             },
-             {
+            {
               Action = "s3:*"
               Condition = {
                 Bool = {
