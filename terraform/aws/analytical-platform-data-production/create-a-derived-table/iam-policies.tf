@@ -90,6 +90,35 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "arn:aws:airflow:*:${var.account_ids["analytical-platform-data-production"]}:environment/prod"
     ]
   }
+  statement {
+    sid = "DenyInsecureTransport"
+    actions = [
+      "s3:*"
+    ]
+
+    effect = "Deny"
+
+    principals {
+      type = "*"
+      identifiers = [
+        "*"
+      ]
+    }
+    resources = [
+      "arn:aws:s3:::mojap-manage-offences/*",
+      "arn:aws:s3:::mojap-manage-offences"
+    ]
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false"
+      ]
+    }
+
+  }
+
 }
 
 module "create_a_derived_table_iam_policy" {
