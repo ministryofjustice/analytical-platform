@@ -43,6 +43,7 @@ The repositories we manage with terraform see [here](https://github.com/ministry
 | [Analytical Platform support](https://github.com/ministryofjustice/data-platform-support)            | This repository is used for support and provides templated forms for our users          |
 | [Analytical Platform User Guidancel](https://github.com/moj-analytical-services/user-guidance)          | User guidance for the Analytical Platform which is hosted on GitHub Pages [here](https://user-guidance.analytical-platform.service.justice.gov.uk/)  |
 | [Analytical Platform Visual Studio Code](https://github.com/ministryofjustice/analytical-platform-visual-studio-code)          | This repository contains the Visual Studio Code image used by the Analytical Platform  |
+| [Data Platform Services GitHub Access](https://github.com/ministryofjustice/data-platform-github-access/) | This repository manages access to Data Platform Service Area's GitHub including Analytical Platform, Data Catalogue and Data Engineering's access to Analytical Platform  |
 | [Modernisation Platform environments repository](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/data-platform) | Hosting environment for the Analytical Platform |
 
 ### Useful links
