@@ -296,8 +296,28 @@ locals {
         ignore_public_acls      = true
         restrict_public_buckets = true
       }
-
-
+      policy = jsonencode(
+        {
+          Statement = [
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Effect    = "Deny"
+              Principal = "*"
+              Resource = [
+                "arn:aws:s3:::moj-analytics-lookup-tables-preprod/*",
+                "arn:aws:s3:::moj-analytics-lookup-tables-preprod"
+              ]
+              Sid = "DenyInsecureTransport"
+            },
+          ]
+          Version = "2012-10-17"
+        }
+      )
     }
 
     "mojap-athena-query-dump" = {
