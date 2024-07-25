@@ -39,7 +39,6 @@ The repositories we manage with terraform see [here](https://github.com/ministry
 | [Analytical Platform Kubectl image](https://github.com/ministryofjustice/analytical-platform-kubectl)          | This repository contains the GitHub Kubectl image used by the Analytical Platform  |
 | [Analytical Platform RShiny base image](https://github.com/ministryofjustice/analytical-platform-rshiny-open-source-base)          | This repository contains the GitHub RShiny Open Source Base image used by the Analytical Platform  |
 | [Analytical Platform RStudio image](https://github.com/ministryofjustice/analytics-platform-rstudio)          | This repository contains the RStudio image used by the Analytical Platform  |
-| [Analytical Platform Runbooks](https://github.com/ministryofjustice/analytical-platform-runbooks)          | This repository contains Runbooks for the Analytical Platform.  |
 | [Analytical Platform support](https://github.com/ministryofjustice/data-platform-support)            | This repository is used for support and provides templated forms for our users          |
 | [Analytical Platform User Guidancel](https://github.com/moj-analytical-services/user-guidance)          | User guidance for the Analytical Platform which is hosted on GitHub Pages [here](https://user-guidance.analytical-platform.service.justice.gov.uk/)  |
 | [Analytical Platform Visual Studio Code](https://github.com/ministryofjustice/analytical-platform-visual-studio-code)          | This repository contains the Visual Studio Code image used by the Analytical Platform  |
