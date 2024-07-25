@@ -2144,21 +2144,6 @@ locals {
               Resource = "arn:aws:s3:::mojap-raw-hist/hmpps/oasys/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-hmpps-oasys"
             },
-            {
-              Action = "s3:*"
-              Condition = {
-                Bool = {
-                  "aws:SecureTransport" = "false"
-                }
-              }
-              Principal = "*"
-              Effect    = "Deny"
-              Resource = [
-                "arn:aws:s3:::mojap-raw-hist/*",
-                "arn:aws:s3:::mojap-raw-hist"
-              ]
-              Sid = "DenyInsecureTransport"
-            },
           ]
           Version = "2012-10-17"
         }
@@ -2308,21 +2293,6 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-dev-hmpps-oasys"
-            },
-            {
-              Action = "s3:*"
-              Condition = {
-                Bool = {
-                  "aws:SecureTransport" = "false"
-                }
-              }
-              Principal = "*"
-              Effect    = "Deny"
-              Resource = [
-                "arn:aws:s3:::mojap-raw-hist-dev/*",
-                "arn:aws:s3:::mojap-raw-hist-dev"
-              ]
-              Sid = "DenyInsecureTransport"
             },
           ]
           Version = "2012-10-17"
@@ -2475,25 +2445,162 @@ locals {
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/oasys/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-preprod-hmpps-oasys"
             },
+          ]
+          Version = "2012-10-17"
+        }
+      )
+    }
+
+    "mojap-raw-hist-preprod" = {
+      grant = [{
+        id         = data.aws_canonical_user_id.current.id
+        permission = "FULL_CONTROL",
+        type       = "CanonicalUser"
+      }]
+      force_destroy       = false
+      object_lock_enabled = false
+      acl                 = "private"
+      versioning = {
+        enabled    = true,
+        mfa_delete = false
+      }
+      mfa_delete = false
+      server_side_encryption_configuration = {
+        rule = {
+          bucket_key_enabled = false
+
+          apply_server_side_encryption_by_default = {
+            sse_algorithm = "AES256"
+          }
+        }
+      }
+      logging = {
+        target_bucket = "moj-analytics-s3-logs"
+        target_prefix = "mojap-raw-hist-preprod/"
+      }
+      public_access_block = {
+        block_public_acls       = true
+        block_public_policy     = true
+        ignore_public_acls      = true
+        restrict_public_buckets = true
+      }
+
+      policy = jsonencode(
+        {
+          Statement = [
             {
-              Action = "s3:*"
+              Action = [
+                "s3:PutObject",
+                "s3:ListMultipartUploadParts",
+              ]
+              Effect = "Allow"
+              Principal = {
+                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-preprod"
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
+              Sid      = "WriteOnlyAccess-mojap-raw-hist-preprod-hmpps-delius"
+            },
+            {
+              Action = "s3:PutObject"
               Condition = {
-                Bool = {
-                  "aws:SecureTransport" = "false"
+                StringNotEquals = {
+                  "s3:x-amz-acl" = "bucket-owner-full-control"
                 }
               }
-              Principal = "*"
-              Effect    = "Deny"
-              Resource = [
-                "arn:aws:s3:::mojap-raw-hist-preprod/*",
-                "arn:aws:s3:::mojap-raw-hist-preprod"
+              Effect = "Deny"
+              Principal = {
+                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-preprod"
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
+              Sid      = "112-mojap-raw-hist-preprod-hmpps-delius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-server-side-encryption" = "AES256"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-preprod"
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
+              Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-preprod-hmpps-delius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                Null = {
+                  "s3:x-amz-server-side-encryption" = "true"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-preprod"
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
+              Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-preprod-hmpps-delius"
+            },
+            {
+              Action = [
+                "s3:PutObject",
+                "s3:ListMultipartUploadParts",
               ]
-              Sid = "DenyInsecureTransport"
+              Effect = "Allow"
+              Principal = {
+                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-preprod"
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/oasys/*"
+              Sid      = "WriteOnlyAccess-mojap-raw-hist-preprod-hmpps-oasys"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-acl" = "bucket-owner-full-control"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-preprod"
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/oasys/*"
+              Sid      = "112-mojap-raw-hist-preprod-hmpps-oasys"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-server-side-encryption" = "AES256"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-preprod"
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/oasys/*"
+              Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-preprod-hmpps-oasys"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                Null = {
+                  "s3:x-amz-server-side-encryption" = "true"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-preprod"
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/oasys/*"
+              Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-preprod-hmpps-oasys"
             },
           ]
           Version = "2012-10-17"
         }
       )
     }
+
   }
 }
