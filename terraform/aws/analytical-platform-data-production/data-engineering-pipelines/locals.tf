@@ -3,12 +3,8 @@ locals {
   protected_dbs = [
     {
       name                    = "xhibit"
-      database_string_pattern = ["xhibit_*"]
-      role_names_to_exempt = [
-        "courts-data-engineer",
-        "restricted-admin",
-        "create-a-derived-table"
-      ]
+      database_string_pattern = ["xhibit", "xhibit_derived"]
+      role_names_to_exempt    = ["create-a-derived-table"]
     },
     {
       name = "mags"
@@ -2143,6 +2139,21 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-raw-hist/hmpps/oasys/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-hmpps-oasys"
+            },
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Principal = "*"
+              Effect    = "Deny"
+              Resource = [
+                "arn:aws:s3:::mojap-raw-hist/*",
+                "arn:aws:s3:::mojap-raw-hist"
+              ]
+              Sid = "DenyInsecureTransport"
             },
           ]
           Version = "2012-10-17"
