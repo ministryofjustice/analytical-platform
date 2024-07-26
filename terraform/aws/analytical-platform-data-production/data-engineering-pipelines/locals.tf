@@ -3,12 +3,8 @@ locals {
   protected_dbs = [
     {
       name                    = "xhibit"
-      database_string_pattern = ["xhibit_*"]
-      role_names_to_exempt = [
-        "courts-data-engineer",
-        "restricted-admin",
-        "create-a-derived-table"
-      ]
+      database_string_pattern = ["xhibit", "xhibit_derived"]
+      role_names_to_exempt    = ["create-a-derived-table"]
     },
     {
       name = "mags"
