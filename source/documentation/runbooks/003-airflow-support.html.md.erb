@@ -1,0 +1,108 @@
+---
+owner_slack: "#analytical-platform"
+title: Airflow Support - Tips and tricks
+last_reviewed_on: 2024-07-27
+review_in: 1 months
+---
+
+# <%= current_page.data.title %>
+
+This is here to help you get to the bottom of what's wrong in any given Airflow Support Issue. This will take you through what information you need from the customer, what information you need to gather behind the scenes to know how to help any given customer.
+
+## Table of Contents
+
+1. [The Flow Chart](#flow-chart)
+2. [Step by step flow](#step-by-step-flow)
+3. [The Phantom Zone](#it-got-tough)
+4. [Contact Information](#contact-information)
+
+
+## Flow Chart
+
+The following flow chart details how we generally approach a support issue that comes in for Airflow.
+
+![Airflow Support Flow Chart](airflow-support-flowchart.excalidraw.png)
+
+This is a wide image, so you may benefit from opening it in a separate tab where you can zoom in and work through it as you approach the ticket if you have difficulty reading it.
+
+
+## Step by Step Flow
+
+### 1. Getting the DAG details and Image Repo
+
+This information is foundational to our ability to diganose what is wrong. The DAG will be stored in the [Airflow Repo](https://github.com/moj-analytical-services/airflow/tree/main/environments), which is split into `dev` and `prod` environments. Each DAG will name a role (which can be found in the `roles` folder in each environment), and an image repo which will be held in a separate git repo. The key checklist to make sure the issue has provided is:
+- A link to the DAG code in the Airflow Repo
+- A link to the file that defines the role their DAG uses
+- A link to the repository they publish the image this DAG uses from.
+
+If the user has failed to provide any of the above, you should request them to provide the relevant bits of missing info to assist in your diagnosis.
+
+### 2. Log Gathering
+
+Having idenified the DAG in question, we now need to understand the nature of the failure. The best place to start are the logs that the pod generated while failing. In many cases, the customer will have already provided these. If they have not, you should ask them for the log dump from a recent failed run, or you can log into the `Managed Workflows for Apache Airflow` section of the AWS console, log into `airflow-dev` or `airflow-prod` (as is appropriate), and find the logs yourself from the information you've already gathered. This can be done by navigating to the airflow UI, and selecting the DAG for which you are seeking the logs. This will get you a page similar to the one below, which has been redacted for security.
+
+![Airflow DAG UI](airflow-ui-example.png)
+
+In this view, the large bars represent the overall status of the DAG - did all tasks pass, and how long did the tasks take overall. Each indivdual square beneath the bar chart represents the individual tasks of that run. Their colour indicates their current status (passed, failed, running, etc.) clicking on one of these squares will lead you to the log for that specific task/run combo. Ensure you have access to the logs before moving on, as these will be critical to our ability to diagnose the issue. Please note, that due to the large amount of logs this service generates, logs are quickly shifted to slower storage. Any logs older than approx 24 hours will take some time (up to 2-3 minutes in the worst case) to load. Please be patient, and they will load eventually!
+
+### 3. Analysing the log - pod startup
+
+Now you have the logs, the first thing to check is whether the image booted successfully. Below is a (condensed) example of a standard airflow job log:
+
+```
+ip-XX-XXX-XX-XXX.eu-west-1.compute.internal
+*** Reading remote log from Cloudwatch log_group: airflow-prod-Task log_stream: dag_id=some_example_dag/run_id=scheduled__2024-07-27T20_00_00+00_00/task_id=some_example_task/attempt=1.log.
+[2024-07-28, 21:00:08 BST] {{taskinstance.py:1165}} INFO - Dependencies all met for <TaskInstance: some_example_dag.some_example_task scheduled__2024-07-27T20:00:00+00:00 [queued]>
+[2024-07-28, 21:00:08 BST] {{taskinstance.py:1165}} INFO - Dependencies all met for <TaskInstance: some_example_dag.some_example_task scheduled__2024-07-27T20:00:00+00:00 [queued]>
+[2024-07-28, 21:00:08 BST] {{taskinstance.py:1362}} INFO -
+--------------------------------------------------------------------------------
+[2024-07-28, 21:00:08 BST] {{taskinstance.py:1363}} INFO - Starting attempt 1 of 1
+[2024-07-28, 21:00:08 BST] {{taskinstance.py:1364}} INFO -
+--------------------------------------------------------------------------------
+[2024-07-28, 21:00:08 BST] {{taskinstance.py:1383}} INFO - Executing <Task(KubernetesPodOperator): some_example_task> on 2024-07-27 20:00:00+00:00
+[2024-07-28, 21:00:08 BST] {{standard_task_runner.py:55}} INFO - Started process 4188 to run task
+[2024-07-28, 21:00:08 BST] {{standard_task_runner.py:82}} INFO - Running: ['airflow', 'tasks', 'run', 'some_example_dag', 'some_example_task', 'scheduled__2024-07-27T20:00:00+00:00', '--job-id', '300871', '--raw', '--subdir', 'DAGS_FOLDER/team_name/task_name.py', '--cfg-path', '/tmp/tmpm5b8dm_q']
+[2024-07-28, 21:00:08 BST] {{standard_task_runner.py:83}} INFO - Job 300871: Subtask some_example_task
+[2024-07-28, 21:00:09 BST] {{task_command.py:376}} INFO - Running <TaskInstance: some_example_dag.some_example_task scheduled__2024-07-27T20:00:00+00:00 [running]> on host ip-10-201-20-179.eu-west-1.compute.internal
+[2024-07-28, 21:00:09 BST] {{taskinstance.py:1590}} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_EMAIL=example@justice.gov.uk
+AIRFLOW_CTX_DAG_OWNER=example
+AIRFLOW_CTX_DAG_ID=some_example_dag
+AIRFLOW_CTX_TASK_ID=some_example_task
+AIRFLOW_CTX_EXECUTION_DATE=2024-07-27T20:00:00+00:00
+AIRFLOW_CTX_TRY_NUMBER=1
+AIRFLOW_CTX_DAG_RUN_ID=scheduled__2024-07-27T20:00:00+00:00
+[2024-07-28, 21:00:09 BST] {{kubernetes_pod.py:587}} INFO - Creating pod some_example_task-28429696e6914baba536dd474ffd33c1 with labels: {'dag_id': 'some_example_dag', 'task_id': 'some_example_task', 'run_id': 'scheduled__2024-07-27T2000000000-a60a933d6', 'kubernetes_pod_operator': 'True', 'try_number': '1'}
+[2024-07-28, 21:00:11 BST] {{kubernetes_pod.py:380}} INFO - Found matching pod some_example_task-28429696e6914baba536dd474ffd33c1 with labels {'airflow_kpo_in_cluster': 'False', 'airflow_version': '2.4.3', 'app': 'some_example_dag', 'dag_id': 'some_example_dag', 'kubernetes_pod_operator': 'True', 'run_id': 'scheduled__2024-07-27T2000000000-a60a933d6', 'task_id': 'some_example_task', 'try_number': '1'}
+[2024-07-28, 21:00:11 BST] {{kubernetes_pod.py:381}} INFO - `try_number` of task_instance: 1
+[2024-07-28, 21:00:11 BST] {{kubernetes_pod.py:382}} INFO - `try_number` of pod: 1
+[2024-07-28, 21:00:11 BST] {{pod_manager.py:180}} WARNING - Pod not yet started: some_example_task-28429696e6914baba536dd474ffd33c1
+[2024-07-28, 21:00:12 BST] {{pod_manager.py:180}} WARNING - Pod not yet started: some_example_task-28429696e6914baba536dd474ffd33c1
+[2024-07-28, 21:00:13 BST] {{pod_manager.py:180}} WARNING - Pod not yet started: some_example_task-28429696e6914baba536dd474ffd33c1
+...
+```
+
+This is intimidating, but already gives us clues - the back end of the task gives us a number of warnings about the pod not yet having started. If the pod is able to start, you'll these warnings give way to any log info the pod is generating. However, in some cases, this step will just continue indefinitely, and not give way to the job itself. This will manifest as an error like:
+
+```
+[2024-07-16, 12:03:51 BST] {{pod_manager.py:180}} WARNING - Pod not yet started: some_example_task-28429696e6914baba536dd474ffd33c1
+[2024-07-16, 12:03:52 BST] {{pod_manager.py:180}} WARNING - Pod not yet started: some_example_task-28429696e6914baba536dd474ffd33c1
+[2024-07-16, 12:03:53 BST] {{pod_manager.py:180}} WARNING - Pod not yet started: some_example_task-28429696e6914baba536dd474ffd33c1
+[2024-07-16, 12:03:53 BST] {{kubernetes_pod.py:475}} INFO - Deleting pod: some_example_task-28429696e6914baba536dd474ffd33c1
+[2024-07-16, 12:03:53 BST] {{taskinstance.py:1851}} ERROR - Task failed with exception
+```
+
+99% of the time, when this occurs, it is due to the pod being unable to find the image it is trying to load. This happens for 2 reasons:
+- Users have published the image with a name (usually specifically the tag) that doesn't match the name their DAG is looking for.
+- Users are working with an image that hasn't been updated in a long time, and thus has not been updated to let our newer compute cluster activate it.
+
+Luckily for us, the solution is essentially the same in both cases. Look through their DAG code - in the opening few lines should be a reference to some combination of `REPO_NAME=`, `IMAGE_TAG=` and/or `IMAGE=` as a way of specifying their desired image. When you visit the image repo that they've shared with you, you can go to the 'releases' section of the github page to check the image tags they've released under. The most common form of this error is a dag specifying an `IMAGE_TAG=v0.0.X`, and then a github release under the tag `v.0.0.X`. The extra `.` in the later example will lead to the image failing to be retrieved, and the above error occuring. Less common, but also possible, are typos in the `IMAGE=` or `REPO_NAME=` arguments where used. Given the path to the image must be exact, any of these being wrong can lead to this error.
+
+### How to remediate
+Ask the user to either update their `IMAGE_TAG`, `REPO_NAME` or `IMAGE` arguements as appropriate via raising a PR in the Airflow repo. Once this update has been merged, it will be reflected within Airflow within 2 minutes or so, at which point the user can test and confirm they're able to run their job.
+
+### 4. Boto(core) and its many errors
+
+Assuming the pod was able to retrieve the image, it will then boot and start running some analytical code in R or Python. This means we are now in the realm of user-defined code, meaning fixes are largely on the user to carry out. However, the core of how most of these tasks carry out their work is via interacting with our AWS estate, and thus via Boto3/Botocore/AWSWrangler and other related packages for working AWS APIs. Where the error the pod throws mentions one of these by name, the error it throws will usually help you understand what might be required to fix it.
+
+
