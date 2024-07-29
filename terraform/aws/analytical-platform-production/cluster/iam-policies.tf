@@ -238,7 +238,7 @@ data "aws_iam_policy_document" "control_panel_api" {
       "lakeformation:RevokePermissions",
       "lakeformation:GetDataAccess"
     ]
-    resources = ["arn:aws:lakeformation:${data.aws_region.current.name}:${var.account_ids["analytical-platform-data-production"]}:*"]
+    resources = ["arn:aws:lakeformation:*:${var.account_ids["analytical-platform-data-production"]}:*"]
   }
 }
 
