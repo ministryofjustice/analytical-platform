@@ -146,7 +146,7 @@ The web page layout is configured using the config/tech-docs.yml file.
 The template can be configured in [config/tech-docs.yml](config/tech-docs.yml)
 
 Further configuration options are described on the Tech Docs Template
-website: [Global Configuration](https://github.com/alphagov/tdt-documentation/blob/main/config/tech-docs.yml).
+site: [Global Configuration](https://github.com/alphagov/tdt-documentation/blob/main/config/tech-docs.yml).
 
 ## Contributing
 
