@@ -1,7 +1,7 @@
 ---
 owner_slack: "#analytical-platform-notifications"
 title: ADR-009 Use separate AWS accounts for data domains and products
-last_reviewed_on: 2024-01-17
+last_reviewed_on: 2024-07-30
 review_in: 6 months
 ---
 
@@ -13,7 +13,7 @@ review_in: 6 months
 
 ## Context
 
-The Data Platform will need to provide a secure location to store and share data to those who have been granted access. The use of a multi-account strategy will give the Data Platform a scalable storage architecture which adheres to the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/) pillars on operational excellence, security, reliability, and cost optimisation.
+The Analytical Platform will need to provide a secure location to store and share data to those who have been granted access. The use of a multi-account strategy will give the Analytical Platform a scalable storage architecture which adheres to the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/) pillars on operational excellence, security, reliability, and cost optimisation.
 
 **/tldr**
 Our current architecture is overly permissive in design and makes understanding responsibility and cost difficult.
