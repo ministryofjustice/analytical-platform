@@ -509,7 +509,7 @@ data "aws_iam_policy_document" "control_panel_api" {
       "lakeformation:GrantPermissions",
       "lakeformation:RevokePermissions"
     ]
-    resources = ["arn:aws:lakeformation:${data.aws_region.current.name}:${var.account_ids["analytical-platform-development"]}:*"]
+    resources = ["arn:aws:lakeformation:*:${var.account_ids["analytical-platform-development"]}:*"]
   }
 }
 

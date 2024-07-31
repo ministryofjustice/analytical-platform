@@ -118,7 +118,8 @@ data "aws_iam_policy_document" "airflow_create_a_pipeline" {
       "s3:DeleteObjectVersion",
       "s3:PutObject",
       "s3:PutObjectAcl",
-      "s3:RestoreObject"
+      "s3:RestoreObject",
+      "s3:GetObjectAttributes"
     ]
     resources = [
       "arn:aws:s3:::alpha-hmcts-de-testing-sandbox",
@@ -146,7 +147,7 @@ module "airflow_create_a_pipeline_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.41.0"
+  version = "5.42.0"
 
   name_prefix = "github-airflow-create-a-pipeline"
 
