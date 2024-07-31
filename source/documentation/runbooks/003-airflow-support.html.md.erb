@@ -98,7 +98,7 @@ This is intimidating, but already gives us clues - the back end of the task give
 
 Luckily for us, the solution is essentially the same in both cases. Look through their DAG code - in the opening few lines should be a reference to some combination of `REPO_NAME=`, `IMAGE_TAG=` and/or `IMAGE=` as a way of specifying their desired image. When you visit the image repo that they've shared with you, you can go to the 'releases' section of the github page to check the image tags they've released under. The most common form of this error is a dag specifying an `IMAGE_TAG=v0.0.X`, and then a github release under the tag `v.0.0.X`. The extra `.` in the later example will lead to the image failing to be retrieved, and the above error occuring. Less common, but also possible, are typos in the `IMAGE=` or `REPO_NAME=` arguments where used. Given the path to the image must be exact, any of these being wrong can lead to this error.
 
-#### How to remediate
+**To Resolve:**
 Ask the user to either update their `IMAGE_TAG`, `REPO_NAME` or `IMAGE` arguements as appropriate via raising a PR in the Airflow repo. Once this update has been merged, it will be reflected within Airflow within 2 minutes or so, at which point the user can test and confirm they're able to run their job.
 
 ### 4. Boto(core) and its many errors
