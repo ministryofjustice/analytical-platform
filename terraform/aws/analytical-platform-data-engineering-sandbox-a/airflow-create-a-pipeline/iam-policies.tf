@@ -118,7 +118,8 @@ data "aws_iam_policy_document" "airflow_create_a_pipeline" {
       "s3:DeleteObjectVersion",
       "s3:PutObject",
       "s3:PutObjectAcl",
-      "s3:RestoreObject"
+      "s3:RestoreObject",
+      "s3:GetObjectAttributes"
     ]
     resources = [
       "arn:aws:s3:::alpha-hmcts-de-testing-sandbox",
