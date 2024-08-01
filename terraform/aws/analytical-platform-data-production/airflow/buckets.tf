@@ -145,4 +145,30 @@ data "aws_iam_policy_document" "allow_s3_sync_role_to_see_prod_bucket" {
       "${aws_s3_bucket.mojap_airflow_prod.arn}/*"
     ]
   }
+  statement {
+    sid = "DenyInsecureTransport"
+    actions = [
+      "s3:*"
+    ]
+
+    effect = "Deny"
+
+    principals {
+      type = "*"
+      identifiers = [
+        "*"
+      ]
+    }
+    resources = [
+      "arn:aws:s3:::mojap-airflow-prod/*",
+      "arn:aws:s3:::mojap-airflow-prod"
+    ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false"
+      ]
+    }
+  }
 }
