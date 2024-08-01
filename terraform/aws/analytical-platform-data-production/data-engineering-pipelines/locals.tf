@@ -257,6 +257,28 @@ locals {
         ignore_public_acls      = true
         restrict_public_buckets = true
       }
+      policy = jsonencode(
+        {
+          Statement = [
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Effect    = "Deny"
+              Principal = "*"
+              Resource = [
+                "arn:aws:s3:::moj-analytics-lookup-tables-dev/*",
+                "arn:aws:s3:::moj-analytics-lookup-tables-dev"
+              ]
+              Sid = "DenyInsecureTransport"
+            },
+          ]
+          Version = "2012-10-17"
+        }
+      )
     }
 
     "moj-analytics-lookup-tables-preprod" = {
@@ -406,6 +428,21 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-athena-query-dump/*"
               Sid      = "readwrite"
+            },
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Principal = "*"
+              Effect    = "Deny"
+              Resource = [
+                "arn:aws:s3:::mojap-athena-query-dump/*",
+                "arn:aws:s3:::mojap-athena-query-dump"
+              ]
+              Sid = "DenyInsecureTransport"
             },
           ]
           Version = "2012-10-17"
@@ -898,7 +935,22 @@ locals {
               Resource = [
                 "arn:aws:s3:::mojap-land/electronic_monitoring/load/*"
               ]
-            }
+            },
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Principal = "*"
+              Effect    = "Deny"
+              Resource = [
+                "arn:aws:s3:::mojap-land/*",
+                "arn:aws:s3:::mojap-land"
+              ]
+              Sid = "DenyInsecureTransport"
+            },
           ]
           Version = "2012-10-17"
         }
@@ -1150,7 +1202,22 @@ locals {
                 "arn:aws:s3:::mojap-land-dev",
                 "arn:aws:s3:::mojap-land-dev/electronic_monitoring/load/*"
               ]
-            }
+            },
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Principal = "*"
+              Effect    = "Deny"
+              Resource = [
+                "arn:aws:s3:::mojap-land-dev/*",
+                "arn:aws:s3:::mojap-land-dev"
+              ]
+              Sid = "DenyInsecureTransport"
+            },
           ]
           Version = "2012-10-17"
         }
@@ -1314,6 +1381,21 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-land-fail-dev/hmpps/oasys/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-land-fail-dev-hmpps-oasys"
+            },
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Principal = "*"
+              Effect    = "Deny"
+              Resource = [
+                "arn:aws:s3:::mojap-land-fail-dev/*",
+                "arn:aws:s3:::mojap-land-fail-dev"
+              ]
+              Sid = "DenyInsecureTransport"
             },
           ]
           Version = "2012-10-17"
@@ -1479,6 +1561,21 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-land-fail-preprod/hmpps/oasys/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-land-fail-preprod-hmpps-oasys"
+            },
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Principal = "*"
+              Effect    = "Deny"
+              Resource = [
+                "arn:aws:s3:::mojap-land-fail-preprod/*",
+                "arn:aws:s3::mojap-land-fail-preprod"
+              ]
+              Sid = "DenyInsecureTransport"
             },
           ]
           Version = "2012-10-17"
@@ -1687,6 +1784,21 @@ locals {
               Resource = "arn:aws:s3:::mojap-land-preprod/hmpps/oasys/*"
               Sid      = "GetDeleteAccess-mojap-land-preprod-hmpps-oasys"
             },
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Principal = "*"
+              Effect    = "Deny"
+              Resource = [
+                "arn:aws:s3:::mojap-land-preprod/*",
+                "arn:aws:s3:::mojap-land-preprod"
+              ]
+              Sid = "DenyInsecureTransport"
+            },
           ]
           Version = "2012-10-17"
         }
@@ -1794,7 +1906,22 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-metadata-dev/electronic_monitoring/*"
               Sid      = "PutAccess-mojap-metadata-dev-electronic-monitoring"
-            }
+            },
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Principal = "*"
+              Effect    = "Deny"
+              Resource = [
+                "arn:aws:s3:::mojap-metadata-dev/*",
+                "arn:aws:s3:::mojap-metadata-dev"
+              ]
+              Sid = "DenyInsecureTransport"
+            },
           ]
           Version = "2012-10-17"
         }
@@ -1881,6 +2008,21 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-metadata-preprod"
               Sid      = "ListBucketAccess-mojap-metadata-preprod"
+            },
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Principal = "*"
+              Effect    = "Deny"
+              Resource = [
+                "arn:aws:s3:::mojap-metadata-preprod/*",
+                "arn:aws:s3:::mojap-metadata-preprod"
+              ]
+              Sid = "DenyInsecureTransport"
             },
           ]
           Version = "2012-10-17"
@@ -1989,7 +2131,22 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-metadata-prod/electronic_monitoring/*"
               Sid      = "PutAccess-mojap-metadata-prod-electronic-monitoring"
-            }
+            },
+            {
+              Action = "s3:*"
+              Condition = {
+                Bool = {
+                  "aws:SecureTransport" = "false"
+                }
+              }
+              Principal = "*"
+              Effect    = "Deny"
+              Resource = [
+                "arn:aws:s3:::mojap-metadata-prod/*",
+                "arn:aws:s3:::mojap-metadata-prod"
+              ]
+              Sid = "DenyInsecureTransport"
+            },
           ]
           Version = "2012-10-17"
         }
