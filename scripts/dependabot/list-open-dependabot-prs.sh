@@ -52,21 +52,24 @@ echo -e "\n🤖 Open Dependabots \n"
 total_open_prs=0
 
 for REPO in "${REPOSITORIES[@]}"; do
-    echo "$REPO:"
 
     # Use gh cli to list pull requests with the label 'dependencies'
     pr_list=$(gh pr list --repo "ministryofjustice/$REPO" --label "dependencies" --state open --json number,title,url,createdAt -q '.[] | "\(.number) | \(.url) | \(.title)"')
 
     pr_count=$(echo "$pr_list" | grep -c " | ")
-    total_open_prs=$((total_open_prs + pr_count))
 
-    # Format the output to include clickable URLs
-    echo "$pr_list" | while IFS="|" read -r number url title; do
-        echo "- [PR#$number: $title]($url)"
-    done
+    # Only display repositories with open PRs
+    if [ "$pr_count" -gt 0 ]; then
+        echo "$REPO:"
 
-    echo ""
-    echo "--------------------------------------------------------------"
+        total_open_prs=$((total_open_prs + pr_count))
+
+        # Format the output to include clickable URLs
+        echo "$pr_list"
+
+        echo ""
+        echo "--------------------------------------------------------------"
+    fi
 done
 
 echo -e "📊 Total Open Dependabot PRs: $total_open_prs \n"
