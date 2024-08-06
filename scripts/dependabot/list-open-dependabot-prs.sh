@@ -8,11 +8,17 @@
 # 2. Authenticate the GitHub CLI with your GitHub account:
 #    gh auth login
 #
+# And either:
 # 3. Make the script executable:
 #    chmod +x list-open-dependabot-prs.sh
 #
 # 4. Run the script:
 #    ./list-open-dependabot-prs.sh
+#
+# Or
+# 3. Run the script:
+#    bash scripts/dependabot/list-open-dependabot-prs.sh
+#
 #
 # This script lists all open Dependabot pull requests for specified repositories in
 # the Ministry of Justice GitHub organization, formatting them as clickable URLs.
