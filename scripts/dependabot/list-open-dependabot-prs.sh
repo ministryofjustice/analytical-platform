@@ -1,24 +1,34 @@
 #!/usr/bin/env bash
 PAGER=""  # Disable pager for gh cli
 
-# Pulled from https://github.com/ministryofjustice/data-platform-github-access/blob/main/analytical-platform-repositories.tf
-REPOSITORIES=(
-    "ministryofjustice/analytical-platform"
-    "ministryofjustice/analytical-platform-runbooks"
-    "ministryofjustice/analytical-platform-user-guide"
-    "ministryofjustice/analytical-platform-dashboard"
-    "ministryofjustice/analytical-platform-visual-studio-code"
-    "ministryofjustice/analytical-platform-ingestion-scan"
-    "ministryofjustice/analytical-platform-ingestion-transfer"
-    "ministryofjustice/analytical-platform-ingestion-notify"
-    "ministryofjustice/analytical-platform-jml-report"
-    "ministryofjustice/analytical-platform-image-build-template"
-    "ministryofjustice/analytical-platform-actions-runner"
-    "ministryofjustice/analytical-platform-rshiny-open-source-base"
-    "ministryofjustice/analytical-platform-kubectl"
-    "ministryofjustice/analytical-platform-mlflow",
-    "ministryofjustice/analytical-platform-action-runner"
-)
+# Define the owner, repo, and path of the file
+REPO_OWNER="ministryofjustice"
+REPO_NAME="data-platform-github-access"
+FILE_PATH="analytical-platform-repositories.tf"
+
+# Function to fetch repository names from the file
+fetch_repositories() {
+    # Use gh to download the file content using the API
+    local repo_file
+    repo_file=$(gh api repos/$REPO_OWNER/$REPO_NAME/contents/$FILE_PATH --jq '.content' | base64 --decode)
+    if [ $? -ne 0 ]; then
+        echo "Failed to fetch the file using gh api. Have you ran gh auth login?"
+        exit 1
+    fi
+
+
+    # Extract repository names using awk
+    echo "$repo_file" | awk -F'"' '/^[[:space:]]*"[a-zA-Z0-9._-]+"[[:space:]]*=[[:space:]]*\{[[:space:]]*$/ {print $2}'
+}
+
+# Fetch repositories
+REPOSITORIES=($(fetch_repositories))
+
+# Debug: Output the list of repositories
+echo "Debug: List of repositories:"
+for repo in "${REPOSITORIES[@]}"; do
+    echo "$repo"
+done
 
 echo -e "🤖 Open Dependabots \n"
 
@@ -28,7 +38,7 @@ for REPO in "${REPOSITORIES[@]}"; do
     echo "$REPO:"
 
     # Use gh cli to list pull requests with the label 'dependencies'
-    pr_list=$(gh pr list --repo $REPO --label "dependencies" --state open --json number,title,url,createdAt -q '.[] | "\(.number) | \(.url) | \(.title)"')
+    pr_list=$(gh pr list --repo "ministryofjustice/$REPO" --label "dependencies" --state open --json number,title,url,createdAt -q '.[] | "\(.number) | \(.url) | \(.title)"')
 
     pr_count=$(echo "$pr_list" | grep -c " | ")
     total_open_prs=$((total_open_prs + pr_count))
