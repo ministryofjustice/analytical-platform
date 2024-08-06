@@ -9,7 +9,7 @@
 #    gh auth login
 #
 # 3. Make the script executable:
-#    chmod +x check_dependabot_prs.sh
+#    chmod +x list-open-dependabot-prs.sh
 #
 # 4. Run the script:
 #    ./list-open-dependabot-prs.sh
