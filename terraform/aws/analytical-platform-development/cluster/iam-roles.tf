@@ -91,7 +91,7 @@ module "iam_assumable_role_cert_manager" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.42.0"
+  version                       = "5.43.0"
   create_role                   = true
   role_name_prefix              = "cert_manager"
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
@@ -107,7 +107,7 @@ module "iam_assumable_role_cluster_autoscaler" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.42.0"
+  version                       = "5.43.0"
   create_role                   = true
   role_name_prefix              = substr("cluster-autoscaler-${module.eks.cluster_id}", 0, 31)
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
@@ -138,7 +138,7 @@ module "iam_assumable_role_external_dns" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.42.0"
+  version                       = "5.43.0"
   create_role                   = true
   role_name_prefix              = "external_dns"
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
@@ -154,7 +154,7 @@ module "iam_assumable_role_external_secrets" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.42.0"
+  version                       = "5.43.0"
   create_role                   = true
   role_name_prefix              = "external_secrets"
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
@@ -170,7 +170,7 @@ module "iam_assumable_role_jupyterhub_teama" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.42.0"
+  version                       = "5.43.0"
   create_role                   = true
   role_name                     = "jupyterhub-teama"
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
@@ -186,7 +186,7 @@ module "iam_assumable_role_prometheus_remote_ingest" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.42.0"
+  version                       = "5.43.0"
   create_role                   = true
   role_name                     = "prometheus_remote_ingest"
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
@@ -202,7 +202,7 @@ module "iam_assumable_role_superset" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.42.0"
+  version                       = "5.43.0"
   create_role                   = true
   role_name_prefix              = "superset"
   provider_url                  = "oidc.eks.eu-west-1.amazonaws.com/id/DDE7A0AC243F2E06BD539D26B3EC28A6"
@@ -218,7 +218,7 @@ module "iam_assumable_role_control_panel_api" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source           = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version          = "5.42.0"
+  version          = "5.43.0"
   create_role      = true
   role_name_prefix = "dev_control_panel_api"
   provider_url     = module.eks.cluster_oidc_issuer_url
