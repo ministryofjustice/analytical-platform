@@ -1281,7 +1281,7 @@ locals {
               ]
               Effect = "Allow"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-dev"
+                AWS = "AROASYCVJWSNN3REJ3AFS"
               }
               Resource = "arn:aws:s3:::mojap-land-fail-dev/hmpps/delius/*"
               Sid      = "WriteOnlyAccess-mojap-land-fail-dev-hmpps-delius"
@@ -1295,7 +1295,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-dev"
+                AWS = "AROASYCVJWSNN3REJ3AFS"
               }
               Resource = "arn:aws:s3:::mojap-land-fail-dev/hmpps/delius/*"
               Sid      = "112-mojap-land-fail-dev-hmpps-delius"
@@ -1309,7 +1309,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-dev"
+                AWS = "AROASYCVJWSNN3REJ3AFS"
               }
               Resource = "arn:aws:s3:::mojap-land-fail-dev/hmpps/delius/*"
               Sid      = "DenyIncorrectEncryptionHeader-mojap-land-fail-dev-hmpps-delius"
@@ -1323,7 +1323,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-dev"
+                AWS = "AROASYCVJWSNN3REJ3AFS"
               }
               Resource = "arn:aws:s3:::mojap-land-fail-dev/hmpps/delius/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-land-fail-dev-hmpps-delius"
@@ -1335,7 +1335,7 @@ locals {
               ]
               Effect = "Allow"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev"
+                AWS = "AROASYCVJWSNFCCBEO2AN"
               }
               Resource = "arn:aws:s3:::mojap-land-fail-dev/hmpps/oasys/*"
               Sid      = "WriteOnlyAccess-mojap-land-fail-dev-hmpps-oasys"
@@ -1349,7 +1349,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev"
+                AWS = "AROASYCVJWSNFCCBEO2AN"
               }
               Resource = "arn:aws:s3:::mojap-land-fail-dev/hmpps/oasys/*"
               Sid      = "112-mojap-land-fail-dev-hmpps-oasys"
@@ -1363,7 +1363,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev"
+                AWS = "AROASYCVJWSNFCCBEO2AN"
               }
               Resource = "arn:aws:s3:::mojap-land-fail-dev/hmpps/oasys/*"
               Sid      = "DenyIncorrectEncryptionHeader-mojap-land-fail-dev-hmpps-oasys"
@@ -1377,7 +1377,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev"
+                AWS = "AROASYCVJWSNFCCBEO2AN"
               }
               Resource = "arn:aws:s3:::mojap-land-fail-dev/hmpps/oasys/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-land-fail-dev-hmpps-oasys"
