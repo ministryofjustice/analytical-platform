@@ -1,4 +1,23 @@
 #!/usr/bin/env bash
+
+# Instructions:
+# 1. Make sure you have the GitHub CLI (gh) installed on your Mac.
+#    You can install it via Homebrew using the following command:
+#    brew install gh
+#
+# 2. Authenticate the GitHub CLI with your GitHub account:
+#    gh auth login
+#
+#
+# 4. Make the script executable:
+#    chmod +x check_dependabot_prs.sh
+#
+# 5. Run the script:
+#    ./check_dependabot_prs.sh
+#
+# This script lists all open Dependabot pull requests for specified repositories in
+# the Ministry of Justice GitHub organization, formatting them as clickable URLs.
+
 PAGER=""  # Disable pager for gh cli
 
 # Define the owner, repo, and path of the file
@@ -12,10 +31,9 @@ fetch_repositories() {
     local repo_file
     repo_file=$(gh api repos/$REPO_OWNER/$REPO_NAME/contents/$FILE_PATH --jq '.content' | base64 --decode)
     if [ $? -ne 0 ]; then
-        echo "Failed to fetch the file using gh api. Have you ran gh auth login?"
+        echo "Failed to fetch the file using gh api. Have you run gh auth login?"
         exit 1
     fi
-
 
     # Extract repository names using awk
     echo "$repo_file" | awk -F'"' '/^[[:space:]]*"[a-zA-Z0-9._-]+"[[:space:]]*=[[:space:]]*\{[[:space:]]*$/ {print $2}'
@@ -30,7 +48,7 @@ for repo in "${REPOSITORIES[@]}"; do
     echo "$repo"
 done
 
-echo -e "🤖 Open Dependabots \n"
+echo -e "\n🤖 Open Dependabots \n"
 
 total_open_prs=0
 
@@ -42,7 +60,12 @@ for REPO in "${REPOSITORIES[@]}"; do
 
     pr_count=$(echo "$pr_list" | grep -c " | ")
     total_open_prs=$((total_open_prs + pr_count))
-    echo "$pr_list"
+
+    # Format the output to include clickable URLs
+    echo "$pr_list" | while IFS="|" read -r number url title; do
+        echo "- [PR#$number: $title]($url)"
+    done
+
     echo ""
     echo "--------------------------------------------------------------"
 done
