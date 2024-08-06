@@ -9,10 +9,10 @@
 #    gh auth login
 #
 #
-# 4. Make the script executable:
+# 3. Make the script executable:
 #    chmod +x check_dependabot_prs.sh
 #
-# 5. Run the script:
+# 4. Run the script:
 #    ./check_dependabot_prs.sh
 #
 # This script lists all open Dependabot pull requests for specified repositories in
