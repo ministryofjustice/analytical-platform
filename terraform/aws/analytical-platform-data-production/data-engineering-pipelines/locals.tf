@@ -1573,7 +1573,7 @@ locals {
               Effect    = "Deny"
               Resource = [
                 "arn:aws:s3:::mojap-land-fail-preprod/*",
-                "arn:aws:s3::mojap-land-fail-preprod"
+                "arn:aws:s3:::mojap-land-fail-preprod"
               ]
               Sid = "DenyInsecureTransport"
             },
