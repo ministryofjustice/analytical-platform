@@ -19,20 +19,22 @@ body:
     validations:
       required: true
 
-  - type: input
+  - type: textarea
     id: datasets
     attributes:
       label: Dataset(s) to Visualise
       description: List the datasets you are looking to visualise during the trial.
-      placeholder: Dataset 1, Dataset 2, etc.
+      placeholder: |
+      Dataset 1 - Glue Reference/Athena Resource, 
+      Dataset 2 - Glue Reference/Athena Resource, etc.
     validations:
       required: true
 
   - type: dropdown
     id: admin_status
     attributes:
-      label: Admin of the Data Source(s)
-      description: Indicate if you have administrative access to the data sources.
+      label: Are you an Analytical Platform Admin of the S3 Data Warehouse for the Datasource(s)?
+      description: Indicate if you're the Admin for these datasources in the Control Panel
       options:
         - "Yes"
         - "No"
@@ -45,12 +47,12 @@ body:
       label: Audience Details
       description: |
         Describe who will be viewing or benefiting from your visualisations. Consider the following suggested audience types:
+      placeholder: |
         - Other AP users
         - MOJ staff
         - External partners
         - Public
         - Other (please specify)
-      placeholder: Provide details about your audience and their needs...
     validations:
       required: true
 
