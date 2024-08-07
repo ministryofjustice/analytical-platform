@@ -8,7 +8,9 @@ body:
       value: |
         ## QuickSight Trial Interest Form
 
-        We need your help! We're looking for participants to join our QuickSight trial. Please provide the following information so we can understand your use case and data needs. Your participation will be invaluable in helping us improve our offerings.
+        We need your help! We're looking for participants to join our QuickSight trial. 
+        Please provide the following information so we can understand your use case and data needs. 
+        Your participation will be invaluable in helping us improve our offerings.
 
   - type: textarea
     id: use_case
@@ -25,7 +27,7 @@ body:
       label: Dataset(s) to Visualise
       description: List the datasets you are looking to visualise during the trial.
       placeholder: |
-        Dataset 1 - Glue Reference/Athena Resource, 
+        Dataset 1 - Glue Reference/Athena Resource,
         Dataset 2 - Glue Reference/Athena Resource, etc.
     validations:
       required: true
@@ -46,7 +48,8 @@ body:
     attributes:
       label: Audience Details
       description: |
-        Describe who will be viewing or benefiting from your visualisations. Consider the following suggested audience types:
+        Describe who will be viewing or benefiting from your visualisations. 
+        Consider the following suggested audience types:
       placeholder: |
         - Other AP users
         - MOJ staff
