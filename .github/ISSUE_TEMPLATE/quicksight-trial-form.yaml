@@ -1,3 +1,4 @@
+---
 name: 📊 QuickSight Trial
 description: Share your use case and data needs for the Analytical Platform QuickSight trial.
 title: "📊 QuickSight Trial Information: [Your Details]"
@@ -8,8 +9,8 @@ body:
       value: |
         ## QuickSight Trial Interest Form
 
-        We need your help! We're looking for participants to join our QuickSight trial. 
-        Please provide the following information so we can understand your use case and data needs. 
+        We need your help! We're looking for participants to join our QuickSight trial.
+        Please provide the following information so we can understand your use case and data needs.
         Your participation will be invaluable in helping us improve our offerings.
 
   - type: textarea
@@ -48,7 +49,7 @@ body:
     attributes:
       label: Audience Details
       description: |
-        Describe who will be viewing or benefiting from your visualisations. 
+        Describe who will be viewing or benefiting from your visualisations.
       placeholder: |
         Consider the following suggested audience types:
         - Other AP users
