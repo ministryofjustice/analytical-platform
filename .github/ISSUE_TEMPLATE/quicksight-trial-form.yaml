@@ -49,8 +49,8 @@ body:
       label: Audience Details
       description: |
         Describe who will be viewing or benefiting from your visualisations. 
-        Consider the following suggested audience types:
       placeholder: |
+        Consider the following suggested audience types:
         - Other AP users
         - MOJ staff
         - External partners
