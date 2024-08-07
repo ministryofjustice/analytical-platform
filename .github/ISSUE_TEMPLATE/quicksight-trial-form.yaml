@@ -25,8 +25,8 @@ body:
       label: Dataset(s) to Visualise
       description: List the datasets you are looking to visualise during the trial.
       placeholder: |
-      Dataset 1 - Glue Reference/Athena Resource, 
-      Dataset 2 - Glue Reference/Athena Resource, etc.
+        Dataset 1 - Glue Reference/Athena Resource, 
+        Dataset 2 - Glue Reference/Athena Resource, etc.
     validations:
       required: true
 
