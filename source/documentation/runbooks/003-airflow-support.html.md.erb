@@ -173,4 +173,91 @@ Once you have verified the existence of `reason: OOMKilled` in the log file, ask
 
 ## Advanced Troubleshooting
 
-TODO: Write up THE PHANTOM ZONE (harder troubleshooting for maniacs)
+Welcome to the area I colloquirally call the Phantom Zone. Much like the comic books, it's a strange space that sits outside natural space or time. This mostly just means you're seeing some really weird behaviour from your pods, and also occasionally General Zod. Examples include:
+
+- Images that can't be retrieved for no clear reason.
+- Pods That won't die (Zombie Pods!)
+- Pods that refuse to output any useful logging
+- CrashLoopBackoff Pods
+- Kyverno Issues
+
+Your first step here is to authenticate with the cluster - the Analytical Platform dev container has all our cluster contexts pre-programmed. The relevant ones (for now) are `airflow-dev`, `airflow-prod`, `analytical-platform-compute-test`, and `analytical-platform-compute-production`. Select the one the job is running on, and uncomment it out. Ensure you have `aws-vault`-ed in, and then you should be ready to work with the cluster:
+
+```
+kubectl get pods -n airflow
+```
+
+Will display all currently running airflow pods in the environment. You may wish to use
+
+```
+kubectl get pods -A
+```
+
+so that you can see the status of other cluster components (autoscaler, kyverno, etc.). If any are in states other than `RUNNING`, this is likely an indicator that something is not right. To audit the logs of an individual pod, you can run
+
+```
+kubectl get event -n airflow --field-selector involvedObject.name=<POD_NAME>
+```
+
+Where `POD_NAME` can be taken from either the airflow logs, or by finding the pod while it is running as above. If the pod has successfully loaded the image it’s using, you’ll see the following sequence of states:
+
+`scheduled` → `pulling` → `pulled` → `created` → `started`
+
+If you see anything but this, it means your pod failed during the start process. Common ways this can happen are:
+
+- Image pull failures - Make sure their build-and-push-to-ECR action is working correctly, and matches their DAG.
+
+- Scheduling issues - if a pod doesn’t have the correct taints/affinities this can cause the pod to never be assigned to a node. Make sure they're properly importing either our standard taints and affinities, or our new `karpenter` compute classes
+
+- Network issues - Occasionally, if the node we’re on is being thrashed and is degraded in performance, we should be syphoned to a new one - however that can be problematic for any tasks still in progress on the old node. Usually fixed by just re-running.
+
+If the pod looks like you’re booting into the image fine, and the logs have not given you anything useful for you diagnostically, then it’s time for us to move onto more advanced troubleshooting.
+
+### Non-Delete Operator Pod (and it's cousin, the Zombie Pod)
+
+If the pod is simply dying too quickly for you to diagnose it, you can force it to stay up by changing the definition of the DAG to include `is_delete_operator_pod = 'false'`. (Note: You will have to do this by downloading the python file and re-uploading the changed one to the bucket in S3, as the Airflow repo's validation will reject non-delete pods.) Having done this, the pod will on it's next run stay running after it is 'done'. You can exec into the pod:
+
+```
+kubectl exec -i -t <container_name> -n airflow -- /bin/bash
+```
+
+This will get you into the bash terminal of the pods, and allow you to explore for things like crashlogs that might have been left on the pod after the task failed. **Please make sure you delete the pod when it's done with:**
+
+```
+kubectl delete pod <container_name> -n airflow
+```
+
+This is also the solution to **zombie pods**, which are pods that occasionally get stuck shutting down. These aren't an issue usually, as the node drains mean these are killed naturally, but should still be killed off when noticed. These will be pods with incredibly long durations stuck in a state other than `RUNNING`.
+
+### CrashLoopBackoff
+
+These are broadly not our problem, as they usually indicate an issue with the image the pod is using. However, should this occur with one of the add-on pods (ClusterAutoScaler etc.), we should try and upgrade the version of the add-on ASAP.
+
+### Solving Kyverno Issues
+
+If users show up at the channel with errors of the form
+
+
+```
+"message":"Internal error occurred: failed calling webhook \"validate.kyverno.svc-fail\":
+failed to call webhook: Post \"https://kyverno-svc.kyverno.svc:443/validate?timeout=10s\":
+no endpoints available for service \"kyverno-svc\""
+```
+
+This means Kyverno has got itself into a state where it is blocking the cluster from making a node-group transition. It is not clear what causes this to happen, but our best guess is that if the old cluster begins shutting down before the new kyverno instance can start, we see this behaviour. To double check this, you can run
+
+
+```
+kubectl get pods -A
+```
+
+Doing so should list multiple pods in the kyverno namespace, at least one of which will be stuck `TERMINATING`
+
+Fixing this is a PRIORITY, as it will block ALL airflow jobs. Thankfully, the fix is easy. Assuming you are connected to the cluster with Kubectl (as per above instructions), you can run:
+
+```
+kubectl delete validatingwebhookconfiguration kyverno-resource-validating-webhook-cfg
+kubectl delete  mutatingwebhookconfiguration kyverno-resource-mutating-webhook-cfg
+````
+
+These two commands will cause kyverno to regenerate the two webhooks listed, hopefully unblocking the state.
