@@ -1,5 +1,4 @@
 name: 📊 QuickSight Trial
-about: 📊 QuickSight Trial Information Form
 description: Share your use case and data needs for the Analytical Platform QuickSight trial.
 title: "📊 QuickSight Trial Information: [Your Details]"
 labels: ["quicksight"]
@@ -35,8 +34,8 @@ body:
       label: Admin of the Data Source(s)
       description: Indicate if you have administrative access to the data sources.
       options:
-        - Yes
-        - No
+        - "Yes"
+        - "No"
     validations:
       required: true
 
