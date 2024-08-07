@@ -1,9 +1,8 @@
 name: 📊 QuickSight Trial
 about: 📊 QuickSight Trial Information Form
 description: Share your use case and data needs for the Analytical Platform QuickSight trial.
-title: 📊 QuickSight Trial Information: <Your Details>
-labels: 
-  - quicksight
+title: "📊 QuickSight Trial Information: [Your Details]"
+labels: ["quicksight"]
 body:
   - type: markdown
     attributes:
