@@ -1,0 +1,63 @@
+name: 📊 QuickSight Trial
+description: Share your use case and data needs for the Analytical Platform QuickSight trial.
+title: 📊 'QuickSight Trial Information: [Your Use Case]'
+labels: 
+  - quicksight
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## QuickSight Trial Interest Form
+
+        We need your help! We're looking for participants to join our QuickSight trial. Please provide the following information so we can understand your use case and data needs. Your participation will be invaluable in helping us improve our offerings.
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use Case Description
+      description: Briefly explain how you plan to use QuickSight and what you hope to achieve with it.
+      placeholder: Describe your use case...
+    validations:
+      required: true
+
+  - type: input
+    id: datasets
+    attributes:
+      label: Dataset(s) to Visualise
+      description: List the datasets you are looking to visualise during the trial.
+      placeholder: Dataset 1, Dataset 2, etc.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: admin_status
+    attributes:
+      label: Admin of the Data Source(s)
+      description: Indicate if you have administrative access to the data sources.
+      options:
+        - Yes
+        - No
+    validations:
+      required: true
+
+  - type: textarea
+    id: audience_details
+    attributes:
+      label: Audience Details
+      description: |
+        Describe who will be viewing or benefiting from your visualisations. Consider the following suggested audience types:
+        - Other AP users
+        - MOJ staff
+        - External partners
+        - Public
+        - Other (please specify)
+      placeholder: Provide details about your audience and their needs...
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: Additional Information
+      description: (Optional) Provide any additional information that might be helpful.
+      placeholder: Any other details...
