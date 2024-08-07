@@ -46,3 +46,22 @@ resource "aws_iam_policy" "quicksight_author" {
   name   = "dev-quicksight-author-access"
   policy = data.aws_iam_policy_document.quicksight_author.json
 }
+
+#trivy:ignore:aws-iam-no-policy-wildcards
+data "aws_iam_policy_document" "lake_formation_data_access" {
+  #checkov:skip=CKV_AWS_111: This is a service policy
+  #checkov:skip=CKV_AWS_356: Needs to access multiple resources
+  #checkov:skip=CKV_AWS_109: Needs to access multiple resources
+
+  statement {
+    sid       = "LakeFormationDataAccessAdditional"
+    effect    = "Allow"
+    actions   = ["lakeformation:GetDataAccess"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "lake_formation_data_access" {
+  name   = "lake-formation-data-access-additional"
+  policy = data.aws_iam_policy_document.lake_formation_data_access.json
+}
