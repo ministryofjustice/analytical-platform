@@ -40,7 +40,7 @@ fetch_repositories() {
         exit 1
     fi
     # Extract repository names using awk
-    echo "$repo_file" | awk -F'"' '/^[[:space:]]*"[a-zA-Z0-9._-]+"[[:space:]]*=[[:space:]]*\{[[:space:]]*$/ {print $2}' | | grep -Ev '^(analytics|ap-)'
+    echo "$repo_file" | awk -F'"' '/^[[:space:]]*"[a-zA-Z0-9._-]+"[[:space:]]*=[[:space:]]*\{[[:space:]]*$/ {print $2}' | grep -Ev '^(analytics|ap-)'
 }
 
 # Fetch repositories
