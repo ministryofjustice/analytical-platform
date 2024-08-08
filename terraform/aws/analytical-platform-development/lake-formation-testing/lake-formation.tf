@@ -26,17 +26,8 @@ module "lake_formation" {
     }
   ]
 
-  # tables_to_share = [{
-  #   database    = ""
-  #   name        = ""
-  #   target_db   = ""
-  #   target_tbl  = ""
-  #   permissions = ["SELECT", "DESCRIBE"]
-  # }]
-
-
   providers = {
-    aws.source = aws # eu-west-1 - why is this eu-west-1?
-    aws.target = aws.analytical-platform-data-development-eu-west-2
+    aws.source = aws                                                # eu-west-1 source account
+    aws.target = aws.analytical-platform-data-development-eu-west-2 # eu-west-2 target account
   }
 }
