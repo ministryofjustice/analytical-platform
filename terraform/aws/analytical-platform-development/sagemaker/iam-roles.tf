@@ -19,3 +19,8 @@ resource "aws_iam_role_policy_attachment" "sagemaker_full_access_studio" {
   role       = aws_iam_role.sagemaker_studio_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSageMakerFullAccess"
 }
+
+resource "aws_iam_role_policy_attachment" "sagemaker_lake_formation_data_access" {
+  role       = aws_iam_role.sagemaker_studio_execution_role.name
+  policy_arn = data.aws_iam_policy.lake_formation_data_access.arn
+}
