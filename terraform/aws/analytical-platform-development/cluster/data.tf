@@ -75,3 +75,7 @@ data "aws_nat_gateways" "nat_gateways" {
     values = ["available"]
   }
 }
+
+data "aws_iam_policy" "lake_formation_data_access" {
+  name = "lake-formation-data-access-additional"
+}
