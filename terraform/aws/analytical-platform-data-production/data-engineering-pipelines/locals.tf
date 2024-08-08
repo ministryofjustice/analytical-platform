@@ -400,36 +400,6 @@ locals {
         {
           Statement = [
             {
-              Action = [
-                "s3:ListBucket",
-                "s3:GetBucketLocation",
-              ]
-              Effect = "Allow"
-              Principal = {
-                AWS = "AROA27HJSWAHEPTTLIWSO"
-              }
-              Resource = "arn:aws:s3:::mojap-athena-query-dump"
-              Sid      = "list"
-            },
-            {
-              Action = [
-                "s3:GetObject",
-                "s3:GetObjectAcl",
-                "s3:GetObjectVersion",
-                "s3:DeleteObject",
-                "s3:DeleteObjectVersion",
-                "s3:PutObject",
-                "s3:PutObjectAcl",
-                "s3:RestoreObject",
-              ]
-              Effect = "Allow"
-              Principal = {
-                AWS = "AROA27HJSWAHEPTTLIWSO"
-              }
-              Resource = "arn:aws:s3:::mojap-athena-query-dump/*"
-              Sid      = "readwrite"
-            },
-            {
               Action = "s3:*"
               Condition = {
                 Bool = {
