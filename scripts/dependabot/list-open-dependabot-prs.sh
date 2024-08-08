@@ -21,30 +21,35 @@
 #
 #
 # This script lists all open Dependabot pull requests for specified repositories in
-# the Ministry of Justice GitHub organization
+# the Ministry of Justice GitHub organization, formatting them as clickable URLs.
 
 PAGER=""  # Disable pager for gh cli
 
-# Define the owner, repo, and path of the file
+# Define the owner, repo, and paths of the files
 REPO_OWNER="ministryofjustice"
 REPO_NAME="data-platform-github-access"
-FILE_PATH="analytical-platform-repositories.tf"
+ANALYTICAL_FILE_PATH="analytical-platform-repositories.tf"
+DATA_PLATFORM_FILE_PATH="data-platform-repositories.tf"
 
-# Function to fetch repository names from the file
+# Function to fetch repository names from a file
 fetch_repositories() {
+    local file_path=$1
+
     # Use gh to download the file content using the API
     local repo_file
-    repo_file=$(gh api repos/$REPO_OWNER/$REPO_NAME/contents/$FILE_PATH --jq '.content' | base64 --decode)
+    repo_file=$(gh api repos/$REPO_OWNER/$REPO_NAME/contents/$file_path --jq '.content' | base64 --decode)
     if [ $? -ne 0 ]; then
         echo "Failed to fetch the file using gh api. Have you run gh auth login?"
         exit 1
     fi
+
     # Extract repository names using awk
     echo "$repo_file" | awk -F'"' '/^[[:space:]]*"[a-zA-Z0-9._-]+"[[:space:]]*=[[:space:]]*\{[[:space:]]*$/ {print $2}' | grep -Ev '^(analytics|ap-)'
 }
 
-# Fetch repositories
-REPOSITORIES=($(fetch_repositories))
+# Fetch repositories from both files
+REPOSITORIES=($(fetch_repositories $ANALYTICAL_FILE_PATH))
+REPOSITORIES+=($(fetch_repositories $DATA_PLATFORM_FILE_PATH))
 
 # Debug: Output the list of repositories
 echo "Debug: List of repositories:"
