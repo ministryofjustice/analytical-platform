@@ -21,7 +21,7 @@
 #
 #
 # This script lists all open Dependabot pull requests for specified repositories in
-# the Ministry of Justice GitHub organization, formatting them as clickable URLs.
+# the Ministry of Justice GitHub organization
 
 PAGER=""  # Disable pager for gh cli
 
@@ -39,9 +39,8 @@ fetch_repositories() {
         echo "Failed to fetch the file using gh api. Have you run gh auth login?"
         exit 1
     fi
-
     # Extract repository names using awk
-    echo "$repo_file" | awk -F'"' '/^[[:space:]]*"[a-zA-Z0-9._-]+"[[:space:]]*=[[:space:]]*\{[[:space:]]*$/ {print $2}'
+    echo "$repo_file" | awk -F'"' '/^[[:space:]]*"[a-zA-Z0-9._-]+"[[:space:]]*=[[:space:]]*\{[[:space:]]*$/ {print $2}' | grep -v '^analytics'
 }
 
 # Fetch repositories
@@ -71,7 +70,9 @@ for REPO in "${REPOSITORIES[@]}"; do
         total_open_prs=$((total_open_prs + pr_count))
 
         # Format the output to include clickable URLs
-        echo "$pr_list"
+        echo "$pr_list" | while IFS="|" read -r number url title; do
+            echo "- [PR#$number: $title]($url)"
+        done
 
         echo ""
         echo "--------------------------------------------------------------"
