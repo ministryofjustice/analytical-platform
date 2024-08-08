@@ -16,6 +16,8 @@ terraform {
   required_version = "~> 1.5"
 }
 
+### SOURCE ACCOUNT - Used in Cross-Account / Cross-Region Testing
+
 provider "aws" {
   region = "eu-west-1"
   assume_role {
@@ -26,7 +28,7 @@ provider "aws" {
   }
 }
 
-### SOURCE ACCOUNT ###
+### SOURCE ACCOUNT
 
 provider "aws" {
   alias  = "analytical-platform-development-eu-west-2"
@@ -39,7 +41,7 @@ provider "aws" {
   }
 }
 
-### TARGET ACCOUNT ###
+### TARGET ACCOUNT
 
 provider "aws" {
   alias  = "analytical-platform-data-development-eu-west-2"
