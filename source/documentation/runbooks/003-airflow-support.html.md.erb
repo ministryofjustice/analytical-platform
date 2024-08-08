@@ -7,7 +7,7 @@ review_in: 1 months
 
 # <%= current_page.data.title %>
 
-This is here to help you get to the bottom of what's wrong in any given Airflow Support Issue. This will take you through what information you need from the customer, what information you need to gather behind the scenes to know how to help any given customer.
+This is here to help you get to the bottom of what's wrong in any given Airflow Support Issue. This will take you through what information you need from the customer, what information you need to gather behind the scenes yourself, to know how to help any given customer.
 
 ## Table of Contents
 
@@ -43,7 +43,7 @@ Having idenified the DAG in question, we now need to understand the nature of th
 
 ![Airflow DAG UI](airflow-ui-example.png)
 
-In this view, the large bars represent the overall status of the DAG - did all tasks pass, and how long did the tasks take overall. Each indivdual square beneath the bar chart represents the individual tasks of that run. Their colour indicates their current status (passed, failed, running, etc.) clicking on one of these squares will lead you to the log for that specific task/run combo. Ensure you have access to the logs before moving on, as these will be critical to our ability to diagnose the issue. Please note, that due to the large amount of logs this service generates, logs are quickly shifted to slower storage. Any logs older than approx 24 hours will take some time (up to 2-3 minutes in the worst case) to load. Please be patient, and they will load eventually!
+In this view, the large bars represent the overall status of the DAG - did all tasks pass, and how long did the tasks take overall. Each indivdual square beneath the bar chart represents the individual tasks of that run. Their colour indicates their current status (passed, failed, running, etc.) clicking on one of these squares will lead you to the log for that specific task/run combo. Ensure you have access to the logs before moving on, as these will be critical to our ability to diagnose the issue. Please note, that due to the large amount of logs this service generates, logs are quickly shifted to slower storage. Any logs older than approx 24 hours will take some time (up to 2-3 minutes in the worst case) to load. Please be patient, and they will load eventually! Sometimes, if a log is taking overly long, you may want to go into the `airflow-<env>-logs` log group in CloudWatch, and search for the log by name. It will always start with `dag_id=name_of_group.dag_name/run_id=manual_20XX_0X_0X` - you can cross reference the run type (`manual` vs `scheduled`) and the timestamp to ensure you've located the right log. These will sometimes load faster than retrieving the logs through the UI, particularly for older logs.
 
 ### 3. Analysing the log - pod startup
 
@@ -105,7 +105,7 @@ Ask the user to either update their `IMAGE_TAG`, `REPO_NAME` or `IMAGE` arguemen
 
 Assuming the pod was able to retrieve the image, it will then boot and start running some analytical code in R or Python. This means we are now in the realm of user-defined code, meaning fixes are largely on the user to carry out. However, the core of how most of these tasks carry out their work is via interacting with our AWS estate, and thus via Boto3/Botocore/AWSWrangler and other related packages for working AWS APIs. Where the error the pod throws mentions one of these by name, the error it throws will usually help you understand what might be required to fix it. Some examples of botocore errors include:
 
-Cross-region errors:
+**Cross-region errors:**
 ```
 botocore.errorfactory.InvalidRequestException: An error occurred (InvalidRequestException) when calling the StartQueryExecution operation: The S3 location provided to save your query results is invalid. Please check your S3 location is correct and is in the same region and try again. If you continue to see the issue, contact customer support for further assistance.
 ```
@@ -113,7 +113,7 @@ botocore.errorfactory.InvalidRequestException: An error occurred (InvalidRequest
 ```
 botocore.exceptions.ClientError: An error occurred (AccessDenied) when calling the CopyObject operation: VPC endpoints do not support cross-region requests
 ```
-Access Denied Errors:
+**Access Denied Errors:**
 ```
 botocore.exceptions.ClientError: An error occurred (AccessDenied) when calling the CopyObject operation: No identity-based policy allows the S3:CopyObject action
 ```
@@ -261,3 +261,7 @@ kubectl delete  mutatingwebhookconfiguration kyverno-resource-mutating-webhook-c
 ````
 
 These two commands will cause kyverno to regenerate the two webhooks listed, hopefully unblocking the state.
+
+## Contact Info
+
+The Analytical Platform team can be contacted by [raising a support issue](https://github.com/ministryofjustice/data-platform-support/issues/new/choose). If you're reading this, you're probably a team member though, so just ask someone in the slack channel for help if there's an issue you get stuck on.
