@@ -17,7 +17,7 @@ module "cjs_dashboard_app_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.41.0"
+  version = "5.43.0"
 
   name_prefix = "github-cjs-dashboard-app"
 

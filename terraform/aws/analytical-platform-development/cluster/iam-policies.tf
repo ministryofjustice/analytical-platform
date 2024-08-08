@@ -507,7 +507,8 @@ data "aws_iam_policy_document" "control_panel_api" {
     actions = [
       "lakeformation:ListPermissions",
       "lakeformation:GrantPermissions",
-      "lakeformation:RevokePermissions"
+      "lakeformation:RevokePermissions",
+      "lakeformation:GetDataAccess"
     ]
     resources = ["arn:aws:lakeformation:*:${var.account_ids["analytical-platform-development"]}:*"]
   }
