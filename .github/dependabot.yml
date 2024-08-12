@@ -62,6 +62,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/rds-s3-exports"
       - "terraform/aws/analytical-platform-data-production/s3-glue-crawler"
       - "terraform/aws/analytical-platform-data-production/tooling-iam"
+      - "terraform/aws/analytical-platform-development/airflow"
       - "terraform/aws/analytical-platform-development/auth0-log-streams"
       - "terraform/aws/analytical-platform-development/cluster"
       - "terraform/aws/analytical-platform-development/control-panel-message-broker"
