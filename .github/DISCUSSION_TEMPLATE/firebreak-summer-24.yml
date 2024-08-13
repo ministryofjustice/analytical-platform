@@ -1,9 +1,6 @@
 ---
 title: "Firebreak Summer 2024 Idea Discussion"
 body:
-- type: textarea
-  attributes:
-    label: "What's wrong?"
 - type: markdown
   attributes:
     value: "# Summer 2024 Firebreak Idea Form"
