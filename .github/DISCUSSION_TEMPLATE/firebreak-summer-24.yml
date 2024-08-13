@@ -1,21 +1,26 @@
-title: "Firebreak Summer 2024 Idea Discussion"
+---
+title: "Firebreak Summer 2024 Idea [Title]"
 body:
   - type: markdown
     attributes:
-      value: "## Idea Description\nPlease provide a clear and concise description of your idea."
-
-  - type: markdown
+      value: Summer 2024 Firebreak Idea Form
+  - type: textarea
     attributes:
-      value: "## Why Should We Do This\nExplain why this idea is valuable and should be implemented."
-
-  - type: markdown
+      label: Idea Description
+      description: "Please provide a clear and concise description of your idea."
+  - type: textarea
     attributes:
-      value: "## Definition of Done\nWhat criteria should be met for this idea to be considered complete?"
-
-  - type: markdown
+      label: Why Should We Do This
+      description: "Explain why this idea is valuable and should be implemented."
+  - type: textarea
     attributes:
-      value: "## What skills do we need?\nList the skills or expertise required to implement this idea."
-
-  - type: markdown
+      label: Definition of Done
+      description: "What criteria should be met for this idea to be considered complete?"
+  - type: textarea
     attributes:
-      value: "## Notes\nInclude any additional information or context that would be helpful."
+      label: What skills do we need?
+      description: "List the skills or expertise required to implement this idea."
+  - type: textarea
+    attributes:
+      label: Notes
+      description: "Include any additional information or context that would be helpful."
