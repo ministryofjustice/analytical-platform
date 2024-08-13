@@ -17,6 +17,7 @@ locals {
     "airflow-prod-corp" = {
       name          = "airflow-prod-workgroup-corp"
       business_unit = "CORP"
+    }
   }
 }
 
