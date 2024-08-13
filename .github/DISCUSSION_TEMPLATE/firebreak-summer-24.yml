@@ -1,21 +1,21 @@
 title: "Firebreak Summer 2024 Idea Discussion"
 body:
-  - type: markdown
+  - type: textarea
     attributes:
       value: "## Idea Description\nPlease provide a clear and concise description of your idea."
 
-  - type: markdown
+  - type: textarea
     attributes:
-      value: "## Why Should We Do This\nExplain why this idea is valuable and should be implemented."
+      label: "## Why Should We Do This\nExplain why this idea is valuable and should be implemented."
 
-  - type: markdown
+  - type: textarea
     attributes:
-      value: "## Definition of Done\nWhat criteria should be met for this idea to be considered complete?"
+      label: "## Definition of Done\nWhat criteria should be met for this idea to be considered complete?"
 
-  - type: markdown
+  - type: textarea
     attributes:
-      value: "## What skills do we need?\nList the skills or expertise required to implement this idea."
+      label: "## What skills do we need?\nList the skills or expertise required to implement this idea."
 
-  - type: markdown
+  - type: textarea
     attributes:
-      value: "## Notes\nInclude any additional information or context that would be helpful."
+      label: "## Notes\nInclude any additional information or context that would be helpful."
