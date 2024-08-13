@@ -14,6 +14,9 @@ locals {
       name          = "airflow-prod-workgroup-hmcts"
       business_unit = "HMCTS"
     }
+    "airflow-prod-corp" = {
+      name          = "airflow-prod-workgroup-corp"
+      business_unit = "CORP"
   }
 }
 
