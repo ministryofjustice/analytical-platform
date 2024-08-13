@@ -2,7 +2,7 @@ title: "Firebreak Summer 2024 Idea Discussion"
 body:
   - type: textarea
     attributes:
-      value: "## Idea Description\nPlease provide a clear and concise description of your idea."
+      label: "## Idea Description\nPlease provide a clear and concise description of your idea."
 
   - type: textarea
     attributes:
@@ -10,7 +10,7 @@ body:
 
   - type: textarea
     attributes:
-      label: "## Definition of Done\nWhat criteria should be met for this idea to be considered complete?"
+      lebel: "## Definition of Done\nWhat criteria should be met for this idea to be considered complete?"
 
   - type: textarea
     attributes:
