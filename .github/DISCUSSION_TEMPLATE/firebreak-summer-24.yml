@@ -11,7 +11,11 @@ body:
   - type: textarea
     attributes:
       label: Why Should We Do This
-      description: "Explain why this idea is valuable and should be implemented.
+      description: "Explain why this idea is valuable and should be implemented."
+  - type: textarea
+    attributes:
+      label: Definition of Done
+      description: "What criteria should be met for this idea to be considered complete?"
   - type: textarea
     attributes:
       label: What skills do we need?
