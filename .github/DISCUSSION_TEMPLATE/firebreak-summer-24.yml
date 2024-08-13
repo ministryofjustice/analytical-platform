@@ -1,0 +1,21 @@
+title: "Firebreak Summer 2024 Idea Discussion"
+body:
+  - type: markdown
+    attributes:
+      value: "## Idea Description\nPlease provide a clear and concise description of your idea."
+
+  - type: markdown
+    attributes:
+      value: "## Why Should We Do This\nExplain why this idea is valuable and should be implemented."
+
+  - type: markdown
+    attributes:
+      value: "## Definition of Done\nWhat criteria should be met for this idea to be considered complete?"
+
+  - type: markdown
+    attributes:
+      value: "## What skills do we need?\nList the skills or expertise required to implement this idea."
+
+  - type: markdown
+    attributes:
+      value: "## Notes\nInclude any additional information or context that would be helpful."
