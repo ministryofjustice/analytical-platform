@@ -1,0 +1,65 @@
+---
+owner_slack: "#analytical-platform"
+title: CaDeT Support - Tips and tricks
+last_reviewed_on: 2024-08-12
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+This is here to help you get to the bottom of what's wrong in any given CaDeT Support Issue. This will take you through what information you need from the customer, what information you need to gather behind the scenes yourself, to know how to help any given customer.
+
+## Table of Contents
+
+1. [Quickstart Guide](#quickstart-guide)
+2. [What to do?](#what-to-do)
+3. [Advanced Troubleshooting](#advanced-troubleshooting)
+4. [Contact Information](#contact-information)
+
+
+## Quickstart Guide
+
+This aims to break all support requests for the product down into discrete categories. Once you know what category your support request comes under, you'll know how roughly to tackle it. Later on, we'll look at an example from each of these categories in more detail.
+
+### Source Updates
+
+Weekly PR (raised on a Monday) by a bot. The PR it raises will always be called `Update Dbt sources`, and will contain a bunch of fairly arcane looking changes to a number of YAML files. The robot is just scraping the glue catalog for info, so you don't need to worry too much about the contents of these. We generally post about this in #data-modelling first thing on a Monday, to let them object if there's any changes they're not set up to cope with. If the PR has literally any title other than this, it's not this category.
+
+A user may approach us asking for an unscheduled source update - in that case, you simply run the dispatch workflow on [this github action](https://github.com/moj-analytical-services/create-a-derived-table/actions/workflows/update-source.yml), and look for the PR it generates. From there, it's as above.
+
+### Deploying New Tables/Databases
+
+Generally, the development and deployment of new tables/databases is the domain of the data modelling team - review of any model files should be left for them to do. However, a key element of this deployment of a new database will require them to modify the [dbt project file](https://github.com/moj-analytical-services/create-a-derived-table/blob/2f3a8d32ded317cd2f3d94329824ba80fe5b0593/mojap_derived_tables/dbt_project.yml#L52), which we reserve control over, to add a deployment schedule. Your role in reviewing the PR is to ensure any new databases have an associated deployment schedule that matches one of our tags (`daily`, `weekly`, `monthly` etc.), and to ensure that they've sought data modeller review for all other elements before merging.
+
+### Changes to workflows/profiles
+
+Sometimes, users will need to do new types of deployment, or will need new targets specific to them to deploy to. We would generally want to take on this work via a feature request. Should this come in via support channels, your role is to steer them towards the 'Create-A-Derived-Table Cross Team Meeting' which occurs fortnightly on Thursday afternoons via Teams.
+
+
+### Workflow Failure
+
+If a workflow has failed in a way that a user is approaching the team about, it's almost certainly not due to their SQL failing. These are characterised by the users raising bug reports about the action runs themselves. These are generally the hardest category to diagnose, as these failures can occur for a number of reasons and each has a fairly distinct solution.
+
+
+## What to do?
+
+Having categorised your problem, you now need to figure out how to solve it. If you're already familar with support, hopefully the quickstart guide has reminded you what to do, but if you need more help you're in the right place! Thankfully, for most of these requests, there's very clear steps to how we'd want to handle them.
+
+### Source Updates - In Detail
+
+DBT, the software powering all our table transformation, has two ways of referencing a table. Either the table is created from within DBT, in which case it is a `model`, or it is a table that exists externally to DBT - a `source`. We have various sources from within the organisation, mostly existing datasets that need to be transformed into nicely modeled outputs. Our sources are mangaged [via a github actions workflow](https://github.com/moj-analytical-services/create-a-derived-table/actions/workflows/update-source.yml), which when run successfully will generate [a corresponding PR (example)](https://github.com/moj-analytical-services/create-a-derived-table/pull/1912/files). This may look very intimidating, but since the bot is just scraping data, you do not need to validate the output yourself directly.
+
+**Step by Step:**
+
+1. If a user requests a source update, run the `dispatch_workflow` option on the linked workflow. Wait for it to spit out a PR. Otherwise, it's Monday morning and the bot has run and made the PR for you
+2. Check the PR for any big changes - 'big' in this context usually means either a diff too big for github to render by default, or any files added or removed. If they exist, note which files they pertain to.
+3. Make a post in #data-modelling with a link to the PR generated. Note any added or removed databases in your post.
+4. Allow a couple hours for objections to be raised against the PR. If there are none, approve and merge it.
+
+### Deploying New Tables/Databases - In Detail
+
+The AP team sits as maintainers of the tool - we ensure it stays functional and supply new features. However, we do not exist to advise users on the practice or theory of Data Modelling itself. As such, we generally will not be involved with the reviewing of model code, leaving this to our friends in the Data Modelling function.
+
+## Contact Info
+
+The Analytical Platform team can be contacted by [raising a support issue](https://github.com/ministryofjustice/data-platform-support/issues/new/choose). If you're reading this, you're probably a team member though, so just ask someone in the slack channel for help if there's an issue you get stuck on.
