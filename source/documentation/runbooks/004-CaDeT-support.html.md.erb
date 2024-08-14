@@ -58,7 +58,11 @@ DBT, the software powering all our table transformation, has two ways of referen
 
 ### Deploying New Tables/Databases - In Detail
 
-The AP team sits as maintainers of the tool - we ensure it stays functional and supply new features. However, we do not exist to advise users on the practice or theory of Data Modelling itself. As such, we generally will not be involved with the reviewing of model code, leaving this to our friends in the Data Modelling function.
+The AP team sits as maintainers of the tool - we ensure it stays functional and supply new features. However, we do not exist to advise users on the practice or theory of Data Modelling itself. As such, we generally will not be involved with the reviewing of model code, leaving this to our friends in the Data Modelling function. To look at an example PR to see what files you should/should not care about:
+
+![Example PR Files](cadet-PR-example.png)
+
+In the example here, we only care about the top two files (`dbt_project.yml` and `sop_staging.yml`). These two, combined, tell us that the user is deploying a new database (and some number of tables within). We do not need to review the SQL files, or any associated metadata files, beyond checking with the user that a data modeller has signed off on them. Your role in reviewing the PR is to check that for each unique `database_name.yml` file listed in the added files, there's a corresponding entry in `dbt_project.yml` with a `+tags: <schedule_argument>`. Standard schedule tags are `daily`, `weekly`, `monthly`, and `paused`, but new databases may not use `paused` tag unless they are changing it from one of `daily`, `weekly`, or `monthly` in the PR (I.E. The table has been deployed at least once before pausing). This is important as all tables in main MUST deploy at least once, ideally as soon as possible after merge into main (using the `daily` tag), otherwise it will cause the `generate dbt docs` workflow to fail daily until the database is either removed from main, or deployed. This will cause catalog data to become stale. Some projects (e.g. BOLD) may use their own scheduling tags (`bold_dev_daily` etc.). This is also acceptable, as long as the tag and the domain (folder) that the table exists in are aligned - Only the BOLD domain should use bold related tags and so on.
 
 ## Contact Info
 
