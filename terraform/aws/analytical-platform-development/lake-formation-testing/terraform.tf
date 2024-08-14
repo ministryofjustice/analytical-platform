@@ -30,24 +30,24 @@ provider "aws" {
 
 ### SOURCE ACCOUNT
 
-provider "aws" {
-  alias  = "analytical-platform-development-eu-west-2"
-  region = "eu-west-2"
-  assume_role {
-    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
-  }
-  default_tags {
-    tags = var.tags
-  }
-}
+# provider "aws" {
+#   alias  = "analytical-platform-development-eu-west-2"
+#   region = "eu-west-2"
+#   assume_role {
+#     role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
+#   }
+#   default_tags {
+#     tags = var.tags
+#   }
+# }
 
 ### TARGET ACCOUNT
 
 provider "aws" {
-  alias  = "analytical-platform-data-development-eu-west-2"
-  region = "eu-west-2"
+  alias  = "analytical-platform-data-development-eu-west-1"
+  region = "eu-west-1"
   assume_role {
-    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-development"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
