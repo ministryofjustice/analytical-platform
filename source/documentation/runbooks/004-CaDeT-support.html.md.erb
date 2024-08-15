@@ -64,6 +64,61 @@ The AP team sits as maintainers of the tool - we ensure it stays functional and 
 
 In the example here, we only care about the top two files (`dbt_project.yml` and `sop_staging.yml`). These two, combined, tell us that the user is deploying a new database (and some number of tables within). We do not need to review the SQL files, or any associated metadata files, beyond checking with the user that a data modeller has signed off on them. Your role in reviewing the PR is to check that for each unique `database_name.yml` file listed in the added files, there's a corresponding entry in `dbt_project.yml` with a `+tags: <schedule_argument>`. Standard schedule tags are `daily`, `weekly`, `monthly`, and `paused`, but new databases may not use `paused` tag unless they are changing it from one of `daily`, `weekly`, or `monthly` in the PR (I.E. The table has been deployed at least once before pausing). This is important as all tables in main MUST deploy at least once, ideally as soon as possible after merge into main (using the `daily` tag), otherwise it will cause the `generate dbt docs` workflow to fail daily until the database is either removed from main, or deployed. This will cause catalog data to become stale. Some projects (e.g. BOLD) may use their own scheduling tags (`bold_dev_daily` etc.). This is also acceptable, as long as the tag and the domain (folder) that the table exists in are aligned - Only the BOLD domain should use bold related tags and so on.
 
+**Step by Step:**
+
+1. Check whether the PR features one or more added files in the `mojap_derived_tables/models/...` directory. If it does, check if any of those are `.yml` files.
+2. Assuming all files are `SQL` files, you're done! It's for the data modellers to review. Otherwise...
+3. For each `database_name.yml` file added, ensure a corresponding change is made to `dbt_project.yml` to give it a schedule of `daily` (if they've picked another schedule, check with the user that the table will be deployed immediately on whatever their schedule tag is)
+4. If the user has created a schedule for all their new databases/tables, then you're good to approve!
+
+### Changes to Profiles/Workflows
+
+[The profiles file](https://github.com/moj-analytical-services/create-a-derived-table/blob/main/.dbt/profiles.yml) is used to define the (currently as of writing) 4 targets that users can deploy to. These represent our environments, and all targets other than `prod` will cause the generated databases to be suffixed with `_<env>_dbt`. The targets themselves, `dev`, `prod`, `sandpit`, and `sandbox`, all represent different S3 locations that tables can be deployed against, with different access requirements. Very occasionally, a user will want a new target - if they do, make sure they have routed this request via the 'Create-A-Derived-Table Cross Team Meeting' which occurs fortnightly on Thursday afternoons via Teams. If they have, a feature request should have been raised pertaining to this work - link them to the ticket and let them know the work is planned. If they've not routed this via this group, ensure they do.
+
+This file is consumed by our Github Actions Workflows when they deploy tables - all workflows published should generally supply `--target prod`, when running `dbt` commands - they should have a good reason why not if they don't. If a user wants to establish a new deployment workflow, again ensure requests are routed via the cross team meeting. This will allow them to properly be reviewed by the team.
+
+**Step by Step:**
+
+1. Check the proposed changes have been routed via the correct working group
+2. If they have, consult the ticket capturing the proposed changes to ensure the PR aligns with the proposal.
+3. If so, approve. Otherwise, ensure they go via the correct group.
+
+### Workflow Failures
+
+We have two groups of workflows that commonly fail - `deploy dbt docs`, and our database deployments. To start with `deploy docs`:
+
+#### Deploy DBT Docs
+
+This workflow scrapes the glue catalog for the information about all database within the project, so full lineage of all tables (including source tables) can be constructed. The reason this fails 99.9% of the time is due to a 'missing' database. A missing database is any database that `DBT` expects to encounter (based on the state of main as of the action run), but fails to find when querying glue. If this is a database that is listed in `mojap_derived_tables/models/sources/`, this means somebody blew up a prod table that we use as a source. Generally, that's not on us to solve - simply make a post in `#ask-data-modelling` naming the missing database (as per the error in the action run logs) and asking what's happened to it.
+
+If the table referenced shows up anywhere else in the `models` folder, that means it's generated from within the tool. This means that somebody has merged a table into main that hasn't been included in any deployments yet. Hopefully, this will have been caught at the PR stage (as per above), but this isn't guaranteed. In the event this happens, offer the user two options. Either they can:
+- Remove the database from main and keep it in a branch until such time as they're ready to deploy it
+OR
+- Deploy the database by setting the schedule tag to `daily`, and then reverting it to the generally intended deployment schedule the day after the intial deployment.
+Either way, it's important that non-deployed tables don't persist in main, as `generate dbt docs` will fail every day unless all tables in main are (or will be overnight) deployed tables (there is a ticket in the backlog to enforce first deployments being on daily schedule, but this is currently not programatically validated).
+
+**Step by Step:**
+1. Find the named database from the workflow's logs in CaDeT's code, and detemine whether it is a `source` or a general `model` in any other domain.
+2. If it is a `source` make a post in #ask-data-modelling highlighting the issue - if the owner indicates it might take a long time to resolve, consider removing the database from the [source databases file](https://github.com/moj-analytical-services/create-a-derived-table/blob/main/scripts/source_database_names.txt) and re-running `update source` to remove the database as a source until it's restored.
+3. Otherwise, for models, make a post in the same channel, highlighting that the database is not currently deployed. Ensure the user either removes their models from main to a branch, or uses the `daily` tag to deploy the model overnight to ensure the next day's workflow run is a success.
+
+#### General Deployment Failures
+
+These are places where one of our database deploying workflows (such as `deploy_prod_daily`), has failed. When it does so, there's a few ways this can happen.
+- Someone submitted SQL that passed in `dev` but failed in `prod` (rare, but not impossible)
+- The pod has finished its workflow, but a table or tables have failed as part of that for non-SQL reasons
+- The pod has exited without finishing the workflow, and steps after the main deployment are skipped.
+
+To look at each in turn:
+**Bad SQL:**
+This will be characterised by the errors thrown at the bottom of the `Deploy dbt models` step's logs - this will be the step that failed in the action run in this case. The errors seen will relate to the `StartQueryExecution` action, and will reference an `invalid query` or `bad syntax` etc. If the workflow fails in this manner, the user will generally be notified, and this is not for us to proactively solve - SQL issues are for data owners.
+
+**Boto Looking Errors (Non-SQL):**
+These will look similar to the above, with the action completing in full, and the failure being seen in the `Deploy DBT models` step. However, the error messages this time will not generally reference Query Execution, but instead may reference stuff like getting `rate limited` while doing an action, or getting `access denied` errors on operations. These will generally require further investigation by the team as a whole. Key things to check in these cases are the `CloudTrail` logs generated by the action runner. These actions will take place in `eu-west-1` in `analytical-platform-data-production`. Look for error messages being thrown by the role used by the runner, and then try and jump into the API calls. If the error is `Access Denied`, you can look at [the role that CaDeT uses](https://github.com/ministryofjustice/analytical-platform/main/terraform/aws/analytical-platform-data-production/create-a-derived-table/iam-roles.tf) to ensure the permission you're being denied by is added to the policy. In cases where `rate limits` are a factor, this is harder to resolve. We can try turning down the number of `threads` in our [profiles file](https://github.com/moj-analytical-services/create-a-derived-table/blob/main/.dbt/profiles.yml) for the relevant target, but this shouldn't be done unless there's no other options (such as asking the owner of the database that's spamming requests to tune down their usage).
+
+**Pod just died 💀:**
+All our github actions runners are now Ephemeral Action Runners, with monitoring via Kibana. If a pod fails part way through a run without really throwing any errors, odds are that the pod exploded due to exceeding a resource limit. Verify that this is the case (using the monitoring UI), and if it is, speak with the team about increasing the spec of the runner to accomodate.
+
 ## Contact Info
 
 The Analytical Platform team can be contacted by [raising a support issue](https://github.com/ministryofjustice/data-platform-support/issues/new/choose). If you're reading this, you're probably a team member though, so just ask someone in the slack channel for help if there's an issue you get stuck on.
