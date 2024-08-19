@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "github_airflow_cjs_dashboard_data" {
+data "aws_iam_policy_document" "airflow_cjs_dashboard_data" {
   statement {
     sid    = "BucketAccess"
     effect = "Allow"
@@ -77,7 +77,7 @@ data "aws_iam_policy_document" "github_airflow_cjs_dashboard_data" {
   }
 }
 
-module "github_airflow_cjs_dashboard_data_iam_policy" {
+module "airflow_cjs_dashboard_data_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
@@ -85,5 +85,20 @@ module "github_airflow_cjs_dashboard_data_iam_policy" {
 
   name_prefix = "github-airflow-cjs-dashboard-data"
 
-  policy = data.aws_iam_policy_document.github_airflow_cjs_dashboard_data.json
+  policy = data.aws_iam_policy_document.airflow_cjs_dashboard_data.json
+}
+
+module "airflow_cjs_dashboard_data_iam_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
+  version = "5.44.0"
+
+  name = "github-airflow-cjs-dashboard-data"
+
+  subjects = ["moj-analytical-services/airflow-cjs-dashboard-data:*"]
+
+  policies = {
+    github_airflow_cjs_dashboard_data = module.airflow_cjs_dashboard_data_iam_policy.arn
+  }
 }
