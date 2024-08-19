@@ -58,7 +58,7 @@ jobs:
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
-          download_external_modules: true
+          download_external_modules: false
           quiet: true
           output_format: cli
         continue-on-error: true
