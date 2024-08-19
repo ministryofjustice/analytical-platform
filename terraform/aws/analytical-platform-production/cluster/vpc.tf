@@ -6,7 +6,7 @@ module "vpc" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.12.1"
+  version = "5.13.0"
 
   name                    = "${var.environment}-vpc"
   cidr                    = var.vpc_cidr
