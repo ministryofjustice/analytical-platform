@@ -33,10 +33,6 @@ locals {
       email = "jacob.hamblin-pyke@digital.justice.gov.uk"
     },
     {
-      name  = "Tom Webber"
-      email = "thomas.webber@digital.justice.gov.uk"
-    },
-    {
       name  = "James Stott"
       email = "james.stott@digital.justice.gov.uk"
     },
@@ -45,8 +41,8 @@ locals {
       email = "anthony.fitzroy@digital.justice.gov.uk"
     },
     {
-      name  = "Eki Osehenye"
-      email = "eki.osehenye@digital.justice.gov.uk"
+      name  = "Yvan Smith"
+      email = "yvan.smith@digital.justice.gov.uk"
     }
   ]
 }
@@ -57,4 +53,9 @@ module "users" {
   source = "./modules/user"
   name   = each.value.name
   email  = each.value.email
+}
+
+import {
+  to = module.users["yvan.smith@digital.justice.gov.uk"].pagerduty_user.this
+  id = "PWEB0DB"
 }
