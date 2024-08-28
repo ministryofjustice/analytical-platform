@@ -1,3 +1,4 @@
+---
 name: 📥 Create Ingestion Maintenance Patching Issue
 on:
   schedule:
