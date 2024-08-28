@@ -1,8 +1,11 @@
 ---
 name: 📥 Create Ingestion Maintenance Patching Issue
+
 on:
   schedule:
-    - cron: 0 8 1,15 * * # UTC time: “At 08:00 on day-of-month 1 and 15.”
+    - cron: "0 8 1,15 * *" # UTC time: “At 08:00 on day-of-month 1 and 15.”
+    
+permissions: {}
 
 jobs:
   create_issue:
