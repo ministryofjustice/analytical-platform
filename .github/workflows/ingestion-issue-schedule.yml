@@ -8,7 +8,7 @@ on:
 permissions: {}
 
 jobs:
-  create_issue:
+  create-issue:
     name: Create Patching Issue
     runs-on: ubuntu-latest
     permissions:
