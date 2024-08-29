@@ -4,7 +4,7 @@ name: 📥 Create Ingestion Maintenance Patching Issue
 on:
   schedule:
     - cron: "0 8 1,15 * *" # UTC time: “At 08:00 on day-of-month 1 and 15.”
-    
+
 permissions: {}
 
 jobs:
@@ -49,7 +49,7 @@ jobs:
             So that… security / best practice etc
 
             ### Definition of Done
-            - [ ] Merge any open depenabot Pull Requests in the ingestion repositories (noted below)
+            - [ ] Merge any open dependabot Pull Requests in the ingestion repositories (noted below)
             - [ ] Create new release of [ingestion-transfer](https://github.com/ministryofjustice/analytical-platform-ingestion-transfer/releases)
             - [ ] Create new release of [ingestion-scan ](https://github.com/ministryofjustice/analytical-platform-ingestion-scan/releases)
             - [ ] Create new release of [ingestion-notify](https://github.com/ministryofjustice/analytical-platform-ingestion-notify/releases/tag/0.0.14)
