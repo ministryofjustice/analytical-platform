@@ -38,7 +38,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          TITLE: 📥 Maintenance -  Actions Runner
+          TITLE: 📥 Maintenance - Actions Runner
           ASSIGNEES:
           LABELS: story
           BODY: |
