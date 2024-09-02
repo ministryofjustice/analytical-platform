@@ -40,8 +40,11 @@ jobs:
           GH_REPO: ${{ github.repository }}
           TITLE: 📥 Maintenance - Actions Runner
           ASSIGNEES:
-          LABELS: story
+          LABELS: maintenance
           BODY: |
+            > [!NOTE]
+            > This issue is created by a scheduled workflow.
+
             ### User Story
 
             As an… engineer on the Analytical Platform

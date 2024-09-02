@@ -40,8 +40,11 @@ jobs:
           GH_REPO: ${{ github.repository }}
           TITLE: 📥 Maintenance - Visual Studio Code
           ASSIGNEES:
-          LABELS: story
+          LABELS: maintenance
           BODY: |
+            > [!NOTE]
+            > This issue is created by a scheduled workflow.
+
             ### User Story
 
             As a… engineer on the Analytical Platform
@@ -49,7 +52,7 @@ jobs:
             So that… security / best practice etc
 
             ### Definition of Done
-            - [ ] Merge any open dependabot Pull Requests in the Actions Runner [repository](https://github.com/ministryofjustice/analytical-platform-visual-studio-code).
+            - [ ] Merge any open dependabot Pull Requests in the Visual Studio Code [repository](https://github.com/ministryofjustice/analytical-platform-visual-studio-code).
             - [ ] Create new [release](https://github.com/ministryofjustice/analytical-platform-visual-studio-code/releases).
             - [ ] Update [guidance](https://user-guidance.analytical-platform.service.justice.gov.uk/tools/visual-studio-code/#visual-studio-code), if required.
             - [ ] Create a new release in [development](https://controlpanel.services.dev.analytical-platform.service.justice.gov.uk/releases/).
