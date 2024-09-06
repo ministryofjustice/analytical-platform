@@ -236,7 +236,10 @@ data "aws_iam_policy_document" "control_panel_api" {
       "lakeformation:ListPermissions",
       "lakeformation:GrantPermissions",
       "lakeformation:RevokePermissions",
-      "lakeformation:GetDataAccess"
+      "lakeformation:GetDataAccess",
+      "lakeformation:CreateLakeFormationOptIn",
+      "lakeformation:DeleteLakeFormationOptIn",
+      "lakeformation:ListLakeFormationOptIns",
     ]
     resources = ["arn:aws:lakeformation:*:${var.account_ids["analytical-platform-data-production"]}:*"]
   }
