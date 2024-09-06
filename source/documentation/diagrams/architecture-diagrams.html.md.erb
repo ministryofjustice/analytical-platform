@@ -4,29 +4,27 @@ This page documents the technical architecture diagrams that make up the Analyti
 
 ## C4 Model Diagrams
 
-In the [C4 model](https://c4model.com/), the four C's represent [context](https://c4model.com/#SystemContextDiagram), [containers](https://c4model.com/#ContainerDiagram), [components](https://c4model.com/#ComponentDiagram), and [code](https://c4model.com/#CodeDiagram). These different levels help you tell the right story to the right audience. These diagrams are for people inside and outside of the the Data Platform team and technical and non-technical people.
+In the [C4 model](https://c4model.com/), the four C's represent [context](https://c4model.com/#SystemContextDiagram), [containers](https://c4model.com/#ContainerDiagram), [components](https://c4model.com/#ComponentDiagram), and [code](https://c4model.com/#CodeDiagram). These different levels help tell the right story, to the right audience. These diagrams are for people inside and outside of the the Analytical Platform team and are for technical and non-technical people.
 
 ### Level 1 - Context Diagram
 
 This is the highest level of abstraction and provides an overview of the entire system. It shows the system under consideration and its external dependencies, such as users, external systems, and APIs. Frequency in change is likely minimal compared to other levels.
 
+#### Level 1 - Analytical Platform Context Diagram - Current
+
 ![Level 1 Diagram](c4-model-level1.excalidraw.png)
 
-### Level 2 - Minimum Viable Product Diagram
+#### Level 1 - Analytical Platform Context Diagram - Future
 
-This diagram shows the components that we are going to deploy as part of our minimum viable product. [MVPs](https://defradigital.blog.gov.uk/2018/03/14/how-showing-the-thing-helped-us-simplify-our-mvp/) play a vital role in service development. By aiming to release our product as early as possible, we reduce the risk of never releasing it at all. We also get valuable feedback from our users who are using the system in a real-world situation.
+Violet coloured items have not been tested yet, and do not have a high level of confidence.
 
-![Level 2 Diagram MVP](c4-model-level2-mvp.excalidraw.png)
+![Level 1 Future Diagram](c4-model-level1-future.excalidraw.png)
 
 ### Level 2 - Container Diagram
 
 This level focuses on the software system's high-level [containers](https://c4model.com/#ContainerDiagram), which are typically applications or services. It illustrates the major components of the system and their interactions. Web servers, databases, desktop and mobile applications are all examples of containers.
 
 ![Level 2 Diagram](c4-model-level2.excalidraw.png)
-
-### Level 3 - Component
-
-This level delves deeper into the containers identified in the previous level. It shows the internal components and their interactions within each container. Components can represent classes, modules, services, or other logical units.
 
 ## Contributing and updating
 
