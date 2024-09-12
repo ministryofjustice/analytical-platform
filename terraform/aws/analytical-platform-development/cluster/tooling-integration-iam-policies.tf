@@ -19,6 +19,7 @@ data "aws_iam_policy_document" "bedrock_integration" {
       "bedrock:GetCustomModel",
       "bedrock:ListCustomModels",
       "bedrock:DeleteCustomModel",
+      "bedrock:ListInferenceProfiles",
       "bedrock:CreateProvisionedModelThroughput",
       "bedrock:UpdateProvisionedModelThroughput",
       "bedrock:GetProvisionedModelThroughput",
