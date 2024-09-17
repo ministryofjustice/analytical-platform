@@ -1,33 +1,58 @@
 locals {
-  teams = [
-    {
-      name = "Analytical Platform"
-      managers = [
-        module.users["jacob.woffenden@digital.justice.gov.uk"].id,
-        module.users["julia.lawrence@digital.justice.gov.uk"].id,
-        module.users["richard.baguley@digital.justice.gov.uk"].id,
-        module.users["yvan.smith@digital.justice.gov.uk"].id
-      ]
-      responders = [
-        module.users["emma.terry@digital.justice.gov.uk"].id,
-        module.users["brian.ellwood@digital.justice.gov.uk"].id,
-        module.users["michael.collins@digital.justice.gov.uk"].id,
-        module.users["gary.henderson@digital.justice.gov.uk"].id,
-        module.users["jacob.hamblin-pyke@digital.justice.gov.uk"].id,
-        module.users["james.stott@digital.justice.gov.uk"].id,
-        module.users["anthony.fitzroy@digital.justice.gov.uk"].id,
-      ]
-    }
-  ]
+  teams = {
+    "Analytical Platform" = {
+      managers = {
+        for user in local.users :
+        user.email => {
+          name = user.name
+          id   = module.users[user.email].id
+        }
+        if user.role == "manager"
+      }
+      responders = {
+        for user in local.users :
+        module.users[user.email].id => {
+          name = user.name
+          id   = module.users[user.email].id
+          email = user.email
+        }
+        if user.role == "responder"
+      }
+}
+  }
 }
 
+
+# module "teams" {
+#   for_each = local.users
+
+#   source     = "./modules/team"
+#   name       = each.value.name
+#   managers   =  {
+#     for email, user in local.users :
+#     email => {
+#       name = user.name
+#       id   = module.users[email].id
+#     }
+#     if user.role == "manager"
+#   }
+#   responders = {
+#     for email, user in local.users :
+#     email => {
+#       name = user.name
+#       id   = module.users[email].id
+#     }
+#     if user.role == "responder"
+#   }
 module "teams" {
-  for_each = { for team in local.teams : team.name => team }
+  for_each = local.teams
 
   source     = "./modules/team"
   name       = each.key
-  managers   = try(each.value.managers, [])
-  responders = try(each.value.responders, [])
-
+  managers   = each.value.managers
+  responders = each.value.responders
   depends_on = [module.users]
 }
+
+
+# I thin

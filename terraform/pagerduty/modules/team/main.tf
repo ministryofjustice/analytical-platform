@@ -14,6 +14,6 @@ resource "pagerduty_team_membership" "responders" {
   for_each = var.responders
 
   team_id = pagerduty_team.this.id
-  user_id = each.key
+  user_id = each.value.id
   role    = "responder"
 }

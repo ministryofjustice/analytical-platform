@@ -4,13 +4,19 @@ variable "name" {
 }
 
 variable "managers" {
-  type        = set(string)
+    type        = map(object({
+    name = string
+    id = string
+  }))
   description = "List of user IDs to be added as managers to the team"
-  default     = []
+  default     = {}
 }
 
 variable "responders" {
-  type        = set(string)
+  type        = map(object({
+    name = string
+    id = string
+  }))
   description = "List of user IDs to be added as responders to the team"
-  default     = []
+  default     = {}
 }
