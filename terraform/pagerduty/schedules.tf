@@ -10,14 +10,15 @@ locals {
           rotation_virtual_start       = "2023-03-28T09:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users["jacob.woffenden@digital.justice.gov.uk"].id,
-            module.users["emma.terry@digital.justice.gov.uk"].id,
+            module.users["anthony.fitzroy@digital.justice.gov.uk"].id,
             module.users["brian.ellwood@digital.justice.gov.uk"].id,
-            module.users["michael.collins@digital.justice.gov.uk"].id,
+            module.users["emma.terry@digital.justice.gov.uk"].id,
             module.users["gary.henderson@digital.justice.gov.uk"].id,
             module.users["jacob.hamblin-pyke@digital.justice.gov.uk"].id,
+            module.users["jacob.woffenden@digital.justice.gov.uk"].id,
             module.users["james.stott@digital.justice.gov.uk"].id,
-            module.users["anthony.fitzroy@digital.justice.gov.uk"].id,
+            module.users["michael.collins@digital.justice.gov.uk"].id,
+            module.users["tom.webber@justice.gov.uk"].id,
           ]
           restrictions = [
             {
