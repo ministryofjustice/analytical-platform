@@ -11,10 +11,9 @@ locals {
       }
       responders = {
         for user in local.users :
-        module.users[user.email].id => {
+        user.email => {
           name = user.name
           id   = module.users[user.email].id
-          email = user.email
         }
         if user.role == "responder"
       }
