@@ -38,7 +38,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          TITLE: 📥 Maintenance - Visual Studio Code
+          TITLE: 📥 Maintenance - JupyterLab
           ASSIGNEES:
           LABELS: maintenance
           BODY: |
