@@ -1,5 +1,5 @@
 ---
-name: 📥 Maintenance - Create JupyterLab Issue
+name: 📥 Maintenance - Create Cloud Development Environment Base Issue
 
 on:
   schedule:
@@ -43,22 +43,17 @@ jobs:
           LABELS: maintenance
           BODY: |
             > [!CAUTION]
-            > JupyterLab is still in development. Confirm these updates should be made before proceeding. Delete this caution once JupiterLab is in production.
+            > This image underpins many containerised services in the Analytical Platform.
 
             ### User Story
 
             As a… engineer on the Analytical Platform
-            I need/want/expect to… keep JupyterLab up to date
+            I need/want/expect to… keep Cloud Development Environment Base up to date
             So that… security / best practice etc
 
             ### Definition of Done
-            - [ ] Merge any open dependabot Pull Requests in the JupyterLab [repository](https://github.com/ministryofjustice/analytical-platform-jupyterlab).
-            - [ ] Create new [release](https://github.com/ministryofjustice/analytical-platform-jupyterlab/releases).
-            - [ ] Update [guidance](https://user-guidance.analytical-platform.service.justice.gov.uk/tools/visual-studio-code/#visual-studio-code), if required.
-            - [ ] Create a new release in [development](https://controlpanel.services.dev.analytical-platform.service.justice.gov.uk/releases/).
-            - [ ] Test deployment in development.
-            - [ ] Create a new release in [production](https://controlpanel.services.analytical-platform.service.justice.gov.uk/releases/).
-            - [ ] Test deployment in production.
+            - [ ] Merge any open dependabot Pull Requests in the Analytical Platform Cloud Development Environment Base [repository](https://github.com/ministryofjustice/analytical-platform-cloud-development-environment-base/pulls).
+            - [ ] Create new [release](https://github.com/ministryofjustice/analytical-platform-cloud-development-environment-base/releases).
 
           PINNED: false
           CLOSE_PREVIOUS: false
