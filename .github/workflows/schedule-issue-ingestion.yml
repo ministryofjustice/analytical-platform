@@ -56,7 +56,7 @@ jobs:
             - [ ] In the ingestion-scan repository, confirm that the [dnf packages](https://github.com/ministryofjustice/analytical-platform-ingestion-scan?tab=readme-ov-file#dnf-packages) and [tests](https://github.com/ministryofjustice/analytical-platform-ingestion-scan/blob/main/test/container-structure-test.yml) are up-to-date.
             - [ ] Create new release of [ingestion-transfer](https://github.com/ministryofjustice/analytical-platform-ingestion-transfer/releases).
             - [ ] Create new release of [ingestion-scan](https://github.com/ministryofjustice/analytical-platform-ingestion-scan/releases).
-            - [ ] Create new release of [ingestion-notify](https://github.com/ministryofjustice/analytical-platform-ingestion-notify/releases/tag/0.0.14).
+            - [ ] Create new release of [ingestion-notify](https://github.com/ministryofjustice/analytical-platform-ingestion-notify/releases).
             - [ ] Update the images used in the Modernisation Platform environments repository (in the manner done [here](https://github.com/ministryofjustice/modernisation-platform-environments/commit/af4d5003385721502127e5a8c22d0a21eee492fa)).
             - [ ] Deploy development.
             - [ ] Deploy production.
