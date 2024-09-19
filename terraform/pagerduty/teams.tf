@@ -17,32 +17,10 @@ locals {
         }
         if user.role == "responder"
       }
-}
+    }
   }
 }
 
-
-# module "teams" {
-#   for_each = local.users
-
-#   source     = "./modules/team"
-#   name       = each.value.name
-#   managers   =  {
-#     for email, user in local.users :
-#     email => {
-#       name = user.name
-#       id   = module.users[email].id
-#     }
-#     if user.role == "manager"
-#   }
-#   responders = {
-#     for email, user in local.users :
-#     email => {
-#       name = user.name
-#       id   = module.users[email].id
-#     }
-#     if user.role == "responder"
-#   }
 module "teams" {
   for_each = local.teams
 
@@ -52,6 +30,3 @@ module "teams" {
   responders = each.value.responders
   depends_on = [module.users]
 }
-
-
-# I thin

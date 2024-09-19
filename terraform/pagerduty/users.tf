@@ -64,16 +64,10 @@ locals {
 }
 
 
-
 module "users" {
-  for_each = { for user in local.users : user.email => user}
+  for_each = { for user in local.users : user.email => user }
 
   source = "./modules/user"
   name   = each.value.name
   email  = each.key
-}
-
-import {
-  to = module.users["yvan.smith@digital.justice.gov.uk"].pagerduty_user.this
-  id = "PWEB0DB"
 }
