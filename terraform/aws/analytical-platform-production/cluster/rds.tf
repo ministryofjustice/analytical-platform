@@ -45,4 +45,10 @@ module "rds" {
   tags = {
     Name = local.rds_identifier
   }
+
+  lifecycle {
+    ignore_changes = [
+      module.rds.module.db_instance.aws_db_instance.this[0].engine_version
+    ]
+  }
 }
