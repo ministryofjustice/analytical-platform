@@ -6,7 +6,7 @@ resource "pagerduty_team_membership" "managers" {
   for_each = var.managers
 
   team_id = pagerduty_team.this.id
-  user_id = each.key
+  user_id = each.value.id
   role    = "manager"
 }
 
