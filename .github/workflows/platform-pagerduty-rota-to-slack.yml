@@ -22,6 +22,8 @@ jobs:
         include:
           - pagerduty-schedule-id: POE95CC # Analytical Platform
             slack-channel: C04M8224WCV # analytical-platform
+          - pagerduty-schedule-id: PW7Q2MF # Find Moj Data Daily Support
+            slack-channel: C03QZ776JVA # data-catalogue
     steps:
       - name: Checkout
         id: checkout
