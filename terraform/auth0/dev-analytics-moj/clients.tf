@@ -5,6 +5,9 @@ resource "auth0_client" "visual_studio_code" {
   allowed_logout_urls = ["https://*-vscode.tools.dev.analytical-platform.service.justice.gov.uk"]
   oidc_conformant     = true
   sso                 = true
+  jwt_configuration {
+    alg = "HS256"
+  }
 }
 
 resource "auth0_connection_client" "visual_studio_code_github" {
