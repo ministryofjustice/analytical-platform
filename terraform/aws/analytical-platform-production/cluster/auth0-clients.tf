@@ -26,7 +26,7 @@ resource "auth0_client" "rstudio" {
   allowed_logout_urls = ["https://*-rstudio.tools.${var.route53_zone}"]
   oidc_conformant     = true
   jwt_configuration {
-    alg = "RS256"
+    alg = "HS256"
   }
 }
 
@@ -42,7 +42,7 @@ resource "auth0_client" "jupyter_lab" {
   allowed_logout_urls = ["https://*-jupyter-lab.tools.${var.route53_zone}"]
   oidc_conformant     = true
   jwt_configuration {
-    alg = "RS256"
+    alg = "HS256"
   }
 }
 
