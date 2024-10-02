@@ -63,7 +63,7 @@ To create a new Terraform component, you will need to:
     | `ENVIRONMENT` | Name of the environment<br /> | `development` |
     | `IS_PRODUCTION` | Whether the environment is production<br /> | `false` |
 
-    `data.tf` [(Example)](https://github.com/ministryofjustice/data-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/data.tf)
+    `data.tf` [(Example)](https://github.com/ministryofjustice/analytical-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/data.tf)
 
       <details>
 
@@ -83,7 +83,7 @@ To create a new Terraform component, you will need to:
 
       </details>
 
-    `terraform.tf` [(Example)](https://github.com/ministryofjustice/data-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/terraform.tf)
+    `terraform.tf` [(Example)](https://github.com/ministryofjustice/analytical-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/terraform.tf)
 
       <details>
 
@@ -136,7 +136,7 @@ To create a new Terraform component, you will need to:
 
       </details>
 
-    `terraform.tfvars` [(Example)](https://github.com/ministryofjustice/data-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/terraform.tfvars)
+    `terraform.tfvars` [(Example)](https://github.com/ministryofjustice/analytical-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/terraform.tfvars)
 
       <details>
 
@@ -156,13 +156,13 @@ To create a new Terraform component, you will need to:
         is-production          = "${IS_PRODUCTION}"
         owner                  = "data-platform:data-platform-tech@digital.justice.gov.uk"
         infrastructure-support = "data-platform:data-platform-tech@digital.justice.gov.uk"
-        source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/${AWS_ACCOUNT_NAME}/${COMPONENT}"
+        source-code            = "github.com/ministryofjustice/analytical-platform/terraform/aws/${AWS_ACCOUNT_NAME}/${COMPONENT}"
       }
       ```
 
       </details>
 
-    `variables.tf` [(Example)](https://github.com/ministryofjustice/data-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/variables.tf)
+    `variables.tf` [(Example)](https://github.com/ministryofjustice/analytical-platform/blob/main/terraform/aws/analytical-platform-data-production/airflow/variables.tf)
 
       <details>
 
