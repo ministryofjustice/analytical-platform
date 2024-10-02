@@ -3,7 +3,7 @@ data "aws_iam_policy_document" "bedrock_integration" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
   statement {
-    sid    = "AnalyticalPlatformBedrockIntegrtion"
+    sid    = "AnalyticalPlatformBedrockIntegration"
     effect = "Allow"
     actions = [
       "bedrock:ListFoundationModels",

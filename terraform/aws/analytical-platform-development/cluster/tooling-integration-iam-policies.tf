@@ -3,7 +3,7 @@ data "aws_iam_policy_document" "bedrock_integration" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
   statement {
-    sid    = "AnalyticalPlatformBedrockIntegrtion"
+    sid    = "AnalyticalPlatformBedrockIntegration"
     effect = "Allow"
 
     actions = [
@@ -68,8 +68,65 @@ data "aws_iam_policy_document" "bedrock_integration" {
   }
 }
 
+#tfsec:ignore:aws-iam-no-policy-wildcards
+data "aws_iam_policy_document" "textract_integration" {
+  #checkov:skip=CKV_AWS_111: This is a service policy
+  #checkov:skip=CKV_AWS_356: Needs to access multiple resources
+  statement {
+    sid    = "AnalyticalPlatformTextractIntegration"
+    effect = "Allow"
+
+    actions = [
+      "textract:AnalyzeDocument",
+      "textract:DetectDocumentText",
+      "textract:GetDocumentAnalysis",
+      "textract:GetLendingAnalysis",
+      "textract:ListAdapterVersions",
+      "textract:AnalyzeExpense",
+      "textract:GetAdapter",
+      "textract:GetDocumentTextDetection",
+      "textract:GetLendingAnalysisSummary",
+      "textract:ListTagsForResource",
+      "textract:AnalyzeID",
+      "textract:GetAdapterVersion",
+      "textract:GetExpenseAnalysis",
+      "textract:ListAdapters",
+      "textract:CreateAdapter",
+      "textract:DeleteAdapterVersion",
+      "textract:StartExpenseAnalysis",
+      "textract:CreateAdapterResource",
+      "textract:StartDocumentAnalysis",
+      "textract:StartLendingAnalysis",
+      "textract:DeleteAdapter",
+      "textract:StartDocumentTextDetection",
+      "textract:UpdateAdapter",
+      "textract:TagResource",
+      "textract:UntagResource",
+    ]
+
+    resources = ["*"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:RequestedRegion"
+      values = [
+        "eu-central-1",
+        "eu-west-1",
+        "eu-west-2",
+        "eu-west-3",
+        "us-east-1"
+      ]
+    }
+  }
+}
+
 resource "aws_iam_policy" "bedrock_integration" {
   name        = "analytical-platform-bedrock-integration"
   description = "Permissions needed to allow access to Bedrock in Frankfurt from tooling."
   policy      = data.aws_iam_policy_document.bedrock_integration.json
+}
+
+resource "aws_iam_policy" "textract_integration" {
+  name        = "analytical-platform-textract-integration"
+  description = "Permissions needed to allow access to Textract in Frankfurt from tooling."
+  policy      = data.aws_iam_policy_document.textract_integration.json
 }
