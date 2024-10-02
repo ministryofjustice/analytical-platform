@@ -127,6 +127,6 @@ resource "aws_iam_policy" "bedrock_integration" {
 
 resource "aws_iam_policy" "textract_integration" {
   name        = "analytical-platform-textract-integration"
-  description = "Permissions needed to allow access to Textract in Frankfurt from tooling."
+  description = "Permissions needed to allow access to Textract from tooling."
   policy      = data.aws_iam_policy_document.textract_integration.json
 }
