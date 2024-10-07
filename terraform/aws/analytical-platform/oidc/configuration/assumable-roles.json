@@ -87,7 +87,11 @@
     "stateLockingDetails": [],
     "ssmParameterConfig": [
       {
-        "ssmParameterArnPrefixes": ["ap-uploader/env/", "ap-uploader/dev/", "ap-uploader/prod/"],
+        "ssmParameterArnPrefixes": [
+          "ap-uploader/env/",
+          "ap-uploader/dev/",
+          "ap-uploader/prod/"
+        ],
         "ssmParameterRegion": "eu-west-1"
       }
     ]
@@ -184,9 +188,7 @@
   "modernisation-platform-lake-formation-share": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
-    "repositories": [
-      "ministryofjustice/modernisation-platform-environments"
-    ],
+    "repositories": ["ministryofjustice/modernisation-platform-environments"],
     "targets": [],
     "stateLockingDetails": [],
     "ssmParameterConfig": [],
