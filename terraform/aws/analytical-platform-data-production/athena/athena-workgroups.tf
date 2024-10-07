@@ -9,14 +9,17 @@ locals {
     "airflow-dev-hmcts" = {
       name          = "airflow-dev-workgroup-hmcts"
       business_unit = "HMCTS"
+      component = "airflow-hmcts-dev"
     }
     "airflow-prod-hmcts" = {
       name          = "airflow-prod-workgroup-hmcts"
       business_unit = "HMCTS"
+      component = "airflow-hmcts-prod"
     }
     "airflow-prod-corp" = {
       name          = "airflow-prod-workgroup-corp"
       business_unit = "CORP"
+      component = "airflow-corp-prod"
     }
   }
 }
@@ -36,7 +39,7 @@ resource "aws_athena_workgroup" "airflow" {
       selected_engine_version = "Athena engine version 3"
     }
     result_configuration {
-      output_location = "s3://mojap-athena-query-dump/${each.value.name}"
+      output_location = "s3://mojap-athena-query-dump"
     }
   }
 
@@ -45,6 +48,7 @@ resource "aws_athena_workgroup" "airflow" {
       "Name"             = each.value.name
       "application"      = "airflow"
       "business-unit"    = try(each.value.business_unit, var.tags["business-unit"])
+      "component"        = try(each.value.component, var.tags["component"]
       "environment-name" = strcontains(each.value.name, "prod") ? "prod" : "dev"
       "is-production"    = strcontains(each.value.name, "prod") ? "True" : "False"
       "owner"            = "Data Engineering:dataengineering@digital.justice.gov.uk"
