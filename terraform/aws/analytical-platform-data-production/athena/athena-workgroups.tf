@@ -9,17 +9,17 @@ locals {
     "airflow-dev-hmcts" = {
       name          = "airflow-dev-workgroup-hmcts"
       business_unit = "HMCTS"
-      component = "airflow-hmcts-dev"
+      component     = "airflow-hmcts-dev"
     }
     "airflow-prod-hmcts" = {
       name          = "airflow-prod-workgroup-hmcts"
       business_unit = "HMCTS"
-      component = "airflow-hmcts-prod"
+      component     = "airflow-hmcts-prod"
     }
     "airflow-prod-corp" = {
       name          = "airflow-prod-workgroup-corp"
       business_unit = "CORP"
-      component = "airflow-corp-prod"
+      component     = "airflow-corp-prod"
     }
   }
 }
