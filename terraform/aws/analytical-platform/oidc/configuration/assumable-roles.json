@@ -98,6 +98,10 @@
       {
         "stateBucket": "analytical-platform-data-engineering-pulumi-backend/",
         "stateBucketKey": ".pulumi/"
+      },
+      {
+        "stateBucket": "probation-de-terraform-backend/",
+        "stateBucketKey": "env:/"
       }
     ],
     "repositories": ["ministryofjustice/analytical-platform-data-engineering"],
@@ -114,6 +118,10 @@
       {
         "stateBucket": "managed-pipelines-sandbox-pulumi-backend/",
         "stateBucketKey": ".pulumi/"
+      },
+      {
+        "stateBucket": "probation-de-sandbox-terraform-backend/",
+        "stateBucketKey": "env:/"
       }
     ],
     "repositories": ["ministryofjustice/analytical-platform-data-engineering"],
