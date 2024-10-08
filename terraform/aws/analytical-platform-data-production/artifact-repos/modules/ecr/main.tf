@@ -1,7 +1,7 @@
 resource "aws_ecr_repository" "this" {
   #ts:skip=AWS.AER.DP.MEDIUM.0026 ECR is shared between all environments
   name                 = var.name
-  image_tag_mutability = "MUTABLE"
+  image_tag_mutability = "IMMUTABLE"
 
   image_scanning_configuration {
     scan_on_push = true
