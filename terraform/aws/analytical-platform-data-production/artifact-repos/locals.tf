@@ -42,10 +42,6 @@ locals {
       "allowed_push_arns" = [local.github_actions_runner]
       "allowed_pull_arns" = [local.data_account_arn, local.development_account_arn, local.production_account_arn]
     },
-    # "github-actions-template" = {
-    #   "allowed_push_arns" = [local.github_actions_runner]
-    #   "allowed_pull_arns" = [local.data_account_arn, local.development_account_arn]
-    # }
     "controlpanel_eks" = {
       "allowed_push_arns" = [local.github_actions_runner]
       "allowed_pull_arns" = [local.data_account_arn, local.development_account_arn, local.production_account_arn]
