@@ -1,27 +1,7 @@
 {
   "name": "analytical-platform",
-  "image": "ghcr.io/ministryofjustice/devcontainer-base:latest",
+  "image": "mcr.microsoft.com/devcontainers/base:1.2.0-ubuntu-24.04",
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/ministryofjustice/devcontainer-feature/aws:1": {},
-    "ghcr.io/ministryofjustice/devcontainer-feature/kubernetes:1": {},
-    "ghcr.io/ministryofjustice/devcontainer-feature/static-analysis:1": {},
-    "ghcr.io/ministryofjustice/devcontainer-feature/terraform:1": {}
-  },
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "EditorConfig.EditorConfig",
-        "GitHub.vscode-github-actions",
-        "GitHub.vscode-pull-request-github"
-      ],
-      "settings": {
-        "files.associations": {
-          "*.html.md.erb": "markdown"
-        }
-      }
-    }
+    "ghcr.io/devcontainers/features/terraform:1": {}
   }
 }
