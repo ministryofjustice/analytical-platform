@@ -22,7 +22,7 @@ module "iam_assumable_role_control_panel_api" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.44.0"
+  version = "5.46.0"
 
   providers = {
     aws = aws.analytical-platform-data-production
@@ -46,7 +46,7 @@ module "iam_assumable_role_cert_manager" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.44.0"
+  version = "5.46.0"
 
   create_role                   = true
   role_name_prefix              = "cert_manager"
@@ -63,7 +63,7 @@ module "iam_assumable_role_cluster_autoscaler" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.44.0"
+  version = "5.46.0"
 
   create_role                   = true
   role_name_prefix              = substr("cluster-autoscaler-${module.eks.cluster_id}", 0, 31)
@@ -80,7 +80,7 @@ module "iam_assumable_role_external_dns" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.44.0"
+  version = "5.46.0"
 
   create_role                   = true
   role_name_prefix              = "external_dns"
@@ -97,7 +97,7 @@ module "iam_assumable_role_external_secrets" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.44.0"
+  version = "5.46.0"
 
   create_role                   = true
   role_name_prefix              = "external_secrets"
@@ -114,7 +114,7 @@ module "iam_assumable_role_prometheus_remote_ingest" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.44.0"
+  version = "5.46.0"
 
   create_role                   = true
   role_name                     = "prometheus_remote_ingest"
@@ -181,4 +181,55 @@ resource "aws_iam_policy_attachment" "efs_csi_driver" {
   name       = "AmazonEKSEFSCSIDriverRolePolicyAttachment"
   roles      = [aws_iam_role.efs_csi_driver.name]
   policy_arn = aws_iam_policy.efs_csi_driver.arn
+}
+
+##################################################
+# AWS for Fluent Bit
+##################################################
+
+module "aws_for_fluent_bit_iam_role" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.46.0"
+
+  role_name_prefix = "aws-for-fluent-bit"
+
+  role_policy_arns = {
+    CloudWatchAgentServerPolicy   = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+    EKSClusterLogsKMSAccessPolicy = module.eks_cluster_logs_kms_access_iam_policy.arn
+  }
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${kubernetes_namespace.aws_observability.metadata[0].name}:aws-for-fluent-bit"]
+    }
+  }
+}
+
+##################################################
+# Amazon Prometheus Proxy
+##################################################
+
+module "amazon_prometheus_proxy_iam_role" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.46.0"
+
+  role_name_prefix = "amazon-prometheus-proxy"
+
+  role_policy_arns = {
+    AmazonManagedPrometheusProxy = module.amazon_prometheus_proxy_iam_policy.arn
+  }
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${kubernetes_namespace.aws_observability.metadata[0].name}:amazon-prometheus-proxy"]
+    }
+  }
 }
