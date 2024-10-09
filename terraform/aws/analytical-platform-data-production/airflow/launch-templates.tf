@@ -127,7 +127,7 @@ resource "aws_launch_template" "prod_standard" {
 
   metadata_options {
     http_put_response_hop_limit = 2
-    http_tokens                 = "optional"
+    http_tokens                 = "required"
   }
 
   network_interfaces {
@@ -179,7 +179,7 @@ resource "aws_launch_template" "prod_high_memory" {
 
   metadata_options {
     http_put_response_hop_limit = 2
-    http_tokens                 = "optional"
+    http_tokens                 = "required"
   }
 
   network_interfaces {
