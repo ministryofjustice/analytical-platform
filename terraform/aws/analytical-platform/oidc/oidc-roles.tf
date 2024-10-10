@@ -15,36 +15,30 @@ data "aws_iam_policy_document" "github_oidc_role" {
       ])
     }
   }
-  dynamic "statement" {
-    for_each = each.value.stateConfig
-
-    content {
-      sid    = "AllowOIDCReadState"
-      effect = "Allow"
-      actions = [
-        "s3:Get*",
-        "s3:List*"
-      ]
-      resources = [
-        "arn:aws:s3:::${statement.value.stateBucket}",
-        "arn:aws:s3:::${statement.value.stateBucket}*"
-      ]
-    }
+  statement {
+    sid    = "AllowOIDCReadState"
+    effect = "Allow"
+    actions = [
+      "s3:Get*",
+      "s3:List*"
+    ]
+    resources = concat(
+      [for statement in each.value.stateConfig : "arn:aws:s3:::${statement.stateBucket}"],
+      [for statement in each.value.stateConfig : "arn:aws:s3:::${statement.stateBucket}*"]
+    )
   }
-  dynamic "statement" {
-    for_each = each.value.stateConfig
-
-    content {
-      #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
-      sid    = "AllowOIDCWriteState"
-      effect = "Allow"
-      actions = [
-        "s3:PutObject",
-        "s3:PutObjectAcl",
-        "s3:DeleteObject"
-      ]
-      resources = ["arn:aws:s3:::${statement.value.stateBucket}${statement.value.stateBucketKey}*"]
-    }
+  statement {
+    #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
+    sid    = "AllowOIDCWriteState"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+      "s3:DeleteObject"
+    ]
+    resources = [
+      for statement in each.value.stateConfig : "arn:aws:s3:::${statement.stateBucket}${statement.stateBucketKey}*"
+    ]
   }
   dynamic "statement" {
     for_each = each.value.stateLockingDetails
