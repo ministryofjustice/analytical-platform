@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
 
       - name: Run Dependabot Configuration Generator
         id: run_dependabot_configuration_generator
@@ -38,7 +38,7 @@ jobs:
 
       - name: Commit Changes
         id: commit_changes
-        uses: planetscale/ghcommit-action@88c53665a0c85bc370b410610f2bcf1979204651 # v0.1.45
+        uses: planetscale/ghcommit-action@551c2e077176aa27a93d9c371131ab2465c536aa # v0.1.47
         with:
           commit_message: "🤖 Update .github/dependabot.yml"
           file_pattern: ".github/dependabot.yml"
