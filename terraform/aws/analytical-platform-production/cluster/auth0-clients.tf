@@ -28,7 +28,7 @@ resource "auth0_client" "rstudio" {
   oidc_conformant     = true
   cross_origin_auth   = true
   jwt_configuration {
-    alg = "RS256"
+    alg = "HS256"
   }
 }
 
@@ -45,7 +45,7 @@ resource "auth0_client" "jupyter_lab" {
   oidc_conformant     = true
   cross_origin_auth   = true
   jwt_configuration {
-    alg = "RS256"
+    alg = "HS256"
   }
 }
 
