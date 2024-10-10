@@ -1,8 +1,8 @@
 ---
-owner_slack: "#analytical-platform"
+owner_slack: "#analytical-platform-notifications"
 title: Airflow Support - Tips and tricks
-last_reviewed_on: 2024-09-05
-review_in: 1 months
+last_reviewed_on: 2024-10-10
+review_in: 3 months
 ---
 
 # <%= current_page.data.title %>
@@ -16,7 +16,6 @@ This is here to help you get to the bottom of what's wrong in any given Airflow 
 3. [Advanced Troubleshooting](#advanced-troubleshooting)
 4. [Contact Information](#contact-information)
 
-
 ## Flow Chart
 
 The following flow chart details how we generally approach a support issue that comes in for Airflow.
@@ -24,7 +23,6 @@ The following flow chart details how we generally approach a support issue that 
 ![Airflow Support Flow Chart](airflow-support-flowchart.excalidraw.png)
 
 This is a wide image, so you may benefit from opening it in a separate tab where you can zoom in and work through it as you approach the ticket if you have difficulty reading it.
-
 
 ## Step by Step Flow
 
@@ -93,6 +91,7 @@ This is intimidating, but already gives us clues - the back end of the task give
 ```
 
 99% of the time, when this occurs, it is due to the pod being unable to find the image it is trying to load. This happens for 2 reasons:
+
 - Users have published the image with a name (usually specifically the tag) that doesn't match the name their DAG is looking for.
 - Users are working with an image that hasn't been updated in a long time, and thus has not been updated to let our newer compute cluster activate it.
 
@@ -262,6 +261,6 @@ kubectl delete  mutatingwebhookconfiguration kyverno-resource-mutating-webhook-c
 
 These two commands will cause kyverno to regenerate the two webhooks listed, hopefully unblocking the state.
 
-## Contact Info
+## Contact Information
 
 The Analytical Platform team can be contacted by [raising a support issue](https://github.com/ministryofjustice/data-platform-support/issues/new/choose). If you're reading this, you're probably a team member though, so just ask someone in the slack channel for help if there's an issue you get stuck on.
