@@ -2469,9 +2469,9 @@ locals {
 
       lifecycle_rule = [
         {
-          enabled                                = true
-          prefix                                 = "dev/models/"
-          id                                     = "dev/models"
+          enabled = true
+          prefix  = "dev/models/"
+          id      = "dev/models"
 
           expiration = {
             days                         = 10
@@ -2479,9 +2479,9 @@ locals {
           }
         },
         {
-          enabled                                = true
-          prefix                                 = "dev/seeds/"
-          id                                     = "dev/seeds"
+          enabled = true
+          prefix  = "dev/seeds/"
+          id      = "dev/seeds"
 
           expiration = {
             days                         = 10
@@ -2489,9 +2489,9 @@ locals {
           }
         },
         {
-          enabled                                = true
-          prefix                                 = "dev/run_artefacts/"
-          id                                     = "dev/run_artefacts"
+          enabled = true
+          prefix  = "dev/run_artefacts/"
+          id      = "dev/run_artefacts"
 
           expiration = {
             days                         = 3
@@ -2499,9 +2499,9 @@ locals {
           }
         },
         {
-          enabled                                = true
-          prefix                                 = "prod/run_artefacts/"
-          id                                     = "prod/run_artefacts"
+          enabled = true
+          prefix  = "prod/run_artefacts/"
+          id      = "prod/run_artefacts"
 
           expiration = {
             days                         = 3
@@ -2509,9 +2509,9 @@ locals {
           }
         },
         {
-          enabled                                = true
-          prefix                                 = "sandpit/models/"
-          id                                     = "sandpit/models"
+          enabled = true
+          prefix  = "sandpit/models/"
+          id      = "sandpit/models"
 
           expiration = {
             days                         = 3
@@ -2538,8 +2538,8 @@ locals {
                 "arn:aws:s3:::mojap-derived-tables/dev/run_artefacts/*",
                 "arn:aws:s3:::mojap-derived-tables/seeds/*",
                 "arn:aws:s3:::mojap-derived-tables/dev/seeds/*",
-                ]
-              Sid      = "AllowCompliantPaths"
+              ]
+              Sid = "AllowCompliantPaths"
             },
             {
               Action = [
@@ -2551,15 +2551,13 @@ locals {
               }
               Resource = [
                 "arn:aws:s3:::mojap-derived-tables",
-                ]
-              Sid      = "AllowList"
+              ]
+              Sid = "AllowList"
             },
           ]
           Version = "2012-10-17"
         }
       )
-    }
-
     }
   }
 }
