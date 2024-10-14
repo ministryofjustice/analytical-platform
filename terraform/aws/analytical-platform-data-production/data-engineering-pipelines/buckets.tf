@@ -21,3 +21,37 @@ module "data_engineering_pipeline_buckets" {
   grant                                = each.value.grant
 }
 
+import {
+  to = module.data_engineering_pipeline_buckets["mojap-derived-tables"].aws_s3_bucket.this[0]
+  id = "mojap-derived-tables"
+}
+
+import {
+  to = module.data_engineering_pipeline_buckets["mojap-derived-tables"].aws_s3_bucket_acl.this[0]
+  id = "mojap-derived-tables"
+}
+
+import {
+  to = module.data_engineering_pipeline_buckets["mojap-derived-tables"].aws_s3_bucket_lifecycle_configuration.this[0]
+  id = "mojap-derived-tables"
+}
+
+import {
+  to = module.data_engineering_pipeline_buckets["mojap-derived-tables"].aws_s3_bucket_policy.this[0]
+  id = "mojap-derived-tables"
+}
+
+import {
+  to = module.data_engineering_pipeline_buckets["mojap-derived-tables"].aws_s3_bucket_public_access_block.this[0]
+  id = "mojap-derived-tables"
+}
+
+import {
+  to = module.data_engineering_pipeline_buckets["mojap-derived-tables"].aws_s3_bucket_server_side_encryption_configuration.this[0]
+  id = "mojap-derived-tables"
+}
+
+import {
+  to = module.data_engineering_pipeline_buckets["mojap-derived-tables"].aws_s3_bucket_versioning.this[0]
+  id = "mojap-derived-tables"
+}

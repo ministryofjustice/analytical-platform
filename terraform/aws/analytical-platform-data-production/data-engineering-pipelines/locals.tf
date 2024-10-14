@@ -2443,7 +2443,7 @@ locals {
       object_lock_enabled = false
       acl                 = "private"
       versioning = {
-        enabled    = true,
+        enabled    = false,
         mfa_delete = false
       }
       mfa_delete = false
@@ -2470,9 +2470,12 @@ locals {
       lifecycle_rule = [
         {
           enabled = true
-          prefix  = "dev/models/"
           id      = "dev/models"
 
+          filter = {
+            prefix = "dev/models/"
+          }
+
           expiration = {
             days                         = 10
             expired_object_delete_marker = false
@@ -2480,9 +2483,12 @@ locals {
         },
         {
           enabled = true
-          prefix  = "dev/seeds/"
           id      = "dev/seeds"
 
+          filter = {
+            prefix = "dev/seeds/"
+          }
+
           expiration = {
             days                         = 10
             expired_object_delete_marker = false
@@ -2490,18 +2496,11 @@ locals {
         },
         {
           enabled = true
-          prefix  = "dev/run_artefacts/"
           id      = "dev/run_artefacts"
 
-          expiration = {
-            days                         = 3
-            expired_object_delete_marker = false
+          filter = {
+            prefix = "dev/run_artefacts/"
           }
-        },
-        {
-          enabled = true
-          prefix  = "prod/run_artefacts/"
-          id      = "prod/run_artefacts"
 
           expiration = {
             days                         = 3
@@ -2510,8 +2509,24 @@ locals {
         },
         {
           enabled = true
-          prefix  = "sandpit/models/"
+          id      = "prod/run_artefacts"
+
+          filter = {
+            prefix = "prod/run_artefacts/"
+          }
+
+          expiration = {
+            days                         = 3
+            expired_object_delete_marker = false
+          }
+        },
+        {
+          enabled = true
           id      = "sandpit/models"
+
+          filter = {
+            prefix = "sandpit/models/"
+          }
 
           expiration = {
             days                         = 3
