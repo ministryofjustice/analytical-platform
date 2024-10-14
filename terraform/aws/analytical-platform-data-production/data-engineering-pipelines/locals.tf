@@ -2443,8 +2443,7 @@ locals {
       object_lock_enabled = false
       acl                 = "private"
       versioning = {
-        enabled    = false,
-        mfa_delete = false
+        status = "Disabled"
       }
       mfa_delete = false
       server_side_encryption_configuration = {
