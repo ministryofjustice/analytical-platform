@@ -4,11 +4,11 @@ account_ids = {
 }
 tags = {
   business-unit          = "Platforms"
-  application            = "Data Platform"
+  application            = "Analytical Platform"
   component              = "create-a-derived-table"
   environment            = "production"
   is-production          = "true"
-  owner                  = "data-platform:data-platform-tech@digital.justice.gov.uk"
-  infrastructure-support = "data-platform:data-platform-tech@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/create-a-derived-table"
+  owner                  = "analytical-platform:analytical-platformdigital.justice.gov.uk"
+  infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
+  source-code            = "github.com/ministryofjustice/analytical-platform/terraform/aws/analytical-platform-data-production/create-a-derived-table"
 }
