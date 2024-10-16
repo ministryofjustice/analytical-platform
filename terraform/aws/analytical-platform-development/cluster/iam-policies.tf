@@ -515,6 +515,18 @@ data "aws_iam_policy_document" "control_panel_api" {
     ]
     resources = ["arn:aws:lakeformation:*:${var.account_ids["analytical-platform-development"]}:*"]
   }
+  statement {
+    sid    = "AssumeRoleComputeAccounnt"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession"
+    ]
+    resources = [
+      "arn:aws:iam::${var.account_ids["analytical-platform-compute-development"]}:role/analytical-platform-control-panel",
+      "arn:aws:iam::${var.account_ids["analytical-platform-compute-test"]}:role/analytical-platform-control-panel"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "control_panel_api" {
