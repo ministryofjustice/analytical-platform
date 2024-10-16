@@ -31,6 +31,8 @@ resource "aws_iam_policy" "cert_manager" {
 ##################################################
 
 data "aws_iam_policy_document" "cluster_autoscaler" {
+  #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
+  #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
   statement {
     sid    = "clusterAutoscalerAll"
     effect = "Allow"
@@ -311,6 +313,8 @@ resource "aws_iam_policy" "ebs_csi_driver" {
 ##################################################
 
 data "aws_iam_policy_document" "control_panel_api" {
+  #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
+  #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
   statement {
     sid    = "CanCreateBuckets"
     effect = "Allow"
