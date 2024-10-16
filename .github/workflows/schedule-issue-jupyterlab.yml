@@ -52,6 +52,7 @@ jobs:
             So that… security / best practice etc
 
             ### Definition of Done
+            Since this image relies on the Analytical Platform Cloud Base Development Image ensure that the maintenance issue is completed for that prior to doing this ticket.
             - [ ] Merge any open dependabot Pull Requests in the JupyterLab [repository](https://github.com/ministryofjustice/analytical-platform-jupyterlab).
             - [ ] Create new [release](https://github.com/ministryofjustice/analytical-platform-jupyterlab/releases).
             - [ ] Update [guidance](https://user-guidance.analytical-platform.service.justice.gov.uk/tools/visual-studio-code/#visual-studio-code), if required.
