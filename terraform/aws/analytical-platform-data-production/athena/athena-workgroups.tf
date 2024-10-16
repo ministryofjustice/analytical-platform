@@ -34,7 +34,7 @@ resource "aws_athena_workgroup" "airflow" {
 
   configuration {
     bytes_scanned_cutoff_per_query  = 1099511627776
-    enforce_workgroup_configuration = strcontains(each.value.name, "airflow-dev-workgroup") ? "false" : "true"
+    enforce_workgroup_configuration = strcontains(each.value.name, "airflow-dev-workgroup") ? false : true
     engine_version {
       selected_engine_version = "Athena engine version 3"
     }
