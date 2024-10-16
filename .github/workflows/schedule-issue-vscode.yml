@@ -52,6 +52,7 @@ jobs:
             So that… security / best practice etc
 
             ### Definition of Done
+            Since this image relies on the Analytical Platform Cloud Base Development Image ensure that the maintenance issue is completed for that prior to doing this ticket.
             - [ ] Merge any open dependabot Pull Requests in the Visual Studio Code [repository](https://github.com/ministryofjustice/analytical-platform-visual-studio-code).
             - [ ] Update the Visual Studio Code [version](https://github.com/ministryofjustice/analytical-platform-visual-studio-code?tab=readme-ov-file#visual-studio-code) if required.
             - [ ] Create new [release](https://github.com/ministryofjustice/analytical-platform-visual-studio-code/releases).
