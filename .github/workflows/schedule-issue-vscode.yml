@@ -3,7 +3,7 @@ name: 📥 Maintenance - Create Visual Studio Code Issue
 
 on:
   schedule:
-    - cron: "0 8 1,15 * *" # UTC time: “At 08:00 on day-of-month 1 and 15.”
+    - cron: "0 8 1 * *" # UTC time: “At 08:00 on first day-of-month”
 
 permissions: {}
 
@@ -52,7 +52,9 @@ jobs:
             So that… security / best practice etc
 
             ### Definition of Done
+            Since this image relies on the Analytical Platform Cloud Base Development Image ensure that the maintenance issue is completed for that prior to doing this ticket.
             - [ ] Merge any open dependabot Pull Requests in the Visual Studio Code [repository](https://github.com/ministryofjustice/analytical-platform-visual-studio-code).
+            - [ ] Update the Visual Studio Code [version](https://github.com/ministryofjustice/analytical-platform-visual-studio-code?tab=readme-ov-file#visual-studio-code) if required.
             - [ ] Create new [release](https://github.com/ministryofjustice/analytical-platform-visual-studio-code/releases).
             - [ ] Update [guidance](https://user-guidance.analytical-platform.service.justice.gov.uk/tools/visual-studio-code/#visual-studio-code), if required.
             - [ ] Create a new release in [development](https://controlpanel.services.dev.analytical-platform.service.justice.gov.uk/releases/).
