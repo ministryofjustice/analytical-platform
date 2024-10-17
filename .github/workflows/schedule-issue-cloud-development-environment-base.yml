@@ -3,7 +3,7 @@ name: 📥 Maintenance - Create Cloud Development Environment Base Issue
 
 on:
   schedule:
-    - cron: "0 8 1,15 * *" # UTC time: “At 08:00 on day-of-month 1 and 15.”
+    - cron: "0 8 1 * *" # UTC time: “At 08:00 on first day-of-month”
 
 permissions: {}
 
