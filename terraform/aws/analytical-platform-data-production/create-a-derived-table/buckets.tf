@@ -1,7 +1,7 @@
 module "cadet_buckets" {
   for_each = local.cadet_buckets
   source   = "terraform-aws-modules/s3-bucket/aws"
-  version  = "4.2.0"
+  version  = "4.2.1"
 
   bucket                               = each.key
   force_destroy                        = each.value.force_destroy
