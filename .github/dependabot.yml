@@ -51,6 +51,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/artifact-repos"
       - "terraform/aws/analytical-platform-data-production/athena"
       - "terraform/aws/analytical-platform-data-production/control-panel-message-broker"
+      - "terraform/aws/analytical-platform-data-production/create-a-derived-table"
       - "terraform/aws/analytical-platform-data-production/data-engineering-pipelines"
       - "terraform/aws/analytical-platform-data-production/github-actions-roles"
       - "terraform/aws/analytical-platform-data-production/hmcts-sdp-direct-connect"
