@@ -1,4 +1,7 @@
 module "state_locking" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
   source  = "terraform-aws-modules/dynamodb-table/aws"
   version = "4.2.0"
 

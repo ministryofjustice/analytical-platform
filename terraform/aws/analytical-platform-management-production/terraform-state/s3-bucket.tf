@@ -1,4 +1,7 @@
 module "state_bucket" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.2.1"
 
