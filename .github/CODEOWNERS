@@ -1,1 +1,4 @@
 * @ministryofjustice/analytical-platform
+
+terraform/aws/analytical-platform-data-engineering-production @ministryofjustice/analytical-platform @ministryofjustice/data-engineering
+terraform/aws/analytical-platform-data-engineering-sandbox-a  @ministryofjustice/analytical-platform @ministryofjustice/data-engineering
