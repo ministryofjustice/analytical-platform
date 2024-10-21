@@ -3,7 +3,7 @@ name: 📥 Maintenance - Create Cloud Development Environment Base Issue
 
 on:
   schedule:
-    - cron: "0 8 1,15 * *" # UTC time: “At 08:00 on day-of-month 1 and 15.”
+    - cron: "0 8 1 * *" # UTC time: “At 08:00 on first day-of-month”
 
 permissions: {}
 
@@ -53,6 +53,7 @@ jobs:
 
             ### Definition of Done
             - [ ] Merge any open dependabot Pull Requests in the Analytical Platform Cloud Development Environment Base [repository](https://github.com/ministryofjustice/analytical-platform-cloud-development-environment-base/pulls).
+            - [ ] Update the image as per the instructions in the README.
             - [ ] Create new [release](https://github.com/ministryofjustice/analytical-platform-cloud-development-environment-base/releases).
 
           PINNED: false

@@ -14,11 +14,11 @@ terraform {
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "5.72.0"
+      version = "5.72.1"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.32.0"
+      version = "2.33.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -26,7 +26,7 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.15.0"
+      version = "2.16.1"
     }
   }
   required_version = "~> 1.7"
