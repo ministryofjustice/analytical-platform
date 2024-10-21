@@ -53,6 +53,7 @@ jobs:
 
             ### Definition of Done
             - [ ] Merge any open dependabot Pull Requests in the Analytical Platform Cloud Development Environment Base [repository](https://github.com/ministryofjustice/analytical-platform-cloud-development-environment-base/pulls).
+            - [ ] Update the image as per the instructions in the README.
             - [ ] Create new [release](https://github.com/ministryofjustice/analytical-platform-cloud-development-environment-base/releases).
 
           PINNED: false
