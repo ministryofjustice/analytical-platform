@@ -29,3 +29,36 @@ provider "aws" {
     tags = var.tags
   }
 }
+
+provider "aws" {
+  alias  = "analytical-platform-data-engineering-production"
+  region = "eu-west-2"
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/GlobalGitHubActionAdmin"
+  }
+  default_tags {
+    tags = var.tags
+  }
+}
+
+provider "aws" {
+  alias  = "analytical-platform-data-engineering-sandbox-a"
+  region = "eu-west-2"
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
+  }
+  default_tags {
+    tags = var.tags
+  }
+}
+
+provider "aws" {
+  alias  = "analytical-platform-data-production"
+  region = "eu-west-2"
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/GlobalGitHubActionAdmin"
+  }
+  default_tags {
+    tags = var.tags
+  }
+}
