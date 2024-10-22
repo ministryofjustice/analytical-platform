@@ -45,82 +45,32 @@ data "aws_iam_policy_document" "state_bucket_policy" {
       identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.analytical_platform_team_access_role.names)}"]
     }
   }
-  // Data Engineering: Data Engineering Production
+  // Data Engineering Team
   statement {
-    sid       = "DataEngineeringProductionListBucket"
+    sid       = "DataEngineeringTeamListBucket"
     effect    = "Allow"
     actions   = ["s3:ListBucket"]
     resources = [module.state_bucket.s3_bucket_arn]
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_engineering_production_data_eng.names)}"]
+      identifiers = [module.data_engineering_state_access_iam_role.iam_role_arn]
     }
   }
   statement {
-    sid    = "DataEngineeringProductionReadWriteBucket"
+    sid    = "DataEngineeringTeamReadWriteBucket"
     effect = "Allow"
     actions = [
       "s3:GetObject",
       "s3:PutObject"
     ]
-    resources = ["${module.state_bucket.s3_bucket_arn}/aws/analytical-platform-data-engineering-production/*"]
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_engineering_production_data_eng.names)}"]
-    }
-  }
-  // Data Engineering: Data Engineering Sandbox A
-  statement {
-    sid       = "DataEngineeringSandboxAListBucket"
-    effect    = "Allow"
-    actions   = ["s3:ListBucket"]
-    resources = [module.state_bucket.s3_bucket_arn]
-    principals {
-      type = "AWS"
-      identifiers = [
-        "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_engineering_sandbox_a_admin.names)}",
-        "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_engineering_sandbox_a_data_eng.names)}"
-      ]
-    }
-  }
-  statement {
-    sid    = "DataEngineeringSandboxAReadWriteBucket"
-    effect = "Allow"
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject"
+    resources = [
+      "${module.state_bucket.s3_bucket_arn}/aws/analytical-platform-data-engineering-production/*",
+      "${module.state_bucket.s3_bucket_arn}/aws/analytical-platform-data-engineering-sandbox-a/*",
+      "${module.state_bucket.s3_bucket_arn}/aws/analytical-platform-data-production/*"
     ]
-    resources = ["${module.state_bucket.s3_bucket_arn}/aws/analytical-platform-data-engineering-sandbox-a/*"]
-    principals {
-      type = "AWS"
-      identifiers = [
-        "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_engineering_sandbox_a_admin.names)}",
-        "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_engineering_sandbox_a_data_eng.names)}"
-      ]
-    }
-  }
-  // Data Engineering: Data Production
-  statement {
-    sid       = "DEDataProductionListBucket"
-    effect    = "Allow"
-    actions   = ["s3:ListBucket"]
-    resources = [module.state_bucket.s3_bucket_arn]
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_production_data_eng.names)}"]
-    }
-  }
-  statement {
-    sid    = "DEDataProductionReadWriteBucket"
-    effect = "Allow"
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject"
-    ]
-    resources = ["${module.state_bucket.s3_bucket_arn}/aws/analytical-platform-data-production/*"]
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_production_data_eng.names)}"]
+      identifiers = [module.data_engineering_state_access_iam_role.iam_role_arn]
     }
   }
 }
