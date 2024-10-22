@@ -72,7 +72,4 @@ updates:
       - "terraform/aws/analytical-platform-production/route53"
       - "terraform/aws/analytical-platform/baseline"
       - "terraform/aws/analytical-platform/oidc"
-      - "terraform/cloud-platform/live/data-platform-development/static-assets"
-      - "terraform/cloud-platform/live/data-platform-production/actions-runners"
-      - "terraform/dpat-eks/production/actions-runners"
       - "terraform/pagerduty"
