@@ -18,6 +18,17 @@ data "aws_iam_policy_document" "data_engineering_state_access" {
       "${module.state_bucket.s3_bucket_arn}/aws/analytical-platform-data-production/*"
     ]
   }
+  statement {
+    sid    = "DynamoDBAccess"
+    effect = "Allow"
+    actions = [
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:DeleteItem"
+    ]
+    resources = [module.state_locking.dynamodb_table_arn]
+  }
 }
 
 module "data_engineering_state_access_iam_policy" {
