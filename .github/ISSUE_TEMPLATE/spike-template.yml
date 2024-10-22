@@ -10,14 +10,16 @@ body:
     id: context
     attributes:
       label: Context
-      placeholder:
-      value: Describe the background context for the problem (why are we doing this spike?)
+      placeholder: >
+        Describe the background context for the problem (why are we doing this spike?)
+      value:
     validations:
       required: true
   - type: textarea
     id: proposal
     attributes:
-      description: A proposal that is something testable, don't worry whether it works or not, it's a place for ideas.
+      description: >
+        A proposal that is something testable, don't worry whether it works or not, it's a place for ideas.
       label: Proposal
       value:
     validations:
@@ -25,7 +27,8 @@ body:
   - type: input
     id: spike-requirements
     attributes:
-      description: Role required, and how many work days of effort estimated (loose timebox)
+      description: >
+        Role required, and how many work days of effort estimated (loose timebox)
       placeholder: Developer, 2 days
       label: Spike requirements
       value:
@@ -34,7 +37,8 @@ body:
   - type: textarea
     id: dod
     attributes:
-      description: Please clearly and concisely detail the DoD. (example optional checklist below)
+      description: >
+        Please clearly and concisely detail the DoD. (example optional checklist below)
       label: Definition of Done
       value: |
         Example
@@ -46,5 +50,5 @@ body:
       required: false
   - type: markdown
     attributes:
-      value: |
+      value: >
         [How to write good user stories](https://www.gov.uk/service-manual/agile-delivery/writing-user-stories)
