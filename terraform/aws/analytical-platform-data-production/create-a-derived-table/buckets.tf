@@ -10,9 +10,8 @@ module "mojap_cadet_production" {
   }]
   force_destroy       = false
   object_lock_enabled = false
-  acl                 = "private"
   versioning = {
-    status     = "Disabled"
+    status     = "Enabled"
     mfa_delete = false
   }
   server_side_encryption_configuration = {
@@ -106,7 +105,37 @@ module "mojap_cadet_production" {
   attach_policy = true
   policy        = data.aws_iam_policy_document.mojap_cadet_production.json
 
-  replication_configuration = data.aws_s3_bucket_replication_configuration.mojap_cadet_to_apc_compute
+  replication_configuration = {
+    role = module.mojap_cadet_production_replication_iam_role.iam_role_arn
+
+    rules = [
+      {
+        id                        = "mojap-data-production-cadet-to-apc-production"
+        status                    = "Enabled"
+        delete_marker_replication = true
+
+        destination = {
+          account_id    = var.account_ids["analytical-platform-compute-production"]
+          bucket        = "arn:aws:s3:::mojap-compute-production-derived-tables-replication"
+          storage_class = "STANDARD"
+          access_control_translation = {
+            owner = "Destination"
+          }
+          encryption_configuration = {
+            replica_kms_key_id = "arn:aws:kms:${local.destination_region}:${var.account_ids["analytical-platform-compute-production"]}:key/${local.mojap_apc_prod_cadet_replication_kms_key_id}"
+          }
+          metrics = {
+            status  = "Enabled"
+            minutes = 15
+          }
+          replication_time = {
+            status  = "Enabled"
+            minutes = 15
+          }
+        }
+      }
+    ]
+  }
 
   tags = var.tags
 }
@@ -148,40 +177,42 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
   }
 }
 
-data "aws_s3_bucket_replication_configuration" "mojap_cadet_to_apc_compute" {
-  role = module.mojap_cadet_production_replication_iam_role.iam_role_arn
+moved {
+  from = module.cadet_buckets["mojap-derived-tables"].aws_s3_bucket.this[0]
+  to   = module.mojap_cadet_production.aws_s3_bucket.this[0]
+}
 
-  rules = [
-    {
-      id                        = "mojap-data-production-cadet-to-apc-production"
-      status                    = "Enabled"
-      delete_marker_replication = true
+moved {
+  from = module.cadet_buckets["mojap-derived-tables"].aws_s3_bucket_acl.this[0]
+  to   = module.mojap_cadet_production.aws_s3_bucket_acl.this[0]
+}
 
-      # source_selection_criteria = {
-      #   sse_kms_encrypted_objects = {
-      #     enabled = true
-      #   }
-      # }
+moved {
+  from = module.cadet_buckets["mojap-derived-tables"].aws_s3_bucket_lifecycle_configuration.this[0]
+  to   = module.mojap_cadet_production.aws_s3_bucket_lifecycle_configuration.this[0]
+}
 
-      destination = {
-        account_id    = var.account_ids["analytical-platform-compute-production"]
-        bucket        = "arn:aws:s3:::mojap-compute-production-derived-tables-replication"
-        storage_class = "STANDARD"
-        access_control_translation = {
-          owner = "Destination"
-        }
-        encryption_configuration = {
-          replica_kms_key_id = "arn:aws:kms:eu-west-2:${var.account_ids["analytical-platform-compute-production"]}:key/${local.mojap_apc_prod_cadet_replication_kms_key_id}"
-        }
-        metrics = {
-          status  = "Enabled"
-          minutes = 15
-        }
-        replication_time = {
-          status  = "Enabled"
-          minutes = 15
-        }
-      }
-    }
-  ]
+moved {
+  from = module.cadet_buckets["mojap-derived-tables"].aws_s3_bucket_logging.this[0]
+  to   = module.mojap_cadet_production.aws_s3_bucket_logging.this[0]
+}
+
+moved {
+  from = module.cadet_buckets["mojap-derived-tables"].aws_s3_bucket_policy.this[0]
+  to   = module.mojap_cadet_production.aws_s3_bucket_policy.this[0]
+}
+
+moved {
+  from = module.cadet_buckets["mojap-derived-tables"].aws_s3_bucket_public_access_block.this[0]
+  to   = module.mojap_cadet_production.aws_s3_bucket_public_access_block.this[0]
+}
+
+moved {
+  from = module.cadet_buckets["mojap-derived-tables"].aws_s3_bucket_server_side_encryption_configuration.this[0]
+  to   = module.mojap_cadet_production.aws_s3_bucket_server_side_encryption_configuration.this[0]
+}
+
+moved {
+  from = module.cadet_buckets["mojap-derived-tables"].aws_s3_bucket_versioning.this[0]
+  to   = module.mojap_cadet_production.aws_s3_bucket_versioning.this[0]
 }
