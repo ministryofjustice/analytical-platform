@@ -18,6 +18,11 @@ terraform {
 provider "aws" {
   alias = "session"
 }
+
+provider "aws" {
+  alias  = "destination"
+  region = "eu-west-2"
+}
 provider "aws" {
   region = "eu-west-1"
   assume_role {
