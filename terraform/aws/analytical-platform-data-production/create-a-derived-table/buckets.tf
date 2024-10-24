@@ -1,4 +1,4 @@
-module "mojap_cadet_prod" {
+module "mojap_cadet_production" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.2.1"
 
@@ -104,12 +104,14 @@ module "mojap_cadet_prod" {
   ]
 
   attach_policy = true
-  policy        = data.aws_iam_policy_document.mojap_cadet_prod.json
+  policy        = data.aws_iam_policy_document.mojap_cadet_production.json
+
+  replication_configuration = data.aws_s3_bucket_replication_configuration.mojap_cadet_to_apc_compute
 
   tags = var.tags
 }
 
-data "aws_iam_policy_document" "mojap_cadet_prod" {
+data "aws_iam_policy_document" "mojap_cadet_production" {
   statement {
     sid    = "AllowCompliantPaths"
     effect = "Allow"
@@ -144,4 +146,42 @@ data "aws_iam_policy_document" "mojap_cadet_prod" {
       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
   }
+}
+
+data "aws_s3_bucket_replication_configuration" "mojap_cadet_to_apc_compute" {
+  role = module.mojap_cadet_production_replication_iam_role.iam_role_arn
+
+  rules = [
+    {
+      id                        = "mojap-data-production-cadet-to-apc-production"
+      status                    = "Enabled"
+      delete_marker_replication = true
+
+      # source_selection_criteria = {
+      #   sse_kms_encrypted_objects = {
+      #     enabled = true
+      #   }
+      # }
+
+      destination = {
+        account_id    = var.account_ids["analytical-platform-compute-production"]
+        bucket        = "arn:aws:s3:::mojap-compute-production-derived-tables-replication"
+        storage_class = "STANDARD"
+        access_control_translation = {
+          owner = "Destination"
+        }
+        encryption_configuration = {
+          replica_kms_key_id = "arn:aws:kms:eu-west-2:${var.account_ids["analytical-platform-compute-production"]}:key/${local.mojap_apc_prod_cadet_replication_kms_key_id}"
+        }
+        metrics = {
+          status  = "Enabled"
+          minutes = 15
+        }
+        replication_time = {
+          status  = "Enabled"
+          minutes = 15
+        }
+      }
+    }
+  ]
 }
