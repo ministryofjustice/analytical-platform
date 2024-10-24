@@ -1,5 +1,5 @@
+#trivy:ignore:avd-aws-0132:Replicating existing bucket that does not encrypt data with a customer managed key
 module "mojap_cadet_production" {
-  #trivy:ignore:avd-aws-0132:Replicating existing bucket that does not encrypt data with a customer managed key
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
