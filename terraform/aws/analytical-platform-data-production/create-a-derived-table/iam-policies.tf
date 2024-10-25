@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "mojap_cadet_production_replication" {
     resources = ["${module.mojap_cadet_production.s3_bucket_arn}/*"]
   }
   statement {
-    sid    = "SourceBucketObjectDecryptS3SsePermissions"
+    sid    = "SourceBucketObjectDecryptSseS3Permissions"
     effect = "Allow"
     actions = [
       "kms:Decrypt",
@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "mojap_cadet_production_replication" {
     resources = [data.aws_kms_alias.s3_source.arn]
   }
   statement {
-    sid    = "DestinationBucketObjectEncryptS3SsePermissions"
+    sid    = "DestinationBucketObjectEncryptSseS3Permissions"
     effect = "Allow"
     actions = [
       "kms:Encrypt",
@@ -85,12 +85,11 @@ data "aws_iam_policy_document" "mojap_cadet_production_replication" {
 }
 
 data "aws_kms_alias" "s3_source" {
-  provider = aws.session
-  name     = "alias/aws/s3"
+  name = "alias/aws/s3"
 }
 
 data "aws_kms_alias" "s3_destination" {
-  provider = aws.destination
+  provider = aws.analytical-platform-data-production-eu-west-2
   name     = "alias/aws/s3"
 }
 
