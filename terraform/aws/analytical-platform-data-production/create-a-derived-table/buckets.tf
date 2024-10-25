@@ -125,7 +125,7 @@ module "mojap_cadet_production" {
             owner = "Destination"
           }
           encryption_configuration = {
-            replica_kms_key_id = "arn:aws:kms:${local.destination_region}:${var.account_ids["analytical-platform-compute-production"]}:key/${local.mojap_apc_prod_cadet_replication_kms_key_id}"
+            replica_kms_key_id = "arn:aws:kms:${local.destination_region}:${var.account_ids["analytical-platform-compute-production"]}:key/${data.aws_kms_alias.mojap_apc_prod_cadet_replication_bucket.key_id}"
           }
           metrics = {
             status  = "Enabled"

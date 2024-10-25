@@ -48,7 +48,7 @@ data "aws_iam_policy_document" "mojap_cadet_production_replication" {
       # https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-key.html#bucket-key-replication#bucket-key-replication
       test     = "StringLike"
       variable = "kms:EncryptionContext:aws:s3:arn"
-      values   = ["${module.mojap_cadet_production.s3_bucket_arn}"]
+      values   = [module.mojap_cadet_production.s3_bucket_arn]
     }
     resources = [data.aws_kms_alias.s3_source.arn]
   }
@@ -69,7 +69,7 @@ data "aws_iam_policy_document" "mojap_cadet_production_replication" {
       # https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-key.html#bucket-key-replication#bucket-key-replication
       test     = "StringLike"
       variable = "kms:EncryptionContext:aws:s3:arn"
-      values   = ["${local.mojap_apc_prod_cadet_replication_bucket}"]
+      values   = [local.mojap_apc_prod_cadet_replication_bucket]
     }
     resources = [data.aws_kms_alias.s3_destination.arn]
   }
@@ -80,17 +80,8 @@ data "aws_iam_policy_document" "mojap_cadet_production_replication" {
       "kms:Encrypt",
       "kms:GenerateDataKey"
     ]
-    resources = ["arn:aws:kms:${local.destination_region}:${var.account_ids["analytical-platform-compute-production"]}:key/${local.mojap_apc_prod_cadet_replication_kms_key_id}"]
+    resources = ["arn:aws:kms:${local.destination_region}:${var.account_ids["analytical-platform-compute-production"]}:key/${data.aws_kms_alias.mojap_apc_prod_cadet_replication_bucket.key_id}"]
   }
-}
-
-data "aws_kms_alias" "s3_source" {
-  name = "alias/aws/s3"
-}
-
-data "aws_kms_alias" "s3_destination" {
-  provider = aws.analytical-platform-data-production-eu-west-2
-  name     = "alias/aws/s3"
 }
 
 module "mojap_cadet_production_replication_iam_policy" {
