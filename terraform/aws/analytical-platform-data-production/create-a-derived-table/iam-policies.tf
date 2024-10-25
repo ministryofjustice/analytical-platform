@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "mojap_cadet_production_replication" {
       "kms:Encrypt",
       "kms:GenerateDataKey"
     ]
-    resources = ["arn:aws:kms:${local.destination_region}:${var.account_ids["analytical-platform-compute-production"]}:key/${data.aws_kms_alias.mojap_apc_prod_cadet_replication_bucket.key_id}"]
+    resources = ["arn:aws:kms:${local.destination_region}:${var.account_ids["analytical-platform-compute-production"]}:key/${data.aws_kms_alias.mojap_apc_prod_cadet_replication_bucket.target_key_id}"]
   }
 }
 
