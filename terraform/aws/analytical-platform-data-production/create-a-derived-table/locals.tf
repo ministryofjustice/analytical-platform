@@ -82,7 +82,7 @@ locals {
           }
 
           expiration = {
-            days                         = 3
+            days                         = 14
             expired_object_delete_marker = false
           }
         },
