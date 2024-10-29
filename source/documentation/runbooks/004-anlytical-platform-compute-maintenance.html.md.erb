@@ -9,7 +9,7 @@ review_in: 3 months
 
 On the first day of the month the workflow [schedule-issue-compute-infrastructure.yml] (https://github.com/ministryofjustice/analytical-platform/blob/bba07f4908b443a2c15bf94738c8b84c5211e9f9/.github/workflows/schedule-issue-compute-infrastructure.yml) will automatically raise a ticket for [Maintenance - Analytical Platform Compute ] (https://github.com/ministryofjustice/analytical-platform/issues/5661 ).
 
-This maintenance ticket includes EKS Cluster Upgrade if applicable and/or patching to ensure all components are as up to date.
+This maintenance ticket includes EKS Cluster Upgrade if applicable and/or patching to ensure all components are up to date.
 
 ##  Check for new release
 
@@ -46,7 +46,7 @@ Make the team aware and check before starting the work to avoid conflicts.
 * Use account `modernisation-platform-developer` for Test and Procuction and `modernisation-platform-sandbox` for Development.
 * If necessary update kubeconfig as follows `aws eks update-kubeconfig --region eu-west-2 --name analytical-platform-compute-test`.
 * Set context as follows  `kubectl config use-context arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test`.
-* To run terraform locally see the [runbook](https://docs.analytical-platform.service.justice.gov.uk/documentation/runbooks/002-working-in-modernisation-platform.html#working-in-modernisation-platform) for further instructions.
+* To run terraform locally see this [runbook](https://docs.analytical-platform.service.justice.gov.uk/documentation/runbooks/002-working-in-modernisation-platform.html#working-in-modernisation-platform) for further instructions.
 
 Note: amend above appropriately for the environment you are working in.
 
@@ -61,7 +61,7 @@ Note: amend above appropriately for the environment you are working in.
 1. Update the `eks_cluster_version` to the new version in `terraform/environments/analytical-platform-compute/environment-configuration.tf`.
 1. Run `terraform plan` and check output.
 1. If as expected run `terraform apply`.
-1. Commit and push your results to the branch.  -- does this need to be after Upgrade the EKS Nodes.
+1. Commit and push your results to the branch.
 
 
 
