@@ -124,9 +124,6 @@ module "mojap_cadet_production" {
           access_control_translation = {
             owner = "Destination"
           }
-          encryption_configuration = {
-            replica_kms_key_id = "arn:aws:kms:${local.destination_region}:${var.account_ids["analytical-platform-compute-production"]}:key/${local.mojap_apc_prod_cadet_replication_kms_key_id}"
-          }
           metrics = {
             status  = "Enabled"
             minutes = 15
