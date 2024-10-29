@@ -16,7 +16,8 @@ data "aws_iam_policy_document" "mojap_cadet_production_replication" {
     effect = "Allow"
     actions = [
       "s3:GetReplicationConfiguration",
-      "s3:ListBucket"
+      "s3:ListBucket",
+      "s3:PutInventoryConfiguration"
     ]
     resources = [module.mojap_cadet_production.s3_bucket_arn]
   }
