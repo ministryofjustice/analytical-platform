@@ -177,7 +177,7 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     }
   }
   statement {
-    sid    = "AllowPut"
+    sid    = "AllowPutInReplicationPrefix"
     effect = "Allow"
     actions = [
       "s3:PutObject",
@@ -186,8 +186,10 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
       "arn:aws:s3:::mojap-derived-tables/batch-replication/*",
     ]
     principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication"
+      ]
     }
   }
   statement {
