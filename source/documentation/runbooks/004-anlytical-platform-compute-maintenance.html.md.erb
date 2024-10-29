@@ -7,27 +7,27 @@ review_in: 3 months
 
 # <%= current_page.data.title %>
 
-On the first day of the month the workflow [schedule-issue-compute-infrastructure.yml] (https://github.com/ministryofjustice/analytical-platform/blob/bba07f4908b443a2c15bf94738c8b84c5211e9f9/.github/workflows/schedule-issue-compute-infrastructure.yml) will automatically raise a ticket for [Maintenance - Analytical Platform Compute ] (https://github.com/ministryofjustice/analytical-platform/issues/5661 )
+On the first day of the month the workflow [schedule-issue-compute-infrastructure.yml] (https://github.com/ministryofjustice/analytical-platform/blob/bba07f4908b443a2c15bf94738c8b84c5211e9f9/.github/workflows/schedule-issue-compute-infrastructure.yml) will automatically raise a ticket for [Maintenance - Analytical Platform Compute ] (https://github.com/ministryofjustice/analytical-platform/issues/5661 ).
 
 This maintenance ticket includes EKS cluster Upgrade if applicable and/or patching to ensure all components are as up to date as possible.
 
 ##  Check for new release
 
 Check if a new release of Amazon EKS Kubernetes has been made available [here](https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#kubernetes-release-calendar
-)
+).
 
-If a new EKS release available carry out EKS upgrade and patch all other components
+If a new EKS release available carry out EKS upgrade and patch all other components.
 
 Or
 
-If no EKS release available patch all other components including addons
+If no EKS release available patch all other components including addons.
 
 ## The Approach
 
 1. Create a new branch / PR.
-2. Make changes to the code.
-3. Apply them in the command line.
-4. Merge the PR with the changes already applied.
+1. Make changes to the code.
+1. Apply them in the command line.
+1. Merge the PR with the changes already applied.
 
 ### Order
 
@@ -36,10 +36,10 @@ Apply in the development, test and production environments, resolving any issues
 ## Assumptions
 
 * You are operating in the analytical-platform development container.
-* To interrogate the cluster, you are exec'd into the same account as the cluster you are operating on `aws-sso exec --profile analytical-platform-compute-test:modernisation-platform-developer`
+* To interrogate the cluster, you are exec'd into the same account as the cluster you are operating on `aws-sso exec --profile analytical-platform-compute-test:modernisation-platform-developer`.
 * Use account `modernisation-platform-developer` for Test and Procuction and `modernisation-platform-sandbox` for Development.
-* If necessary update kubeconfig as follows `aws eks update-kubeconfig --region eu-west-2 --name analytical-platform-compute-test`
-* Set context as follows  `kubectl config use-context arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test`
+* If necessary update kubeconfig as follows `aws eks update-kubeconfig --region eu-west-2 --name analytical-platform-compute-test`.
+* Set context as follows  `kubectl config use-context arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test`.
 * To run terraform locally see the [runbook](https://docs.analytical-platform.service.justice.gov.uk/documentation/runbooks/002-working-in-modernisation-platform.html#working-in-modernisation-platform) for further instructions.
 
 Note: amend above appropriately for the environment you are working in.
@@ -52,30 +52,31 @@ Example patching [PR](https://github.com/ministryofjustice/modernisation-platfor
 
 ##  Upgrade the EKS Control Plane
 
-1. Update the `eks_cluster_version` to the new version in `terraform/environments/analytical-platform-compute/environment-configuration.tf`
-2. Run terraform plan and check output
-3. If as expected run terraform apply
-4. Commit and push your results to the branch.  -- does this need to be after Upgrade the EKS Nodes
+1. Update the `eks_cluster_version` to the new version in `terraform/environments/analytical-platform-compute/environment-configuration.tf`.
+1. Run terraform plan and check output.
+1. If as expected run terraform apply.
+1. Commit and push your results to the branch.  -- does this need to be after Upgrade the EKS Nodes.
+
 
 
 ##  Upgrade the EKS Nodes
 
 1. Check the eks_node_version from environment-configuration.tf against the bottlerocket [changelog](https://github.com/bottlerocket-os/bottlerocket/blob/develop/CHANGELOG.md) to see if a new version is available.
-2. If so the `eks_node_version` is formed from '${BOTTLEROCKET_OS_RELEASE}]-${FIRST_EIGHT_CHARACTERS_OF_RELEASE_SHA}' i.e  [12.5.0](https://github.com/bottlerocket-os/bottlerocket/releases/tag/v1.25.0)-[388e1050](https://github.com/bottlerocket-os/bottlerocket/commit/388e1050a669dd2544007f2af336832b68fa0d64)
-3. Update `eks_node_version`  `environment-configuration.tf` with the value from above
-4. Run terraform plan and check output
-5. If as expected run terraform apply
-6. Commit and push your results to the branch
+1. If so the `eks_node_version` is formed from '${BOTTLEROCKET_OS_RELEASE}]-${FIRST_EIGHT_CHARACTERS_OF_RELEASE_SHA}' i.e  [12.5.0](https://github.com/bottlerocket-os/bottlerocket/releases/tag/v1.25.0)-[388e1050](https://github.com/bottlerocket-os/bottlerocket/commit/388e1050a669dd2544007f2af336832b68fa0d64).
+1. Update `eks_node_version`  `environment-configuration.tf` with the value from above.
+1. Run terraform plan and check output.
+1. If as expected run terraform apply.
+1. Commit and push your results to the branch.
 
 ##  Upgrade the EKS add-ons
 
 1. Run the following command and interpret the results to understand what version the add-ons should be upgraded to: `aws eks describe-addon-versions` Output to a text file (> file.txt) if you want to interpret the content more easily.
-2. Edit the appropriate values in the `eks_cluster_addon_version` block in the `terraform/environments/analytical-platform-compute/environment-configuration.tf`
-3. Run terraform plan and check output
-4. If as expected run terraform apply
-5. Commit and push your results to the branch
+1. Edit the appropriate values in the `eks_cluster_addon_version` block in the `terraform/environments/analytical-platform-compute/environment-configuration.tf`.
+1. Run terraform plan and check output.
+1. If as expected run terraform apply.
+1. Commit and push your results to the branch.
 
 ## Patch Terraform modules
 
-Patch everything !
+Patch everything  add instructions !
 
