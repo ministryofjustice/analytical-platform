@@ -85,7 +85,11 @@ data "aws_iam_policy_document" "control_panel_api" {
       "iam:GetPolicy",
       "iam:GetPolicyVersion",
     ]
-    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/*"]
+    resources = [
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/*",
+      "arn:aws:iam::aws:policy/*" # Amazon managed policies
+
+    ]
   }
   statement {
     sid     = "CanAttachPolicies"
