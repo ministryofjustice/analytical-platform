@@ -58,6 +58,7 @@ data "aws_iam_policy_document" "create_a_derived_table" {
     actions = [
       "glue:Get*",
       "glue:DeleteTable",
+      "glue:DeleteTableVersion",
       "glue:DeleteSchema",
       "glue:DeletePartition",
       "glue:DeleteDatabase",
