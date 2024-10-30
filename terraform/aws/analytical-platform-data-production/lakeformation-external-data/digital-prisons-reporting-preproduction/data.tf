@@ -31,7 +31,6 @@ data "aws_secretsmanager_secret" "account_ids" {
   name     = "analytical-platform/platform-account-ids"
 }
 
-# Retrieve the latest version of the secret's value
 data "aws_secretsmanager_secret_version" "account_ids_version" {
   provider  = aws.session
   secret_id = data.aws_secretsmanager_secret.account_ids.id
