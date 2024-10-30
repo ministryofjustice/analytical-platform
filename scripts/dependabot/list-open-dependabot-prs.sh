@@ -73,7 +73,8 @@ for REPO in "${REPOSITORIES[@]}"; do
     # Use gh cli to list pull requests with the label 'dependencies'
     pr_list=$(gh pr list --repo "$REPO_OWNER/$REPO" --label "dependencies" --state open --json number,title,url,createdAt -q '.[] | "\(.number) | \(.url) | \(.title)"')
 
-    pr_count=$(echo "$pr_list" | grep -c " | ")
+    # dirty work around to exclude analytics-platform repos
+    pr_count=$(echo "$pr_list" | grep -v  analytics-platform | grep -c " | ")
 
     # Only display repositories with open PRs
     if [ "$pr_count" -gt 0 ]; then
