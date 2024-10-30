@@ -40,7 +40,7 @@ fetch_repositories() {
         exit 1
     fi
     # Extract repository names using awk, excluding analytics, ap-, and analytical-platform-ui
-    echo "$repo_file" | awk -F'"' '/^[[:space:]]*"[a-zA-Z0-9._-]+"[[:space:]]*=[[:space:]]*\{[[:space:]]*$/ {print $2}' | grep -Ev '^(analytics|ap-|analytical-platform-ui)$'
+    echo "$repo_file" | awk -F'"' '/^[[:space:]]*"[a-zA-Z0-9._-]+"[[:space:]]*=[[:space:]]*\{[[:space:]]*$/ {print $2}' | grep -Ev '^(analytics|ap-|analytical-platform-ui|analytics-platform-rstudio)$'
 }
 
 # Function to check if a repository is archived
@@ -54,10 +54,10 @@ is_repo_archived() {
 REPOSITORIES=($(fetch_repositories))
 
 # Debug: Output the list of repositories
-echo "Debug: List of repositories:"
-for repo in "${REPOSITORIES[@]}"; do
-    echo "$repo"
-done
+# echo "Debug: List of repositories:"
+# for repo in "${REPOSITORIES[@]}"; do
+#     echo "$repo"
+# done
 
 echo -e "\n🤖 Open Dependabots \n"
 
