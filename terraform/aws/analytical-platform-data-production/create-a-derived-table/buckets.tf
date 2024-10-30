@@ -181,6 +181,8 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     effect = "Allow"
     actions = [
       "s3:PutObject",
+      "s3:GetObject",
+      "s3:GetObjectVersion"
     ]
     resources = [
       "arn:aws:s3:::mojap-derived-tables/batch-replication/*",
