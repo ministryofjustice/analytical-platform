@@ -39,8 +39,15 @@ fetch_repositories() {
         echo "Failed to fetch the file using gh api. Have you run gh auth login?"
         exit 1
     fi
-    # Extract repository names using awk
-    echo "$repo_file" | awk -F'"' '/^[[:space:]]*"[a-zA-Z0-9._-]+"[[:space:]]*=[[:space:]]*\{[[:space:]]*$/ {print $2}' | grep -Ev '^(analytics|ap-)'
+    # Extract repository names using awk, excluding analytics, ap-, and analytical-platform-ui
+    echo "$repo_file" | awk -F'"' '/^[[:space:]]*"[a-zA-Z0-9._-]+"[[:space:]]*=[[:space:]]*\{[[:space:]]*$/ {print $2}' | grep -Ev '^(analytics|ap-|analytical-platform-ui)$'
+}
+
+# Function to check if a repository is archived
+is_repo_archived() {
+    local repo=$1
+    archived=$(gh api repos/"$REPO_OWNER"/"$repo" --jq '.archived')
+    [[ "$archived" == "true" ]]
 }
 
 # Fetch repositories
@@ -57,11 +64,17 @@ echo -e "\n🤖 Open Dependabots \n"
 total_open_prs=0
 
 for REPO in "${REPOSITORIES[@]}"; do
+    # Skip archived repositories
+    if is_repo_archived "$REPO"; then
+        echo "Skipping archived repository: $REPO"
+        continue
+    fi
 
     # Use gh cli to list pull requests with the label 'dependencies'
-    pr_list=$(gh pr list --repo "ministryofjustice/$REPO" --label "dependencies" --state open --json number,title,url,createdAt -q '.[] | "\(.number) | \(.url) | \(.title)"')
+    pr_list=$(gh pr list --repo "$REPO_OWNER/$REPO" --label "dependencies" --state open --json number,title,url,createdAt -q '.[] | "\(.number) | \(.url) | \(.title)"')
 
-    pr_count=$(echo "$pr_list" | grep -c " | ")
+    # dirty work around to exclude analytics-platform repos
+    pr_count=$(echo "$pr_list" | grep -v  analytics-platform | grep -c " | ")
 
     # Only display repositories with open PRs
     if [ "$pr_count" -gt 0 ]; then

@@ -1,6 +1,6 @@
 # Module: lake_formation_analytical_platform_data_prod
 module "lake_formation_analytical_platform_data_prod" {
-  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-lakeformation?ref=0.5.0"
+  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-lakeformation?ref=6fab8677e457c2e276fa1feec8ee83bbccc1220a"
 
 
   providers = {
@@ -10,5 +10,4 @@ module "lake_formation_analytical_platform_data_prod" {
 
   data_locations     = local.data_locations
   databases_to_share = local.databases
-  #   tables_to_share = local.lakeformation_permissions
 }

@@ -160,7 +160,6 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
   }
-
   statement {
     sid    = "AllowList"
     effect = "Allow"
@@ -171,8 +170,46 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
       "arn:aws:s3:::mojap-derived-tables",
     ]
     principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      ]
+    }
+  }
+  statement {
+    sid    = "AllowPutInReplicationPrefix"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:GetObject",
+      "s3:GetObjectVersion"
+    ]
+    resources = [
+      "arn:aws:s3:::mojap-derived-tables/batch-replication/*",
+    ]
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication"
+      ]
+    }
+  }
+  statement {
+    sid    = "AllowInventoryCreationAndRetrieval"
+    effect = "Allow"
+    actions = [
+      "s3:GetReplicationConfiguration",
+      "s3:ListBucket",
+      "s3:PutInventoryConfiguration"
+    ]
+    resources = [
+      "arn:aws:s3:::mojap-derived-tables",
+    ]
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication"
+      ]
     }
   }
 }

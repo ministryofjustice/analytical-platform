@@ -12,11 +12,30 @@ data "aws_iam_policy_document" "mojap_cadet_production_replication" {
     resources = ["arn:aws:s3:::${local.mojap_apc_prod_cadet_replication_bucket}/*"]
   }
   statement {
+    sid    = "SourceBucketManifestPermissions"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:PutObject"
+    ]
+    resources = ["${module.mojap_cadet_production.s3_bucket_arn}/batch-manifest/*"]
+  }
+  statement {
+    sid    = "SourceBucketReplicatePermissions"
+    effect = "Allow"
+    actions = [
+      "s3:InitiateReplication"
+    ]
+    resources = ["${module.mojap_cadet_production.s3_bucket_arn}/*"]
+  }
+  statement {
     sid    = "SourceBucketPermissions"
     effect = "Allow"
     actions = [
       "s3:GetReplicationConfiguration",
-      "s3:ListBucket"
+      "s3:ListBucket",
+      "s3:PutInventoryConfiguration"
     ]
     resources = [module.mojap_cadet_production.s3_bucket_arn]
   }
