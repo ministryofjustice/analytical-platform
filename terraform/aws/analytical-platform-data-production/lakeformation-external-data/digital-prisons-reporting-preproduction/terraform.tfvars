@@ -4,8 +4,8 @@
 
 tags = {
   business-unit          = "Platforms"
-  application            = "lakelormation-external-data/digital-prisons-reporting-preproduction"
-  component              = "lakelormation-external-data/digital-prisons-reporting-preproduction"
+  application            = "lakeformation-external-data/digital-prisons-reporting-preproduction"
+  component              = "lakeformation-external-data/digital-prisons-reporting-preproduction"
   environment            = "production"
   is-production          = "true"
   owner                  = "data-platform:data-platform-tech@digital.justice.gov.uk"
