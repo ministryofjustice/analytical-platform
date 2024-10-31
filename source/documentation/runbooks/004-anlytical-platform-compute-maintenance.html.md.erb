@@ -19,11 +19,11 @@ This maintenance ticket includes EKS Cluster Upgrade if applicable and/or patchi
 Check if a new release of Amazon EKS Kubernetes has been made available [here](https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#kubernetes-release-calendar
 ).
 
-If a new EKS release available carry out EKS upgrade and patch all other components.
+If there is a new EKS release available carry out EKS upgrade and patch all other components.
 
 Or
 
-If no EKS release available patch all other components including addons.
+If there is not a new EKS release available patch all other components including addons.
 
 ## The Approach
 
@@ -44,12 +44,12 @@ Make the team aware and check before starting the work to avoid conflicts.
 
 ## Assumptions
 
-* You are operating in the analytical-platform development container.
-* To interrogate the cluster, you are exec'd into the same account as the cluster you are operating on `aws-sso exec --profile analytical-platform-compute-test:modernisation-platform-developer`.
-* Use account `modernisation-platform-developer` for Test and Procuction and `modernisation-platform-sandbox` for Development.
-* If necessary update kubeconfig as follows `aws eks update-kubeconfig --region eu-west-2 --name analytical-platform-compute-test`.
-* Set context as follows  `kubectl config use-context arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test`.
-* To run terraform locally see this [runbook](https://docs.analytical-platform.service.justice.gov.uk/documentation/runbooks/002-working-in-modernisation-platform.html#working-in-modernisation-platform) for further instructions.
+- You are operating in the `analytical-platform` repository Development Container.
+- To interrogate the cluster, you are exec'd into the same account as the cluster you are operating on `aws-sso exec --profile analytical-platform-compute-test:modernisation-platform-developer`.
+- Use account `modernisation-platform-developer` for Test and Procuction and `modernisation-platform-sandbox` for Development.
+- If necessary update `~/kube/config` as follows `aws eks update-kubeconfig --region eu-west-2 --name analytical-platform-compute-test`.
+- Set context as follows  `kubectl config use-context arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test`.
+- To run terraform locally see the [runbook](https://docs.analytical-platform.service.justice.gov.uk/documentation/runbooks/002-working-in-modernisation-platform.html#working-in-modernisation-platform) for further instructions.
 
 **Note:** amend above appropriately for the environment you are working in.
 
