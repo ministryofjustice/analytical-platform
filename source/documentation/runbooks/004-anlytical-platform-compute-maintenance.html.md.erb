@@ -1,15 +1,18 @@
 ---
 owner_slack: "#analytical-platform-notifications"
-title: Analytical Platform Compute Maintenance
+title: Analytical Platform Compute Maintenance - Draft
 last_reviewed_on: 2024-10-28
 review_in: 3 months
 ---
 
 # <%= current_page.data.title %>
 
+
 On the first day of the month the workflow [schedule-issue-compute-infrastructure.yml] (https://github.com/ministryofjustice/analytical-platform/blob/bba07f4908b443a2c15bf94738c8b84c5211e9f9/.github/workflows/schedule-issue-compute-infrastructure.yml) will automatically raise a ticket for [Maintenance - Analytical Platform Compute ] (https://github.com/ministryofjustice/analytical-platform/issues/5661 ).
 
 This maintenance ticket includes EKS Cluster Upgrade if applicable and/or patching to ensure all components are up to date.
+
+**Note:** Currently these tickets need manually pulling into the sprint.
 
 ##  Check for new release
 
@@ -48,7 +51,23 @@ Make the team aware and check before starting the work to avoid conflicts.
 * Set context as follows  `kubectl config use-context arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test`.
 * To run terraform locally see this [runbook](https://docs.analytical-platform.service.justice.gov.uk/documentation/runbooks/002-working-in-modernisation-platform.html#working-in-modernisation-platform) for further instructions.
 
-Note: amend above appropriately for the environment you are working in.
+**Note:** amend above appropriately for the environment you are working in.
+
+## Impact on Users
+
+As this is a live service there could be an impact on users so this will have to be taken into consideration when planning the work.
+
+The impact on users depends on what is planned to be upgraded/patched.
+
+For example
+If upgrading `cloudwatch logs` agent, the user impact is minimal, applications will run, logs might be delayed and you will not require a maintenance window.
+
+IF upgrading `karpenter`, the user impact is high because jobs might not schedule as expected so you will have to agree when to schedule a maintenance window.
+
+To schedule a maintenance window go to [Pagerduty Maintenance Page](https://moj-digital-tools.pagerduty.com/external-status-dashboard/P1E3FLK/maintenance?tab=ongoing) and use the `Post Maintenance` button.
+
+If in doubt discuss with the team.
+
 
 ## Example Pull requests
 
