@@ -120,7 +120,7 @@ module "create_a_derived_table_iam_role" {
 
   oidc_providers = {
     analytical-platform-compute-production = {
-      provider_arn               = "arn:aws:iam::593291632749:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/801920EDEF91E3CAB03E04C03A2DE2BB"
+      provider_arn = "arn:aws:iam::593291632749:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/801920EDEF91E3CAB03E04C03A2DE2BB"
       namespace_service_accounts = [
         "actions-runners:actions-runner-mojas-create-a-derived-table",
         "actions-runners:actions-runner-mojas-create-a-derived-table-non-spot"
