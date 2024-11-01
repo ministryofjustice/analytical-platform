@@ -90,7 +90,6 @@ locals {
         "restricted-admin",
         "cc-data-engineer",
         "data-first-data-engineer",
-        "airflow_prod_civil",
         "airflow_dev_civil",
       ]
     },
@@ -106,7 +105,6 @@ locals {
         "restricted-admin",
         "cc-data-engineer",
         "data-first-data-engineer",
-        "airflow_prod_civil",
         "airflow_dev_civil",
       ]
     }
