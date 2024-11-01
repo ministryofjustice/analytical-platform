@@ -10,13 +10,13 @@ host: https://technical-documentation.data-platform.service.justice.gov.uk
 show_govuk_logo: false
 service_name: Analytical Platform
 service_link: /
-phase: Alpha
+phase: INTERNAL
 
 # Links to show on right-hand-side of header
 header_links:
-  🏠 Home: https://docs.analytical-platform.service.justice.gov.uk/
-  🔧 Our Main GitHub repo: https://github.com/ministryofjustice/analytical-platform
-  💬 Ask Slack Channel: https://mojdt.slack.com/archives/C04VBJTKY58
+  Home: https://docs.analytical-platform.service.justice.gov.uk/
+  GitHub: https://github.com/ministryofjustice/analytical-platform
+  Slack: https://mojdt.slack.com/archives/C04VBJTKY58
 
 # Enables search functionality. This indexes pages only and is not recommended for single-page sites.
 enable_search: true

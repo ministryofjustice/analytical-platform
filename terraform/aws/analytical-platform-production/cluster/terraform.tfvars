@@ -7,6 +7,8 @@ account_ids = {
   analytical-platform-development           = "525294151996"
   analytical-platform-management-production = "042130406152"
   analytical-platform-production            = "312423030077"
+  analytical-platform-compute-test          = "767397661611"
+  analytical-platform-compute-production    = "992382429243"
 }
 
 environment     = "production"
@@ -125,14 +127,14 @@ redis_alarm_memory_threshold_bytes = 100000
 # EKS
 ##################################################
 eks_versions = {
-  cluster    = "1.28"
-  node-group = "1.28"
+  cluster    = "1.29"
+  node-group = "1.29"
 }
 eks_addon_versions = {
-  coredns        = "v1.10.1-eksbuild.4"
-  ebs-csi-driver = "v1.32.0-eksbuild.1"
-  kube-proxy     = "v1.28.2-eksbuild.2"
-  vpc-cni        = "v1.15.1-eksbuild.1"
+  coredns        = "v1.11.3-eksbuild.1"
+  ebs-csi-driver = "v1.35.0-eksbuild.1"
+  kube-proxy     = "v1.29.7-eksbuild.9"
+  vpc-cni        = "v1.18.5-eksbuild.1"
 }
 eks_node_group_name_prefix = "prod"
 eks_node_group_capacities = {

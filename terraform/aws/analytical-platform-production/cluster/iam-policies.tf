@@ -3,6 +3,8 @@
 ##################################################
 
 data "aws_iam_policy_document" "ebs_csi_driver" {
+  #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
+  #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
   statement {
     sid    = "EbsCsiDriver"
     effect = "Allow"
@@ -39,6 +41,8 @@ resource "aws_iam_policy" "ebs_csi_driver" {
 ##################################################
 
 data "aws_iam_policy_document" "control_panel_api" {
+  #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
+  #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
   statement {
     sid    = "CanCreateBuckets"
     effect = "Allow"
@@ -81,7 +85,11 @@ data "aws_iam_policy_document" "control_panel_api" {
       "iam:GetPolicy",
       "iam:GetPolicyVersion",
     ]
-    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/*"]
+    resources = [
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/*",
+      "arn:aws:iam::aws:policy/*" # Amazon managed policies
+
+    ]
   }
   statement {
     sid     = "CanAttachPolicies"
@@ -243,6 +251,18 @@ data "aws_iam_policy_document" "control_panel_api" {
     ]
     resources = ["arn:aws:lakeformation:*:${var.account_ids["analytical-platform-data-production"]}:*"]
   }
+  statement {
+    sid    = "AssumeRoleComputeAccounnt"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession"
+    ]
+    resources = [
+      "arn:aws:iam::${var.account_ids["analytical-platform-compute-production"]}:role/analytical-platform-control-panel",
+      "arn:aws:iam::${var.account_ids["analytical-platform-compute-test"]}:role/analytical-platform-control-panel"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "control_panel_api" {
@@ -286,6 +306,8 @@ resource "aws_iam_policy" "cert_manager" {
 ##################################################
 
 data "aws_iam_policy_document" "cluster_autoscaler" {
+  #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
+  #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
   statement {
     sid    = "clusterAutoscalerAll"
     effect = "Allow"
@@ -463,7 +485,7 @@ module "managed_prometheus_kms_access_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.47.0"
+  version = "5.47.1"
 
   name_prefix = "managed-prometheus-kms-access"
 
@@ -494,7 +516,7 @@ module "eks_cluster_logs_kms_access_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.47.0"
+  version = "5.47.1"
 
   name_prefix = "eks-cluster-logs-kms-access"
 
@@ -524,7 +546,7 @@ module "amazon_prometheus_proxy_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.47.0"
+  version = "5.47.1"
 
   name_prefix = "amazon-prometheus-proxy"
 

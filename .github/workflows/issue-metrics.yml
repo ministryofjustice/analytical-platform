@@ -32,7 +32,7 @@ jobs:
 
       - name: Run GitHub Issue Metrics action
         id: run_github_issue_metrics
-        uses: github/issue-metrics@c6f90dba421854cc285790b8ba4dd7e391b0e204 # v3.14.0
+        uses: github/issue-metrics@baa452396191291251e07916fe662b10f3b100b5 # v3.15.2
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SEARCH_QUERY: 'repo:ministryofjustice/analytical-platform is:issue created:${{ env.last_month }} -reason:"not planned"'
