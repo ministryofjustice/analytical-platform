@@ -116,6 +116,7 @@ module "mojap_cadet_production" {
         id                        = "mojap-data-production-cadet-to-apc-production-prod"
         status                    = "Enabled"
         delete_marker_replication = true
+        priority                  = 0
 
         destination = {
           account_id = var.account_ids["analytical-platform-compute-production"]
@@ -141,6 +142,7 @@ module "mojap_cadet_production" {
         id                        = "mojap-data-production-cadet-to-apc-development-prod"
         status                    = "Enabled"
         delete_marker_replication = true
+        priority                  = 10
 
         destination = {
           account_id = var.account_ids["analytical-platform-compute-development"]
