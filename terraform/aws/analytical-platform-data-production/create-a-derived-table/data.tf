@@ -7,5 +7,5 @@ data "aws_kms_alias" "s3_source" {
 }
 
 data "aws_kms_alias" "s3_destination" {
-  name     = "alias/aws/s3"
+  name = "alias/aws/s3"
 }
