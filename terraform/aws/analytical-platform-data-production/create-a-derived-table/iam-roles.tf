@@ -17,6 +17,6 @@ module "mojap_cadet_production_replication_iam_role" {
 
   custom_role_policy_arns = [
     module.mojap_cadet_production_replication_iam_policy.arn,
-    mojap_cadet_production_replication_to_dev_iam_policy
+    module.mojap_cadet_production_replication_to_dev_iam_policy.arn
   ]
 }
