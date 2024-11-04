@@ -136,6 +136,31 @@ module "mojap_cadet_production" {
             minutes = 15
           }
         }
+      },
+      {
+        id                        = "mojap-data-production-cadet-to-apc-development-prod"
+        status                    = "Enabled"
+        delete_marker_replication = true
+
+        destination = {
+          account_id = var.account_ids["analytical-platform-compute-development"]
+          bucket     = "arn:aws:s3:::mojap-compute-development-derived-tables-replication"
+          filter = {
+            prefix = "prod/"
+          }
+          storage_class = "STANDARD"
+          access_control_translation = {
+            owner = "Destination"
+          }
+          metrics = {
+            status  = "Enabled"
+            minutes = 15
+          }
+          replication_time = {
+            status  = "Enabled"
+            minutes = 15
+          }
+        }
       }
     ]
   }
@@ -193,7 +218,8 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-development-replication"
       ]
     }
   }
@@ -211,7 +237,8 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-development-replication"
       ]
     }
   }
