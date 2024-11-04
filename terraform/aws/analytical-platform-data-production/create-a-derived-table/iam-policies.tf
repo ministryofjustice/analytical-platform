@@ -85,10 +85,12 @@ data "aws_iam_policy_document" "mojap_cadet_production_replication" {
     }
     condition {
       # https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html#bk-replication
-      # https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-key.html#bucket-key-replication#bucket-key-replication
+      # https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingServerSideEncryption.html
+      # https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-encryption.html#bucket-encryption-replication
+      #   "replica objects in the destination bucket use the same type of encryption as the source objects"
       test     = "StringLike"
       variable = "kms:EncryptionContext:aws:s3:arn"
-      values   = [local.mojap_apc_prod_cadet_replication_bucket]
+      values   = ["arn:aws:s3:::${local.mojap_apc_prod_cadet_replication_bucket}/*"]
     }
     resources = [data.aws_kms_alias.s3_destination.arn]
   }
