@@ -113,13 +113,16 @@ module "mojap_cadet_production" {
 
     rules = [
       {
-        id                        = "mojap-data-production-cadet-to-apc-production"
+        id                        = "mojap-data-production-cadet-to-apc-production-prod"
         status                    = "Enabled"
         delete_marker_replication = true
 
         destination = {
-          account_id    = var.account_ids["analytical-platform-compute-production"]
-          bucket        = "arn:aws:s3:::mojap-compute-production-derived-tables-replication"
+          account_id = var.account_ids["analytical-platform-compute-production"]
+          bucket     = "arn:aws:s3:::mojap-compute-production-derived-tables-replication"
+          filter = {
+            prefix = "prod/"
+          }
           storage_class = "STANDARD"
           access_control_translation = {
             owner = "Destination"
