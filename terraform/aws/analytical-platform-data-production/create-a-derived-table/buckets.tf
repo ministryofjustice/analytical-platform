@@ -220,8 +220,7 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-development-replication"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication"
       ]
     }
   }
@@ -239,8 +238,7 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-development-replication"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication"
       ]
     }
   }
