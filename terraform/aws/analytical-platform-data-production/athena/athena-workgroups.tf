@@ -87,7 +87,7 @@ resource "aws_athena_workgroup" "dbt" {
       "business-unit"    = try(each.value.business_unit, var.tags["business-unit"])
       "component"        = try(each.value.component, var.tags["component"])
       "environment-name" = try(each.value.environment_name, "prod")
-      "is-production"    = strcontains(each.value.name, "prod") ? "True" : "False"
+      "is-production"    = strcontains(each.value.name, "dev") ? "False" : "True"
       "owner"            = "Data Engineering:dataengineering@digital.justice.gov.uk"
     }
   )
