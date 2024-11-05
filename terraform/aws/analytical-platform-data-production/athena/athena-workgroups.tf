@@ -62,6 +62,7 @@ resource "aws_athena_workgroup" "airflow" {
   )
 }
 
+#trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
 resource "aws_athena_workgroup" "dbt" {
   #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
 
