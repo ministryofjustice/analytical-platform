@@ -90,16 +90,16 @@ data "tls_certificate" "cross_account_irsa_oidc_issuer" {
 
 data "http" "prometheus_operator_crds" {
   for_each = {
-    alertmanagerconfigs = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.76.1/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml"
-    alertmanagers       = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.76.1/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml"
-    podmonitors         = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.76.1/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml"
-    probes              = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.76.1/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml"
-    prometheus_agents   = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.76.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml"
-    prometheuses        = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.76.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml"
-    prometheusrules     = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.76.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml"
-    scrapeconfigs       = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.76.1/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml"
-    servicemonitors     = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.76.1/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml"
-    thanosrulers        = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.76.1/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml"
+    alertmanagerconfigs = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.77.2/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml"
+    alertmanagers       = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.77.2/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml"
+    podmonitors         = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.77.2/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml"
+    probes              = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.77.2/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml"
+    prometheus_agents   = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.77.2/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml"
+    prometheuses        = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.77.2/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml"
+    prometheusrules     = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.77.2/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml"
+    scrapeconfigs       = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.77.2/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml"
+    servicemonitors     = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.77.2/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml"
+    thanosrulers        = "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.77.2/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml"
   }
 
   url = each.value
