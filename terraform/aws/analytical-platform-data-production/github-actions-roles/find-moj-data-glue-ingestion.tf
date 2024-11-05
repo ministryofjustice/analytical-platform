@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "find_moj_data_glue_ingestion" {
   }
 }
 
-module "find_moj_data_glue_policy" {
+module "find_moj_data_glue_access_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
@@ -31,11 +31,11 @@ module "find_moj_data_glue_access_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
   version = "5.47.1"
 
-  name = "github_find_moj_data_glue_access"
+  name = "github-find-moj-data-glue-access"
 
   subjects = ["ministryofjustice/data-catalogue:*"]
 
   policies = {
-    github_find_moj_data_glue_access = module.find_moj_data_glue_policy.arn
+    github_find_moj_data_glue_access = module.find_moj_data_glue_access_iam_policy.arn
   }
 }
