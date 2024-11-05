@@ -122,7 +122,7 @@ module "mojap_cadet_production" {
           account_id = var.account_ids["analytical-platform-compute-production"]
           bucket     = "arn:aws:s3:::mojap-compute-production-derived-tables-replication"
           filter = {
-            prefix = "prod/"
+            prefix = "prod"
           }
           storage_class = "STANDARD"
           access_control_translation = {
@@ -148,7 +148,7 @@ module "mojap_cadet_production" {
           account_id = var.account_ids["analytical-platform-compute-development"]
           bucket     = "arn:aws:s3:::mojap-compute-development-derived-tables-replication"
           filter = {
-            prefix = "prod/"
+            prefix = "prod"
           }
           storage_class = "STANDARD"
           access_control_translation = {
