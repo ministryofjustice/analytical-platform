@@ -14,7 +14,7 @@ terraform {
     }
     auth0 = {
       source  = "auth0/auth0"
-      version = "1.7.1"
+      version = "1.7.3"
     }
   }
   required_version = "~> 1.5"
