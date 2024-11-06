@@ -1,8 +1,14 @@
 resource "auth0_client" "visual_studio_code" {
   name                = "Visual Studio Code"
   app_type            = "regular_web"
-  callbacks           = ["https://*-vscode*.tools.dev.analytical-platform.service.justice.gov.uk/callback"]
-  allowed_logout_urls = ["https://*-vscode*.tools.dev.analytical-platform.service.justice.gov.uk"]
+  callbacks = [
+    "https://*-vscode.tools.dev.analytical-platform.service.justice.gov.uk/callback",
+    "https://*-vscode-tunnel.tools.dev.analytical-platform.service.justice.gov.uk/callback"
+  ]
+  allowed_logout_urls = [
+    "https://*-vscode*.tools.dev.analytical-platform.service.justice.gov.uk",
+    "https://*-vscode-tunnel.tools.dev.analytical-platform.service.justice.gov.uk",
+  ]
   oidc_conformant     = true
   sso                 = true
   cross_origin_auth   = true
