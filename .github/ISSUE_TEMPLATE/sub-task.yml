@@ -17,14 +17,6 @@ body:
     validations:
       required: true
   - type: textarea
-    id: parent-issue
-    attributes:
-      description: Reference to the parent issue.
-      label: Parent Issue
-      placeholder: "e.g. #123"
-    validations:
-      required: true
-  - type: textarea
     id: steps
     attributes:
       description: Steps to address the sub-task.
