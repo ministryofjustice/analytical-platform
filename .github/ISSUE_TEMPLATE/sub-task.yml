@@ -3,6 +3,11 @@ description: Create a Sub-Task
 title: "📋 <title>"
 labels: ["sub-task"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!TIP]
+        > Sub-tasks should only be created as sub-issues of Stories
   - type: textarea
     id: description
     attributes:
@@ -16,7 +21,7 @@ body:
     attributes:
       description: Reference to the parent issue.
       label: Parent Issue
-      placeholder: "e.g., #123"
+      placeholder: "e.g. #123"
     validations:
       required: true
   - type: textarea
