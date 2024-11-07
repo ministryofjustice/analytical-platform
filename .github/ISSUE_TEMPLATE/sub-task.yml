@@ -1,0 +1,28 @@
+name: 📋 Sub-Task
+description: Create a Sub-Task
+title: "📋 <title>"
+labels: ["sub-task"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      description: A clear and concise description of the sub-task.
+      label: Describe the sub-task.
+      value:
+    validations:
+      required: true
+  - type: textarea
+    id: parent-issue
+    attributes:
+      description: Reference to the parent issue.
+      label: Parent Issue
+      placeholder: "e.g., #123"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      description: Steps to address the sub-task.
+      label: Steps to Address
+    validations:
+      required: false
