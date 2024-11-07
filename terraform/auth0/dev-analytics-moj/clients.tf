@@ -1,6 +1,6 @@
 resource "auth0_client" "visual_studio_code" {
-  name                = "Visual Studio Code"
-  app_type            = "regular_web"
+  name     = "Visual Studio Code"
+  app_type = "regular_web"
   callbacks = [
     "https://*-vscode.tools.dev.analytical-platform.service.justice.gov.uk/callback",
     "https://*-vscode-tunnel.tools.dev.analytical-platform.service.justice.gov.uk/callback"
@@ -9,9 +9,9 @@ resource "auth0_client" "visual_studio_code" {
     "https://*-vscode*.tools.dev.analytical-platform.service.justice.gov.uk",
     "https://*-vscode-tunnel.tools.dev.analytical-platform.service.justice.gov.uk",
   ]
-  oidc_conformant     = true
-  sso                 = true
-  cross_origin_auth   = true
+  oidc_conformant   = true
+  sso               = true
+  cross_origin_auth = true
   jwt_configuration {
     alg = "HS256"
   }
