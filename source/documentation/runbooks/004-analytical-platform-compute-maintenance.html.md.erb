@@ -29,8 +29,8 @@ If there is not a new EKS release available patch all other components including
 
 1. Create a new branch / PR.
 1. Make changes to the code.
-1. Apply them in the command line.
-1. Merge the PR with the changes already applied.
+1. Create a Pull Request and check the plan.
+1. Request approval and merge the PR.
 
 ### Order
 
@@ -49,7 +49,7 @@ Make the team aware and check before starting the work to avoid conflicts.
 - Use account `modernisation-platform-developer` for Test and Procuction and `modernisation-platform-sandbox` for Development.
 - If necessary update `~/kube/config` as follows `aws eks update-kubeconfig --region eu-west-2 --name analytical-platform-compute-test`.
 - Set context as follows  `kubectl config use-context arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test`.
-- To run terraform locally see the [runbook](https://docs.analytical-platform.service.justice.gov.uk/documentation/runbooks/002-working-in-modernisation-platform.html#working-in-modernisation-platform) for further instructions.
+
 
 **Note:** amend above appropriately for the environment you are working in.
 
@@ -78,9 +78,9 @@ If in doubt discuss with the team.
 ##  Upgrade the EKS Control Plane
 
 1. Update the `eks_cluster_version` to the new version in `terraform/environments/analytical-platform-compute/environment-configuration.tf`.
-1. Run `terraform plan` and check output.
-1. If as expected run `terraform apply`.
 1. Commit and push your results to the branch.
+1. Check the Terraform plan.
+1. If plan as expected request approval of the PR.
 
 
 
@@ -89,17 +89,17 @@ If in doubt discuss with the team.
 1. Check the eks_node_version from environment-configuration.tf against the bottlerocket [changelog](https://github.com/bottlerocket-os/bottlerocket/blob/develop/CHANGELOG.md) to see if a new version is available.
 1. If so the `eks_node_version` is formed from '${BOTTLEROCKET_OS_RELEASE}]-${FIRST_EIGHT_CHARACTERS_OF_RELEASE_SHA}' i.e  [12.5.0](https://github.com/bottlerocket-os/bottlerocket/releases/tag/v1.25.0)-[388e1050](https://github.com/bottlerocket-os/bottlerocket/commit/388e1050a669dd2544007f2af336832b68fa0d64). Tip look at the url.
 1. Update `eks_node_version` in `environment-configuration.tf` with the value from above.
-1. Run `terraform plan` and check output.
-1. If as expected run `terraform apply`.
 1. Commit and push your results to the branch.
+1. Check the Terraform plan.
+1. If plan as expected request approval of the PR.
 
 ##  Upgrade the EKS add-ons
 
 1. Run the following command and interpret the results to understand what version the add-ons should be upgraded to: `aws eks describe-addon-versions` Output to a text file (> file.txt) if you want to interpret the content more easily.
 1. Edit the appropriate values in the `eks_cluster_addon_version` block in the `terraform/environments/analytical-platform-compute/environment-configuration.tf`.
-1. Run `terraform plan` and check output.
-1. If as expected run `terraform apply`.
 1. Commit and push your results to the branch.
+1. Check the Terraform plan.
+1. If plan as expected request approval of the PR.
 
 ## Patch Terraform modules
 
@@ -108,9 +108,10 @@ Patching is a manual process
 1. Open each .tf file in the `terraform/environments/analytical-platform-compute` directory.
 1. Check each module i.e `source  = "terraform-aws-modules/eks/aws//modules/karpenter"` in `eks-custer.tf` and `cmd + click`` to follow the link.
 1. Amend the version if appropriate.
-1. Run `terraform plan` and check output.
-1. Repeat for each module.
-1. If the complete plan is as expected run `terraform apply`.
 1. Commit and push your results to the branch.
+1. Check the Terraform plan.
+1. Repeat for each module.
+1. If the complete plan is as expected request approval of the PR.
+
 
 
