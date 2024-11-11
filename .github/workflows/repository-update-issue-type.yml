@@ -54,7 +54,7 @@ jobs:
               console.log(`Issue is a ${type}`);
               return fieldOptionId;
             } else {
-              console.log("Issue is not a bug, epic, feature-request, or story");
+              console.log("Issue is not a bug, epic, feature-request, sub-task or story");
               return null;
             }
 
