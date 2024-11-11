@@ -3,7 +3,7 @@ module "mojap_cadet_production" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.2.1"
+  version = "4.2.2"
 
   bucket = "mojap-derived-tables"
   grant = [{
@@ -117,13 +117,13 @@ module "mojap_cadet_production" {
         status                    = "Enabled"
         delete_marker_replication = true
         priority                  = 0
+        filter = {
+          prefix = "prod"
+        }
 
         destination = {
-          account_id = var.account_ids["analytical-platform-compute-production"]
-          bucket     = "arn:aws:s3:::mojap-compute-production-derived-tables-replication"
-          filter = {
-            prefix = "prod/"
-          }
+          account_id    = var.account_ids["analytical-platform-compute-production"]
+          bucket        = "arn:aws:s3:::mojap-compute-production-derived-tables-replication"
           storage_class = "STANDARD"
           access_control_translation = {
             owner = "Destination"
@@ -143,13 +143,13 @@ module "mojap_cadet_production" {
         status                    = "Enabled"
         delete_marker_replication = true
         priority                  = 10
+        filter = {
+          prefix = "prod"
+        }
 
         destination = {
-          account_id = var.account_ids["analytical-platform-compute-development"]
-          bucket     = "arn:aws:s3:::mojap-compute-development-derived-tables-replication"
-          filter = {
-            prefix = "prod/"
-          }
+          account_id    = var.account_ids["analytical-platform-compute-development"]
+          bucket        = "arn:aws:s3:::mojap-compute-development-derived-tables-replication"
           storage_class = "STANDARD"
           access_control_translation = {
             owner = "Destination"
