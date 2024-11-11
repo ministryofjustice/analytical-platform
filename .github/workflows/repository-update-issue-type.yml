@@ -76,7 +76,6 @@ jobs:
             project_id: ${{ env.PROJECT_ID }}
             content_id: ${{ github.event.issue.node_id }}
 
-
       - name: Update issue type
         id: update_issue_type
         if: steps.check_labels.outputs.result != null
