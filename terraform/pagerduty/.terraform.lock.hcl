@@ -25,23 +25,23 @@ provider "registry.terraform.io/hashicorp/aws" {
 }
 
 provider "registry.terraform.io/pagerduty/pagerduty" {
-  version     = "3.17.0"
-  constraints = "3.17.0"
+  version     = "3.17.1"
+  constraints = "3.17.1"
   hashes = [
-    "h1:YUKhtNTmRKEEiN7wmNvltffHMnzQGtTwpdyDgCDO4Xk=",
-    "h1:qXs/bLlxBifI/ErgxjNg5dzEGLJB8+LgoWeP9YwKtC4=",
-    "zh:09694a66eb3e576bb5afee5505af5ad10eb8a90091d34d31a29ca6c52a054895",
-    "zh:1e7b01b6f9ca74f881d4e8628b23ea1c151158204d6fb71e3679b063d106a28c",
-    "zh:27b9b31f758d7d85e2a337696faad7c660262d3a5610afc2e2dac3ac3556828d",
-    "zh:48d20f68e426bec1cf4e9b6fbd0353a3604368656674afa6447d4674e906cda2",
-    "zh:59c054d997e7b22c69e17770eb133e352887fab0ecb6608a56f15f20a3389678",
-    "zh:63f0353520b461495a9b0b0a9eaa9abba6d51989628213eceee2fd851d2ae496",
-    "zh:75e08beeb22456917ed02f17480a6e67367cd652ecc4a063a54f217a5c8afca0",
-    "zh:8d107b4a441c106b5bb8235bd65ba8eef4ca3b850ef5c98a2fe0b41aa4b2860d",
-    "zh:b724bdb5b57dd5dd1f35a46fce54676e28a0bdbec3a2089db26b94a331b1f599",
-    "zh:c685b44c6fbf4c0ff7c831df75bd8e0a0b11ccb9387a1be7f9c913261cbc2086",
-    "zh:dc21762b7662f7e132f3905b64a3ecfb762ad9dee236b098b82ce304e3323990",
-    "zh:e3319fced84ad43cc049962e6beeb44d5b3505c10cd02da639ee216a79e95a4f",
-    "zh:f19ad6eafd1526d802f30290fc6df8af8adc84aa71d8cfa0dd917ef8803d3a93",
+    "h1:5wBfUormUkfGSnCvd0JBdmpcf51ZWoOIn0zGRY1OVzY=",
+    "h1:PjXCxkHUD8dxLTSLxbWTMr3VSVQvj4iP05zTQuQyQjo=",
+    "zh:05e2130f7142bc2de5ac4d68044bf24009a0b92767cf875e826385fa63362ed4",
+    "zh:093db47783ab4763457fd9af7a803bb9bc0dcfe84a6ba4f59e76db00d714b69a",
+    "zh:38f1fae62a4f0ae6bef0d2fac4814c1733af50b57bef1356e42d452df2b7f5f1",
+    "zh:39d6fdd44d74af21b75e8062e3de9ee2300cf333e9f50dda54daa6af978205ca",
+    "zh:3bce6762ab1969fa7cd632a121cab489ccb226897db41e0ebabc4f4fb07be74b",
+    "zh:7f6aa24e767749aeb584fd960a2e59a8335cc451e41d895304cf413ac2ef8951",
+    "zh:84c52eb9b12892bdf8da17d8ea36d509e0dcec42efd5dc4a713591f6b37cf51c",
+    "zh:ab48f35339771ab6292304c85c1fe3eac026bc78d0cc9e7ccb18a80a986f0171",
+    "zh:b4536d4e1a7d6ea45d99573ad15591c72c56a30893e47dc5e067c744aae46f22",
+    "zh:c77d8e6761291b996489c1cf30760582d3f4394e66ca001ced550c90038172f6",
+    "zh:d302e1a7bc0b588a3becd2809705d4c40da3569e5270de3c922c94a7097b1342",
+    "zh:ec12000000f5329c7d9bbc8c9d6bcd0a52acaea61e0de20790b9bdf95a1dd3b4",
+    "zh:ef7965618db68ab3f47790e8c7c97db10e5beaf3e3913d4e5849a2d15892ad70",
   ]
 }
