@@ -45,6 +45,9 @@ jobs:
             } else if (labels.includes("spike")) {
               type = "spike";
               fieldOptionId = "0c851ccb";
+            } else if (labels.includes("sub-task")) {
+              type = "sub-task";
+              fieldOptionId = "c8b1f8fe"
             }
 
             if (type) {
