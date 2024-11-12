@@ -77,7 +77,7 @@ To schedule a maintenance window go to [Pagerduty Maintenance Page](https://moj-
 
 1. Check the `eks_node_version` from `environment-configuration.tf` against the bottlerocket [changelog](https://github.com/bottlerocket-os/bottlerocket/blob/develop/CHANGELOG.md) to see if a new version is available.
 1. If so the `eks_node_version` is formed from '${BOTTLEROCKET_OS_RELEASE}-${FIRST_EIGHT_CHARACTERS_OF_RELEASE_SHA}' i.e  [12.5.0](https://github.com/bottlerocket-os/bottlerocket/releases/tag/v1.25.0)-[388e1050](https://github.com/bottlerocket-os/bottlerocket/commit/388e1050a669dd2544007f2af336832b68fa0d64).
-Tip: Look at the commit url for example `https://github.com/bottlerocket-os/bottlerocket/commit/388e1050a669dd2544007f2af336832b68fa0d64` and copy the first eight characters of the sha in this case `388e1050`.
+Tip: Look at the commit URL for example `https://github.com/bottlerocket-os/bottlerocket/commit/388e1050a669dd2544007f2af336832b68fa0d64` and copy the first eight characters of the sha in this case `388e1050`.
 1. Update `eks_node_version` in `environment-configuration.tf` with the value from above.
 1. Commit and push your results to the branch.
 1. Check the Terraform plan.
