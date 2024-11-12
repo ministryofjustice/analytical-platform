@@ -45,13 +45,16 @@ jobs:
             } else if (labels.includes("spike")) {
               type = "spike";
               fieldOptionId = "0c851ccb";
+            } else if (labels.includes("sub-task")) {
+              type = "sub-task";
+              fieldOptionId = "c8b1f8fe";
             }
 
             if (type) {
               console.log(`Issue is a ${type}`);
               return fieldOptionId;
             } else {
-              console.log("Issue is not a bug, epic, feature-request, or story");
+              console.log("Issue is not a bug, epic, feature-request, sub-task or story");
               return null;
             }
 
@@ -72,7 +75,6 @@ jobs:
           variables: |
             project_id: ${{ env.PROJECT_ID }}
             content_id: ${{ github.event.issue.node_id }}
-
 
       - name: Update issue type
         id: update_issue_type

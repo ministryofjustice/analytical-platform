@@ -97,7 +97,7 @@ module "create_a_derived_table_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.47.1"
+  version = "5.48.0"
 
   name_prefix = "create-a-derived-table"
 
@@ -108,7 +108,7 @@ module "create_a_derived_table_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.47.1"
+  version = "5.48.0"
 
   role_name = "create-a-derived-table"
 
