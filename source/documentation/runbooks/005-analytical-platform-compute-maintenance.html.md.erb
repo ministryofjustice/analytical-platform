@@ -86,7 +86,8 @@ Tip: Look at the commit URL for example `https://github.com/bottlerocket-os/bott
 
 ##  Upgrade the EKS add-ons
 
-1. Run the following command and interpret the results to understand what version the add-ons should be upgraded to: `aws eks describe-addon-versions` Output to a text file (`> file.txt`) if you want to interpret the content more easily.
+1. Run the following command and interpret the results to understand what version the add-ons should be upgraded to: `aws eks describe-addon-versions` 
+Output to a text file (`> file.txt`) if you want to interpret the content more easily.
 1. Edit the appropriate values in the `eks_cluster_addon_version` block in the `terraform/environments/analytical-platform-compute/environment-configuration.tf`.
 1. Commit and push your results to the branch.
 1. Check the Terraform plan.
