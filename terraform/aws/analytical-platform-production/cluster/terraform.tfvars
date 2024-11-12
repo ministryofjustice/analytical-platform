@@ -190,7 +190,7 @@ eks_node_group_ami_type_gpu_node       = "AL2_x86_64_GPU"
 
 eks_node_group_capacities_gpu_node = {
   desired = 2
-  max     = 10
+  max     = 12
   min     = 1
 }
 
