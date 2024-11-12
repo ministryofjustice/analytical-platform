@@ -110,7 +110,7 @@ module "mojap_cadet_production_replication_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.47.1"
+  version = "5.48.0"
 
   name_prefix = "mojap-data-production-cadet-to-apc-production"
 
@@ -229,7 +229,7 @@ module "mojap_cadet_production_replication_to_dev_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.47.1"
+  version = "5.48.0"
 
   name_prefix = "mojap-data-production-cadet-to-apc-development"
 
