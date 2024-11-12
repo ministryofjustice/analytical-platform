@@ -26,7 +26,6 @@ locals {
     "dbt-avature" = {
       name = "dbt-avature-workgroup"
     }
-
   }
 }
 
