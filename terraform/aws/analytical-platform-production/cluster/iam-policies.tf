@@ -85,7 +85,11 @@ data "aws_iam_policy_document" "control_panel_api" {
       "iam:GetPolicy",
       "iam:GetPolicyVersion",
     ]
-    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/*"]
+    resources = [
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/*",
+      "arn:aws:iam::aws:policy/*" # Amazon managed policies
+
+    ]
   }
   statement {
     sid     = "CanAttachPolicies"
@@ -481,7 +485,7 @@ module "managed_prometheus_kms_access_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.47.1"
+  version = "5.48.0"
 
   name_prefix = "managed-prometheus-kms-access"
 
@@ -512,7 +516,7 @@ module "eks_cluster_logs_kms_access_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.47.1"
+  version = "5.48.0"
 
   name_prefix = "eks-cluster-logs-kms-access"
 
@@ -542,7 +546,7 @@ module "amazon_prometheus_proxy_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.47.1"
+  version = "5.48.0"
 
   name_prefix = "amazon-prometheus-proxy"
 

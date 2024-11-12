@@ -13,7 +13,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     container:
-      image: docker.io/ministryofjustice/tech-docs-github-pages-publisher@sha256:cd3513beca3fcaf5dd34cbe81a33b3ff30337d8ada5869b40a6454c21d6f7684 # v4.0.0
+      image: ghcr.io/ministryofjustice/tech-docs-github-pages-publisher@sha256:35699473dbeefeeb8b597de024125a241277ee03587d5fe8e72545e4b27b33f8 # v5.0.0
     permissions:
       contents: read
     steps:
@@ -38,7 +38,7 @@ jobs:
 
       - name: Lychee
         id: lychee
-        uses: lycheeverse/lychee-action@7cd0af4c74a61395d455af97419279d86aafaede # v2.0.2
+        uses: lycheeverse/lychee-action@f81112d0d2814ded911bd23e3beaa9dda9093915 # v2.1.0
         with:
           args: --verbose --no-progress './**/*.md' './**/*.html' './**/*.erb' --accept 403,200,429
           fail: true
