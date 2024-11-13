@@ -708,6 +708,23 @@ locals {
               ]
             },
             {
+              Sid    = "AllowAnalyticalPlatformIngestionDataSyncReplication"
+              Effect = "Allow"
+              Principal = {
+                AWS = "arn:aws:iam::471112983409:role/datasync-replication"
+              }
+              Action = [
+                "s3:ReplicateObject",
+                "s3:ObjectOwnerOverrideToBucketOwner",
+                "s3:GetObjectVersionTagging",
+                "s3:ReplicateTags",
+                "s3:ReplicateDelete"
+              ]
+              Resource = [
+                "arn:aws:s3:::mojap-land/*"
+              ]
+            },
+            {
               Sid    = "ListBucketAccessElectronicMonitoringService"
               Effect = "Allow"
               Principal = {
