@@ -1,4 +1,6 @@
 module "data_engineering_pipeline_buckets" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   for_each = local.data_engineering_buckets
   source   = "terraform-aws-modules/s3-bucket/aws"
   version  = "4.2.2"
