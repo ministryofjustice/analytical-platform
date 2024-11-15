@@ -824,6 +824,72 @@ locals {
             {
               Action = [
                 "s3:PutObject",
+                "s3:ListMultipartUploadParts",
+              ]
+              Effect = "Allow"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::288342028542:role/glue-job-integration",
+                  "arn:aws:iam::288342028542:role/glue-job-dev",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
+              Sid      = "WriteOnlyAccess-mojap-land-dev-opg-sirius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-acl" = "bucket-owner-full-control"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::288342028542:role/glue-job-integration",
+                  "arn:aws:iam::288342028542:role/glue-job-dev",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
+              Sid      = "112-mojap-land-dev-opg-sirius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-server-side-encryption" = "AES256"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::288342028542:role/glue-job-integration",
+                  "arn:aws:iam::288342028542:role/glue-job-dev",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
+              Sid      = "DenyIncorrectEncryptionHeader-mojap-land-dev-opg-sirius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                Null = {
+                  "s3:x-amz-server-side-encryption" = "true"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::288342028542:role/glue-job-integration",
+                  "arn:aws:iam::288342028542:role/glue-job-dev",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
+              Sid      = "DenyUnEncryptedObjectUploads-mojap-land-dev-opg-sirius"
+            },
+            {
+              Action = [
+                "s3:PutObject",
                 "s3:PutObjectTagging",
                 "s3:DeleteObject",
                 "s3:ListMultipartUploadParts",
@@ -1465,6 +1531,68 @@ locals {
       policy = jsonencode(
         {
           Statement = [
+            {
+              Action = [
+                "s3:PutObject",
+                "s3:ListMultipartUploadParts",
+              ]
+              Effect = "Allow"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::492687888235:role/glue-job-preproduction",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"
+              Sid      = "WriteOnlyAccess-mojap-land-preprod-opg-sirius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-acl" = "bucket-owner-full-control"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::492687888235:role/glue-job-preproduction",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"
+              Sid      = "112-mojap-land-preprod-opg-sirius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-server-side-encryption" = "AES256"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::492687888235:role/glue-job-preproduction",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"
+              Sid      = "DenyIncorrectEncryptionHeader-mojap-land-preprod-opg-sirius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                Null = {
+                  "s3:x-amz-server-side-encryption" = "true"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::492687888235:role/glue-job-preproduction",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"
+              Sid      = "DenyUnEncryptedObjectUploads-mojap-land-preprod-opg-sirius"
+            },
             {
               Action = [
                 "s3:PutObject",
