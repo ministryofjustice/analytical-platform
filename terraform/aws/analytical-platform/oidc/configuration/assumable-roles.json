@@ -183,5 +183,12 @@
     "stateLockingDetails": [],
     "ssmParameterConfig": [],
     "lakeFormationSharePolicy": true
+  },
+  "data-discovery": {
+    "account": "analytical-platform-data-production",
+    "stateConfig": [],
+    "repositories": ["moj-analytical-services/data-discovery"],
+    "targets": ["analytical-platform-data-production"],
+    "stateLockingDetails": []
   }
 }
