@@ -104,14 +104,12 @@ Patching is a manual process. This means you will have to check each module in e
 1. Amend the version if appropriate.
 1. Commit and push your results to the branch.
 
-### Applying/Releasing the changes
+### Applying/Releasing the Changes
 
-canceling previous workflow if new changes pushed to the previous
+Once the Terraform plan is checked and as expected, the changes can then be applied by the workflow.
 
-can apply in dev with no approval, but best to seek confirmation from a peer
+- Development - The changes can be applied prior to the Pull Request approval, by aproving the workflow apply process.
 
-test can be applied with out maint window - do we need to do anything
+- Test - Does the PR need approval first ?  If the apply in the Development environment has completed as expected the changes can be applied by aproving the workflow apply process.
 
-Arranging maint window for Production
-
-
+- Production -  If the apply in the Test environment has completed as expected the changes can be applied by aproving the workflow apply process. This should be carried out in the agreed maintenance window for Production.
