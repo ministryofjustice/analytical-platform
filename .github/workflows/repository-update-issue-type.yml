@@ -36,9 +36,6 @@ jobs:
             } else if (labels.includes("epic")) {
               type = "epic";
               fieldOptionId = "0c0fae3e";
-            } else if (labels.includes("feature-request")) {
-              type = "feature-request";
-              fieldOptionId = "f9d31408";
             } else if (labels.includes("story")) {
               type = "story";
               fieldOptionId = "28d2bccc";
