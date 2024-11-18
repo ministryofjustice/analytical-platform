@@ -52,7 +52,6 @@ jobs:
             So that… security / best practice etc
 
             ### Definition of Done
-            - [ ] Update the [Analytical Platform Compute](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-compute) estate in Modernisation Platform Environments. (example https://github.com/ministryofjustice/modernisation-platform-environments/commit/08bbcaf09b254619a727721d0c4cb93afc0f4aec)
-
+            - [ ] Follow the instructions as documented in [Analytical Platform Compute Maintenance](https://docs.analytical-platform.service.justice.gov.uk/documentation/runbooks/005-analytical-platform-compute-maintenance.html).
           PINNED: false
           CLOSE_PREVIOUS: false
