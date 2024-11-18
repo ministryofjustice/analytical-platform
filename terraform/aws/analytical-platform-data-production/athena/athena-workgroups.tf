@@ -24,7 +24,7 @@ locals {
   }
   dbt_athena_workgroups = {
     "dbt-avature" = {
-      name = "dbt-avature-workgroup"
+      name = "dbt-avature"
     }
   }
 }
