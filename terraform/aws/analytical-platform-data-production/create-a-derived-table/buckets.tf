@@ -148,7 +148,7 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     }
   }
   statement {
-    sid    = "AllowCompliantPaths"
+    sid    = "AllowCrossAccountDataAccess"
     effect = "Allow"
     actions = [
       "s3:PutObject",
