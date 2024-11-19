@@ -183,5 +183,12 @@
     "stateLockingDetails": [],
     "ssmParameterConfig": [],
     "lakeFormationSharePolicy": true
+  },
+  "create-a-derived-table-infrastructure": {
+    "account": "analytical-platform-data-production",
+    "stateConfig": [],
+    "repositories": ["ministryofjustice/create-a-derived-table-infrastructure"],
+    "targets": ["analytical-platform-data-production"],
+    "stateLockingDetails": []
   }
 }
