@@ -190,5 +190,12 @@
     "repositories": ["ministryofjustice/create-a-derived-table-infrastructure"],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": []
+  },
+  "data-engineering-database-access": {
+    "account": "analytical-platform-data-production",
+    "stateConfig": [],
+    "repositories": ["moj-analytical-services/data-engineering-database-access"],
+    "targets": ["analytical-platform-data-production"],
+    "stateLockingDetails": []
   }
 }
