@@ -148,7 +148,7 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     }
   }
   statement {
-    sid    = "AllowCrossAccountDataAccess"
+    sid    = "AllowCrossAccountReadWrite"
     effect = "Allow"
     actions = [
       "s3:PutObject",
@@ -160,8 +160,7 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${var.account_ids["analytical-platform-compute-development"]}:role/lf-data-prod-mojap-derived-20241115171036626100000001",
-        "arn:aws:iam::${var.account_ids["analytical-platform-compute-production"]}:role/lf-data-prod-mojap-derived-"
+        "arn:aws:iam::${var.account_ids["analytical-platform-compute-development"]}:role/service-role/AWSGlueServiceRole-mojap-cadet-manual"
       ]
     }
   }
@@ -177,8 +176,7 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${var.account_ids["analytical-platform-compute-development"]}:role/lf-data-prod-mojap-derived-20241115171036626100000001",
-        "arn:aws:iam::${var.account_ids["analytical-platform-compute-production"]}:role/lf-data-prod-mojap-derived-"
+        "arn:aws:iam::${var.account_ids["analytical-platform-compute-development"]}:role/service-role/AWSGlueServiceRole-mojap-cadet-manual"
       ]
     }
   }
