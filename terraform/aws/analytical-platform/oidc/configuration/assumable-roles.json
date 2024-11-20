@@ -197,5 +197,12 @@
     "repositories": ["moj-analytical-services/data-engineering-database-access"],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": []
+  },
+  "analytics-platform-helm-charts": {
+    "account": "analytical-platform-data-production",
+    "stateConfig": [],
+    "repositories": ["ministryofjustice/analytics-platform-helm-charts"],
+    "targets": ["analytical-platform-data-production"],
+    "stateLockingDetails": []
   }
 }
