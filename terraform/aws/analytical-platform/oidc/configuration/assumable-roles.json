@@ -223,5 +223,16 @@
         "ssmParameterRegion": "eu-west-1"
       }
     ]
+  },
+    "airflow-contracts-etl": {
+    "account": "analytical-platform-data-engineering-production",
+    "stateConfig": [],
+    "repositories": ["moj-analytical-services/airflow-contracts-etl"],
+    "targets": [
+      "analytical-platform-data-engineering-production",
+      "analytical-platform-data-production"
+    ],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
   }
 }
