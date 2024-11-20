@@ -189,6 +189,39 @@
     "stateConfig": [],
     "repositories": ["moj-analytical-services/data-discovery"],
     "targets": ["analytical-platform-data-production"],
-    "stateLockingDetails": []
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+
+  },
+    "analytics-platform-helm-charts": {
+      "account": "analytical-platform-data-production",
+      "stateConfig": [
+        {
+          "stateBucket": "moj-analytics-helm-repo/",
+          "stateBucketKey": "*"
+        }
+      ],
+      "repositories": ["ministryofjustice/analytics-platform-helm-charts"],
+      "targets": [
+        "analytical-platform-data-production"
+      ],
+      "stateLockingDetails": [],
+      "ssmParameterConfig": []
+    },
+    "data-engineering-cleanup": {
+    "account": "analytical-platform-data-engineering-production",
+    "stateConfig": [],
+    "repositories": ["ministryofjustice/data-engineering-cleanup"],
+    "targets": [
+      "analytical-platform-data-engineering-production",
+      "analytical-platform-data-production"
+    ],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": [
+      {
+        "ssmParameterArnPrefixes": ["data-engineering-cleanup/"],
+        "ssmParameterRegion": "eu-west-1"
+      }
+    ]
   }
 }
