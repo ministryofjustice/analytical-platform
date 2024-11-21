@@ -1,15 +1,20 @@
+data "aws_region" "current" {}
+
+data "aws_secretsmanager_secret_version" "source" {
+  secret_id = var.source_secrets_manager_arn
+}
+
 # DMS Source Endpoint
 resource "aws_dms_endpoint" "source" {
-  endpoint_id   = "${var.db}-source-${var.region}-${var.environment}"
+  endpoint_id   = "${var.db}-source-${data.aws_region.current.name}-${var.environment}"
   endpoint_type = "source"
   engine_name   = "oracle"
-  secrets_manager_arn = var.secrets_manager_arn
 
-  #username      = var.source_database.username
-  #password      = var.source_database.password
-  #server_name   = var.source_database.server_name
-  #port          = var.source_database.port
-  #database_name = var.source_database.database_name
+  username      = jsondecode(data.aws_secretsmanager_secret_version.source.secret_string)["username"]
+  password      = jsondecode(data.aws_secretsmanager_secret_version.source.secret_string)["password"]
+  server_name   = var.dms_source_server_name
+  port          = var.dms_source_server_port
+  database_name = var.dms_source_database_name
 }
 
 ## DMS S3 Target Endpoint
