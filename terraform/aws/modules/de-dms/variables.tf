@@ -22,3 +22,24 @@ variable "dms_source_server_port" {
 variable "dms_source_database_name" {
   type = string
 }
+
+variable "dms_replication_instance_name" {
+  type = string
+}
+
+variable "dms_replication_subnet_ids" {
+  type = list(string)
+}
+
+variable "landing_bucket" {
+  type = string
+}
+
+variable "landing_bucket_folder" {
+  type = string
+}
+
+#variable "tags" {
+#  description = "Tags applied to all resources"
+#  type        = map(string)
+#}

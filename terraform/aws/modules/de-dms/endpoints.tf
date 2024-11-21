@@ -17,11 +17,11 @@ resource "aws_dms_endpoint" "source" {
   database_name = var.dms_source_database_name
 }
 
-## DMS S3 Target Endpoint
-#resource "aws_dms_s3_endpoint" "s3_target" {
-#  endpoint_id             = "aws_dms_s3_endpoint-id-CHANGE-THIS!!"
-#  endpoint_type           = "target"
-#  bucket_name             = var.s3_bucket
-#  service_access_role_arn = aws_iam_role.dms_vpc_role.arn
-#}
-#
+# DMS S3 Target Endpoint
+resource "aws_dms_s3_endpoint" "s3_target" {
+  endpoint_id             = "${var.db}-target-${data.aws_region.current.name}-${var.environment}"
+  endpoint_type           = "target"
+  bucket_name             = var.landing_bucket
+  bucket_folder           = var.landing_bucket_folder
+  service_access_role_arn = aws_iam_role.dms.arn
+}
