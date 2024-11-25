@@ -6,6 +6,4 @@ module "observability_platform_tenant" {
   version = "1.2.0"
 
   observability_platform_account_id = "319748487814" # observability-platform-production
-  enable_prometheus                 = true
-
 }
