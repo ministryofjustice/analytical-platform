@@ -6,8 +6,8 @@ on:
     branches:
       - main
     paths:
-      - 'config/**'
-      - 'source/**'
+      - "config/**'"
+      - "source/**"
 
 permissions: {}
 
