@@ -91,6 +91,12 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "arn:aws:airflow:*:${var.account_ids["analytical-platform-data-production"]}:environment/prod"
     ]
   }
+  statement {
+    sid       = "AllowAssumeAPComputeMetadataTransferRole"
+    effect    = "Allow"
+    actions   = ["sts:AssumeRole"]
+    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-compute-production"]}:role/analytical-platform-cadet-runner-compute-policy"]
+  }
 }
 
 module "create_a_derived_table_iam_policy" {
