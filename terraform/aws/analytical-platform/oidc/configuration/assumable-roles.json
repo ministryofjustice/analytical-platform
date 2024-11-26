@@ -1,207 +1,265 @@
 {
-  "moj-data-transfer-api-infra": {
-    "account": "analytical-platform-data-engineering-production",
-    "stateConfig": [
-      {
-        "stateBucket": "moj-data-transfer-api-pulumi-backend/",
-        "stateBucketKey": ".pulumi/"
-      }
+	"moj-data-transfer-api-infra": {
+		"account": "analytical-platform-data-engineering-production",
+		"stateConfig": [
+			{
+				"stateBucket": "moj-data-transfer-api-pulumi-backend/",
+				"stateBucketKey": ".pulumi/"
+			}
+		],
+		"repositories": [
+			"ministryofjustice/moj-data-transfer-api"
+		],
+		"targets": [
+			"analytical-platform-data-production",
+			"analytical-platform-data-engineering-production",
+			"analytical-platform-data-engineering-sandbox-a"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": []
+	},
+	"data-engineering-pulumi-components": {
+		"account": "analytical-platform-data-engineering-sandbox-a",
+		"stateConfig": [
+			{
+				"stateBucket": "sandbox-pulumi-backend/",
+				"stateBucketKey": ".pulumi/"
+			}
+		],
+		"repositories": [
+			"ministryofjustice/data-engineering-pulumi-components"
+		],
+		"targets": [
+			"analytical-platform-data-engineering-sandbox-a"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": [
+			{
+				"ssmParameterArnPrefixes": [
+					"data-eng-pulumi-component/dev/"
+				],
+				"ssmParameterRegion": "eu-west-1"
+			}
+		]
+	},
+	"register-my-data": {
+		"account": "analytical-platform-data-engineering-production",
+		"stateConfig": [
+			{
+				"stateBucket": "register-my-data-pulumi-backend/",
+				"stateBucketKey": ".pulumi/"
+			}
+		],
+		"repositories": [
+			"ministryofjustice/register-my-data"
+		],
+		"targets": [
+			"analytical-platform-data-engineering-production",
+			"analytical-platform-data-production"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": [
+			{
+				"ssmParameterArnPrefixes": [
+					"register-my-data/env/"
+				],
+				"ssmParameterRegion": "eu-west-1"
+			}
+		]
+	},
+	"data-engineering-airflow": {
+		"account": "analytical-platform-data-engineering-production",
+		"stateConfig": [
+			{
+				"stateBucket": "data-engineering-airflow-pulumi-backend/",
+				"stateBucketKey": ".pulumi/"
+			}
+		],
+		"repositories": [
+			"ministryofjustice/data-engineering-airflow"
+		],
+		"targets": [
+			"analytical-platform-data-engineering-production",
+			"analytical-platform-data-production"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": []
+	},
+	"data-uploader": {
+		"account": "analytical-platform-data-engineering-production",
+		"stateConfig": [
+			{
+				"stateBucket": "ap-uploader-pulumi-backend/",
+				"stateBucketKey": ".pulumi/"
+			}
+		],
+		"repositories": [
+			"ministryofjustice/analytical-platform-uploader"
+		],
+		"targets": [
+			"analytical-platform-data-engineering-production",
+			"analytical-platform-data-production"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": [
+			{
+				"ssmParameterArnPrefixes": [
+					"ap-uploader/env/",
+					"ap-uploader/dev/",
+					"ap-uploader/prod/"
+				],
+				"ssmParameterRegion": "eu-west-1"
+			}
+		]
+	},
+	"analytical-platform-data-engineering": {
+		"account": "analytical-platform-data-engineering-production",
+		"stateConfig": [
+			{
+				"stateBucket": "analytical-platform-data-engineering-pulumi-backend/",
+				"stateBucketKey": ".pulumi/"
+			}
+		],
+		"repositories": [
+			"ministryofjustice/analytical-platform-data-engineering"
+		],
+		"targets": [
+			"analytical-platform-data-production",
+			"analytical-platform-data-engineering-production"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": []
+	},
+	"analytical-platform-data-engineering-sandbox": {
+		"account": "analytical-platform-data-engineering-sandbox-a",
+		"stateConfig": [
+			{
+				"stateBucket": "managed-pipelines-sandbox-pulumi-backend/",
+				"stateBucketKey": ".pulumi/"
+			}
+		],
+		"repositories": [
+			"ministryofjustice/analytical-platform-data-engineering"
+		],
+		"targets": [
+			"analytical-platform-data-engineering-sandbox-a"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": []
+	},
+	"pulumi-oidc-test": {
+		"account": "analytical-platform-data-engineering-sandbox-a",
+		"stateConfig": [
+			{
+				"stateBucket": "sandbox-pulumi-backend/",
+				"stateBucketKey": "pulumi-oidc-test/.pulumi/"
+			}
+		],
+		"repositories": [
+			"moj-analytical-services/pulumi-oidc-test"
+		],
+		"targets": [
+			"analytical-platform-data-engineering-sandbox-a"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": []
+	},
+	"lookup-offence-sandbox": {
+		"account": "analytical-platform-data-engineering-sandbox-a",
+		"stateConfig": [],
+		"repositories": [
+			"ministryofjustice/lookup-offence-sandbox"
+		],
+		"targets": [
+			"analytical-platform-data-engineering-sandbox-a"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": []
+	},
+	"create-a-derived-table": {
+		"account": "analytical-platform-data-production",
+		"stateConfig": [],
+		"repositories": [
+			"moj-analytical-services/create-a-derived-table"
+		],
+		"targets": [
+			"analytical-platform-data-production"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": []
+	},
+	"lookup-offence": {
+		"account": "analytical-platform-data-production",
+		"stateConfig": [],
+		"repositories": [
+			"moj-analytical-services/lookup_offence"
+		],
+		"targets": [
+			"analytical-platform-data-production"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": []
+	},
+	"data-platform-apps": {
+		"account": "analytical-platform-data-production",
+		"stateConfig": [],
+		"repositories": [
+			"ministryofjustice/hmpps-hr-dashboard",
+			"ministryofjustice/ltc-capabilites-app",
+			"ministryofjustice/mlp-app",
+			"ministryofjustice/moj-officehub-locator-webapp",
+			"ministryofjustice/pfg-dash-moj",
+			"ministryofjustice/regime-dashboard"
+		],
+		"targets": [
+			"analytical-platform-data-production"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": []
+	},
+	"modernisation-platform-lake-formation-share": {
+		"account": "analytical-platform-data-production",
+		"stateConfig": [],
+		"repositories": [
+			"ministryofjustice/modernisation-platform-environments"
+		],
+		"targets": [],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": [],
+		"lakeFormationSharePolicy": true
+	},
+	"create-a-derived-table-infrastructure": {
+		"account": "analytical-platform-data-production",
+		"stateConfig": [
+			{
+				"stateBucket": "data-engineering-pulumi.analytics.justice.gov.uk/",
+				"stateBucketKey": ".pulumi/"
+			}
     ],
-    "repositories": ["ministryofjustice/moj-data-transfer-api"],
-    "targets": [
-      "analytical-platform-data-production",
-      "analytical-platform-data-engineering-production",
-      "analytical-platform-data-engineering-sandbox-a"
-    ],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": []
-  },
-  "data-engineering-pulumi-components": {
-    "account": "analytical-platform-data-engineering-sandbox-a",
-    "stateConfig": [
-      {
-        "stateBucket": "sandbox-pulumi-backend/",
-        "stateBucketKey": ".pulumi/"
-      }
-    ],
-    "repositories": ["ministryofjustice/data-engineering-pulumi-components"],
-    "targets": ["analytical-platform-data-engineering-sandbox-a"],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": [
-      {
-        "ssmParameterArnPrefixes": ["data-eng-pulumi-component/dev/"],
-        "ssmParameterRegion": "eu-west-1"
-      }
-    ]
-  },
-  "register-my-data": {
-    "account": "analytical-platform-data-engineering-production",
-    "stateConfig": [
-      {
-        "stateBucket": "register-my-data-pulumi-backend/",
-        "stateBucketKey": ".pulumi/"
-      }
-    ],
-    "repositories": ["ministryofjustice/register-my-data"],
-    "targets": [
-      "analytical-platform-data-engineering-production",
-      "analytical-platform-data-production"
-    ],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": [
-      {
-        "ssmParameterArnPrefixes": ["register-my-data/env/"],
-        "ssmParameterRegion": "eu-west-1"
-      }
-    ]
-  },
-  "data-engineering-airflow": {
-    "account": "analytical-platform-data-engineering-production",
-    "stateConfig": [
-      {
-        "stateBucket": "data-engineering-airflow-pulumi-backend/",
-        "stateBucketKey": ".pulumi/"
-      }
-    ],
-    "repositories": ["ministryofjustice/data-engineering-airflow"],
-    "targets": [
-      "analytical-platform-data-engineering-production",
-      "analytical-platform-data-production"
-    ],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": []
-  },
-  "data-uploader": {
-    "account": "analytical-platform-data-engineering-production",
-    "stateConfig": [
-      {
-        "stateBucket": "ap-uploader-pulumi-backend/",
-        "stateBucketKey": ".pulumi/"
-      }
-    ],
-    "repositories": ["ministryofjustice/analytical-platform-uploader"],
-    "targets": [
-      "analytical-platform-data-engineering-production",
-      "analytical-platform-data-production"
-    ],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": [
-      {
-        "ssmParameterArnPrefixes": [
-          "ap-uploader/env/",
-          "ap-uploader/dev/",
-          "ap-uploader/prod/"
-        ],
-        "ssmParameterRegion": "eu-west-1"
-      }
-    ]
-  },
-  "analytical-platform-data-engineering": {
-    "account": "analytical-platform-data-engineering-production",
-    "stateConfig": [
-      {
-        "stateBucket": "analytical-platform-data-engineering-pulumi-backend/",
-        "stateBucketKey": ".pulumi/"
-      }
-    ],
-    "repositories": ["ministryofjustice/analytical-platform-data-engineering"],
-    "targets": [
-      "analytical-platform-data-production",
-      "analytical-platform-data-engineering-production"
-    ],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": []
-  },
-  "analytical-platform-data-engineering-sandbox": {
-    "account": "analytical-platform-data-engineering-sandbox-a",
-    "stateConfig": [
-      {
-        "stateBucket": "managed-pipelines-sandbox-pulumi-backend/",
-        "stateBucketKey": ".pulumi/"
-      }
-    ],
-    "repositories": ["ministryofjustice/analytical-platform-data-engineering"],
-    "targets": ["analytical-platform-data-engineering-sandbox-a"],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": []
-  },
-  "pulumi-oidc-test": {
-    "account": "analytical-platform-data-engineering-sandbox-a",
-    "stateConfig": [
-      {
-        "stateBucket": "sandbox-pulumi-backend/",
-        "stateBucketKey": "pulumi-oidc-test/.pulumi/"
-      }
-    ],
-    "repositories": ["moj-analytical-services/pulumi-oidc-test"],
-    "targets": ["analytical-platform-data-engineering-sandbox-a"],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": []
-  },
-  "lookup-offence-sandbox": {
-    "account": "analytical-platform-data-engineering-sandbox-a",
-    "stateConfig": [],
-    "repositories": ["ministryofjustice/lookup-offence-sandbox"],
-    "targets": ["analytical-platform-data-engineering-sandbox-a"],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": []
-  },
-  "create-a-derived-table": {
-    "account": "analytical-platform-data-production",
-    "stateConfig": [],
-    "repositories": ["moj-analytical-services/create-a-derived-table"],
-    "targets": ["analytical-platform-data-production"],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": []
-  },
-  "lookup-offence": {
-    "account": "analytical-platform-data-production",
-    "stateConfig": [],
-    "repositories": ["moj-analytical-services/lookup_offence"],
-    "targets": ["analytical-platform-data-production"],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": []
-  },
-  "data-platform-apps": {
-    "account": "analytical-platform-data-production",
-    "stateConfig": [],
-    "repositories": [
-      "ministryofjustice/hmpps-hr-dashboard",
-      "ministryofjustice/ltc-capabilites-app",
-      "ministryofjustice/mlp-app",
-      "ministryofjustice/moj-officehub-locator-webapp",
-      "ministryofjustice/pfg-dash-moj",
-      "ministryofjustice/regime-dashboard"
-    ],
-    "targets": ["analytical-platform-data-production"],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": []
-  },
-  "modernisation-platform-lake-formation-share": {
-    "account": "analytical-platform-data-production",
-    "stateConfig": [],
-    "repositories": ["ministryofjustice/modernisation-platform-environments"],
-    "targets": [],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": [],
-    "lakeFormationSharePolicy": true
-  },
-  "create-a-derived-table-infrastructure": {
-    "account": "analytical-platform-data-production",
-    "stateConfig": [],
-    "repositories": ["ministryofjustice/create-a-derived-table-infrastructure"],
-    "targets": ["analytical-platform-data-production"],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": []
-  },
-  "data-engineering-database-access": {
-    "account": "analytical-platform-data-production",
-    "stateConfig": [],
-    "repositories": [
-      "moj-analytical-services/data-engineering-database-access"
-    ],
-    "targets": ["analytical-platform-data-production"],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": []
-  }
+		"repositories": [
+			"ministryofjustice/create-a-derived-table-infrastructure"
+		],
+		"targets": [
+			"analytical-platform-data-production"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": []
+	},
+	"data-engineering-database-access": {
+		"account": "analytical-platform-data-production",
+		"stateConfig": [
+			{
+				"stateBucket": "data-engineering-pulumi.analytics.justice.gov.uk/",
+				"stateBucketKey": ".pulumi/"
+			}
+		],
+		"repositories": [
+			"moj-analytical-services/data-engineering-database-access"
+		],
+		"targets": [
+			"analytical-platform-data-production"
+		],
+		"stateLockingDetails": [],
+		"ssmParameterConfig": []
+	}
 }
