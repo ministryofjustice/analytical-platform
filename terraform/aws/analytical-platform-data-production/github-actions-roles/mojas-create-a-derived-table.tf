@@ -94,7 +94,7 @@ data "aws_iam_policy_document" "create_a_derived_table" {
   statement {
     sid       = "AllowAssumeAPComputeMetadataTransferRole"
     effect    = "Allow"
-    actions   = ["sts:AssumeRole"]
+    actions   = ["sts:AssumeRole", "sts:TagSession"]
     resources = ["arn:aws:iam::${var.account_ids["analytical-platform-compute-production"]}:role/analytical-platform-cadet-runner-assumable"]
   }
 }
