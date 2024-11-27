@@ -70,6 +70,12 @@ for REPO in "${REPOSITORIES[@]}"; do
         continue
     fi
 
+    # Skip mlflow repositories
+    if [[ "$REPO" == "analytical-platform-mlflow" ]]; then
+    echo "Skipping mlflow repository: $REPO"
+    continue
+    fi
+
     # Use gh cli to list pull requests with the label 'dependencies'
     pr_list=$(gh pr list --repo "$REPO_OWNER/$REPO" --label "dependencies" --state open --json number,title,url,createdAt -q '.[] | "\(.number) | \(.url) | \(.title)"')
 
