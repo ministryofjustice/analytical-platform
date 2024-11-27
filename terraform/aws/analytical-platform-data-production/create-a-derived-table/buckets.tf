@@ -108,65 +108,6 @@ module "mojap_cadet_production" {
   attach_policy = true
   policy        = data.aws_iam_policy_document.mojap_cadet_production.json
 
-  replication_configuration = {
-    role = module.mojap_cadet_production_replication_iam_role.iam_role_arn
-
-    rules = [
-      {
-        id                        = "mojap-data-production-cadet-to-apc-production-prod"
-        status                    = "Enabled"
-        delete_marker_replication = true
-        priority                  = 0
-        filter = {
-          prefix = "prod"
-        }
-
-        destination = {
-          account_id    = var.account_ids["analytical-platform-compute-production"]
-          bucket        = "arn:aws:s3:::mojap-compute-production-derived-tables-replication"
-          storage_class = "STANDARD"
-          access_control_translation = {
-            owner = "Destination"
-          }
-          metrics = {
-            status  = "Enabled"
-            minutes = 15
-          }
-          replication_time = {
-            status  = "Enabled"
-            minutes = 15
-          }
-        }
-      },
-      {
-        id                        = "mojap-data-production-cadet-to-apc-development-prod"
-        status                    = "Enabled"
-        delete_marker_replication = true
-        priority                  = 10
-        filter = {
-          prefix = "prod"
-        }
-
-        destination = {
-          account_id    = var.account_ids["analytical-platform-compute-development"]
-          bucket        = "arn:aws:s3:::mojap-compute-development-derived-tables-replication"
-          storage_class = "STANDARD"
-          access_control_translation = {
-            owner = "Destination"
-          }
-          metrics = {
-            status  = "Enabled"
-            minutes = 15
-          }
-          replication_time = {
-            status  = "Enabled"
-            minutes = 15
-          }
-        }
-      }
-    ]
-  }
-
   tags = var.tags
 }
 
@@ -207,30 +148,27 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     }
   }
   statement {
-    sid    = "AllowPutInReplicationPrefix"
+    sid    = "AllowCrossAccountReadWrite"
     effect = "Allow"
     actions = [
       "s3:PutObject",
       "s3:GetObject",
-      "s3:GetObjectVersion"
     ]
     resources = [
-      "arn:aws:s3:::mojap-derived-tables/batch-replication/*",
+      "arn:aws:s3:::mojap-derived-tables/prod/*",
     ]
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication"
+        "arn:aws:iam::${var.account_ids["analytical-platform-compute-production"]}:role/lake-formation-data-production-data-access"
       ]
     }
   }
   statement {
-    sid    = "AllowInventoryCreationAndRetrieval"
+    sid    = "AllowCrossAccountFindBucket"
     effect = "Allow"
     actions = [
-      "s3:GetReplicationConfiguration",
-      "s3:ListBucket",
-      "s3:PutInventoryConfiguration"
+      "s3:ListBucket"
     ]
     resources = [
       "arn:aws:s3:::mojap-derived-tables",
@@ -238,7 +176,7 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mojap-data-production-cadet-to-apc-production-replication"
+        "arn:aws:iam::${var.account_ids["analytical-platform-compute-production"]}:role/lake-formation-data-production-data-access"
       ]
     }
   }
