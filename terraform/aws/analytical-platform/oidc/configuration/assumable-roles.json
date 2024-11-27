@@ -220,12 +220,7 @@
   },
   "airflow-contracts-etl": {
     "account": "analytical-platform-data-engineering-production",
-    "stateConfig": [
-      {
-        "stateBucket": "analytical-platform-data-engineering-pulumi-backend/",
-        "stateBucketKey": ".pulumi/"
-      }
-    ],
+    "stateConfig": [],
     "repositories": ["moj-analytical-services/airflow-contracts-etl"],
     "targets": [
       "analytical-platform-data-engineering-production",
