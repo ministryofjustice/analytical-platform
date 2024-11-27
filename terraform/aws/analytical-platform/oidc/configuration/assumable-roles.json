@@ -195,12 +195,7 @@
   },
     "analytics-platform-helm-charts": {
       "account": "analytical-platform-data-production",
-      "stateConfig": [
-        {
-          "stateBucket": "moj-analytics-helm-repo/",
-          "stateBucketKey": "*"
-        }
-      ],
+      "stateConfig": [],
       "repositories": ["ministryofjustice/analytics-platform-helm-charts"],
       "targets": [
         "analytical-platform-data-production"
@@ -226,7 +221,12 @@
   },
     "airflow-contracts-etl": {
     "account": "analytical-platform-data-engineering-production",
-    "stateConfig": [],
+    "stateConfig": [
+      {
+        "stateBucket": "analytical-platform-data-engineering-pulumi-backend/",
+        "stateBucketKey": ".pulumi/"
+      }
+    ],
     "repositories": ["moj-analytical-services/airflow-contracts-etl"],
     "targets": [
       "analytical-platform-data-engineering-production",
