@@ -87,7 +87,11 @@
     "stateLockingDetails": [],
     "ssmParameterConfig": [
       {
-        "ssmParameterArnPrefixes": ["ap-uploader/env/", "ap-uploader/dev/", "ap-uploader/prod/"],
+        "ssmParameterArnPrefixes": [
+          "ap-uploader/env/",
+          "ap-uploader/dev/",
+          "ap-uploader/prod/"
+        ],
         "ssmParameterRegion": "eu-west-1"
       }
     ]
@@ -176,9 +180,7 @@
   "modernisation-platform-lake-formation-share": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
-    "repositories": [
-      "ministryofjustice/modernisation-platform-environments"
-    ],
+    "repositories": ["ministryofjustice/modernisation-platform-environments"],
     "targets": [],
     "stateLockingDetails": [],
     "ssmParameterConfig": [],
@@ -191,19 +193,16 @@
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
-
   },
-    "analytics-platform-helm-charts": {
-      "account": "analytical-platform-data-production",
-      "stateConfig": [],
-      "repositories": ["ministryofjustice/analytics-platform-helm-charts"],
-      "targets": [
-        "analytical-platform-data-production"
-      ],
-      "stateLockingDetails": [],
-      "ssmParameterConfig": []
-    },
-    "data-engineering-cleanup": {
+  "analytics-platform-helm-charts": {
+    "account": "analytical-platform-data-production",
+    "stateConfig": [],
+    "repositories": ["ministryofjustice/analytics-platform-helm-charts"],
+    "targets": ["analytical-platform-data-production"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  },
+  "data-engineering-cleanup": {
     "account": "analytical-platform-data-engineering-production",
     "stateConfig": [],
     "repositories": ["ministryofjustice/data-engineering-cleanup"],
@@ -219,7 +218,7 @@
       }
     ]
   },
-    "airflow-contracts-etl": {
+  "airflow-contracts-etl": {
     "account": "analytical-platform-data-engineering-production",
     "stateConfig": [
       {
