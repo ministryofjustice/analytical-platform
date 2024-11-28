@@ -75,6 +75,7 @@ resource "aws_athena_workgroup" "dbt" {
     engine_version {
       selected_engine_version = "Athena engine version 3"
     }
+    #checkov:skip=CKV_AWS_82:Can't enforce output location due to DBT requirements
     result_configuration {
       output_location = "s3://dbt-query-dump/"
     }
