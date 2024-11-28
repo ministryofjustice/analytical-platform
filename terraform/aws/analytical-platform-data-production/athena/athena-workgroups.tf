@@ -76,7 +76,7 @@ resource "aws_athena_workgroup" "dbt" {
       selected_engine_version = "Athena engine version 3"
     }
     result_configuration {
-      output_location = "s3://dbt-query-dump/"
+      output_location = strcontains(each.value.name, "dev") ? "s3://dbt-query-dump/" : "s3://mojap-derived-tables/"
     }
   }
 
