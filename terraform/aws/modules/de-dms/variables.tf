@@ -23,12 +23,18 @@ variable "dms_source_database_name" {
   type = string
 }
 
-variable "dms_replication_instance_name" {
-  type = string
-}
-
-variable "dms_replication_subnet_ids" {
-  type = list(string)
+variable "dms_replication_instance" {
+  type = object({
+    replication_instance_id    = string
+    subnet_ids                 = list(string)
+    allocated_storage          = number
+    availability_zone          = string
+    engine_version             = string
+    kms_key_arn                = string
+    multi_az                   = bool
+    replication_instance_class = string
+    vpc_security_group_ids     = list(string)
+  })
 }
 
 variable "landing_bucket" {
@@ -38,8 +44,3 @@ variable "landing_bucket" {
 variable "landing_bucket_folder" {
   type = string
 }
-
-#variable "tags" {
-#  description = "Tags applied to all resources"
-#  type        = map(string)
-#}
