@@ -1,10 +1,10 @@
-resource "auth0_log_stream" "aws_eventbridge_data_platform_apps_and_tools_development" {
-  name   = "data-platform-apps-and-tools-development"
+resource "auth0_log_stream" "aws_eventbridge_analytical_platform_data_production" {
+  name   = "analytical-platform-data-production"
   type   = "eventbridge"
   status = "active"
 
   sink {
-    aws_account_id = "335889174965"
+    aws_account_id = "593291632749"
     aws_region     = "eu-west-2"
   }
 }
