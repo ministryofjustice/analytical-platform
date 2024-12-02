@@ -5,7 +5,7 @@ from airflow.www.utils import UIAlert
 # and here https://github.com/apache/airflow/blob/main/airflow/www/utils.py#L889
 DASHBOARD_UIALERTS = [
     UIAlert(
-        'Commencing 06/01/2025 the Analytical Platform team will decommission the development Data Engineering EKS cluster (also known as airflow-dev), to ensure your workflows continue to run please complete the migration steps outlined in the <a href="https://user-guidance.analytical-platform.service.justice.gov.uk/tools/airflow/migration.html">user guidance</a>',
+        'Commencing 06/01/2025, the Analytical Platform team will decommission the development Data Engineering EKS cluster (also known as airflow-dev). To ensure your workflows continue to run, please complete the migration steps outlined in the <a href="https://user-guidance.analytical-platform.service.justice.gov.uk/tools/airflow/migration.html">user guidance</a>',
         category="info",
         html=True,
     ),
