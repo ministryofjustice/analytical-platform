@@ -108,6 +108,11 @@ variable "rds_allocated_storage" {
   description = "Allocated storage for the RDS instance"
 }
 
+variable "rds_max_allocated_storage" {
+  type        = number
+  description = "Allocated storage for the RDS storage autoscaling"
+}
+
 variable "rds_db_name" {
   type        = string
   description = "Name of the RDS database"
