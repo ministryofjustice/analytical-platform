@@ -8,19 +8,20 @@ module "rds" {
   source  = "terraform-aws-modules/rds/aws"
   version = "6.10.0"
 
-  identifier          = local.rds_identifier
-  engine              = var.rds_engine
-  family              = var.rds_family
-  engine_version      = var.rds_engine_version
-  instance_class      = var.rds_instance_class
-  allocated_storage   = var.rds_allocated_storage
-  deletion_protection = var.rds_deletion_protection
-  multi_az            = var.rds_multi_az
-  storage_encrypted   = var.rds_storage_encrypted
-  snapshot_identifier = var.rds_snapshot_identifier
-  maintenance_window  = var.rds_maintenance_window
-  backup_window       = var.rds_backup_window
-  ca_cert_identifier  = var.rds_ca_cert_identifier
+  identifier             = local.rds_identifier
+  engine                 = var.rds_engine
+  family                 = var.rds_family
+  engine_version         = var.rds_engine_version
+  instance_class         = var.rds_instance_class
+  allocated_storage      = var.rds_allocated_storage
+  max_allocated_storage  = var.rds_max_allocated_storage
+  deletion_protection    = var.rds_deletion_protection
+  multi_az               = var.rds_multi_az
+  storage_encrypted      = var.rds_storage_encrypted
+  snapshot_identifier    = var.rds_snapshot_identifier
+  maintenance_window     = var.rds_maintenance_window
+  backup_window          = var.rds_backup_window
+  ca_cert_identifier     = var.rds_ca_cert_identifier
 
   subnet_ids             = module.vpc.database_subnets
   vpc_security_group_ids = [module.eks.worker_security_group_id]
