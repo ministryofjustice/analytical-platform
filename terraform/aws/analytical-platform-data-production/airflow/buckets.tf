@@ -36,6 +36,35 @@ resource "aws_s3_object" "kubeconfig_dev" {
   server_side_encryption = "AES256"
 }
 
+resource "aws_s3_object" "airflow_local_settings_dev" {
+  bucket = "mojap-airflow-dev"
+  key    = "dags/airflow_local_settings.py"
+  source = "./files/dev/airflow_local_settings.py"
+
+  # The filemd5() function is available in Terraform 0.11.12 and later
+  # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
+  # etag = "${md5(file("path/to/file"))}"
+  etag                   = filemd5("./files/dev/airflow_local_settings.py")
+  server_side_encryption = "AES256"
+
+  provisioner "local-exec" {
+    command = ""
+  }
+}
+
+resource "aws_s3_object" "airflow_local_settings_dev_2" {
+  bucket = "mojap-airflow-dev"
+  key    = "dags-dev/airflow_local_settings.py"
+  source = "./files/dev/airflow_local_settings.py"
+
+  etag                   = filemd5("./files/dev/airflow_local_settings.py")
+  server_side_encryption = "AES256"
+
+  provisioner "local-exec" {
+    command = "bash scripts/update-mwaa-environment.sh ${var.account_ids["analytical-platform-data-production"]} dev"
+  }
+}
+
 resource "aws_s3_bucket_policy" "airflow_dev_bucket_policy" {
   bucket = aws_s3_bucket.mojap_airflow_dev.id
   policy = data.aws_iam_policy_document.airflow_bucket_policy.json
