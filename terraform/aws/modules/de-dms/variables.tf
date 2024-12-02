@@ -37,6 +37,17 @@ variable "dms_replication_instance" {
   })
 }
 
+variable "replication_task_id" {
+  type = object({
+    full_load = string
+    cdc       = string
+  })
+}
+
+variable "dms_mapping_rules" {
+  type = string
+}
+
 variable "landing_bucket" {
   type = string
 }

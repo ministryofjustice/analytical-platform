@@ -1,0 +1,19 @@
+{
+    "schema": "MPTUSER",
+    "objects_from": "oracle19_sandbox",
+    "extraction_date": "2024-06-25T13:47:00.688074",
+    "objects": [
+        "CATEGORIES",
+        "CUSTOMERS",
+        "STORES_MV"
+    ],
+    "blobs": [
+        {
+            "object_name": "CATEGORIES",
+            "column_name": "PICTURE"
+        }
+    ],
+    "deleted_tables": [
+        "EMPLOYEES"
+    ]
+}

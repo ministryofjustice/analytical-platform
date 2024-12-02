@@ -6,7 +6,7 @@ resource "aws_dms_replication_subnet_group" "replication_subnet_group" {
   subnet_ids = var.dms_replication_instance.subnet_ids
 
   tags = {
-    Name = "${data.aws_region.current.name}-${var.environment}"
+    Name        = "${data.aws_region.current.name}-${var.environment}"
     application = "Data Engineering"
   }
 }
@@ -23,7 +23,7 @@ resource "aws_dms_replication_instance" "instance" {
   replication_instance_class   = var.dms_replication_instance.replication_instance_class
   replication_instance_id      = var.dms_replication_instance.replication_instance_id
   replication_subnet_group_id  = aws_dms_replication_subnet_group.replication_subnet_group.id
-  vpc_security_group_ids = var.dms_replication_instance.vpc_security_group_ids
+  vpc_security_group_ids       = var.dms_replication_instance.vpc_security_group_ids
 
   tags = {
     Name = var.dms_replication_instance.replication_instance_id
