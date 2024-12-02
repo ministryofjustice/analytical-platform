@@ -160,7 +160,7 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${var.account_ids["analytical-platform-compute-development"]}:role/service-role/AWSGlueServiceRole-mojap-cadet-manual"
+        "arn:aws:iam::${var.account_ids["analytical-platform-compute-production"]}:role/lake-formation-data-production-data-access"
       ]
     }
   }
@@ -176,7 +176,7 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${var.account_ids["analytical-platform-compute-development"]}:role/service-role/AWSGlueServiceRole-mojap-cadet-manual"
+        "arn:aws:iam::${var.account_ids["analytical-platform-compute-production"]}:role/lake-formation-data-production-data-access"
       ]
     }
   }

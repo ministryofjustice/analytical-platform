@@ -62,8 +62,10 @@ resource "aws_athena_workgroup" "airflow" {
 }
 
 #trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
+#trivy:ignore:avd-aws-0007:Can't enforce output location due to DBT requirements
 resource "aws_athena_workgroup" "dbt" {
   #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
+  #checkov:skip=CKV_AWS_82:Can't enforce output location due to DBT requirements
 
   for_each = local.dbt_athena_workgroups
 
@@ -71,7 +73,7 @@ resource "aws_athena_workgroup" "dbt" {
 
   configuration {
     bytes_scanned_cutoff_per_query  = 1099511627776000
-    enforce_workgroup_configuration = true
+    enforce_workgroup_configuration = false
     engine_version {
       selected_engine_version = "Athena engine version 3"
     }
