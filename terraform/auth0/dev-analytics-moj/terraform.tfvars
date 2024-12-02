@@ -4,11 +4,11 @@ account_ids = {
 
 tags = {
   business-unit          = "Platforms"
-  application            = "Data Platform"
+  application            = "Analytical Platform"
   component              = "Auth0"
   environment            = "management"
   is-production          = "false"
-  owner                  = "data-platform:data-platform-tech@digital.justice.gov.uk"
-  infrastructure-support = "data-platform:data-platform-tech@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/data-platform/terraform/auth0/dev-analytics-moj"
+  owner                  = "analytical-platform:analytical-platform-tech@digital.justice.gov.uk"
+  infrastructure-support = "analytical-platform:analytical-platform-tech@digital.justice.gov.uk"
+  source-code            = "github.com/ministryofjustice/analytical-platform/terraform/auth0/dev-analytics-moj"
 }
