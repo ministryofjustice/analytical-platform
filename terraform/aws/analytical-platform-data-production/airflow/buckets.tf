@@ -48,19 +48,6 @@ resource "aws_s3_object" "airflow_local_settings_dev" {
   server_side_encryption = "AES256"
 
   provisioner "local-exec" {
-    command = ""
-  }
-}
-
-resource "aws_s3_object" "airflow_local_settings_dev_2" {
-  bucket = "mojap-airflow-dev"
-  key    = "dags-dev/airflow_local_settings.py"
-  source = "./files/dev/airflow_local_settings.py"
-
-  etag                   = filemd5("./files/dev/airflow_local_settings.py")
-  server_side_encryption = "AES256"
-
-  provisioner "local-exec" {
     command = "bash scripts/update-mwaa-environment.sh ${var.account_ids["analytical-platform-data-production"]} dev"
   }
 }
