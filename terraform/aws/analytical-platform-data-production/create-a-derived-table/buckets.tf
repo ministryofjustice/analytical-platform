@@ -14,7 +14,7 @@ module "mojap_cadet_production" {
   force_destroy       = false
   object_lock_enabled = false
   versioning = {
-    status     = "Enabled"
+    status     = "Suspended"
     mfa_delete = false
   }
   server_side_encryption_configuration = {
@@ -38,6 +38,14 @@ module "mojap_cadet_production" {
   restrict_public_buckets = true
 
   lifecycle_rule = [
+    {
+      enabled = true
+      id      = "remove-object-versions"
+
+      noncurrent_version_expiration = {
+        days = 0
+      }
+    },
     {
       enabled = true
       id      = "dev/models"
