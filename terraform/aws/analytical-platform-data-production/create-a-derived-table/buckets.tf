@@ -41,14 +41,6 @@ module "mojap_cadet_production" {
   lifecycle_rule = [
     {
       enabled = true
-      id      = "remove-object-versions"
-
-      noncurrent_version_expiration = {
-        days = 1
-      }
-    },
-    {
-      enabled = true
       id      = "dev/models"
 
       filter = {
@@ -110,6 +102,14 @@ module "mojap_cadet_production" {
       expiration = {
         days                         = 3
         expired_object_delete_marker = false
+      }
+    },
+    {
+      enabled = true
+      id      = "remove-object-versions"
+
+      noncurrent_version_expiration = {
+        days = 1
       }
     }
   ]
