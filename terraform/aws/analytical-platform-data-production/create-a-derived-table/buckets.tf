@@ -1,4 +1,5 @@
 #trivy:ignore:avd-aws-0132:Replicating existing bucket that does not encrypt data with a customer managed key
+#trivy:ignore:avd-aws-0090:Bucket versioning is not preferred for this bucket for now as data is produced on-demand (and versioning is expensive)
 module "mojap_cadet_production" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
@@ -43,7 +44,7 @@ module "mojap_cadet_production" {
       id      = "remove-object-versions"
 
       noncurrent_version_expiration = {
-        days = 0
+        days = 1
       }
     },
     {
