@@ -228,6 +228,16 @@ kubectl delete pod <container_name> -n airflow
 
 This is also the solution to **zombie pods**, which are pods that occasionally get stuck shutting down. These aren't an issue usually, as the node drains mean these are killed naturally, but should still be killed off when noticed. These will be pods with incredibly long durations stuck in a state other than `RUNNING`.
 
+### Logs stop, but the task runs to completion (benign zombie pods)
+
+Sometimes a KubernetesPodOperator task will become decoupled from its MWAA worker. Airflow is no longer tracking the task, but it can continue to completion. This can present as a task that gets marked as `Failed` in the airflow UI, with logs abruptly stopping at some point, but the goes on to complete.
+
+The pod logs and diagnostics can be found within the [Observability Platform `analytical-platform/compute/mwaa/workloads` dashboard](https://g-9d213fbc19.grafana-workspace.eu-west-2.amazonaws.com/d/ee58t1q7jr7y8a/workloads?orgId=1&from=now-2d&to=now&var-environment=analytical-platform-compute-test). Setting the `environment` variable to `analytical-platform-compute-test` will show task pods from Aiflow-Dev, and `analytical-platform-compute-production` will show task pods from Airflow-Prod. The pod ID can typically be found near the top of the Airflow task logs (from the airflow UI) after the task definition, as part of a log entry that starts like:
+
+```bash
+[2024-01-01, 00:00:01 UTC] {{kubernetes_pod.py:380}} INFO - Found matching pod
+```
+
 ### CrashLoopBackoff
 
 These are broadly not our problem, as they usually indicate an issue with the image the pod is using. However, should this occur with one of the add-on pods (ClusterAutoScaler etc.), we should try and upgrade the version of the add-on ASAP.
