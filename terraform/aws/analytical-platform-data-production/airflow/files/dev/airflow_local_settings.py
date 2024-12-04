@@ -13,5 +13,5 @@ DASHBOARD_UIALERTS = [
         'Workflows that use internal networking (HMCTS SDP or Cloud and Modernisation Platforms) will need to complete the migration steps outlined in the <a href="https://user-guidance.analytical-platform.service.justice.gov.uk/tools/airflow/migration.html">user guidance</a>',
         category="warning",
         html=True,
-    )
+    ),
 ]
