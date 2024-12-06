@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hmcts-sdp-debug
+  namespace: airflow
+spec:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+  # https://github.com/moj-analytical-services/airflow/blob/main/imports/azure_pod_operator.py
+  hostAliases:
+    - ip: "10.168.5.13"
+      hostnames:
+        - "mipersistentprod.blob.core.windows.net"
+    - ip: "10.168.5.8"
+      hostnames:
+        - "miexportprod.file.core.windows.net"
+  containers:
+    - name: ubuntu
+      image: ttl.sh/69ddb2af-c762-43ed-aa29-95718373c0fe:5h
+      imagePullPolicy: Always
+      command: ["sleep", "infinity"]
+      resources:
+        requests:
+          memory: "256Mi"
+          cpu: "250m"
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
