@@ -1,4 +1,7 @@
+#trivy:ignore:avd-aws-0066:X-Ray is not required for this service
 module "cloudtrail_athena_event_processor_function" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   source  = "terraform-aws-modules/lambda/aws"
   version = "7.16.0"
 
