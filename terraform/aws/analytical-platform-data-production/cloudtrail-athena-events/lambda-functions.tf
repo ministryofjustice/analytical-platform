@@ -3,6 +3,7 @@ module "cloudtrail_athena_event_processor_function" {
   version = "7.16.0"
 
   function_name = "cloudtrail-athena-event-processor"
+  description   = "Processes incoming CloudTrail events and forwards them to CloudWatch Logs"
   handler       = "main.lambda_handler"
   runtime       = "python3.12"
   timeout       = 60
