@@ -13,7 +13,7 @@ CLOUDWATCH_LOG_STREAM_NAME = datetime.datetime.now().strftime("%Y-%m-%d")
 logs_client = boto3.client("logs")
 
 
-def lambda_handler(event, context):
+def lambda_handler(event, context):  # pylint: disable=unused-argument
     # Extract and decode the data
     compressed_data = base64.b64decode(event["awslogs"]["data"])
 
@@ -44,8 +44,12 @@ def lambda_handler(event, context):
             pass
 
         # Put the log event in the log stream
-        response = logs_client.put_log_events(
-            logGroupName=CLOUDWATCH_LOG_GROUP_NAME,
-            logStreamName=CLOUDWATCH_LOG_STREAM_NAME,
-            logEvents=[{"timestamp": timestamp, "message": json.dumps(message)}],
-        )
+        try:
+            response = logs_client.put_log_events(
+                logGroupName=CLOUDWATCH_LOG_GROUP_NAME,
+                logStreamName=CLOUDWATCH_LOG_STREAM_NAME,
+                logEvents=[{"timestamp": timestamp, "message": json.dumps(message)}],
+            )
+        except Exception as e:
+            print(f"Failed to put log events: {log_event['id']}")
+            print(e)
