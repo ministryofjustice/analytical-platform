@@ -36,7 +36,7 @@ def lambda_handler(event, context):  # pylint: disable=unused-argument
 
         # Create a log stream
         try:
-            response = logs_client.create_log_stream(
+            create_log_stream = logs_client.create_log_stream(  # noqa: F841
                 logGroupName=CLOUDWATCH_LOG_GROUP_NAME,
                 logStreamName=CLOUDWATCH_LOG_STREAM_NAME,
             )
@@ -45,7 +45,7 @@ def lambda_handler(event, context):  # pylint: disable=unused-argument
 
         # Put the log event in the log stream
         try:
-            response = logs_client.put_log_events(
+            put_log_event = logs_client.put_log_events(  # noqa: F841
                 logGroupName=CLOUDWATCH_LOG_GROUP_NAME,
                 logStreamName=CLOUDWATCH_LOG_STREAM_NAME,
                 logEvents=[{"timestamp": timestamp, "message": json.dumps(message)}],
