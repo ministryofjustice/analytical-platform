@@ -1,0 +1,54 @@
+name: 🔱 Spike
+description: Create a Spike
+title: "🔱 <title>"
+labels: ["spike"]
+body:
+  - type: markdown
+    attributes:
+      value: Please fill out the fields below.
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      placeholder: >
+        Describe the background context for the problem (why are we doing this spike?)
+      value:
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      description: >
+        A proposal that is something testable, don't worry whether it works or not, it's a place for ideas.
+      label: Proposal
+      value:
+    validations:
+      required: false
+  - type: input
+    id: spike-requirements
+    attributes:
+      description: >
+        Role required, and how many work days of effort estimated (loose timebox)
+      placeholder: Developer, 2 days
+      label: Spike requirements
+      value:
+    validations:
+      required: false
+  - type: textarea
+    id: dod
+    attributes:
+      description: >
+        Please clearly and concisely detail the DoD. (example optional checklist below)
+      label: Definition of Done
+      value: |
+        Example
+        - [ ] Solution has been designed / detailed
+        - [ ] New issue details the follow-up tasks
+        - [ ] PoC completed
+        - [ ] PoC findings captured / documented
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: >
+        [How to write good user stories](https://www.gov.uk/service-manual/agile-delivery/writing-user-stories)

@@ -6,6 +6,8 @@ account_ids = {
   analytical-platform-development           = "525294151996"
   analytical-platform-management-production = "042130406152"
   analytical-platform-production            = "312423030077"
+  analytical-platform-compute-development   = "381491960855"
+  analytical-platform-compute-test          = "767397661611"
 }
 
 environment     = "development"
@@ -53,7 +55,7 @@ efs_low_credit_burst_balance_alarm_threshold = 50000
 rds_instance_class       = "db.t3.micro"
 rds_engine               = "postgres"
 rds_family               = "postgres13"
-rds_engine_version       = "13.13"
+rds_engine_version       = "13.15"
 rds_allocated_storage    = 5
 rds_deletion_protection  = true
 rds_multi_az             = true
@@ -124,14 +126,14 @@ redis_alarm_memory_threshold_bytes = 100000
 ##################################################
 
 eks_versions = {
-  cluster    = "1.28"
-  node-group = "1.28"
+  cluster    = "1.29"
+  node-group = "1.29"
 }
 eks_addon_versions = {
-  coredns        = "v1.10.1-eksbuild.4"
-  ebs-csi-driver = "v1.32.0-eksbuild.1"
-  kube-proxy     = "v1.28.2-eksbuild.2"
-  vpc-cni        = "v1.15.1-eksbuild.1"
+  coredns        = "v1.11.3-eksbuild.1"
+  ebs-csi-driver = "v1.35.0-eksbuild.1"
+  kube-proxy     = "v1.29.7-eksbuild.9"
+  vpc-cni        = "v1.18.5-eksbuild.1"
 }
 eks_node_group_name_prefix = "dev"
 eks_node_group_capacities = {

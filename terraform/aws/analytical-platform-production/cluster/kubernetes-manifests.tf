@@ -17,3 +17,9 @@ resource "kubernetes_manifest" "nvidia_cluster_role_binding" {
 resource "kubernetes_manifest" "nvidia_service_account" {
   manifest = yamldecode(file("src/kubernetes/nvidia-service-account.yml"))
 }
+
+resource "kubernetes_manifest" "prometheus_operator_crds" {
+  for_each = data.http.prometheus_operator_crds
+
+  manifest = yamldecode(each.value.response_body)
+}

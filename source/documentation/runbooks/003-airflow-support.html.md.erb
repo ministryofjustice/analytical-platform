@@ -1,8 +1,8 @@
 ---
-owner_slack: "#analytical-platform"
+owner_slack: "#analytical-platform-notifications"
 title: Airflow Support - Tips and tricks
-last_reviewed_on: 2024-09-05
-review_in: 1 months
+last_reviewed_on: 2024-10-10
+review_in: 3 months
 ---
 
 # <%= current_page.data.title %>
@@ -16,7 +16,6 @@ This is here to help you get to the bottom of what's wrong in any given Airflow 
 3. [Advanced Troubleshooting](#advanced-troubleshooting)
 4. [Contact Information](#contact-information)
 
-
 ## Flow Chart
 
 The following flow chart details how we generally approach a support issue that comes in for Airflow.
@@ -24,7 +23,6 @@ The following flow chart details how we generally approach a support issue that 
 ![Airflow Support Flow Chart](airflow-support-flowchart.excalidraw.png)
 
 This is a wide image, so you may benefit from opening it in a separate tab where you can zoom in and work through it as you approach the ticket if you have difficulty reading it.
-
 
 ## Step by Step Flow
 
@@ -93,6 +91,7 @@ This is intimidating, but already gives us clues - the back end of the task give
 ```
 
 99% of the time, when this occurs, it is due to the pod being unable to find the image it is trying to load. This happens for 2 reasons:
+
 - Users have published the image with a name (usually specifically the tag) that doesn't match the name their DAG is looking for.
 - Users are working with an image that hasn't been updated in a long time, and thus has not been updated to let our newer compute cluster activate it.
 
@@ -229,6 +228,16 @@ kubectl delete pod <container_name> -n airflow
 
 This is also the solution to **zombie pods**, which are pods that occasionally get stuck shutting down. These aren't an issue usually, as the node drains mean these are killed naturally, but should still be killed off when noticed. These will be pods with incredibly long durations stuck in a state other than `RUNNING`.
 
+### Logs stop, but the task runs to completion (benign zombie pods)
+
+Sometimes a KubernetesPodOperator task will become decoupled from its MWAA worker. Airflow is no longer tracking the task, but it can continue to completion. This can present as a task that gets marked as `Failed` in the airflow UI, with logs abruptly stopping at some point, but the goes on to complete.
+
+The pod logs and diagnostics can be found within the [Observability Platform `analytical-platform/compute/mwaa/workloads` dashboard](https://g-9d213fbc19.grafana-workspace.eu-west-2.amazonaws.com/d/ee58t1q7jr7y8a/workloads?orgId=1&from=now-2d&to=now&var-environment=analytical-platform-compute-test). Setting the `environment` variable to `analytical-platform-compute-test` will show task pods from Aiflow-Dev, and `analytical-platform-compute-production` will show task pods from Airflow-Prod. The pod ID can typically be found near the top of the Airflow task logs (from the airflow UI) after the task definition, as part of a log entry that starts like:
+
+```bash
+[2024-01-01, 00:00:01 UTC] {{kubernetes_pod.py:380}} INFO - Found matching pod
+```
+
 ### CrashLoopBackoff
 
 These are broadly not our problem, as they usually indicate an issue with the image the pod is using. However, should this occur with one of the add-on pods (ClusterAutoScaler etc.), we should try and upgrade the version of the add-on ASAP.
@@ -262,6 +271,6 @@ kubectl delete  mutatingwebhookconfiguration kyverno-resource-mutating-webhook-c
 
 These two commands will cause kyverno to regenerate the two webhooks listed, hopefully unblocking the state.
 
-## Contact Info
+## Contact Information
 
 The Analytical Platform team can be contacted by [raising a support issue](https://github.com/ministryofjustice/data-platform-support/issues/new/choose). If you're reading this, you're probably a team member though, so just ask someone in the slack channel for help if there's an issue you get stuck on.

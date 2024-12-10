@@ -1,5 +1,6 @@
 https://login.cloud-platform.service.justice.gov.uk
 https://github.com/ministryofjustice/data-platform-github-access
+https://github.com/ministryofjustice/analytical-platform-ithc-2024
 https://github.com/ministryofjustice/data-platform-support
 https://github.com/ministryofjustice/analytics-platform-auth-proxy
 https://github.com/ministryofjustice/data-platform-app-template
@@ -14,3 +15,4 @@ https://github.com/moj-analytical-services/create-a-derived-table
 https://github.com/ministryofjustice/analytics-platform-helm-charts/tree/main/charts/jupyter-lab-datascience-notebook
 https://github.com/ministryofjustice/analytics-platform-helm-charts/tree/main/charts/jupyter-lab-all-spark
 https://github.com/ministryofjustice/analytics-platform-helm-charts/tree/main/charts/jupyter-lab
+https://dbeaver.io/download/

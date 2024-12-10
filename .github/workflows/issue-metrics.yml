@@ -32,14 +32,14 @@ jobs:
 
       - name: Run GitHub Issue Metrics action
         id: run_github_issue_metrics
-        uses: github/issue-metrics@f156a5633eed28613c7545c44bc10408adfd23a0 # v3.9.0
+        uses: github/issue-metrics@2a4bfcbe40396c10a03ab0b19605f179c1509755 # v3.16.0
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SEARCH_QUERY: 'repo:ministryofjustice/analytical-platform is:issue created:${{ env.last_month }} -reason:"not planned"'
 
       - name: Create issue
         id: create_issue
-        uses: peter-evans/create-issue-from-file@24452a72d85239eacf1468b0f1982a9f3fec4c94 # v5.0.0
+        uses: peter-evans/create-issue-from-file@e8ef132d6df98ed982188e460ebb3b5d4ef3a9cd # v5.0.1
         with:
           title: Monthly issue metrics report
           token: ${{ secrets.GITHUB_TOKEN }}

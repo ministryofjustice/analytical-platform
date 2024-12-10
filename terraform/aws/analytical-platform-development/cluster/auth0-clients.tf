@@ -9,6 +9,7 @@ resource "auth0_client" "airflow_sqlite" {
   callbacks           = ["https://*-airflow-sqlite.tools.${var.route53_zone}/callback"]
   allowed_logout_urls = ["https://*-airflow-sqlite.tools.${var.route53_zone}"]
   oidc_conformant     = true
+  cross_origin_auth   = true
   jwt_configuration {
     alg = "RS256"
   }
@@ -25,8 +26,9 @@ resource "auth0_client" "rstudio" {
   callbacks           = ["https://*-rstudio.tools.${var.route53_zone}/callback"]
   allowed_logout_urls = ["https://*-rstudio.tools.${var.route53_zone}"]
   oidc_conformant     = true
+  cross_origin_auth   = true
   jwt_configuration {
-    alg = "RS256"
+    alg = "HS256"
   }
 }
 
@@ -41,8 +43,9 @@ resource "auth0_client" "jupyter_lab" {
   callbacks           = ["https://*-jupyter-lab.tools.${var.route53_zone}/callback"]
   allowed_logout_urls = ["https://*-jupyter-lab.tools.${var.route53_zone}"]
   oidc_conformant     = true
+  cross_origin_auth   = true
   jwt_configuration {
-    alg = "RS256"
+    alg = "HS256"
   }
 }
 
@@ -57,6 +60,7 @@ resource "auth0_client" "controlpanel" {
   callbacks           = ["https://controlpanel.services.${var.route53_zone}/oidc/callback/", "http://localhost:8000/oidc/callback/"]
   allowed_logout_urls = ["https://controlpanel.services.${var.route53_zone}", "http://localhost:8000/"]
   oidc_conformant     = true
+  cross_origin_auth   = true
   jwt_configuration {
     alg = "RS256"
   }

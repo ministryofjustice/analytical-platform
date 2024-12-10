@@ -25,7 +25,7 @@ module "data_development_guardduty_eu_west_2" {
 }
 
 ##################################################
-# Data Engineering Development
+# Data Engineering Production
 ##################################################
 
 module "data_engineering_guardduty_eu_west_1" {

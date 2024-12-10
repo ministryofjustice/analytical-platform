@@ -3,6 +3,8 @@
 ##################################################
 
 data "aws_iam_policy_document" "ebs_csi_driver" {
+  #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
+  #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
   statement {
     sid    = "EbsCsiDriver"
     effect = "Allow"
@@ -39,6 +41,8 @@ resource "aws_iam_policy" "ebs_csi_driver" {
 ##################################################
 
 data "aws_iam_policy_document" "control_panel_api" {
+  #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
+  #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
   statement {
     sid    = "CanCreateBuckets"
     effect = "Allow"
@@ -81,7 +85,11 @@ data "aws_iam_policy_document" "control_panel_api" {
       "iam:GetPolicy",
       "iam:GetPolicyVersion",
     ]
-    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/*"]
+    resources = [
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:policy/*",
+      "arn:aws:iam::aws:policy/*" # Amazon managed policies
+
+    ]
   }
   statement {
     sid     = "CanAttachPolicies"
@@ -243,6 +251,18 @@ data "aws_iam_policy_document" "control_panel_api" {
     ]
     resources = ["arn:aws:lakeformation:*:${var.account_ids["analytical-platform-data-production"]}:*"]
   }
+  statement {
+    sid    = "AssumeRoleComputeAccounnt"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession"
+    ]
+    resources = [
+      "arn:aws:iam::${var.account_ids["analytical-platform-compute-production"]}:role/analytical-platform-control-panel",
+      "arn:aws:iam::${var.account_ids["analytical-platform-compute-test"]}:role/analytical-platform-control-panel"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "control_panel_api" {
@@ -286,6 +306,8 @@ resource "aws_iam_policy" "cert_manager" {
 ##################################################
 
 data "aws_iam_policy_document" "cluster_autoscaler" {
+  #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
+  #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
   statement {
     sid    = "clusterAutoscalerAll"
     effect = "Allow"
@@ -437,4 +459,96 @@ resource "aws_iam_policy" "efs_csi_driver" {
   name_prefix = "AmazonEKSEFSCSIDriverPolicy"
   description = "AmazonEKS_EFS_CSI_Driver_Policy for ${module.eks.cluster_id}"
   policy      = data.aws_iam_policy_document.efs_csi_driver.json
+}
+
+##################################################
+# AMP KMS Access
+##################################################
+
+data "aws_iam_policy_document" "managed_prometheus_kms_access" {
+  statement {
+    sid    = "AllowKMS"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt*",
+      "kms:Decrypt*",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:Describe*"
+    ]
+    resources = [module.managed_prometheus_kms.key_arn]
+  }
+}
+
+module "managed_prometheus_kms_access_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.48.0"
+
+  name_prefix = "managed-prometheus-kms-access"
+
+  policy = data.aws_iam_policy_document.managed_prometheus_kms_access.json
+}
+
+##################################################
+# EKS Cluster Logs KMS Access
+##################################################
+
+data "aws_iam_policy_document" "eks_cluster_logs_kms_access" {
+  statement {
+    sid    = "AllowKMS"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt*",
+      "kms:Decrypt*",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:Describe*"
+    ]
+    resources = [module.eks_cluster_logs_kms.key_arn]
+  }
+}
+
+module "eks_cluster_logs_kms_access_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.48.0"
+
+  name_prefix = "eks-cluster-logs-kms-access"
+
+  policy = data.aws_iam_policy_document.eks_cluster_logs_kms_access.json
+}
+
+##################################################
+# Amazon Prometheus Proxy
+##################################################
+
+data "aws_iam_policy_document" "amazon_prometheus_proxy" {
+  statement {
+    sid    = "AllowAPS"
+    effect = "Allow"
+    actions = [
+      "aps:RemoteWrite",
+      "aps:GetSeries",
+      "aps:GetLabels",
+      "aps:GetMetricMetadata"
+    ]
+    resources = [module.managed_prometheus.workspace_arn]
+  }
+}
+
+module "amazon_prometheus_proxy_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.48.0"
+
+  name_prefix = "amazon-prometheus-proxy"
+
+  policy = data.aws_iam_policy_document.amazon_prometheus_proxy.json
 }

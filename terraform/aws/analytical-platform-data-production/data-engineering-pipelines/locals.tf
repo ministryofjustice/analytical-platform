@@ -90,7 +90,6 @@ locals {
         "restricted-admin",
         "cc-data-engineer",
         "data-first-data-engineer",
-        "airflow_prod_civil",
         "airflow_dev_civil",
       ]
     },
@@ -106,7 +105,6 @@ locals {
         "restricted-admin",
         "cc-data-engineer",
         "data-first-data-engineer",
-        "airflow_prod_civil",
         "airflow_dev_civil",
       ]
     }
@@ -168,177 +166,6 @@ locals {
         }
       )
     }
-    "moj-analytics-lookup-tables" = {
-      grant = [{
-        id         = data.aws_canonical_user_id.current.id
-        permission = "FULL_CONTROL",
-        type       = "CanonicalUser"
-      }]
-      force_destroy       = false
-      object_lock_enabled = false
-      acl                 = "private"
-      versioning = {
-        enabled    = true,
-        mfa_delete = false
-      }
-      mfa_delete = false
-      server_side_encryption_configuration = {
-        rule = {
-          bucket_key_enabled = false
-
-          apply_server_side_encryption_by_default = {
-            sse_algorithm = "AES256"
-          }
-        }
-      }
-      logging = {
-        target_bucket = "moj-analytics-s3-logs"
-        target_prefix = "moj-analytics-lookup-tables/"
-      }
-      public_access_block = {
-        block_public_acls       = true
-        block_public_policy     = true
-        ignore_public_acls      = true
-        restrict_public_buckets = true
-      }
-      policy = jsonencode(
-        {
-          Statement = [
-            {
-              Action = "s3:*"
-              Condition = {
-                Bool = {
-                  "aws:SecureTransport" = "false"
-                }
-              }
-              Effect    = "Deny"
-              Principal = "*"
-              Resource = [
-                "arn:aws:s3:::moj-analytics-lookup-tables/*",
-                "arn:aws:s3:::moj-analytics-lookup-tables"
-              ]
-              Sid = "DenyInsecureTransport"
-            },
-          ]
-          Version = "2012-10-17"
-        }
-      )
-    }
-    "moj-analytics-lookup-tables-dev" = {
-      grant = [{
-        id         = data.aws_canonical_user_id.current.id
-        permission = "FULL_CONTROL",
-        type       = "CanonicalUser"
-      }]
-      force_destroy       = false
-      object_lock_enabled = false
-      acl                 = "private"
-      versioning = {
-        enabled    = true,
-        mfa_delete = false
-      }
-      mfa_delete = false
-      server_side_encryption_configuration = {
-        rule = {
-          bucket_key_enabled = false
-
-          apply_server_side_encryption_by_default = {
-            sse_algorithm = "AES256"
-          }
-        }
-      }
-      logging = {
-        target_bucket = "moj-analytics-s3-logs"
-        target_prefix = "moj-analytics-lookup-tables-dev/"
-      }
-      public_access_block = {
-        block_public_acls       = true
-        block_public_policy     = true
-        ignore_public_acls      = true
-        restrict_public_buckets = true
-      }
-      policy = jsonencode(
-        {
-          Statement = [
-            {
-              Action = "s3:*"
-              Condition = {
-                Bool = {
-                  "aws:SecureTransport" = "false"
-                }
-              }
-              Effect    = "Deny"
-              Principal = "*"
-              Resource = [
-                "arn:aws:s3:::moj-analytics-lookup-tables-dev/*",
-                "arn:aws:s3:::moj-analytics-lookup-tables-dev"
-              ]
-              Sid = "DenyInsecureTransport"
-            },
-          ]
-          Version = "2012-10-17"
-        }
-      )
-    }
-
-    "moj-analytics-lookup-tables-preprod" = {
-      grant = [{
-        id         = data.aws_canonical_user_id.current.id
-        permission = "FULL_CONTROL",
-        type       = "CanonicalUser"
-      }]
-      force_destroy       = false
-      object_lock_enabled = false
-      acl                 = "private"
-      versioning = {
-        enabled    = true,
-        mfa_delete = false
-      }
-      mfa_delete = false
-      server_side_encryption_configuration = {
-        rule = {
-          bucket_key_enabled = false
-
-          apply_server_side_encryption_by_default = {
-            sse_algorithm = "AES256"
-          }
-        }
-      }
-      logging = {
-        target_bucket = "moj-analytics-s3-logs"
-        target_prefix = "moj-analytics-lookup-tables-preprod/"
-      }
-      public_access_block = {
-        block_public_acls       = true
-        block_public_policy     = true
-        ignore_public_acls      = true
-        restrict_public_buckets = true
-      }
-      policy = jsonencode(
-        {
-          Statement = [
-            {
-              Action = "s3:*"
-              Condition = {
-                Bool = {
-                  "aws:SecureTransport" = "false"
-                }
-              }
-              Effect    = "Deny"
-              Principal = "*"
-              Resource = [
-                "arn:aws:s3:::moj-analytics-lookup-tables-preprod/*",
-                "arn:aws:s3:::moj-analytics-lookup-tables-preprod"
-              ]
-              Sid = "DenyInsecureTransport"
-            },
-          ]
-          Version = "2012-10-17"
-        }
-      )
-
-    }
-
     "mojap-athena-query-dump" = {
       grant = [{
         id         = data.aws_canonical_user_id.current.id
@@ -881,6 +708,23 @@ locals {
               ]
             },
             {
+              Sid    = "AllowAnalyticalPlatformIngestionDataSyncReplication"
+              Effect = "Allow"
+              Principal = {
+                AWS = "arn:aws:iam::471112983409:role/datasync-replication"
+              }
+              Action = [
+                "s3:ReplicateObject",
+                "s3:ObjectOwnerOverrideToBucketOwner",
+                "s3:GetObjectVersionTagging",
+                "s3:ReplicateTags",
+                "s3:ReplicateDelete"
+              ]
+              Resource = [
+                "arn:aws:s3:::mojap-land/*"
+              ]
+            },
+            {
               Sid    = "ListBucketAccessElectronicMonitoringService"
               Effect = "Allow"
               Principal = {
@@ -977,6 +821,72 @@ locals {
       policy = jsonencode(
         {
           Statement = [
+            {
+              Action = [
+                "s3:PutObject",
+                "s3:ListMultipartUploadParts",
+              ]
+              Effect = "Allow"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::288342028542:role/glue-job-integration",
+                  "arn:aws:iam::288342028542:role/glue-job-dev",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
+              Sid      = "WriteOnlyAccess-mojap-land-dev-opg-sirius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-acl" = "bucket-owner-full-control"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::288342028542:role/glue-job-integration",
+                  "arn:aws:iam::288342028542:role/glue-job-dev",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
+              Sid      = "112-mojap-land-dev-opg-sirius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-server-side-encryption" = "AES256"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::288342028542:role/glue-job-integration",
+                  "arn:aws:iam::288342028542:role/glue-job-dev",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
+              Sid      = "DenyIncorrectEncryptionHeader-mojap-land-dev-opg-sirius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                Null = {
+                  "s3:x-amz-server-side-encryption" = "true"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::288342028542:role/glue-job-integration",
+                  "arn:aws:iam::288342028542:role/glue-job-dev",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
+              Sid      = "DenyUnEncryptedObjectUploads-mojap-land-dev-opg-sirius"
+            },
             {
               Action = [
                 "s3:PutObject",
@@ -1144,6 +1054,23 @@ locals {
               Resource = [
                 "arn:aws:s3:::mojap-land-dev",
                 "arn:aws:s3:::mojap-land-dev/bold/essex-police/*"
+              ]
+            },
+            {
+              Sid    = "AllowAnalyticalPlatformIngestionDataSyncReplication"
+              Effect = "Allow"
+              Principal = {
+                AWS = "arn:aws:iam::730335344807:role/datasync-replication"
+              }
+              Action = [
+                "s3:ReplicateObject",
+                "s3:ObjectOwnerOverrideToBucketOwner",
+                "s3:GetObjectVersionTagging",
+                "s3:ReplicateTags",
+                "s3:ReplicateDelete"
+              ]
+              Resource = [
+                "arn:aws:s3:::mojap-land-dev/*"
               ]
             },
             {
@@ -1604,6 +1531,68 @@ locals {
       policy = jsonencode(
         {
           Statement = [
+            {
+              Action = [
+                "s3:PutObject",
+                "s3:ListMultipartUploadParts",
+              ]
+              Effect = "Allow"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::492687888235:role/glue-job-preproduction",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"
+              Sid      = "WriteOnlyAccess-mojap-land-preprod-opg-sirius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-acl" = "bucket-owner-full-control"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::492687888235:role/glue-job-preproduction",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"
+              Sid      = "112-mojap-land-preprod-opg-sirius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-server-side-encryption" = "AES256"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::492687888235:role/glue-job-preproduction",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"
+              Sid      = "DenyIncorrectEncryptionHeader-mojap-land-preprod-opg-sirius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                Null = {
+                  "s3:x-amz-server-side-encryption" = "true"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::492687888235:role/glue-job-preproduction",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"
+              Sid      = "DenyUnEncryptedObjectUploads-mojap-land-preprod-opg-sirius"
+            },
             {
               Action = [
                 "s3:PutObject",

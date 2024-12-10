@@ -3,20 +3,10 @@
 MODE="${1}"
 
 case ${MODE} in
-  charts)
-    PATH_FILTER_CONFIGURATION_FILE=".github/path-filter/charts.yml"
-    SEARCH_PATTERN="*Chart.yaml*"
-    SKIP_FILE=".charts-path-filter-ignore"
-  ;;
   terraform)
     PATH_FILTER_CONFIGURATION_FILE=".github/path-filter/terraform.yml"
     SEARCH_PATTERN=".terraform.lock.hcl"
     SKIP_FILE=".terraform-path-filter-ignore"
-  ;;
-  pytest)
-    PATH_FILTER_CONFIGURATION_FILE=".github/path-filter/pytest.yml"
-    SEARCH_PATTERN="**/*_test.py"
-    SKIP_FILE=".pytest-path-filter-ignore"
   ;;
   *)
     echo "Usage: ${0} [containers|terraform|pytest]"

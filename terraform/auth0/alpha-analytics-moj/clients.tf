@@ -1,10 +1,20 @@
 resource "auth0_client" "visual_studio_code" {
-  name                = "Visual Studio Code"
-  app_type            = "regular_web"
-  callbacks           = ["https://*-vscode.tools.analytical-platform.service.justice.gov.uk/callback"]
-  allowed_logout_urls = ["https://*-vscode.tools.analytical-platform.service.justice.gov.uk"]
-  oidc_conformant     = true
-  sso                 = true
+  name     = "Visual Studio Code"
+  app_type = "regular_web"
+  callbacks = [
+    "https://*-vscode.tools.analytical-platform.service.justice.gov.uk/callback",
+    "https://*-vscode-tunnel.tools.analytical-platform.service.justice.gov.uk/callback"
+  ]
+  allowed_logout_urls = [
+    "https://*-vscode*.tools.analytical-platform.service.justice.gov.uk",
+    "https://*-vscode-tunnel.tools.analytical-platform.service.justice.gov.uk",
+  ]
+  oidc_conformant   = true
+  sso               = true
+  cross_origin_auth = true
+  jwt_configuration {
+    alg = "HS256"
+  }
 }
 
 resource "auth0_connection_client" "visual_studio_code_github" {

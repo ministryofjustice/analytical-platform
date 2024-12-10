@@ -3,7 +3,7 @@ name: 📥 Maintenance - Create Actions Runner Issue
 
 on:
   schedule:
-    - cron: "0 8 1,15 * *" # UTC time: “At 08:00 on day-of-month 1 and 15.”
+    - cron: "0 8 1 * *" # UTC time: “At 08:00 on first day-of-month”
 
 permissions: {}
 
@@ -52,12 +52,11 @@ jobs:
             So that… security / best practice etc
 
             ### Definition of Done
-            - [ ] Merge any open dependabot Pull Requests in the Actions Runnner [repository](https://github.com/ministryofjustice/analytical-platform-actions-runner/pulls).
+            - [ ] Merge any open dependabot Pull Requests in the [Actions Runner repository](https://github.com/ministryofjustice/analytical-platform-actions-runner/pulls/app%2Fdependabot).
+            - [ ] Update [Chart.yml](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/main/chart/Chart.yaml) and [values.yml](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/main/chart/values.yaml).
             - [ ] Create new [release](https://github.com/ministryofjustice/analytical-platform-actions-runner).
-            - [ ] Create a new release in [development](https://controlpanel.services.dev.analytical-platform.service.justice.gov.uk/releases/).
-            - [ ] Deployment development.
-            - [ ] Create a new release in [production](https://controlpanel.services.analytical-platform.service.justice.gov.uk/releases/).
-            - [ ] Deploy production.
+            - [ ] Update the images used in the Modernisation Platform environments repository (in the manner done [here](https://github.com/ministryofjustice/modernisation-platform-environments/commit/13f8345673fc128b5219eab23ae5556292a73051)).
+            - [ ] Deployment to relevant the Modernisation Platform environments.
 
           PINNED: false
           CLOSE_PREVIOUS: false

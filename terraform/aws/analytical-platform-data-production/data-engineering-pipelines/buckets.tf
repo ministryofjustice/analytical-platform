@@ -1,7 +1,9 @@
 module "data_engineering_pipeline_buckets" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
   for_each = local.data_engineering_buckets
   source   = "terraform-aws-modules/s3-bucket/aws"
-  version  = "4.1.2"
+  version  = "4.2.2"
 
   bucket                               = each.key
   force_destroy                        = each.value.force_destroy
@@ -20,4 +22,3 @@ module "data_engineering_pipeline_buckets" {
   restrict_public_buckets              = try(each.value.public_access_block.restrict_public_buckets, true)
   grant                                = each.value.grant
 }
-
