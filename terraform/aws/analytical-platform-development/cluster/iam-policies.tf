@@ -534,6 +534,16 @@ data "aws_iam_policy_document" "control_panel_api" {
       "arn:aws:iam::${var.account_ids["analytical-platform-compute-test"]}:role/analytical-platform-control-panel"
     ]
   }
+  statement {
+    sid    = "WriteToFeedbackBucket"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = [
+      "arn:aws:s3:::ap-feedback-${var.resource_prefix}/*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "control_panel_api" {
