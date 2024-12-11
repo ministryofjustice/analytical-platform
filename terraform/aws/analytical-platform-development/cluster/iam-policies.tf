@@ -541,7 +541,7 @@ data "aws_iam_policy_document" "control_panel_api" {
       "s3:PutObject"
     ]
     resources = [
-      "arn:aws:s3:::ap-feedback-${var.resource_prefix}/*"
+      "arn:aws:s3:::${var.resource_prefix}-ap-feedback/*"
     ]
   }
 }
