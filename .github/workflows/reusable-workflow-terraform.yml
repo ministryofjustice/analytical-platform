@@ -54,7 +54,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@5ae57a8860ce0657cb09591f5b8b8d9ead999a68 # v12.2920.0
+        uses: bridgecrewio/checkov-action@84f8bb70bc02d86035371e5a5dd568e19d44281b # v12.2934.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -362,7 +362,7 @@ jobs:
       - name: Notify Slack on Failure
         if: failure() && steps.terraform_apply.outcome == 'failure'
         id: slack_notification
-        uses: slackapi/slack-github-action@37ebaef184d7626c5f204ab8d3baff4262dd30f0 # v1.27.0
+        uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
         with:
           payload: |
             {
