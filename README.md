@@ -98,7 +98,7 @@ As above - preferably our Slack channel: [#ask-analytical-platform](https://moj.
 
 The [published](https://docs.analytical-platform.service.justice.gov.uk/)
 documentation is created by editing `*.html.md.erb` files,
-found in the [docs source](docs/source/) folder.
+found in the [`source`](/source/) folder.
 
 The syntax is Markdown, more details can be found [here](https://daringfireball.net/projects/markdown/).
 
@@ -118,7 +118,7 @@ You can preview how your changes will look, if you've cloned this repository
 to your local machine, run this command:
 
 ```bash
-bash scripts/docs/local.sh
+make preview
 ```
 
 This will run a preview web server on <http://localhost:4567> which you can
