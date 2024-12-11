@@ -30,6 +30,7 @@ updates:
       - "scripts/pagerduty/rota-to-slack"
       - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
       - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
+      - "terraform/aws/analytical-platform-development/zephyr-poc/src/airflow"
   - package-ecosystem: "terraform"
     schedule:
       interval: "daily"
@@ -69,6 +70,7 @@ updates:
       - "terraform/aws/analytical-platform-development/control-panel-message-broker"
       - "terraform/aws/analytical-platform-development/sagemaker"
       - "terraform/aws/analytical-platform-development/tooling-iam"
+      - "terraform/aws/analytical-platform-development/zephyr-poc"
       - "terraform/aws/analytical-platform-management-production/cluster"
       - "terraform/aws/analytical-platform-management-production/terraform-state"
       - "terraform/aws/analytical-platform-production/cluster"
