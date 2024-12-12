@@ -87,7 +87,11 @@
     "stateLockingDetails": [],
     "ssmParameterConfig": [
       {
-        "ssmParameterArnPrefixes": ["ap-uploader/env/", "ap-uploader/dev/", "ap-uploader/prod/"],
+        "ssmParameterArnPrefixes": [
+          "ap-uploader/env/",
+          "ap-uploader/dev/",
+          "ap-uploader/prod/"
+        ],
         "ssmParameterRegion": "eu-west-1"
       }
     ]
@@ -176,12 +180,81 @@
   "modernisation-platform-lake-formation-share": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
-    "repositories": [
-      "ministryofjustice/modernisation-platform-environments"
-    ],
+    "repositories": ["ministryofjustice/modernisation-platform-environments"],
     "targets": [],
     "stateLockingDetails": [],
     "ssmParameterConfig": [],
     "lakeFormationSharePolicy": true
+  },
+  "data-discovery": {
+    "account": "analytical-platform-data-production",
+    "stateConfig": [],
+    "repositories": ["moj-analytical-services/data-discovery"],
+    "targets": ["analytical-platform-data-production"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  },
+  "analytics-platform-helm-charts": {
+    "account": "analytical-platform-data-production",
+    "stateConfig": [],
+    "repositories": ["ministryofjustice/analytics-platform-helm-charts"],
+    "targets": ["analytical-platform-data-production"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  },
+  "data-engineering-cleanup": {
+    "account": "analytical-platform-data-engineering-production",
+    "stateConfig": [],
+    "repositories": ["ministryofjustice/data-engineering-cleanup"],
+    "targets": [
+      "analytical-platform-data-engineering-production",
+      "analytical-platform-data-production"
+    ],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": [
+      {
+        "ssmParameterArnPrefixes": ["data-engineering-cleanup/"],
+        "ssmParameterRegion": "eu-west-1"
+      }
+    ]
+  },
+  "airflow-contracts-etl": {
+    "account": "analytical-platform-data-engineering-production",
+    "stateConfig": [],
+    "repositories": ["moj-analytical-services/airflow-contracts-etl"],
+    "targets": [
+      "analytical-platform-data-engineering-production",
+      "analytical-platform-data-production"
+    ],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  },
+  "create-a-derived-table-infrastructure": {
+    "account": "analytical-platform-data-production",
+    "stateConfig": [
+      {
+        "stateBucket": "data-engineering-pulumi.analytics.justice.gov.uk/",
+        "stateBucketKey": ".pulumi/"
+      }
+    ],
+    "repositories": ["ministryofjustice/create-a-derived-table-infrastructure"],
+    "targets": ["analytical-platform-data-production"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  },
+  "data-engineering-database-access": {
+    "account": "analytical-platform-data-production",
+    "stateConfig": [
+      {
+        "stateBucket": "data-engineering-pulumi.analytics.justice.gov.uk/",
+        "stateBucketKey": ".pulumi/"
+      }
+    ],
+    "repositories": [
+      "moj-analytical-services/data-engineering-database-access"
+    ],
+    "targets": ["analytical-platform-data-production"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
   }
 }
