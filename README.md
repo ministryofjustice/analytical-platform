@@ -54,11 +54,10 @@ It may be also useful to look at:
 
 ## Getting in touch
 
-We are currently in the research and design phase, and are not yet accepting
-requests to host new data products.
+- If you want to raise a support issue please go [here](https://github.com/ministryofjustice/data-platform-support/issues/new/choose)
+- If you want to raise a feature request go [here](https://github.com/ministryofjustice/analytical-platform/issues/new?template=feature-request-template.yml)
 
-In the meantime please get in touch via our `#analytical-platform` Slack channel
-with any questions.
+You can reach the team [#ask-analytical-platform](https://moj.enterprise.slack.com/archives/C06TFT94JTC) Slack channel with any questions not related to support.
 
 <!--
 ## Service runbook information
