@@ -101,7 +101,7 @@ data "aws_iam_policy_document" "create_a_derived_table" {
 
 data "aws_iam_policy_document" "create_a_derived_table_prod" {
   # Currently just replicates existing role exactly, both needed to test
-  tatement {
+  statement {
     sid    = "BucketAccess"
     effect = "Allow"
     actions = [
