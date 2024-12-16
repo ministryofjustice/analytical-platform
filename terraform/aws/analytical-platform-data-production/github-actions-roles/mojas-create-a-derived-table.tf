@@ -393,7 +393,7 @@ module "create_a_derived_table_dev_iam_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.48.0"
 
-  name_prefix = "create-a-derived-table"
+  name_prefix = "create-a-derived-table-dev"
 
   policy = data.aws_iam_policy_document.create_a_derived_table_dev.json
 }
