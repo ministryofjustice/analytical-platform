@@ -10,7 +10,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.75.1"
+      version = "5.81.0"
     }
     tls = {
       source  = "hashicorp/tls"
@@ -22,7 +22,7 @@ terraform {
     }
     kubectl = {
       source  = "gavinbunney/kubectl"
-      version = "1.17.0"
+      version = "1.18.0"
     }
   }
   required_version = "~> 1.5"

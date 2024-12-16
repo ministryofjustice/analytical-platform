@@ -1,5 +1,5 @@
 ---
-name: Build and Test Documentation
+name: 🧪 Test Documentation
 
 on:
   pull_request:
@@ -16,7 +16,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/ministryofjustice/tech-docs-github-pages-publisher@sha256:35699473dbeefeeb8b597de024125a241277ee03587d5fe8e72545e4b27b33f8 # v5.0.0
+      image: ghcr.io/ministryofjustice/tech-docs-github-pages-publisher@sha256:aee182dd1dd86696077ea1c3512590f17ceb9f7a47aa5b16ea4f742666911dbd # v5.0.1
     permissions:
       contents: read
     steps:
@@ -29,8 +29,8 @@ jobs:
         run: |
           /usr/local/bin/package
 
-  test:
-    name: Test
+  link-checker:
+    name: Link Checker
     runs-on: ubuntu-latest
     permissions:
       contents: read
