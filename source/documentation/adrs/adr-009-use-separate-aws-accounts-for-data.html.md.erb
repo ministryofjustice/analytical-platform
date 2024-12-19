@@ -1,7 +1,7 @@
 ---
 owner_slack: "#analytical-platform-notifications"
 title: ADR-009 Use separate AWS accounts for data domains and products
-last_reviewed_on: 2024-07-30
+last_reviewed_on: 2024-12-19
 review_in: 6 months
 ---
 
@@ -9,20 +9,17 @@ review_in: 6 months
 
 ## Status
 
-🤔 Proposed
+✅  Accepted
 
 ## Context
 
 The Analytical Platform will need to provide a secure location to store and share data to those who have been granted access. The use of a multi-account strategy will give the Analytical Platform a scalable storage architecture which adheres to the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/) pillars on operational excellence, security, reliability, and cost optimisation.
 
-**/tldr**
-Our current architecture is overly permissive in design and makes understanding responsibility and cost difficult.
-
-Using separate AWS (Amazon Web Services) accounts for storing data will serve several purposes for MoJ, each contributing to improved governance, security and manageability.
-
 ## Decision
 
-- _proposed_
+We will use separate AWS accounts to isolate, secure, and govern data where needed. This may include scenarios where data is sensitive or where a particular domain has specific operational, compliance, or data governance requirements. AWS Lake Formation will be used to securely manage permissions and facilitate data sharing across these accounts, ensuring that authorised users and services have the appropriate level of access.
+
+By allocating resources and datasets to distinct AWS accounts, we simplify cost attribution, reinforce security boundaries, and empower owners with greater control and for their datasets.
 
 ## Proposal Consequences
 
@@ -38,23 +35,4 @@ Using separate AWS (Amazon Web Services) accounts for storing data will serve se
 - We will be able to give teams access to a project or temporary accounts for research (this could include other managed analytical tooling e.g. SageMaker) which then can be securely closed down with all associated resources removed
 - Observability of accounts and data is simplified for account owners
 
-Using separate AWS (Amazon Web Services) accounts for storing data will serve several purposes for MoJ, each contributing to improved governance, security, manageability, and efficiency.
-
-Other reasons for using separate AWS accounts for data storage:
-
-1. **Security Isolation:**
-    - **Data Segmentation:** Different types of data may have varying sensitivity levels. By using separate accounts, you can isolate highly sensitive data from less critical information, reducing the risk of unauthorised access or data breaches.
-    - **Access Control:** AWS Identity and Access Management (IAM) allows fine-grained control over who can access resources within an AWS account. Using separate accounts allows for better control and segregation of access permissions, limiting potential security vulnerabilities.
-2. **Compliance Requirements:**
-    - **Regulatory Compliance:** Certain industries and regions have specific regulatory requirements regarding data storage and processing. Using separate AWS accounts can help you adhere to these compliance standards by providing clear boundaries and controls around data.
-3. **Resource Management:**
-    - **Isolation of Resources:** Different business units or projects within an organisation may require their own set of AWS resources. Using separate accounts makes it easier to manage and isolate these resources, preventing interference or resource contention.
-    - **Resource Scaling:** Each AWS account has its own resource limits and can be independently scaled. This allows for better resource optimisation and avoids the risk of reaching account-wide limits.
-4. **Cost Management:**
-    - **Billing and Budgeting:** AWS provides detailed billing reports for each account. By using separate accounts, you can better track and allocate costs to specific projects, teams, or departments. This facilitates more accurate budgeting and financial management. Tags provide some of these capabilities but are limited in their scope as they cannot be applied to all resources.
-5. **Disaster Recovery:**
-    - **Isolation for Redundancy:** In the event of a disaster, having data stored in separate AWS accounts can act as a form of redundancy. If one account experiences issues, the others may remain unaffected, providing a level of data resilience.
-6. **Third-Party Access:**
-    - **Vendor or Partner Access:** If external vendors or partners need access to specific data or services, setting up a separate account for them. can facilitate controlled and secure access without compromising other data in that account. if further restrictions on data access is required [AWS Clean Rooms](https://docs.aws.amazon.com/clean-rooms/latest/userguide/what-is.html) can be explored
-7. **Ownership**
-    - **Responsibility:** We need for our users to take responsibility for storing data, and to meet point 12 of the The Technology Code of Practice of [Make your technology sustainable](https://www.gov.uk/guidance/the-technology-code-of-practice#make-your-technology-sustainable) and to inform our users of the cost associated with storing data, which in our current architecture is very difficult to deduct.
+Using separate AWS (Amazon Web Services) accounts for storing data will serve several purposes for MoJ, each contributing to improved governance, security, manageability, efficiency and enabling fine-grained control of access.
