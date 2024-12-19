@@ -1,14 +1,15 @@
 account_ids = {
-  analytical-platform-data-production = "593291632749"
+  analytical-platform-data-engineering-sandbox-a = "684969100054"
+  analytical-platform-management-production      = "042130406152"
 }
 
 tags = {
   business-unit          = "Platforms"
   application            = "Analytical Platform"
   component              = "CloudTrail Athena Events"
-  environment            = "production"
-  is-production          = "true"
+  environment            = "sandbox-a"
+  is-production          = "false"
   owner                  = "analytical-platform:analytical-platform@digital.justice.gov.uk"
   infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/analytical-platform/terraform/aws/analytical-platform-data-production/cloudtrail-athena-events"
+  source-code            = "github.com/ministryofjustice/analytical-platform/terraform/aws/analytical-platform-data-engineering-sandbox-a/cloudtrail-athena-events"
 }
