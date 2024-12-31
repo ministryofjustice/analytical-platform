@@ -6,7 +6,7 @@ module "iam_assumable_role_cert_manager" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.51.0"
+  version = "5.52.0"
 
   create_role                   = true
   role_name_prefix              = "cert_manager"
@@ -23,7 +23,7 @@ module "iam_assumable_role_cluster_autoscaler" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.51.0"
+  version = "5.52.0"
 
   create_role                   = true
   role_name_prefix              = substr("cluster-autoscaler-${module.eks.cluster_id}", 0, 31)
@@ -40,7 +40,7 @@ module "iam_assumable_role_external_dns" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.51.0"
+  version = "5.52.0"
 
   create_role                   = true
   role_name_prefix              = "external_dns"
@@ -57,7 +57,7 @@ module "iam_assumable_role_external_secrets" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.51.0"
+  version = "5.52.0"
 
   create_role                   = true
   role_name_prefix              = "external_secrets"
