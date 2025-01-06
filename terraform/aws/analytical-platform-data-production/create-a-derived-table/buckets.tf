@@ -122,6 +122,27 @@ module "mojap_cadet_production" {
 
 data "aws_iam_policy_document" "mojap_cadet_production" {
   statement {
+    sid     = "DenyInsecureTransport"
+    effect  = "Deny"
+    actions = ["s3:*"]
+
+    resources = [
+      "arn:aws:s3:::mojap-derived-tables/*",
+      "arn:aws:s3:::mojap-derived-tables"
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+  }
+  statement {
     sid    = "AllowCompliantPaths"
     effect = "Allow"
     actions = [
