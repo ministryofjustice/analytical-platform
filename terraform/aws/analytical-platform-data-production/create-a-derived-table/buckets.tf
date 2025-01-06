@@ -127,8 +127,8 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     actions = ["s3:*"]
 
     resources = [
-      "arn:aws:s3:::mojap-airflow-dev/*",
-      "arn:aws:s3:::mojap-airflow-dev"
+      "arn:aws:s3:::mojap-derived-tables/*",
+      "arn:aws:s3:::mojap-derived-tables"
     ]
 
     principals {
