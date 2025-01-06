@@ -132,14 +132,14 @@ data "aws_iam_policy_document" "mojap_cadet_production" {
     ]
 
     principals {
-      type = "*"
+      type        = "*"
       identifiers = ["*"]
     }
 
     condition {
       test     = "Bool"
       variable = "aws:SecureTransport"
-      values = ["false"]
+      values   = ["false"]
     }
   }
   statement {
