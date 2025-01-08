@@ -131,3 +131,33 @@ resource "aws_iam_policy" "textract_integration" {
   description = "Permissions needed to allow access to Textract from tooling."
   policy      = data.aws_iam_policy_document.textract_integration.json
 }
+
+resource "aws_iam_role" "bedrock_batch_inference_role" {
+  name = "bedrock-batch-inference-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement: [
+      {
+        Effect: "Allow"
+        Principal: {
+          Service: "bedrock.amazonaws.com"
+        }
+        Action: "sts:AssumeRole"
+        Condition: {
+          StringEquals: {
+            "aws:SourceAccount": "${data.aws_caller_identity.current.account_id}"
+          },
+          ArnEquals: {
+            "aws:SourceArn": "arn:aws:bedrock:eu-west-1:${data.aws_caller_identity.current.account_id}:model-invocation-job/*"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "bedrock_integration_attachment" {
+  role       = aws_iam_role.bedrock_batch_inference_role.name
+  policy_arn = aws_iam_policy.bedrock_integration.arn
+}
