@@ -1,3 +1,4 @@
+#tfsec:ignore:avd-aws-0066:no need for tracing
 module "jml_extract_lambda" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   source  = "terraform-aws-modules/lambda/aws"
