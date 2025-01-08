@@ -1,7 +1,5 @@
 module "jml_extract_lambda" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
-  count = terraform.workspace == "data-platform-apps-and-tools-production" ? 1 : 0
-
   source  = "terraform-aws-modules/lambda/aws"
   version = "~> 6.0"
 
