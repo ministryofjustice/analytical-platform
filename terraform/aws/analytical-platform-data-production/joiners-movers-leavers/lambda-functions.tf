@@ -37,7 +37,6 @@ module "jml_extract_lambda" {
         "logs:GetQueryResults"
       ]
       resources = [
-        # "${module.auth0_log_streams["alpha-analytics-moj"].cloudwatch_log_group_arn}:*"
         "${local.cloudwatch_log_group_arn}:*"
       ]
     }
