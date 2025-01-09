@@ -16,7 +16,7 @@ module "jml_extract_lambda" {
 
   environment_variables = {
     SECRET_ID       = data.aws_secretsmanager_secret_version.govuk_notify_api_key.id
-    LOG_GROUP_NAMES = data.aws_cloudwatch_log_group.jml_cloudwatch_log_group.name
+    LOG_GROUP_NAMES = "/aws/events/auth0/alpha-analytics-moj"
     EMAIL_SECRET    = data.aws_secretsmanager_secret_version.jml_email.id
     TEMPLATE_ID     = "de618989-db86-4d9a-aa55-4724d5485fa5"
   }
@@ -38,7 +38,7 @@ module "jml_extract_lambda" {
       ]
       resources = [
         # "${module.auth0_log_streams["alpha-analytics-moj"].cloudwatch_log_group_arn}:*"
-        "${data.aws_cloudwatch_log_group.jml_cloudwatch_log_group.arn}:*"
+        "${local.cloudwatch_log_group_arn}:*"
       ]
     }
     "secretsmanager" = {
@@ -62,4 +62,8 @@ module "jml_extract_lambda" {
       source_arn = aws_cloudwatch_event_rule.jml_lambda_trigger.arn
     }
   }
+}
+
+locals {
+  cloudwatch_log_group_arn = "arn:aws:logs:eu-west-2:593291632749:log-group:/aws/events/auth0/alpha-analytics-moj:*"
 }

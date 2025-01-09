@@ -15,7 +15,3 @@ data "aws_secretsmanager_secret_version" "govuk_notify_api_key" {
 data "aws_secretsmanager_secret_version" "jml_email" {
   secret_id = aws_secretsmanager_secret.jml_email.id
 }
-
-data "aws_cloudwatch_log_group" "jml_cloudwatch_log_group" {
-  name = aws_cloudwatch_event_rule.jml_lambda_trigger.name
-}
