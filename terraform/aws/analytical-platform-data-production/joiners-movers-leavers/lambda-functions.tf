@@ -2,7 +2,7 @@
 module "jml_extract_lambda" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   source  = "terraform-aws-modules/lambda/aws"
-  version = "6.8.0"
+  version = "7.20.0"
 
   publish        = true
   create_package = false
