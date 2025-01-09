@@ -2,7 +2,7 @@
 module "jml_extract_lambda" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   source  = "terraform-aws-modules/lambda/aws"
-  version = "~> 6.0"
+  version = "6.8.0"
 
   publish        = true
   create_package = false
@@ -64,5 +64,5 @@ module "jml_extract_lambda" {
 }
 
 locals {
-  cloudwatch_log_group_arn = "arn:aws:logs:eu-west-2:593291632749:log-group:/aws/events/auth0/alpha-analytics-moj:*"
+  cloudwatch_log_group_arn = "arn:aws:logs:eu-west-2:593291632749:log-group:/aws/events/auth0/alpha-analytics-moj"
 }
