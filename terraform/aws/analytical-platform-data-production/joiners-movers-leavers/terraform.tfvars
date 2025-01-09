@@ -11,5 +11,5 @@ tags = {
   is-production          = "true"
   owner                  = "analytical-platform:analytical-platform@digital.justice.gov.uk"
   infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/athena"
+  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/joiners-movers-leavers"
 }
