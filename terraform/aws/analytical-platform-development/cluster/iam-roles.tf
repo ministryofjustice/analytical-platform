@@ -238,3 +238,35 @@ module "iam_assumable_role_control_panel_api" {
     "system:serviceaccount:${var.control_panel_celery_kubernetes_service_account}"
   ]
 }
+
+##################################################
+# Bedrock Batch Inference
+##################################################
+
+data "aws_iam_policy_document" "bedrock_batch_inference_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = ["${data.aws_caller_identity.current.account_id}"]
+    }
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = ["arn:aws:bedrock:*:${data.aws_caller_identity.current.account_id}:model-invocation-job/*"]
+    }
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["bedrock.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "bedrock_batch_inference_role" {
+  name = "bedrock-batch-inference-role"
+
+  assume_role_policy = data.aws_iam_policy_document.bedrock_batch_inference_role.json
+}
+
