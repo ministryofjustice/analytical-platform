@@ -249,7 +249,7 @@ data "aws_iam_policy_document" "bedrock_batch_inference_role" {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = ["${data.aws_caller_identity.current.account_id}"]
+      values = [data.aws_caller_identity.current.account_id]
     }
     condition {
       test     = "ArnLike"
