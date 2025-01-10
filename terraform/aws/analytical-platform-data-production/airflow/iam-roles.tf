@@ -87,27 +87,27 @@ resource "aws_iam_role" "airflow_dev_eks_role" {
 }
 
 #### Airflow Dev IRSA
-module "airflow_dev_monitoring_iam_role" {
-  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+# module "airflow_dev_monitoring_iam_role" {
+#   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.52.1"
+#   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+#   version = "5.52.1"
 
-  create_role = true
+#   create_role = true
 
-  role_name = "airflow-monitoring-dev"
+#   role_name = "airflow-monitoring-dev"
 
-  role_policy_arns = {
-    policy = module.airflow_dev_monitoring_iam_policy.arn
-  }
+#   role_policy_arns = {
+#     policy = module.airflow_dev_monitoring_iam_policy.arn
+#   }
 
-  oidc_providers = {
-    one = {
-      provider_arn               = resource.aws_iam_openid_connect_provider.airflow_dev.arn
-      namespace_service_accounts = ["airflow:airflow"]
-    }
-  }
-}
+#   oidc_providers = {
+#     one = {
+#       provider_arn               = resource.aws_iam_openid_connect_provider.airflow_dev.arn
+#       namespace_service_accounts = ["airflow:airflow"]
+#     }
+#   }
+# }
 
 ####################################################################################
 ######################### AIRFLOW PRODUCTION INFRASTRUCTURE ########################
