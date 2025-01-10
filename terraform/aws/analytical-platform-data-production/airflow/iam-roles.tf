@@ -2,7 +2,7 @@ module "airflow_analytical_platform_development_iam_role" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.52.1"
+  version = "5.52.2"
 
   create_role = true
 
@@ -85,6 +85,7 @@ resource "aws_iam_role" "airflow_dev_eks_role" {
     "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   ]
 }
+
 
 ####################################################################################
 ######################### AIRFLOW PRODUCTION INFRASTRUCTURE ########################
