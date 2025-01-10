@@ -23,6 +23,3 @@ data "tls_certificate" "analytical_platform_development_eks_oidc_issuer" {
   url = data.aws_eks_cluster.analytical_platform_development.identity[0].oidc[0].issuer
 }
 
-# data "tls_certificate" "airflow_dev_eks_cluster" {
-#   url = aws_eks_cluster.airflow_dev_eks_cluster.identity[0].oidc[0].issuer
-# }
