@@ -552,38 +552,4 @@ resource "aws_iam_policy" "control_panel_api" {
   policy      = data.aws_iam_policy_document.control_panel_api.json
 }
 
-##################################################
-# Bedrock Batch Inference
-##################################################
-
-data "aws_iam_policy_document" "s3_access_policy" {
-  statement {
-    sid    = "S3-batch-inference-access"
-    effect = "Allow"
-
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-      "s3:ListBucket",
-    ]
-
-    resources = [
-      "arn:aws:s3:::*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceAccount"
-      values = [
-        data.aws_caller_identity.current.account_id
-      ]
-    }
-  }
-}
-
-resource "aws_iam_policy" "s3_access_policy" {
-  name        = "bedrock-batch-s3-access-policy"
-  description = "S3 access policy for Bedrock batch inference."
-  policy      = data.aws_iam_policy_document.s3_access_policy.json
-}
 
