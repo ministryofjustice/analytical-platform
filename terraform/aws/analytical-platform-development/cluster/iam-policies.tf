@@ -551,5 +551,3 @@ resource "aws_iam_policy" "control_panel_api" {
   description = "Control Panel policy for ${var.resource_prefix} EKS cluster"
   policy      = data.aws_iam_policy_document.control_panel_api.json
 }
-
-
