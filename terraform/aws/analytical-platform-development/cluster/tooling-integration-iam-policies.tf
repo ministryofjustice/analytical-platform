@@ -138,7 +138,7 @@ resource "aws_iam_policy" "textract_integration" {
 
 data "aws_iam_policy_document" "bedrock_batch_inference" {
   statement {
-    sid = "AllowBedrockAssumeRoleForBatchInference"
+    sid     = "AllowBedrockAssumeRoleForBatchInference"
     actions = ["sts:AssumeRole"]
     condition {
       test     = "StringEquals"
