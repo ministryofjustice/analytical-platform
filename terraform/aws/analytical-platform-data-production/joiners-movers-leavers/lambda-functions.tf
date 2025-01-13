@@ -15,9 +15,9 @@ module "jml_extract_lambda" {
   image_uri     = "374269020027.dkr.ecr.eu-west-2.amazonaws.com/data-platform-jml-extract-lambda-ecr-repo:1.0.3"
 
   environment_variables = {
-    SECRET_ID       = data.aws_secretsmanager_secret_version.govuk_notify_api_key.id
+    SECRET_ID       = module.govuk_notify_api_key_secret.secret_id
     LOG_GROUP_NAMES = "/aws/events/auth0/alpha-analytics-moj"
-    EMAIL_SECRET    = data.aws_secretsmanager_secret_version.jml_email.id
+    EMAIL_SECRET    = module.jml_email_secret.secret_id
     TEMPLATE_ID     = "de618989-db86-4d9a-aa55-4724d5485fa5"
   }
 
@@ -49,8 +49,8 @@ module "jml_extract_lambda" {
         "secretsmanager:ListSecrets"
       ]
       resources = [
-        aws_secretsmanager_secret.govuk_notify_api_key.arn,
-        aws_secretsmanager_secret.jml_email.arn
+        module.govuk_notify_api_key_secret.secret_arn,
+        module.jml_email_secret.secret_arn
       ]
     }
   }
