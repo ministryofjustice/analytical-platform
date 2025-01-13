@@ -12,7 +12,7 @@ module "jml_extract_lambda" {
   package_type  = "Image"
   memory_size   = 512
   timeout       = 120
-  image_uri     = "374269020027.dkr.ecr.eu-west-2.amazonaws.com/data-platform-jml-extract-lambda-ecr-repo:1.0.3"
+  image_uri     = "374269020027.dkr.ecr.eu-west-2.amazonaws.com/data-platform-jml-extract-lambda-ecr-repo:1.4.3"
 
   environment_variables = {
     SECRET_ID       = module.govuk_notify_api_key_secret.secret_id
