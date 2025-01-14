@@ -7,12 +7,12 @@ module "jml_extract_lambda" {
   publish        = true
   create_package = false
 
-  function_name = "data_platform_jml_extract"
+  function_name = "analytical_platform_jml_extract"
   description   = "Generates a JML report and sends it to JMLv4"
   package_type  = "Image"
   memory_size   = 512
   timeout       = 120
-  image_uri     = "374269020027.dkr.ecr.eu-west-2.amazonaws.com/data-platform-jml-extract-lambda-ecr-repo:1.0.3"
+  image_uri     = "509399598587.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-jml-report:1.4.3"
 
   environment_variables = {
     SECRET_ID       = data.aws_secretsmanager_secret_version.govuk_notify_api_key.id
