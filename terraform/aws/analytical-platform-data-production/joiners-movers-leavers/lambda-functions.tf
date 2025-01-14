@@ -1,5 +1,5 @@
 #tfsec:ignore:avd-aws-0066:no need for tracing
-module "jml_extract_lambda" {
+module "jml_report_lambda" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   source  = "terraform-aws-modules/lambda/aws"
   version = "7.20.0"
@@ -7,7 +7,7 @@ module "jml_extract_lambda" {
   publish        = true
   create_package = false
 
-  function_name = "analytical-platform-jml-extract"
+  function_name = "analytical-platform-jml-report"
   description   = "Generates a JML report and sends it to JMLv4"
   package_type  = "Image"
   memory_size   = 512
