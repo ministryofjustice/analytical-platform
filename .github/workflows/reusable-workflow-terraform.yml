@@ -357,7 +357,7 @@ jobs:
         run: |
           PR_NUMBER=$(git log -1 --pretty=%B | grep -oP '#\K\d+')
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-          echo "::set-output name=pr_number::$PR_NUMBER"
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
 
       - name: Notify Slack on Failure
         if: failure() && steps.terraform_apply.outcome == 'failure'
