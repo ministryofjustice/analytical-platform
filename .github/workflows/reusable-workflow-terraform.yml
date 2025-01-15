@@ -364,6 +364,7 @@ jobs:
         id: slack_notification
         uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
         with:
+          webhook-type: incoming-webhook
           payload: |
             {
               "run_id": "${{ github.run_id }}",
@@ -371,4 +372,4 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: incoming-webhook
+
