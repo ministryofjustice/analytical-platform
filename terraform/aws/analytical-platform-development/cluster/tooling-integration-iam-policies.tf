@@ -172,7 +172,7 @@ resource "aws_iam_role_policy_attachment" "bedrock_batch_inference" {
 # Bedrock Batch Inference s3 access
 data "aws_iam_policy_document" "bedrock_batch_inference_s3_access" {
   statement {
-    sid    = "bedrock-batch-inference-s3-access"
+    sid    = "BedrockBatchInferenceS3Access"
     effect = "Allow"
 
     actions = [
