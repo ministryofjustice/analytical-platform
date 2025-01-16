@@ -8,7 +8,7 @@ account_ids = {
   analytical-platform-management-production = "042130406152"
   analytical-platform-production            = "312423030077"
   analytical-platform-compute-test          = "767397661611"
-  analytical-platform-compute-production    = "992382429243",
+  analytical-platform-compute-production    = "992382429243"
   parent-account                            = "295814833350"
 }
 
