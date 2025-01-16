@@ -47,6 +47,38 @@ data "aws_iam_policy_document" "github_oidc_role" {
     }
   }
   dynamic "statement" {
+    for_each = each.value.s3Locations
+
+    content {
+      sid    = "AllowS3LocationRead"
+      effect = "Allow"
+      actions = [
+        "s3:Get*",
+        "s3:List*"
+      ]
+      resources = [
+        "arn:aws:s3:::${statement.value.bucket}"
+      ]
+    }
+  }
+  dynamic "statement" {
+    for_each = each.value.s3Locations
+
+    content {
+      #checkov:skip=CKV_AWS_111: skip requires access to multiple resources
+      sid    = "AllowS3LocationWrite"
+      effect = "Allow"
+      actions = [
+        "s3:PutObject",
+        "s3:PutObjectAcl",
+        "s3:DeleteObject"
+      ]
+      resources = [
+        for key in statement.value.keys : "arn:aws:s3:::${statement.value.bucket}/${key}*"
+      ]
+    }
+  }
+  dynamic "statement" {
     for_each = each.value.stateLockingDetails
 
     content {
