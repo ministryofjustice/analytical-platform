@@ -8,6 +8,7 @@ account_ids = {
   analytical-platform-production            = "312423030077"
   analytical-platform-compute-development   = "381491960855"
   analytical-platform-compute-test          = "767397661611"
+  parent-account                            = "295814833350"
 }
 
 environment     = "development"
