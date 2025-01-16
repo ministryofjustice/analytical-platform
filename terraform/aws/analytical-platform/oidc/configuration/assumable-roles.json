@@ -7,6 +7,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
+    "s3Locations": [],
     "repositories": ["ministryofjustice/moj-data-transfer-api"],
     "targets": [
       "analytical-platform-data-production",
@@ -24,6 +25,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
+    "s3Locations": [],
     "repositories": ["ministryofjustice/data-engineering-pulumi-components"],
     "targets": ["analytical-platform-data-engineering-sandbox-a"],
     "stateLockingDetails": [],
@@ -42,6 +44,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
+    "s3Locations": [],
     "repositories": ["ministryofjustice/register-my-data"],
     "targets": [
       "analytical-platform-data-engineering-production",
@@ -63,6 +66,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
+    "s3Locations": [],
     "repositories": ["ministryofjustice/data-engineering-airflow"],
     "targets": [
       "analytical-platform-data-engineering-production",
@@ -79,6 +83,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
+    "s3Locations": [],
     "repositories": ["ministryofjustice/analytical-platform-uploader"],
     "targets": [
       "analytical-platform-data-engineering-production",
@@ -104,6 +109,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
+    "s3Locations": [],
     "repositories": ["ministryofjustice/analytical-platform-data-engineering"],
     "targets": [
       "analytical-platform-data-production",
@@ -120,6 +126,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
+    "s3Locations": [],
     "repositories": ["ministryofjustice/analytical-platform-data-engineering"],
     "targets": ["analytical-platform-data-engineering-sandbox-a"],
     "stateLockingDetails": [],
@@ -133,6 +140,7 @@
         "stateBucketKey": "pulumi-oidc-test/.pulumi/"
       }
     ],
+    "s3Locations": [],
     "repositories": ["moj-analytical-services/pulumi-oidc-test"],
     "targets": ["analytical-platform-data-engineering-sandbox-a"],
     "stateLockingDetails": [],
@@ -141,6 +149,7 @@
   "lookup-offence-sandbox": {
     "account": "analytical-platform-data-engineering-sandbox-a",
     "stateConfig": [],
+    "s3Locations": [],
     "repositories": ["ministryofjustice/lookup-offence-sandbox"],
     "targets": ["analytical-platform-data-engineering-sandbox-a"],
     "stateLockingDetails": [],
@@ -149,6 +158,7 @@
   "create-a-derived-table": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
+    "s3Locations": [],
     "repositories": ["moj-analytical-services/create-a-derived-table"],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
@@ -157,6 +167,7 @@
   "lookup-offence": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
+    "s3Locations": [],
     "repositories": ["moj-analytical-services/lookup_offence"],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
@@ -165,6 +176,7 @@
   "data-platform-apps": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
+    "s3Locations": [],
     "repositories": [
       "ministryofjustice/hmpps-hr-dashboard",
       "ministryofjustice/ltc-capabilites-app",
@@ -180,6 +192,7 @@
   "modernisation-platform-lake-formation-share": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
+    "s3Locations": [],
     "repositories": ["ministryofjustice/modernisation-platform-environments"],
     "targets": [],
     "stateLockingDetails": [],
@@ -189,6 +202,7 @@
   "data-discovery": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
+    "s3Locations": [],
     "repositories": ["moj-analytical-services/data-discovery"],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
@@ -197,6 +211,12 @@
   "analytics-platform-helm-charts": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
+    "s3Locations": [
+      {
+        "bucket": "moj-analytics-helm-repo",
+        "keys": [""]
+      }
+    ],
     "repositories": ["ministryofjustice/analytics-platform-helm-charts"],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
@@ -205,6 +225,7 @@
   "data-engineering-cleanup": {
     "account": "analytical-platform-data-engineering-production",
     "stateConfig": [],
+    "s3Locations": [],
     "repositories": ["ministryofjustice/data-engineering-cleanup"],
     "targets": [
       "analytical-platform-data-engineering-production",
@@ -221,6 +242,7 @@
   "airflow-contracts-etl": {
     "account": "analytical-platform-data-engineering-production",
     "stateConfig": [],
+    "s3Locations": [],
     "repositories": ["moj-analytical-services/airflow-contracts-etl"],
     "targets": [
       "analytical-platform-data-engineering-production",
@@ -237,6 +259,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
+    "s3Locations": [],
     "repositories": ["ministryofjustice/create-a-derived-table-infrastructure"],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
@@ -250,6 +273,7 @@
         "stateBucketKey": ".pulumi/"
       }
     ],
+    "s3Locations": [],
     "repositories": [
       "moj-analytical-services/data-engineering-database-access"
     ],
