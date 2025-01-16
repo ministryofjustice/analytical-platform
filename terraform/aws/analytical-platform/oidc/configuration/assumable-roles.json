@@ -197,6 +197,12 @@
   "analytics-platform-helm-charts": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
+    "s3Locations": [
+      {
+        "bucket": "moj-analytics-helm-repo",
+        "keys": [""]
+      }
+    ],
     "repositories": ["ministryofjustice/analytics-platform-helm-charts"],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
