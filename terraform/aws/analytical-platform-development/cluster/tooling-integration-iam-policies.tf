@@ -230,7 +230,7 @@ resource "aws_iam_role_policy_attachment" "bedrock_batch_inference_s3_access" {
   policy_arn = aws_iam_policy.bedrock_batch_inference_s3_access.arn
 }
 
-resource "aws_iam_role_policy_attachment" "bedrock_batch_inference_s3_access" {
+resource "aws_iam_role_policy_attachment" "bedrock_batch_inference_cross_region" {
   role       = aws_iam_role.bedrock_batch_inference.name
   policy_arn = aws_iam_policy.bedrock_batch_inference_cross_region.arn
 }
