@@ -157,19 +157,6 @@ data "aws_iam_policy_document" "bedrock_batch_inference" {
       identifiers = ["bedrock.amazonaws.com"]
     }
   }
-  statement {
-    sid    = "CrossRegionInference"
-    effect = "Allow"
-
-    actions = [
-      "bedrock:InvokeModel"
-    ]
-
-    resources = [
-      "arn:aws:bedrock:*::inference-profile/*",
-      "arn:aws:bedrock:*::foundation-model/*"
-    ]
-  }
 }
 
 resource "aws_iam_role" "bedrock_batch_inference" {
@@ -209,13 +196,41 @@ data "aws_iam_policy_document" "bedrock_batch_inference_s3_access" {
   }
 }
 
+# Bedrock Batch Inference cross region
+data "aws_iam_policy_document" "bedrock_batch_inference_cross_region" {
+  statement {
+    sid    = "CrossRegionInference"
+    effect = "Allow"
+
+    actions = [
+      "bedrock:InvokeModel"
+    ]
+
+    resources = [
+      "arn:aws:bedrock:*::inference-profile/*",
+      "arn:aws:bedrock:*::foundation-model/*"
+    ]
+  }
+}
+
 resource "aws_iam_policy" "bedrock_batch_inference_s3_access" {
   name        = "bedrock-batch-inference-s3-access"
   description = "S3 access policy for Bedrock batch inference."
   policy      = data.aws_iam_policy_document.bedrock_batch_inference_s3_access.json
 }
 
+resource "aws_iam_policy" "bedrock_batch_inference_cross_region" {
+  name        = "bedrock-batch-inference-cross-region"
+  description = "Cross region policy for Bedrock batch inference."
+  policy      = data.aws_iam_policy_document.bedrock_batch_inference_cross_region.json
+}
+
 resource "aws_iam_role_policy_attachment" "bedrock_batch_inference_s3_access" {
   role       = aws_iam_role.bedrock_batch_inference.name
   policy_arn = aws_iam_policy.bedrock_batch_inference_s3_access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "bedrock_batch_inference_s3_access" {
+  role       = aws_iam_role.bedrock_batch_inference.name
+  policy_arn = aws_iam_policy.bedrock_batch_inference_cross_region.arn
 }
