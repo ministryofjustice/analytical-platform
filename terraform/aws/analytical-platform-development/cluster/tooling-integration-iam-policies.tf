@@ -170,7 +170,7 @@ data "aws_iam_policy_document" "bedrock_batch_inference" {
       "arn:aws:bedrock:*::foundation-model/*"
     ]
   }
-} 
+}
 
 resource "aws_iam_role" "bedrock_batch_inference" {
   name               = "bedrock-batch-inference-role"
