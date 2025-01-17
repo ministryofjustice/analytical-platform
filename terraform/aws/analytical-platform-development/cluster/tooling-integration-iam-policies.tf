@@ -54,6 +54,7 @@ data "aws_iam_policy_document" "bedrock_integration" {
       "bedrock:CreateModelInvocationJob",
       "bedrock:GetModelInvocationJob",
       "bedrock:ListModelInvocationJobs",
+      "bedrock:GetInferenceProfiles",
       "bedrock:StopModelInvocationJob"
     ]
 
@@ -155,6 +156,19 @@ data "aws_iam_policy_document" "bedrock_batch_inference" {
       type        = "Service"
       identifiers = ["bedrock.amazonaws.com"]
     }
+  }
+  statement {
+    sid    = "CrossRegionInference"
+    effect = "Allow"
+
+    actions = [
+      "bedrock:InvokeModel"
+    ]
+
+    resources = [
+      "arn:aws:bedrock:*::inference-profile/*",
+      "arn:aws:bedrock:*::foundation-model/*"
+    ]
   }
 }
 
