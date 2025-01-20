@@ -54,7 +54,7 @@ module "alb" {
       protocol    = "HTTPS"
       port        = 443
       target_type = "ip"
-      target_id   = "10.200.44.178"
+      target_id   = data.dns_a_record_set.mwaa_webserver_vpc_endpoint.addrs[0]
       health_check = {
         enabled  = true
         path     = "/"
@@ -67,7 +67,7 @@ module "alb" {
   additional_target_group_attachments = {
     ex-mwaa = {
       target_group_key = "ex-mwaa"
-      target_id        = "10.200.35.161"
+      target_id        = data.dns_a_record_set.mwaa_webserver_vpc_endpoint.addrs[1]
       port             = 443
     }
   }

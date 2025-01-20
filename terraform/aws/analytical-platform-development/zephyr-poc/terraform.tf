@@ -12,6 +12,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "5.80.0"
     }
+    dns = {
+      source  = "hashicorp/dns"
+      version = "3.4.2"
+    }
     null = {
       source  = "hashicorp/null"
       version = "3.2.3"

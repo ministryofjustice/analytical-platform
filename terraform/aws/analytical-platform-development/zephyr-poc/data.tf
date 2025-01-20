@@ -18,9 +18,13 @@ data "aws_route53_zone" "dev_analytical_platform_service_justice_gov_uk" {
   name = "dev.analytical-platform.service.justice.gov.uk"
 }
 
-# data "aws_vpc_endpoint" "mwaa_webserver" {
-#   service_name = aws_mwaa_environment.main.webserver_vpc_endpoint_service
-# }
+data "aws_vpc_endpoint" "mwaa_webserver" {
+  service_name = aws_mwaa_environment.main.webserver_vpc_endpoint_service
+}
+
+data "dns_a_record_set" "mwaa_webserver_vpc_endpoint" {
+  host = data.aws_vpc_endpoint.mwaa_webserver.dns_entry[0].dns_name
+}
 
 # data "aws_network_interface" "mwaa_webserver_vpce_network_interface_ids" {
 #   for_each = data.aws_vpc_endpoint.mwaa_webserver.network_interface_ids
