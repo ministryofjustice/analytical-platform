@@ -84,8 +84,8 @@ resource "aws_dms_replication_task" "full_load_replication_task" {
   start_replication_task    = false
 
   tags = merge(
-    {Name = var.replication_task_id.full_load},
-    var.tags)
+    { Name = var.replication_task_id.full_load },
+  var.tags)
 }
 
 resource "aws_dms_replication_task" "cdc_replication_task" {
@@ -99,7 +99,7 @@ resource "aws_dms_replication_task" "cdc_replication_task" {
   start_replication_task    = false
 
   tags = merge(
-    {Name = var.replication_task_id.cdc},
+    { Name = var.replication_task_id.cdc },
     var.tags
   )
 }

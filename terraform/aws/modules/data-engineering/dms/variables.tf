@@ -60,6 +60,21 @@ variable "landing_bucket_folder" {
   type = string
 }
 
+variable "cdc_config" {
+  type = object({
+    add_column_name       = bool
+    max_batch_interval    = number
+    min_file_size         = number
+    timestamp_column_name = string
+  })
+  default = {
+    add_column_name       = true
+    max_batch_interval    = 3600
+    min_file_size         = 32000
+    timestamp_column_name = "EXTRACTION_TIMESTAMP"
+  }
+}
+
 variable "tags" {
   type = map(string)
 }

@@ -17,7 +17,7 @@ resource "aws_iam_role" "dms" {
   })
 
   tags = merge(
-    {Name = "${var.db}-dms-${var.environment}"},
+    { Name = "${var.db}-dms-${var.environment}" },
     var.tags
   )
 }
