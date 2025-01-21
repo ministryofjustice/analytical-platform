@@ -29,26 +29,28 @@ variable "dms_config" {
   type = map(object({
     source_secrets_manager_arn = string
     role_name                  = string
-    #source_server_name          = string
-    #source_server_port          = number
-    #source_database_name        = string
+    source = object({
+      server_name   = string
+      server_port   = number
+      database_name = string
+    })
     replication_instance = object({
       replication_instance_id   = string
       security_group_id         = string
       security_group_ingress_id = string
       security_group_egress_id  = string
-      #  allocated_storage          = number
-      #  availability_zone          = string
-      #  engine_version             = string
+      allocated_storage         = number
+      availability_zone         = string
+      engine_version            = string
       #  kms_key_arn                = string
-      #  multi_az                   = bool
-      #  replication_instance_class = string
+      multi_az                   = bool
+      replication_instance_class = string
       #  inbound_cidr               = string
     })
-    #replication_task_id = object({
-    #  full_load = string
-    #  cdc       = string
-    #})
+    replication_task_id = object({
+      full_load = string
+      cdc       = string
+    })
     #mapping_rules = string
     landing_bucket        = string
     landing_bucket_folder = string
@@ -56,7 +58,5 @@ variable "dms_config" {
     fail_bucket           = string
     raw_hist_bucket       = string
     slack_secret_arn      = string
-    full_load_task_id     = string
-    cdc_task_id           = string
   }))
 }
