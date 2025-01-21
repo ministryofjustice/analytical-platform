@@ -1,13 +1,25 @@
-#tfsec:ignore:avd-aws-0098 CMK not required currently
-resource "aws_secretsmanager_secret" "govuk_notify_api_key" {
-  # checkov:skip=CKV2_AWS_57:These won't be rotated in the traditional manner
-  # checkov:skip=CKV_AWS_149:No KMS key needed as per above, these won't be rotated
-  name = "gov-uk-notify/production/api-key"
+module "jml_email_secret" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/secrets-manager/aws"
+  version = "1.3.1"
+
+  name = "jml-report/email"
+
+  ignore_secret_changes = true
+  secret_string         = "CHANGEME"
 }
 
-#tfsec:ignore:avd-aws-0098 CMK not required currently
-resource "aws_secretsmanager_secret" "jml_email" {
-  # checkov:skip=CKV2_AWS_57:These won't be rotated in the traditional manner
-  # checkov:skip=CKV_AWS_149:No KMS key needed as per above, these won't be rotated
-  name = "jml/email"
+module "govuk_notify_api_key_secret" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/secrets-manager/aws"
+  version = "1.3.1"
+
+  name = "gov-uk-notify/api-key"
+
+  ignore_secret_changes = true
+  secret_string         = "CHANGEME"
 }

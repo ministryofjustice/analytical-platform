@@ -531,7 +531,8 @@ data "aws_iam_policy_document" "control_panel_api" {
     ]
     resources = [
       "arn:aws:iam::${var.account_ids["analytical-platform-compute-development"]}:role/analytical-platform-control-panel",
-      "arn:aws:iam::${var.account_ids["analytical-platform-compute-test"]}:role/analytical-platform-control-panel"
+      "arn:aws:iam::${var.account_ids["analytical-platform-compute-test"]}:role/analytical-platform-control-panel",
+      "arn:aws:iam::${var.account_ids["parent-account"]}:role/AnalyticalPlatformIdentityCenter"
     ]
   }
   statement {
