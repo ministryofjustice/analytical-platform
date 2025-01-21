@@ -2,6 +2,10 @@ variable "environment" {
   type = string
 }
 
+variable "vpc_id" {
+  type = string
+}
+
 variable "db" {
   type = string
 }
@@ -26,14 +30,14 @@ variable "dms_source_database_name" {
 variable "dms_replication_instance" {
   type = object({
     replication_instance_id    = string
-    subnet_ids                 = list(string)
+    subnet_group_id            = string
     allocated_storage          = number
     availability_zone          = string
     engine_version             = string
     kms_key_arn                = string
     multi_az                   = bool
     replication_instance_class = string
-    vpc_security_group_ids     = list(string)
+    inbound_cidr               = string
   })
 }
 
@@ -54,4 +58,8 @@ variable "landing_bucket" {
 
 variable "landing_bucket_folder" {
   type = string
+}
+
+variable "tags" {
+  type = map(string)
 }

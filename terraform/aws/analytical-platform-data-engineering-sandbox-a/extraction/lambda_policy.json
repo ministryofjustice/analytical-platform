@@ -1,0 +1,58 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "CreateCloudwatchLogs",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Sid": "AllowListBucket",
+            "Action": ["s3:ListBucket", "s3:PutBucketNotification"],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::${landing_bucket}",
+                "arn:aws:s3:::${metadata_bucket}"
+            ]
+        },
+        {
+            "Sid": "AllowPutDelete",
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl",
+                "s3:PutObjectTagging",
+                "s3:DeleteObject"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::${raw_hist_bucket}/*",
+                "arn:aws:s3:::${fail_bucket}/*"
+            ]
+        },
+        {
+            "Sid": "AllowGetDelete",
+            "Action": ["s3:GetObject", "s3:DeleteObject"],
+            "Effect": "Allow",
+            "Resource": ["arn:aws:s3:::${landing_bucket}/*"]
+        },
+        {
+            "Sid": "AllowGet",
+            "Action": ["s3:GetObject"],
+            "Effect": "Allow",
+            "Resource": ["arn:aws:s3:::${metadata_bucket}/*"]
+        },
+        {
+            "Sid": "AllowGetSecretValue",
+            "Action": [
+                "secretsmanager:GetSecretValue"
+            ],
+            "Effect": "Allow",
+            "Resource": "${slack_secret_arn}"
+        }
+    ]
+}
