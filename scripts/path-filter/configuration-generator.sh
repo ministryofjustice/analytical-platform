@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 MODE="${1}"
+PATH_FILTER_CONFIGURATION_FILE=".github/path-filter/${MODE}.yml"
 
 case ${MODE} in
   terraform)
-    PATH_FILTER_CONFIGURATION_FILE=".github/path-filter/terraform.yml"
     SEARCH_PATTERN=".terraform.lock.hcl"
     SKIP_FILE=".terraform-path-filter-ignore"
   ;;
@@ -13,6 +13,9 @@ case ${MODE} in
     exit 1
   ;;
 esac
+
+mkdir --parents ".github/path-filter"
+touch "${PATH_FILTER_CONFIGURATION_FILE}"
 
 if [[ "${MODE}" == "pytest" ]]; then
   folders=$(find . -type f -wholename "${SEARCH_PATTERN}" | sed 's|/tests/.*$||g' | sort -h | uniq | cut -c 3-)
