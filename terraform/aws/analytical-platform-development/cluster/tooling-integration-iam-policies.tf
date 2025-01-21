@@ -54,6 +54,7 @@ data "aws_iam_policy_document" "bedrock_integration" {
       "bedrock:CreateModelInvocationJob",
       "bedrock:GetModelInvocationJob",
       "bedrock:ListModelInvocationJobs",
+      "bedrock:GetInferenceProfiles",
       "bedrock:StopModelInvocationJob"
     ]
 
@@ -130,4 +131,106 @@ resource "aws_iam_policy" "textract_integration" {
   name        = "analytical-platform-textract-integration"
   description = "Permissions needed to allow access to Textract from tooling."
   policy      = data.aws_iam_policy_document.textract_integration.json
+}
+
+##################################################
+# Bedrock Batch Inference
+##################################################
+
+data "aws_iam_policy_document" "bedrock_batch_inference" {
+  statement {
+    sid     = "AllowBedrockAssumeRoleForBatchInference"
+    actions = ["sts:AssumeRole"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = ["arn:aws:bedrock:*:${data.aws_caller_identity.current.account_id}:model-invocation-job/*"]
+    }
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["bedrock.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "bedrock_batch_inference" {
+  name               = "bedrock-batch-inference-role"
+  description        = "IAM role for AWS Bedrock to perform batch inference tasks as part of model invocation workflows."
+  assume_role_policy = data.aws_iam_policy_document.bedrock_batch_inference.json
+}
+
+resource "aws_iam_role_policy_attachment" "bedrock_batch_inference" {
+  role       = aws_iam_role.bedrock_batch_inference.name
+  policy_arn = aws_iam_policy.bedrock_integration.arn
+}
+
+# Bedrock Batch Inference s3 access
+data "aws_iam_policy_document" "bedrock_batch_inference_s3_access" {
+  statement {
+    sid    = "BedrockBatchInferenceS3Access"
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      "arn:aws:s3:::*"
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceAccount"
+      values = [
+        data.aws_caller_identity.current.account_id
+      ]
+    }
+  }
+}
+
+# Bedrock Batch Inference cross region
+data "aws_iam_policy_document" "bedrock_batch_inference_cross_region" {
+  statement {
+    sid    = "CrossRegionInference"
+    effect = "Allow"
+
+    actions = [
+      "bedrock:InvokeModel"
+    ]
+
+    resources = [
+      "arn:aws:bedrock:*::inference-profile/*",
+      "arn:aws:bedrock:*::foundation-model/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "bedrock_batch_inference_s3_access" {
+  name        = "bedrock-batch-inference-s3-access"
+  description = "S3 access policy for Bedrock batch inference."
+  policy      = data.aws_iam_policy_document.bedrock_batch_inference_s3_access.json
+}
+
+resource "aws_iam_policy" "bedrock_batch_inference_cross_region" {
+  name        = "bedrock-batch-inference-cross-region"
+  description = "Cross region policy for Bedrock batch inference."
+  policy      = data.aws_iam_policy_document.bedrock_batch_inference_cross_region.json
+}
+
+resource "aws_iam_role_policy_attachment" "bedrock_batch_inference_s3_access" {
+  role       = aws_iam_role.bedrock_batch_inference.name
+  policy_arn = aws_iam_policy.bedrock_batch_inference_s3_access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "bedrock_batch_inference_cross_region" {
+  role       = aws_iam_role.bedrock_batch_inference.name
+  policy_arn = aws_iam_policy.bedrock_batch_inference_cross_region.arn
 }

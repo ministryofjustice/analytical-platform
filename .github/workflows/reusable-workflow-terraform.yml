@@ -54,7 +54,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@2f247aefd2fdd1e1c8c03affa194ca9a230ccaac # v12.2943.0
+        uses: bridgecrewio/checkov-action@7e385e047f08facd4bc29345786743742edbee1f # v12.2944.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -357,18 +357,17 @@ jobs:
         run: |
           PR_NUMBER=$(git log -1 --pretty=%B | grep -oP '#\K\d+')
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-          echo "::set-output name=pr_number::$PR_NUMBER"
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
 
       - name: Notify Slack on Failure
         if: failure() && steps.terraform_apply.outcome == 'failure'
         id: slack_notification
         uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
         with:
+          webhook: ${{ env.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
           payload: |
             {
               "run_id": "${{ github.run_id }}",
               "pr_number": "${{ steps.extract_pr.outputs.pr_number }}"
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
