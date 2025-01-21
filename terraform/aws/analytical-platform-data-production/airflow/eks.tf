@@ -1,21 +1,3 @@
-resource "aws_eks_cluster" "airflow_dev_eks_cluster" {
-  name     = var.dev_eks_cluster_name
-  role_arn = aws_iam_role.airflow_dev_eks_role.arn
-  enabled_cluster_log_types = ["api",
-    "audit",
-    "authenticator",
-    "controllerManager",
-    "scheduler",
-  ]
-  version = "1.28"
-
-  vpc_config {
-    subnet_ids          = aws_subnet.dev_private_subnet[*].id
-    public_access_cidrs = ["0.0.0.0/0"]
-    security_group_ids  = [var.dev_cluster_additional_sg_id]
-  }
-}
-
 ######################################
 ########### EKS PRODUCTION ###########
 ######################################
@@ -138,27 +120,6 @@ resource "kubernetes_namespace" "kyverno_prod" {
     }
   }
   timeouts {}
-}
-
-resource "aws_eks_addon" "kube_proxy_dev" {
-  cluster_name                = var.dev_eks_cluster_name
-  addon_name                  = "kube-proxy"
-  addon_version               = "v1.28.8-eksbuild.5"
-  resolve_conflicts_on_create = "OVERWRITE"
-}
-
-resource "aws_eks_addon" "vpc_cni_dev" {
-  cluster_name                = var.dev_eks_cluster_name
-  addon_name                  = "vpc-cni"
-  addon_version               = "v1.18.1-eksbuild.3"
-  resolve_conflicts_on_create = "OVERWRITE"
-}
-
-resource "aws_eks_addon" "coredns_dev" {
-  cluster_name                = var.dev_eks_cluster_name
-  addon_name                  = "coredns"
-  addon_version               = "v1.10.1-eksbuild.11"
-  resolve_conflicts_on_create = "OVERWRITE"
 }
 
 resource "aws_eks_addon" "kube_proxy_prod" {
