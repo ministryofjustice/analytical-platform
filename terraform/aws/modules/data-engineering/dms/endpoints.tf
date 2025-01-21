@@ -31,12 +31,11 @@ resource "aws_dms_endpoint" "source" {
 
 # DMS S3 Target Endpoint
 resource "aws_dms_s3_endpoint" "s3_target" {
-  endpoint_id   = "${var.db}-target-${data.aws_region.current.name}-${var.environment}"
-  endpoint_type = "target"
-  bucket_name   = var.landing_bucket
-  bucket_folder = var.landing_bucket_folder
-  # TODO: Uncomment the following line to use the IAM role for DMS VPC Access
-  #service_access_role_arn = aws_iam_role.dms.arn
+  endpoint_id                      = "${var.db}-target-${data.aws_region.current.name}-${var.environment}"
+  endpoint_type                    = "target"
+  bucket_name                      = var.landing_bucket
+  bucket_folder                    = var.landing_bucket_folder
+  service_access_role_arn          = aws_iam_role.dms.arn
   add_column_name                  = var.cdc_config.add_column_name
   canned_acl_for_objects           = "bucket-owner-full-control"
   cdc_max_batch_interval           = var.cdc_config.max_batch_interval
@@ -49,7 +48,6 @@ resource "aws_dms_s3_endpoint" "s3_target" {
   parquet_timestamp_in_millisecond = true
   parquet_version                  = "parquet-2-0"
   timestamp_column_name            = var.cdc_config.timestamp_column_name
-  service_access_role_arn          = "arn:aws:iam::684969100054:role/oracle19-dms-sandbox"
 
   tags = merge(
     { Name = "${var.db}-target-${data.aws_region.current.name}-${var.environment}" },
