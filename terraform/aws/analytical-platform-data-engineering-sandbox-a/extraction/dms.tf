@@ -14,7 +14,7 @@ resource "aws_dms_replication_subnet_group" "replication_subnet_group" {
 }
 
 module "dms" {
-  source = "../../modules/de-dms"
+  source = "../../modules/data-engineering/dms"
 
   for_each = nonsensitive(toset(keys(var.dms_config)))
 
@@ -34,12 +34,12 @@ module "dms" {
 
   dms_replication_instance = {
     replication_instance_id    = var.dms_config[each.key].replication_instance.replication_instance_id
-    allocated_storage          = 50
-    availability_zone          = "eu-west-1a"
-    engine_version             = "3.5.3"
+    allocated_storage          = var.dms_config[each.key].replication_instance.allocated_storage
+    availability_zone          = var.dms_config[each.key].replication_instance.availability_zone
+    engine_version             = var.dms_config[each.key].replication_instance.engine_version
     kms_key_arn                = var.dms_config[each.key].source_secrets_manager_arn
-    multi_az                   = false
-    replication_instance_class = "dms.t2.micro"
+    multi_az                   = var.dms_config[each.key].replication_instance.multi_az
+    replication_instance_class = var.dms_config[each.key].replication_instance.replication_instance_class
     subnet_group_id            = aws_dms_replication_subnet_group.replication_subnet_group.id
     inbound_cidr               = var.import_ids.private_subnets["eu-west-1a"].cidr
   }
@@ -106,11 +106,11 @@ import {
 import {
   for_each = nonsensitive(toset(keys(var.dms_config)))
   to       = module.dms[each.key].aws_dms_replication_task.full_load_replication_task
-  id       = var.dms_config[each.key].full_load_task_id
+  id       = var.dms_config[each.key].replication_task_id.full_load
 }
 
 import {
   for_each = nonsensitive(toset(keys(var.dms_config)))
   to       = module.dms[each.key].aws_dms_replication_task.cdc_replication_task
-  id       = var.dms_config[each.key].cdc_task_id
+  id       = var.dms_config[each.key].replication_task_id.cdc
 }
