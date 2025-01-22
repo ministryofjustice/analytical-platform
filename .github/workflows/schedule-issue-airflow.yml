@@ -38,7 +38,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          TITLE: 📥 Maintenance - Ingestion
+          TITLE: 📥 Maintenance - Airflow Python Base Image
           ASSIGNEES:
           LABELS: maintenance
           BODY: |
