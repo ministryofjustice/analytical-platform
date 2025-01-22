@@ -60,7 +60,7 @@ variable "landing_bucket_folder" {
   type = string
 }
 
-variable "cdc_config" {
+variable "s3_target_config" {
   type = object({
     add_column_name       = bool
     max_batch_interval    = number

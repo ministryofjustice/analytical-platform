@@ -36,10 +36,10 @@ resource "aws_dms_s3_endpoint" "s3_target" {
   bucket_name                      = var.landing_bucket
   bucket_folder                    = var.landing_bucket_folder
   service_access_role_arn          = aws_iam_role.dms.arn
-  add_column_name                  = var.cdc_config.add_column_name
+  add_column_name                  = var.s3_target_config.add_column_name
   canned_acl_for_objects           = "bucket-owner-full-control"
-  cdc_max_batch_interval           = var.cdc_config.max_batch_interval
-  cdc_min_file_size                = var.cdc_config.min_file_size
+  cdc_max_batch_interval           = var.s3_target_config.max_batch_interval
+  cdc_min_file_size                = var.s3_target_config.min_file_size
   compression_type                 = "GZIP"
   data_format                      = "parquet"
   encoding_type                    = "rle-dictionary"
@@ -47,7 +47,7 @@ resource "aws_dms_s3_endpoint" "s3_target" {
   include_op_for_full_load         = true
   parquet_timestamp_in_millisecond = true
   parquet_version                  = "parquet-2-0"
-  timestamp_column_name            = var.cdc_config.timestamp_column_name
+  timestamp_column_name            = var.s3_target_config.timestamp_column_name
 
   tags = merge(
     { Name = "${var.db}-target-${data.aws_region.current.name}-${var.environment}" },
