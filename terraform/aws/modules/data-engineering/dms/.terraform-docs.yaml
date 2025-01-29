@@ -1,0 +1,18 @@
+# .terraform-docs.yaml
+content: |-
+  {{ .Header }}
+
+  # RDS Export Terraform Module
+  ## Example
+
+  ```hcl
+  {{ include "examples/example-readme/main.tf" }}
+  ```
+
+  {{ .Requirements }}
+
+  {{ .Inputs }}
+
+  {{ .Outputs }}
+
+  {{ .Resources }}

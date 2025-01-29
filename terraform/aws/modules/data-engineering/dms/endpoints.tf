@@ -1,20 +1,15 @@
 data "aws_region" "current" {}
 
-data "aws_secretsmanager_secret_version" "source" {
-  secret_id = var.source_secrets_manager_arn
-}
-
 # DMS Source Endpoint
 resource "aws_dms_endpoint" "source" {
   endpoint_id   = "${var.db}-source-${data.aws_region.current.name}-${var.environment}"
   endpoint_type = "source"
-  engine_name   = "oracle"
+  engine_name   = var.dms_source.engine_name
 
-  username      = jsondecode(data.aws_secretsmanager_secret_version.source.secret_string)["username"]
-  password      = jsondecode(data.aws_secretsmanager_secret_version.source.secret_string)["password"]
-  server_name   = var.dms_source_server_name
-  port          = var.dms_source_server_port
-  database_name = var.dms_source_database_name
+  secrets_manager_arn             = var.dms_source.secrets_manager_arn
+  secrets_manager_access_role_arn = aws_iam_role.dms_source.arn
+  database_name                   = var.dms_source.sid
+  extra_connection_attributes     = var.dms_source.extra_connection_attributes
 
   tags = merge(
     { Name = "${var.db}-source-${data.aws_region.current.name}-${var.environment}" },
@@ -53,8 +48,4 @@ resource "aws_dms_s3_endpoint" "s3_target" {
     { Name = "${var.db}-target-${data.aws_region.current.name}-${var.environment}" },
     var.tags
   )
-}
-
-output "secret_user" {
-  value = jsondecode(data.aws_secretsmanager_secret_version.source.secret_string)["username"]
 }

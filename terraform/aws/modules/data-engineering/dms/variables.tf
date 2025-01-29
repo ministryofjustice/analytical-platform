@@ -10,35 +10,25 @@ variable "db" {
   type = string
 }
 
-variable "source_secrets_manager_arn" {
-  type = string
-}
-
-variable "dms_source_server_name" {
-  type = string
-}
-
-variable "dms_source_server_port" {
-  type    = string
-  default = 1521 # Deafult Oracle DB port
-}
-
-variable "dms_source_database_name" {
-  type = string
-}
-
 variable "dms_replication_instance" {
   type = object({
     replication_instance_id    = string
-    subnet_group_id            = string
+    subnet_group_id            = optional(string)
+    subnet_group_name          = optional(string)
+    subnet_ids                 = optional(list(string))
     allocated_storage          = number
     availability_zone          = string
     engine_version             = string
-    kms_key_arn                = string
+    kms_key_arn                = optional(string)
     multi_az                   = bool
     replication_instance_class = string
     inbound_cidr               = string
   })
+
+  validation {
+    condition     = contains(["3.5.2", "3.5.3", "3.5.4"], var.dms_replication_instance.engine_version)
+    error_message = "Valid values for var: test_variable are ('3.5.2', '3.5.3', '3.5.4')."
+  }
 }
 
 variable "replication_task_id" {
@@ -46,6 +36,21 @@ variable "replication_task_id" {
     full_load = string
     cdc       = string
   })
+}
+
+variable "dms_source" {
+  type = object({
+    engine_name                 = string,
+    secrets_manager_arn         = string,
+    sid                         = string,
+    extra_connection_attributes = optional(string)
+    cdc_start_time              = optional(string)
+  })
+
+  validation {
+    condition     = contains(["oracle"], var.dms_source.engine_name)
+    error_message = "Valid values for var: test_variable are ('oracle')."
+  }
 }
 
 variable "dms_mapping_rules" {

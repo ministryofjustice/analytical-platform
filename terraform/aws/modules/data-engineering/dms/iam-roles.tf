@@ -59,3 +59,43 @@ resource "aws_iam_role_policy" "dms" {
     ]
   })
 }
+
+resource "aws_iam_role" "dms_source" {
+  name = "${var.db}-dms-source-${var.environment}"
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "dms.${data.aws_region.current.name}.amazonaws.com"
+        },
+        "Action" : "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = merge(
+    { Name = "${var.db}-dms-${var.environment}" },
+    var.tags
+  )
+}
+
+resource "aws_iam_role_policy" "dms_source" {
+  name = "${var.db}-dms-source-${var.environment}"
+  role = aws_iam_role.dms_source.id
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Action" : [
+          "secretsmanager:GetSecretValue"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "${var.dms_source.secrets_manager_arn}",
+        "Sid" : "AllowGetSecretValue"
+      }
+    ]
+  })
+}

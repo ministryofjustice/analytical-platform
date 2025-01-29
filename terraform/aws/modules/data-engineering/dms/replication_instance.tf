@@ -34,20 +34,20 @@ resource "aws_vpc_security_group_egress_rule" "replication_instance_outbound" {
 }
 
 # Being moved out of the modules as it is reused for each environment
-#resource "aws_dms_replication_subnet_group" "replication_subnet_group" {
-#  replication_subnet_group_description = "Subnet group for DMS replication instances"
-#  replication_subnet_group_id          = "${data.aws_region.current.name}-${var.environment}"
-#
-#  # these would come from the core stack once created
-#  subnet_ids = var.dms_replication_instance.subnet_ids
-#
-#  tags = merge(var.tags,
-#    {
-#      Name        = "${data.aws_region.current.name}-${var.environment}"
-#      application = "Data Engineering"
-#    }
-#  )
-#}
+resource "aws_dms_replication_subnet_group" "replication_subnet_group" {
+  count                                = var.dms_replication_instance.subnet_group_id == null ? 1 : 0
+  replication_subnet_group_description = "Subnet group for DMS replication instances"
+  replication_subnet_group_id          = var.dms_replication_instance.subnet_group_name == null ? "${data.aws_region.current.name}-${var.environment}" : var.dms_replication_instance.subnet_group_name
+  # these would come from the core stack once created
+  subnet_ids = var.dms_replication_instance.subnet_ids
+
+  tags = merge(var.tags,
+    {
+      Name        = "${data.aws_region.current.name}-${var.environment}"
+      application = "Data Engineering"
+    }
+  )
+}
 
 resource "aws_dms_replication_instance" "instance" {
   allocated_storage            = var.dms_replication_instance.allocated_storage
@@ -60,7 +60,7 @@ resource "aws_dms_replication_instance" "instance" {
   publicly_accessible          = false
   replication_instance_class   = var.dms_replication_instance.replication_instance_class
   replication_instance_id      = var.dms_replication_instance.replication_instance_id
-  replication_subnet_group_id  = var.dms_replication_instance.subnet_group_id
+  replication_subnet_group_id  = var.dms_replication_instance.subnet_group_id == null ? aws_dms_replication_subnet_group.replication_subnet_group[0].id : var.dms_replication_instance.subnet_group_id
   vpc_security_group_ids       = [aws_security_group.replication_instance.id]
 
   tags = merge({ Name = var.dms_replication_instance.replication_instance_id },
