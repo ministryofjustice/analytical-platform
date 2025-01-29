@@ -93,7 +93,7 @@ resource "aws_iam_role_policy" "dms_source" {
           "secretsmanager:GetSecretValue"
         ],
         "Effect" : "Allow",
-        "Resource" : "${var.dms_source.secrets_manager_arn}",
+        "Resource" : var.dms_source.secrets_manager_arn,
         "Sid" : "AllowGetSecretValue"
       }
     ]

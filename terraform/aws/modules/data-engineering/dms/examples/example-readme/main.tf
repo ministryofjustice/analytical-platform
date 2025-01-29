@@ -14,7 +14,7 @@ locals {
 }
 
 module "dms" {
-  source = "github.com/ministryofjustice/analytical-platform//terraform/aws/modules/data-engineering/dms"
+  source = "github.com/ministryofjustice/analytical-platform//terraform/aws/modules/data-engineering/dms?ref=66a7d870"
 
   environment = local.tags.environment-name
   vpc_id      = module.vpc.vpc_id
