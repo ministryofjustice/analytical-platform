@@ -2,6 +2,7 @@ data "aws_region" "current" {}
 
 # DMS Source Endpoint
 resource "aws_dms_endpoint" "source" {
+  #checkov:skip=CKV_AWS_296: Use AWS managed KMS key
   endpoint_id   = "${var.db}-source-${data.aws_region.current.name}-${var.environment}"
   endpoint_type = "source"
   engine_name   = var.dms_source.engine_name
@@ -19,6 +20,7 @@ resource "aws_dms_endpoint" "source" {
 
 # DMS S3 Target Endpoint
 resource "aws_dms_s3_endpoint" "s3_target" {
+  # checkov:skip=CKV_AWS_298: Use AWS managed KMS key
   endpoint_id                      = "${var.db}-target-${data.aws_region.current.name}-${var.environment}"
   endpoint_type                    = "target"
   bucket_name                      = var.landing_bucket

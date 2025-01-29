@@ -1,6 +1,6 @@
 resource "aws_security_group" "replication_instance" {
   name        = "${var.db}-${data.aws_region.current.name}-${var.environment}"
-  description = "Managed by Pulumi"
+  description = "Security group for DMS replication instances. Managed by Terraform"
   vpc_id      = var.vpc_id
   tags = merge(
     { Name = "${var.db}-${data.aws_region.current.name}-${var.environment}" },
@@ -11,7 +11,7 @@ resource "aws_security_group" "replication_instance" {
 resource "aws_vpc_security_group_ingress_rule" "replication_instance_inbound" {
   security_group_id = aws_security_group.replication_instance.id
 
-  description = "created by pipelines project"
+  description = "Allow inbound traffic to DMS replication instances (Check if it is necessary)"
   cidr_ipv4   = var.dms_replication_instance.inbound_cidr
   from_port   = 1521
   ip_protocol = "tcp"
@@ -24,6 +24,7 @@ resource "aws_vpc_security_group_ingress_rule" "replication_instance_inbound" {
 
 resource "aws_vpc_security_group_egress_rule" "replication_instance_outbound" {
   security_group_id = aws_security_group.replication_instance.id
+  description       = "Allow outbound traffic from DMS replication instances"
 
   cidr_ipv4   = "0.0.0.0/0"
   ip_protocol = "-1"
