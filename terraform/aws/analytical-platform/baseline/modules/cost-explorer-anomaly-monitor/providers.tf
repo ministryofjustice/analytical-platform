@@ -5,4 +5,5 @@ terraform {
       configuration_aliases = [aws.management, aws.target]
     }
   }
+  required_version = "~> 1.10"
 }

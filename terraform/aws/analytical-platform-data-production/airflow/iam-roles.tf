@@ -31,16 +31,6 @@ resource "aws_iam_role" "airflow_dev_execution_role" {
   }
 }
 
-resource "aws_iam_role" "airflow_dev_cluster_autoscaler_role" {
-  name               = "airflow-dev-cluster-autoscaler-role"
-  description        = "Cluster Autoscaler role for Airflow dev"
-  assume_role_policy = data.aws_iam_policy_document.airflow_dev_cluster_autoscaler_assume_role_policy.json
-
-  inline_policy {
-    name   = "cluster-autoscaler"
-    policy = data.aws_iam_policy_document.airflow_dev_cluster_autoscaler_policy.json
-  }
-}
 
 resource "aws_iam_role" "airflow_dev_flow_log_role" {
   name               = "airflow-dev-flow-log-role"
@@ -86,28 +76,6 @@ resource "aws_iam_role" "airflow_dev_eks_role" {
   ]
 }
 
-#### Airflow Dev IRSA
-module "airflow_dev_monitoring_iam_role" {
-  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
-
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.52.2"
-
-  create_role = true
-
-  role_name = "airflow-monitoring-dev"
-
-  role_policy_arns = {
-    policy = module.airflow_dev_monitoring_iam_policy.arn
-  }
-
-  oidc_providers = {
-    one = {
-      provider_arn               = resource.aws_iam_openid_connect_provider.airflow_dev.arn
-      namespace_service_accounts = ["airflow:airflow"]
-    }
-  }
-}
 
 ####################################################################################
 ######################### AIRFLOW PRODUCTION INFRASTRUCTURE ########################
