@@ -1,10 +1,14 @@
 # Database Setup
-Follow the instructions below to setup the database for the DMS pipeline.<br>
+
+Follow the instructions below to setup the database for the DMS pipeline.
 [AWS Documentation for Oracle Database Setup](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.Oracle.html)
 
-
 ## Steps
-1. Create a user for DMS. Grant the necessary permissions and enable the required options. (Change the password to a strong password)
+
+- Create a user for DMS.
+Grant the necessary permissions and enable the required options.
+(Change the password to a strong password)
+
 ```SQL
 CREATE USER DMS IDENTIFIED BY "StrongPassword123!";
 GRANT CREATE SESSION TO DMS;
@@ -68,8 +72,9 @@ exec rdsadmin.rdsadmin_util.grant_sys_object('DBMS_CRYPTO', 'DMS', 'EXECUTE');
 -- (for binary reader)
 exec rdsadmin.rdsadmin_util.grant_sys_object('DBA_DIRECTORIES','DMS','SELECT');
 
--- Required when the source database is Oracle Data guard, and Oracle Standby is used in the latest release of DMS version 3.4.6, version 3.4.7, and higher.
-
+-- Required when the source database is Oracle Data guard
+-- and Oracle Standby is used in the latest release of
+-- DMS version 3.4.6, version 3.4.7, and higher.
 exec rdsadmin.rdsadmin_util.grant_sys_object('V_$DATAGUARD_STATS', 'DMS', 'SELECT');
 
 exec rdsadmin.rdsadmin_util.set_configuration('archivelog retention hours',24);
@@ -79,12 +84,14 @@ exec rdsadmin.rdsadmin_util.alter_supplemental_logging('ADD');
 exec rdsadmin.rdsadmin_util.alter_supplemental_logging('ADD','PRIMARY KEY');
 ```
 
-2. Grant the DMS user permissions to read from the source tables.
+- Grant the DMS user permissions to read from the source tables.
+
 ```SQL
 GRANT SELECT ON <SCHEMA_NAME>.<TABLE_NAME> TO DMS;
 ```
 
-3. Create an AWS Secret in Secrets Manager for the DMS user with the follwing details
+- Create an AWS Secret in Secrets Manager for the DMS user with the follwing details
+
 ```json
 {
   "username": "<DMS_USER>"
@@ -94,4 +101,5 @@ GRANT SELECT ON <SCHEMA_NAME>.<TABLE_NAME> TO DMS;
 }
 ```
 
-4. Define the dms terraform block with the required input parameters [Example in README](./README.md) and apply the Terraform
+- Define the dms terraform block with the required input parameters
+ [Example in README](./README.md) and apply the Terraform
