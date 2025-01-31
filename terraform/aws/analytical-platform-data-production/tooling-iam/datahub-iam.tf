@@ -100,14 +100,14 @@ data "aws_iam_policy_document" "datahub_ingestion_github_actions" {
       identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:oidc-provider/token.actions.githubusercontent.com"]
     }
     condition {
-      test     = "StringEquals"
-      values   = ["sts.amazonaws.com"]
-      variable = "token.actions.githubusercontent.com:aud"
-    }
-    condition {
       test     = "StringLike"
       values   = ["repo:ministryofjustice/data-catalogue:*"]
       variable = "token.actions.githubusercontent.com:sub"
+    }
+    condition {
+      test     = "StringEquals"
+      values   = ["sts.amazonaws.com"]
+      variable = "token.actions.githubusercontent.com:aud"
     }
   }
 }
