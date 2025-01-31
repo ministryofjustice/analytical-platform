@@ -1,7 +1,22 @@
 # .terraform-docs.yaml
-content: |-
-  {{ .Header }}
+formatter: markdown table
+sections:
+  hide-all: true
+  show:
+    - providers
+    - inputs
+    - outputs
 
+output:
+  file: README.md
+  mode: replace
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+    {{- printf "\n" -}}
+
+content: |-
   # RDS Export Terraform Module
   ## Example
 

@@ -1,6 +1,4 @@
 <!-- BEGIN_TF_DOCS -->
-
-
 # RDS Export Terraform Module
 ## Example
 
@@ -21,7 +19,7 @@ locals {
 }
 
 module "dms" {
-  source = "github.com/ministryofjustice/analytical-platform//terraform/aws/modules/data-engineering/dms"
+  source = "github.com/ministryofjustice/analytical-platform//terraform/aws/modules/data-engineering/dms?ref=66a7d870"
 
   environment = local.tags.environment-name
   vpc_id      = module.vpc.vpc_id
@@ -63,9 +61,7 @@ module "dms" {
 ## Note
 Update the mappings.json to specify the mappings for the DMS task. This will be used to select the tables to be migrated.
 
-## Requirements
 
-No requirements.
 
 ## Inputs
 
@@ -89,23 +85,4 @@ No requirements.
 |------|-------------|
 | <a name="output_terraform_rules"></a> [terraform\_rules](#output\_terraform\_rules) | n/a |
 
-## Resources
-
-| Name | Type |
-|------|------|
-| [aws_dms_endpoint.source](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dms_endpoint) | resource |
-| [aws_dms_replication_instance.instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dms_replication_instance) | resource |
-| [aws_dms_replication_subnet_group.replication_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dms_replication_subnet_group) | resource |
-| [aws_dms_replication_task.cdc_replication_task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dms_replication_task) | resource |
-| [aws_dms_replication_task.full_load_replication_task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dms_replication_task) | resource |
-| [aws_dms_s3_endpoint.s3_target](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dms_s3_endpoint) | resource |
-| [aws_iam_role.dms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role.dms_source](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy.dms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy.dms_source](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_security_group.replication_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
-| [aws_vpc_security_group_egress_rule.replication_instance_outbound](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_egress_rule) | resource |
-| [aws_vpc_security_group_ingress_rule.replication_instance_inbound](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_ingress_rule) | resource |
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 <!-- END_TF_DOCS -->
