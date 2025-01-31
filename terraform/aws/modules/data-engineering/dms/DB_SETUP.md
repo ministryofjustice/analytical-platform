@@ -102,4 +102,4 @@ GRANT SELECT ON <SCHEMA_NAME>.<TABLE_NAME> TO DMS;
 ```
 
 - Define the dms terraform block with the required input parameters
-  [Example in README](./README.md) and apply the Terraform
+  [Example in readme](./README.md) and apply the Terraform
