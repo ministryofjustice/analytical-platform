@@ -5,6 +5,7 @@ data "aws_iam_policy_document" "bedrock_integration" {
   statement {
     sid    = "AnalyticalPlatformBedrockIntegration"
     effect = "Allow"
+
     actions = [
       "bedrock:ListFoundationModels",
       "bedrock:GetFoundationModel",
@@ -53,8 +54,11 @@ data "aws_iam_policy_document" "bedrock_integration" {
       "bedrock:CreateModelInvocationJob",
       "bedrock:GetModelInvocationJob",
       "bedrock:ListModelInvocationJobs",
+      "bedrock:GetInferenceProfile",
+      "bedrock:DeleteInferenceProfile",
       "bedrock:StopModelInvocationJob"
     ]
+
     resources = ["*"]
     condition {
       test     = "StringEquals"
