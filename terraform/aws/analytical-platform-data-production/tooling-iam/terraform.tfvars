@@ -18,7 +18,6 @@ athena_query_result_buckets = ["aws-athena-query-results-593291632749-eu-west-1"
 
 datahub_cp_irsa_role_names = {
   dev     = "cloud-platform-irsa-33e75989394c3a08-live",
-  test    = "cloud-platform-irsa-fdce67955f41b322-live",
   preprod = "cloud-platform-irsa-fe098636951cc219-live"
 }
 
