@@ -6,8 +6,8 @@ Follow the instructions below to setup the database for the DMS pipeline.
 ## Steps
 
 - Create a user for DMS.
-Grant the necessary permissions and enable the required options.
-(Change the password to a strong password)
+  Grant the necessary permissions and enable the required options.
+  (Change the password to a strong password)
 
 ```SQL
 CREATE USER DMS IDENTIFIED BY "StrongPassword123!";
@@ -102,4 +102,4 @@ GRANT SELECT ON <SCHEMA_NAME>.<TABLE_NAME> TO DMS;
 ```
 
 - Define the dms terraform block with the required input parameters
- [Example in README](./README.md) and apply the Terraform
+  [Example in README](./README.md) and apply the Terraform
