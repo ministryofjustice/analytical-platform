@@ -81,7 +81,8 @@ body:
     attributes:
       description: Please clearly and concisely detail the DoD. (example optional checklist below)
       label: Definition of Done
-      value: Example
+      value: |
+        Example
         - [ ] Documentation has been written / updated
 
         - [ ] README has been updated
