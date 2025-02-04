@@ -46,11 +46,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Richard Baguley"
-      email = "richard.baguley@digital.justice.gov.uk"
-      role  = "manager"
-    },
-    {
       name  = "Tom Webber"
       email = "tom.webber@justice.gov.uk"
       role  = "responder"
