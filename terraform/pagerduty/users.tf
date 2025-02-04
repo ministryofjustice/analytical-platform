@@ -11,11 +11,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Emma Terry"
-      email = "emma.terry@digital.justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Gary Henderson"
       email = "gary.henderson@digital.justice.gov.uk"
       role  = "responder"
@@ -44,11 +39,6 @@ locals {
       name  = "Michael Collins"
       email = "michael.collins@digital.justice.gov.uk"
       role  = "responder"
-    },
-    {
-      name  = "Richard Baguley"
-      email = "richard.baguley@digital.justice.gov.uk"
-      role  = "manager"
     },
     {
       name  = "Tom Webber"
