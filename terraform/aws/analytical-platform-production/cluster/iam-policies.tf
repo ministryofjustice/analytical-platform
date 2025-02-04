@@ -155,10 +155,13 @@ data "aws_iam_policy_document" "control_panel_api" {
     ]
   }
   statement {
-    sid       = "CanUpdateAssumeRolesPolicies"
-    effect    = "Allow"
-    actions   = ["iam:UpdateAssumeRolePolicy"]
-    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_user_*"]
+    sid     = "CanUpdateAssumeRolesPolicies"
+    effect  = "Allow"
+    actions = ["iam:UpdateAssumeRolePolicy"]
+    resources = [
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_user_*",
+      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/${var.resource_prefix}_app_*"
+    ]
   }
   statement {
     sid    = "CanCreateAndDeleteSSMParameters"

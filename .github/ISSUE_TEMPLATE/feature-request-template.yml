@@ -1,6 +1,7 @@
 name: ✨ Feature Request
 description: Create a Feature Request
 title: " ✨ <title>"
+type: "Feature Request"
 labels: ["feature-request"]
 body:
   - type: textarea
