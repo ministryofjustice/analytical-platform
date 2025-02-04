@@ -2,6 +2,7 @@
 name: ⛰ Epic
 description: Create an Epic
 title: "⛰ <title>"
+type: "Epic"
 labels: ["epic"]
 body:
   - type: markdown
