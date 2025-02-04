@@ -1,6 +1,7 @@
 name: 🐞 Bug Report
 description: Create a Bug Report
 title: "🐞 <title>"
+type: "Bug"
 labels: ["bug"]
 body:
   - type: textarea

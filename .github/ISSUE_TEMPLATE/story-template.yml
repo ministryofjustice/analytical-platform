@@ -1,6 +1,7 @@
 name: 📖 Story
 description: Create a Story
 title: "📖 <title>"
+type: "Story"
 labels: ["story"]
 body:
   - type: markdown
