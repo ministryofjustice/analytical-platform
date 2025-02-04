@@ -37,10 +37,10 @@ resource "auth0_client" "rstudio" {
 ##################################################
 
 resource "auth0_client" "jupyter_lab" {
-  name        = "Jupyter Lab EKS"
-  description = "Auth0 Client used by Jupyter Lab on EKS"
-  app_type    = "regular_web"
-  callbacks = [
+  name                = "Jupyter Lab EKS"
+  description         = "Auth0 Client used by Jupyter Lab on EKS"
+  app_type            = "regular_web"
+  callbacks           = [
     "https://*-jupyter-lab.tools.${var.route53_zone}/callback",
     "https://*-jupyter-lab-tunnel.tools.analytical-platform.service.justice.gov.uk/callback"
   ]
@@ -48,8 +48,8 @@ resource "auth0_client" "jupyter_lab" {
     "https://*-jupyter-lab.tools.${var.route53_zone}",
     "https://*-jupyter-lab-tunnel.tools.${var.route53_zone}"
   ]
-  oidc_conformant   = true
-  cross_origin_auth = true
+  oidc_conformant     = true
+  cross_origin_auth   = true
   jwt_configuration {
     alg = "HS256"
   }
