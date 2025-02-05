@@ -725,32 +725,6 @@ locals {
               ]
             },
             {
-              Sid    = "ListBucketAccessElectronicMonitoringService"
-              Effect = "Allow"
-              Principal = {
-                AWS = "arn:aws:iam::976799291502:role/send_table_to_ap"
-              }
-              Action = "s3:ListBucket"
-              Resource = [
-                "arn:aws:s3:::mojap-land",
-              ]
-            },
-            {
-              Sid    = "WriteOnlyAccessElectronicMonitoringService"
-              Effect = "Allow"
-              Principal = {
-                AWS = "arn:aws:iam::976799291502:role/send_table_to_ap"
-              }
-              Action = [
-                "s3:PutObject",
-                "s3:PutObjectTagging",
-                "s3:PutObjectAcl"
-              ]
-              Resource = [
-                "arn:aws:s3:::mojap-land/electronic_monitoring/load/*"
-              ]
-            },
-            {
               Action = "s3:*"
               Condition = {
                 Bool = {
@@ -1071,33 +1045,6 @@ locals {
               ]
               Resource = [
                 "arn:aws:s3:::mojap-land-dev/*"
-              ]
-            },
-            {
-              Sid    = "ListBucketAccessElectronicMonitoringService"
-              Effect = "Allow"
-              Principal = {
-                AWS = "arn:aws:iam::800964199911:role/send_table_to_ap"
-              }
-              Action = "s3:ListBucket"
-              Resource = [
-                "arn:aws:s3:::mojap-land-dev",
-              ]
-            },
-            {
-              Sid    = "WriteOnlyAccessElectronicMonitoringService"
-              Effect = "Allow"
-              Principal = {
-                AWS = "arn:aws:iam::800964199911:role/send_table_to_ap"
-              }
-              Action = [
-                "s3:PutObject",
-                "s3:PutObjectTagging",
-                "s3:PutObjectAcl"
-              ]
-              Resource = [
-                "arn:aws:s3:::mojap-land-dev",
-                "arn:aws:s3:::mojap-land-dev/electronic_monitoring/load/*"
               ]
             },
             {
