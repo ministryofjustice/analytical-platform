@@ -27,7 +27,6 @@ updates:
     reviewers:
       - "ministryofjustice/analytical-platform"
     directories:
-      - "scripts/pagerduty/rota-to-slack"
       - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
       - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
   - package-ecosystem: "terraform"
