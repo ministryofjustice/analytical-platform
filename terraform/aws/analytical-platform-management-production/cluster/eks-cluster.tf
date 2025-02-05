@@ -34,25 +34,25 @@ module "eks" {
     var.eks_role_mappings
   )
 
-  node_groups_defaults = {
-    ami_type         = var.eks_node_group_ami_type
-    disk_size        = var.eks_node_group_disk_size
-    desired_capacity = var.eks_node_group_capacities["desired"]
-    max_capacity     = var.eks_node_group_capacities["max"]
-    min_capacity     = var.eks_node_group_capacities["min"]
-    instance_types   = var.eks_node_group_instance_types
-    version          = var.eks_versions["node-group"]
-  }
+  # node_groups_defaults = {
+  #   ami_type         = var.eks_node_group_ami_type
+  #   disk_size        = var.eks_node_group_disk_size
+  #   desired_capacity = var.eks_node_group_capacities["desired"]
+  #   max_capacity     = var.eks_node_group_capacities["max"]
+  #   min_capacity     = var.eks_node_group_capacities["min"]
+  #   instance_types   = var.eks_node_group_instance_types
+  #   version          = var.eks_versions["node-group"]
+  # }
 
-  node_groups = {
-    main_node_pool = {
-      name_prefix                          = var.eks_node_group_name_prefix
-      create_launch_template               = true
-      metadata_http_endpoint               = "enabled"
-      metadata_http_tokens                 = "required"
-      metadata_http_put_response_hop_limit = 1
-    }
-  }
+  # node_groups = {
+  #   main_node_pool = {
+  #     name_prefix                          = var.eks_node_group_name_prefix
+  #     create_launch_template               = true
+  #     metadata_http_endpoint               = "enabled"
+  #     metadata_http_tokens                 = "required"
+  #     metadata_http_put_response_hop_limit = 1
+  #   }
+  # }
   workers_additional_policies = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
   write_kubeconfig            = false
 }
