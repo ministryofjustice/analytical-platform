@@ -103,19 +103,19 @@
 # External Secrets
 ##################################################
 
-data "aws_iam_policy_document" "external_secrets" {
-  statement {
-    sid    = "externalSecrets"
-    effect = "Allow"
-    actions = [
-      "secretsmanager:GetResourcePolicy",
-      "secretsmanager:GetSecretValue",
-      "secretsmanager:DescribeSecret",
-      "secretsmanager:ListSecretVersionIds"
-    ]
-    resources = ["arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:secret:*"]
-  }
-}
+# data "aws_iam_policy_document" "external_secrets" {
+#   statement {
+#     sid    = "externalSecrets"
+#     effect = "Allow"
+#     actions = [
+#       "secretsmanager:GetResourcePolicy",
+#       "secretsmanager:GetSecretValue",
+#       "secretsmanager:DescribeSecret",
+#       "secretsmanager:ListSecretVersionIds"
+#     ]
+#     resources = ["arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:secret:*"]
+#   }
+# }
 
 # resource "aws_iam_policy" "external_secrets" {
 #   name_prefix = "external_secrets"
