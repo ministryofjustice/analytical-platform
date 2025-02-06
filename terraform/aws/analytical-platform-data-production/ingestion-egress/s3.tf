@@ -171,7 +171,7 @@ module "cica_dms_egress_s3" {
   }
 
   replication_configuration = {
-    role = module.production_replication_iam_role.iam_role_arn
+    role = module.production_replication_cica_dms_iam_role.iam_role_arn
     rules = [
       {
         id                        = "mojap-ingestion-cica-dms-egress"
@@ -192,7 +192,7 @@ module "cica_dms_egress_s3" {
             owner = "Destination"
           }
           encryption_configuration = {
-            replica_kms_key_id = "arn:aws:kms:eu-west-2:471112983409:key/159671dd-57fa-497c-93b9-2aa9aa8b0fd1"
+            replica_kms_key_id = "arn:aws:kms:eu-west-2:471112983409:key/159671dd-57fa-497c-93b9-2aa9aa8b0fd1" # TODO: Check this
           }
           metrics = {
             status  = "Enabled"
@@ -210,7 +210,7 @@ module "cica_dms_egress_s3" {
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = module.production_kms.key_arn
+        kms_master_key_id = module.production_cica_dms_kms.key_arn
         sse_algorithm     = "aws:kms"
       }
     }
