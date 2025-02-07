@@ -4,7 +4,10 @@ locals {
     {
       name                    = "xhibit"
       database_string_pattern = ["xhibit", "xhibit_derived"]
-      role_names_to_exempt    = ["create-a-derived-table"]
+      role_names_to_exempt = [
+        "create-a-derived-table",
+        "airflow_prod_cadet_deploy_xhibit"
+      ]
     },
     {
       name = "mags"
