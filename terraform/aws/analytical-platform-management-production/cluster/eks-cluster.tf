@@ -53,6 +53,6 @@ module "eks" {
   #     metadata_http_put_response_hop_limit = 1
   #   }
   # }
-  #   workers_additional_policies = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
-  #   write_kubeconfig            = false
+    workers_additional_policies = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
+    write_kubeconfig            = false
 }
