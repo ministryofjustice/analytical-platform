@@ -202,7 +202,12 @@
   "data-discovery": {
     "account": "analytical-platform-data-production",
     "stateConfig": [],
-    "s3Locations": [],
+    "s3Locations": [
+      {
+        "bucket": "alpha-data-discovery",
+        "keys": [""]
+      }
+    ],
     "repositories": ["moj-analytical-services/data-discovery"],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
