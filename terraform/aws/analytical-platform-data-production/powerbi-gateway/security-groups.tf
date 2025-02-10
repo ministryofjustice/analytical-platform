@@ -28,8 +28,8 @@ module "test_powerbi_security_group" {
   vpc_id      = module.vpc.vpc_id
 
   ingress_cidr_blocks = ["10.0.0.0/16"]
-  ingress_rules       = ["https-443-tcp", "all-icmp", "rdp-tcp"]
-  egress_rules        = []
+  ingress_rules       = ["https-443-tcp", "all-icmp"]
+  egress_rules        = ["all-all"]
 
   tags = {
     Name = local.name
