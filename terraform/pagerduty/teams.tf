@@ -40,10 +40,6 @@ moved {
   to   = module.teams["Analytical Platform"].pagerduty_team_membership.managers["julia.lawrence@digital.justice.gov.uk"]
 }
 moved {
-  from = module.teams["Analytical Platform"].pagerduty_team_membership.managers["PJTSCUW"]
-  to   = module.teams["Analytical Platform"].pagerduty_team_membership.managers["richard.baguley@digital.justice.gov.uk"]
-}
-moved {
   from = module.teams["Analytical Platform"].pagerduty_team_membership.managers["PWEB0DB"]
   to   = module.teams["Analytical Platform"].pagerduty_team_membership.managers["yvan.smith@digital.justice.gov.uk"]
 }

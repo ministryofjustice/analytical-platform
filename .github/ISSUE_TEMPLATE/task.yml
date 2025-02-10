@@ -1,25 +1,26 @@
-name: 📋 Sub-Task
-description: Create a Sub-Task
+name: 📋 Task
+description: Create a Task
 title: "📋 <title>"
-labels: ["sub-task"]
+type: "Task"
+labels: ["task"]
 body:
   - type: markdown
     attributes:
       value: |
         > [!TIP]
-        > Sub-tasks should only be created as sub-issues of Stories
+        > Tasks should only be created as children of Stories
   - type: textarea
     id: description
     attributes:
-      description: A clear and concise description of the sub-task.
-      label: Describe the sub-task.
+      description: A clear and concise description of the task.
+      label: Describe the task.
       value:
     validations:
       required: true
   - type: textarea
     id: steps
     attributes:
-      description: Steps to address the sub-task.
+      description: Steps to address the task.
       label: Steps to Address
     validations:
       required: false

@@ -1,6 +1,7 @@
 name: 🔱 Spike
 description: Create a Spike
 title: "🔱 <title>"
+type: "Spike"
 labels: ["spike"]
 body:
   - type: markdown
