@@ -29,7 +29,7 @@ module "test_powerbi_security_group" {
 
   ingress_cidr_blocks = ["10.0.0.0/16"]
   ingress_rules       = ["https-443-tcp", "all-icmp"]
-  egress_rules        = []
+  egress_rules        = ["all-all"]
 
   tags = {
     Name = local.name
