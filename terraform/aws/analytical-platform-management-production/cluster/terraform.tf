@@ -44,4 +44,4 @@ provider "aws" {
 #   token                  = data.aws_eks_cluster_auth.cluster.token
 # }
 
-provider "random" {}
+# provider "random" {}
