@@ -17,9 +17,6 @@ module "datasync_opg_development" {
   bucket        = "mojap-data-production-datasync-opg-development"
   force_destroy = true
 
-  attach_policy = true
-  policy        = data.aws_iam_policy_document.datasync_opg_development.json
-
   versioning = {
     enabled = true
   }
@@ -89,9 +86,6 @@ module "datasync_opg_production" {
 
   bucket        = "mojap-data-production-datasync-opg"
   force_destroy = true
-
-  attach_policy = true
-  policy        = data.aws_iam_policy_document.datasync_opg_production.json
 
   versioning = {
     enabled = true
