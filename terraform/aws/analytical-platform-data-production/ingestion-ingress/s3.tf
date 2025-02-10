@@ -1,3 +1,21 @@
+data "aws_iam_policy_document" "cica_dms_ingress_bucket_policy" {
+  statement {
+    sid    = "ReplicationPermissions"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::471112983409:role/cica-dms-ingress-production-replication"]
+    }
+    actions = [
+      "s3:ReplicateObject",
+      "s3:ObjectOwnerOverrideToBucketOwner",
+      "s3:GetObjectVersionTagging",
+      "s3:ReplicateTags",
+      "s3:ReplicateDelete"
+    ]
+    resources = ["arn:aws:s3:::mojap-data-production-cica-dms-ingress-production/*"]
+  }
+}
 
 #tfsec:ignore:AVD-AWS-0088:Bucket is encrypted with CMK KMS, but not detected by Trivy
 #tfsec:ignore:AVD-AWS-0089:Bucket logging not enabled currently
@@ -18,12 +36,16 @@ module "cica_dms_ingress_s3" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.5.0"
 
-  bucket        = "mojap-data-production-cica-dms-ingress-production"
+  bucket = "mojap-data-production-cica-dms-ingress-production"
+
   force_destroy = true
 
   versioning = {
     enabled = true
   }
+
+  attach_policy = true
+  policy        = data.aws_iam_policy_document.bold_egress_bucket_policy.json
 
   server_side_encryption_configuration = {
     rule = {
