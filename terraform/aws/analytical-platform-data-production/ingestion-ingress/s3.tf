@@ -45,7 +45,7 @@ module "cica_dms_ingress_s3" {
   }
 
   attach_policy = true
-  policy        = data.aws_iam_policy_document.bold_egress_bucket_policy.json
+  policy        = data.aws_iam_policy_document.bold_ingress_bucket_policy.json
 
   server_side_encryption_configuration = {
     rule = {
