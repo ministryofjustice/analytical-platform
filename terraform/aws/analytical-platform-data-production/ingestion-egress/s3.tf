@@ -192,7 +192,7 @@ module "cica_dms_egress_s3" {
             owner = "Destination"
           }
           encryption_configuration = {
-            replica_kms_key_id = "arn:aws:kms:eu-west-2:471112983409:key/159671dd-57fa-497c-93b9-2aa9aa8b0fd1" # TODO: Check this
+            replica_kms_key_id = "arn:aws:kms:eu-west-2:593291632749:key/mrk-0148560792c648ccb8cf051ee32e358c"
           }
           metrics = {
             status  = "Enabled"
