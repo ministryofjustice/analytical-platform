@@ -121,7 +121,7 @@ module "test_powerbi_ec2" {
   metadata_options = {
     http_tokens = "required"
   }
-  vpc_security_group_ids = [module.security_group.security_group_id]
+  vpc_security_group_ids = [module.test_powerbi_security_group.security_group_id]
   subnet_id              = module.vpc.private_subnets[0]
 
   tags = var.tags
