@@ -186,7 +186,7 @@ module "cica_dms_egress_s3" {
 
         destination = {
           account_id    = "471112983409"
-          bucket        = "arn:aws:s3:::mojap-ingestion-production-cica-dms-egress"
+          bucket        = "arn:aws:s3:::mojap-ingestion-production-bold-egress" # TODO: Change this, only here as bucket needs to exist to apply
           storage_class = "STANDARD"
           access_control_translation = {
             owner = "Destination"
