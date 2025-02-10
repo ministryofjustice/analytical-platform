@@ -4,7 +4,10 @@ locals {
     {
       name                    = "xhibit"
       database_string_pattern = ["xhibit", "xhibit_derived"]
-      role_names_to_exempt    = ["create-a-derived-table"]
+      role_names_to_exempt = [
+        "create-a-derived-table",
+        "airflow_prod_cadet_deploy_xhibit"
+      ]
     },
     {
       name = "mags"
@@ -725,32 +728,6 @@ locals {
               ]
             },
             {
-              Sid    = "ListBucketAccessElectronicMonitoringService"
-              Effect = "Allow"
-              Principal = {
-                AWS = "arn:aws:iam::976799291502:role/send_table_to_ap"
-              }
-              Action = "s3:ListBucket"
-              Resource = [
-                "arn:aws:s3:::mojap-land",
-              ]
-            },
-            {
-              Sid    = "WriteOnlyAccessElectronicMonitoringService"
-              Effect = "Allow"
-              Principal = {
-                AWS = "arn:aws:iam::976799291502:role/send_table_to_ap"
-              }
-              Action = [
-                "s3:PutObject",
-                "s3:PutObjectTagging",
-                "s3:PutObjectAcl"
-              ]
-              Resource = [
-                "arn:aws:s3:::mojap-land/electronic_monitoring/load/*"
-              ]
-            },
-            {
               Action = "s3:*"
               Condition = {
                 Bool = {
@@ -1071,33 +1048,6 @@ locals {
               ]
               Resource = [
                 "arn:aws:s3:::mojap-land-dev/*"
-              ]
-            },
-            {
-              Sid    = "ListBucketAccessElectronicMonitoringService"
-              Effect = "Allow"
-              Principal = {
-                AWS = "arn:aws:iam::800964199911:role/send_table_to_ap"
-              }
-              Action = "s3:ListBucket"
-              Resource = [
-                "arn:aws:s3:::mojap-land-dev",
-              ]
-            },
-            {
-              Sid    = "WriteOnlyAccessElectronicMonitoringService"
-              Effect = "Allow"
-              Principal = {
-                AWS = "arn:aws:iam::800964199911:role/send_table_to_ap"
-              }
-              Action = [
-                "s3:PutObject",
-                "s3:PutObjectTagging",
-                "s3:PutObjectAcl"
-              ]
-              Resource = [
-                "arn:aws:s3:::mojap-land-dev",
-                "arn:aws:s3:::mojap-land-dev/electronic_monitoring/load/*"
               ]
             },
             {
@@ -1846,27 +1796,6 @@ locals {
               Sid      = "ListBucketAccess-mojap-metadata-dev"
             },
             {
-              Action = "s3:ListBucket"
-              Effect = "Allow"
-              Principal = {
-                AWS = "arn:aws:iam::800964199911:role/send_metadata_to_ap"
-              }
-              Resource = "arn:aws:s3:::mojap-metadata-dev"
-              Sid      = "ListAccess-mojap-metadata-dev-electronic-monitoring"
-            },
-            {
-              Action = [
-                "s3:PutObject",
-                "s3:PutObjectAcl"
-              ]
-              Effect = "Allow"
-              Principal = {
-                AWS = "arn:aws:iam::800964199911:role/send_metadata_to_ap"
-              }
-              Resource = "arn:aws:s3:::mojap-metadata-dev/electronic_monitoring/*"
-              Sid      = "PutAccess-mojap-metadata-dev-electronic-monitoring"
-            },
-            {
               Action = "s3:*"
               Condition = {
                 Bool = {
@@ -2069,27 +1998,6 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-metadata-prod"
               Sid      = "ListBucketAccess-mojap-metadata-prod"
-            },
-            {
-              Action = "s3:ListBucket"
-              Effect = "Allow"
-              Principal = {
-                AWS = "arn:aws:iam::976799291502:role/send_metadata_to_ap"
-              }
-              Resource = "arn:aws:s3:::mojap-metadata-prod"
-              Sid      = "ListAccess-mojap-metadata-prod-electronic-monitoring"
-            },
-            {
-              Action = [
-                "s3:PutObject",
-                "s3:PutObjectAcl"
-              ]
-              Effect = "Allow"
-              Principal = {
-                AWS = "arn:aws:iam::976799291502:role/send_metadata_to_ap"
-              }
-              Resource = "arn:aws:s3:::mojap-metadata-prod/electronic_monitoring/*"
-              Sid      = "PutAccess-mojap-metadata-prod-electronic-monitoring"
             },
             {
               Action = "s3:*"
@@ -2314,114 +2222,6 @@ locals {
       policy = jsonencode(
         {
           Statement = [
-            {
-              Action = [
-                "s3:PutObject",
-                "s3:ListMultipartUploadParts",
-              ]
-              Effect = "Allow"
-              Principal = {
-                AWS = "AROASYCVJWSNN3REJ3AFS"
-              }
-              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/delius/*"
-              Sid      = "WriteOnlyAccess-mojap-raw-hist-dev-hmpps-delius"
-            },
-            {
-              Action = "s3:PutObject"
-              Condition = {
-                StringNotEquals = {
-                  "s3:x-amz-acl" = "bucket-owner-full-control"
-                }
-              }
-              Effect = "Deny"
-              Principal = {
-                AWS = "AROASYCVJWSNN3REJ3AFS"
-              }
-              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/delius/*"
-              Sid      = "112-mojap-raw-hist-dev-hmpps-delius"
-            },
-            {
-              Action = "s3:PutObject"
-              Condition = {
-                StringNotEquals = {
-                  "s3:x-amz-server-side-encryption" = "AES256"
-                }
-              }
-              Effect = "Deny"
-              Principal = {
-                AWS = "AROASYCVJWSNN3REJ3AFS"
-              }
-              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/delius/*"
-              Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-dev-hmpps-delius"
-            },
-            {
-              Action = "s3:PutObject"
-              Condition = {
-                Null = {
-                  "s3:x-amz-server-side-encryption" = "true"
-                }
-              }
-              Effect = "Deny"
-              Principal = {
-                AWS = "AROASYCVJWSNN3REJ3AFS"
-              }
-              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/delius/*"
-              Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-dev-hmpps-delius"
-            },
-            {
-              Action = [
-                "s3:PutObject",
-                "s3:ListMultipartUploadParts",
-              ]
-              Effect = "Allow"
-              Principal = {
-                AWS = "AROASYCVJWSNFCCBEO2AN"
-              }
-              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
-              Sid      = "WriteOnlyAccess-mojap-raw-hist-dev-hmpps-oasys"
-            },
-            {
-              Action = "s3:PutObject"
-              Condition = {
-                StringNotEquals = {
-                  "s3:x-amz-acl" = "bucket-owner-full-control"
-                }
-              }
-              Effect = "Deny"
-              Principal = {
-                AWS = "AROASYCVJWSNFCCBEO2AN"
-              }
-              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
-              Sid      = "112-mojap-raw-hist-dev-hmpps-oasys"
-            },
-            {
-              Action = "s3:PutObject"
-              Condition = {
-                StringNotEquals = {
-                  "s3:x-amz-server-side-encryption" = "AES256"
-                }
-              }
-              Effect = "Deny"
-              Principal = {
-                AWS = "AROASYCVJWSNFCCBEO2AN"
-              }
-              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
-              Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-dev-hmpps-oasys"
-            },
-            {
-              Action = "s3:PutObject"
-              Condition = {
-                Null = {
-                  "s3:x-amz-server-side-encryption" = "true"
-                }
-              }
-              Effect = "Deny"
-              Principal = {
-                AWS = "AROASYCVJWSNFCCBEO2AN"
-              }
-              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
-              Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-dev-hmpps-oasys"
-            },
             {
               Action = "s3:*"
               Condition = {

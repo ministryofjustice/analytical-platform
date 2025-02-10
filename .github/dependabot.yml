@@ -27,7 +27,6 @@ updates:
     reviewers:
       - "ministryofjustice/analytical-platform"
     directories:
-      - "scripts/pagerduty/rota-to-slack"
       - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
       - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
   - package-ecosystem: "terraform"
@@ -57,8 +56,8 @@ updates:
       - "terraform/aws/analytical-platform-data-production/create-a-derived-table"
       - "terraform/aws/analytical-platform-data-production/data-engineering-pipelines"
       - "terraform/aws/analytical-platform-data-production/github-actions-roles"
-      - "terraform/aws/analytical-platform-data-production/hmcts-sdp-direct-connect"
       - "terraform/aws/analytical-platform-data-production/ingestion-egress"
+      - "terraform/aws/analytical-platform-data-production/ingestion-ingress"
       - "terraform/aws/analytical-platform-data-production/joiners-movers-leavers"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prisons-reporting-preproduction"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prisons-reporting-production"

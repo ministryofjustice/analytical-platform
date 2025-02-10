@@ -6,10 +6,10 @@ account_ids = {
 tags = {
   business-unit          = "Platforms"
   application            = "Analytical Platform"
-  component              = "HMCTS SDP Direct Connect"
+  component              = "ingestion-ingress"
   environment            = "production"
   is-production          = "true"
   owner                  = "analytical-platform:analytical-platform@digital.justice.gov.uk"
   infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/analytical-platform/terraform/aws/analytical-platform-data-production/hmcts-sdp-direct-connect"
+  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/ingestion-ingress"
 }
