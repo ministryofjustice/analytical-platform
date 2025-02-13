@@ -1,4 +1,8 @@
 data "aws_iam_policy_document" "athena_read" {
+  #checkov:skip=CKV_AWS_111:This code is ported from IAM Builder
+  #checkov:skip=CKV_AWS_356:This code is ported from IAM Builder
+
+
   statement {
     sid    = "AthenaReadOnlyS3BucketActions"
     effect = "Allow"
@@ -101,6 +105,9 @@ module "athena_read_iam_policy" {
 }
 
 data "aws_iam_policy_document" "athena_write" {
+  #checkov:skip=CKV_AWS_111:This code is ported from IAM Builder
+  #checkov:skip=CKV_AWS_356:This code is ported from IAM Builder
+
   statement {
     sid    = "AthenaWrite"
     effect = "Allow"
@@ -210,6 +217,9 @@ module "bedrock_iam_policy" {
 }
 
 data "aws_iam_policy_document" "glue" {
+  #checkov:skip=CKV_AWS_111:This code is ported from IAM Builder
+  #checkov:skip=CKV_AWS_356:This code is ported from IAM Builder
+
   statement {
     sid    = "GlueActions"
     effect = "Allow"
