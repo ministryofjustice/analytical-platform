@@ -1,4 +1,7 @@
 data "aws_iam_policy_document" "datasync_ingress_bucket_policy" {
+
+  for_each = local.analytical_platform_ingestion_environments
+
   statement {
     sid    = "DataSyncReplicationPermissions"
     effect = "Allow"
@@ -47,7 +50,7 @@ module "datasync_ingress_s3" {
   }
 
   attach_policy = true
-  policy        = data.aws_iam_policy_document.datasync_ingress_bucket_policy.json
+  policy        = data.aws_iam_policy_document.datasync_ingress_bucket_policy[each.key].json
 
   server_side_encryption_configuration = {
     rule = {
