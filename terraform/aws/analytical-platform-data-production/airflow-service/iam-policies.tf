@@ -2,7 +2,6 @@ data "aws_iam_policy_document" "athena_read" {
   #checkov:skip=CKV_AWS_111:This code is ported from IAM Builder
   #checkov:skip=CKV_AWS_356:This code is ported from IAM Builder
 
-
   statement {
     sid    = "AthenaReadOnlyS3BucketActions"
     effect = "Allow"
