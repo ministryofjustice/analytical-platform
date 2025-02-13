@@ -1,13 +1,13 @@
-data "aws_iam_policy_document" "datasync_ingress_bucket_policy" {
+data "aws_iam_policy_document" "datasync_opg_ingress_bucket_policy" {
 
   for_each = local.analytical_platform_ingestion_environments
 
   statement {
-    sid    = "DataSyncReplicationPermissions"
+    sid    = "DataSyncOPGReplicationPermissions"
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-ingestion-${each.key}"]}:role/datasync-ingress-${each.key}-replication"]
+      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-ingestion-${each.key}"]}:role/datasync-opg-ingress-${each.key}-replication"]
     }
     actions = [
       "s3:ReplicateObject",
@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "datasync_ingress_bucket_policy" {
 #tfsec:ignore:AVD-AWS-0088:Bucket is encrypted with CMK KMS, but not detected by Trivy
 #tfsec:ignore:AVD-AWS-0089:Bucket logging not enabled currently
 #tfsec:ignore:AVD-AWS-0132:Bucket is encrypted with CMK KMS, but not detected by Trivy
-module "datasync_ingress_s3" {
+module "datasync_opg_ingress_s3" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
   #checkov:skip=CKV_AWS_18:Access logging not enabled currently
@@ -41,7 +41,7 @@ module "datasync_ingress_s3" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.6.0"
 
-  bucket = "mojap-data-production-datasync-ingress-${each.key}"
+  bucket = "mojap-data-production-datasync-opg-ingress-${each.key}"
 
   force_destroy = true
 
@@ -50,7 +50,7 @@ module "datasync_ingress_s3" {
   }
 
   attach_policy = true
-  policy        = data.aws_iam_policy_document.datasync_ingress_bucket_policy[each.key].json
+  policy        = data.aws_iam_policy_document.datasync_opg_ingress_bucket_policy[each.key].json
 
   server_side_encryption_configuration = {
     rule = {

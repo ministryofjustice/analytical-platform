@@ -10,5 +10,5 @@ data "aws_iam_session_context" "session" {
 
 data "aws_kms_alias" "kms" {
   for_each = toset(keys(local.analytical_platform_ingestion_environments))
-  name     = "alias/s3/mojap-data-production-datasync-ingress-${each.key}"
+  name     = "alias/s3/mojap-data-production-datasync-opg-ingress-${each.key}"
 }

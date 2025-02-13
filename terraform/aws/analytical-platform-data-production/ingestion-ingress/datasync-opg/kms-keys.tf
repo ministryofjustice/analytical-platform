@@ -1,4 +1,4 @@
-module "datasync_kms" {
+module "datasync_opg_kms" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
@@ -7,12 +7,12 @@ module "datasync_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "3.1.1"
 
-  aliases               = ["s3/mojap-data-production-datasync-ingress-${each.key}"]
-  description           = "MoJ AP DataSync Ingress - ${title(each.key)}"
+  aliases               = ["s3/mojap-data-production-datasync-opg-ingress-${each.key}"]
+  description           = "MoJ AP DataSync OPG Ingress - ${title(each.key)}"
   enable_default_policy = true
   key_statements = [
     {
-      sid = "AllowAnalyticalPlatformDataSyncIngestion${title(each.key)}"
+      sid = "AllowAnalyticalPlatformDataSyncOPGIngestion${title(each.key)}"
       actions = [
         "kms:Encrypt",
         "kms:GenerateDataKey"
@@ -22,7 +22,7 @@ module "datasync_kms" {
       principals = [
         {
           type        = "AWS"
-          identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-ingestion-${each.key}"]}:role/datasync-ingress-${each.key}-replication"]
+          identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-ingestion-${each.key}"]}:role/datasync-opg-ingress-${each.key}-replication"]
         }
       ]
     }
