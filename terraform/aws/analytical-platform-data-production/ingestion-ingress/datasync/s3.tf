@@ -1,10 +1,10 @@
 data "aws_iam_policy_document" "datasync_ingress_bucket_policy" {
   statement {
-    sid    = "ReplicationPermissions"
+    sid    = "DataSyncReplicationPermissions"
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::471112983409:role/datasync-ingress-production-replication"]
+      identifiers = ["arn:aws:iam::471112983409:role/datasync-ingress-${each.key}-replication"]
     }
     actions = [
       "s3:ReplicateObject",
@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "datasync_ingress_bucket_policy" {
       "s3:ReplicateTags",
       "s3:ReplicateDelete"
     ]
-    resources = ["arn:aws:s3:::mojap-data-production-datasync-ingress-production/*"]
+    resources = ["arn:aws:s3:::mojap-data-production-datasync-ingress-${each.key}/*"]
   }
 }
 
@@ -38,7 +38,7 @@ module "datasync_ingress_s3" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.6.0"
 
-  bucket = "mojap-data-production-datasync-ingress-production"
+  bucket = "mojap-data-production-datasync-ingress-${each.key}"
 
   force_destroy = true
 
