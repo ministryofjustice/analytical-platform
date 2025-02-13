@@ -22,7 +22,7 @@ module "datasync_kms" {
       principals = [
         {
           type        = "AWS"
-          identifiers = ["arn:aws:iam::471112983409:role/datasync-ingress-${each.key}-replication"]
+          identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-ingestion-${each.key}"]}:role/datasync-ingress-${each.key}-replication"]
         }
       ]
     }

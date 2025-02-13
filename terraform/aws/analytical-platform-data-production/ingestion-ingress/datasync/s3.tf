@@ -7,7 +7,7 @@ data "aws_iam_policy_document" "datasync_ingress_bucket_policy" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::471112983409:role/datasync-ingress-${each.key}-replication"]
+      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-ingestion-${each.key}"]}:role/datasync-ingress-${each.key}-replication"]
     }
     actions = [
       "s3:ReplicateObject",
