@@ -88,7 +88,7 @@ Tip: Go to the [Bottlerocket Releases](https://github.com/bottlerocket-os/bottle
 
 ##  Upgrade the EKS add-ons
 
-1. Run the following command and interpret the results to understand what version the add-ons should be upgraded to: `aws eks describe-addon-versions > file.txt`. Search the file for each add-on name i.e. `aws-ebs-csi-driver` the version is in the field `addonVersion`.
+1. Run the following command and interpret the results to understand what version the add-ons should be upgraded to: `aws eks describe-addon-versions > file.txt`. Search the file for each add-on name i.e. `aws-ebs-csi-driver` the version is in the field `addonVersion`.  **Note:** Search for `aws-ebs-csi-driver` not `aws_ebs_csi_driver` as it is specified in Terraform.
 1. Check the `addonVersion` against the appropriate values in the `eks_cluster_addon_version` block in the `terraform/environments/analytical-platform-compute/environment-configuration.tf` and amend if needed, there are 3 blocks one for each environment.
 1. Commit and push your results to the branch.
 
