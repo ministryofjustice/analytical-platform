@@ -153,7 +153,7 @@ module "test_powerbi_gateway_ec2" {
   monitoring                  = true
   create_iam_instance_profile = true
   iam_role_description        = "IAM role for PowerBI Gateway Instance"
-  ignore_ami_changes          = true
+  ignore_ami_changes          = timestamp() > "2025-15-02T00:00:00Z"
   enable_volume_tags          = false
   associate_public_ip_address = false
   iam_role_name               = local.powerbi_gateway_role
