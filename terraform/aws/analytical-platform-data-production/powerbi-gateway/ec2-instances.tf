@@ -18,7 +18,7 @@ data "aws_ami" "windows_server_2025" {
 
   filter {
     name   = "name"
-    values = ["Windows_Server-2022-English-Full-Base-*"]
+    values = ["Windows_Server-2025-English-Full-Base-*"]
   }
   filter {
     name   = "virtualization-type"
