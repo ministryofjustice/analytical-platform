@@ -11,3 +11,8 @@ variable "tags" {
   type        = map(string)
   description = "Map of tags to apply to resources"
 }
+
+variable "current-time" {
+  type = string
+  default = "2025-02-14T00:00:00Z"
+}
