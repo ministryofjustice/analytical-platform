@@ -13,6 +13,6 @@ variable "tags" {
 }
 
 variable "current-time" {
-  type = string
+  type    = string
   default = "2025-02-14T00:00:00Z"
 }
