@@ -26,10 +26,9 @@ locals {
     "dbt-avature" = {
       name = "dbt-avature"
     }
-
     "dbt-athena-spark" = {
       name = "dbt-athena-spark"
-    }terraform fmt
+    }
   }
 }
 
