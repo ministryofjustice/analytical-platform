@@ -5,7 +5,7 @@ locals {
     }
     "airflow-prod" = {
       name = "airflow-prod-workgroup"
-    }   
+    }
     "airflow-dev-hmcts" = {
       name          = "airflow-dev-workgroup-hmcts"
       business_unit = "HMCTS"
@@ -25,7 +25,7 @@ locals {
   dbt_athena_workgroups = {
     "dbt-avature" = {
       name = "dbt-avature"
-    },
+    }
     "dbt-athena-spark" = {
       name = "dbt-athena-spark"
     }
