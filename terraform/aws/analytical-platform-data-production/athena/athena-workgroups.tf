@@ -114,7 +114,7 @@ resource "dbt_spark_workgroups" "dbt" {
     bytes_scanned_cutoff_per_query  = 1099511627776
     enforce_workgroup_configuration = true
     engine_version {
-      selected_engine_version = "PySpark3"
+      selected_engine_version = "PySpark engine version 3"
     }
     result_configuration {
       output_location = "s3://dbt-query-dump/"
