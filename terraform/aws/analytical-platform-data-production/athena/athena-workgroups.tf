@@ -28,7 +28,7 @@ locals {
     }
     "dbt-athena-spark" = {
       name = "dbt-athena-spark"
-    } 
+    }
   }
 }
 
