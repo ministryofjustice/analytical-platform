@@ -102,7 +102,7 @@ resource "aws_athena_workgroup" "dbt" {
 
 #trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
 #trivy:ignore:avd-aws-0007:Can't enforce output location due to DBT requirements
-resource "aws_athena_workgroup" "dbt" {
+resource "aws_athena_workgroup" "spark" {
   #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
   #checkov:skip=CKV_AWS_82:Can't enforce output location due to DBT requirements
 
