@@ -1,18 +1,24 @@
-module "athena_iam_role" {
-  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+resource "aws_iam_role" "athena_spark_execution_role" {
+  name = "AthenaSparkExecutionRole"
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "~> 5.0"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Service = "athena.amazonaws.com"
+      }
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
 
-  create_role = true
+resource "aws_iam_role_policy_attachment" "athena_spark_s3_access" {
+  role = aws_iam_role.athena_spark_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAthenaFullAccess"
+}
 
-  role_name         = "athena_spark_execution_role"
-  role_requires_mfa = false
-
-  trusted_role_arns = ["arn:aws:iam::${var.account_ids["data-platform-apps-and-tools-development"]}:root"]
-
-  custom_role_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AmazonAthenaFullAccess",
-    module.athena_iam_policy.arn
-  ]
+resource "aws_iam_role_policy_attachment" "athena_spark_glue_access" {
+  role = aws_iam_role.athena_spark_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
 }
