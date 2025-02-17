@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "datasync_opg_ingress_bucket_policy" {
       "s3:ReplicateTags",
       "s3:ReplicateDelete"
     ]
-    resources = ["arn:aws:s3:::mojap-data-production-datasync-ingress-${each.key}/*"]
+    resources = ["arn:aws:s3:::mojap-data-production-datasync-opg-ingress-${each.key}/*"]
   }
 }
 
@@ -55,7 +55,7 @@ module "datasync_opg_ingress_s3" {
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = data.aws_kms_alias.kms[each.key].arn
+        kms_master_key_id = module.datasync_opg_kms[each.key].key_arn
         sse_algorithm     = "aws:kms"
       }
     }
