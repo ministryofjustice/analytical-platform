@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "athena" {
+data "aws_iam_policy_document" "athena_spark_execution_role" {
   #checkov:skip=CKV_AWS_108:We are going to revisit this https://github.com/ministryofjustice/data-platform/issues/2179
   #checkov:skip=CKV_AWS_109:We are going to revisit this https://github.com/ministryofjustice/data-platform/issues/2179
   #checkov:skip=CKV_AWS_110:We are going to revisit this https://github.com/ministryofjustice/data-platform/issues/2179
