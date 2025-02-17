@@ -1,7 +1,7 @@
 ---
 owner_slack: "#analytical-platform"
 title: Incident Process
-last_reviewed_on: 2024-11-12
+last_reviewed_on: 2025-02-17
 review_in: 3 months
 ---
 
@@ -13,21 +13,23 @@ This document describes our incident handling process for network, operations an
 
 ## 1. Confirm that the event constitutes an incident
 
-> If this incident constitutes a security breach, you must also report it [here](https://goo.gl/forms/frsB1h8AGv3Zefwq2)
+> If this incident constitutes a security breach, you must **also** [**report it here**]
 
 We define an incident as an event which:
 
-* is unplanned, and
-* impacts end users or our direct users (developers and engineers), or
-* degrades user-facing services, or
-* increases risk to production services
+* is unplanned
 
-If this event does not constitute an incident, the appropriate response is ask a user to [raise an support issue](https://github.com/ministryofjustice/data-platform-support/issues/new/choose) or [raise a ticket](https://github.com/ministryofjustice/analytical-platform/issues/new/choose) in our GitHub repository, however if the issue is security related, it is [raised here](https://github.com/ministryofjustice/analytical-platform-ithc-2024/issues/new?template=Blank+issue).
+**and**
+* impacts end users or our direct users (developers and engineers)
+* **OR:** degrades user-facing services
+* **OR:** increases risk to production services
+
+If this event does not constitute an incident, the appropriate response is ask a user to [raise a support issue] or [raise a ticket] in our GitHub repository, however if the issue is security related, it is [raised here].
 
 Once you are confident that you have an incident, declare it as such.
 
 ## 2. Declare the incident
-> Declaring an incident begins with updating Analytical Platform [external status page](https://moj-digital-tools.pagerduty.com/external-status-dashboard/P1E3FLK/incidents/create_incident).
+> Declaring an incident begins with updating Analytical Platform [external status page].
 
 You will be presented with a form for you to complete:
 ![Create a new PagerDuty incident](./updating-external-status-page.png)
@@ -54,11 +56,11 @@ Select `Time till Next Update`. Note that users should be kept regularly updated
 
 Tick the **Send update notifications to subscribers** box.
 
-Click **Post** button once you are happy with the form. This will update the external page. The PagerDuty Status Page slack integration will then automatically post the status in the [analytical-platform-support](https://moj.enterprise.slack.com/archives/C4PF7QAJZ) and [ask-data-engineering](https://moj.enterprise.slack.com/archives/C8X3PP1TN) channels.
+Click **Post** button once you are happy with the form. This will update the external page. The PagerDuty Status Page slack integration will then automatically post the status in the [#analytical-platform-support] and [#ask-data-engineering] channels.
 
 ## 3. Managing an Incident
 
-Incident communications must be maintained in a single Slack thread in the main [analytical-platform](https://moj.enterprise.slack.com/archives/C04M8224WCV) team channel for maximum visibility.
+Incident communications must be maintained in a single Slack thread in the main [#analytical-platform] team channel for maximum visibility.
 
 ### 3.1 Starting a Thread
 
@@ -82,7 +84,7 @@ For AWS support, log a call in the AWS account affected.
 
 3rd Party | How to log a support ticket | Escalation process
 ---|---|---
-AWS| [Creating a support case](https://docs.aws.amazon.com/awssupport/latest/user/case-management.html)| On the case, or post in [#ext-aws] (https://moj.enterprise.slack.com/archives/C015UBQ78MR)
+AWS| [Creating a support case] | On the case, or post in [#ext-aws]
 
 ## 5. End the incident
 
@@ -100,5 +102,15 @@ After the incident is resolved:
 * A blameless post mortem meeting should be scheduled to identify any processes that need to be improved
 * A [runbook] for how to fix this issue **should** be published
 
+<!-- External links -->
+[**report it here**]: https://goo.gl/forms/frsB1h8AGv3Zefwq2
+[raise a support issue]: https://github.com/ministryofjustice/data-platform-support/issues/new/choose
+[raised here]: https://github.com/ministryofjustice/analytical-platform-ithc-2024/issues/new?template=Blank+issue
+[external status page]: https://moj-digital-tools.pagerduty.com/external-status-dashboard/P1E3FLK/incidents/create_incident
+[#analytical-platform-support]: https://moj.enterprise.slack.com/archives/C4PF7QAJZ
+[#ask-data-engineering]: https://moj.enterprise.slack.com/archives/C8X3PP1TN
+[#analytical-platform]: https://moj.enterprise.slack.com/archives/C04M8224WCV
+[Creating a support case]: https://docs.aws.amazon.com/awssupport/latest/user/case-management.html
+[#ext-aws]: https://moj.enterprise.slack.com/archives/C015UBQ78MR
 [runbook]: https://github.com/ministryofjustice/analytical-platform/tree/main/source/documentation/runbooks
-[raise a ticket]: http://goo.gl/msfGiS
+[raise a ticket]: https://github.com/ministryofjustice/analytical-platform/issues/new/choose

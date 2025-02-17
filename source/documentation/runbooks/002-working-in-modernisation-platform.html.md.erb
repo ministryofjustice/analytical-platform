@@ -1,7 +1,7 @@
 ---
 owner_slack: "#analytical-platform-notifications"
 title: Working in Modernisation Platform
-last_reviewed_on: 2024-10-10
+last_reviewed_on: 2025-02-17
 review_in: 3 months
 ---
 
@@ -11,6 +11,12 @@ The Analytical Platform makes use of the Modernisation Platform as a hosting sol
 
 ## Running Terraform in Modernisation Platform
 
+We don't have native plan permissions for our SSO users, but we have a couple of options for running local plans:
+
+- We can follow [the Modernisation Platform guide for local plans](https://user-guide.modernisation-platform.service.justice.gov.uk/user-guide/running-terraform-plan-locally.html)
+
+- We can use the `/workspaces/modernisation-platform-environments/scripts/ .sh` script to run local plans (configurable to environment):
+
 > In this case we will use the [analytical-platform-ingestion](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-ingestion) environment.
 
 1. Clone the [modernisation-platform-environments](https://github.com/ministryofjustice/modernisation-platform-environments) repository and open it in Visual Studio Code.
@@ -19,7 +25,7 @@ The Analytical Platform makes use of the Modernisation Platform as a hosting sol
 1. Navigate to the environment you are operating in - `cd terraform/environments/analytical-platform-ingestion`.
 1. To run a `terraform init` + `terraform plan` run the following command:
 
-    ``` bash
+    ```sh
     $ bash /workspaces/modernisation-platform-environments/scripts/member-local-plan.sh
 
     Account: analytical-platform-ingestion
@@ -39,12 +45,12 @@ The Analytical Platform makes use of the Modernisation Platform as a hosting sol
 
 If you run the `member-local-plan.sh` script and produce the error:
 
-```
+```sh
 FATAL   Error running command: Invalid --profile analytical-platform-ingestion-development:modernisation-platform-developer
 ```
 Then you need to use the `-r` flag in the `member-local-plan.sh` script:
 
-```
+```sh
 $ bash /workspaces/modernisation-platform-environments/scripts/member-local-plan.sh -r modernisation-platform-sandbox
 ```
 
