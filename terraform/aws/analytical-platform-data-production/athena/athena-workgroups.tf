@@ -116,9 +116,7 @@ resource "aws_athena_workgroup" "spark" {
     engine_version {
       selected_engine_version = "PySpark engine version 3"
     }
-    workgroup_configuration {
-      execution_role = aws_iam_role.athena_spark_execution_role.arn
-    }
+    execution_role = aws_iam_role.athena_spark_execution_role.arn
     result_configuration {
       output_location = "s3://dbt-query-dump/"
     }
