@@ -15,10 +15,5 @@ resource "aws_iam_role" "athena_spark_execution_role" {
 
 resource "aws_iam_role_policy_attachment" "athena_spark_s3_access" {
   role       = aws_iam_role.athena_spark_execution_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAthenaFullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "athena_spark_glue_access" {
-  role       = aws_iam_role.athena_spark_execution_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
 }
