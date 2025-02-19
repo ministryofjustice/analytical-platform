@@ -1,13 +1,13 @@
 ---
 owner_slack: "#analytical-platform-notifications"
 title: Analytical Platform Compute Maintenance
-last_reviewed_on: 2024-10-28
+last_reviewed_on: 2025-02-17
 review_in: 3 months
 ---
 
 # <%= current_page.data.title %>
 
-On the first day of the month the workflow [schedule-issue-compute-infrastructure.yml](https://github.com/ministryofjustice/analytical-platform/blob/bba07f4908b443a2c15bf94738c8b84c5211e9f9/.github/workflows/schedule-issue-compute-infrastructure.yml) will automatically raise a ticket for example [Maintenance - Analytical Platform Compute ](https://github.com/ministryofjustice/analytical-platform/issues/5661).
+On the first day of the month the workflow [schedule-issue-compute-infrastructure.yml](https://github.com/ministryofjustice/analytical-platform/blob/bba07f4908b443a2c15bf94738c8b84c5211e9f9/.github/workflows/schedule-issue-compute-infrastructure.yml) will automatically raise a ticket for example [Maintenance - Analytical Platform Compute](https://github.com/ministryofjustice/analytical-platform/issues/5661).
 
 This maintenance ticket includes EKS Cluster Upgrade if applicable and/or patching to ensure all components are up to date.
 
@@ -34,16 +34,17 @@ Apply in the Development, Test and Production environments, resolving any issues
 
 Be aware that due to restrictions with the state file multiple people cannot work on the environment at once. Terraform plan is fine but once you have released the apply workflow the state file cannot be used by anyone until the changes are complete. This only affects the environment you are carrying out the apply.
 
-Make the team aware and check before starting the work to avoid conflicts.
+**Make the team aware and check before starting the work to avoid conflicts.**
 
 ### Workflows
 
-Once you create a Pull request in the Modernisation Platform Environments [repository](https://github.com/ministryofjustice/modernisation-platform-environments), workflow will be instigated to carry the required checks etc. If you then subsequently push any changes up to the branch, you will need to go into github actions and cancel the previous workkflow so the new one can start.
+Once you create a Pull Request in the [Modernisation Platform Environments repository](https://github.com/ministryofjustice/modernisation-platform-environments), a workflow run will be started that carries out the required checks etc.
+If you then subsequently push any changes up to the branch, you will need to go into GitHub Actions and cancel the previous workkflow so the new one can start.
 
 ## Assumptions
 
 - You are operating in the `modernisation-platform-environments` repository Development Container.
-- To interrogate the cluster, you are exec'd into the same account as the cluster you are operating on `aws-sso exec --profile analytical-platform-compute-test:modernisation-platform-developer`.
+- To interrogate the cluster, you are `exec`'d into the same account as the cluster you are operating on `aws-sso exec --profile analytical-platform-compute-test:modernisation-platform-developer`.
 - Use account `modernisation-platform-developer` for Test and Production and `modernisation-platform-sandbox` for Development.
 - If necessary update `~/kube/config` as follows `aws eks update-kubeconfig --region eu-west-2 --name analytical-platform-compute-test`.
 - Set context as follows  `kubectl config use-context arn:aws:eks:eu-west-2:767397661611:cluster/analytical-platform-compute-test`.
@@ -85,7 +86,6 @@ Tip: Go to the [Bottlerocket Releases](https://github.com/bottlerocket-os/bottle
 1. Update `eks_node_version` in `environment-configuration.tf` with the value from above.
 1. Commit and push your results to the branch.
 
-
 ##  Upgrade the EKS add-ons
 
 1. Run the following command and interpret the results to understand what version the add-ons should be upgraded to: `aws eks describe-addon-versions > file.txt`. Search the file for each add-on name i.e. `aws-ebs-csi-driver` the version is in the field `addonVersion`.  **Note:** Search for `aws-ebs-csi-driver` not `aws_ebs_csi_driver` as it is specified in Terraform.
@@ -99,7 +99,7 @@ Source: [Describe EKS Add-on versions](https://docs.aws.amazon.com/cli/latest/re
 Patching is a manual process. This means you will have to check each module in each file as follows.
 
 1. Open each `.tf` file in the `terraform/environments/analytical-platform-compute` directory.
-1. Check each module i.e `source  = "terraform-aws-modules/eks/aws//modules/karpenter"` in `eks-custer.tf` and `cmd + click`` to follow the link.
+1. Check each module i.e `source  = "terraform-aws-modules/eks/aws//modules/karpenter"` in `eks-custer.tf` and `cmd + click` to follow the link.
 1. Also check any `helm_release` for example in `helm-charts-system.tf` for any new versions.
 1. Amend the version if appropriate.
 1. Commit and push your results to the branch.
