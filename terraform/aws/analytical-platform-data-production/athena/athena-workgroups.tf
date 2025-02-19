@@ -114,7 +114,7 @@ resource "aws_athena_workgroup" "spark" {
     bytes_scanned_cutoff_per_query  = 1099511627776
     enforce_workgroup_configuration = true
     engine_version {
-      selected_engine_version = "PySpark engine version 3"
+      selected_engine_version = "Athena engine version 3"
     }
     execution_role = aws_iam_role.athena_spark_execution_role.arn
     result_configuration {
