@@ -26,8 +26,8 @@ locals {
     "dbt-avature" = {
       name = "dbt-avature"
     }
-    "dbt-spark" = {
-      name = "dbt-spark"
+    "dbt-athena" = {
+      name = "dbt-athena"
     }
   }
 }
