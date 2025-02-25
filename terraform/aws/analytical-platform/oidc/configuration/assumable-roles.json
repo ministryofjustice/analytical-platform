@@ -285,5 +285,14 @@
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
     "ssmParameterConfig": []
+  },
+  "analytics-platform-control-panel": {
+    "account": "analytical-platform-data-production",
+    "stateConfig": [],
+    "s3Locations": [],
+    "repositories": ["ministryofjustice/analytics-platform-control-panel"],
+    "targets": ["analytical-platform-data-production"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
   }
 }
