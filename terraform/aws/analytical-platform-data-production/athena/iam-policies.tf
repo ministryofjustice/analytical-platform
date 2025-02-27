@@ -6,7 +6,7 @@ data "aws_iam_policy_document" "athena_spark" {
   #checkov:skip=CKV_AWS_356:We are going to revisit this https://github.com/ministryofjustice/data-platform/issues/2179
 
   statement {
-    sid     = ""
+    sid     = "DumpBucketAccess"
     effect  = "Allow"
     actions = ["s3:List*", "s3:*Object"]
     resources = [
