@@ -5,25 +5,16 @@ data "aws_iam_policy_document" "athena_spark" {
   #checkov:skip=CKV_AWS_111:We are going to revisit this https://github.com/ministryofjustice/data-platform/issues/2179
   #checkov:skip=CKV_AWS_356:We are going to revisit this https://github.com/ministryofjustice/data-platform/issues/2179
 
-  {
-      "Version": "2012-10-17",
-      "Statement": [
-          {
-              "Sid": "ListObjectsInBucket",
-              "Effect": "Allow",
-              "Action": ["s3:ListBucket"],
-              "Resource": ["arn:aws:s3:::dbt-query-dump"]
-          },
-          {
-              "Sid": "AllObjectActions",
-              "Effect": "Allow",
-              "Action": "s3:*Object",
-              "Resource": ["arn:aws:s3:::dbt-query-dump/*"]
-          }
-      ]
+  statement {
+    sid     = ""
+    effect  = "Allow"
+    actions = ["s3:List*", "s3:*Object"]
+    resources = [
+      "arn:aws:s3:::dbt-query-dump/*",
+      "arn:aws:s3:::dbt-query-dump"
+    ]
   }
 }
-
 module "athena_iam_policy" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
