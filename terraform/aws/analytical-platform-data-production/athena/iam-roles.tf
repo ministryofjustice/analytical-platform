@@ -20,8 +20,6 @@ resource "aws_iam_role_policy_attachment" "athena_spark_s3_access" {
 
 resource "aws_iam_role_policy" "inline_policy" {
   role       = aws_iam_role.athena_spark_execution_role.name
-  inline_policy {
-    name   = "athena-spark-role-policy"
-    policy = data.aws_iam_policy_document.athena_spark.json
-  }
+  name   = "athena-spark-role-policy"
+  policy = data.aws_iam_policy_document.athena_spark.json
 }
