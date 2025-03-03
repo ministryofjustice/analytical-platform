@@ -66,16 +66,6 @@ variable "dms_mapping_rules" {
   description = "The path to the mapping rules file"
 }
 
-variable "landing_bucket" {
-  type        = string
-  description = "The S3 bucket name where the output data will be stored"
-}
-
-variable "landing_bucket_folder" {
-  type        = string
-  description = "The S3 bucket folder where the output data will be stored"
-}
-
 variable "s3_target_config" {
   type = object({
     add_column_name       = bool

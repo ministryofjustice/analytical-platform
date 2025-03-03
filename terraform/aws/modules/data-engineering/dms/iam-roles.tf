@@ -34,7 +34,7 @@ resource "aws_iam_role_policy" "dms" {
           "s3:ListBucket"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:s3:::${var.landing_bucket}",
+        "Resource" : "arn:aws:s3:::${aws_s3_bucket.landing.bucket}",
         "Sid" : "AllowListBucket"
       },
       {
@@ -45,7 +45,7 @@ resource "aws_iam_role_policy" "dms" {
           "s3:PutObjectTagging"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:s3:::${var.landing_bucket}/${var.landing_bucket_folder}/*",
+        "Resource" : "arn:aws:s3:::${aws_s3_bucket.landing.bucket}/*",
         "Sid" : "AllowDeleteAndPutObject"
       },
       {

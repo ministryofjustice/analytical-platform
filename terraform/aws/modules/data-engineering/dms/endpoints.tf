@@ -23,8 +23,7 @@ resource "aws_dms_s3_endpoint" "s3_target" {
   # checkov:skip=CKV_AWS_298: Use AWS managed KMS key
   endpoint_id                      = "${var.db}-target-${data.aws_region.current.name}-${var.environment}"
   endpoint_type                    = "target"
-  bucket_name                      = var.landing_bucket
-  bucket_folder                    = var.landing_bucket_folder
+  bucket_name                      = aws_s3_bucket.landing.bucket
   service_access_role_arn          = aws_iam_role.dms.arn
   add_column_name                  = var.s3_target_config.add_column_name
   canned_acl_for_objects           = "bucket-owner-full-control"
