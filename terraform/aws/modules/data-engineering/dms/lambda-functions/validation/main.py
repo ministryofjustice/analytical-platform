@@ -2,6 +2,7 @@ import json
 import os
 import re
 from datetime import datetime
+from typing import Optional
 from urllib.parse import unquote_plus
 
 import boto3
@@ -94,7 +95,7 @@ def strip_data_type(data_type: str) -> str:
     )
 
 
-def return_agnostic_type(data_type: str, column_name: str = None) -> str:
+def return_agnostic_type(data_type: str, column_name: Optional[str] = None) -> str:
     """Returns the agnostic type for the given non-agnostic data type, based on the
     mapping in the type_lookup dictionary.
     Parameters
@@ -191,7 +192,7 @@ class FileValidator:
         self.parquet_table_name = parquet_table_name
         self.metadata_s3_keys = metadata_s3_keys
         self.metadata_bucket = metadata_bucket
-        self.errors = []
+        self.errors: list[str] = []
 
     def _add_error(self, error: str):
         """Collects and aggregates error messges into a list.
