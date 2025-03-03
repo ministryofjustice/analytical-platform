@@ -1,18 +1,18 @@
 import json
 import logging
-import sys
 import os
-import oracledb
+import sys
 from datetime import datetime
 
-from mojap_metadata import Metadata
-from mojap_metadata.converters.sqlalchemy_converter import SQLAlchemyConverter
-from mojap_metadata.converters.etl_manager_converter import EtlManagerConverter
-from mojap_metadata.converters.glue_converter import GlueConverter, GlueTable
 import boto3
-from sqlalchemy import create_engine
+import oracledb
+from aws_xray_sdk.core import patch_all, xray_recorder
 from dotenv import load_dotenv
-from aws_xray_sdk.core import xray_recorder, patch_all
+from mojap_metadata import Metadata
+from mojap_metadata.converters.etl_manager_converter import EtlManagerConverter
+from mojap_metadata.converters.glue_converter import GlueConverter
+from mojap_metadata.converters.sqlalchemy_converter import SQLAlchemyConverter
+from sqlalchemy import create_engine
 
 patch_all()
 
@@ -180,7 +180,7 @@ class MetadataExtractor:
         return tables
 
 
-def handler(event, context):
+def handler(event, context):  # pylint: disable=unused-argument
     # TODO: PASS IN AS ENV VARS
     os.environ["RAW_HISTORY_BUCKET"] = "dms-test-raw-history-20250221145111054600000001"
 
@@ -217,15 +217,15 @@ def handler(event, context):
 
     # Get the glue database to check if it exists. handle EntityNotFoundException
     try:
-        db_response = glue.get_database(Name=db_identifier)
+        glue.get_database(Name=db_identifier)
         logger.info(f"Database {db_identifier} already exists")
     except glue.exceptions.EntityNotFoundException:
         # Create the database if it does not exist. Fails is it cannot be created
         logger.info(f"Database {db_identifier} does not exist. Creating it now")
         response = glue.create_database(
             DatabaseInput={
-                'Name': db_identifier,
-                'Description': f'{db_identifier} - DMS Pipeline'
+                "Name": db_identifier,
+                "Description": f"{db_identifier} - DMS Pipeline",
             }
         )
 
@@ -234,23 +234,30 @@ def handler(event, context):
 
     # Used to create glue tables based on Metadata objects
     gc = GlueConverter()
-    glue_table_definitions = [gc.generate_from_meta(
-        table,
-        db_identifier.replace("_", "-"),
-        f"s3://{raw_history_bucket}/{schema_name}/{table.name}") for table in db_metadata
+    glue_table_definitions = [
+        gc.generate_from_meta(
+            table,
+            db_identifier.replace("_", "-"),
+            f"s3://{raw_history_bucket}/{schema_name}/{table.name}",
+        )
+        for table in db_metadata
     ]
 
     for table in glue_table_definitions:
         try:
-            table_response = glue.get_table(DatabaseName=db_identifier, Name=table["TableInput"]["Name"])
+            glue.get_table(DatabaseName=db_identifier, Name=table["TableInput"]["Name"])
             logger.info(f"Table {table['TableInput']['Name']} already exists")
             # Update the table if it exists
             logger.info(f"Updating table {table['TableInput']['Name']}")
-            response = glue.update_table(DatabaseName=db_identifier, TableInput=table["TableInput"])
+            glue.update_table(
+                DatabaseName=db_identifier, TableInput=table["TableInput"]
+            )
         except glue.exceptions.EntityNotFoundException:
-            logger.info(f"Table {table['TableInput']['Name']} does not exist. Creating it now")
+            logger.info(
+                f"Table {table['TableInput']['Name']} does not exist. Creating it now"
+            )
             response = glue.create_table(**table)
-            logger.info(response)
+            logger.debug(response)
 
     # Output json metadata to S3
     for table in db_metadata:
@@ -274,30 +281,31 @@ def handler(event, context):
 
     # Move these keys to the landing bucket
     for key in invalid_keys:
-            # Extract X-Ray trace ID
-            trace_id = xray_recorder.current_segment().trace_id
+        # Extract X-Ray trace ID
+        trace_id = xray_recorder.current_segment().trace_id
 
-            # Get original object metadata (if exists)
-            original_metadata = s3.head_object(Bucket=invalid_bucket_name, Key=key).get('Metadata', {})
+        # Get original object metadata (if exists)
+        original_metadata = s3.head_object(Bucket=invalid_bucket_name, Key=key).get(
+            "Metadata", {}
+        )
 
-            # Preserve existing metadata and add X-Ray trace ID
-            updated_metadata = original_metadata.copy()
-            updated_metadata["X-Amzn-Trace-Id"] = trace_id
+        # Preserve existing metadata and add X-Ray trace ID
+        updated_metadata = original_metadata.copy()
+        updated_metadata["X-Amzn-Trace-Id"] = trace_id
 
-            # Add object metadata to state that it has been reprocessed
-            updated_metadata["reprocessed"] = "true"
+        # Add object metadata to state that it has been reprocessed
+        updated_metadata["reprocessed"] = "true"
 
-            # Copy object with new metadata
-            s3.copy_object(
-                CopySource=f"{invalid_bucket_name}/{key}",
-                Bucket=landing_bucket_name,
-                Key=key,
-                Metadata=updated_metadata,
-                MetadataDirective='REPLACE'  # Ensures metadata is replaced with the new one
-            )
+        # Copy object with new metadata
+        s3.copy_object(
+            CopySource=f"{invalid_bucket_name}/{key}",
+            Bucket=landing_bucket_name,
+            Key=key,
+            Metadata=updated_metadata,
+            MetadataDirective="REPLACE",  # Ensures metadata is replaced with the new one
+        )
 
-            # Delete original object
-            s3.delete_object(Bucket=invalid_bucket_name, Key=key)
-
+        # Delete original object
+        s3.delete_object(Bucket=invalid_bucket_name, Key=key)
 
     logger.info("Done reprocessing failed records")

@@ -1,15 +1,15 @@
 import json
 import os
-from datetime import datetime
 import re
+from datetime import datetime
 from urllib.parse import unquote_plus
 
 import boto3
+import s3fs
+from aws_xray_sdk.core import patch_all
 from pyarrow import ArrowInvalid
 from pyarrow.parquet import ParquetFile
-import s3fs
 from urllib3 import PoolManager
-from aws_xray_sdk.core import xray_recorder, patch_all
 
 patch_all()
 
@@ -88,10 +88,10 @@ def strip_data_type(data_type: str) -> str:
 
     if data_type in type_lookup or data_type in type_lookup.values():
         return data_type
-    else:
-        raise MetadataTypeMismatchException(
-            f"'{data_type}' is not valid or is not a supported data type."
-        )
+
+    raise MetadataTypeMismatchException(
+        f"'{data_type}' is not valid or is not a supported data type."
+    )
 
 
 def return_agnostic_type(data_type: str, column_name: str = None) -> str:
@@ -118,12 +118,12 @@ def return_agnostic_type(data_type: str, column_name: str = None) -> str:
     if data_type in type_lookup.keys():
         agnostic_type = type_lookup[data_type]
         return agnostic_type
-    else:
-        raise MetadataTypeMismatchException(
-            f"The column type '{data_type}' "
-            f"{'for column ' + column_name if column_name else ''} is already an "
-            "agnostic type."
-        )
+
+    raise MetadataTypeMismatchException(
+        f"The column type '{data_type}' "
+        f"{'for column ' + column_name if column_name else ''} is already an "
+        "agnostic type."
+    )
 
 
 class MetadataTypeMismatchException(Exception):
@@ -155,7 +155,7 @@ class FileValidator:
         The name of the bucket where the metadata is located.
     """
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-positional-arguments,too-many-arguments
         self,
         key: str,
         pass_bucket: str,
@@ -209,20 +209,21 @@ class FileValidator:
         Moves the validated file to to the pass or fail bucket depending on the result
         of the validation.
         """
-        client = boto3.client("secretsmanager")
-        #secrets = client.get_secret_value(SecretId=os.getenv("SLACK_SECRET_KEY"))
-        #secrets = json.loads(secrets.get("SecretString"))
-        #url = secrets.get("webhook_url")
-        #channel = secrets.get("channel")
+        # client = boto3.client("secretsmanager")
+        # secrets = client.get_secret_value(SecretId=os.getenv("SLACK_SECRET_KEY"))
+        # secrets = json.loads(secrets.get("SecretString"))
+        # url = secrets.get("webhook_url")
+        # channel = secrets.get("channel")
 
         self._validate_file(path=f"{self.bucket_from}/{self.key}")
         if self.errors:
-            event_time = datetime.utcnow().isoformat(sep=" ", timespec="milliseconds")
-            location = (
-                f"https://s3.console.aws.amazon.com/s3/buckets/"
-                f"{self.fail_bucket}/{self.key}"
-            )
-            #payload = {
+            # TODO: Implement the slack notifications - commented out for now
+            # event_time = datetime.utcnow().isoformat(sep=" ", timespec="milliseconds")
+            # location = (
+            #    f"https://s3.console.aws.amazon.com/s3/buckets/"
+            #    f"{self.fail_bucket}/{self.key}"
+            # )
+            # payload = {
             #    "channel": channel,
             #    "text": "",
             #    "username": "AWS Lambda",
@@ -247,12 +248,13 @@ class FileValidator:
             #            },
             #        },
             #    ],
-            #}
+            # }
 
             self.bucket_to = self.fail_bucket
             move_object(self.bucket_to, self.bucket_from, self.key)
 
-            #for error in self.errors:
+            # More slack notification code
+            # for error in self.errors:
             #    print(
             #        f"VALIDATION ERROR\n"
             #        f"File {self.key} failed validation\r"
@@ -261,10 +263,10 @@ class FileValidator:
             #    )
             #    payload["blocks"][1]["text"]["text"] += f"\n*Failure Reason:* {error}"
 
-            #encoded_payload = json.dumps(payload).encode("utf-8")
-            #http.request(
+            # encoded_payload = json.dumps(payload).encode("utf-8")
+            # http.request(
             #    method="POST", url=url, body=encoded_payload
-            #)
+            # )
         else:
             move_object(self.bucket_to, self.bucket_from, self.key)
 
@@ -433,7 +435,7 @@ class FileValidator:
                 self._add_error(error=str(e))
 
 
-def handler(event, context):  # noqa: C901
+def handler(event, context):  # noqa: C901 pylint: disable=unused-argument
     pass_bucket = os.environ["PASS_BUCKET"]
     fail_bucket = os.environ["FAIL_BUCKET"]
     metadata_bucket = os.environ["METADATA_BUCKET"]
