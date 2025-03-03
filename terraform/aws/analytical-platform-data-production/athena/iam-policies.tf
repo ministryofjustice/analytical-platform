@@ -21,7 +21,8 @@ data "aws_iam_policy_document" "athena_spark" {
     resources = [
       "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=development_sandpit/*",
       "arn:aws:s3:::mojap-derived-tables/sandpit/models/domain_name=development_sandpit/*",
-      "arn:aws:s3:::mojap-derived-tables/dev/models/domain_name=development_sandpit/*"
+      "arn:aws:s3:::mojap-derived-tables/dev/models/domain_name=development_sandpit/*",
+      "arn:aws:s3:::alpha-everyone/athena-spark-packages/*"
     ]
   }
 }
