@@ -34,7 +34,8 @@ module "iam_assumable_role_control_panel_api" {
   role_policy_arns = [aws_iam_policy.control_panel_api.arn]
   oidc_fully_qualified_subjects = [
     "system:serviceaccount:${var.control_panel_kubernetes_service_account}",
-    "system:serviceaccount:${var.control_panel_celery_kubernetes_service_account}"
+    "system:serviceaccount:${var.control_panel_celery_kubernetes_service_account}",
+    "system:serviceaccount:${var.control_panel_celery_beat_kubernetes_service_account}",
   ]
 }
 
