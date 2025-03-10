@@ -111,8 +111,7 @@ resource "aws_athena_workgroup" "spark" {
   name = each.value.name
 
   configuration {
-    bytes_scanned_cutoff_per_query  = 1099511627776000
-    enforce_workgroup_configuration = true
+    enforce_workgroup_configuration = false
     engine_version {
       selected_engine_version = "PySpark engine version 3"
     }
