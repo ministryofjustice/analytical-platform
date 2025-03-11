@@ -16,10 +16,11 @@ locals {
   ]
   tables = [
     {
-      source_table     = "account"
-      source_database  = "staged_fms_test_dbt"
-      data_filter_name = "filter-account-acfd15b3547e6c190937dabba14245cdf39af4256bc72fffdb64f9c91e0e1144"
-      permissions      = ["SELECT", "DESCRIBE"]
+      source_table         = "account"
+      source_database      = "staged_fms_test_dbt"
+      data_filter_name     = "filter-account-acfd15b3547e6c190937dabba14245cdf39af4256bc72fffdb64f9c91e0e1144"
+      permissions          = ["SELECT", "DESCRIBE"]
+      destination_database = "staged_fms_test_dbt"
     }
   ]
 
