@@ -6,11 +6,28 @@ data "aws_caller_identity" "session" {
   provider = aws.session
 }
 
+data "aws_caller_identity" "destination" {
+  provider = aws.destination
+}
+
+data "aws_caller_identity" "source" {
+  provider = aws.source
+}
+
+data "aws_region" "destination" {
+  provider = aws.destination
+}
+
+data "aws_region" "source" {
+  provider = aws.source
+}
+
 data "aws_iam_session_context" "session" {
   provider = aws.session
 
   arn = data.aws_caller_identity.session.arn
 }
+
 
 ### Account Information
 
