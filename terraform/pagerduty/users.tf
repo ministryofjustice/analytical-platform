@@ -41,11 +41,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Tom Webber"
-      email = "tom.webber@justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Yvan Smith"
       email = "yvan.smith@digital.justice.gov.uk"
       role  = "manager"
