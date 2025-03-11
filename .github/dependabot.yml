@@ -63,6 +63,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/joiners-movers-leavers"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prisons-reporting-preproduction"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prisons-reporting-production"
+      - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/electronic-monitoring-data-test"
       - "terraform/aws/analytical-platform-data-production/openmetadata"
       - "terraform/aws/analytical-platform-data-production/powerbi-gateway"
       - "terraform/aws/analytical-platform-data-production/rds-s3-exports"
