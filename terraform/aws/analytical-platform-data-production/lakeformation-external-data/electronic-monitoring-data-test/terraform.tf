@@ -23,8 +23,9 @@ provider "aws" {
   region = "eu-west-2"
 }
 
+# electronic_monitoring_data_test_eu_west_2
 provider "aws" {
-  alias  = "electronic_monitoring_data_test_eu_west_2"
+  alias  = "source"
   region = "eu-west-2"
   assume_role {
     role_arn = "arn:aws:iam::${local.account_ids["electronic-monitoring-data-test"]}:role/analytical-platform-data-production-share-role"
@@ -44,9 +45,9 @@ provider "aws" {
   }
 }
 
-
+# analytical_platform_management_production
 provider "aws" {
-  alias  = "analytical_platform_management_production"
+  alias  = "destination"
   region = "eu-west-1"
   assume_role {
     role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${local.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"

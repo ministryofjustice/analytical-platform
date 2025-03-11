@@ -48,13 +48,13 @@ resource "aws_lakeformation_permissions" "share_filtered_data_with_role" {
   for_each = {
     for tbl in local.tables : tbl.source_table => tbl
   }
-  principal   = var.role_arn
+  principal   = data.aws_caller_identity.destination.account_id
   permissions = ["DESCRIBE", "SELECT"]
   data_cells_filter {
     database_name    = each.value.source_database
     table_name       = each.key
-    table_catalog_id = data.aws_caller_identity.destination.account_id
-    name             = aws_lakeformation_data_cells_filter.data_filter[each.key].table_data[0].name
+    table_catalog_id = data.aws_caller_identity.source.account_id
+    name             = "filter-account-acfd15b3547e6c190937dabba14245cdf39af4256bc72fffdb64f9c91e0e1144"
   }
 
 
