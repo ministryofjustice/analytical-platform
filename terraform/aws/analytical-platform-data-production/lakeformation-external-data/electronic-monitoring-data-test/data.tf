@@ -14,10 +14,6 @@ data "aws_caller_identity" "source" {
   provider = aws.source
 }
 
-data "aws_region" "destination" {
-  provider = aws.destination
-}
-
 data "aws_region" "source" {
   provider = aws.source
 }
