@@ -11,7 +11,9 @@ locals {
 
   databases = [
     {
-      name = "staged_fms_test_dbt"
+      name        = "staged_fms_test_dbt"
+      permissions = ["DESCRIBE"]
+
     }
   ]
   tables = [
