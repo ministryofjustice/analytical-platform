@@ -49,7 +49,7 @@ resource "aws_lakeformation_permissions" "share_filtered_data_with_role" {
     for tbl in local.tables : tbl.source_table => tbl
   }
   principal   = data.aws_caller_identity.destination.account_id
-  permissions = ["DESCRIBE", "SELECT"]
+  permissions = ["SELECT"]
   data_cells_filter {
     database_name    = each.value.source_database
     table_name       = each.key
