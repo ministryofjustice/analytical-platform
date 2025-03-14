@@ -82,7 +82,8 @@ data "aws_iam_policy_document" "create_a_derived_table" {
 
 module "create_a_derived_table_iam_policy" {
   # Commit hash for v5.52.2 - (prevents supply chain attacks)
-  source = "github.com/terraform-aws-modules/terraform-aws-iam//modules/iam-policy?ref=e803e25"
+  source = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.52.2"
 
   name_prefix = "create-a-derived-table"
   policy      = data.aws_iam_policy_document.create_a_derived_table.json
@@ -91,7 +92,8 @@ module "create_a_derived_table_iam_policy" {
 # Role for the GitHub Actions runner to assume using the OIDC provider
 module "create_a_derived_table_iam_role" {
   # Commit hash for v5.52.2
-  source = "github.com/terraform-aws-modules/terraform-aws-iam//modules/iam-role-for-service-accounts-eks?ref=e803e25"
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.52.2"
 
   role_name            = "create-a-derived-table"
   max_session_duration = 10800
