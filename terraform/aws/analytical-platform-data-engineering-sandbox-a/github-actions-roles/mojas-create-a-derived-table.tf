@@ -1,7 +1,7 @@
 # OIDC Provider for the EKS cluster in AP account
 resource "aws_iam_openid_connect_provider" "ap_compute_production" {
   client_id_list = ["sts.amazonaws.com"]
-  url            = local.eks_oidc_url
+  url            = var.eks_oidc_url
 }
 
 # Permissions for the GitHub Actions runner
@@ -46,8 +46,8 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "athena:StopQueryExecution"
     ]
     resources = [
-      "arn:aws:athena:*:${local.account_ids["analytical-platform-data-engineering-sandbox-a"]}:datacatalog/*",
-      "arn:aws:athena:*:${local.account_ids["analytical-platform-data-engineering-sandbox-a"]}:workgroup/*"
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:datacatalog/*",
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:workgroup/*"
     ]
   }
   statement {
@@ -72,17 +72,18 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "glue:CreateDatabase"
     ]
     resources = [
-      "arn:aws:glue:*:${local.account_ids["analytical-platform-data-engineering-sandbox-a"]}:schema/*",
-      "arn:aws:glue:*:${local.account_ids["analytical-platform-data-engineering-sandbox-a"]}:database/*",
-      "arn:aws:glue:*:${local.account_ids["analytical-platform-data-engineering-sandbox-a"]}:table/*/*",
-      "arn:aws:glue:*:${local.account_ids["analytical-platform-data-engineering-sandbox-a"]}:catalog"
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:schema/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:database/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:table/*/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:catalog"
     ]
   }
 }
 
 module "create_a_derived_table_iam_policy" {
-  # Commit hash for v5.52.2 - (prevents supply chain attacks)
-  source = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.52.2"
 
   name_prefix = "create-a-derived-table"
@@ -91,8 +92,9 @@ module "create_a_derived_table_iam_policy" {
 
 # Role for the GitHub Actions runner to assume using the OIDC provider
 module "create_a_derived_table_iam_role" {
-  # Commit hash for v5.52.2
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.52.2"
 
   role_name            = "create-a-derived-table"

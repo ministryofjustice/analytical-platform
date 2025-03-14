@@ -19,9 +19,9 @@ terraform {
 provider "aws" {
   region = "eu-west-2"
   assume_role {
-    role_arn = "arn:aws:iam::${local.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
-    tags = local.tags
+    tags = var.tags
   }
 }
