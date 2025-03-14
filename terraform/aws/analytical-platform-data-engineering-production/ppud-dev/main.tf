@@ -39,4 +39,40 @@ module "ppud_dev" {
     ignore_public_acls      = true
     restrict_public_buckets = true
   }
+  attach_policy       = true
+  policy              = jsonencode(
+    {
+      Statement = [
+        {
+          Sid       = "Set-permissions-for-objects"
+          Effect    = "Allow"
+          Principal = {
+            AWS = [
+              "arn:aws:iam::${local.account_ids["ppud-development"]}:role/iam_role_s3_bucket_moj_database_source_dev"
+            ]
+          }
+          Action    = [
+            "s3:ReplicateObject", 
+		        "s3:ReplicateDelete"
+          ]
+          Resource  = "arn:aws:s3:::mojap-data-engineering-production-ppud-dev/*"
+        },
+        {
+          Sid       = "Set-permissions-on-bucket"
+          Effect    = "Allow"
+          Principal = {
+            AWS = [
+              "arn:aws:iam::${local.account_ids["ppud-development"]}:role/iam_role_s3_bucket_moj_database_source_dev"
+            ]
+          }
+          Action    = [
+            "s3:GetBucketVersioning", 
+            "s3:PutBucketVersioning"
+          ]
+          Resource  = "arn:aws:s3:::mojap-data-engineering-production-ppud-dev"
+        }
+      ]
+      Version = "2012-10-17"
+    }
+  )
 }
