@@ -107,6 +107,13 @@ resource "aws_glue_catalog_table" "destination_account_table_resource_link" {
     database_name = each.value.source_database # shared database
     region        = data.aws_region.source.name
   }
+  table_type = "EXTERNAL_TABLE"
+
+  open_table_format_input {
+    iceberg_input {
+      metadata_operation = "CREATE"
+    }
+  }
 
   lifecycle {
     ignore_changes = [
