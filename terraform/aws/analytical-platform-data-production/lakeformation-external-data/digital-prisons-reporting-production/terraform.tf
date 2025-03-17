@@ -3,7 +3,7 @@ terraform {
     acl            = "private"
     bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "aws/analytical-platform-data-production/lakeformation-external-data/digital-prisons-reporting-production/terraform.tfstate"
+    key            = "aws/analytical-platform-data-production/lakeformation-external-data/hmpps-data-hub-production/terraform.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
@@ -27,7 +27,7 @@ provider "aws" {
   alias  = "digital_prisons_reporting_prod_eu_west_2"
   region = "eu-west-2"
   assume_role {
-    role_arn = "arn:aws:iam::${local.account_ids["digital-prisons-reporting-production"]}:role/analytical-platform-data-production-share-role"
+    role_arn = "arn:aws:iam::${local.account_ids["hmpps-data-hub-production"]}:role/analytical-platform-data-production-share-role"
   }
   default_tags {
     tags = var.tags
