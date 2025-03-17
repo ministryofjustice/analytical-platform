@@ -17,7 +17,8 @@ terraform {
 }
 
 provider "aws" {
-  alias = "session"
+  alias  = "session"
+  region = "eu-west-2"
 }
 
 provider "aws" {
