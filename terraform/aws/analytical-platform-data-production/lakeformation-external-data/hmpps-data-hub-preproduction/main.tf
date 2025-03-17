@@ -4,7 +4,7 @@ module "lake_formation_analytical_platform_data_prod" {
 
 
   providers = {
-    aws.source      = aws.digital_prisons_reporting_preprod_eu_west_2
+    aws.source      = aws.hmpps_data_hub_preprod_eu_west_2
     aws.destination = aws
   }
 
