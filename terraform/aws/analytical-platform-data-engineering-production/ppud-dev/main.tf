@@ -39,8 +39,8 @@ module "ppud_dev" {
     ignore_public_acls      = true
     restrict_public_buckets = true
   }
-  attach_policy       = true
-  policy              = jsonencode(
+  attach_policy = true
+  policy = jsonencode(
     {
       Statement = [
         {
@@ -53,7 +53,7 @@ module "ppud_dev" {
           }
           Action = [
             "s3:ReplicateObject",
-		        "s3:ReplicateDelete"
+            "s3:ReplicateDelete"
           ]
           Resource = "arn:aws:s3:::mojap-data-engineering-production-ppud-dev/*"
         },
