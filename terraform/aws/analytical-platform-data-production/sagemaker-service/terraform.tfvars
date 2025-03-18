@@ -11,5 +11,5 @@ tags = {
   is-production          = "true"
   owner                  = "analytical-platform:analytical-platform@digital.justice.gov.uk"
   infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/analytical-platform/terraform/aws/analytical-platform-data-production/airflow-service"
+  source-code            = "github.com/ministryofjustice/analytical-platform/terraform/aws/analytical-platform-data-production/sagemaker-service"
 }
