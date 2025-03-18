@@ -40,7 +40,7 @@ data "aws_iam_policy_document" "create_a_derived_table" {
   }
   statement {
     sid = "readSecrets"
-    effect = "Allow",
+    effect = "Allow"
     actions = [
       "secretsmanager:GetSecretValue",
       "secretsmanager:DescribeSecret",
