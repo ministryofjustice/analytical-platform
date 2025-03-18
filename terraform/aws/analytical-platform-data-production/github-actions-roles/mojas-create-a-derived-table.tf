@@ -39,6 +39,19 @@ data "aws_iam_policy_document" "create_a_derived_table" {
     ]
   }
   statement {
+    sid    = "readSecrets"
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:ListSecrets",
+    ]
+    resources = [
+      "arn:aws:secretsmanager:*:*:secret:/alpha/airflow/airflow_dev_cadet_deployments/cadet-deploy-key/*",
+      "arn:aws:secretsmanager:*:*:secret:/alpha/airflow/airflow_dev_cadet_deployments/slack_bot_key/*"
+    ]
+  }
+  statement {
     sid    = "AthenaAccess"
     effect = "Allow"
     actions = [
