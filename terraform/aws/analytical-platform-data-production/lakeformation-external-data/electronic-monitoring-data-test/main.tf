@@ -109,12 +109,6 @@ resource "aws_glue_catalog_table" "destination_account_table_resource_link" {
   }
   table_type = "EXTERNAL_TABLE"
 
-  open_table_format_input {
-    iceberg_input {
-      metadata_operation = "CREATE"
-    }
-  }
-
   lifecycle {
     ignore_changes = [
       # Change to description  require alter permissions which aren't typicically granted or needed
