@@ -140,7 +140,8 @@ resource "aws_lakeformation_permissions" "grant_account_table_ap_de" {
   permissions = ["SELECT"]
   table {
     database_name = "staged_fms_test_dbt"
-    name          = "account_resource_link"
+    name          = "account"
+    catalog_id    = data.aws_caller_identity.source.account_id
   }
   permissions_with_grant_option = ["SELECT"]
 }
