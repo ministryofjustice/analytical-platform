@@ -143,7 +143,6 @@ resource "aws_lakeformation_permissions" "grant_account_table_ap_de" {
     name          = "account"
     catalog_id    = data.aws_caller_identity.source.account_id
   }
-  permissions_with_grant_option = ["SELECT"]
 }
 
 resource "aws_lakeformation_permissions" "grant_account_database_ap_de" {
@@ -154,7 +153,6 @@ resource "aws_lakeformation_permissions" "grant_account_database_ap_de" {
   database {
     name = "staged_fms_test_dbt_resource_link"
   }
-  permissions_with_grant_option = ["DESCRIBE"]
 }
 
 # resource "aws_lakeformation_permissions" "s3_bucket_permissions_for_ap_ap_de" {
