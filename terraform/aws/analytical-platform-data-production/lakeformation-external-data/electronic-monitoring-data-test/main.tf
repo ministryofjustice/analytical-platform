@@ -137,7 +137,7 @@ resource "aws_lakeformation_permissions" "grant_account_table_ap_de" {
   provider = aws.destination
 
   principal   = "arn:iam::${local.environment_management.account_ids["analytical-platform-data-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_engineering_production_data_eng.names)}"
-  permissions = ["DESCRIBE"]
+  permissions = ["SELECT"]
   table {
     database_name = "staged_fms_test_dbt"
     name          = "account_resource_link"
