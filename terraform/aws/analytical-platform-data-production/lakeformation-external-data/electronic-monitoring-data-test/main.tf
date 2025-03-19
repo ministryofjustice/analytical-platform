@@ -93,7 +93,7 @@ resource "aws_glue_catalog_database" "destination_account_database_resource_link
   }
 }
 
-resource "aws_glue_catalog_table" "destination_account_table_resource_link" {
+# resource "aws_glue_catalog_table" "destination_account_table_resource_link" {
 #   provider = aws.destination
 #   for_each = {
 #     for tbl in local.tables : tbl.source_table => tbl
