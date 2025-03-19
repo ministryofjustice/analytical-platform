@@ -120,30 +120,30 @@ resource "aws_glue_catalog_table" "destination_account_table_resource_link" {
 }
 
 
-# resource "aws_lakeformation_permissions" "grant_account_table_filter_ap_de" {
-#   provider    = aws.destination
-#   principal   = "arn:iam::${local.environment_management.account_ids["analytical-platform-data-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_engineering_production_data_eng.names)}"
-#   permissions = ["SELECT"]
-#   data_cells_filter {
-#     database_name    = "staged_fms_test_dbt"
-#     table_name       = "account_resource_link"
-#     table_catalog_id = data.aws_caller_identity.destination.account_id
-#     name             = "filter-account-acfd15b3547e6c190937dabba14245cdf39af4256bc72fffdb64f9c91e0e1144"
-#   }
-#   permissions_with_grant_option = ["SELECT"]
-# }
-
-resource "aws_lakeformation_permissions" "grant_account_table_ap_de" {
-  provider = aws.destination
-
+resource "aws_lakeformation_permissions" "grant_account_table_filter_ap_de" {
+  provider    = aws.destination
   principal   = "arn:aws:iam::${data.aws_caller_identity.destination.account_id}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.source.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_engineering_production_data_eng.names)}"
   permissions = ["SELECT"]
-  table {
-    database_name = "staged_fms_test_dbt"
-    name          = "account"
-    catalog_id    = data.aws_caller_identity.source.account_id
+  data_cells_filter {
+    database_name    = "staged_fms_test_dbt"
+    table_name       = "account"
+    table_catalog_id = data.aws_caller_identity.source.account_id
+    name             = "filter-account-acfd15b3547e6c190937dabba14245cdf39af4256bc72fffdb64f9c91e0e1144"
   }
+  permissions_with_grant_option = ["SELECT"]
 }
+
+# resource "aws_lakeformation_permissions" "grant_account_table_ap_de" {
+#   provider = aws.destination
+
+#   principal   = "arn:aws:iam::${data.aws_caller_identity.destination.account_id}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.source.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_engineering_production_data_eng.names)}"
+#   permissions = ["SELECT"]
+#   table {
+#     database_name = "staged_fms_test_dbt"
+#     name          = "account"
+#     catalog_id    = data.aws_caller_identity.source.account_id
+#   }
+# }
 
 resource "aws_lakeformation_permissions" "grant_account_database_ap_de" {
   provider = aws.destination
