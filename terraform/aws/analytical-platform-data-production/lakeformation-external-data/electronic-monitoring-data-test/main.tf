@@ -54,7 +54,7 @@ resource "aws_lakeformation_permissions" "share_filtered_data_with_role" {
     database_name    = each.value.source_database
     table_name       = each.key
     table_catalog_id = data.aws_caller_identity.source.account_id
-    name             = local.tables[each.key].data_filter_name
+    name             = each.value.data_sfilter_name
   }
 
 
