@@ -9,11 +9,8 @@ account_ids = {
 
 }
 
-# AP Compute Production
-eks_oidc_url = "https://oidc.eks.eu-west-2.amazonaws.com/id/801920EDEF91E3CAB03E04C03A2DE2BB"
-
 tags = {
-  business-unit          = "Platforms"
+  business-unit          = "Central Digital"
   application            = "Analytical Platform"
   component              = "GitHub Actions Roles"
   environment            = "sandbox"
