@@ -54,7 +54,7 @@ resource "aws_lakeformation_permissions" "share_filtered_data_with_role" {
     database_name    = each.value.source_database
     table_name       = each.key
     table_catalog_id = data.aws_caller_identity.source.account_id
-    name             = "filter-account-acfd15b3547e6c190937dabba14245cdf39af4256bc72fffdb64f9c91e0e1144"
+    name             = each.value.data_filter_name
   }
 
 
@@ -76,7 +76,7 @@ resource "aws_glue_catalog_database" "destination_account_database_resource_link
     for db in local.databases : db.name => db
   }
 
-  name = "${each.key}_resource_link"
+  name = "electronic_monitoring_${each.key}"
 
   target_database {
     catalog_id    = data.aws_caller_identity.source.account_id
@@ -99,8 +99,8 @@ resource "aws_glue_catalog_table" "destination_account_table_resource_link" {
     for tbl in local.tables : tbl.source_table => tbl
   }
 
-  name          = try(each.value.resource_link_name, "${each.key}_resource_link") # what to name the resoruce link in the destintion account
-  database_name = each.value.destination_database.database_name                   # what database to place the resource link into
+  name          = try(each.value.resource_link_name, "em_${each.key}") # what to name the resoruce link in the destintion account
+  database_name = each.value.destination_database.database_name        # what database to place the resource link into
   target_table {
     name          = each.key # the shared database
     catalog_id    = data.aws_caller_identity.source.account_id
