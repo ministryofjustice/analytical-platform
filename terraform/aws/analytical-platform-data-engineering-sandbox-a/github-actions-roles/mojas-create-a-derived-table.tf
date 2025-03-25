@@ -99,7 +99,7 @@ module "create_a_derived_table_iam_role" {
   oidc_providers = {
     analytical-platform-compute-production = {
       provider_arn = format(
-        "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:oidc-provider/%s",
+        "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:oidc-provider/%s",
         trimprefix(jsondecode(data.aws_secretsmanager_secret_version.analytical_platform_compute_cluster_data.secret_string)["analytical-platform-compute-production-oidc-endpoint"], "https://")
       )
       namespace_service_accounts = [
