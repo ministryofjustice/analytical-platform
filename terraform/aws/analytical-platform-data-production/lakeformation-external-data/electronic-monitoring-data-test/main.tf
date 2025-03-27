@@ -123,11 +123,14 @@ resource "aws_glue_catalog_table" "destination_account_table_resource_link" {
 
 resource "aws_lakeformation_permissions" "grant_account_database_ap_de" {
   provider = aws.destination
+  for_each = {
+    for db in local.databases : db.name => db
+  }
 
   principal   = "arn:aws:iam::${data.aws_caller_identity.destination.account_id}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.source.name}/${one(data.aws_iam_roles.data_engineering_team_access_role_data_engineering_production_data_eng.names)}"
   permissions = ["DESCRIBE"]
   database {
-    name = "staged_fms_test_dbt_resource_link"
+    name = "electronic_monitoring_${each.key}"
   }
 }
 
