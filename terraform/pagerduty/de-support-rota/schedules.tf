@@ -54,7 +54,7 @@ locals {
 module "schedules" {
   for_each = { for schedule in local.schedules : schedule.name => schedule }
 
-  source = "./modules/schedule"
+  source = "../modules/schedule"
   name   = each.key
   team   = each.value.team
   layers = each.value.layers

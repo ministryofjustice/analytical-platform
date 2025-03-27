@@ -16,7 +16,7 @@ locals {
 module "teams" {
   for_each = local.teams
 
-  source     = "./modules/team"
+  source     = "../modules/team"
   name       = each.key
   responders = each.value.responders
   depends_on = [module.users]
