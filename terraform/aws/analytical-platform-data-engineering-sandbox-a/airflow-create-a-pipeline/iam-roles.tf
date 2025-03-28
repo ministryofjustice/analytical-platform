@@ -2,7 +2,7 @@ module "airflow_create_a_pipeline_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
-  version = "5.53.0"
+  version = "5.54.0"
 
   name = "github-airflow-create-a-pipeline"
 
