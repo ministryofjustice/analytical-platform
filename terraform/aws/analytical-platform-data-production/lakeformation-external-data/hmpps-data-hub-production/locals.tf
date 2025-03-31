@@ -1,7 +1,7 @@
 locals {
   data_locations = [
     {
-      data_location = "arn:aws:s3:::hmpps-data-hub-structured-historical-production"
+      data_location = "arn:aws:s3:::dpr-structured-historical-production"
       hybrid_access = true
       register      = true
       share         = true
