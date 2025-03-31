@@ -39,7 +39,7 @@ module "ec2" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                      = "terraform-aws-modules/ec2-instance/aws"
-  version                     = "5.7.1"
+  version                     = "5.8.0"
   name                        = local.powerbi_gateway_ec2.instance_name
   ami                         = data.aws_ami.windows_server_2022.id
   instance_type               = local.powerbi_gateway_ec2.instance_type
@@ -92,7 +92,7 @@ module "test_powerbi_ec2" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                      = "terraform-aws-modules/ec2-instance/aws"
-  version                     = "5.7.1"
+  version                     = "5.8.0"
   name                        = "test-data-production-powerbi"
   ami                         = data.aws_ami.windows_server_2022.id
   instance_type               = "t3a.xlarge"
@@ -145,7 +145,7 @@ module "test_powerbi_gateway_ec2" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                      = "terraform-aws-modules/ec2-instance/aws"
-  version                     = "5.7.1"
+  version                     = "5.8.0"
   name                        = "test-gateway-data-production-powerbi"
   ami                         = data.aws_ami.windows_server_2025.id
   instance_type               = "t3a.xlarge"

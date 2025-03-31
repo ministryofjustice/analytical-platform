@@ -11,18 +11,18 @@ locals {
 
   databases = [
     {
-      name        = "staged_fms_test_dbt"
+      name        = "mart_test_dbt"
       permissions = ["DESCRIBE"]
 
     }
   ]
   tables = [
     {
-      source_table         = "account"
-      source_database      = "staged_fms_test_dbt"
-      data_filter_name     = "filter-account-acfd15b3547e6c190937dabba14245cdf39af4256bc72fffdb64f9c91e0e1144"
+      source_table         = "visits"
+      source_database      = "mart_test_dbt"
+      data_filter_name     = "filter-visits"
       permissions          = ["SELECT"]
-      destination_database = { database_name = "staged_fms_test_dbt" }
+      destination_database = { database_name = "mart_test_dbt" }
     }
   ]
 
