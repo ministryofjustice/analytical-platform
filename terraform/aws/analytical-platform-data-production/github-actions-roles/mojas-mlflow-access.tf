@@ -81,7 +81,7 @@ module "mlflow_access_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.54.0"
+  version = "5.54.1"
 
   name_prefix = "github-mlflow-access"
 
@@ -92,7 +92,7 @@ module "mlflow_access_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
-  version = "5.54.0"
+  version = "5.54.1"
 
   name = "github-mlflow-access"
 
