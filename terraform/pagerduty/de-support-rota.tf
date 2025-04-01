@@ -77,14 +77,14 @@ module "schedules-de" {
   team   = each.value.team
   layers = each.value.layers
 
-  depends_on = [module.teams]
+  depends_on = [module.teams-de]
 }
 
 locals {
   teams = {
     "Data Engineering Support Team" = {
       responders = {
-        for user in local.users :
+        for user in local.users-de :
         user.email => {
           name = user.name
           id   = module.users[user.email].id
@@ -96,7 +96,7 @@ locals {
 }
 
 module "teams-de" {
-  for_each = local.teams-de
+  for_each = local.teams
 
   source     = "../modules/team"
   name       = each.key
@@ -105,7 +105,7 @@ module "teams-de" {
 }
 
 locals {
-  users = [
+  users-de = [
     {
       name  = "Guy Wheeler"
       email = "guy.wheeler@justice.gov.uk"
