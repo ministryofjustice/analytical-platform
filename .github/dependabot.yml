@@ -44,7 +44,6 @@ updates:
       - "terraform/auth0/dev-analytics-moj"
       - "terraform/auth0/ministryofjustice-data-platform"
       - "terraform/auth0/ministryofjustice-data-platform-development"
-      - "terraform/aws/analytical-platform-data-engineering-production/10ds"
       - "terraform/aws/analytical-platform-data-engineering-production/ppud-dev"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/airflow-create-a-pipeline"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/github-actions-roles"
