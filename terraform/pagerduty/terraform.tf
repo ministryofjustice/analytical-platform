@@ -14,7 +14,7 @@ terraform {
     }
     pagerduty = {
       source  = "pagerduty/pagerduty"
-      version = "3.21.0"
+      version = "3.23.1"
     }
   }
   required_version = "~> 1.5"
