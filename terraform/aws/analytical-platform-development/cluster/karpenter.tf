@@ -128,7 +128,7 @@ module "iam_karpenter_controller_irsa" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                         = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                        = "5.54.0"
+  version                        = "5.54.1"
   create_role                    = true
   role_name_prefix               = "karpenter_controller"
   provider_url                   = module.eks.cluster_oidc_issuer_url
