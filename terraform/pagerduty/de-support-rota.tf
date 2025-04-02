@@ -81,7 +81,7 @@ module "schedules-de" {
 }
 
 locals {
-  teams = {
+  teams-de = {
     "Data Engineering Support Team" = {
       responders = {
         for user in local.users-de :
@@ -96,7 +96,7 @@ locals {
 }
 
 module "teams-de" {
-  for_each = local.teams
+  for_each = local.teamsteams-de
 
   source     = "../modules/team"
   name       = each.key
