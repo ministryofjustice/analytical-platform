@@ -709,7 +709,8 @@ locals {
                 "arn:aws:s3:::mojap-land",
                 "arn:aws:s3:::mojap-land/bold/essex-police/*",
                 "arn:aws:s3:::mojap-land/sscl/sscl_data_dump/*",
-                "arn:aws:s3:::mojap-land/cps/*"
+                "arn:aws:s3:::mojap-land/cps/*",
+                "arn:aws:s3:::mojap-land/property/planetfm/backupfiles/*"
               ]
             },
             {
