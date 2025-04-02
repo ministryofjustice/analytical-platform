@@ -2,7 +2,7 @@ locals {
   schedules-de-loc = [
     {
       name = "Data Engineering Support"
-      team = module.teams["Data Engineering Support Team"].id
+      team = module.teams-de["Data Engineering Support Team"].id
       layers = [
         {
           name                         = "Daily Support Rota"
@@ -10,8 +10,8 @@ locals {
           rotation_virtual_start       = "2024-09-20T09:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users["guy.wheeler@justice.gov.uk"].id,
-            module.users["thomas.hepworth@justice.gov.uk"].id,
+            module.users-de["guy.wheeler@justice.gov.uk"].id,
+            module.users-de["thomas.hepworth@justice.gov.uk"].id,
           ]
           restrictions = [
             {
