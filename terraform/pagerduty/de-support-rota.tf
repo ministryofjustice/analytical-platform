@@ -17,7 +17,7 @@ data "aws_secretsmanager_secret_version" "pagerduty_token" {
 }
 
 locals {
-  schedules = [
+  schedules-de = [
     {
       name = "Data Engineering Support"
       team = module.teams["Data Engineering Support Team"].id
@@ -70,9 +70,9 @@ locals {
 }
 
 module "schedules-de" {
-  for_each = { for schedule in local.schedules : schedule.name => schedule }
+  for_each = { for schedule in local.schedules-de : schedule.name => schedule }
 
-  source = "../modules/schedules-de"
+  source = "../modules/schedules"
   name   = each.key
   team   = each.value.team
   layers = each.value.layers
@@ -96,7 +96,7 @@ locals {
 }
 
 module "teams-de" {
-  for_each = local.teamsteams-de
+  for_each = local.teams-de
 
   source     = "../modules/team"
   name       = each.key
