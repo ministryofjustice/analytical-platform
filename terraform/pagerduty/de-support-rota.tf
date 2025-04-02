@@ -10,8 +10,8 @@ locals {
           rotation_virtual_start       = "2024-09-20T09:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users_de["guy.wheeler@justice.gov.uk"].id,
-            module.users_de["thomas.hepworth@justice.gov.uk"].id,
+            module.users_de_seo["guy.wheeler@justice.gov.uk"].id,
+            module.users_de_seo["thomas.hepworth@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -117,7 +117,7 @@ locals {
         for user in local.users_de_seo :
         user.email => {
           name = user.name
-          id   = module.users_de[user.email].id
+          id   = module.users_de_seo[user.email].id
         }
         if user.role == "responder"
       }
