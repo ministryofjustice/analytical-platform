@@ -69,7 +69,7 @@ locals {
         for user in local.users-de :
         user.email => {
           name = user.name
-          id   = module.users[user.email].id
+          id   = module.users-de[user.email].id
         }
         if user.role == "responder"
       }
