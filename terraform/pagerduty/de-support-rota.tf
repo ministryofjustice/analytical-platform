@@ -1,5 +1,5 @@
 locals {
-  schedules-de = [
+  schedules-de-loc = [
     {
       name = "Data Engineering Support"
       team = module.teams["Data Engineering Support Team"].id
@@ -51,8 +51,8 @@ locals {
   ]
 }
 
-module "schedules" {
-  for_each = { for schedule in local.schedules-de : schedule.name => schedule }
+module "schedules-de" {
+  for_each = { for schedule in local.schedules-de-loc : schedule.name => schedule }
 
   source = "./modules/schedules"
   name   = each.key
