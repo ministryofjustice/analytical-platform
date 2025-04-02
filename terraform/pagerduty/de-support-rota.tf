@@ -1,21 +1,3 @@
-data "aws_caller_identity" "session" {
-  provider = aws.session
-}
-
-data "aws_iam_session_context" "session" {
-  provider = aws.session
-
-  arn = data.aws_caller_identity.session.arn
-}
-
-data "aws_secretsmanager_secret" "pagerduty_token" {
-  name = "pagerduty-token"
-}
-
-data "aws_secretsmanager_secret_version" "pagerduty_token" {
-  secret_id = data.aws_secretsmanager_secret.pagerduty_token.id
-}
-
 locals {
   schedules-de = [
     {
@@ -72,7 +54,7 @@ locals {
 module "schedules-de" {
   for_each = { for schedule in local.schedules-de : schedule.name => schedule }
 
-  source = "../modules/schedules"
+  source = "./modules/schedules"
   name   = each.key
   team   = each.value.team
   layers = each.value.layers
@@ -98,7 +80,7 @@ locals {
 module "teams-de" {
   for_each = local.teams-de
 
-  source     = "../modules/team"
+  source     = "./modules/team"
   name       = each.key
   responders = each.value.responders
   depends_on = [module.users]
@@ -122,7 +104,7 @@ locals {
 module "users-de" {
   for_each = { for user in local.users-de : user.email => user }
 
-  source = "../modules/user"
+  source = "./modules/user"
   name   = each.value.name
   email  = each.key
 }
