@@ -1,8 +1,8 @@
 locals {
-  schedules-de-loc = [
+  schedules_de_loc = [
     {
       name = "Data Engineering Support"
-      team = module.teams-de["Data Engineering Support Team"].id
+      team = module.teams_de["Data Engineering Support Team"].id
       layers = [
         {
           name                         = "Daily Support Rota"
@@ -10,8 +10,8 @@ locals {
           rotation_virtual_start       = "2024-09-20T09:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users-de["guy.wheeler@justice.gov.uk"].id,
-            module.users-de["thomas.hepworth@justice.gov.uk"].id,
+            module.users_de["guy.wheeler@justice.gov.uk"].id,
+            module.users_de["thomas.hepworth@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -51,25 +51,25 @@ locals {
   ]
 }
 
-module "schedules-de" {
-  for_each = { for schedule in local.schedules-de-loc : schedule.name => schedule }
+module "schedules_de" {
+  for_each = { for schedule in local.schedules_de_loc : schedule.name => schedule }
 
   source = "./modules/schedule"
   name   = each.key
   team   = each.value.team
   layers = each.value.layers
 
-  depends_on = [module.teams-de]
+  depends_on = [module.teams_de]
 }
 
 locals {
-  teams-de = {
+  teams_de = {
     "Data Engineering Support Team" = {
       responders = {
-        for user in local.users-de :
+        for user in local.users_de :
         user.email => {
           name = user.name
-          id   = module.users-de[user.email].id
+          id   = module.users_de[user.email].id
         }
         if user.role == "responder"
       }
@@ -77,8 +77,8 @@ locals {
   }
 }
 
-module "teams-de" {
-  for_each = local.teams-de
+module "teams_de" {
+  for_each = local.teams_de
 
   source     = "./modules/team"
   name       = each.key
@@ -87,7 +87,7 @@ module "teams-de" {
 }
 
 locals {
-  users-de = [
+  users_de = [
     {
       name  = "Guy Wheeler"
       email = "guy.wheeler@justice.gov.uk"
@@ -101,8 +101,8 @@ locals {
   ]
 }
 
-module "users-de" {
-  for_each = { for user in local.users-de : user.email => user }
+module "users_de" {
+  for_each = { for user in local.users_de : user.email => user }
 
   source = "./modules/user"
   name   = each.value.name
