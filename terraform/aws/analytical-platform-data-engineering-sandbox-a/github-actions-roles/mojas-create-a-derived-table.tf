@@ -5,8 +5,8 @@ data "aws_iam_policy_document" "create_a_derived_table" {
     actions = [
       "s3:List*",
       "s3:Get*",
-      "s3:Delete*",
-      "s3:Put*"
+      "s3:DeleteObject*",
+      "s3:PutObject*"
     ]
     resources = [
       "arn:aws:s3:::dbt-tables-sandbox/*",
