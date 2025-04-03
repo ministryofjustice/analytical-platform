@@ -97,20 +97,7 @@ locals {
       ]
     }
   ]
-}
 
-module "schedules_de" {
-  for_each = { for schedule in local.schedules_de_loc : schedule.name => schedule }
-
-  source = "./modules/schedule"
-  name   = each.key
-  team   = each.value.team
-  layers = each.value.layers
-
-  depends_on = [module.teams_de]
-}
-
-locals {
   teams_de = {
     "Data Engineering Support SEO" = {
       responders = {
@@ -133,18 +120,7 @@ locals {
       }
     }
   }
-}
 
-module "teams_de" {
-  for_each = local.teams_de
-
-  source     = "./modules/team"
-  name       = each.key
-  responders = each.value.responders
-  depends_on = [module.users_de_seo, module.users_de_g7]
-}
-
-locals {
   users_de_seo = [
     {
       name  = "Guy Wheeler"
@@ -157,17 +133,7 @@ locals {
       role  = "responder"
     }
   ]
-}
 
-module "users_de_seo" {
-  for_each = { for user in local.users_de_seo : user.email => user }
-
-  source = "./modules/user"
-  name   = each.value.name
-  email  = each.key
-}
-
-locals {
   users_de_g7 = [
     {
       name  = "Matt Heery"
@@ -182,10 +148,53 @@ locals {
   ]
 }
 
+module "schedules_de" {
+  for_each = { for schedule in local.schedules_de_loc : schedule.name => schedule }
+
+  source = "./modules/schedule"
+  name   = each.key
+  team   = each.value.team
+  layers = each.value.layers
+
+  depends_on = [module.teams_de]
+}
+
+module "teams_de" {
+  for_each = local.teams_de
+
+  source     = "./modules/team"
+  name       = each.key
+  responders = each.value.responders
+  depends_on = [module.users_de_seo, module.users_de_g7]
+}
+
+module "users_de_seo" {
+  for_each = { for user in local.users_de_seo : user.email => user }
+
+  source = "./modules/user"
+  name   = each.value.name
+  email  = each.key
+}
+
 module "users_de_g7" {
   for_each = { for user in local.users_de_g7 : user.email => user }
 
   source = "./modules/user"
   name   = each.value.name
   email  = each.key
+}
+
+import {
+  to = module.users_de_seo["guy.wheeler@justice.gov.uk"].pagerduty_user.this
+  id = "PWL9H7T"
+}
+
+import {
+  to = module.users_de_g7["matt.heery@justice.gov.uk"].pagerduty_user.this
+  id = "PKCT98I"
+}
+
+import {
+  to = module.users_de_seo["thomas.hepworth@justice.gov.uk"].pagerduty_user.this
+  id = "PIAKE2C"
 }
