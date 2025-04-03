@@ -6,7 +6,7 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "s3:List*",
       "s3:Get*",
       "s3:Delete*",
-      "s3:PutObject*"
+      "s3:Put*"
     ]
     resources = [
       "arn:aws:s3:::dbt-tables-sandbox/*",
