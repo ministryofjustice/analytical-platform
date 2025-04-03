@@ -4,8 +4,7 @@ data "aws_iam_policy_document" "create_a_derived_table" {
     effect = "Allow"
     actions = [
       "s3:List*",
-      "s3:GetObject*",
-      "s3:GetBucket*",
+      "s3:Get*",
       "s3:DeleteObject*",
       "s3:PutObject*"
     ]
@@ -62,6 +61,7 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "glue:CreatePartition",
       "glue:CreatePartitionIndex",
       "glue:BatchCreatePartition",
+      "glue:BatchDeletePartition",
       "glue:CreateDatabase"
     ]
     resources = [
