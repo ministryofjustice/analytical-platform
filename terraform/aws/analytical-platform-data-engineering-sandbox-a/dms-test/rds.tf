@@ -21,7 +21,7 @@ resource "aws_db_instance" "dms_test" {
   allocated_storage           = 10
   db_name                     = "DMSTEST"
   engine                      = "oracle-ee"
-  engine_version              = "19.0.0.0.ru-2024-10.rur-2024-10.r1"
+  engine_version              = "19.0.0.0.ru-2025-01.rur-2025-01.r1"
   instance_class              = "db.t3.small"
   username                    = "admin"
   manage_master_user_password = true
