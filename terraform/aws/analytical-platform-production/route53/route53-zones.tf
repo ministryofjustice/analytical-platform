@@ -5,7 +5,7 @@ module "route53_zones" {
   #checkov:skip=CKV2_AWS_39:Will address in the future, this is just an import of the zone
 
   source  = "terraform-aws-modules/route53/aws//modules/zones"
-  version = "4.1.0"
+  version = "5.0.0"
 
   zones = {
     "analytical-platform.service.justice.gov.uk" = {
