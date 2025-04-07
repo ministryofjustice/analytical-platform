@@ -4,12 +4,12 @@ account_ids = {
 }
 
 tags = {
-  business-unit          = "Platforms"
+  business-unit          = "Central Digital"
   application            = "Analytical Platform"
   component              = "ingestion-ingress"
   environment            = "production"
   is-production          = "true"
   owner                  = "analytical-platform:analytical-platform@digital.justice.gov.uk"
   infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/ingestion-ingress"
+  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/ingestion-ingress/dms"
 }
