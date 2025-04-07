@@ -1,13 +1,18 @@
 data "aws_iam_policy_document" "dms_ingress_iam_policy" {
   statement {
-    sid    = "AllowGlueAccess"
+    sid    = "AllowDMSGlueAccess"
     effect = "Allow"
     actions = [
       "glue:GetTable",
       "glue:CreateTable",
       "glue:UpdateTable",
-      "glue:CreateDatabase",
-      "glue:UpdateDatabase"
+      "glue:GetDatabase",
+      "glue:CreateDatabase"
+    ]
+    resources = [
+      "arn:aws:glue:eu-west-2:${var.account_ids["analytical-platform-data-production"]}:catalog",
+      "arn:aws:glue:eu-west-2:${var.account_ids["analytical-platform-data-production"]}:database/cica_tariff",
+      "arn:aws:glue:eu-west-2:${var.account_ids["analytical-platform-data-production"]}:table/cica_tariff/*"
     ]
   }
 }
