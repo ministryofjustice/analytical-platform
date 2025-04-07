@@ -143,3 +143,15 @@ module "production_s3" {
     }
   }
 }
+
+
+module "test_s3" {
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "4.6.0"
+
+  bucket        = "test_bucket"
+  force_destroy = true
+
+  versioning = {
+    enabled = true
+  }
