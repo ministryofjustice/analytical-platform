@@ -6,7 +6,7 @@ account_ids = {
 }
 
 tags = {
-  business-unit          = "Platforms"
+  business-unit          = "Central Digital"
   application            = "Analytical Platform"
   component              = "ingestion-ingress/dms"
   environment            = "production"
