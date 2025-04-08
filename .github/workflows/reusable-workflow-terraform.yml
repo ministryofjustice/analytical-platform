@@ -117,25 +117,27 @@ jobs:
               issue_number: context.issue.number,
             })
 
+            // Find previous bot comment with the same marker
             const botComment = comments.find(comment => {
               return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.component }}_static_analysis')
             })
 
+            // Delete previous comment if it exists
             if (botComment) {
-              github.rest.issues.updateComment({
+              await github.rest.issues.deleteComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: output
-              })
-            } else {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
+                comment_id: botComment.id
               })
             }
+
+            // Create new comment
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
 
       - name: Process Outcomes
         if: github.ref != 'refs/heads/main'
@@ -283,25 +285,27 @@ jobs:
               issue_number: context.issue.number,
             })
 
+            // Find previous bot comment with the same marker
             const botComment = comments.find(comment => {
               return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.component }}_plan')
             })
 
+            // Delete previous comment if it exists
             if (botComment) {
-              github.rest.issues.updateComment({
+              await github.rest.issues.deleteComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: output
-              })
-            } else {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
+                comment_id: botComment.id
               })
             }
+
+            // Create new comment
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
 
       - name: Process Outcomes
         if: github.ref != 'refs/heads/main'
