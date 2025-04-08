@@ -17,7 +17,7 @@ module "development_s3" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.6.0"
 
-  bucket        = "mojap-data-production-bold-egress-development"
+  bucket        = "mojap-data-production-bold-egress-development-gary"
   force_destroy = true
 
   versioning = {
