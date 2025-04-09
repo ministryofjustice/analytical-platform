@@ -70,7 +70,7 @@ module "test_dms_implementation" {
       full_load =  "test-dms-full-load"
       cdc = "test-dms-cdc"
     }
-    dms_mapping_rules     = file("${path.module}/test_mappings.json")
+    dms_mapping_rules     = "test_mappings.json"
     #output_bucket         = module.test_dms_rawhist
 
     tags = local.tags
@@ -79,5 +79,5 @@ module "test_dms_implementation" {
     # write_metadata_to_glue_catalog            = false
     # retry_failed_after_recreate_metadata      = true
     # valid_files_mutable                       = true
-    #glue_catalog_arn                          = local.environment_configuration.ap_data_glue_catalog_arn
+    glue_catalog_arn                          = "arn:aws:glue:eu-west-1:684969100054:catalog"
 }
