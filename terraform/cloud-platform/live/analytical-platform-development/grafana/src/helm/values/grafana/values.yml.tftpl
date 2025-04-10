@@ -1,0 +1,128 @@
+---
+rbac:
+  create: false
+
+serviceAccount:
+  create: false
+  name: grafana-irsa # Provided by cloud-platform-irsa module
+
+# init container runs as 0, unsure if this is needed anyway
+initChownData:
+  enabled: false
+
+ingress:
+  enabled: true
+  ingressClassName: default
+  annotations:
+    external-dns.alpha.kubernetes.io/aws-weight: "100"
+    external-dns.alpha.kubernetes.io/set-identifier: "grafana-analytical-platform-development-green"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "35.176.93.186/32" # GlobalProtect
+  pathType: ImplementationSpecific
+  hosts:
+    - grafana-analytical-platform-development.apps.live.cloud-platform.service.justice.gov.uk
+
+serviceMonitor:
+  enabled: true
+
+env:
+  GF_AUTH_GITHUB_CLIENT_ID: ${github_client_id}
+  GF_AUTH_GITHUB_CLIENT_SECRET: ${github_client_secret}
+
+envValueFrom:
+  GF_DATABASE_HOST:
+    secretKeyRef:
+      name: grafana-rds
+      key: rds_instance_endpoint
+  GF_DATABASE_NAME:
+    secretKeyRef:
+      name: grafana-rds
+      key: database_name
+  GF_DATABASE_USER:
+    secretKeyRef:
+      name: grafana-rds
+      key: database_username
+  GF_DATABASE_PASSWORD:
+    secretKeyRef:
+      name: grafana-rds
+      key: database_password
+
+plugins:
+  - grafana-amazonprometheus-datasource
+
+grafana.ini:
+  app_mode: production
+  instance_name: development
+  database:
+    type: postgres
+    ssl_mode: require
+  auth:
+    disable_login_form: true
+  auth.github:
+    enabled: true
+    allow_sign_up: true
+    auto_login: true
+    allowed_organizations: ${github_organisation}
+    role_attribute_path: "contains(groups[*], '@${github_organisation}/${github_admin_team}') && 'GrafanaAdmin' || 'Viewer'"
+    team_ids: ${github_team_ids}
+  auth.basic:
+    enabled: false
+  news:
+    news_feed_enabled: false
+  security:
+    disable_initial_admin_creation: true
+  server:
+    root_url: https://grafana-analytical-platform-development.apps.live.cloud-platform.service.justice.gov.uk
+
+persistence:
+  enabled: false # Disabled because CP SA doesn't have access to persistent volume claims
+  size: 10Gi
+  storageClassName: gp3
+
+sidecar:
+  datasources:
+    enabled: true
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      # Analytical Platform Compute Development
+      ## CloudWatch
+      - name: analytical-platform-compute-development-cloudwatch
+        type: cloudwatch
+        access: proxy
+        uid: mojap-compute-development-cloudwatch
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::381491960855:role/analytical-platform-observability
+      ## Prometheus
+      - name: analytical-platform-compute-development-prometheus
+        type: grafana-amazonprometheus-datasource
+        access: proxy
+        uid: mojap-compute-development-prometheus
+        isDefault: false
+        url: https://aps-workspaces.eu-west-2.amazonaws.com/workspaces/ws-bfdd5d7a-5571-4686-bfd4-43ab07cf8d54ba
+        jsonData:
+          sigV4Region: eu-west-2
+          sigV4AssumeRoleArn: arn:aws:iam::381491960855:role/analytical-platform-observability
+      # Analytical Platform Compute Production
+      ## CloudWatch
+      - name: analytical-platform-compute-production-cloudwatch
+        type: cloudwatch
+        access: proxy
+        uid: mojap-compute-production-cloudwatch
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::992382429243:role/analytical-platform-observability
+      # Analytical Platform Compute Test
+      ## CloudWatch
+      - name: analytical-platform-compute-test-cloudwatch
+        type: cloudwatch
+        access: proxy
+        uid: mojap-compute-test-cloudwatch
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::767397661611:role/analytical-platform-observability
