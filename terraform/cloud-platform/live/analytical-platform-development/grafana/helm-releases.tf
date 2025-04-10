@@ -22,10 +22,3 @@ resource "helm_release" "grafana" {
     )
   ]
 }
-
-# To retrieve a team ID, you need to do the following:
-# $ aws-sso exec --profile analytical-platform-management-production:AdministratorAccess
-# $ GH_TOKEN=$(aws --region eu-west-1 secretsmanager get-secret-value --secret-id github-token | jq -r '.SecretString') gh api /orgs/ministryofjustice/teams/${TEAM_NAME} | jq -r '.id'
-# analytical-platform-engineers: 12120135
-# analytical-platform-airflow:   12120137
-# data-engineering:              8205153
