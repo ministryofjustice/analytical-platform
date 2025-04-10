@@ -16,7 +16,8 @@ resource "helm_release" "grafana" {
         github_team_ids = join(",", [
           data.github_team.analytical_platform_engineers.id,
           data.github_team.analytical_platform_airflow.id,
-          data.github_team.data_engineering.id
+          data.github_team.data_engineering.id,
+          data.github_team.probation_data_science.id
         ])
       }
     )

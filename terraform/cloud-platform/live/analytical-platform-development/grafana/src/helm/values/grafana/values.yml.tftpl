@@ -48,6 +48,9 @@ envValueFrom:
 
 plugins:
   - grafana-amazonprometheus-datasource
+  - grafana-athena-datasource
+  - grafana-github-datasource
+  - grafana-x-ray-datasource
 
 grafana.ini:
   app_mode: production
@@ -96,6 +99,7 @@ datasources:
         jsonData:
           defaultRegion: eu-west-2
           assumeRoleArn: arn:aws:iam::381491960855:role/analytical-platform-observability
+          tracingDatasourceUid: mojap-compute-development-xray
       ## Prometheus
       - name: analytical-platform-compute-development-prometheus
         type: grafana-amazonprometheus-datasource
@@ -109,6 +113,15 @@ datasources:
           sigV4AuthType: default
           sigV4Region: eu-west-2
           sigV4AssumeRoleArn: arn:aws:iam::381491960855:role/analytical-platform-observability
+      ## X-Ray
+      - name: analytical-platform-compute-development-xray
+        type: grafana-x-ray-datasource
+        access: proxy
+        uid: mojap-compute-development-xray
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::381491960855:role/analytical-platform-observability
 
 
       ##### Analytical Platform Compute Production #####
@@ -121,6 +134,7 @@ datasources:
         jsonData:
           defaultRegion: eu-west-2
           assumeRoleArn: arn:aws:iam::992382429243:role/analytical-platform-observability
+          tracingDatasourceUid: mojap-compute-production-xray
       ## Prometheus
       - name: analytical-platform-compute-production-prometheus
         type: grafana-amazonprometheus-datasource
@@ -134,6 +148,15 @@ datasources:
           sigV4AuthType: default
           sigV4Region: eu-west-2
           sigV4AssumeRoleArn: arn:aws:iam::992382429243:role/analytical-platform-observability
+      ## X-Ray
+      - name: analytical-platform-compute-production-xray
+        type: grafana-x-ray-datasource
+        access: proxy
+        uid: mojap-compute-production-xray
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::992382429243:role/analytical-platform-observability
 
 
       ##### Analytical Platform Compute Test #####
@@ -146,6 +169,7 @@ datasources:
         jsonData:
           defaultRegion: eu-west-2
           assumeRoleArn: arn:aws:iam::767397661611:role/analytical-platform-observability
+          tracingDatasourceUid: mojap-compute-test-xray
       ## Prometheus
       - name: analytical-platform-compute-test-prometheus
         type: grafana-amazonprometheus-datasource
@@ -159,3 +183,12 @@ datasources:
           sigV4AuthType: default
           sigV4Region: eu-west-2
           sigV4AssumeRoleArn: arn:aws:iam::767397661611:role/analytical-platform-observability
+      ## X-Ray
+      - name: analytical-platform-compute-test-xray
+        type: grafana-x-ray-datasource
+        access: proxy
+        uid: mojap-compute-test-xray
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::767397661611:role/analytical-platform-observability
