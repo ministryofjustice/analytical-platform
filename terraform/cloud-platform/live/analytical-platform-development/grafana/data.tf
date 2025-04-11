@@ -48,6 +48,10 @@ data "github_team" "probation_data_science" {
   slug = "probation-data-science"
 }
 
+data "github_team" "probation_integration" {
+  slug = "probation-integration"
+}
+
 data "aws_secretsmanager_secret_version" "analytical_platform_grafana_development_github_client_id" {
   provider = aws.analytical-platform-management-production
 
