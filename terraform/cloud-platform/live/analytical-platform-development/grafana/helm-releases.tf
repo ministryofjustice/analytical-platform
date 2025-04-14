@@ -9,6 +9,7 @@ resource "helm_release" "grafana" {
     templatefile(
       "${path.module}/src/helm/values/grafana/values.yml.tftpl",
       {
+        namespace            = var.namespace,
         github_client_id     = data.aws_secretsmanager_secret_version.analytical_platform_grafana_development_github_client_id.secret_string
         github_client_secret = data.aws_secretsmanager_secret_version.analytical_platform_grafana_development_github_client_secret.secret_string
         github_organisation  = "ministryofjustice"

@@ -15,11 +15,10 @@ ingress:
   ingressClassName: default
   annotations:
     external-dns.alpha.kubernetes.io/aws-weight: "100"
-    external-dns.alpha.kubernetes.io/set-identifier: "grafana-analytical-platform-development-green"
-    nginx.ingress.kubernetes.io/whitelist-source-range: "35.176.93.186/32" # GlobalProtect
+    external-dns.alpha.kubernetes.io/set-identifier: "grafana-${namespace}-green"
   pathType: ImplementationSpecific
   hosts:
-    - grafana-analytical-platform-development.apps.live.cloud-platform.service.justice.gov.uk
+    - grafana-${namespace}.apps.live.cloud-platform.service.justice.gov.uk
 
 serviceMonitor:
   enabled: true
@@ -74,10 +73,10 @@ grafana.ini:
   security:
     disable_initial_admin_creation: true
   server:
-    root_url: https://grafana-analytical-platform-development.apps.live.cloud-platform.service.justice.gov.uk
+    root_url: https://grafana-${namespace}.apps.live.cloud-platform.service.justice.gov.uk
 
 persistence:
-  enabled: false # Disabled because CP SA doesn't have access to persistent volume claims
+  enabled: true
   size: 10Gi
   storageClassName: gp3
 
