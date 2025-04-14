@@ -278,6 +278,7 @@ resource "aws_iam_policy" "lake_formation_data_access" {
 }
 
 #trivy:ignore:aws-iam-no-policy-wildcards
+#trivy:ignore:AVD-AWS-0342
 data "aws_iam_policy_document" "comprehend_integration" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
