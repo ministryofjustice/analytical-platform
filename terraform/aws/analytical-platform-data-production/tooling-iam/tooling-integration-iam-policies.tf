@@ -276,3 +276,150 @@ resource "aws_iam_policy" "lake_formation_data_access" {
   name   = "lake-formation-data-access-additional"
   policy = data.aws_iam_policy_document.lake_formation_data_access.json
 }
+
+#trivy:ignore:aws-iam-no-policy-wildcards
+data "aws_iam_policy_document" "comprehend_integration" {
+  #checkov:skip=CKV_AWS_111: This is a service policy
+  #checkov:skip=CKV_AWS_356: Needs to access multiple resources
+  #checkov:skip=CKV_AWS_109: Needs to access multiple resources
+
+  statement {
+    sid    = "AnalyticalPlatformComprehendIntegration"
+    effect = "Allow"
+    actions = [
+      "comprehend:DetectEntities",
+      "comprehend:DetectKeyPhrases",
+      "comprehend:DetectDominantLanguage",
+      "comprehend:DetectSentiment",
+      "comprehend:DetectTargetedSentiment",
+      "comprehend:DetectSyntax",
+      "comprehend:StartDominantLanguageDetectionJob",
+      "comprehend:StartEntitiesDetectionJob",
+      "comprehend:StartKeyPhrasesDetectionJob",
+      "comprehend:StartSentimentDetectionJob",
+      "comprehend:StartTargetedSentimentDetectionJob",
+      "comprehend:StartTopicsDetectionJob",
+      "comprehend:DescribeTopicsDetectionJob",
+      "comprehend:ListTopicsDetectionJobs",
+      "comprehend:DescribeEntitiesDetectionJob",
+      "comprehend:ListEntitiesDetectionJobs",
+      "comprehend:DescribeSentimentDetectionJob",
+      "comprehend:ListSentimentDetectionJobs",
+      "comprehend:DescribeTargetedSentimentDetectionJob",
+      "comprehend:ListTargetedSentimentDetectionJobs",
+      "comprehend:DescribeDominantLanguageDetectionJob",
+      "comprehend:ListDominantLanguageDetectionJobs",
+      "comprehend:DescribeKeyPhrasesDetectionJob",
+      "comprehend:ListKeyPhrasesDetectionJobs",
+      "textract:DetectDocumentText",
+      "textract:AnalyzeDocument"
+    ]
+    resources = ["*"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:RequestedRegion"
+      values = [
+        "eu-west-1",
+        "eu-west-2"
+      ]
+    }
+  }
+
+  statement {
+    sid       = "ComprehendPassRole"
+    effect    = "Allow"
+    actions   = ["iam:PassRole"]
+    resources = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/comprehend-batch-processing-role"]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["comprehend.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_policy" "comprehend_integration" {
+  name        = "analytical-platform-comprehend-integration"
+  description = "Permissions needed to use Comprehend APIs and pass batch processing role."
+  policy      = data.aws_iam_policy_document.comprehend_integration.json
+}
+
+##################################################
+# Comprehend Batch Processing Role
+##################################################
+
+#trivy:ignore:aws-iam-no-policy-wildcards
+data "aws_iam_policy_document" "comprehend_batch_processing_assume_role" {
+  #checkov:skip=CKV_AWS_111: This is a service policy
+  #checkov:skip=CKV_AWS_356: Needs to access multiple resources
+  #checkov:skip=CKV_AWS_109: Needs to access multiple resources
+  statement {
+    sid     = "AllowComprehendAssumeRoleForBatchProcessing"
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["comprehend.amazonaws.com"]
+    }
+    # Add security constraints
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = ["arn:aws:comprehend:*:${data.aws_caller_identity.current.account_id}:*"]
+    }
+  }
+}
+
+resource "aws_iam_role" "comprehend_batch_processing" {
+  name               = "comprehend-batch-processing-role"
+  description        = "Role for AWS Comprehend service to perform batch processing tasks."
+  assume_role_policy = data.aws_iam_policy_document.comprehend_batch_processing_assume_role.json
+}
+
+#trivy:ignore:aws-iam-no-policy-wildcards
+data "aws_iam_policy_document" "comprehend_batch_processing_s3_access" {
+  #checkov:skip=CKV_AWS_111: This is a service policy
+  #checkov:skip=CKV_AWS_356: Needs to access multiple resources
+  #checkov:skip=CKV_AWS_109: Needs to access multiple resources
+  statement {
+    sid    = "ComprehendBatchProcessingS3Access"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:ListBucket",
+    ]
+    resources = [
+      "arn:aws:s3:::*"
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceAccount"
+      values = [
+        data.aws_caller_identity.current.account_id
+      ]
+    }
+  }
+}
+
+resource "aws_iam_policy" "comprehend_batch_processing_s3_access" {
+  name        = "comprehend-batch-processing-s3-access"
+  description = "S3 access policy for Comprehend batch processing."
+  policy      = data.aws_iam_policy_document.comprehend_batch_processing_s3_access.json
+}
+
+resource "aws_iam_role_policy_attachment" "comprehend_batch_processing_s3_access" {
+  role       = aws_iam_role.comprehend_batch_processing.name
+  policy_arn = aws_iam_policy.comprehend_batch_processing_s3_access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "comprehend_batch_processing" {
+  role       = aws_iam_role.comprehend_batch_processing.name
+  policy_arn = aws_iam_policy.comprehend_integration.arn
+}
