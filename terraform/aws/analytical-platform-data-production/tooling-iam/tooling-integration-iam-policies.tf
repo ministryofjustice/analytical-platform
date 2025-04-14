@@ -396,7 +396,10 @@ data "aws_iam_policy_document" "comprehend_batch_processing_s3_access" {
       "s3:ListBucket",
     ]
     resources = [
-      "arn:aws:s3:::*"
+      "arn:aws:s3:::alpha-*",
+      "arn:aws:s3:::mojap-*",
+      "arn:aws:s3:::alpha-*/*",
+      "arn:aws:s3:::mojap-*/*",
     ]
 
     condition {
