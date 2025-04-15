@@ -1,7 +1,6 @@
+#trivy:ignore:avd-aws-0104:We intend unrestricted egress
 module "security_group" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
-  #trivy:ignore:avd-aws-0104:We intend unrestricted egress
-  #tfsec:ignore:avd-aws-0104:We intend unrestricted egress
 
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.3.0"
@@ -19,10 +18,9 @@ module "security_group" {
   }
 }
 
+#trivy:ignore:avd-aws-0104:We intend unrestricted egress
 module "powerbi_test_security_group" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
-  #trivy:ignore:avd-aws-0104:We intend unrestricted egress
-  #tfsec:ignore:avd-aws-0104:We intend unrestricted egress
 
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.3.0"
