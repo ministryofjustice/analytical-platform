@@ -96,7 +96,7 @@ module "athena_read_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.54.1"
+  version = "5.55.0"
 
   path   = "/airflow-service/"
   name   = "athena-read"
@@ -137,7 +137,7 @@ module "athena_write_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.54.1"
+  version = "5.55.0"
 
   path   = "/airflow-service/"
   name   = "athena-write"
@@ -208,7 +208,7 @@ module "bedrock_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.54.1"
+  version = "5.55.0"
 
   path   = "/airflow-service/"
   name   = "bedrock"
@@ -280,7 +280,7 @@ module "glue_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.54.1"
+  version = "5.55.0"
 
   path   = "/airflow-service/"
   name   = "glue"
@@ -304,7 +304,7 @@ module "kms_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.54.1"
+  version = "5.55.0"
 
   path   = "/airflow-service/"
   name   = "kms"
