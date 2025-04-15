@@ -88,6 +88,16 @@ datasources:
   datasources.yaml:
     apiVersion: 1
     datasources:
+      ##### Analytical Platform Common Production
+      ## CloudWatch
+      - name: analytical-platform-common-production-cloudwatch
+        type: cloudwatch
+        access: proxy
+        uid: mojap-common-production-cloudwatch
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::509399598587:role/analytical-platform-observability
       ##### Analytical Platform Compute Development #####
       ## CloudWatch
       - name: analytical-platform-compute-development-cloudwatch
