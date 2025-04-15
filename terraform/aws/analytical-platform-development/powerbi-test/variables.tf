@@ -11,8 +11,3 @@ variable "tags" {
   type        = map(string)
   description = "Map of tags to apply to resources"
 }
-
-variable "ami_maintenance_date" {
-  type    = string
-  default = "2025-02-14T00:00:00Z"
-}
