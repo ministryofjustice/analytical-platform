@@ -81,4 +81,5 @@ updates:
       - "terraform/aws/analytical-platform-production/route53"
       - "terraform/aws/analytical-platform/baseline"
       - "terraform/aws/analytical-platform/oidc"
+      - "terraform/cloud-platform/live/analytical-platform-development/grafana"
       - "terraform/pagerduty"
