@@ -26,7 +26,7 @@ module "dms_ingress_iam_policy" {
   for_each = local.analytical_platform_ingestion_environments
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.54.1"
+  version = "5.55.0"
 
   name_prefix = "mojap-data-production-dms-ingress-${each.key}"
 
