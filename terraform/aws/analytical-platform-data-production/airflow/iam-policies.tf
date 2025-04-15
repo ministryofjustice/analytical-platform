@@ -11,7 +11,7 @@ module "airflow_analytical_platform_development_iam_policy" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.54.1"
+  version = "5.55.0"
 
   name = "airflow-analytical-platform-development"
 
@@ -264,7 +264,7 @@ module "airflow_dev_monitoring_iam_policy" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.54.1"
+  version = "5.55.0"
 
   name = "airflow_dev_monitoring"
 
