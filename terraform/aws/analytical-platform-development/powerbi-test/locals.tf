@@ -13,6 +13,6 @@ locals {
     virtualization_type = "hvm"
     owner_account       = "801119661308" # amazon
     instance_type       = "t3a.xlarge"   # 4vCPU, 16G RAM
-    ssh_pub_key         = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDUblimrIplKnxcf0uX1rRTEa7I83C1iBQsrohjT8CFWD+DmYVXPceQqe2YK06m3f3zMeAYaWBupUd6BoqgiZBLl+hUF/qm/ppeRjcjwvQLy4VyqIbTLiSPRgiqT84noOvphIQOkteYebyRpwv3evRzCWWImBDHSkwno42dqU3VcbI7FjQh+p5Lx0ZgUGiEMidwb18BGV+aO2AtYoLFRxpEpuSh1cm5wyugXvc/T9XX3TKmpPf1dQYvi4LSbmhpfeCYrlMlE80upVkl176GsCNM1gsY9DjcJSdSZGTD+OhfGqCT1Jgs9c/lq7Vx6HqXOxIcP5z5BASRWGPK8O6OsJDoW+EC95Lh+cq2zUYaZXCwbgfAylE9oUEwdgooe6ADrBn9zZLa7HxIlj+AjN4zKzhFczvlcbawyZVp5iiKuncJcrDmHkre4CqO5WSf1OR+LRPWwdZqVBjoKo1+CwsMplm8imOts5/m0TSEIRZMVdN8TSbsnflIqZ5+UNH9lt9xwo0= gary.henderson@MJ004516"
+    ssh_pub_key         = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCUyeDduoNLszf/iRbSlCDo0hnzZjnkIz2zjOFM9hL47GWKEh9mtbU6S6H/Fm7OldGHNEFGrKRJM5Fj51NN/+HkEU9p1nNW7GRQQjlyzMIa8iWNTX5/yn8rK8ThSi3hBL6HpCCVsMAjCg4PhYgGRoxURGCVKqaKOkZGsyNazJXxCXixiwgJsqy/Zu1Y5vE28Jw7nbMVEhi44icNfF83mEJ9JvewL0YT/VYQitKFqjNNYTvJKXZmEwzfiGf966VPHEjKJ0PaXBFpr6FYRaWs6JWpKSKk9nUi7O5X54Dpzj50zwxpEMdrWemrY7buhXE6gQGKneh8bXxzZtKUAoL5VdSH"
   }
 }
