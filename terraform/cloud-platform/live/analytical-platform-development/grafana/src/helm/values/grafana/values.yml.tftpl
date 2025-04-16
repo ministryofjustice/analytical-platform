@@ -1,0 +1,203 @@
+---
+rbac:
+  create: false
+
+serviceAccount:
+  create: false
+  name: grafana-irsa # Provided by cloud-platform-irsa module
+
+# init container runs as 0, unsure if this is needed anyway
+initChownData:
+  enabled: false
+
+ingress:
+  enabled: true
+  ingressClassName: default
+  annotations:
+    external-dns.alpha.kubernetes.io/aws-weight: "100"
+    external-dns.alpha.kubernetes.io/set-identifier: "grafana-${namespace}-green"
+  pathType: ImplementationSpecific
+  hosts:
+    - grafana-${namespace}.apps.live.cloud-platform.service.justice.gov.uk
+
+serviceMonitor:
+  enabled: true
+
+env:
+  GF_AUTH_GITHUB_CLIENT_ID: ${github_client_id}
+  GF_AUTH_GITHUB_CLIENT_SECRET: ${github_client_secret}
+
+envValueFrom:
+  GF_DATABASE_HOST:
+    secretKeyRef:
+      name: grafana-rds
+      key: rds_instance_endpoint
+  GF_DATABASE_NAME:
+    secretKeyRef:
+      name: grafana-rds
+      key: database_name
+  GF_DATABASE_USER:
+    secretKeyRef:
+      name: grafana-rds
+      key: database_username
+  GF_DATABASE_PASSWORD:
+    secretKeyRef:
+      name: grafana-rds
+      key: database_password
+
+plugins:
+  - grafana-amazonprometheus-datasource
+  - grafana-athena-datasource
+  - grafana-github-datasource
+  - grafana-x-ray-datasource
+
+grafana.ini:
+  app_mode: production
+  instance_name: development
+  database:
+    type: postgres
+    ssl_mode: require
+  auth:
+    disable_login_form: true
+  auth.github:
+    enabled: true
+    allow_sign_up: true
+    auto_login: true
+    allowed_organizations: ${github_organisation}
+    role_attribute_path: "contains(groups[*], '@${github_organisation}/${github_admin_team}') && 'GrafanaAdmin' || 'Viewer'"
+    team_ids: ${github_team_ids}
+  auth.basic:
+    enabled: false
+  news:
+    news_feed_enabled: false
+  security:
+    disable_initial_admin_creation: true
+  server:
+    root_url: https://grafana-${namespace}.apps.live.cloud-platform.service.justice.gov.uk
+
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClassName: gp3
+
+sidecar:
+  datasources:
+    enabled: true
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      ##### Analytical Platform Common Production
+      ## CloudWatch
+      - name: analytical-platform-common-production-cloudwatch
+        type: cloudwatch
+        access: proxy
+        uid: mojap-common-production-cloudwatch
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::509399598587:role/analytical-platform-observability
+      ##### Analytical Platform Compute Development #####
+      ## CloudWatch
+      - name: analytical-platform-compute-development-cloudwatch
+        type: cloudwatch
+        access: proxy
+        uid: mojap-compute-development-cloudwatch
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::381491960855:role/analytical-platform-observability
+          tracingDatasourceUid: mojap-compute-development-xray
+      ## Prometheus
+      - name: analytical-platform-compute-development-prometheus
+        type: grafana-amazonprometheus-datasource
+        access: proxy
+        uid: mojap-compute-development-prometheus
+        isDefault: false
+        url: https://aps-workspaces.eu-west-2.amazonaws.com/workspaces/ws-bfdd5d7a-5571-4686-bfd4-43ab07cf8d54ba/
+        jsonData:
+          httpMethod: POST
+          sigV4Auth: true
+          sigV4AuthType: default
+          sigV4Region: eu-west-2
+          sigV4AssumeRoleArn: arn:aws:iam::381491960855:role/analytical-platform-observability
+      ## X-Ray
+      - name: analytical-platform-compute-development-xray
+        type: grafana-x-ray-datasource
+        access: proxy
+        uid: mojap-compute-development-xray
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::381491960855:role/analytical-platform-observability
+
+
+      ##### Analytical Platform Compute Production #####
+      ## CloudWatch
+      - name: analytical-platform-compute-production-cloudwatch
+        type: cloudwatch
+        access: proxy
+        uid: mojap-compute-production-cloudwatch
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::992382429243:role/analytical-platform-observability
+          tracingDatasourceUid: mojap-compute-production-xray
+      ## Prometheus
+      - name: analytical-platform-compute-production-prometheus
+        type: grafana-amazonprometheus-datasource
+        access: proxy
+        uid: mojap-compute-production-prometheus
+        isDefault: false
+        url: https://aps-workspaces.eu-west-2.amazonaws.com/workspaces/ws-257796b7-4aa4-4c18-b906-6dd21e95d7b73e/
+        jsonData:
+          httpMethod: POST
+          sigV4Auth: true
+          sigV4AuthType: default
+          sigV4Region: eu-west-2
+          sigV4AssumeRoleArn: arn:aws:iam::992382429243:role/analytical-platform-observability
+      ## X-Ray
+      - name: analytical-platform-compute-production-xray
+        type: grafana-x-ray-datasource
+        access: proxy
+        uid: mojap-compute-production-xray
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::992382429243:role/analytical-platform-observability
+
+
+      ##### Analytical Platform Compute Test #####
+      ## CloudWatch
+      - name: analytical-platform-compute-test-cloudwatch
+        type: cloudwatch
+        access: proxy
+        uid: mojap-compute-test-cloudwatch
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::767397661611:role/analytical-platform-observability
+          tracingDatasourceUid: mojap-compute-test-xray
+      ## Prometheus
+      - name: analytical-platform-compute-test-prometheus
+        type: grafana-amazonprometheus-datasource
+        access: proxy
+        uid: mojap-compute-test-prometheus
+        isDefault: false
+        url: https://aps-workspaces.eu-west-2.amazonaws.com/workspaces/ws-a9d7f576-58b7-4748-b4c1-b02bbdc54a2922/
+        jsonData:
+          httpMethod: POST
+          sigV4Auth: true
+          sigV4AuthType: default
+          sigV4Region: eu-west-2
+          sigV4AssumeRoleArn: arn:aws:iam::767397661611:role/analytical-platform-observability
+      ## X-Ray
+      - name: analytical-platform-compute-test-xray
+        type: grafana-x-ray-datasource
+        access: proxy
+        uid: mojap-compute-test-xray
+        isDefault: false
+        jsonData:
+          defaultRegion: eu-west-2
+          assumeRoleArn: arn:aws:iam::767397661611:role/analytical-platform-observability
