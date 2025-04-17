@@ -13,6 +13,6 @@ locals {
     virtualization_type = "hvm"
     owner_account       = "801119661308" # amazon
     instance_type       = "t3a.xlarge"   # 4vCPU, 16G RAM
-    ssh_pub_key         = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCUyeDduoNLszf/iRbSlCDo0hnzZjnkIz2zjOFM9hL47GWKEh9mtbU6S6H/Fm7OldGHNEFGrKRJM5Fj51NN/+HkEU9p1nNW7GRQQjlyzMIa8iWNTX5/yn8rK8ThSi3hBL6HpCCVsMAjCg4PhYgGRoxURGCVKqaKOkZGsyNazJXxCXixiwgJsqy/Zu1Y5vE28Jw7nbMVEhi44icNfF83mEJ9JvewL0YT/VYQitKFqjNNYTvJKXZmEwzfiGf966VPHEjKJ0PaXBFpr6FYRaWs6JWpKSKk9nUi7O5X54Dpzj50zwxpEMdrWemrY7buhXE6gQGKneh8bXxzZtKUAoL5VdSH"
+    ssh_pub_key         = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIV+8W60eCb9VP7TrL4U1PKiybEnl6NhZ3pC+UNfxtPdPKXg1/5d6yfXrnJRF/59R9kIv6h7bcjzjkuAdS5kzk1Pk/pOMpbfPbXS6uYEJ4ONgt0BCr6e07ho9io/zpw0dEuaWxcFOuqXUvEGI8s9m3F0aTNKAD6eO1U+UP1QWtyNKnacnP0c+l9Iff65j1TgRsWnYTMbGNyQ6rnygbyr7xyC+BN7jgUq81Ct5ChECeTFJ7iUne7L9fqPRBfdhgjBz0LEtWbpm6xwhX7V9wnEpGoc04qFR77zwBa5MV676GioD2C2bUMNf2CKF1QfIfxa9YsPpZygmOE/MYHficK0Vv"
   }
 }
