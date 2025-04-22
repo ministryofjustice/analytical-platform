@@ -13,8 +13,8 @@ data "aws_iam_policy_document" "dms_ingress_iam_policy" {
     ]
     resources = [
       "arn:aws:glue:eu-west-2:${var.account_ids["analytical-platform-data-production"]}:catalog",
-      "arn:aws:glue:eu-west-2:${var.account_ids["analytical-platform-data-production"]}:database/cica_tariff_${each.key}",
-      "arn:aws:glue:eu-west-2:${var.account_ids["analytical-platform-data-production"]}:table/cica_tariff_${each.key}/*"
+      "arn:aws:glue:eu-west-2:${var.account_ids["analytical-platform-data-production"]}:database/cica-tariff-${each.key}",
+      "arn:aws:glue:eu-west-2:${var.account_ids["analytical-platform-data-production"]}:table/cica-tariff-${each.key}/*"
     ]
   }
 }
