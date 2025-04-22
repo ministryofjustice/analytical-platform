@@ -3,17 +3,15 @@ resource "helm_release" "grafana" {
   name       = "grafana"
   repository = "https://grafana.github.io/helm-charts"
   chart      = "grafana"
-  version    = "8.11.4"
+  version    = "8.12.1"
   namespace  = var.namespace
   values = [
     templatefile(
       "${path.module}/src/helm/values/grafana/values.yml.tftpl",
       {
-        namespace            = var.namespace,
-        github_client_id     = data.aws_secretsmanager_secret_version.analytical_platform_grafana_development_github_client_id.secret_string
-        github_client_secret = data.aws_secretsmanager_secret_version.analytical_platform_grafana_development_github_client_secret.secret_string
-        github_organisation  = "ministryofjustice"
-        github_admin_team    = "analytical-platform-engineers"
+        namespace           = var.namespace,
+        github_organisation = "ministryofjustice",
+        github_admin_team   = "analytical-platform-engineers",
         github_team_ids = join(",", [
           data.github_team.analytical_platform_engineers.id,
           data.github_team.analytical_platform_airflow.id,
@@ -24,4 +22,13 @@ resource "helm_release" "grafana" {
       }
     )
   ]
+
+  set_sensitive {
+    name  = "env.GF_AUTH_GITHUB_CLIENT_ID"
+    value = data.aws_secretsmanager_secret_version.analytical_platform_grafana_development_github_client_id.secret_string
+  }
+  set_sensitive {
+    name  = "env.GF_AUTH_GITHUB_CLIENT_SECRET"
+    value = data.aws_secretsmanager_secret_version.analytical_platform_grafana_development_github_client_secret.secret_string
+  }
 }
