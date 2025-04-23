@@ -5,7 +5,6 @@ data "aws_iam_policy_document" "bedrock_integration" {
   statement {
     sid    = "AnalyticalPlatformBedrockIntegration"
     effect = "Allow"
-
     actions = [
       "bedrock:ListFoundationModels",
       "bedrock:GetFoundationModel",
@@ -58,7 +57,6 @@ data "aws_iam_policy_document" "bedrock_integration" {
       "bedrock:DeleteInferenceProfile",
       "bedrock:StopModelInvocationJob"
     ]
-
     resources = ["*"]
     condition {
       test     = "StringEquals"
@@ -70,6 +68,17 @@ data "aws_iam_policy_document" "bedrock_integration" {
         "eu-west-3",
         "us-east-1"
       ]
+    }
+  }
+  statement {
+    sid       = "BedrockPassBatchInferenceRole"
+    effect    = "Allow"
+    actions   = ["iam:PassRole"]
+    resources = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/bedrock-batch-inference-role"]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["bedrock.amazonaws.com"]
     }
   }
 }
