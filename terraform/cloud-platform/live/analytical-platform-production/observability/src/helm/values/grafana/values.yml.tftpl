@@ -341,7 +341,7 @@ alerting:
   contactpoints.yaml:
     apiVersion: 1
     contactPoints:
-      - name: analytical-platform-slack
+      - name: analytical-platform-alerts-slack
         receivers:
           - uid: analytical-platform-alerts-slack
             type: slack
@@ -349,19 +349,18 @@ alerting:
               recipient: analytical-platform-alerts
               token: $${ANALYTICAL_PLATFORM_SLACK_TOKEN}
 
-  # policies.yaml:
-  #   apiVersion: 1
-  #   policies:
-  #       - orgId: 1
-  #         receiver: grafana-default-email
-  #         group_by:
-  #           - '...'
-  #         routes:
-  #           - receiver: analytical-platform-alerts-slack
-  #             object_matchers:
-  #               - - slack-channel
-  #                 - =
-  #                 - analytical-platform-alerts
-  #         group_wait: 30s
-  #         group_interval: 5m
-  #         repeat_interval: 4h
+  policies.yaml:
+    apiVersion: 1
+    policies:
+        - orgId: 1
+          receiver: grafana-default-email
+          group_by:
+            - grafana_folder
+            - alertname
+          routes:
+            - receiver: analytical-platform-alerts-slack
+              object_matchers:
+                - - slack-channel
+                  - =
+                  - analytical-platform-alerts
+
