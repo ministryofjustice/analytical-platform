@@ -63,3 +63,9 @@ data "aws_secretsmanager_secret_version" "analytical_platform_grafana_production
 
   secret_id = "analytical-platform-grafana/production/github/client-secret"
 }
+
+data "aws_secretsmanager_secret_version" "analytical_platform_slack_token" {
+  provider = aws.analytical-platform-management-production
+
+  secret_id = "slack/analytical-platform"
+}

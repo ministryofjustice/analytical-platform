@@ -31,4 +31,8 @@ resource "helm_release" "grafana" {
     name  = "env.GF_AUTH_GITHUB_CLIENT_SECRET"
     value = data.aws_secretsmanager_secret_version.analytical_platform_grafana_production_github_client_secret.secret_string
   }
+  set_sensitive {
+    name  = "env.ANALYTICAL_PLATFORM_SLACK_TOKEN"
+    value = data.aws_secretsmanager_secret_version.analytical_platform_slack_token.secret_string
+  }
 }
