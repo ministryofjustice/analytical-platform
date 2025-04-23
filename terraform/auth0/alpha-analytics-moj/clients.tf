@@ -35,7 +35,7 @@ resource "auth0_client" "dashboard_service" {
   sso               = true
   cross_origin_auth = true
   jwt_configuration {
-    alg = "HS256"
+    alg = "RS256"
   }
 }
 
