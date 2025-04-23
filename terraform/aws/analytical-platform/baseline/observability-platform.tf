@@ -22,6 +22,8 @@ module "data_development_analytical_platform_observability" {
   providers = {
     aws = aws.analytical-platform-data-development-eu-west-2
   }
+
+  enable_aws_xray_read_only_access = true
 }
 
 ##################################################
@@ -48,6 +50,8 @@ module "data_engineering_production_analytical_platform_observability" {
   providers = {
     aws = aws.analytical-platform-data-engineering-production-eu-west-2
   }
+
+  enable_aws_xray_read_only_access = true
 }
 
 ##################################################
@@ -74,6 +78,8 @@ module "data_engineering_sandbox_a_analytical_platform_observability" {
   providers = {
     aws = aws.analytical-platform-data-engineering-sandbox-a-eu-west-2
   }
+
+  enable_aws_xray_read_only_access = true
 }
 
 ##################################################
@@ -100,6 +106,8 @@ module "data_production_analytical_platform_observability" {
   providers = {
     aws = aws.analytical-platform-data-production-eu-west-2
   }
+
+  enable_aws_xray_read_only_access = true
 }
 
 ##################################################
@@ -132,6 +140,8 @@ module "landing_production_analytical_platform_observability" {
   providers = {
     aws = aws.analytical-platform-landing-production-eu-west-2
   }
+
+  enable_aws_xray_read_only_access = true
 }
 
 ##################################################
@@ -158,6 +168,8 @@ module "management_production_analytical_platform_observability" {
   providers = {
     aws = aws.analytical-platform-management-production-eu-west-2
   }
+
+  enable_aws_xray_read_only_access = true
 }
 
 ##################################################
