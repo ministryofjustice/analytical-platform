@@ -1,4 +1,5 @@
 #trivy:ignore:aws-iam-no-policy-wildcards
+#trivy:ignore:AVD-AWS-0342 passing of role is needed for batch processing
 data "aws_iam_policy_document" "bedrock_integration" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
