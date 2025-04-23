@@ -1,11 +1,11 @@
 #trivy:ignore:aws-iam-no-policy-wildcards
+#trivy:ignore:AVD-AWS-0342 passing of role is needed for batch processing
 data "aws_iam_policy_document" "bedrock_integration" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
   statement {
     sid    = "AnalyticalPlatformBedrockIntegration"
     effect = "Allow"
-
     actions = [
       "bedrock:ListFoundationModels",
       "bedrock:GetFoundationModel",
@@ -58,7 +58,6 @@ data "aws_iam_policy_document" "bedrock_integration" {
       "bedrock:DeleteInferenceProfile",
       "bedrock:StopModelInvocationJob"
     ]
-
     resources = ["*"]
     condition {
       test     = "StringEquals"
@@ -70,6 +69,17 @@ data "aws_iam_policy_document" "bedrock_integration" {
         "eu-west-3",
         "us-east-1"
       ]
+    }
+  }
+  statement {
+    sid       = "BedrockPassBatchInferenceRole"
+    effect    = "Allow"
+    actions   = ["iam:PassRole"]
+    resources = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/bedrock-batch-inference-role"]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["bedrock.amazonaws.com"]
     }
   }
 }
