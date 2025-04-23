@@ -3,7 +3,7 @@ terraform {
     acl            = "private"
     bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "aws/analytical-platform-development/auth0-log-streams/terraform.tfstate"
+    key            = "aws/analytical-platform-development/powerbi-test/terraform.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
@@ -11,10 +11,6 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = "5.94.1"
-    }
-    auth0 = {
-      source  = "auth0/auth0"
-      version = "1.16.0"
     }
   }
   required_version = "~> 1.5"

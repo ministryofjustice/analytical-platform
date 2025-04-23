@@ -58,6 +58,22 @@ module "route53_records" {
       ]
     },
     {
+      name = "dashboards.development"
+      type = "CNAME"
+      ttl  = 300
+      records = [
+        "ingress.compute.development.analytical-platform.service.justice.gov.uk."
+      ]
+    },
+    {
+      name = "dashboards"
+      type = "CNAME"
+      ttl  = 300
+      records = [
+        "ingress.compute.analytical-platform.service.justice.gov.uk."
+      ]
+    },
+    {
       name = "test"
       type = "CNAME"
       ttl  = 300
