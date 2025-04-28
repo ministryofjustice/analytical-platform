@@ -41,7 +41,7 @@ resource "auth0_client" "dashboard_service" {
   }
 }
 
-resource "auth0_connection_client" "dashboard_service_email" {
+resource "auth0_connection_client" "dashboard_service_passwordless" {
   client_id     = auth0_client.dashboard_service.id
   connection_id = "con_nYgw0M6GJbKXJiNh"
 }
