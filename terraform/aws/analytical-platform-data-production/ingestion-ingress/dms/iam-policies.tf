@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "dms_ingress_iam_policy" {
       "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog",
       "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:database/cica-tariff-${each.key}",
       "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:table/cica-tariff-${each.key}/*",
-      "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:database/cica-tempus-${each.key}/*"
+      "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:database/cica-tempus-${each.key}/*",
       "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:table/cica-tempus-${each.key}/*"
     ]
   }
