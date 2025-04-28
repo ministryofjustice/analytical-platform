@@ -39,7 +39,13 @@ resource "auth0_client" "dashboard_service" {
   }
 }
 
-resource "auth0_connection_client" "dashboard_service_email" {
+resource "auth0_connection_client" "dashboard_service_passwordless" {
   client_id     = auth0_client.dashboard_service.id
   connection_id = "con_6zNyH9PCyBMhbCaD"
+}
+
+resource "auth0_client_grant" "control_panel_api" {
+  client_id = auth0_client.dashboard_service.id
+  audience  = "urn:control-panel-prod-api"
+  scopes    = ["list:dashboard", "retrieve:dashboard"]
 }
