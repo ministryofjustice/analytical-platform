@@ -58,6 +58,22 @@ module "route53_records" {
       ]
     },
     {
+      name = "dashboards.development"
+      type = "CNAME"
+      ttl  = 300
+      records = [
+        "ingress.compute.development.analytical-platform.service.justice.gov.uk."
+      ]
+    },
+    {
+      name = "dashboards"
+      type = "CNAME"
+      ttl  = 300
+      records = [
+        "ingress.compute.analytical-platform.service.justice.gov.uk."
+      ]
+    },
+    {
       name = "test"
       type = "CNAME"
       ttl  = 300
@@ -70,6 +86,17 @@ module "route53_records" {
       type    = "A"
       ttl     = 300
       records = tolist(data.dns_a_record_set.apc_ingress_prod.addrs)
-    }
+    },
+    {
+      name = "observability"
+      type = "NS"
+      ttl  = 300
+      records = [
+        "ns-1326.awsdns-37.org.",
+        "ns-146.awsdns-18.com.",
+        "ns-1010.awsdns-62.net.",
+        "ns-1929.awsdns-49.co.uk."
+      ]
+    },
   ]
 }
