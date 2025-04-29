@@ -56,6 +56,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/control-panel-message-broker"
       - "terraform/aws/analytical-platform-data-production/create-a-derived-table"
       - "terraform/aws/analytical-platform-data-production/data-engineering-pipelines"
+      - "terraform/aws/analytical-platform-data-production/data-warehouses-eu-west-2"
       - "terraform/aws/analytical-platform-data-production/github-actions-roles"
       - "terraform/aws/analytical-platform-data-production/ingestion-egress"
       - "terraform/aws/analytical-platform-data-production/ingestion-ingress"
