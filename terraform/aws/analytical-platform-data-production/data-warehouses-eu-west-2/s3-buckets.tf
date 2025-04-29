@@ -17,7 +17,7 @@ module "mojap_national_security_data_s3" {
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = module.sagemaker_ai_probation_search_models_kms.key_arn
+        kms_master_key_id = module.mojap_national_security_data_kms.key_arn
         sse_algorithm     = "aws:kms"
       }
     }
