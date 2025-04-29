@@ -14,7 +14,7 @@ module "dms_ingress_iam_role" {
 
   trusted_role_services = ["s3.amazonaws.com"]
   trusted_role_arns = [
-    "arn:aws:iam::${var.account_ids["analytical-platform-ingestion-${each.key}"]}:role/tariff-${each.key}-metadata-generator",
+    "arn:aws:iam::${var.account_ids["analytical-platform-ingestion-${each.key}"]}:role/tariff-${each.key}-metadata-generator"
   ]
 
   custom_role_policy_arns = [module.dms_ingress_iam_policy[each.key].arn]

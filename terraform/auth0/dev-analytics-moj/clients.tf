@@ -37,11 +37,17 @@ resource "auth0_client" "dashboard_service" {
   sso               = true
   cross_origin_auth = true
   jwt_configuration {
-    alg = "HS256"
+    alg = "RS256"
   }
 }
 
-resource "auth0_connection_client" "dashboard_service_email" {
+resource "auth0_connection_client" "dashboard_service_passwordless" {
   client_id     = auth0_client.dashboard_service.id
   connection_id = "con_nYgw0M6GJbKXJiNh"
+}
+
+resource "auth0_client_grant" "control_panel_api" {
+  client_id = auth0_client.dashboard_service.id
+  audience  = "urn:control-panel-dev-api"
+  scopes    = ["list:dashboard", "retrieve:dashboard"]
 }
