@@ -12,20 +12,6 @@ data "aws_ami" "windows_server_2022" {
   }
 }
 
-data "aws_ami" "windows_server_2025" {
-  most_recent = local.powerbi_gateway_ec2.most_recent
-  owners      = [local.powerbi_gateway_ec2.owner_account]
-
-  filter {
-    name   = "name"
-    values = ["Windows_Server-2025-English-Full-Base-*"]
-  }
-  filter {
-    name   = "virtualization-type"
-    values = [local.powerbi_gateway_ec2.virtualization_type]
-  }
-}
-
 data "aws_iam_policy" "powerbi_user" {
   name = "powerbi_user"
 }
