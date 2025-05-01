@@ -23,7 +23,7 @@ provider "aws" {
   region = "eu-west-2"
 }
 
-# electronic_monitoring_data_test_eu_west_2
+# electronic_monitoring_data_preprod_eu_west_2
 provider "aws" {
   alias  = "source"
   region = "eu-west-2"
