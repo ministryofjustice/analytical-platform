@@ -2,7 +2,7 @@
 resource "aws_glue_catalog_database" "destination_account_database_resource_link" {
   provider = aws.destination
   for_each = {
-    for db in local.source_databases : db.name => db
+    for db in local.source_databases : db.source_name => db
   }
 
   name = "em_${each.key}"
