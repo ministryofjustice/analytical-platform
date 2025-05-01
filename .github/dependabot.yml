@@ -76,6 +76,7 @@ updates:
       - "terraform/aws/analytical-platform-development/cluster"
       - "terraform/aws/analytical-platform-development/control-panel-message-broker"
       - "terraform/aws/analytical-platform-development/sagemaker"
+      - "terraform/aws/analytical-platform-development/tjf-powerbi-test"
       - "terraform/aws/analytical-platform-development/tooling-iam"
       - "terraform/aws/analytical-platform-management-production/terraform-state"
       - "terraform/aws/analytical-platform-production/cluster"
