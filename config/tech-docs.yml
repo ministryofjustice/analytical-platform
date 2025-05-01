@@ -4,18 +4,19 @@
 # yamllint enable rule:line-length
 
 # Host to use for canonical URL generation (without trailing slash)
-host: https://technical-documentation.data-platform.service.justice.gov.uk
+host: https://docs.analytical-platform.service.justice.gov.uk
 
 # Header-related options
 show_govuk_logo: false
 service_name: Analytical Platform
 service_link: /
+phase: Internal
 
 # Links to show on right-hand-side of header
 header_links:
   Home: https://docs.analytical-platform.service.justice.gov.uk/
   GitHub: https://github.com/ministryofjustice/analytical-platform
-  Slack: https://mojdt.slack.com/archives/C04VBJTKY58
+  Slack: https://moj.enterprise.slack.com/archives/C04M8224WCV
 
 # Enables search functionality. This indexes pages only and is not recommended for single-page sites.
 enable_search: true
