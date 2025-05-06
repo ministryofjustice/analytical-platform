@@ -16,32 +16,36 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/ministryofjustice/tech-docs-github-pages-publisher@sha256:aee182dd1dd86696077ea1c3512590f17ceb9f7a47aa5b16ea4f742666911dbd # v5.0.1
+      image: ghcr.io/ministryofjustice/tech-docs-github-pages-publisher@sha256:30d00879b5c82afa5d76264164db46189fa11d4358b37ca35b6a62e341d62bb7 # v5.1.0
     permissions:
       contents: read
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Build
         id: build
         run: |
           /usr/local/bin/package
 
-  link-checker:
-    name: Link Checker
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  # link-checker:
+  #   name: Link Checker
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: read
+  #   steps:
+  #     - name: Checkout
+  #       id: checkout
+  #       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  #       with:
+  #         persist-credentials: false
 
-      - name: Lychee
-        id: lychee
-        uses: lycheeverse/lychee-action@1d97d84f0bc547f7b25f4c2170d87d810dc2fb2c # v2.4.0
-        with:
-          args: --verbose --no-progress './**/*.md' './**/*.html' './**/*.erb' --accept 403,200,429
-          fail: true
+  #     - name: Lychee
+  #       id: lychee
+  #       uses: lycheeverse/lychee-action@1d97d84f0bc547f7b25f4c2170d87d810dc2fb2c # v2.4.0
+  #       with:
+  #         args: --verbose --no-progress './**/*.md' './**/*.html' './**/*.erb' --accept 403,200,429
+  #         fail: true

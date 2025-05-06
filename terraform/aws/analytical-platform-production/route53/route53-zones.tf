@@ -10,6 +10,9 @@ module "route53_zones" {
   zones = {
     "analytical-platform.service.justice.gov.uk" = {
       comment = "Managed by Terraform"
+    },
+    "data-platform.service.justice.gov.uk" = {
+      comment = "Managed by Terraform"
     }
   }
 }
