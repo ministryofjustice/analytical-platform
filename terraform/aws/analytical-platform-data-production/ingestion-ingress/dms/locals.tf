@@ -10,7 +10,10 @@ locals {
     }
     production = {
       ingest_trusted_role_arns = [
-        "arn:aws:iam::${var.account_ids["analytical-platform-ingestion-production"]}:role/tariff-production-metadata-generator"
+        "arn:aws:iam::${var.account_ids["analytical-platform-ingestion-production"]}:role/tariff-production-metadata-generator",
+        "arn:aws:iam::${var.account_ids["analytical-platform-ingestion-production"]}:role/tempus-cw-production-metadata-generator",
+        "arn:aws:iam::${var.account_ids["analytical-platform-ingestion-production"]}:role/tempus-spppp-production-metadata-generator",
+        "arn:aws:iam::${var.account_ids["analytical-platform-ingestion-production"]}:role/tempus-sppfj-production-metadata-generator"
       ]
     }
   }
