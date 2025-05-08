@@ -107,14 +107,3 @@ provider "aws" {
     tags = var.tags
   }
 }
-
-provider "aws" {
-  alias  = "mi-platform-development"
-  region = "eu-west-1"
-  assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["mi-platform-development"]}:role/GlobalGitHubActionAdmin"
-  }
-  default_tags {
-    tags = var.tags
-  }
-}

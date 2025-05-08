@@ -14,8 +14,6 @@ updates:
     commit-message:
       prefix: ":dependabot: github-actions"
       include: "scope"
-    reviewers:
-      - "ministryofjustice/analytical-platform"
   - package-ecosystem: "pip"
     schedule:
       interval: "daily"
@@ -24,8 +22,6 @@ updates:
     commit-message:
       prefix: ":dependabot: pip"
       include: "scope"
-    reviewers:
-      - "ministryofjustice/analytical-platform"
     directories:
       - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
       - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
@@ -37,14 +33,14 @@ updates:
     commit-message:
       prefix: ":dependabot: terraform"
       include: "scope"
-    reviewers:
-      - "ministryofjustice/analytical-platform"
     directories:
       - "terraform/auth0/alpha-analytics-moj"
       - "terraform/auth0/dev-analytics-moj"
       - "terraform/auth0/ministryofjustice-data-platform"
       - "terraform/auth0/ministryofjustice-data-platform-development"
+      - "terraform/aws/analytical-platform-data-engineering-production/dms-dev"
       - "terraform/aws/analytical-platform-data-engineering-production/ppud-dev"
+      - "terraform/aws/analytical-platform-data-engineering-production/terraform-state"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/airflow-create-a-pipeline"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/github-actions-roles"
       - "terraform/aws/analytical-platform-data-production/airflow"
@@ -66,6 +62,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prisons-reporting-preproduction"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prisons-reporting-production"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/electronic-monitoring-data-preproduction"
+      - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/electronic-monitoring-data-production"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/electronic-monitoring-data-test"
       - "terraform/aws/analytical-platform-data-production/openmetadata"
       - "terraform/aws/analytical-platform-data-production/powerbi-gateway"

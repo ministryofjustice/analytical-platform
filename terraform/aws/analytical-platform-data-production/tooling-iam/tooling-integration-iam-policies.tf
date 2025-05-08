@@ -72,6 +72,12 @@ data "aws_iam_policy_document" "bedrock_integration" {
     }
   }
   statement {
+    sid       = "BedrockBatchInferenceListRoles"
+    effect    = "Allow"
+    actions   = ["iam:ListRoles"]
+    resources = ["*"]
+  }
+  statement {
     sid       = "BedrockPassBatchInferenceRole"
     effect    = "Allow"
     actions   = ["iam:PassRole"]
