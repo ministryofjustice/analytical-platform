@@ -10,7 +10,7 @@ terraform {
   required_providers {
     auth0 = {
       source  = "auth0/auth0"
-      version = "1.16.0"
+      version = "1.19.1"
     }
     aws = {
       source  = "hashicorp/aws"
@@ -22,7 +22,7 @@ terraform {
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.7.1"
+      version = "3.7.2"
     }
     helm = {
       source  = "hashicorp/helm"

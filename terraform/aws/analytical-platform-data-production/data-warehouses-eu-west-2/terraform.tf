@@ -3,17 +3,17 @@ terraform {
     acl            = "private"
     bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "aws/analytical-platform-development/powerbi-test/terraform.tfstate"
+    key            = "aws/analytical-platform-data-production/data-warehouses-eu-west-2/terraform.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
   }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.94.1"
+      version = "5.96.0"
     }
   }
-  required_version = "~> 1.5"
+  required_version = "~> 1.10"
 }
 
 provider "aws" {
@@ -23,7 +23,7 @@ provider "aws" {
 provider "aws" {
   region = "eu-west-2"
   assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-development"]}:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
