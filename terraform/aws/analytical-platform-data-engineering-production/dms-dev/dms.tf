@@ -12,7 +12,7 @@ module "dev_dms_oasys" {
 
   source      = "github.com/ministryofjustice/terraform-dms-module?ref=intial_branch"
   vpc_id      = module.vpc.vpc_id
-  environment = local.tags.environment-name
+  environment = var.tags.environment-name
 
   db = "oasys-dev"
 

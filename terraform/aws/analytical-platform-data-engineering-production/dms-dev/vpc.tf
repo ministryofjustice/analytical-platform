@@ -22,11 +22,11 @@ locals {
 }
 
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws"
   version = "5.21.0"
-  name   = local.name
-  cidr   = "172.24.0.0/16"
-  azs    = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+  name    = local.name
+  cidr    = "172.24.0.0/16"
+  azs     = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
 
   private_subnets      = ["172.24.0.0/20", "172.24.16.0/20", "172.24.32.0/20"]
   private_subnet_names = ["private-eu-west-1a-dev", "private-eu-west-1b-dev", "private-eu-west-1c-dev"]
@@ -47,7 +47,7 @@ module "vpc" {
 
 
 module "endpoints" {
-  source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+  source  = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
   version = "5.21.0"
 
   vpc_id                     = module.vpc.vpc_id
