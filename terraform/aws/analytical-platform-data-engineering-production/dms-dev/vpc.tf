@@ -23,6 +23,7 @@ locals {
 
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
+  version = "5.21.0"
   name   = local.name
   cidr   = "172.24.0.0/16"
   azs    = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
@@ -47,6 +48,7 @@ module "vpc" {
 
 module "endpoints" {
   source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+  version = "5.21.0"
 
   vpc_id                     = module.vpc.vpc_id
   create_security_group      = true
