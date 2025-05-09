@@ -11,7 +11,8 @@ locals {
           rotation_turn_length_seconds = 86400
           users = [
             module.users_de_seo["guy.wheeler@justice.gov.uk"].id,
-            module.users_de_seo["thomas.hepworth@justice.gov.uk"].id,
+            module.users_de_seo["siva.bathina@digital.justice.gov.uk"].id,
+            module.users_de_seo["murad.ali@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -59,7 +60,9 @@ locals {
           rotation_turn_length_seconds = 86400
           users = [
             module.users_de_g7["matt.heery@justice.gov.uk"].id,
-            module.users_de_g7["lalitha.nagarur3@justice.gov.uk"].id,
+            module.users_de_g7["lalitha.nagarur@digital.justice.gov.uk"].id,
+            module.users_de_g7["thomas.hepworth@justice.gov.uk"].id,
+            module.users_de_g7["matthew.price2@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -128,10 +131,16 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Thomas Hepworth"
-      email = "thomas.hepworth@justice.gov.uk"
+      name  = "Siva Bathina"
+      email = "siva.bathina@digital.justice.gov.uk"
       role  = "responder"
-    }
+    },
+    {
+      name  = "Murad Ali"
+      email = "murad.ali@justice.gov.uk"
+      role  = "responder"
+    },
+
   ]
 
   users_de_g7 = [
@@ -143,6 +152,16 @@ locals {
     {
       name  = "Lalitha Nagarur"
       email = "lalitha.nagarur@digital.justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Thomas Hepworth"
+      email = "thomas.hepworth@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Matt Price"
+      email = "matthew.price2@justice.gov.uk"
       role  = "responder"
     }
   ]
@@ -195,7 +214,7 @@ import {
 }
 
 import {
-  to = module.users_de_seo["thomas.hepworth@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_g7["thomas.hepworth@justice.gov.uk"].pagerduty_user.this
   id = "PIAKE2C"
 }
 
