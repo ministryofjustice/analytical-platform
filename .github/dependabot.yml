@@ -14,8 +14,6 @@ updates:
     commit-message:
       prefix: ":dependabot: github-actions"
       include: "scope"
-    reviewers:
-      - "ministryofjustice/analytical-platform"
   - package-ecosystem: "pip"
     schedule:
       interval: "daily"
