@@ -45,8 +45,6 @@ for package_ecosystem in pip terraform; do
   printf "    commit-message:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "      prefix: \":dependabot: %s\"\n" "${package_ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "      include: \"scope\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-  printf "    reviewers:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-  printf "      - \"ministryofjustice/analytical-platform\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "    directories:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
 
 
