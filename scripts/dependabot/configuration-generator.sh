@@ -20,8 +20,6 @@ updates:
     commit-message:
       prefix: ":dependabot: github-actions"
       include: "scope"
-    reviewers:
-      - "ministryofjustice/analytical-platform"
 EOL
 
 for package_ecosystem in pip terraform; do
