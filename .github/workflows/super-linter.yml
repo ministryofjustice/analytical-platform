@@ -20,7 +20,7 @@ jobs:
       # Validate exclusions ported from previous iteration
       super-linter-variables: |
         {
-          FILTER_REGEX_EXCLUDE: '.*archive/.*',
+          FILTER_REGEX_EXCLUDE: .*archive/.*,
           VALIDATE_ALL_CODEBASE: false,
           VALIDATE_GITHUB_ACTIONS: false,
           VALIDATE_BASH: false,
