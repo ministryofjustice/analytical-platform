@@ -1,12 +1,12 @@
 ---
-name: Dependabot Configuration Generator
+name: ":dependabot: Dependabot Configuration Generator"
 
-on: # yamllint disable-line rule:truthy
+on:
   pull_request:
     branches:
       - main
 
-permissions: read-all
+permissions: {}
 
 jobs:
   dependabot-configuration-generator:
@@ -29,12 +29,6 @@ jobs:
         run: |
           git diff --quiet --exit-code .github/dependabot.yml
         continue-on-error: true
-
-      - name: DEBUG
-        id: debug
-        run: |
-          git diff .github/dependabot.yml
-          echo "detect_changes_output ${{ steps.detect_changes.outcome }}"
 
       - name: Commit Changes
         id: commit_changes
