@@ -14,8 +14,6 @@ updates:
     commit-message:
       prefix: ":dependabot: github-actions"
       include: "scope"
-    reviewers:
-      - "ministryofjustice/analytical-platform"
   - package-ecosystem: "pip"
     schedule:
       interval: "daily"
@@ -24,8 +22,6 @@ updates:
     commit-message:
       prefix: ":dependabot: pip"
       include: "scope"
-    reviewers:
-      - "ministryofjustice/analytical-platform"
     directories:
       - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
       - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
@@ -37,8 +33,6 @@ updates:
     commit-message:
       prefix: ":dependabot: terraform"
       include: "scope"
-    reviewers:
-      - "ministryofjustice/analytical-platform"
     directories:
       - "terraform/auth0/alpha-analytics-moj"
       - "terraform/auth0/dev-analytics-moj"
