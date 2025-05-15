@@ -14,4 +14,4 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-check-commit-signatures.yml@828b3c86946eb2f3c551e90d7f1ee551448ae427 # v2.5.0
+    uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-commit-signature-checker.yml@828b3c86946eb2f3c551e90d7f1ee551448ae427 # v2.5.0
