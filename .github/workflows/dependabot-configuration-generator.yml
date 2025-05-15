@@ -1,5 +1,5 @@
 ---
-name: ":dependabot: Dependabot Configuration Generator"
+name: 🤖 Dependabot Configuration Generator
 
 on:
   pull_request:
