@@ -1,0 +1,37 @@
+---
+name: 🦝 Super Linter
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions: {}
+
+jobs:
+  super-linter:
+    name: Super Linter
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
+    uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-super-linter.yml@828b3c86946eb2f3c551e90d7f1ee551448ae427 # v2.5.0
+    with:
+      # Validate exclusions ported from previous iteration
+      super-linter-variables: |
+        {
+          FILTER_REGEX_EXCLUDE: ".*archive/.*",
+          VALIDATE_ALL_CODEBASE: false,
+          VALIDATE_GITHUB_ACTIONS: false,
+          VALIDATE_BASH: false,
+          VALIDATE_BASH_EXEC: false,
+          VALIDATE_SHELL_SHFMT: false,
+          VALIDATE_HTML: false,
+          VALIDATE_JAVASCRIPT_STANDARD: false,
+          VALIDATE_OPENAPI: false,
+          VALIDATE_KUBERNETES_KUBECONFORM: false,
+          VALIDATE_TERRAFORM_TERRASCAN: false,
+          VALIDATE_CHECKOV: false,
+          VALIDATE_JSCPD: false,
+          VALIDATE_CSS: false
+        }
