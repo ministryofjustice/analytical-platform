@@ -1,11 +1,11 @@
 locals {
   schedules_de_loc = [
     {
-      name = "Data Engineering Support HEO/SEO"
-      team = module.teams_de["Data Engineering Support HEO/SEO"].id
+      name = "Data Engineering Support HEO_SEO"
+      team = module.teams_de["Data Engineering Support HEO_SEO"].id
       layers = [
         {
-          name                         = "DE Daily Support Rota HEO/SEO"
+          name                         = "DE Daily Support Rota HEO_SEO"
           start                        = "2023-03-27T09:00:00Z"
           rotation_virtual_start       = "2024-09-20T09:00:00+01:00"
           rotation_turn_length_seconds = 86400
@@ -102,7 +102,7 @@ locals {
   ]
 
   teams_de = {
-    "Data Engineering Support HEO/SEO" = {
+    "Data Engineering Support HEO_SEO" = {
       responders = {
         for user in local.users_de_seo :
         user.email => {
