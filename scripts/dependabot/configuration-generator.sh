@@ -31,20 +31,22 @@ updates:
       include: "scope"
 EOL
 
-for package_ecosystem in pip terraform; do
+for package_ecosystem in terraform; do
 
   echo "=== Ecosystem: ${package_ecosystem} ==="
 
   case ${package_ecosystem} in
-    pip)
-      SEARCH_PATTERN="*requirements*.txt"
-      SKIP_FILE=".dependabot-pip-ignore"
-    ;;
     terraform)
       SEARCH_PATTERN=".terraform.lock.hcl"
       SKIP_FILE=".dependabot-terraform-ignore"
     ;;
   esac
+
+  folders=$(find . -type f -name "${SEARCH_PATTERN}" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
+  export folders
+
+  echo "=== Folders ==="
+  echo "${folders}"
 
   printf "  - package-ecosystem: \"%s\"\n" "${package_ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "    schedule:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
@@ -55,13 +57,6 @@ for package_ecosystem in pip terraform; do
   printf "      prefix: \":dependabot: %s\"\n" "${package_ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "      include: \"scope\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "    directories:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-
-
-  folders=$(find . -type f -name "${SEARCH_PATTERN}" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
-  export folders
-
-  echo "=== Folders ==="
-  echo "${folders}"
 
   for folder in ${folders}; do
 
