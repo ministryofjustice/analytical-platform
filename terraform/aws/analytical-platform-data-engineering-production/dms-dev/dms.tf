@@ -1,14 +1,19 @@
 data "aws_availability_zones" "available" {} #updated IAM role policy
-
 resource "aws_secretsmanager_secret" "oasys_dev_secret" {
-  name = "oasys-dev-secret"
+  # checkov:skip=CKV2_AWS_57: Skipping because automatic rotation not needed. 
+  name       = "oasys-dev-secret"
+  kms_key_id = module.dms_dev_kms.key_arn
 }
 
 resource "aws_secretsmanager_secret" "oasys_dev_asm_secret" {
-  name = "oasys-dev-asm-secret"
+  # checkov:skip=CKV2_AWS_57: Skipping because automatic rotation not needed. 
+  name       = "oasys-dev-asm-secret"
+  kms_key_id = module.dms_dev_kms.key_arn
 }
 
 module "dev_dms_oasys" {
+  # checkov:skip=CKV_TF_1: Skipping because currently want to reference a branch whilst making changes to the dms module. Will update once dms module is stable.
+  # checkov:skip=CKV_TF_2: Skipping as waiting for dms module to be stable before making a release.
 
   source      = "github.com/ministryofjustice/terraform-dms-module?ref=intial_branch"
   vpc_id      = module.vpc.vpc_id

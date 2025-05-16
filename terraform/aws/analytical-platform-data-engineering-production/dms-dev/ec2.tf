@@ -35,6 +35,8 @@ data "aws_ssm_parameter" "al2023" {
 }
 
 resource "aws_security_group" "dev_bastion_ec2" {
+  # checkov:skip=CKV_AWS_23: Skipping as Terraform adds a default description.
+  # checkov:skip=CKV_AWS_382: Skipping as dev bastion.
   vpc_id = module.vpc.vpc_id
 
   egress {
@@ -49,11 +51,19 @@ resource "aws_security_group" "dev_bastion_ec2" {
 }
 
 resource "aws_instance" "dev_bastion_ec2" {
+  # checkov:skip=CKV_AWS_126: Skipping because detailed monitoring not needed for the EC2 instance to test connectivity to the source databases, basic monitoring is enough and is free.
+  # checkov:skip=CKV_AWS_135: Skipping becuase t3a.nano is EBS optimized by default.
   ami                    = data.aws_ssm_parameter.al2023.value
   instance_type          = "t3a.nano"
   iam_instance_profile   = aws_iam_instance_profile.dev_bastion_ec2.name
   subnet_id              = module.vpc.private_subnets[0]
   vpc_security_group_ids = [aws_security_group.dev_bastion_ec2.id]
+  root_block_device {
+    encrypted = true #fixes CKV_AWS_8
+  }
+  metadata_options {
+    http_tokens = "required"
+  }
 
   tags = merge(
     {

@@ -22,11 +22,12 @@ locals {
 }
 
 module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "5.21.0"
-  name    = local.name
-  cidr    = "172.24.0.0/16"
-  azs     = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+
+  # Commit has for v5.21.0
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc?ref=7c1f791efd61f326ed6102d564d1a65d1eceedf0"
+  name   = local.name
+  cidr   = "172.24.0.0/16"
+  azs    = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
 
   private_subnets      = ["172.24.0.0/20", "172.24.16.0/20", "172.24.32.0/20"]
   private_subnet_names = ["private-eu-west-1a-dev", "private-eu-west-1b-dev", "private-eu-west-1c-dev"]
@@ -47,8 +48,8 @@ module "vpc" {
 
 
 module "endpoints" {
-  source  = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  version = "5.21.0"
+  # Commit has for v5.21.0
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc//modules/vpc-endpoints?ref=507193ee659f6f0ecdd4a75107e59e2a6c1ac3cc"
 
   vpc_id                     = module.vpc.vpc_id
   create_security_group      = true
