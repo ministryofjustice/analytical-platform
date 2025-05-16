@@ -23,7 +23,7 @@ provider "aws" {
 
 # Comment out to run terraform plan locally
 provider "aws" {
-  region = "eu-west-2"
+  region = "eu-west-1"
   assume_role {
     role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/GlobalGitHubActionAdmin"
   }

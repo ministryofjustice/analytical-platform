@@ -34,6 +34,9 @@ data "aws_ssm_parameter" "al2023" {
   name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
 }
 
+#trivy:ignore:AVD-AWS-0099:Using default description.
+#trivy:ignore:AVD-AWS-0124:Using default description.
+#trivy:ignore:AVD-AWS-0104:Just a dev bastion to test source connection to database.
 resource "aws_security_group" "dev_bastion_ec2" {
   # checkov:skip=CKV_AWS_23: Skipping as Terraform adds a default description.
   # checkov:skip=CKV_AWS_382: Skipping as dev bastion.
