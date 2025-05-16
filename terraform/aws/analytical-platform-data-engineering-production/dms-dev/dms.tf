@@ -1,12 +1,12 @@
 data "aws_availability_zones" "available" {} #updated IAM role policy
 resource "aws_secretsmanager_secret" "oasys_dev_secret" {
-  # checkov:skip=CKV2_AWS_57: Skipping because automatic rotation not needed. 
+  # checkov:skip=CKV2_AWS_57: Skipping because automatic rotation not needed.
   name       = "oasys-dev-secret"
   kms_key_id = module.dms_dev_kms.key_arn
 }
 
 resource "aws_secretsmanager_secret" "oasys_dev_asm_secret" {
-  # checkov:skip=CKV2_AWS_57: Skipping because automatic rotation not needed. 
+  # checkov:skip=CKV2_AWS_57: Skipping because automatic rotation not needed.
   name       = "oasys-dev-asm-secret"
   kms_key_id = module.dms_dev_kms.key_arn
 }
