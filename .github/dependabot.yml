@@ -14,17 +14,15 @@ updates:
     commit-message:
       prefix: ":dependabot: github-actions"
       include: "scope"
-  - package-ecosystem: "pip"
+  - package-ecosystem: "devcontainers"
+    directory: "/"
     schedule:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: ":dependabot: pip"
+      prefix: ":dependabot: devcontainers"
       include: "scope"
-    directories:
-      - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
-      - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
   - package-ecosystem: "terraform"
     schedule:
       interval: "daily"
