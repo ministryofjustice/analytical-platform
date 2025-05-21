@@ -38,7 +38,7 @@ jobs:
 
       - name: Commit Changes
         id: commit_changes
-        uses: planetscale/ghcommit-action@5b20c92facae8dbf8a3836dc65b8503dda378573 # v0.2.13
+        uses: planetscale/ghcommit-action@2675e0864d08c642df6064d3eb71d71452aeeb29 # v0.2.14
         with:
           commit_message: "🤖 Update .github/dependabot.yml"
           file_pattern: ".github/dependabot.yml"
