@@ -2353,6 +2353,8 @@ locals {
           ]
           Version = "2012-10-17"
         }
+      )
+    }
     "mojap-raw-hist-preprod" = {
       grant = [{
         id         = data.aws_canonical_user_id.current.id
