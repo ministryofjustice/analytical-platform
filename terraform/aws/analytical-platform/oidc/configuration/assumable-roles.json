@@ -234,22 +234,7 @@
     "repositories": ["ministryofjustice/data-engineering-cleanup"],
     "targets": [
       "analytical-platform-data-engineering-production",
-      "analytical-platform-data-production"
-    ],
-    "stateLockingDetails": [],
-    "ssmParameterConfig": [
-      {
-        "ssmParameterArnPrefixes": ["data-engineering-cleanup/"],
-        "ssmParameterRegion": "eu-west-1"
-      }
-    ]
-  },
-  "data-engineering-cleanup-sandbox": {
-    "account": "analytical-platform-data-engineering-sandbox-a",
-    "stateConfig": [],
-    "s3Locations": [],
-    "repositories": ["ministryofjustice/data-engineering-cleanup"],
-    "targets": [
+      "analytical-platform-data-production",
       "analytical-platform-data-engineering-sandbox-a"
     ],
     "stateLockingDetails": [],
