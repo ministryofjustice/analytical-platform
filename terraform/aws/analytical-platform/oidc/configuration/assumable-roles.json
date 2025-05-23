@@ -244,6 +244,22 @@
       }
     ]
   },
+  "data-engineering-cleanup-sandbox": {
+    "account": "analytical-platform-data-engineering-sandbox-a",
+    "stateConfig": [],
+    "s3Locations": [],
+    "repositories": ["ministryofjustice/data-engineering-cleanup"],
+    "targets": [
+      "analytical-platform-data-engineering-sandbox-a"
+    ],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": [
+      {
+        "ssmParameterArnPrefixes": ["data-engineering-cleanup/"],
+        "ssmParameterRegion": "eu-west-1"
+      }
+    ]
+  },
   "airflow-contracts-etl": {
     "account": "analytical-platform-data-engineering-production",
     "stateConfig": [],
