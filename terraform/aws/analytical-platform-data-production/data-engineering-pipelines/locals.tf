@@ -2288,7 +2288,7 @@ locals {
               ]
               Effect = "Allow"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev"
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev","arn:aws:iam::189157455002:role/oasys-dev-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
               Sid      = "WriteOnlyAccess-mojap-raw-hist-dev-hmpps-oasys"
@@ -2302,7 +2302,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev"
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev","arn:aws:iam::189157455002:role/oasys-dev-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
               Sid      = "112-mojap-raw-hist-dev-hmpps-oasys"
@@ -2316,7 +2316,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev"
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev","arn:aws:iam::189157455002:role/oasys-dev-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
               Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-dev-hmpps-oasys"
@@ -2330,7 +2330,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev"
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev","arn:aws:iam::189157455002:role/oasys-dev-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-dev-hmpps-oasys"
