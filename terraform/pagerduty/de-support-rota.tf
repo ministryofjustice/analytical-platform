@@ -65,7 +65,6 @@ locals {
           users = [
             module.users_de_g7["matt.heery@justice.gov.uk"].id,
             module.users_de_g7["lalitha.nagarur@digital.justice.gov.uk"].id,
-            module.users_de_g7["thomas.hepworth@justice.gov.uk"].id,
             module.users_de_g7["matthew.price2@justice.gov.uk"].id,
             module.users_de_g7["andrew.craik@justice.gov.uk"].id,
             module.users_de_g7["supratik.chowdhury@digital.justice.gov.uk"].id,
@@ -182,11 +181,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Thomas Hepworth"
-      email = "thomas.hepworth@justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Matt Price"
       email = "matthew.price2@justice.gov.uk"
       role  = "responder"
@@ -254,11 +248,6 @@ import {
 import {
   to = module.users_de_g7["matt.heery@justice.gov.uk"].pagerduty_user.this
   id = "PKCT98I"
-}
-
-import {
-  to = module.users_de_g7["thomas.hepworth@justice.gov.uk"].pagerduty_user.this
-  id = "PIAKE2C"
 }
 
 import {
