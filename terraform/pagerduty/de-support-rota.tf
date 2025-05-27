@@ -153,7 +153,7 @@ locals {
     },
     {
       name  = "Anthony Cody"
-      email = "anthony.cody@justice.gov.uk"
+      email = "anthony.cody@digital.justice.gov.uk"
       role  = "responder"
     },
     {
