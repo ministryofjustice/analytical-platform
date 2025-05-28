@@ -1794,7 +1794,7 @@ locals {
               Principal = {
                 AWS = [
                   "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev",
-                  "arn:aws:iam::189157455002:role/delius-lambda-copy-object-dev",
+                  "arn:aws:iam::189157455002:role/delius-lambda-copy-object-dev"
                 ]
               }
               Resource = "arn:aws:s3:::mojap-metadata-dev"
@@ -1987,7 +1987,7 @@ locals {
               Action = "s3:GetObject"
               Effect = "Allow"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-prod"
+                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-prod",
               }
               Resource = "arn:aws:s3:::mojap-metadata-prod/oasys/*"
               Sid      = "ReadOnlyAccess-mojap-metadata-prod-oasys"
@@ -2069,7 +2069,7 @@ locals {
               ]
               Effect = "Allow"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-prod"
+                AWS = ["arn:aws:iam::189157455002:role/delius-lambda-copy-object-prod", "arn:aws:iam::189157455002:role/delius-prod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist/hmpps/delius/*"
               Sid      = "WriteOnlyAccess-mojap-raw-hist-hmpps-delius"
@@ -2083,7 +2083,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-prod"
+                AWS = ["arn:aws:iam::189157455002:role/delius-lambda-copy-object-prod", "arn:aws:iam::189157455002:role/delius-prod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist/hmpps/delius/*"
               Sid      = "112-mojap-raw-hist-hmpps-delius"
@@ -2097,7 +2097,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-prod"
+                AWS = ["arn:aws:iam::189157455002:role/delius-lambda-copy-object-prod", "arn:aws:iam::189157455002:role/delius-prod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist/hmpps/delius/*"
               Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-hmpps-delius"
@@ -2111,7 +2111,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-prod"
+                AWS = ["arn:aws:iam::189157455002:role/delius-lambda-copy-object-prod", "arn:aws:iam::189157455002:role/delius-prod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist/hmpps/delius/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-hmpps-delius"
@@ -2123,7 +2123,7 @@ locals {
               ]
               Effect = "Allow"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-prod"
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-prod", "arn:aws:iam::189157455002:role/oasys-prod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist/hmpps/oasys/*"
               Sid      = "WriteOnlyAccess-mojap-raw-hist-hmpps-oasys"
@@ -2137,7 +2137,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-prod"
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-prod", "arn:aws:iam::189157455002:role/oasys-prod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist/hmpps/oasys/*"
               Sid      = "112-mojap-raw-hist-hmpps-oasys"
@@ -2151,7 +2151,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-prod"
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-prod", "arn:aws:iam::189157455002:role/oasys-prod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist/hmpps/oasys/*"
               Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-hmpps-oasys"
@@ -2165,7 +2165,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-prod"
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-prod", "arn:aws:iam::189157455002:role/oasys-prod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist/hmpps/oasys/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-hmpps-oasys"
@@ -2227,6 +2227,114 @@ locals {
       policy = jsonencode(
         {
           Statement = [
+            {
+              Action = [
+                "s3:PutObject",
+                "s3:ListMultipartUploadParts",
+              ]
+              Effect = "Allow"
+              Principal = {
+                AWS = ["arn:aws:iam::189157455002:role/delius-lambda-copy-object-dev", "arn:aws:iam::189157455002:role/delius-dev-validation"]
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/delius/*"
+              Sid      = "WriteOnlyAccess-mojap-raw-hist-dev-hmpps-delius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-acl" = "bucket-owner-full-control"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = ["arn:aws:iam::189157455002:role/delius-lambda-copy-object-dev", "arn:aws:iam::189157455002:role/delius-dev-validation"]
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/delius/*"
+              Sid      = "112-mojap-raw-hist-dev-hmpps-delius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-server-side-encryption" = "AES256"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = ["arn:aws:iam::189157455002:role/delius-lambda-copy-object-dev", "arn:aws:iam::189157455002:role/delius-dev-validation"]
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/delius/*"
+              Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-dev-hmpps-delius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                Null = {
+                  "s3:x-amz-server-side-encryption" = "true"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = ["arn:aws:iam::189157455002:role/delius-lambda-copy-object-dev", "arn:aws:iam::189157455002:role/delius-dev-validation"]
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/delius/*"
+              Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-dev-hmpps-delius"
+            },
+            {
+              Action = [
+                "s3:PutObject",
+                "s3:ListMultipartUploadParts",
+              ]
+              Effect = "Allow"
+              Principal = {
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev", "arn:aws:iam::189157455002:role/oasys-dev-validation"]
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
+              Sid      = "WriteOnlyAccess-mojap-raw-hist-dev-hmpps-oasys"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-acl" = "bucket-owner-full-control"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev", "arn:aws:iam::189157455002:role/oasys-dev-validation"]
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
+              Sid      = "112-mojap-raw-hist-dev-hmpps-oasys"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-server-side-encryption" = "AES256"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev", "arn:aws:iam::189157455002:role/oasys-dev-validation"]
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
+              Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-dev-hmpps-oasys"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                Null = {
+                  "s3:x-amz-server-side-encryption" = "true"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-dev", "arn:aws:iam::189157455002:role/oasys-dev-validation"]
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
+              Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-dev-hmpps-oasys"
+            },
             {
               Action = "s3:*"
               Condition = {
@@ -2291,7 +2399,7 @@ locals {
               ]
               Effect = "Allow"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-preprod"
+                AWS = ["arn:aws:iam::189157455002:role/delius-lambda-copy-object-preprod", "arn:aws:iam::189157455002:role/delius-preprod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
               Sid      = "WriteOnlyAccess-mojap-raw-hist-preprod-hmpps-delius"
@@ -2305,7 +2413,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-preprod"
+                AWS = ["arn:aws:iam::189157455002:role/delius-lambda-copy-object-preprod", "arn:aws:iam::189157455002:role/delius-preprod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
               Sid      = "112-mojap-raw-hist-preprod-hmpps-delius"
@@ -2319,7 +2427,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-preprod"
+                AWS = ["arn:aws:iam::189157455002:role/delius-lambda-copy-object-preprod", "arn:aws:iam::189157455002:role/delius-preprod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
               Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-preprod-hmpps-delius"
@@ -2333,7 +2441,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/delius-lambda-copy-object-preprod"
+                AWS = ["arn:aws:iam::189157455002:role/delius-lambda-copy-object-preprod", "arn:aws:iam::189157455002:role/delius-preprod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-preprod-hmpps-delius"
@@ -2345,7 +2453,7 @@ locals {
               ]
               Effect = "Allow"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-preprod"
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-preprod", "arn:aws:iam::189157455002:role/oasys-preprod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/oasys/*"
               Sid      = "WriteOnlyAccess-mojap-raw-hist-preprod-hmpps-oasys"
@@ -2359,7 +2467,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-preprod"
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-preprod", "arn:aws:iam::189157455002:role/oasys-preprod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/oasys/*"
               Sid      = "112-mojap-raw-hist-preprod-hmpps-oasys"
@@ -2373,7 +2481,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-preprod"
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-preprod", "arn:aws:iam::189157455002:role/oasys-preprod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/oasys/*"
               Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-preprod-hmpps-oasys"
@@ -2387,7 +2495,7 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = "arn:aws:iam::189157455002:role/oasys-lambda-copy-object-preprod"
+                AWS = ["arn:aws:iam::189157455002:role/oasys-lambda-copy-object-preprod", "arn:aws:iam::189157455002:role/oasys-preprod-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/oasys/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-preprod-hmpps-oasys"
