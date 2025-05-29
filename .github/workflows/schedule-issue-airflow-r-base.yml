@@ -1,5 +1,5 @@
 ---
-name: 📥 Maintenance - Create Airflow Python Base Issue
+name: 📥 Maintenance - Create Airflow R Base Issue
 
 on:
   schedule:
@@ -38,7 +38,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          TITLE: 📥 Maintenance - Airflow Python Base Image
+          TITLE: 📥 Maintenance - Airflow R Base Image
           ASSIGNEES:
           LABELS: maintenance
           BODY: |
@@ -48,13 +48,13 @@ jobs:
             ### User Story
 
             As an… engineer on the Analytical Platform
-            I need/want/expect to… keep the Airflow Python Base image up to date
+            I need/want/expect to… keep the Airflow R Base image up to date
             So that… security / best practice etc
 
             ### Definition of Done
             - [ ] Merge any open dependabot Pull Requests in the repository (noted below).
-            - [ ] In the [repository](https://github.com/ministryofjustice/analytical-platform-airflow-python-base), confirm that the [software](https://github.com/ministryofjustice/analytical-platform-airflow-python-base?tab=readme-ov-file#managing-software-versions) and [tests](https://github.com/ministryofjustice/analytical-platform-airflow-python-base/blob/main/test/container-structure-test.yml) are up-to-date.
-            - [ ] Create a new [release](https://github.com/ministryofjustice/analytical-platform-airflow-python-base/releases).
+            - [ ] In the [repository](https://github.com/ministryofjustice/analytical-platform-airflow-r-base), confirm that the [software](https://github.com/ministryofjustice/analytical-platform-airflow-r-base?tab=readme-ov-file#managing-software-versions) and [tests](https://github.com/ministryofjustice/analytical-platform-airflow-r-base/blob/main/test/container-structure-test.yml) are up-to-date.
+            - [ ] Create a new [release](https://github.com/ministryofjustice/analytical-platform-airflow-r-base/releases).
 
           PINNED: false
           CLOSE_PREVIOUS: false
