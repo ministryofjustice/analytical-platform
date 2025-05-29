@@ -230,31 +230,3 @@ module "analytical_platform_production_assumable_role" {
     [module.analytical_platform_management_production_github_oidc_provider.github_actions_role],
   [for role_name, config in local.oidc_roles : module.analytical_platform_data_engineering_production_github_oidc_role[role_name].role if module.analytical_platform_data_engineering_production_github_oidc_role != {} && contains(config.targets, "analytical-platform-production")])
 }
-
-module "mi_platform_development_assumable_role" {
-  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
-
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.55.0"
-
-  providers = {
-    aws = aws.mi-platform-development
-  }
-
-  create_role = true
-
-  role_name         = "github-actions-infrastructure"
-  role_description  = "Allows GitHub Actions and self-hosted runners to administer this account"
-  role_requires_mfa = "false"
-
-  attach_admin_policy    = true
-  allow_self_assume_role = true
-  force_detach_policies  = true
-
-  trusted_role_arns = concat(
-    tolist(data.aws_iam_roles.analytical_platform_management_production_runner_roles.arns),
-    tolist(data.aws_iam_roles.analytical_platform_data_production_runner_roles.arns),
-    tolist(data.aws_iam_roles.analytical_platform_development_runner_roles.arns),
-    [module.analytical_platform_management_production_github_oidc_provider.github_actions_role],
-  [for role_name, config in local.oidc_roles : module.analytical_platform_data_engineering_production_github_oidc_role[role_name].role if module.analytical_platform_data_engineering_production_github_oidc_role != {} && contains(config.targets, "mi-platform-development")])
-}
