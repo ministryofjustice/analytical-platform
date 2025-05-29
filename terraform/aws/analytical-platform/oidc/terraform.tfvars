@@ -11,7 +11,6 @@ account_ids = {
   analytical-platform-landing-production          = "335823981503"
   analytical-platform-management-production       = "042130406152"
   analytical-platform-production                  = "312423030077"
-  mi-platform-development                         = "967617145656"
 }
 
 tags = {
