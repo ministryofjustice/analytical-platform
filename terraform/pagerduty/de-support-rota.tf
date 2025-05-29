@@ -69,6 +69,7 @@ locals {
             module.users_de_g7["andrew.craik@justice.gov.uk"].id,
             module.users_de_g7["supratik.chowdhury@digital.justice.gov.uk"].id,
             module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].id,
+            module.users_de_g7["thomas.hepworth@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -200,6 +201,11 @@ locals {
       email = "tapan.perkins@digital.justice.gov.uk"
       role  = "responder"
     },
+    {
+      name  = "Thomas Hepworth"
+      email = "thomas.hepworth@justice.gov.uk"
+      role  = "responder"
+    },
 
   ]
 }
@@ -303,4 +309,9 @@ import {
 import {
   to = module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].pagerduty_user.this
   id = "PXAKE4K"
+}
+
+import {
+  to = module.users_de_g7["thomas.hepworth@justice.gov.uk"].pagerduty_user.this
+  id = "PINRNK0"
 }
