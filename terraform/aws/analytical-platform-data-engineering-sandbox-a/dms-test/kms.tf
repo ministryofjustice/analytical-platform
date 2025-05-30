@@ -11,12 +11,12 @@ module "dms_test_kms" {
   deletion_window_in_days = 7
 
   # Grants
-  grants = {
-    dms_source = {
-      grantee_principal = module.test_dms_implementation.dms_source_role_arn
-      operations        = ["Encrypt", "Decrypt", "GenerateDataKey"]
-    }
-  }
+  #grants = {
+  #  dms_source = {
+  #    grantee_principal = module.test_dms_implementation.dms_source_role_arn
+  #    operations        = ["Encrypt", "Decrypt", "GenerateDataKey"]
+  #  }
+  #}
 
   tags = local.tags
 }
