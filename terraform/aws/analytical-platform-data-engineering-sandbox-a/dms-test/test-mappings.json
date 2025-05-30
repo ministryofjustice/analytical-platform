@@ -1,0 +1,10 @@
+{
+    "schema": "ADMIN",
+    "objects_from": "oracle19_sandbox",
+    "extraction_date": "2024-06-25T13:47:00.688074",
+    "objects": [
+        "TEST_DATA"
+    ],
+    "blobs": [],
+    "columns_to_exclude":[]
+}
