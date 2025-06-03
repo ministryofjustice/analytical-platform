@@ -11,7 +11,7 @@ locals {
 
   databases = [
     {
-      name                         = "curated_prisons_history_dev_dbt"
+      name                         = "dpr-ap-integration"
       share_all_tables             = true
       share_all_tables_permissions = ["DESCRIBE", "SELECT"]
 
