@@ -23,6 +23,8 @@ updates:
       prefix: ":dependabot: pip"
       include: "scope"
     directories:
+      - "terraform/aws/analytical-platform-data-engineering-sandbox-a/dms-test/validation-lambda"
+      - "terraform/aws/analytical-platform-data-engineering-sandbox-a/dms-test/validation-lambda-test"
       - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
       - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
       - "terraform/aws/modules/data-engineering/dms/lambda-functions/metadata_generator"
@@ -44,6 +46,7 @@ updates:
       - "terraform/aws/analytical-platform-data-engineering-production/ppud-dev"
       - "terraform/aws/analytical-platform-data-engineering-production/terraform-state"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/airflow-create-a-pipeline"
+      - "terraform/aws/analytical-platform-data-engineering-sandbox-a/dms-test"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/github-actions-roles"
       - "terraform/aws/analytical-platform-data-production/airflow"
       - "terraform/aws/analytical-platform-data-production/airflow-service"
