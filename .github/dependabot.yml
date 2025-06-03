@@ -25,6 +25,8 @@ updates:
     directories:
       - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
       - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
+      - "terraform/aws/modules/data-engineering/dms/lambda-functions/metadata_generator"
+      - "terraform/aws/modules/data-engineering/dms/lambda-functions/validation"
   - package-ecosystem: "terraform"
     schedule:
       interval: "daily"
