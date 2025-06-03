@@ -7,7 +7,7 @@ module "test_dms_implementation" {
   environment = local.tags.environment-name
 
   db = aws_db_instance.dms_test.identifier
-
+  slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
   dms_replication_instance = {
     replication_instance_id    = "test-dms"
     subnet_ids                 = module.vpc.private_subnets
