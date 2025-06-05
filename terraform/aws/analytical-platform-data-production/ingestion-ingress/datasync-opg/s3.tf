@@ -39,7 +39,7 @@ module "datasync_opg_ingress_s3" {
   for_each = local.analytical_platform_ingestion_environments
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.10.0"
+  version = "4.10.1"
 
   bucket = "mojap-data-production-datasync-opg-ingress-${each.key}"
 
