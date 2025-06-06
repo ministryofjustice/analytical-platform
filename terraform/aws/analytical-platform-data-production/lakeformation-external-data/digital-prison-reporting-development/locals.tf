@@ -11,7 +11,7 @@ locals {
 
   databases = [
     {
-      name                         = "dpr-ap-integration"
+      name                         = "dpr-ap-integration-test"
       share_all_tables             = true
       share_all_tables_permissions = ["DESCRIBE", "SELECT"]
 
