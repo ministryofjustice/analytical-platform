@@ -55,7 +55,7 @@ data "aws_iam_policy_document" "glue_ireland" {
     for_each = local.data_engineering_dbs
 
     content {
-      sid    = statement.value.name
+      sid    = "${statement.value.name}DE"
       effect = "Allow"
       actions = [
         "glue:UpdateTable",
