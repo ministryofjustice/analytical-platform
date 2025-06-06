@@ -39,7 +39,9 @@ data "aws_iam_policy_document" "glue_ireland" {
         values = flatten([
           [for user_id in statement.value.role_names_to_exempt : [
             data.aws_iam_role.glue_policy_role[user_id].unique_id,
-            "${data.aws_iam_role.glue_policy_role[user_id].unique_id}:*"
+            "${data.aws_iam_role.data_engineering_glue_policy_role[user_id].unique_id}:*",
+            data.aws_iam_role.glue_policy_role[user_id].unique_id,
+            "${data.aws_iam_role.data_engineering_glue_policy_role[user_id].unique_id}:*"
           ]],
           [
             data.aws_caller_identity.current.account_id,
