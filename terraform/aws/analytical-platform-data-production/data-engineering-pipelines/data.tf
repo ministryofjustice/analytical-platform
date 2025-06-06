@@ -10,9 +10,11 @@ data "aws_iam_role" "glue_policy_role" {
 }
 
 data "aws_iam_role" "data_engineering_glue_policy_role" {
-  provider = aws.analytical-platform-data-engineering-production
   for_each = toset(local.data_engineering_unique_role_names)
-  name     = each.value
+
+  provider = aws.analytical-platform-data-engineering-production
+
+  name = each.value
 }
 
 data "aws_iam_roles" "aws_sso_modernisation_platform_data_eng" {
