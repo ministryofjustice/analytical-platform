@@ -59,6 +59,8 @@ updates:
       - "terraform/aws/analytical-platform-data-production/ingestion-ingress/datasync-opg"
       - "terraform/aws/analytical-platform-data-production/ingestion-ingress/dms"
       - "terraform/aws/analytical-platform-data-production/joiners-movers-leavers"
+      - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prison-reporting-development"
+      - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prisons-reporting-development"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prisons-reporting-preproduction"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prisons-reporting-production"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/electronic-monitoring-data-preproduction"
