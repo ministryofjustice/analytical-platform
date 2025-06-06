@@ -1,373 +1,373 @@
 ---
-on: # yamllint disable-line rule:truthy
-  workflow_call:
-    inputs:
-      component:
-        required: true
-        type: string
-      terraform-version:
-        default: latest
-        required: false
-        type: string
-
-concurrency:
-  group: ${{ inputs.component }}
-
-jobs:
-  determine-workflow-mode:
-    name: Determine Workflow Mode
-    runs-on: ubuntu-latest
-    outputs:
-      mode: ${{ steps.determine_mode.outputs.mode }}
-    steps:
-      - name: Determine Mode
-        id: determine_mode
-        run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "mode=Apply" >>"${GITHUB_OUTPUT}"
-          else
-            echo "mode=Plan" >>"${GITHUB_OUTPUT}"
-          fi
-
-  terraform-static-analysis:
-    if: (github.ref != 'refs/heads/main' && github.actor != 'dependabot[bot]')
-    name: Static Analysis
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
-      - name: Build path-filters file
-        id: build_path_filters
-        run: bash scripts/path-filter/configuration-generator.sh terraform
-
-      - name: Prepare Environment
-        id: prepare_environment
-        shell: bash
-        run: |
-          workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filter/terraform.yml | sed 's/.\{3\}$//')
-          export workingDirectory
-
-          echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
-
-      - name: Checkov
-        if: github.ref != 'refs/heads/main'
-        id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@4f966d0f4ad18f9d1c8fa484530d67d1ada2931a # v12.3027.0
-        with:
-          directory: ${{ env.working-directory }}
-          framework: terraform
-          download_external_modules: false
-          quiet: true
-          output_format: cli
-        continue-on-error: true
-
-      - name: Trivy
-        if: github.ref != 'refs/heads/main'
-        id: terraform_static_analysis_trivy
-        uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37 # v0.31.0
-        with:
-          scan-type: config
-          scan-ref: ${{ env.working-directory }}
-          exit-code: 1
-        continue-on-error: true
-
-      - name: Check for Static Analysis Override Label
-        if: github.ref != 'refs/heads/main'
-        id: check_for_static_analysis_override
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        with:
-          result-encoding: string
-          script: |
-            const labels = await github.rest.issues.listLabelsOnIssue({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            })
-
-            const overrideStaticAnalysis = labels.data.find(label => {
-              return label.name === 'override-static-analysis'
-            })
-
-            if (overrideStaticAnalysis) {
-              console.log('Found label')
-              return "true"
-            } else {
-              console.log('Did not find label')
-              return "false"
-            }
-
-      - name: Comment on Pull Request
-        if: github.event_name == 'pull_request'
-        id: comment
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        with:
-          script: |
-            const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
-            #### Checkov 🛂: \`${{ steps.terraform_static_analysis_checkov.outcome }}\`
-            #### Trivy 🛂: \`${{ steps.terraform_static_analysis_trivy.outcome }}\`
-            #### Static Analysis Override Label 🏷️: \`${{ steps.check_for_static_analysis_override.outputs.result }}\`
-
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`, Marker: \`${{ inputs.component }}_static_analysis\`*`;
-
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            })
-
-            const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.component }}_static_analysis')
-            })
-
-            if (botComment) {
-              github.rest.issues.updateComment({
+  on: # yamllint disable-line rule:truthy
+    workflow_call:
+      inputs:
+        component:
+          required: true
+          type: string
+        terraform-version:
+          default: latest
+          required: false
+          type: string
+  
+  concurrency:
+    group: ${{ inputs.component }}
+  
+  jobs:
+    determine-workflow-mode:
+      name: Determine Workflow Mode
+      runs-on: ubuntu-latest
+      outputs:
+        mode: ${{ steps.determine_mode.outputs.mode }}
+      steps:
+        - name: Determine Mode
+          id: determine_mode
+          run: |
+            if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+              echo "mode=Apply" >>"${GITHUB_OUTPUT}"
+            else
+              echo "mode=Plan" >>"${GITHUB_OUTPUT}"
+            fi
+  
+    terraform-static-analysis:
+      if: (github.ref != 'refs/heads/main' && github.actor != 'dependabot[bot]')
+      name: Static Analysis
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          id: checkout
+          uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  
+        - name: Build path-filters file
+          id: build_path_filters
+          run: bash scripts/path-filter/configuration-generator.sh terraform
+  
+        - name: Prepare Environment
+          id: prepare_environment
+          shell: bash
+          run: |
+            workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filter/terraform.yml | sed 's/.\{3\}$//')
+            export workingDirectory
+  
+            echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
+  
+        - name: Checkov
+          if: github.ref != 'refs/heads/main'
+          id: terraform_static_analysis_checkov
+          uses: bridgecrewio/checkov-action@4f966d0f4ad18f9d1c8fa484530d67d1ada2931a # v12.3027.0
+          with:
+            directory: ${{ env.working-directory }}
+            framework: terraform
+            download_external_modules: false
+            quiet: true
+            output_format: cli
+          continue-on-error: true
+  
+        - name: Trivy
+          if: github.ref != 'refs/heads/main'
+          id: terraform_static_analysis_trivy
+          uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37 # v0.31.0
+          with:
+            scan-type: config
+            scan-ref: ${{ env.working-directory }}
+            exit-code: 1
+          continue-on-error: true
+  
+        - name: Check for Static Analysis Override Label
+          if: github.ref != 'refs/heads/main'
+          id: check_for_static_analysis_override
+          uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+          with:
+            result-encoding: string
+            script: |
+              const labels = await github.rest.issues.listLabelsOnIssue({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: output
-              })
-            } else {
-              github.rest.issues.createComment({
                 issue_number: context.issue.number,
+              })
+  
+              const overrideStaticAnalysis = labels.data.find(label => {
+                return label.name === 'override-static-analysis'
+              })
+  
+              if (overrideStaticAnalysis) {
+                console.log('Found label')
+                return "true"
+              } else {
+                console.log('Did not find label')
+                return "false"
+              }
+  
+        - name: Comment on Pull Request
+          if: github.event_name == 'pull_request'
+          id: comment
+          uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+          with:
+            script: |
+              const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
+              #### Checkov 🛂: \`${{ steps.terraform_static_analysis_checkov.outcome }}\`
+              #### Trivy 🛂: \`${{ steps.terraform_static_analysis_trivy.outcome }}\`
+              #### Static Analysis Override Label 🏷️: \`${{ steps.check_for_static_analysis_override.outputs.result }}\`
+  
+              *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`, Marker: \`${{ inputs.component }}_static_analysis\`*`;
+  
+              const { data: comments } = await github.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: output
-              })
-            }
-
-      - name: Process Outcomes
-        if: github.ref != 'refs/heads/main'
-        id: process_outcomes
-        shell: bash
-        run: |
-          failBuild=false
-
-          if [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
-            echo "OVERRIDDEN (Dependabot): Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
-            export failBuild=true
-            echo "FAIL: Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
-            echo "OVERRIDDEN (by label): Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" == "success" ]]; then
-            echo "PASS: Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
-          fi
-
-          if [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
-            echo "OVERRIDDEN (Dependabot): Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
-            export failBuild=true
-            echo "FAIL: Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
-            echo "OVERRIDDEN (by label): Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" == "success" ]]; then
-            echo "PASS: Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
-          fi
-
-          if [[ "${failBuild}" == "true" ]]; then
-            exit 1
-          fi
-
-  terraform:
-    needs: [determine-workflow-mode]
-    name: ${{ needs.determine-workflow-mode.outputs.mode }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
-      - name: Build path-filters file
-        id: build_path_filters
-        run: bash scripts/path-filter/configuration-generator.sh terraform
-
-      - name: Prepare Environment
-        id: prepare_environment
-        shell: bash
-        run: |
-          workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filter/terraform.yml | sed 's/.\{3\}$//')
-          export workingDirectory
-
-          echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
-
-      - name: Configure AWS Credentials
-        id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
-        with:
-          aws-region: eu-west-1
-          role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
-
-      - name: Assume GlobalGitHubActionAdmin Role
-        id: assume_global_github_action_admin_role
-        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
-        with:
-          aws-region: eu-west-1
-          role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
-          role-skip-session-tagging: true
-
-      - name: Retrieve AWS Secrets Manager Secrets
-        id: retrieve_aws_secrets_manager_secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@5e19ff380d035695bdd56bbad320ca535c9063f2 # v2.0.9
-        with:
-          secret-ids: |
-            GITHUB_ROBOT_TOKEN, github-token
-            SLACK_WEBHOOK_URL, slack-webhook-url/terraform-failure
-
-      - name: Assume GlobalGitHubActionAccess Role
-        id: assume_global_github_action_access_role
-        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
-        with:
-          aws-region: eu-west-1
-          role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
-
-      - name: Set up Terraform
-        id: setup_terraform
-        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
-        with:
-          terraform_version: ${{ inputs.terraform-version }}
-
-      - name: Prepare Terraform
-        id: terraform_prepare
-        shell: bash
-        run: |
-          echo "TF_IN_AUTOMATION=true" >> ${GITHUB_ENV}
-
-      - name: Initialise Terraform
-        id: terraform_init
-        shell: bash
-        working-directory: ${{ env.working-directory }}
-        run: |
-          terraform init \
-            -backend-config="assume_role={role_arn=\"arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin\"}" \
-            -reconfigure \
-            -upgrade \
-            -no-color
-
-      - name: Validate Terraform
-        if: github.ref != 'refs/heads/main'
-        id: terraform_validate
-        working-directory: ${{ env.working-directory }}
-        shell: bash
-        run: |
-          terraform validate -no-color
-
-      - name: Plan Terraform
-        id: terraform_plan
-        working-directory: ${{ env.working-directory }}
-        shell: bash
-        run: |
-          terraform plan -input=false -no-color
-        continue-on-error: true
-
-      - name: Comment on Pull Request
-        if: github.event_name == 'pull_request'
-        id: comment
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        with:
-          script: |
-            const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
-            #### Terraform Initialization ⚙️: \`${{ steps.terraform_init.outcome }}\`
-            #### Terraform Validation 🤖: \`${{ steps.terraform_validate.outcome }}\`
-            #### Terraform Plan 🛠️: \`${{ steps.terraform_plan.outcome }}\`
-
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`, Marker: \`${{ inputs.component }}_plan\`*`;
-
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            })
-
-            const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.component }}_plan')
-            })
-
-            if (botComment) {
-              github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: output
-              })
-            } else {
-              github.rest.issues.createComment({
                 issue_number: context.issue.number,
+              })
+  
+              const botComment = comments.find(comment => {
+                return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.component }}_static_analysis')
+              })
+  
+              if (botComment) {
+                github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: botComment.id,
+                  body: output
+                })
+              } else {
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: output
+                })
+              }
+  
+        - name: Process Outcomes
+          if: github.ref != 'refs/heads/main'
+          id: process_outcomes
+          shell: bash
+          run: |
+            failBuild=false
+  
+            if [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+              echo "OVERRIDDEN (Dependabot): Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
+            elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
+              export failBuild=true
+              echo "FAIL: Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
+            elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
+              echo "OVERRIDDEN (by label): Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
+            elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" == "success" ]]; then
+              echo "PASS: Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
+            fi
+  
+            if [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+              echo "OVERRIDDEN (Dependabot): Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
+            elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
+              export failBuild=true
+              echo "FAIL: Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
+            elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
+              echo "OVERRIDDEN (by label): Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
+            elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" == "success" ]]; then
+              echo "PASS: Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
+            fi
+  
+            if [[ "${failBuild}" == "true" ]]; then
+              exit 1
+            fi
+  
+    terraform:
+      needs: [determine-workflow-mode]
+      name: ${{ needs.determine-workflow-mode.outputs.mode }}
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          id: checkout
+          uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  
+        - name: Build path-filters file
+          id: build_path_filters
+          run: bash scripts/path-filter/configuration-generator.sh terraform
+  
+        - name: Prepare Environment
+          id: prepare_environment
+          shell: bash
+          run: |
+            workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filter/terraform.yml | sed 's/.\{3\}$//')
+            export workingDirectory
+  
+            echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
+  
+        - name: Configure AWS Credentials
+          id: configure_aws_credentials
+          uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
+          with:
+            aws-region: eu-west-1
+            role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
+  
+        - name: Assume GlobalGitHubActionAdmin Role
+          id: assume_global_github_action_admin_role
+          uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
+          with:
+            aws-region: eu-west-1
+            role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
+            aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+            aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+            role-skip-session-tagging: true
+  
+        - name: Retrieve AWS Secrets Manager Secrets
+          id: retrieve_aws_secrets_manager_secrets
+          uses: aws-actions/aws-secretsmanager-get-secrets@5e19ff380d035695bdd56bbad320ca535c9063f2 # v2.0.9
+          with:
+            secret-ids: |
+              GITHUB_ROBOT_TOKEN, github-token
+              SLACK_WEBHOOK_URL, slack-webhook-url/terraform-failure
+  
+        - name: Assume GlobalGitHubActionAccess Role
+          id: assume_global_github_action_access_role
+          uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
+          with:
+            aws-region: eu-west-1
+            role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
+  
+        - name: Set up Terraform
+          id: setup_terraform
+          uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+          with:
+            terraform_version: ${{ inputs.terraform-version }}
+  
+        - name: Prepare Terraform
+          id: terraform_prepare
+          shell: bash
+          run: |
+            echo "TF_IN_AUTOMATION=true" >> ${GITHUB_ENV}
+  
+        - name: Initialise Terraform
+          id: terraform_init
+          shell: bash
+          working-directory: ${{ env.working-directory }}
+          run: |
+            terraform init \
+              -backend-config="assume_role={role_arn=\"arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin\"}" \
+              -reconfigure \
+              -upgrade \
+              -no-color
+  
+        - name: Validate Terraform
+          if: github.ref != 'refs/heads/main'
+          id: terraform_validate
+          working-directory: ${{ env.working-directory }}
+          shell: bash
+          run: |
+            terraform validate -no-color
+  
+        - name: Plan Terraform
+          id: terraform_plan
+          working-directory: ${{ env.working-directory }}
+          shell: bash
+          run: |
+            terraform plan -input=false -no-color
+          continue-on-error: true
+  
+        - name: Comment on Pull Request
+          if: github.event_name == 'pull_request'
+          id: comment
+          uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+          with:
+            script: |
+              const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
+              #### Terraform Initialization ⚙️: \`${{ steps.terraform_init.outcome }}\`
+              #### Terraform Validation 🤖: \`${{ steps.terraform_validate.outcome }}\`
+              #### Terraform Plan 🛠️: \`${{ steps.terraform_plan.outcome }}\`
+  
+              *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`, Marker: \`${{ inputs.component }}_plan\`*`;
+  
+              const { data: comments } = await github.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: output
+                issue_number: context.issue.number,
               })
-            }
-
-      - name: Process Outcomes
-        if: github.ref != 'refs/heads/main'
-        id: process_outcomes
-        shell: bash
-        run: |
-          failBuild=false
-
-          if [[ "${{ steps.terraform_validate.outcome }}" != "success" ]]; then
-            export failBuild=true
-            echo "FAIL: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_validate.outcome }}" == "success" ]]; then
-            echo "PASS: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
-          fi
-
-          if [[ "${{ steps.terraform_plan.outcome }}" != "success" ]]; then
-            export failBuild=true
-            echo "FAIL: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_plan.outcome }}" == "success" ]]; then
-            echo "PASS: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
-          fi
-
-          if [[ "${failBuild}" == "true" ]]; then
-            exit 1
-          fi
-
-      - name: Automatic Approval for Dependabot
-        if: (github.event_name == 'pull_request' && github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
-        id: automatic_approval
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        with:
-          github-token: ${{ env.GITHUB_ROBOT_TOKEN }}
-          script: |
-            github.rest.pulls.createReview({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              body: 'Automatically approving as no changes were detected in the Terraform plan, and the pull request was raised by Dependabot.\n\n@dependabot merge 🤖 🤝 🤖',
-              event: 'APPROVE'
-            })
-
-      - name: Apply Terraform
-        if: github.ref == 'refs/heads/main'
-        id: terraform_apply
-        working-directory: ${{ env.working-directory }}
-        shell: bash
-        run: |
-          terraform apply -input=false -auto-approve -no-color
-
-      - name: Extract PR number from commit message
-        if: failure() && steps.terraform_apply.outcome == 'failure'
-        id: extract_pr
-        run: |
-          PR_NUMBER=$(git log -1 --pretty=%B | grep -oP '#\K\d+')
-          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
-
-      - name: Notify Slack on Failure
-        if: failure() && steps.terraform_apply.outcome == 'failure'
-        id: slack_notification
-        uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
-        with:
-          webhook: ${{ env.SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            {
-              "run_id": "${{ github.run_id }}",
-              "pr_number": "${{ steps.extract_pr.outputs.pr_number }}"
-            }
+  
+              const botComment = comments.find(comment => {
+                return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.component }}_plan')
+              })
+  
+              if (botComment) {
+                github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: botComment.id,
+                  body: output
+                })
+              } else {
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: output
+                })
+              }
+  
+        - name: Process Outcomes
+          if: github.ref != 'refs/heads/main'
+          id: process_outcomes
+          shell: bash
+          run: |
+            failBuild=false
+  
+            if [[ "${{ steps.terraform_validate.outcome }}" != "success" ]]; then
+              export failBuild=true
+              echo "FAIL: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
+            elif [[ "${{ steps.terraform_validate.outcome }}" == "success" ]]; then
+              echo "PASS: Terraform Validation" >>"${GITHUB_STEP_SUMMARY}"
+            fi
+  
+            if [[ "${{ steps.terraform_plan.outcome }}" != "success" ]]; then
+              export failBuild=true
+              echo "FAIL: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
+            elif [[ "${{ steps.terraform_plan.outcome }}" == "success" ]]; then
+              echo "PASS: Terraform Plan" >>"${GITHUB_STEP_SUMMARY}"
+            fi
+  
+            if [[ "${failBuild}" == "true" ]]; then
+              exit 1
+            fi
+  
+        - name: Automatic Approval for Dependabot
+          if: (github.event_name == 'pull_request' && github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
+          id: automatic_approval
+          uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+          with:
+            github-token: ${{ env.GITHUB_ROBOT_TOKEN }}
+            script: |
+              github.rest.pulls.createReview({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                body: 'Automatically approving as no changes were detected in the Terraform plan, and the pull request was raised by Dependabot.\n\n@dependabot merge 🤖 🤝 🤖',
+                event: 'APPROVE'
+              })
+  
+        - name: Apply Terraform
+          if: github.ref == 'refs/heads/main'
+          id: terraform_apply
+          working-directory: ${{ env.working-directory }}
+          shell: bash
+          run: |
+            terraform apply -input=false -auto-approve -no-color
+  
+        - name: Extract PR number from commit message
+          if: failure() && steps.terraform_apply.outcome == 'failure'
+          id: extract_pr
+          run: |
+            PR_NUMBER=$(git log -1 --pretty=%B | grep -oP '#\K\d+')
+            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+            echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+  
+        - name: Notify Slack on Failure
+          if: failure() && steps.terraform_apply.outcome == 'failure'
+          id: slack_notification
+          uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
+          with:
+            webhook: ${{ env.SLACK_WEBHOOK_URL }}
+            webhook-type: incoming-webhook
+            payload: |
+              {
+                "run_id": "${{ github.run_id }}",
+                "pr_number": "${{ steps.extract_pr.outputs.pr_number }}"
+              }
