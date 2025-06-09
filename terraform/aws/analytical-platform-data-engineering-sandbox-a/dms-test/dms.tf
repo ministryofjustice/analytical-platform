@@ -1,4 +1,9 @@
 data "aws_availability_zones" "available" {}
+resource "aws_secretsmanager_secret" "dms_sandbox_secret" {
+  # checkov:skip=CKV2_AWS_57: Skipping because automatic rotation not needed.
+  name       = "dms-sandbox-secret"
+  kms_key_id = module.dms_test_kms.key_arn
+}
 
 module "test_dms_implementation" {
   source = "github.com/ministryofjustice/terraform-dms-module?ref=intial_branch"
@@ -24,7 +29,7 @@ module "test_dms_implementation" {
 
   dms_source = {
     engine_name                 = "oracle"
-    secrets_manager_arn         = "arn:aws:secretsmanager:eu-west-1:684969100054:secret:dms-test-migration-user-syaF4T"
+    secrets_manager_arn         = aws_secretsmanager_secret.dms_sandbox_secret.arn
     secrets_manager_kms_arn     = module.dms_test_kms.key_arn
     sid                         = aws_db_instance.dms_test.db_name
     extra_connection_attributes = "addSupplementalLogging=N;useBfile=Y;useLogminerReader=N;"
