@@ -6,7 +6,7 @@ module "dev_dms_oasys" {
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
-  db = "oasys-dev"
+  db                      = "oasys-dev"
   slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
 
   dms_replication_instance = {
