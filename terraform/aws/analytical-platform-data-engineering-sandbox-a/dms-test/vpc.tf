@@ -86,12 +86,6 @@ module "endpoints" {
       subnet_ids          = module.vpc.private_subnets
       private_dns_enabled = true
     }
-    athena= {
-      service             = "athena"
-      service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
-      private_dns_enabled = true
-    }
 
   }
 
