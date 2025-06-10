@@ -55,7 +55,12 @@ module "endpoints" {
   create_security_group      = true
   security_group_description = "Managed by Pulumi"
   security_group_tags        = { Name : "eu-west-1-dev" }
-
+  security_group_rules = {
+    ingress_https = {
+      description = "HTTPS from VPC"
+      cidr_blocks = [module.vpc.vpc_cidr_block]
+    }
+  }
   endpoints = {
     # interface endpoints  need  subnet_ids and sg_id
     # Interface endpoint for ec2messages
@@ -98,6 +103,12 @@ module "endpoints" {
       subnet_ids          = module.vpc.private_subnets
       private_dns_enabled = true
       tags                = { Name = "secretsmanager-eu-west-1-dev" }
+    }
+    glue = {
+      service             = "glue"
+      service_type        = "Interface"
+      subnet_ids          = module.vpc.private_subnets
+      private_dns_enabled = true
     }
 
   }
