@@ -234,8 +234,7 @@
     "repositories": ["ministryofjustice/data-engineering-cleanup"],
     "targets": [
       "analytical-platform-data-engineering-production",
-      "analytical-platform-data-production",
-      "analytical-platform-data-engineering-sandbox-a"
+      "analytical-platform-data-production"
     ],
     "stateLockingDetails": [],
     "ssmParameterConfig": [
@@ -282,6 +281,22 @@
     "s3Locations": [],
     "repositories": [
       "moj-analytical-services/data-engineering-database-access"
+    ],
+    "targets": ["analytical-platform-data-production"],
+    "stateLockingDetails": [],
+    "ssmParameterConfig": []
+  },
+  "data-engineering-datalake-access": {
+    "account": "analytical-platform-data-production",
+    "stateConfig": [
+      {
+        "stateBucket": "global-tf-state-aqsvzyd5u9",
+        "stateBucketKey": "data-engineering-datalake-access/aws/"
+      }
+    ],
+    "s3Locations": [],
+    "repositories": [
+      "moj-analytical-services/data-engineering-datalake-access"
     ],
     "targets": ["analytical-platform-data-production"],
     "stateLockingDetails": [],
