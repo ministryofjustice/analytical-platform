@@ -13,4 +13,5 @@ tags = {
   environment-name = "dev"
   is-production    = "False"
   owner            = "Data Engineering:dataengineering@digital.justice.gov.uk"
+  source-code      = "https://github.com/ministryofjustice/analytical-platform/tree/main/terraform/aws/analytical-platform-data-engineering-production/dms-dev"
 }
