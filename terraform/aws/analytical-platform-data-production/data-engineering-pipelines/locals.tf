@@ -113,7 +113,18 @@ locals {
     }
   ]
 
-  unique_role_names = distinct(flatten([for db in local.protected_dbs : db.role_names_to_exempt])) // to retrieve unique_ids
+  data_engineering_dbs = [
+    {
+      name                    = "oasys"
+      database_string_pattern = ["oasys*"]
+      data_engineering_role_names_to_allow = [
+        "oasys-dev-metadata-generator"
+      ]
+    }
+  ]
+
+  unique_role_names                  = distinct(flatten([for db in local.protected_dbs : db.role_names_to_exempt])) // to retrieve unique_ids
+  data_engineering_unique_role_names = distinct(flatten([for db in local.data_engineering_dbs : db.data_engineering_role_names_to_allow]))
 
   data_engineering_buckets = {
     "alpha-data-engineer-logs" = {

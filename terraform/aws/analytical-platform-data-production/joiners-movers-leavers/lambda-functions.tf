@@ -12,7 +12,7 @@ module "jml_report_lambda" {
   package_type  = "Image"
   memory_size   = 512
   timeout       = 120
-  image_uri     = "509399598587.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-jml-report:1.4.5"
+  image_uri     = "509399598587.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-jml-report:1.4.6"
 
   environment_variables = {
     SECRET_ID       = module.govuk_notify_api_key_secret.secret_id
