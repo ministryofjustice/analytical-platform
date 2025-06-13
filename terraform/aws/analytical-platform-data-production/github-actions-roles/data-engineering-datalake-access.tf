@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "data_eng_datalake_access" {
+data "aws_iam_policy_document" "data_engineering_datalake_access" {
   statement {
     sid    = "GlueAccess"
     effect = "Allow"
@@ -29,15 +29,13 @@ data "aws_iam_policy_document" "data_eng_datalake_access" {
     ]
   }
   statement {
-    sid    = "LakeFormationAdminPermissions"
-    effect = "Allow"
-    actions = [
-      "lakeformation:*"
-    ]
+    sid       = "LakeFormationAdminPermissions"
+    effect    = "Allow"
+    actions   = ["lakeformation:*"]
     resources = ["*"]
   }
   statement {
-    sid    = "EditIAMPolicy"
+    sid    = "IAMAccess"
     effect = "Allow"
     actions = [
       "iam:CreatePolicy",
@@ -63,28 +61,31 @@ data "aws_iam_policy_document" "data_eng_datalake_access" {
   }
 }
 
-module "data_eng_datalake_access_iam_policy" {
-  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+module "data_engineering_datalake_access_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.58.0"
 
-  name_prefix = "data-eng-datalake-access"
+  name_prefix = "data-engineering-datalake-access"
 
-  policy = data.aws_iam_policy_document.data_eng_datalake_access.json
+  policy = data.aws_iam_policy_document.data_engineering_datalake_access.json
 }
 
-module "data_eng_datalake_access_iam_role" {
-  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+module "data_engineering_datalake_access_iam_role" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.58.0"
 
-  name = "data-eng-datalake-access"
+  create_role = true
 
-  subjects = ["ministryofjustice/data-engineering-datalake-access:*"]
+  role_name         = "data-engineering-datalake-access"
+  role_requires_mfa = false
 
-  policies = {
-    github_find_moj_data_glue_access = module.data_eng_datalake_access_iam_policy.arn
-  }
+  trusted_role_arns = ["arn:aws:iam::${var.account_ids["analytical-platform-commons-production"]}:role/data-engineering-datalake-access-github-actions"]
+
+  custom_role_policy_arns = [module.data_engineering_datalake_access_iam_policy.arn]
 }
