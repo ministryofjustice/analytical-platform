@@ -4,7 +4,7 @@ data "aws_iam_policy_document" "data_eng_datalake_access" {
     effect = "Allow"
     actions = [
       "glue:GetDatabase",
-      "glue:GetDatabases", 
+      "glue:GetDatabases",
       "glue:CreateDatabase",
       "glue:UpdateDatabase",
       "glue:DeleteDatabase",
