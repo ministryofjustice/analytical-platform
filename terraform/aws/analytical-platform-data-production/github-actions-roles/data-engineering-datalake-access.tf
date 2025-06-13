@@ -74,7 +74,7 @@ module "data_eng_datalake_access_iam_policy" {
   policy = data.aws_iam_policy_document.data_eng_datalake_access.json
 }
 
-module "find_moj_data_glue_access_iam_role" {
+module "data_eng_datalake_access_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
