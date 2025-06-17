@@ -1,7 +1,7 @@
 locals {
   schedules_ae_loc = [
     {
-      name = "Analytics Engineering Support SEO_HEO
+      name = "Analytics Engineering Support SEO_HEO"
       team = module.teams_ae["Analytics Engineering Support SEO_HEO"].id
       layers = [
         {
