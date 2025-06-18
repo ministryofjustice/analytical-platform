@@ -17,6 +17,9 @@ locals {
             module.users_de_seo["anthony.cody@digital.justice.gov.uk"].id,
             module.users_de_seo["thomas.hirsch@justice.gov.uk"].id,
             module.users_de_seo["william.orr@digital.justice.gov.uk"].id,
+            module.users_de_seo["Mohammed.Ahad1@justice.gov.uk"].id,
+            module.users_de_seo["Theodoros.MANASSIS@justice.gov.uk"].id,
+            module.users_de_seo["Khristiania.Raihan@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -70,6 +73,7 @@ locals {
             module.users_de_g7["supratik.chowdhury@digital.justice.gov.uk"].id,
             module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].id,
             module.users_de_g7["thomas.hepworth@justice.gov.uk"].id,
+            module.users_de_g7["Philip.Sinfield@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -167,6 +171,21 @@ locals {
       email = "william.orr@digital.justice.gov.uk"
       role  = "responder"
     },
+    {
+      name  = "Mohammed Ahad"
+      email = "Mohammed.Ahad1@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Theodoros Manassis"
+      email = "Theodoros.MANASSIS@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Khristiania Raihan"
+      email = "Khristiania.Raihan@justice.gov.uk"
+      role  = "responder"
+    },
 
   ]
 
@@ -204,6 +223,11 @@ locals {
     {
       name  = "Thomas Hepworth"
       email = "thomas.hepworth@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Philip Sinfield"
+      email = "Philip.Sinfield@justice.gov.uk"
       role  = "responder"
     },
 
