@@ -8,6 +8,9 @@ module "dev_dms_oasys" {
 
   db                      = "oasys-dev"
   slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
+  output_key_prefix       = "hmpps/oasys"
+  output_key_suffix       = "-tf"
+  output_bucket           = "mojap-raw-hist-dev"
 
   dms_replication_instance = {
     replication_instance_id    = "oasys-dev"
