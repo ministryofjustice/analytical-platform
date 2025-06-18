@@ -17,6 +17,7 @@ locals {
             module.users_de_seo["anthony.cody@digital.justice.gov.uk"].id,
             module.users_de_seo["thomas.hirsch@justice.gov.uk"].id,
             module.users_de_seo["william.orr@digital.justice.gov.uk"].id,
+            module.users_de_seo["khristiania.raihan@justice.gov.uk"].id,
           ]
           restrictions = [
             {
