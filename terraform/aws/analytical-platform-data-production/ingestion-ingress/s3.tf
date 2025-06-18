@@ -34,7 +34,7 @@ module "cica_dms_ingress_s3" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.10.1"
+  version = "4.11.0"
 
   bucket = "mojap-data-production-cica-dms-ingress-production"
 
