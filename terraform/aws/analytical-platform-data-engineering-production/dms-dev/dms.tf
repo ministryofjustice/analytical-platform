@@ -48,5 +48,5 @@ module "dev_dms_oasys" {
     var.tags
   )
 
-  glue_catalog_arn = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-engineering-production"]}:catalog"
+  glue_catalog_arn = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
 }
