@@ -18,7 +18,7 @@ locals {
     }
   ]
 
-  tables_to_share = [
+  tables = [
     {
       source_database = "dpr_ap_integration_test_tag_dev_dbt"
       source_table    = "dev_model_1_notag"
