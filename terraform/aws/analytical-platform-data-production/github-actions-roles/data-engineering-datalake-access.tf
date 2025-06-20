@@ -22,7 +22,8 @@ data "aws_iam_policy_document" "data_engineering_datalake_access" {
       "glue:BatchDeletePartition",
       "glue:BatchUpdatePartition",
       "glue:TagResource",
-      "glue:unTagResource"
+      "glue:unTagResource",
+      "glue:GetTag",
     ]
     resources = [
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:catalog",
