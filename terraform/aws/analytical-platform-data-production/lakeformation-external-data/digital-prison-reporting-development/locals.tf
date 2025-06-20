@@ -18,5 +18,26 @@ locals {
     }
   ]
 
+  tables_to_share = [
+    {
+      source_database = "dpr_ap_integration_test_tag_dev_dbt"
+      source_table    = "dev_model_1_notag"
+      destination_database = {
+        database_name   = "dpr_ap_integration_test_tag_dev_dbt_resource_link"
+        create_database = false
+      }
+      permissions = ["DESCRIBE", "SELECT"]
+    },
+    {
+      source_database = "dpr_ap_integration_test_tag_dev_dbt"
+      source_table    = "dev_model_2_tag"
+      destination_database = {
+        database_name   = "dpr_ap_integration_test_tag_dev_dbt_resource_link"
+        create_database = false
+      }
+      permissions = ["DESCRIBE", "SELECT"]
+    }
+  ]
+
   account_ids = jsondecode(data.aws_secretsmanager_secret_version.account_ids_version.secret_string)
 }
