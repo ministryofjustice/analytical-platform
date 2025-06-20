@@ -9,8 +9,16 @@ data "aws_iam_role" "glue_policy_role" {
   name     = each.value
 }
 
-data "aws_iam_role" "data_engineering_glue_policy_role" {
-  for_each = toset(local.data_engineering_unique_role_names)
+data "aws_iam_role" "de_glue_policy_role" {
+  for_each = toset(local.de_unique_role_names)
+
+  provider = aws.analytical-platform-data-engineering-production
+
+  name = each.value
+}
+
+data "aws_iam_role" "de_glue_policy_role_allow" {
+  for_each = toset(local.de_unique_role_names_allow)
 
   provider = aws.analytical-platform-data-engineering-production
 
