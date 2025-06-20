@@ -8,7 +8,7 @@ locals {
         "create-a-derived-table",
         "airflow_prod_cadet_deploy_xhibit"
       ]
-      de_role_names_to_expempt = []
+      de_role_names_to_exempt = []
     },
     {
       name = "mags"
@@ -22,7 +22,7 @@ locals {
         "restricted-admin",
         "airflow_dev_mags_data_processor",
       ]
-      de_role_names_to_expempt = []
+      de_role_names_to_exempt = []
     },
     {
       name                    = "familyman"
@@ -35,7 +35,7 @@ locals {
         "airflow_prod_familyman",
         "airflow_dev_familyman",
       ]
-      de_role_names_to_expempt = []
+      de_role_names_to_exempt = []
     },
     {
       name                    = "delius"
@@ -47,7 +47,7 @@ locals {
         "github-actions-infrastructure",
         "restricted-admin",
       ]
-      de_role_names_to_expempt = []
+      de_role_names_to_exempt = []
     },
     {
       name                    = "oasys"
@@ -59,7 +59,7 @@ locals {
         "github-actions-infrastructure",
         "restricted-admin",
       ]
-      de_role_names_to_expempt = [
+      de_role_names_to_exempt = [
         "oasys-dev-metadata-generator"
       ]
     },
@@ -79,7 +79,7 @@ locals {
         "restricted-admin",
         "create-a-derived-table"
       ]
-      de_role_names_to_expempt = []
+      de_role_names_to_exempt = []
     },
     {
       name                    = "pathfinder"
@@ -88,7 +88,7 @@ locals {
         "prison-probation-data-engineer",
         "restricted-admin",
       ]
-      de_role_names_to_expempt = []
+      de_role_names_to_exempt = []
     },
     {
       name = "caseman"
@@ -104,7 +104,7 @@ locals {
         "data-first-data-engineer",
         "airflow_dev_civil",
       ]
-      de_role_names_to_expempt = []
+      de_role_names_to_exempt = []
     },
     {
       name = "pcol"
@@ -120,7 +120,7 @@ locals {
         "data-first-data-engineer",
         "airflow_dev_civil",
       ]
-      de_role_names_to_expempt = []
+      de_role_names_to_exempt = []
     }
   ]
 
