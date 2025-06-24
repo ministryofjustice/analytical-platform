@@ -67,7 +67,10 @@ data "aws_iam_policy_document" "bedrock_integration" {
         "eu-west-1",
         "eu-west-2",
         "eu-west-3",
-        "us-east-1"
+        "us-east-1",
+        "eu-north-1",
+        "eu-south-1",
+        "eu-south-2"
       ]
     }
   }
