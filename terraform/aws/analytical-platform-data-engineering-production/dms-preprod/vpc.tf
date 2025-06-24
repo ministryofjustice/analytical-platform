@@ -1,10 +1,9 @@
 locals {
   name = "eu-west-1-preprod"
 
-  tgw_destinations = ["10.26.12.211/32",
-    "10.101.0.0/16",
-    "10.161.4.0/22",
-    "10.161.20.0/22",
+  tgw_destinations = ["10.27.0.0/16",
+    "10.40.0.0/18",
+    "10.160.0.0/20",
   "172.20.0.0/16"]
 
   route_tables_ids = toset(module.vpc.private_route_table_ids)
@@ -120,9 +119,9 @@ module "endpoints" {
 
 
 
-# resource "aws_route" "routes" {
-#   for_each               = { for pair in local.route_dest_pairs : pair.pair_key => pair }
-#   route_table_id         = each.value.route_table_id
-#   destination_cidr_block = each.value.destination
-#   transit_gateway_id     = "tgw-0e7b982ea47c28fba"
-# }
+resource "aws_route" "routes" {
+  for_each               = { for pair in local.route_dest_pairs : pair.pair_key => pair }
+  route_table_id         = each.value.route_table_id
+  destination_cidr_block = each.value.destination
+  transit_gateway_id     = "tgw-0e7b982ea47c28fba"
+}
