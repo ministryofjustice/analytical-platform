@@ -10,5 +10,4 @@ module "lake_formation_analytical_platform_data_prod" {
 
   data_locations     = local.data_locations
   databases_to_share = local.databases
-  tables_to_share    = local.tables
 }
