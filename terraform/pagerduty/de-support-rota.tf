@@ -325,6 +325,11 @@ import {
 }
 
 import {
+  to = module.users_de_g7["thomas.hepworth@justice.gov.uk"].pagerduty_user.this
+  id = "PINRNK0"
+}
+
+import {
   to = module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].pagerduty_user.this
   id = "PXAKE4K"
 }
