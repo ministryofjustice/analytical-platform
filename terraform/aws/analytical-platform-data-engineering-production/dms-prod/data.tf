@@ -8,4 +8,4 @@ data "aws_iam_session_context" "session" {
   arn = data.aws_caller_identity.session.arn
 }
 
-data "aws_availability_zones" "available" {}
+#data "aws_availability_zones" "available" {}

@@ -1,25 +1,25 @@
 locals {
   name = "eu-west-1-prod"
 
-  tgw_destinations = ["10.26.12.211/32",
-    "10.27.0.0/16",
-    "10.40.0.0/18",
-  "10.40.64.0/18",
-  "10.160.16.0/20",
-  "172.20.0.0/16"]
+  # tgw_destinations = ["10.26.12.211/32",
+  #   "10.27.0.0/16",
+  #   "10.40.0.0/18",
+  # "10.40.64.0/18",
+  # "10.160.16.0/20",
+  # "172.20.0.0/16"]
 
-  route_tables_ids = toset(module.vpc.private_route_table_ids)
+  # route_tables_ids = toset(module.vpc.private_route_table_ids)
 
-  route_dest_pairs = flatten([
-    for rt in local.route_tables_ids : [
-      for dest in local.tgw_destinations : {
-        route_table_id = rt
-        destination    = dest
-        # a unique key for for_each
-        pair_key = "${rt}-${replace(dest, "/", "-")}"
-      }
-    ]
-  ])
+  # route_dest_pairs = flatten([
+  #   for rt in local.route_tables_ids : [
+  #     for dest in local.tgw_destinations : {
+  #       route_table_id = rt
+  #       destination    = dest
+  #       # a unique key for for_each
+  #       pair_key = "${rt}-${replace(dest, "/", "-")}"
+  #     }
+  #   ]
+  # ])
 }
 
 module "vpc" {
