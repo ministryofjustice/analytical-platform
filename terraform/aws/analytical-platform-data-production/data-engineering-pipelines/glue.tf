@@ -67,6 +67,8 @@ data "aws_iam_policy_document" "glue_ireland" {
       ]
       resources = flatten([
         for pattern in statement.value.database_string_pattern : [
+          "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:database/${pattern}",
+          "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:table/${pattern}/*",
           "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:catalog"
         ]
       ])
