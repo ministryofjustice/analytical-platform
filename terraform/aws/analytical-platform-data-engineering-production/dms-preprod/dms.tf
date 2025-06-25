@@ -13,7 +13,7 @@ module "preprod_dms_oasys" {
     replication_instance_id    = "oasys-preprod"
     subnet_ids                 = module.vpc.private_subnets
     subnet_group_name          = "oasys-preprod"
-    allocated_storage          = 50
+    allocated_storage          = 100
     availability_zone          = data.aws_availability_zones.available.names[0]
     engine_version             = "3.5.4"
     kms_key_arn                = module.dms_preprod_kms.key_arn
