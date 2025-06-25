@@ -9,7 +9,7 @@ module "dms_preprod_kms" {
 
   key_statements = [
     {
-      sid = "AllowDMSServiceAccess"
+      sid    = "AllowDMSServiceAccess"
       effect = "Allow"
       actions = [
         "kms:Encrypt*",
@@ -25,8 +25,8 @@ module "dms_preprod_kms" {
           identifiers = ["dms.amazonaws.com"]
         }
       ]
-  }
-]
+    }
+  ]
 
   deletion_window_in_days = 7
 
