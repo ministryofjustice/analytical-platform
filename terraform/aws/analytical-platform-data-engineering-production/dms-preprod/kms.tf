@@ -7,6 +7,18 @@ module "dms_preprod_kms" {
   description           = "Used in the HMPPS probation domain to encode secrets and traffic"
   enable_default_policy = true
 
+  grants = {
+    allow_dms = {
+      to_principal = {
+        service = "dms.amazonaws.com"
+      }
+      operations = [
+        "kms:GenerateDataKey*",
+        "kms:Decrypt"
+      ]
+    }
+  }
+
   deletion_window_in_days = 7
 
   tags = var.tags
