@@ -8,7 +8,6 @@ locals {
         "create-a-derived-table",
         "airflow_prod_cadet_deploy_xhibit"
       ]
-      de_role_names_to_exempt = []
     },
     {
       name = "mags"
@@ -22,7 +21,6 @@ locals {
         "restricted-admin",
         "airflow_dev_mags_data_processor",
       ]
-      de_role_names_to_exempt = []
     },
     {
       name                    = "familyman"
@@ -35,7 +33,6 @@ locals {
         "airflow_prod_familyman",
         "airflow_dev_familyman",
       ]
-      de_role_names_to_exempt = []
     },
     {
       name                    = "delius"
@@ -45,9 +42,8 @@ locals {
         "data-engineering-infrastructure",
         "create-a-derived-table",
         "github-actions-infrastructure",
-        "restricted-admin",
+        "restricted-admin"
       ]
-      de_role_names_to_exempt = []
     },
     {
       name                    = "oasys"
@@ -57,10 +53,7 @@ locals {
         "data-engineering-infrastructure",
         "create-a-derived-table",
         "github-actions-infrastructure",
-        "restricted-admin",
-      ]
-      de_role_names_to_exempt = [
-        "oasys-dev-metadata-generator"
+        "restricted-admin"
       ]
     },
     {
@@ -79,7 +72,6 @@ locals {
         "restricted-admin",
         "create-a-derived-table"
       ]
-      de_role_names_to_exempt = []
     },
     {
       name                    = "pathfinder"
@@ -88,7 +80,6 @@ locals {
         "prison-probation-data-engineer",
         "restricted-admin",
       ]
-      de_role_names_to_exempt = []
     },
     {
       name = "caseman"
@@ -104,7 +95,6 @@ locals {
         "data-first-data-engineer",
         "airflow_dev_civil",
       ]
-      de_role_names_to_exempt = []
     },
     {
       name = "pcol"
@@ -120,23 +110,10 @@ locals {
         "data-first-data-engineer",
         "airflow_dev_civil",
       ]
-      de_role_names_to_exempt = []
     }
   ]
 
-  data_engineering_dbs = [
-    {
-      name                    = "oasys"
-      database_string_pattern = ["oasys*"]
-      de_role_names_to_allow = [
-        "oasys-dev-metadata-generator"
-      ]
-    }
-  ]
-
-  unique_role_names          = distinct(flatten([for db in local.protected_dbs : db.role_names_to_exempt])) // to retrieve unique_ids
-  de_unique_role_names       = distinct(flatten([for db in local.protected_dbs : db.de_role_names_to_exempt]))
-  de_unique_role_names_allow = distinct(flatten([for db in local.data_engineering_dbs : db.de_role_names_to_allow]))
+  unique_role_names = distinct(flatten([for db in local.protected_dbs : db.role_names_to_exempt])) // to retrieve unique_ids
 
   data_engineering_buckets = {
     "alpha-data-engineer-logs" = {
