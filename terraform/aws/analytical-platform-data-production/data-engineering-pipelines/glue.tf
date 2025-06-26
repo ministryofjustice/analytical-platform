@@ -39,17 +39,13 @@ data "aws_iam_policy_document" "glue_ireland" {
         values = flatten([
           [for user_id in statement.value.role_names_to_exempt : [
             data.aws_iam_role.glue_policy_role[user_id].unique_id,
-            "${data.aws_iam_role.glue_policy_role[user_id].unique_id}:*",
+            "${data.aws_iam_role.glue_policy_role[user_id].unique_id}:*"
           ]],
           [
             data.aws_caller_identity.current.account_id,
             data.aws_iam_role.aws_sso_modernisation_platform_data_eng.unique_id,
             "${data.aws_iam_role.aws_sso_modernisation_platform_data_eng.unique_id}:*" // data engineering role protection bypass
-          ],
-          [for user_id in statement.value.de_role_names_to_exempt : [
-            data.aws_iam_role.de_glue_policy_role[user_id].unique_id,
-            "${data.aws_iam_role.de_glue_policy_role[user_id].unique_id}:*"
-          ]]
+          ]
         ])
       }
     }
