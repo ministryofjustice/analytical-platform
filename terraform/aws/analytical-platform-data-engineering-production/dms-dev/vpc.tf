@@ -108,7 +108,7 @@ module "endpoints" {
       service             = "glue"
       service_type        = "Interface"
       subnet_ids          = module.vpc.private_subnets
-      private_dns_enabled = true,
+      private_dns_enabled = true
       tags                = { Name = "glue-eu-west-1-dev" }
     }
     sts = {
