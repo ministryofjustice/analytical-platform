@@ -13,7 +13,7 @@ locals {
             module.users_de_seo["guy.wheeler@justice.gov.uk"].id,
             module.users_de_seo["siva.bathina@digital.justice.gov.uk"].id,
             module.users_de_seo["murad.ali@justice.gov.uk"].id,
-            module.users_de_seo["andrew.cook@digital.justice.gov.uk"].id,
+            module.users_de_seo["andrew.cook1@justice.gov.uk"].id,
             module.users_de_seo["anthony.cody@digital.justice.gov.uk"].id,
             module.users_de_seo["thomas.hirsch@justice.gov.uk"].id,
             module.users_de_seo["william.orr@digital.justice.gov.uk"].id,
@@ -153,7 +153,7 @@ locals {
     },
     {
       name  = "Andrew Cook"
-      email = "andrew.cook@digital.justice.gov.uk"
+      email = "andrew.cook1@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -301,7 +301,7 @@ import {
 }
 
 import {
-  to = module.users_de_seo["andrew.cook@digital.justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_seo["andrew.cook1@justice.gov.uk"].pagerduty_user.this
   id = "PZDNZKP"
 }
 
