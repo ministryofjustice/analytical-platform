@@ -42,7 +42,8 @@ locals {
         "data-engineering-infrastructure",
         "create-a-derived-table",
         "github-actions-infrastructure",
-        "restricted-admin"
+        "restricted-admin",
+        "data-engineering-probation-glue"
       ]
     },
     {
@@ -53,7 +54,8 @@ locals {
         "data-engineering-infrastructure",
         "create-a-derived-table",
         "github-actions-infrastructure",
-        "restricted-admin"
+        "restricted-admin",
+        "data-engineering-probation-glue"
       ]
     },
     {
