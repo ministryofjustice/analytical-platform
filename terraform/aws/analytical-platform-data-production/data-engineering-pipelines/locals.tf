@@ -115,7 +115,7 @@ locals {
     }
   ]
 
-  unique_role_names          = distinct(flatten([for db in local.protected_dbs : db.role_names_to_exempt])) // to retrieve unique_ids
+  unique_role_names = distinct(flatten([for db in local.protected_dbs : db.role_names_to_exempt])) // to retrieve unique_ids
 
   data_engineering_buckets = {
     "alpha-data-engineer-logs" = {
