@@ -104,3 +104,14 @@ data "http" "prometheus_operator_crds" {
 
   url = each.value
 }
+
+##################################################
+# Modernisation Platform Core Logging
+##################################################
+
+data "aws_route53_resolver_query_log_config" "core_logging_s3" {
+  filter {
+    name   = "Name"
+    values = ["core-logging-rlq-s3-eu-west-1"]
+  }
+}
