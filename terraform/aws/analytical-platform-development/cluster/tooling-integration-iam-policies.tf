@@ -121,6 +121,73 @@ data "aws_iam_policy_document" "textract_integration" {
   }
 }
 
+#trivy:ignore:aws-iam-no-policy-wildcards
+#trivy:ignore:AVD-AWS-0342
+data "aws_iam_policy_document" "comprehend_integration" {
+  #checkov:skip=CKV_AWS_111: This is a service policy
+  #checkov:skip=CKV_AWS_356: Needs to access multiple resources
+  #checkov:skip=CKV_AWS_109: Needs to access multiple resources
+
+  statement {
+    sid    = "AnalyticalPlatformComprehendIntegration"
+    effect = "Allow"
+    actions = [
+      "comprehend:DetectEntities",
+      "comprehend:DetectKeyPhrases",
+      "comprehend:DetectDominantLanguage",
+      "comprehend:DetectSentiment",
+      "comprehend:DetectTargetedSentiment",
+      "comprehend:DetectSyntax",
+      "comprehend:StartDominantLanguageDetectionJob",
+      "comprehend:StartEntitiesDetectionJob",
+      "comprehend:StartKeyPhrasesDetectionJob",
+      "comprehend:StartSentimentDetectionJob",
+      "comprehend:StartTargetedSentimentDetectionJob",
+      "comprehend:StartTopicsDetectionJob",
+      "comprehend:DescribeTopicsDetectionJob",
+      "comprehend:ListTopicsDetectionJobs",
+      "comprehend:DescribeEntitiesDetectionJob",
+      "comprehend:ListEntitiesDetectionJobs",
+      "comprehend:DescribeSentimentDetectionJob",
+      "comprehend:ListSentimentDetectionJobs",
+      "comprehend:DescribeTargetedSentimentDetectionJob",
+      "comprehend:ListTargetedSentimentDetectionJobs",
+      "comprehend:DescribeDominantLanguageDetectionJob",
+      "comprehend:ListDominantLanguageDetectionJobs",
+      "comprehend:DescribeKeyPhrasesDetectionJob",
+      "comprehend:ListKeyPhrasesDetectionJobs",
+      "textract:DetectDocumentText",
+      "textract:AnalyzeDocument",
+      "comprehend:ContainsPiiEntities",
+      "comprehend:DetectPiiEntities",
+      "comprehend:ListDocumentClassifiers",
+      "comprehend:ListEntityRecognizers",
+      "comprehend:ListDocumentClassifierSummaries"
+    ]
+    resources = ["*"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:RequestedRegion"
+      values = [
+        "eu-west-1",
+        "eu-west-2"
+      ]
+    }
+  }
+
+  statement {
+    sid       = "ComprehendPassRole"
+    effect    = "Allow"
+    actions   = ["iam:PassRole"]
+    resources = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/comprehend-batch-processing-role"]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["comprehend.amazonaws.com"]
+    }
+  }
+}
+
 resource "aws_iam_policy" "bedrock_integration" {
   name        = "analytical-platform-bedrock-integration"
   description = "Permissions needed to allow access to Bedrock in Frankfurt from tooling."
@@ -131,6 +198,12 @@ resource "aws_iam_policy" "textract_integration" {
   name        = "analytical-platform-textract-integration"
   description = "Permissions needed to allow access to Textract from tooling."
   policy      = data.aws_iam_policy_document.textract_integration.json
+}
+
+resource "aws_iam_policy" "comprehend_integration" {
+  name        = "analytical-platform-comprehend-integration"
+  description = "Permissions needed to use Comprehend APIs and pass batch processing role."
+  policy      = data.aws_iam_policy_document.comprehend_integration.json
 }
 
 ##################################################
