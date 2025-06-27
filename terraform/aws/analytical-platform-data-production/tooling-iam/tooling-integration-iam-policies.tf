@@ -331,8 +331,6 @@ data "aws_iam_policy_document" "comprehend_integration" {
       "comprehend:ListDominantLanguageDetectionJobs",
       "comprehend:DescribeKeyPhrasesDetectionJob",
       "comprehend:ListKeyPhrasesDetectionJobs",
-      "textract:DetectDocumentText",
-      "textract:AnalyzeDocument",
       "comprehend:ContainsPiiEntities",
       "comprehend:DetectPiiEntities",
       "comprehend:ListDocumentClassifiers",
