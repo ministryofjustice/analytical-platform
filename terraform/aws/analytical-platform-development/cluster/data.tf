@@ -79,3 +79,14 @@ data "aws_nat_gateways" "nat_gateways" {
 data "aws_iam_policy" "lake_formation_data_access" {
   name = "lake-formation-data-access-additional"
 }
+
+##################################################
+# Modernisation Platform Core Logging
+##################################################
+
+data "aws_route53_resolver_query_log_config" "core_logging_s3" {
+  filter {
+    name   = "Name"
+    values = ["core-logging-rlq-s3-eu-west-1"]
+  }
+}
