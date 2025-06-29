@@ -8,10 +8,10 @@ account_ids = {
 tags = {
   business-unit          = "Platforms"
   application            = "Analytical Platform"
-  component              = "ingestion-ingress/datasync-opg"
+  component              = "ingestion-ingress/datasync"
   environment            = "production"
   is-production          = "true"
   owner                  = "analytical-platform:analytical-platform@digital.justice.gov.uk"
   infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/ingestion-ingress/datasync-opg"
+  source-code            = "github.com/ministryofjustice/data-platform/terraform/aws/analytical-platform-data-production/ingestion-ingress/datasync"
 }
