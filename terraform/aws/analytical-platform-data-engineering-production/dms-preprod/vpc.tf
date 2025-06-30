@@ -108,6 +108,14 @@ module "endpoints" {
       service_type        = "Interface"
       subnet_ids          = module.vpc.private_subnets
       private_dns_enabled = true
+      tags                = { Name = "glue-eu-west-1-preprod" }
+    }
+    sts = {
+      service             = "sts"
+      service_type        = "Interface"
+      subnet_ids          = module.vpc.private_subnets
+      private_dns_enabled = true
+      tags                = { Name = "sts-eu-west-1-preprod" }
     }
 
   }
