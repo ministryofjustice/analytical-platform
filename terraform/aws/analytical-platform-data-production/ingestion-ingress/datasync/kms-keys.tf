@@ -55,6 +55,27 @@ module "datasync_laa_kms" {
           identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-ingestion-production"]}:role/laa-data-analysis-production-replication"]
         }
       ]
+    },
+    {
+      sid = "AllowS3InventoryToUseKMSKey"
+      actions = [
+        "kms:Encrypt",
+        "kms:GenerateDataKey"
+      ]
+      resources = ["*"]
+      effect    = "Allow"
+      principals = [
+        {
+          type        = "Service"
+          identifiers = ["s3.amazonaws.com"]
+        }
+      ]
+
+      condition = {
+        test     = "StringEquals"
+        variable = "aws:SourceAccount"
+        values   = [var.account_ids["analytical-platform-data-production"]]
+      }
     }
   ]
   deletion_window_in_days = 7
