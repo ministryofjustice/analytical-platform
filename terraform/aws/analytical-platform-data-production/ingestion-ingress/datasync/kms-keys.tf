@@ -70,12 +70,11 @@ module "datasync_laa_kms" {
           identifiers = ["s3.amazonaws.com"]
         }
       ]
-
-      condition = {
+      condition = [{
         test     = "StringEquals"
         variable = "aws:SourceAccount"
         values   = [var.account_ids["analytical-platform-data-production"]]
-      }
+      }]
     }
   ]
   deletion_window_in_days = 7
