@@ -68,7 +68,7 @@ data "aws_iam_policy_document" "data_engineering_datalake_access" {
       "iam:GetRole",
       "iam:UpdateRole"
     ]
-    resources = [""]
+    resources = ["arn:aws:iam::*:role/alpha"]
 }
 
 module "data_engineering_datalake_access_iam_policy" {
