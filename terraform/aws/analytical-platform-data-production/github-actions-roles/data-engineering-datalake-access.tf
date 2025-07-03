@@ -57,12 +57,18 @@ data "aws_iam_policy_document" "data_engineering_datalake_access" {
       "iam:PutRolePolicy",
       "iam:GetRolePolicy",
       "iam:DeleteRolePolicy",
-      "iam:GetRole",
-      "iam:UpdateRole",
       "iam:UpdateAssumeRolePolicy"
     ]
-    resources = ["arn:aws:iam::*:role/alpha*"]
+    resources = ["*"]
   }
+  statement {
+    sid    = "IAMRoleAlpha"
+    effect = "Allow"
+    actions = [
+      "iam:GetRole",
+      "iam:UpdateRole"
+    ]
+    resources = [""]
 }
 
 module "data_engineering_datalake_access_iam_policy" {
