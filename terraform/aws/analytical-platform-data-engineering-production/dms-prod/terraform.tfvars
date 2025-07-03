@@ -12,7 +12,7 @@ tags = {
   business-unit    = "Platforms"
   application      = "Data Engineering"
   environment-name = "prod"
-  is-production    = "False"
+  is-production    = "True"
   owner            = "Data Engineering:dataengineering@digital.justice.gov.uk"
   source-code      = "https://github.com/ministryofjustice/analytical-platform/tree/main/terraform/aws/analytical-platform-data-engineering-production/dms-prod"
 }
