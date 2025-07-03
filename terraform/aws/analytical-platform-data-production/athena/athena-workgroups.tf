@@ -25,6 +25,9 @@ locals {
   dbt_athena_workgroups = {
     "dbt-avature" = {
       name = "dbt-avature"
+    },
+    "dbt-xcjs" = {
+      name = "dbt-xcjs"
     }
   }
   dbt_spark_workgroups = {
