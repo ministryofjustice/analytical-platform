@@ -56,3 +56,56 @@ module "cica_dms_ingress_s3" {
     }
   }
 }
+
+data "aws_iam_policy_document" "shared_services_client_team_gov_29148" {
+  statement {
+    sid    = "AllowAnalyticalPlatformIngestionService"
+    effect = "Allow"
+    actions = [
+      "s3:DeleteObject",
+      "s3:GetObject",
+      "s3:GetObjectAcl",
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+      "s3:PutObjectTagging"
+    ]
+    resources = [
+      "arn:aws:s3:::mojap-data-production-shared-services-client-team-gov-29148/*",
+      "arn:aws:s3:::mojap-data-production-shared-services-client-team-gov-29148"
+    ]
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::471112983409:role/transfer"]
+    }
+  }
+}
+
+#tfsec:ignore:AVD-AWS-0089:Bucket logging not enabled currently
+module "shared_services_client_team_gov_29148_s3" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "4.11.0"
+
+  bucket = "mojap-data-production-shared-services-client-team-gov-29148"
+
+  force_destroy = true
+
+  attach_policy = true
+  policy        = data.aws_iam_policy_document.shared_services_client_team_gov_29148.json
+
+  versioning = {
+    enabled = true
+  }
+
+  server_side_encryption_configuration = {
+    rule = {
+      bucket_key_enabled = true
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = module.shared_services_client_team_gov_29148_kms.key_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+}

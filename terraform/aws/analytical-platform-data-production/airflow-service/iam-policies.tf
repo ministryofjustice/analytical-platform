@@ -194,10 +194,14 @@ data "aws_iam_policy_document" "bedrock" {
       test     = "StringEquals"
       variable = "aws:RequestedRegion"
       values = [
-        "eu-central-1", // Frankfurt
-        "eu-west-1",    // Ireland
-        "eu-west-2",    // London
-        "eu-west-3"     // Paris
+        "eu-central-1", # Europe (Frankfurt)
+        "eu-north-1",   # Europe (Stockholm)
+        "eu-south-1",   # Europe (Milan)
+        "eu-south-2",   # Europe (Spain)
+        "eu-west-1",    # Europe (Ireland)
+        "eu-west-2",    # Europe (London)
+        "eu-west-3",    # Europe (Paris)
+        "us-east-1",    # US East (N. Virginia)
       ]
     }
   }

@@ -1,5 +1,5 @@
 module "preprod_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=fb85692a4ad7b662a909fd56e543dc44f071fea7"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=3252bef7be960beea20dec37cd1b9b13d7b5c764"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -45,5 +45,6 @@ module "preprod_dms_oasys" {
     var.tags
   )
 
-  glue_catalog_arn = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
+  glue_catalog_arn      = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
+  glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
 }
