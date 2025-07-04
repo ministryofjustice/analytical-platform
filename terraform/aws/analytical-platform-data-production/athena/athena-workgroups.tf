@@ -58,7 +58,24 @@ locals {
     },
     "dbt-opg" = {
       name = "dbt-opg"
-    }
+    },
+    # dev workgroups
+    "dbt-curated-dev" = {
+      name             = "dbt-curated-dev",
+      environment_name = "dev"
+    },
+    "dbt-dev" = {
+      name             = "dbt-dev",
+      environment_name = "dev"
+    },
+    "dbt-sandpit" = {
+      name             = "dbt-sandpit",
+      environment_name = "dev"
+    },
+    "dbt-bold-daily-dev"  = {
+      name             = "dbt-bold-daily-dev",
+      environment_name = "dev"
+    },
   }
   dbt_spark_workgroups = {
     "dbt-spark" = {
