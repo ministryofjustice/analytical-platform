@@ -138,8 +138,8 @@ resource "aws_athena_workgroup" "dbt" {
 # and skips creating duplicates on apply.
 import {
   for_each = local.dbt_athena_workgroups
-  id = each.value.name # AWS workgroup name
-  to = aws_athena_workgroup.dbt[each.key]
+  id       = each.value.name # AWS workgroup name
+  to       = aws_athena_workgroup.dbt[each.key]
 }
 
 #trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
