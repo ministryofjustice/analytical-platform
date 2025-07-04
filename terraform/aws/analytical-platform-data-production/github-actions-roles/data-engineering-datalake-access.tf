@@ -49,7 +49,8 @@ data "aws_iam_policy_document" "data_engineering_datalake_access" {
       "iam:GetPolicy",
       "iam:GetPolicyVersion",
       "iam:ListPolicyVersions",
-      "iam:SetDefaultPolicyVersion"
+      "iam:SetDefaultPolicyVersion",
+      "iam:TagPolicy"
     ]
     resources = ["arn:aws:iam::*:policy/get-lf-data-access"]
   }
