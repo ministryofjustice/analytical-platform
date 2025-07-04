@@ -72,7 +72,7 @@ locals {
       name             = "dbt-sandpit",
       environment_name = "dev"
     },
-    "dbt-bold-daily-dev"  = {
+    "dbt-bold-daily-dev" = {
       name             = "dbt-bold-daily-dev",
       environment_name = "dev"
     },
