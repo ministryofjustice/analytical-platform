@@ -28,6 +28,36 @@ locals {
     },
     "dbt-xcjs" = {
       name = "dbt-xcjs"
+    },
+    "dbt-curated-daily" = {
+      name = "dbt-curated-daily"
+    },
+    "dbt-curated-prod" = {
+      name = "dbt-curated-prod"
+    },
+    "dbt-daily" = {
+      name = "dbt-daily"
+    },
+    "dbt-monthly" = {
+      name = "dbt-monthly"
+    },
+    "dbt-nomis-daily" = {
+      name = "dbt-nomis-daily"
+    },
+    "dbt-weekly" = {
+      name = "dbt-weekly"
+    },
+    "dbt-xhibit" = {
+      name = "dbt-xhibit"
+    },
+    "dbt-bold-daily-prod" = {
+      name = "dbt-bold-daily-prod"
+    },
+    "dbt-caseman" = {
+      name = "dbt-caseman"
+    },
+    "dbt-opg" = {
+      name = "dbt-opg"
     }
   }
   dbt_spark_workgroups = {
