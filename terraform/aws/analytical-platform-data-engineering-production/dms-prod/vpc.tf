@@ -66,7 +66,7 @@ module "endpoints" {
       service_type        = "Interface"
       subnet_ids          = module.vpc.private_subnets
       private_dns_enabled = true
-      tags                = { Name = "ec2messages-eu-west-1c-prod" }
+      tags                = { Name = "ec2messages-eu-west-1-prod" }
     }
 
     ssmmessages = {
@@ -74,7 +74,7 @@ module "endpoints" {
       service_type        = "Interface"
       subnet_ids          = module.vpc.private_subnets
       private_dns_enabled = true
-      tags                = { Name = "ssmmessages-eu-west-1c-prod" }
+      tags                = { Name = "ssmmessages-eu-west-1-prod" }
     }
 
     ssm = {
@@ -82,7 +82,7 @@ module "endpoints" {
       service_type        = "Interface"
       subnet_ids          = module.vpc.private_subnets
       private_dns_enabled = true
-      tags                = { Name = "ssm-eu-west-1c-prod" }
+      tags                = { Name = "ssm-eu-west-1-prod" }
     }
 
     s3 = {
