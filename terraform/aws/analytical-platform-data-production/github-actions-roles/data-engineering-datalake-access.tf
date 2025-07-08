@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "data_engineering_datalake_access" {
     resources = ["*"]
   }
   statement {
-    sid    = "IAMAccess"
+    sid    = "IAMPolicyAccess"
     effect = "Allow"
     actions = [
       "iam:CreatePolicy",
@@ -50,6 +50,14 @@ data "aws_iam_policy_document" "data_engineering_datalake_access" {
       "iam:GetPolicyVersion",
       "iam:ListPolicyVersions",
       "iam:SetDefaultPolicyVersion",
+      "iam:TagPolicy"
+    ]
+    resources = ["arn:aws:iam::*:policy/get-lf-data-access"]
+  }
+  statement {
+    sid    = "IAMRoleAccess"
+    effect = "Allow"
+    actions = [
       "iam:AttachRolePolicy",
       "iam:DetachRolePolicy",
       "iam:ListAttachedRolePolicies",
@@ -57,9 +65,9 @@ data "aws_iam_policy_document" "data_engineering_datalake_access" {
       "iam:PutRolePolicy",
       "iam:GetRolePolicy",
       "iam:DeleteRolePolicy",
+      "iam:UpdateAssumeRolePolicy",
       "iam:GetRole",
-      "iam:UpdateRole",
-      "iam:UpdateAssumeRolePolicy"
+      "iam:UpdateRole"
     ]
     resources = ["arn:aws:iam::*:role/alpha*"]
   }
