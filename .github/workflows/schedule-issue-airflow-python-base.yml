@@ -1,9 +1,8 @@
----
 name: 📥 Maintenance - Create Airflow Python Base Issue
 
-on:
+'on':
   schedule:
-    - cron: "0 8 1 * *" # UTC time: “At 08:00 on first day-of-month”
+    - cron: 0 8 1 * * # UTC time: “At 08:00 on first day-of-month”
 
 permissions: {}
 
@@ -39,7 +38,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           TITLE: 📥 Maintenance - Airflow Python Base Image
-          ASSIGNEES:
+          ASSIGNEES: null
           LABELS: maintenance
           BODY: |
             > [!NOTE]

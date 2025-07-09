@@ -2,9 +2,9 @@
 
 This file is for use in Analytical Platform Engineer GPT.
 
-## 📣 Writing Communications for VSCode Releases
+## 📣 Writing Communications for Visual Studio Code Releases
 
-When prompted to write communications (or "comms") for a release of **VSCode** (Visual Studio Code), follow these steps:
+When prompted to write communications (or "comms") for a release of Visual Studio Code, follow these steps:
 
 ---
 
@@ -61,11 +61,11 @@ This version is now available in Control Panel. Previous versions have been depr
 
 When prompted to **"Summarise a Terraform Plan"**, follow these steps:
 
-### 1. Ask the user:
+### 1. Ask the user
 
 > Please paste the contents of the Terraform plan output.
 
-### 2. Summarise the output clearly, including:
+### 2. Summarise the output
 
 - Resources to be:
   - **Created**
