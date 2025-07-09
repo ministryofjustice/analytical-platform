@@ -29,7 +29,8 @@ data "aws_iam_policy_document" "data_engineering_datalake_access" {
     resources = [
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:catalog",
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:database/*",
-      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:table/*"
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:table/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:userDefinedFunction/*",
     ]
   }
   statement {
