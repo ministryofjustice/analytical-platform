@@ -55,7 +55,7 @@ module "preprod_dms_delius" {
   environment = var.tags.environment-name
 
   db                      = "delius-preprod"
-  slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
+  slack_webhook_secret_id = aws_secretsmanager_secret.preprod_slack_webhook.id
   output_key_prefix       = "hmpps/delius"
   output_key_suffix       = "-tf"
   output_bucket           = "mojap-raw-hist-preprod"
@@ -64,7 +64,7 @@ module "preprod_dms_delius" {
     replication_instance_id    = "delius-preprod"
     subnet_ids                 = module.vpc.private_subnets
     subnet_group_name          = "delius-preprod"
-    allocated_storage          = 100
+    allocated_storage          = 200
     availability_zone          = data.aws_availability_zones.available.names[0]
     engine_version             = "3.5.4"
     kms_key_arn                = module.dms_preprod_kms.key_arn
