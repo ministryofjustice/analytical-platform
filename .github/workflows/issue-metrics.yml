@@ -1,46 +1,65 @@
 ---
-name: Monthly issue metrics
+name: 📊 Monthly Issue Metrics
 
 on:
   schedule:
-    - cron: "3 2 1 * *"
+    - cron: "0 7 1 * *"
   workflow_dispatch:
 
-permissions: read-all
+permissions: {}
 
 jobs:
   monthly-issue-metrics:
-    name: Monthly issue metrics
+    name: Monthly Issue Metrics
     runs-on: ubuntu-latest
     permissions:
       issues: write
       pull-requests: read
     steps:
-      - name: Get dates for last month
-        id: get_last_months_dates
+      - name: Generate Dates
+        id: generate_dates
         shell: bash
         run: |
           # Calculate the first day of the previous month
-          first_day=$(date -d "last month" +%Y-%m-01)
+          firstDay=$(date --date="last month" +%Y-%m-01)
+          export firstDay
 
           # Calculate the last day of the previous month
-          last_day=$(date -d "$first_day +1 month -1 day" +%Y-%m-%d)
+          lastDay=$(date --date="${firstDay} +1 month -1 day" +%Y-%m-%d)
+          export lastDay
 
-          #Set an environment variable with the date range
-          echo "$first_day..$last_day"
-          echo "last_month=$first_day..$last_day" >> "$GITHUB_ENV"
+          # Set an environment variable with the date range
+          echo "${firstDay}..${lastDay}"
+          echo "last-month=${firstDay}..${lastDay}" >>"${GITHUB_ENV}"
 
       - name: Run GitHub Issue Metrics action
         id: run_github_issue_metrics
         uses: github/issue-metrics@346541fd0068df64c02607a4c7f55438dc2881e2 # v3.21.0
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SEARCH_QUERY: 'repo:ministryofjustice/analytical-platform is:issue created:${{ env.last_month }} -reason:"not planned"'
+          SEARCH_QUERY: 'repo:ministryofjustice/analytical-platform is:issue created:${{ env.last-month }} -reason:"not planned"'
 
       - name: Create issue
         id: create_issue
-        uses: peter-evans/create-issue-from-file@e8ef132d6df98ed982188e460ebb3b5d4ef3a9cd # v5.0.1
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
-          title: Monthly issue metrics report
-          token: ${{ secrets.GITHUB_TOKEN }}
-          content-filepath: ./issue_metrics.md
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const metricsPath = path.join(process.env.GITHUB_WORKSPACE, 'issue_metrics.md');
+            const metricsBody = fs.readFileSync(metricsPath, 'utf8');
+
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Monthly issue metrics report',
+              body: metricsBody,
+            })
+
+      # - name: Create issue
+      #   id: create_issue
+      #   uses: peter-evans/create-issue-from-file@e8ef132d6df98ed982188e460ebb3b5d4ef3a9cd # v5.0.1
+      #   with:
+      #     title: Monthly issue metrics report
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     content-filepath: ./issue_metrics.md
