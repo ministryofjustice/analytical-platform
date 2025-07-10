@@ -1,0 +1,42 @@
+{
+  "inputs": [],
+  "servers": {
+    "aws-documentation": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["awslabs.aws-documentation-mcp-server@latest"],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    },
+    "aws-eks": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "awslabs.eks-mcp-server@latest",
+        "--allow-sensitive-data-access"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    },
+    "aws-terraform": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["awslabs.terraform-mcp-server@latest"],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    },
+    "hashicorp-terraform": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "--interactive",
+        "--rm",
+        "docker.io/hashicorp/terraform-mcp-server"
+      ]
+    }
+  }
+}
