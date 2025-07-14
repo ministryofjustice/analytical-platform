@@ -1,48 +1,20 @@
 ---
-name: OpenSSF Scorecard
+name: 🛡️ OpenSSF Scorecard
 
-on: # yamllint disable-line rule:truthy
-  branch_protection_rule:
+on:
   push:
     branches:
       - main
   schedule:
     - cron: "30 6 * * 1"
-  workflow_dispatch:
 
-permissions: read-all
+permissions: {}
 
 jobs:
-  scorecard-analysis:
-    name: Scorecard analysis
-    runs-on: ubuntu-latest
+  openssf-scorecard:
+    name: OpenSSF Scorecard
     permissions:
+      contents: read
       id-token: write
       security-events: write
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
-      - name: Run analysis
-        id: run_analysis
-        uses: ossf/scorecard-action@05b42c624433fc40578a4040d5cf5e36ddca8cde # v2.4.2
-        with:
-          repo_token: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
-          results_file: results.sarif
-          results_format: sarif
-          publish_results: true
-
-      - name: Upload SARIF results
-        id: upload_sarif_results
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v3.1.0
-        with:
-          name: SARIF results
-          path: results.sarif
-          retention-days: 5
-
-      - name: Upload to CodeQL
-        id: upload_to_codeql
-        uses: github/codeql-action/upload-sarif@181d5eefc20863364f96762470ba6f862bdef56b # v3.29.2
-        with:
-          sarif_file: results.sarif
+    uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-openssf-scorecard.yml@df5fa543cab50de34ac4c1ccd6f85617744bf9e4 # v4.0.0
