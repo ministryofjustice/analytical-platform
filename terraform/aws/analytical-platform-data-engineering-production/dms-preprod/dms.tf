@@ -50,7 +50,7 @@ module "preprod_dms_oasys" {
 }
 
 module "preprod_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=f5f4662945a5ff937ae88b7373aa8f891b6f8954"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=229b089cef8cce42a97c3edede4d0230403a1380"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
