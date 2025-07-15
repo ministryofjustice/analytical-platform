@@ -13,7 +13,9 @@ module "data_engineering_probation_glue_access_iam_role" {
   trusted_role_arns = [
     "arn:aws:iam::189157455002:role/oasys-dev-metadata-generator",
     "arn:aws:iam::189157455002:role/oasys-preprod-metadata-generator",
-    "arn:aws:iam::189157455002:role/oasys-prod-metadata-generator"
+    "arn:aws:iam::189157455002:role/oasys-prod-metadata-generator",
+    "arn:aws:iam::189157455002:role/delius-preprod-metadata-generator",
+    "arn:aws:iam::189157455002:role/delius-prod-metadata-generator"
   ]
 
   inline_policy_statements = [

@@ -1,5 +1,5 @@
 module "prod_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=3252bef7be960beea20dec37cd1b9b13d7b5c764"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=0d967271afc866d8f068408283c7f7ac2c2b9edd"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -7,7 +7,7 @@ module "prod_dms_oasys" {
   slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
   output_key_prefix       = "hmpps/oasys"
   output_key_suffix       = "-tf"
-  output_bucket           = "mojap-raw-hist-prod"
+  output_bucket           = "mojap-raw-hist"
 
   dms_replication_instance = {
     replication_instance_id    = "oasys-prod"
@@ -38,6 +38,57 @@ module "prod_dms_oasys" {
   dms_mapping_rules = {
     bucket = "mojap-data-engineering-prod-table-mappings-metadata-prod"
     key    = "prod/oasys/table_mappings.json"
+  }
+
+  tags = merge(
+    { "managed-by" = "Terraform" },
+    var.tags
+  )
+
+  glue_catalog_arn      = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
+  glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
+}
+
+module "prod_dms_delius" {
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=0d967271afc866d8f068408283c7f7ac2c2b9edd"
+  vpc_id      = module.vpc.vpc_id
+  environment = var.tags.environment-name
+
+  db                      = "delius-prod"
+  slack_webhook_secret_id = aws_secretsmanager_secret.prod_slack_webhook.id
+  output_key_prefix       = "hmpps/delius"
+  output_key_suffix       = "-tf"
+  output_bucket           = "mojap-raw-hist"
+
+  dms_replication_instance = {
+    replication_instance_id    = "delius-prod"
+    subnet_ids                 = module.vpc.private_subnets
+    subnet_group_name          = "delius-prod"
+    allocated_storage          = 200
+    availability_zone          = data.aws_availability_zones.available.names[0]
+    engine_version             = "3.5.4"
+    kms_key_arn                = module.dms_prod_kms.key_arn
+    multi_az                   = false
+    replication_instance_class = "dms.r6i.2xlarge"
+    inbound_cidr               = "192.0.2.0/32" # test unassigned
+    apply_immediately          = true
+  }
+  dms_source = {
+    engine_name             = "oracle"
+    secrets_manager_arn     = aws_secretsmanager_secret.delius_prod_secret.arn
+    secrets_manager_kms_arn = module.dms_prod_kms.key_arn
+    sid                     = "prdndas2"
+
+    extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=3;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=delius-db-3.probation.service.justice.gov.uk/+ASM;asm_user=delius_analytics_platform;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N;"
+    cdc_start_time              = "2025-06-24T12:00:00Z"
+  }
+  replication_task_id = {
+    full_load = "delius-prod-full-load"
+    cdc       = "delius-prod-cdc"
+  }
+  dms_mapping_rules = {
+    bucket = "mojap-data-engineering-prod-table-mappings-metadata-prod"
+    key    = "prod/delius/table_mappings.json"
   }
 
   tags = merge(
