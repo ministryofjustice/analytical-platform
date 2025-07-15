@@ -1,6 +1,7 @@
+---
 name: 📥 Maintenance - Create Airflow Python Base Issue
 
-'on':
+on:
   schedule:
     - cron: 0 8 1 * * # UTC time: “At 08:00 on first day-of-month”
 
