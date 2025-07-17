@@ -107,7 +107,6 @@ datasources:
           defaultRegion: eu-west-2
           assumeRoleArn: arn:aws:iam::381491960855:role/analytical-platform-observability
           tracingDatasourceUid: mojap-compute-development-xray
-          customMetricsNamespaces: "NetworkMonitor"
       ## Prometheus
       - name: analytical-platform-compute-development-prometheus
         type: grafana-amazonprometheus-datasource
@@ -142,7 +141,6 @@ datasources:
           defaultRegion: eu-west-2
           assumeRoleArn: arn:aws:iam::992382429243:role/analytical-platform-observability
           tracingDatasourceUid: mojap-compute-production-xray
-          customMetricsNamespaces: "NetworkMonitor"
       ## Prometheus
       - name: analytical-platform-compute-production-prometheus
         type: grafana-amazonprometheus-datasource
@@ -177,7 +175,6 @@ datasources:
           defaultRegion: eu-west-2
           assumeRoleArn: arn:aws:iam::767397661611:role/analytical-platform-observability
           tracingDatasourceUid: mojap-compute-test-xray
-          customMetricsNamespaces: "NetworkMonitor"
       ## Prometheus
       - name: analytical-platform-compute-test-prometheus
         type: grafana-amazonprometheus-datasource
