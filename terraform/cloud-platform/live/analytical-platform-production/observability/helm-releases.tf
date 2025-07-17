@@ -3,7 +3,7 @@ resource "helm_release" "grafana" {
   name       = "grafana"
   repository = "https://grafana.github.io/helm-charts"
   chart      = "grafana"
-  version    = "9.2.7"
+  version    = "9.2.10"
   namespace  = var.namespace
   values = [
     templatefile(
