@@ -1,57 +1,60 @@
-#!/usr/bin/env bash
+#!/bin/bash
+set -euo pipefail
 
-# Define Kubernetes version and AWS region
 K8S_VERSION="1.33"
 REGION="eu-west-2"
+GITHUB_RAW_URL="https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/213a7f7b259067520f77105ba390f7f1a2566119/terraform/environments/analytical-platform-compute/cluster/environment-configuration.tf"
 
-# Define addons and their current versions
-declare -A eks_cluster_addon_versions=(
-    [coredns]="v1.12.1-eksbuild.2"
-    [kube-proxy]="v1.33.0-eksbuild.2"
-    [aws-ebs-csi-driver]="v1.44.0-eksbuild.1"
-    [aws-efs-csi-driver]="v2.1.8-eksbuild.1"
-    [aws-guardduty-agent]="v1.10.0-eksbuild.2"
-    [aws-network-flow-monitoring-agent]="v1.0.2-eksbuild.5"
-    [eks-pod-identity-agent]="v1.3.7-eksbuild.2"
-    [eks-node-monitoring-agent]="v1.3.0-eksbuild.2"
-    [vpc-cni]="v1.19.6-eksbuild.1"
-)
+# Fetch and extract eks_cluster_addon_versions block
+echo "Fetching eks_cluster_addon_versions from GitHub..."
+raw_block=$(curl -sSL "$GITHUB_RAW_URL" \
+  | sed -n '/^ *eks_cluster_addon_versions *= *{/,/^ *}/p' \
+  | sed '1d;$d' \
+  | grep -E '^[[:space:]]*[a-zA-Z0-9_-]+[[:space:]]*=' | grep -v '^ *eks_cluster_addon_versions *= *{')
+
+# Populate associative array
+declare -A eks_cluster_addon_versions
+while IFS='=' read -r key val; do
+  key=$(echo "$key" | xargs | tr -d '"')
+  val=$(echo "$val" | xargs | tr -d '"')
+  eks_cluster_addon_versions["$key"]="$val"
+done <<< "$raw_block"
 
 declare -A updated_versions
 
-echo "Checking latest addon versions for Kubernetes $K8S_VERSION in region $REGION..."
-echo ""
+echo
+echo "Checking addon versions for Kubernetes $K8S_VERSION in region $REGION"
+echo
 
-for addon in "${!eks_cluster_addon_versions[@]}"; do
-    latest_version=$(aws eks describe-addon-versions \
-        --region "$REGION" \
-        --kubernetes-version "$K8S_VERSION" \
-        --addon-name "$addon" \
-        --query 'addons[].addonVersions[].addonVersion' \
-        --output text | tr '\t' '\n' | sort -V | tail -n 1)
+for tf_key in "${!eks_cluster_addon_versions[@]}"; do
+  current_version="${eks_cluster_addon_versions[$tf_key]}"
+  aws_addon_name="${tf_key//_/-}"
 
-    current_version=${eks_cluster_addon_versions[$addon]}
-    updated_versions[$addon]=$latest_version
+  latest_version=$(aws eks describe-addon-versions \
+      --region "$REGION" \
+      --kubernetes-version "$K8S_VERSION" \
+      --addon-name "$aws_addon_name" \
+      --query 'addons[].addonVersions[].addonVersion' \
+      --output text 2>/dev/null | tr '\t' '\n' | sort -V | tail -n 1)
 
-    echo "$addon:"
-    echo "  Current version: $current_version"
-    echo "  Latest version : $latest_version"
+  updated_versions["$tf_key"]="$latest_version"
 
-    if [[ "$current_version" == "$latest_version" ]]; then
-        echo "  ✅ Up to date"
-    else
-        echo "  ⚠️  Update available"
-    fi
+  echo "$tf_key:"
+  echo "  Current version: $current_version"
+  echo "  Latest version : $latest_version"
 
-    echo ""
+  if [[ "$current_version" == "$latest_version" || -z "$latest_version" ]]; then
+    echo "  ✅ Up to date"
+  else
+    echo "  ⚠️  Update available"
+  fi
+  echo
 done
 
-# Output the updated eks_cluster_addon_versions block
-echo "Updated eks_cluster_addon_versions block:"
-echo ""
-echo "eks_cluster_addon_versions = {"
-for addon in "${!updated_versions[@]}"; do
-    tf_key=$(echo "$addon" | sed -E 's/-/_/g')
-    printf "  %-35s = \"%s\"\n" "$tf_key" "${updated_versions[$addon]}"
+# Emit updated Terraform block
+echo "Updated eks_cluster_addon_versions = {"
+for tf_key in "${!updated_versions[@]}"; do
+  version="${updated_versions[$tf_key]}"
+  printf "    %-35s = \"%s\"\n" "$tf_key" "$version"
 done
 echo "}"
