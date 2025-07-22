@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-K8S_VERSION="1.33"
+EKS_CLUSTER_VERSION="1.33"
 REGION="eu-west-2"
 GITHUB_RAW_URL="https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/213a7f7b259067520f77105ba390f7f1a2566119/terraform/environments/analytical-platform-compute/cluster/environment-configuration.tf"
 
@@ -23,7 +23,7 @@ done <<< "$raw_block"
 declare -A updated_versions
 
 echo
-echo "Checking addon versions for Kubernetes $K8S_VERSION in region $REGION"
+echo "Checking addon versions for Kubernetes $EKS_CLUSTER_VERSION in region $REGION"
 echo
 
 for tf_key in "${!eks_cluster_addon_versions[@]}"; do
