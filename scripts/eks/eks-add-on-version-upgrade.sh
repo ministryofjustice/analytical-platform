@@ -73,7 +73,7 @@ EKS_NODE_VERSION=$(curl -sSL "$GITHUB_RAW_URL" \
   | head -n1 \
   | sed -E 's/.*=\s*"([^"]+)"/\1/')
 
-echo "DEBUG: eks_node_version is: '$EKS_NODE_VERSION'"
+echo "NOTE: eks_node_version is: '$EKS_NODE_VERSION'"
 
 # Build SSM path for latest Bottlerocket image_version
 SSM_PATH="/aws/service/bottlerocket/aws-k8s-${EKS_CLUSTER_VERSION}/x86_64/latest/image_version"
@@ -85,7 +85,7 @@ LATEST_NODE_RELEASE=$(aws ssm get-parameter \
   --query 'Parameter.Value' \
   --output text 2>/dev/null)
 
-echo "Latest Bottlerocket image_version: $LATEST_NODE_RELEASE"
+echo "🚀 Latest Bottlerocket image_version: $LATEST_NODE_RELEASE"
 
 if [[ "$EKS_NODE_VERSION" == "$LATEST_NODE_RELEASE" ]]; then
   echo "✅ Bottlerocket node version is up to date"
