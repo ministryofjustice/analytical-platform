@@ -98,7 +98,7 @@ locals {
     },
     {
       name = "Data Engineering Support G7 Dev"
-      team = module.teams_de["Data Engineering Support G7 Dev"].id
+      team = module.teams_de_dev["Data Engineering Support G7 Dev"].id
       layers = [
         {
           name                         = "DE Daily Support Rota G7 Dev"
