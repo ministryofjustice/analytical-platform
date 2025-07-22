@@ -1,9 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
-EKS_CLUSTER_VERSION="1.33"
 REGION="eu-west-2"
 GITHUB_RAW_URL="https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-environments/213a7f7b259067520f77105ba390f7f1a2566119/terraform/environments/analytical-platform-compute/cluster/environment-configuration.tf"
+
+# Fetch eks_cluster_version from GitHub
+EKS_CLUSTER_VERSION=$(curl -sSL "$GITHUB_RAW_URL" \
+  | grep -E '^\s*eks_cluster_version\s*=' \
+  | head -n1 \
+  | sed -E 's/.*=\s*"([^"]+)"/\1/')
 
 # Fetch and extract eks_cluster_addon_versions block
 echo "Fetching eks_cluster_addon_versions from GitHub..."
@@ -32,7 +37,7 @@ for tf_key in "${!eks_cluster_addon_versions[@]}"; do
 
   latest_version=$(aws eks describe-addon-versions \
       --region "$REGION" \
-      --kubernetes-version "$K8S_VERSION" \
+      --kubernetes-version "$EKS_CLUSTER_VERSION" \
       --addon-name "$aws_addon_name" \
       --query 'addons[].addonVersions[].addonVersion' \
       --output text 2>/dev/null | tr '\t' '\n' | sort -V | tail -n 1)
@@ -58,3 +63,34 @@ for tf_key in "${!updated_versions[@]}"; do
   printf "    %-35s = \"%s\"\n" "$tf_key" "$version"
 done
 echo "}"
+
+echo ""
+echo "Checking latest Bottlerocket AMI version..."
+
+# Extract eks_node_version from GitHub
+EKS_NODE_VERSION=$(curl -sSL "$GITHUB_RAW_URL" \
+  | grep -E '^\s*eks_node_version\s*=' \
+  | head -n1 \
+  | sed -E 's/.*=\s*"([^"]+)"/\1/')
+
+echo "DEBUG: eks_node_version is: '$EKS_NODE_VERSION'"
+
+# Build SSM path for latest Bottlerocket image_version
+SSM_PATH="/aws/service/bottlerocket/aws-k8s-${EKS_CLUSTER_VERSION}/x86_64/latest/image_version"
+
+# Get latest Bottlerocket version from SSM
+LATEST_NODE_RELEASE=$(aws ssm get-parameter \
+  --region "$REGION" \
+  --name "$SSM_PATH" \
+  --query 'Parameter.Value' \
+  --output text 2>/dev/null)
+
+echo "Latest Bottlerocket image_version: $LATEST_NODE_RELEASE"
+
+if [[ "$EKS_NODE_VERSION" == "$LATEST_NODE_RELEASE" ]]; then
+  echo "✅ Bottlerocket node version is up to date"
+else
+  echo "⚠️  Newer Bottlerocket node version available: $LATEST_NODE_RELEASE"
+fi
+
+
