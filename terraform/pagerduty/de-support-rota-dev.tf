@@ -275,7 +275,7 @@ locals {
   ]
 }
 
-module "schedules_de" {
+module "schedules_de_dev" {
   for_each = { for schedule in local.schedules_de_loc_dev : schedule.name => schedule }
 
   source = "./modules/schedule"
