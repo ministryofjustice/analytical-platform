@@ -156,10 +156,10 @@ locals {
   teams_de_dev = {
     "Data Engineering Support HEO_SEO Dev" = {
       responders = {
-        for user in local.users_de_seo :
+        for user in local.users_de_seo_dev :
         user.email => {
           name = user.name
-          id   = module.users_de_seo[user.email].id
+          id   = module.users_de_seo_dev[user.email].id
         }
         if user.role == "responder"
       }
@@ -169,7 +169,7 @@ locals {
         for user in local.users_de_g7_dev :
         user.email => {
           name = user.name
-          id   = module.users_de_g7[user.email].id
+          id   = module.users_de_g7_dev[user.email].id
         }
         if user.role == "responder"
       }
