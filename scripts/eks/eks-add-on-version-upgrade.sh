@@ -52,6 +52,6 @@ echo ""
 echo "eks_cluster_addon_versions = {"
 for addon in "${!updated_versions[@]}"; do
     tf_key=$(echo "$addon" | sed -E 's/-/_/g')
-    printf "    %-35s = \"%s\"\n" "$tf_key" "${updated_versions[$addon]}"
+    printf "  %-35s = \"%s\"\n" "$tf_key" "${updated_versions[$addon]}"
 done
 echo "}"
