@@ -1,8 +1,8 @@
 locals {
-  schedules_de_loc = [
+  schedules_de_loc_dev = [
     {
       name = "Data Engineering Support HEO_SEO Dev"
-      team = module.teams_de["Data Engineering Support HEO_SEO Dev"].id
+      team = module.teams_de_dev["Data Engineering Support HEO_SEO Dev"].id
       layers = [
         {
           name                         = "DE Daily Support Rota HEO_SEO Mon Fri"
@@ -10,13 +10,13 @@ locals {
           rotation_virtual_start       = "2025-07-04T09:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users_de_seo["murad.ali@justice.gov.uk"].id,
-            module.users_de_seo["andrew.cook@digital.justice.gov.uk"].id,
-            module.users_de_seo["anthony.cody@digital.justice.gov.uk"].id,
-            module.users_de_seo["thomas.hirsch@justice.gov.uk"].id,
-            module.users_de_seo["william.orr@digital.justice.gov.uk"].id,
-            module.users_de_seo["khristiania.raihan@justice.gov.uk"].id,
-            module.users_de_seo["mohammed.ahad1@justice.gov.uk"].id,
+            module.users_de_seo_dev["murad.ali@justice.gov.uk"].id,
+            module.users_de_seo_dev["andrew.cook@digital.justice.gov.uk"].id,
+            module.users_de_seo_dev["anthony.cody@digital.justice.gov.uk"].id,
+            module.users_de_seo_dev["thomas.hirsch@justice.gov.uk"].id,
+            module.users_de_seo_dev["william.orr@digital.justice.gov.uk"].id,
+            module.users_de_seo_dev["khristiania.raihan@justice.gov.uk"].id,
+            module.users_de_seo_dev["mohammed.ahad1@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -57,15 +57,15 @@ locals {
           rotation_virtual_start       = "2025-07-04T09:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users_de_seo["guy.wheeler@justice.gov.uk"].id,
-            module.users_de_seo["siva.bathina@digital.justice.gov.uk"].id,
-            module.users_de_seo["murad.ali@justice.gov.uk"].id,
-            module.users_de_seo["andrew.cook@digital.justice.gov.uk"].id,
-            module.users_de_seo["anthony.cody@digital.justice.gov.uk"].id,
-            module.users_de_seo["thomas.hirsch@justice.gov.uk"].id,
-            module.users_de_seo["william.orr@digital.justice.gov.uk"].id,
-            module.users_de_seo["khristiania.raihan@justice.gov.uk"].id,
-            module.users_de_seo["mohammed.ahad1@justice.gov.uk"].id,
+            module.users_de_seo_dev["guy.wheeler@justice.gov.uk"].id,
+            module.users_de_seo_dev["siva.bathina@digital.justice.gov.uk"].id,
+            module.users_de_seo_dev["murad.ali@justice.gov.uk"].id,
+            module.users_de_seo_dev["andrew.cook@digital.justice.gov.uk"].id,
+            module.users_de_seo_dev["anthony.cody@digital.justice.gov.uk"].id,
+            module.users_de_seo_dev["thomas.hirsch@justice.gov.uk"].id,
+            module.users_de_seo_dev["william.orr@digital.justice.gov.uk"].id,
+            module.users_de_seo_dev["khristiania.raihan@justice.gov.uk"].id,
+            module.users_de_seo_dev["mohammed.ahad1@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -106,15 +106,15 @@ locals {
           rotation_virtual_start       = "2025-07-04T09:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users_de_g7["matt.heery@justice.gov.uk"].id,
-            module.users_de_g7["lalitha.nagarur3@justice.gov.uk"].id,
-            module.users_de_g7["matthew.price2@justice.gov.uk"].id,
-            module.users_de_g7["andrew.craik@justice.gov.uk"].id,
-            module.users_de_g7["supratik.chowdhury@digital.justice.gov.uk"].id,
-            module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].id,
-            module.users_de_g7["thomas.hepworth@justice.gov.uk"].id,
-            module.users_de_g7["philip.sinfield@justice.gov.uk"].id,
-            module.users_de_g7["laurence.droy@justice.gov.uk"].id,
+            module.users_de_g7_dev["matt.heery@justice.gov.uk"].id,
+            module.users_de_g7_dev["lalitha.nagarur3@justice.gov.uk"].id,
+            module.users_de_g7_dev["matthew.price2@justice.gov.uk"].id,
+            module.users_de_g7_dev["andrew.craik@justice.gov.uk"].id,
+            module.users_de_g7_dev["supratik.chowdhury@digital.justice.gov.uk"].id,
+            module.users_de_g7_dev["tapan.perkins@digital.justice.gov.uk"].id,
+            module.users_de_g7_dev["thomas.hepworth@justice.gov.uk"].id,
+            module.users_de_g7_dev["philip.sinfield@justice.gov.uk"].id,
+            module.users_de_g7_dev["laurence.droy@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -153,7 +153,7 @@ locals {
     }
   ]
 
-  teams_de = {
+  teams_de_dev = {
     "Data Engineering Support HEO_SEO Dev" = {
       responders = {
         for user in local.users_de_seo :
@@ -166,7 +166,7 @@ locals {
     },
     "Data Engineering Support G7 Dev" = {
       responders = {
-        for user in local.users_de_g7 :
+        for user in local.users_de_g7_dev :
         user.email => {
           name = user.name
           id   = module.users_de_g7[user.email].id
@@ -176,7 +176,7 @@ locals {
     }
   }
 
-  users_de_seo = [
+  users_de_seo_dev = [
     {
       name  = "Guy Wheeler"
       email = "guy.wheeler@justice.gov.uk"
@@ -225,7 +225,7 @@ locals {
 
   ]
 
-  users_de_g7 = [
+  users_de_g7_dev = [
     {
       name  = "Matt Heery"
       email = "matt.heery@justice.gov.uk"
@@ -276,35 +276,35 @@ locals {
 }
 
 module "schedules_de" {
-  for_each = { for schedule in local.schedules_de_loc : schedule.name => schedule }
+  for_each = { for schedule in local.schedules_de_loc_dev : schedule.name => schedule }
 
   source = "./modules/schedule"
   name   = each.key
   team   = each.value.team
   layers = each.value.layers
 
-  depends_on = [module.teams_de]
+  depends_on = [module.teams_de_dev]
 }
 
-module "teams_de" {
-  for_each = local.teams_de
+module "teams_de_dev" {
+  for_each = local.teams_de_dev
 
   source     = "./modules/team"
   name       = each.key
   responders = each.value.responders
-  depends_on = [module.users_de_seo, module.users_de_g7]
+  depends_on = [module.users_de_seo_dev, module.users_de_g7_dev]
 }
 
-module "users_de_seo" {
-  for_each = { for user in local.users_de_seo : user.email => user }
+module "users_de_seo_dev" {
+  for_each = { for user in local.users_de_seo_dev : user.email => user }
 
   source = "./modules/user"
   name   = each.value.name
   email  = each.key
 }
 
-module "users_de_g7" {
-  for_each = { for user in local.users_de_g7 : user.email => user }
+module "users_de_g7_dev" {
+  for_each = { for user in local.users_de_g7_dev : user.email => user }
 
   source = "./modules/user"
   name   = each.value.name
@@ -312,91 +312,91 @@ module "users_de_g7" {
 }
 
 import {
-  to = module.users_de_seo["guy.wheeler@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_seo_dev["guy.wheeler@justice.gov.uk"].pagerduty_user.this
   id = "PWL9H7T"
 }
 
 import {
-  to = module.users_de_g7["matt.heery@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_g7_dev["matt.heery@justice.gov.uk"].pagerduty_user.this
   id = "PKCT98I"
 }
 
 import {
-  to = module.users_de_g7["lalitha.nagarur3@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_g7_dev["lalitha.nagarur3@justice.gov.uk"].pagerduty_user.this
   id = "PKIIO6K"
 }
 
 import {
-  to = module.users_de_g7["matthew.price2@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_g7_dev["matthew.price2@justice.gov.uk"].pagerduty_user.this
   id = "PW0GM04"
 }
 
 import {
-  to = module.users_de_seo["siva.bathina@digital.justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_seo_dev["siva.bathina@digital.justice.gov.uk"].pagerduty_user.this
   id = "POQ8MD1"
 }
 
 import {
-  to = module.users_de_seo["murad.ali@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_seo_dev["murad.ali@justice.gov.uk"].pagerduty_user.this
   id = "PFFFZBU"
 }
 
 import {
-  to = module.users_de_seo["andrew.cook@digital.justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_seo_dev["andrew.cook@digital.justice.gov.uk"].pagerduty_user.this
   id = "PZDNZKP"
 }
 
 import {
-  to = module.users_de_seo["anthony.cody@digital.justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_seo_dev["anthony.cody@digital.justice.gov.uk"].pagerduty_user.this
   id = "PIUFXQZ"
 }
 
 import {
-  to = module.users_de_seo["thomas.hirsch@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_seo_dev["thomas.hirsch@justice.gov.uk"].pagerduty_user.this
   id = "PWPVBYR"
 }
 
 import {
-  to = module.users_de_seo["william.orr@digital.justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_seo_dev["william.orr@digital.justice.gov.uk"].pagerduty_user.this
   id = "P5XVEI1"
 }
 
 import {
-  to = module.users_de_g7["andrew.craik@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_g7_dev["andrew.craik@justice.gov.uk"].pagerduty_user.this
   id = "PBLDKJP"
 }
 
 import {
-  to = module.users_de_g7["supratik.chowdhury@digital.justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_g7_dev["supratik.chowdhury@digital.justice.gov.uk"].pagerduty_user.this
   id = "PUZN13S"
 }
 
 import {
-  to = module.users_de_g7["thomas.hepworth@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_g7_dev["thomas.hepworth@justice.gov.uk"].pagerduty_user.this
   id = "PINRNK0"
 }
 
 import {
-  to = module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_g7_dev["tapan.perkins@digital.justice.gov.uk"].pagerduty_user.this
   id = "PXAKE4K"
 }
 
 import {
-  to = module.users_de_g7["laurence.droy@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_g7_dev["laurence.droy@justice.gov.uk"].pagerduty_user.this
   id = "P2SZG76"
 }
 
 import {
-  to = module.users_de_g7["philip.sinfield@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_g7_dev["philip.sinfield@justice.gov.uk"].pagerduty_user.this
   id = "P94ZLYO"
 }
 
 import {
-  to = module.users_de_seo["khristiania.raihan@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_seo_dev["khristiania.raihan@justice.gov.uk"].pagerduty_user.this
   id = "P0O354I"
 }
 
 import {
-  to = module.users_de_seo["mohammed.ahad1@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_seo_dev["mohammed.ahad1@justice.gov.uk"].pagerduty_user.this
   id = "P1USSNR"
 }
