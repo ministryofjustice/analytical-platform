@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Define Kubernetes version and AWS region
 K8S_VERSION="1.33"
