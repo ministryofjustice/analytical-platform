@@ -32,6 +32,8 @@ locals {
         "alpha_user_lavmatt",
         "airflow_prod_familyman",
         "airflow_dev_familyman",
+        "airflow-test-hmcts-familyman-extraction",
+        "airflow-production-hmcts-familyman-extraction"
       ]
     },
     {
