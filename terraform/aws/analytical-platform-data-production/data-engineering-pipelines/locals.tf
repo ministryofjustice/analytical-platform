@@ -32,6 +32,8 @@ locals {
         "alpha_user_lavmatt",
         "airflow_prod_familyman",
         "airflow_dev_familyman",
+        "airflow-test-hmcts-familyman-extraction",
+        "airflow-production-hmcts-familyman-extraction"
       ]
     },
     {
@@ -111,6 +113,8 @@ locals {
         "cc-data-engineer",
         "data-first-data-engineer",
         "airflow_dev_civil",
+        "airflow-test-hmcts-pcol",
+        "airflow-production-hmcts-pcol-extraction"
       ]
     }
   ]

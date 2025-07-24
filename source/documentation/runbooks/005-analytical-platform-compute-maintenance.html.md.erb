@@ -110,3 +110,18 @@ Once the Terraform plan is checked and as expected, the changes can then be appl
 - Test - If the apply in the Development environment has completed as expected the changes can be applied and this can also be carried out prior to pull request approval. This should be carried out in the agreed maintenance window for Test.
 
 - Production -  If the apply in the Test environment has completed as expected seek approval for the pull request and merge into main. The changes can then be applied by aproving the workflow apply process. This should be carried out in the agreed maintenance window for Production.
+
+### PagerDuty Maintenance Scheduling
+
+Before performing any upgrades, a maintenance window **must** be scheduled on [PagerDuty](https://moj-digital-tools.pagerduty.com/external-status-dashboard/P1E3FLK/maintenance?tab=ongoing).
+
+Please follow the notice periods below for different environments:
+
+- **Development**:
+  No prior notice required. Work may proceed as needed.
+
+- **Test**:
+  Requires a minimum of **1 working day's notice** before scheduling.
+
+- **Production**:
+  Requires a minimum of **2 working days' notice** before scheduling.
