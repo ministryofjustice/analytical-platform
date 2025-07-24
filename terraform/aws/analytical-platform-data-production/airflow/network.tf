@@ -1,3 +1,161 @@
+resource "aws_vpc" "airflow_dev" {
+  cidr_block = var.dev_vpc_cidr_block
+
+  tags = {
+    Name = "airflow-dev"
+  }
+}
+
+resource "aws_vpn_gateway" "airflow_dev" {
+  vpc_id = aws_vpc.airflow_dev.id
+
+  tags = {
+    Name = "airflow-dev"
+  }
+}
+
+resource "aws_internet_gateway" "airflow_dev" {
+  vpc_id = aws_vpc.airflow_dev.id
+
+  tags = {
+    Name = "airflow-dev"
+  }
+}
+
+resource "aws_eip" "airflow_dev_eip" {
+  domain     = "vpc"
+  count      = length(var.azs)
+  depends_on = [aws_internet_gateway.airflow_dev]
+  tags = {
+    Name = "airflow-dev-${element(var.azs, count.index)}"
+  }
+}
+
+resource "aws_subnet" "dev_public_subnet" {
+  vpc_id            = aws_vpc.airflow_dev.id
+  count             = length(var.dev_public_subnet_cidrs)
+  cidr_block        = element(var.dev_public_subnet_cidrs, count.index)
+  availability_zone = element(var.azs, count.index)
+  tags = {
+    Name = "airflow-dev-public-${element(var.azs, count.index)}"
+  }
+}
+
+resource "aws_subnet" "dev_private_subnet" {
+  vpc_id            = aws_vpc.airflow_dev.id
+  count             = length(var.dev_private_subnet_cidrs)
+  cidr_block        = element(var.dev_private_subnet_cidrs, count.index)
+  availability_zone = element(var.azs, count.index)
+  tags = {
+    Name = "airflow-dev-private-${element(var.azs, count.index)}"
+  }
+}
+
+resource "aws_nat_gateway" "airflow_dev" {
+  count         = length(var.azs)
+  allocation_id = aws_eip.airflow_dev_eip[count.index].id
+  subnet_id     = aws_subnet.dev_public_subnet[count.index].id
+
+  tags = {
+    Name = "airflow-dev-${element(var.azs, count.index)}"
+  }
+
+  depends_on = [aws_subnet.dev_public_subnet]
+}
+
+resource "aws_route_table" "airflow_dev_public" {
+  vpc_id = aws_vpc.airflow_dev.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.airflow_dev.id
+  }
+  route { # known dead end to noms-live
+    cidr_block = var.noms_live_dead_end_cidr_block
+    gateway_id = aws_internet_gateway.airflow_dev.id
+  }
+
+  tags = {
+    Name = "airflow-dev-public"
+  }
+}
+
+resource "aws_route_table_association" "airflow_dev_public_route_table_assoc" {
+  count          = length(var.azs)
+  subnet_id      = aws_subnet.dev_public_subnet[count.index].id
+  route_table_id = aws_route_table.airflow_dev_public.id
+}
+
+resource "aws_route_table" "airflow_dev_private" {
+  vpc_id = aws_vpc.airflow_dev.id
+  count  = length(var.azs)
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.airflow_dev[count.index].id
+  }
+  route {
+    cidr_block         = var.modernisation_platform_cidr_block
+    transit_gateway_id = var.transit_gateway_ids["airflow-moj"]
+  }
+  route { # known dead end to noms-live
+    cidr_block         = var.noms_live_dead_end_cidr_block
+    transit_gateway_id = var.transit_gateway_ids["airflow-moj"]
+  }
+
+  tags = {
+    Name = "airflow-dev-private-${element(var.azs, count.index)}"
+  }
+}
+
+resource "aws_route_table_association" "airflow_dev_private_route_table_assoc" {
+  count          = length(var.azs)
+  subnet_id      = aws_subnet.dev_private_subnet[count.index].id
+  route_table_id = aws_route_table.airflow_dev_private[count.index].id
+}
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "airflow_dev_moj" {
+  subnet_ids         = aws_subnet.dev_private_subnet[*].id
+  transit_gateway_id = var.transit_gateway_ids["airflow-moj"]
+  vpc_id             = aws_vpc.airflow_dev.id
+
+  tags = {
+    Name = "airflow-moj"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "airflow_dev_vpc_flow_log" {
+  name              = "airflow-dev-vpc-flow-log"
+  retention_in_days = 400
+  skip_destroy      = true
+}
+
+resource "aws_flow_log" "airflow_dev" {
+  iam_role_arn    = aws_iam_role.airflow_dev_flow_log_role.arn
+  log_destination = aws_cloudwatch_log_group.airflow_dev_vpc_flow_log.arn
+  traffic_type    = "ALL"
+  vpc_id          = aws_vpc.airflow_dev.id
+
+  tags = {
+    Name = "airflow-dev"
+  }
+}
+
+resource "aws_security_group" "airflow_dev" {
+  name        = "airflow-dev"
+  description = "Managed by Pulumi"
+  vpc_id      = aws_vpc.airflow_dev.id
+
+  tags = {
+    Name = "airflow-dev"
+  }
+}
+
+import {
+  to = aws_security_group.airflow_dev
+  id = "sg-0a0e48d87c9abe924"
+}
+
 #      _     _         __  _                   ____                   _               _    _
 #     / \   (_) _ __  / _|| |  ___ __      __ |  _ \  _ __  ___    __| | _   _   ___ | |_ (_)  ___   _ __
 #    / _ \  | || '__|| |_ | | / _ \\ \ /\ / / | |_) || '__|/ _ \  / _` || | | | / __|| __|| | / _ \ | '_ \
