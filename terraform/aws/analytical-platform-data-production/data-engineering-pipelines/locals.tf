@@ -113,6 +113,8 @@ locals {
         "cc-data-engineer",
         "data-first-data-engineer",
         "airflow_dev_civil",
+        "airflow-test-hmcts-pcol",
+        "airflow-production-hmcts-pcol-extraction"
       ]
     }
   ]
