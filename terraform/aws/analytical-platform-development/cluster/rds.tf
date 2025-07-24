@@ -21,7 +21,6 @@ module "rds" {
   maintenance_window  = var.rds_maintenance_window
   backup_window       = var.rds_backup_window
   ca_cert_identifier  = var.rds_ca_cert_identifier
-  allow_major_version_upgrade = true
 
   subnet_ids             = module.vpc.database_subnets
   vpc_security_group_ids = [module.eks.worker_security_group_id]
@@ -38,6 +37,7 @@ module "rds" {
   create_db_subnet_group      = true
   create_monitoring_role      = true
   manage_master_user_password = false
+  allow_major_version_upgrade = true
 
   parameters = var.rds_paramaters
 
