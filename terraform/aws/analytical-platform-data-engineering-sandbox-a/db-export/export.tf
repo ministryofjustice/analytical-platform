@@ -1,7 +1,7 @@
 locals {
-  name = "serj-test-export"
+  name = "ppud-dev"
   tags = {
-    environment = "serj-test"
+    environment = "ln-test"
   }
 }
 
@@ -56,12 +56,13 @@ resource "aws_security_group_rule" "db_ingress" {
 }
 
 module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=sql-backup-restore"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=sql-backup-restore-rds-updates"
 
   name                = local.name
   vpc_id              = data.aws_vpc.selected.id
   database_subnet_ids = data.aws_subnets.private_subnets.ids
   kms_key_arn         = aws_kms_key.export.arn
+  master_user_secret_id = "arn:aws:secretsmanager:eu-west-1:684969100054:secret:rds-export-test-db-pw-IwAzUp"
 
   tags = local.tags
 }
