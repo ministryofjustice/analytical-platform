@@ -24,56 +24,72 @@ locals {
   }
   dbt_athena_workgroups = {
     "dbt-avature" = {
-      name = "dbt-avature"
+      name      = "dbt-avature",
+      component = "dbt-avature",
     },
     "dbt-xcjs" = {
-      name = "dbt-xcjs"
+      name      = "dbt-xcjs",
+      component = "dbt-xcjs"
     },
     "dbt-curated-daily" = {
-      name = "dbt-curated-daily"
+      name      = "dbt-curated-daily",
+      component = "dbt-curated-daily"
     },
     "dbt-curated-prod" = {
-      name = "dbt-curated-prod"
+      name      = "dbt-curated-prod",
+      component = "dbt-curated-prod"
     },
     "dbt-daily" = {
-      name = "dbt-daily"
+      name      = "dbt-daily",
+      component = "dbt-daily"
     },
     "dbt-monthly" = {
-      name = "dbt-monthly"
+      name      = "dbt-monthly",
+      component = "dbt-monthly"
     },
     "dbt-nomis-daily" = {
-      name = "dbt-nomis-daily"
+      name      = "dbt-nomis-daily",
+      component = "dbt-nomis-daily"
     },
     "dbt-weekly" = {
-      name = "dbt-weekly"
+      name      = "dbt-weekly",
+      component = "dbt-weekly"
     },
     "dbt-xhibit" = {
-      name = "dbt-xhibit"
+      name      = "dbt-xhibit",
+      component = "dbt-xhibit"
     },
     "dbt-bold-daily-prod" = {
-      name = "dbt-bold-daily-prod"
+      name      = "dbt-bold-daily-prod",
+      component = "dbt-bold-daily-prod"
     },
     "dbt-caseman" = {
-      name = "dbt-caseman"
+      name      = "dbt-caseman",
+      component = "dbt-caseman"
     },
     "dbt-opg" = {
-      name = "dbt-opg"
+      name      = "dbt-opg",
+      component = "dbt-opg"
     },
     # dev workgroups
     "dbt-curated-dev" = {
       name             = "dbt-curated-dev",
+      component        = "dbt-dev",
       environment_name = "dev"
     },
     "dbt-dev" = {
       name             = "dbt-dev",
+      component        = "dbt-dev",
       environment_name = "dev"
     },
     "dbt-sandpit" = {
       name             = "dbt-sandpit",
-      environment_name = "dev"
+      component        = "dbt-sandpit",
+      environment_name = "sandpit"
     },
     "dbt-bold-daily-dev" = {
       name             = "dbt-bold-daily-dev",
+      component        = "dbt-bold-daily-dev",
       environment_name = "dev"
     },
   }
