@@ -276,11 +276,6 @@ variable "redis_alarm_memory_threshold_bytes" {
   description = "The redis memory threshold to alarm on"
 }
 
-variable "redis_parameter_group_family" {
-  type        = string
-  description = "The Redis parameter group family"
-}
-
 ##################################################
 # EKS
 ##################################################

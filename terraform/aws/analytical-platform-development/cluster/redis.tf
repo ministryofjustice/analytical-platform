@@ -33,12 +33,6 @@ module "control_panel_redis" {
   security_group_description = "Security group for Control panel Redis"
   allowed_security_groups    = [module.eks.worker_security_group_id]
 
-  create_parameter_group = false
+  create_parameter_group = true
   parameter_group_name   = "control-panel-${var.environment}"
-}
-
-resource "aws_elasticache_parameter_group" "control_panel_redis_parameter_group" {
-  name        = "control-panel-${var.environment}"
-  family      = var.redis_parameter_group_family
-  description = "Parameter group for Control Panel Redis"
 }
