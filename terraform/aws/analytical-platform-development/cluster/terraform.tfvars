@@ -122,6 +122,8 @@ redis_multi_az_enabled           = true
 redis_alarm_cpu_threshold_percent  = 75
 redis_alarm_memory_threshold_bytes = 100000
 
+redis_parameter_group_family = "redis7"
+
 ##################################################
 # EKS
 ##################################################
