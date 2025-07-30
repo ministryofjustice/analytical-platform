@@ -56,8 +56,8 @@ efs_low_credit_burst_balance_alarm_threshold = 50000
 
 rds_instance_class        = "db.t3.micro"
 rds_engine                = "postgres"
-rds_family                = "postgres13"
-rds_engine_version        = "13.20"
+rds_family                = "postgres17"
+rds_engine_version        = "17.4"
 rds_allocated_storage     = 10
 rds_max_allocated_storage = 100
 rds_deletion_protection   = true
