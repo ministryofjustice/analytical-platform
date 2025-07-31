@@ -35,5 +35,5 @@ module "control_panel_redis" {
   allowed_security_groups    = [module.eks.worker_security_group_id]
 
   create_parameter_group = true
-  parameter_group_name   = "control-panel-${var.environment}"
+  parameter_group_name   = "control-panel-${var.environment}-${var.redis_family}"
 }

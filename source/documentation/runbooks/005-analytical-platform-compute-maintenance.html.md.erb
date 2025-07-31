@@ -80,16 +80,13 @@ To schedule a maintenance window for Test and Production go to [Pagerduty Mainte
 
 ##  Upgrade the EKS Nodes
 
-1. Check the `eks_node_version` from `environment-configuration.tf` against the bottlerocket [changelog](https://github.com/bottlerocket-os/bottlerocket/blob/develop/CHANGELOG.md) to see if a new version is available.
-1. If so the `eks_node_version` is formed from `'${BOTTLEROCKET_OS_RELEASE}-${FIRST_EIGHT_CHARACTERS_OF_RELEASE_SHA}'` i.e  [12.5.0](https://github.com/bottlerocket-os/bottlerocket/releases/tag/v1.25.0)-[388e1050](https://github.com/bottlerocket-os/bottlerocket/commit/388e1050a669dd2544007f2af336832b68fa0d64).
-Tip: Go to the [Bottlerocket Releases](https://github.com/bottlerocket-os/bottlerocket/releases) page and find the `latest` release to the left is the link to the commit, follow this and look at the commit URL for example `https://github.com/bottlerocket-os/bottlerocket/commit/388e1050a669dd2544007f2af336832b68fa0d64` and copy the first eight characters of the sha in this case `388e1050`.
+1. Use the script [here](https://github.com/ministryofjustice/analytical-platform/blob/main/scripts/eks/eks-add-on-version-upgrade.sh) to identify the latest version appropriate for the cluster.
 1. Update `eks_node_version` in `environment-configuration.tf` with the value from above.
 1. Commit and push your results to the branch.
 
 ##  Upgrade the EKS add-ons
 
-1. Run the following command and interpret the results to understand what version the add-ons should be upgraded to: `aws eks describe-addon-versions > file.txt`. Search the file for each add-on name i.e. `aws-ebs-csi-driver` the version is in the field `addonVersion`.  **Note:** Search for `aws-ebs-csi-driver` not `aws_ebs_csi_driver` as it is specified in Terraform.
-1. Check the `addonVersion` against the appropriate values in the `eks_cluster_addon_version` block in the `terraform/environments/analytical-platform-compute/environment-configuration.tf` and amend if needed, there are 3 blocks one for each environment.
+1. Use the script [here](https://github.com/ministryofjustice/analytical-platform/blob/main/scripts/eks/eks-add-on-version-upgrade.sh) to identify the latest version appropriate for the cluster.
 1. Commit and push your results to the branch.
 
 Source: [Describe EKS Add-on versions](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-addon-versions.html)
@@ -113,3 +110,18 @@ Once the Terraform plan is checked and as expected, the changes can then be appl
 - Test - If the apply in the Development environment has completed as expected the changes can be applied and this can also be carried out prior to pull request approval. This should be carried out in the agreed maintenance window for Test.
 
 - Production -  If the apply in the Test environment has completed as expected seek approval for the pull request and merge into main. The changes can then be applied by aproving the workflow apply process. This should be carried out in the agreed maintenance window for Production.
+
+### PagerDuty Maintenance Scheduling
+
+Before performing any upgrades, a maintenance window **must** be scheduled on [PagerDuty](https://moj-digital-tools.pagerduty.com/external-status-dashboard/P1E3FLK/maintenance?tab=ongoing).
+
+Please follow the notice periods below for different environments:
+
+- **Development**:
+  No prior notice required. Work may proceed as needed.
+
+- **Test**:
+  Requires a minimum of **1 working day's notice** before scheduling.
+
+- **Production**:
+  Requires a minimum of **2 working days' notice** before scheduling.
