@@ -36,6 +36,7 @@ module "coat_s3" {
   policy        = data.aws_iam_policy_document.coat_bucket_policy.json
 
   server_side_encryption_configuration = {
+    bucket_key_enabled = true
     rule = {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = module.coat_kms.key_arn
