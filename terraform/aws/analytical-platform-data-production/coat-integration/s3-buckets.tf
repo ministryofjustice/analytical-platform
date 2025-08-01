@@ -17,6 +17,7 @@ data "aws_iam_policy_document" "coat_bucket_policy" {
   }
 }
 
+#trivy:ignore:AVD-AWS-0089:Bucket logging not enabled currently
 module "coat_s3" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
