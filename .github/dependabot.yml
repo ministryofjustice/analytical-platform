@@ -87,3 +87,4 @@ updates:
       - "terraform/cloud-platform/live/analytical-platform-development/grafana"
       - "terraform/cloud-platform/live/analytical-platform-production/observability"
       - "terraform/pagerduty"
+    open-pull-requests-limit: 15
