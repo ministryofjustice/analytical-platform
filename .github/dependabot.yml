@@ -51,6 +51,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/athena"
       - "terraform/aws/analytical-platform-data-production/auth0-log-streams"
       - "terraform/aws/analytical-platform-data-production/cloudtrail-athena-events"
+      - "terraform/aws/analytical-platform-data-production/coat-integration"
       - "terraform/aws/analytical-platform-data-production/control-panel-message-broker"
       - "terraform/aws/analytical-platform-data-production/create-a-derived-table"
       - "terraform/aws/analytical-platform-data-production/data-engineering-pipelines"
