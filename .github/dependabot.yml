@@ -15,6 +15,7 @@ updates:
       prefix: ":dependabot: github-actions"
       include: "scope"
   - package-ecosystem: "pip"
+    open-pull-requests-limit: "15"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -23,10 +24,10 @@ updates:
       prefix: ":dependabot: pip"
       include: "scope"
     directories:
-    open-pull-requests-limit: "15"
       - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
       - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
   - package-ecosystem: "terraform"
+    open-pull-requests-limit: "15"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -35,7 +36,6 @@ updates:
       prefix: ":dependabot: terraform"
       include: "scope"
     directories:
-    open-pull-requests-limit: "15"
       - "terraform/auth0/alpha-analytics-moj"
       - "terraform/auth0/dev-analytics-moj"
       - "terraform/auth0/ministryofjustice-data-platform"
