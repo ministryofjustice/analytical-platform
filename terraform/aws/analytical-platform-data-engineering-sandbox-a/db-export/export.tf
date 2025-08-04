@@ -1,8 +1,9 @@
 locals {
   name = "ppud-dev"
-  tags = {
-    environment = "ln-test"
-  }
+  tags = merge (
+    {"environment" = "ln-test"},
+    var.tags
+  )
 }
 
 resource "aws_kms_key" "export" {
@@ -56,13 +57,13 @@ resource "aws_security_group_rule" "db_ingress" {
 }
 
 module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=sql-backup-restore-rds-updates"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=sql-backup-ln-changes"
 
   name                = local.name
   vpc_id              = data.aws_vpc.selected.id
   database_subnet_ids = data.aws_subnets.private_subnets.ids
-  kms_key_arn         = aws_kms_key.export.arn
-  master_user_secret_id = "arn:aws:secretsmanager:eu-west-1:684969100054:secret:rds-export-test-db-pw-IwAzUp"
+  kms_key_arn         = module.rds_export_kms.key_arn
+  master_user_secret_id = aws_secretsmanager_secret.rds_export_sandbox.arn
 
   tags = local.tags
 }
