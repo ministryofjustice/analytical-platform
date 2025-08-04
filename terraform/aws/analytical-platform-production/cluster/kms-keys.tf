@@ -12,7 +12,7 @@ module "eks_cluster_logs_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.0.0"
 
   aliases                 = ["eks/cluster-logs"]
   description             = "EKS cluster logs KMS key"
@@ -52,7 +52,7 @@ module "managed_prometheus_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.0.0"
 
   aliases                 = ["amp/default"]
   description             = "AMP KMS key"
@@ -96,7 +96,7 @@ module "managed_prometheus_logs_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.0.0"
 
   aliases                 = ["amp/logs"]
   description             = "AMP logs KMS key"
