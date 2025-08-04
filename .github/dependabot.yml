@@ -15,6 +15,7 @@ updates:
       prefix: ":dependabot: github-actions"
       include: "scope"
   - package-ecosystem: "pip"
+    open-pull-requests-limit: 15
     schedule:
       interval: "daily"
       time: "09:00"
@@ -26,6 +27,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
       - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
   - package-ecosystem: "terraform"
+    open-pull-requests-limit: 15
     schedule:
       interval: "daily"
       time: "09:00"
