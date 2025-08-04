@@ -19,6 +19,7 @@ updates:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
+    open-pull-requests-limit: 15
     commit-message:
       prefix: ":dependabot: pip"
       include: "scope"
@@ -30,6 +31,7 @@ updates:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
+    open-pull-requests-limit: 15
     commit-message:
       prefix: ":dependabot: terraform"
       include: "scope"
