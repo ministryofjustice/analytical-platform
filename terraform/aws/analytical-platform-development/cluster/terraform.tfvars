@@ -70,8 +70,9 @@ rds_monitoring_interval  = 30
 rds_monitoring_role_name = "ControlPanelRDSMonitoringRole-psgdb-encrypted"
 rds_paramaters = [
   {
-    name  = "rds.force_ssl"
-    value = 1
+    name         = "rds.force_ssl"
+    value        = 1
+    apply_method = "pending-reboot"
   },
   {
     name  = "log_statement"
