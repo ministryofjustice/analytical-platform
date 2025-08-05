@@ -61,6 +61,8 @@ updates:
       - "terraform/aws/analytical-platform-data-production/github-actions-roles"
       - "terraform/aws/analytical-platform-data-production/ingestion-egress"
       - "terraform/aws/analytical-platform-data-production/ingestion-ingress"
+      - "terraform/aws/analytical-platform-data-production/ingestion-ingress/datasync"
+      - "terraform/aws/analytical-platform-data-production/ingestion-ingress/dms"
       - "terraform/aws/analytical-platform-data-production/joiners-movers-leavers"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prison-reporting-development"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prisons-reporting-preproduction"
