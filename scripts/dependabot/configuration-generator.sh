@@ -42,6 +42,7 @@ for package_ecosystem in pip terraform; do
   printf "      interval: \"daily\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "      time: \"09:00\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "      timezone: \"Europe/London\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+  printf "    open-pull-requests-limit: 15\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "    commit-message:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "      prefix: \":dependabot: %s\"\n" "${package_ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
   printf "      include: \"scope\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
