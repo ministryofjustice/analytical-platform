@@ -3,7 +3,7 @@ module "sagemaker_ai_probation_search_models_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.0.0"
 
   aliases               = ["s3/sagemaker-ai-probation-search-models"]
   description           = "SageMaker AI Probation Search Models KMS Key"
