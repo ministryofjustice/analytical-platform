@@ -5,7 +5,7 @@ module "datasync_opg_kms" {
   for_each = local.analytical_platform_ingestion_environments
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.0.0"
 
   aliases               = ["s3/mojap-data-production-datasync-opg-ingress-${each.key}"]
   description           = "MoJ AP DataSync OPG Ingress - ${title(each.key)}"
@@ -35,7 +35,7 @@ module "datasync_laa_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.0.0"
 
   aliases               = ["s3/mojap-data-production-datasync-laa-ingress-production"]
   description           = "MoJ AP DataSync LAA Ingress - Production"
