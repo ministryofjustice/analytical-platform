@@ -24,8 +24,74 @@ locals {
   }
   dbt_athena_workgroups = {
     "dbt-avature" = {
-      name = "dbt-avature"
-    }
+      name      = "dbt-avature",
+      component = "dbt-avature",
+    },
+    "dbt-xcjs" = {
+      name      = "dbt-xcjs",
+      component = "dbt-xcjs"
+    },
+    "dbt-curated-daily" = {
+      name      = "dbt-curated-daily",
+      component = "dbt-curated-daily"
+    },
+    "dbt-curated-prod" = {
+      name      = "dbt-curated-prod",
+      component = "dbt-curated-prod"
+    },
+    "dbt-daily" = {
+      name      = "dbt-daily",
+      component = "dbt-daily"
+    },
+    "dbt-monthly" = {
+      name      = "dbt-monthly",
+      component = "dbt-monthly"
+    },
+    "dbt-nomis-daily" = {
+      name      = "dbt-nomis-daily",
+      component = "dbt-nomis-daily"
+    },
+    "dbt-weekly" = {
+      name      = "dbt-weekly",
+      component = "dbt-weekly"
+    },
+    "dbt-xhibit" = {
+      name      = "dbt-xhibit",
+      component = "dbt-xhibit"
+    },
+    "dbt-bold-daily-prod" = {
+      name      = "dbt-bold-daily-prod",
+      component = "dbt-bold-daily-prod"
+    },
+    "dbt-caseman" = {
+      name      = "dbt-caseman",
+      component = "dbt-caseman"
+    },
+    "dbt-opg" = {
+      name      = "dbt-opg",
+      component = "dbt-opg"
+    },
+    # dev workgroups
+    "dbt-curated-dev" = {
+      name             = "dbt-curated-dev",
+      component        = "dbt-dev",
+      environment_name = "dev"
+    },
+    "dbt-dev" = {
+      name             = "dbt-dev",
+      component        = "dbt-dev",
+      environment_name = "dev"
+    },
+    "dbt-sandpit" = {
+      name             = "dbt-sandpit",
+      component        = "dbt-sandpit",
+      environment_name = "sandpit"
+    },
+    "dbt-bold-daily-dev" = {
+      name             = "dbt-bold-daily-dev",
+      component        = "dbt-bold-daily-dev",
+      environment_name = "dev"
+    },
   }
   dbt_spark_workgroups = {
     "dbt-spark" = {
@@ -98,6 +164,15 @@ resource "aws_athena_workgroup" "dbt" {
       "owner"            = "Data Engineering:dataengineering@digital.justice.gov.uk"
     }
   )
+}
+
+# Import any existing DBT Athena workgroups into Terraform state
+# This ensures Terraform recognizes workgroups already in AWS
+# and skips creating duplicates on apply.
+import {
+  for_each = local.dbt_athena_workgroups
+  id       = each.value.name # AWS workgroup name
+  to       = aws_athena_workgroup.dbt[each.key]
 }
 
 #trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently

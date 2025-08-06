@@ -3,7 +3,7 @@ resource "helm_release" "grafana" {
   name       = "grafana"
   repository = "https://grafana.github.io/helm-charts"
   chart      = "grafana"
-  version    = "9.0.0"
+  version    = "9.3.0"
   namespace  = var.namespace
   values = [
     templatefile(
@@ -23,16 +23,18 @@ resource "helm_release" "grafana" {
     )
   ]
 
-  set_sensitive {
-    name  = "env.GF_AUTH_GITHUB_CLIENT_ID"
-    value = data.aws_secretsmanager_secret_version.analytical_platform_grafana_production_github_client_id.secret_string
-  }
-  set_sensitive {
-    name  = "env.GF_AUTH_GITHUB_CLIENT_SECRET"
-    value = data.aws_secretsmanager_secret_version.analytical_platform_grafana_production_github_client_secret.secret_string
-  }
-  set_sensitive {
-    name  = "env.ANALYTICAL_PLATFORM_SLACK_TOKEN"
-    value = data.aws_secretsmanager_secret_version.analytical_platform_slack_token.secret_string
-  }
+  set_sensitive = [
+    {
+      name  = "env.GF_AUTH_GITHUB_CLIENT_ID"
+      value = data.aws_secretsmanager_secret_version.analytical_platform_grafana_production_github_client_id.secret_string
+    },
+    {
+      name  = "env.GF_AUTH_GITHUB_CLIENT_SECRET"
+      value = data.aws_secretsmanager_secret_version.analytical_platform_grafana_production_github_client_secret.secret_string
+    },
+    {
+      name  = "env.ANALYTICAL_PLATFORM_SLACK_TOKEN"
+      value = data.aws_secretsmanager_secret_version.analytical_platform_slack_token.secret_string
+    }
+  ]
 }

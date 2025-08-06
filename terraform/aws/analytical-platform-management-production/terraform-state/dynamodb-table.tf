@@ -3,7 +3,7 @@ module "state_locking" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/dynamodb-table/aws"
-  version = "4.4.0"
+  version = "5.0.0"
 
   name = "global-tf-state-aqsvzyd5u9-locks"
 }
@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "state_locking_policy" {
     resources = [module.state_locking.dynamodb_table_arn]
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.analytical_platform_team_access_role.names)}"]
+      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.region}/${one(data.aws_iam_roles.analytical_platform_team_access_role.names)}"]
     }
   }
   // Data Engineering Team

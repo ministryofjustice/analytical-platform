@@ -19,6 +19,7 @@ updates:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
+    open-pull-requests-limit: 15
     commit-message:
       prefix: ":dependabot: pip"
       include: "scope"
@@ -30,6 +31,7 @@ updates:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
+    open-pull-requests-limit: 15
     commit-message:
       prefix: ":dependabot: terraform"
       include: "scope"
@@ -39,6 +41,8 @@ updates:
       - "terraform/auth0/ministryofjustice-data-platform"
       - "terraform/auth0/ministryofjustice-data-platform-development"
       - "terraform/aws/analytical-platform-data-engineering-production/dms-dev"
+      - "terraform/aws/analytical-platform-data-engineering-production/dms-preprod"
+      - "terraform/aws/analytical-platform-data-engineering-production/dms-prod"
       - "terraform/aws/analytical-platform-data-engineering-production/ppud-dev"
       - "terraform/aws/analytical-platform-data-engineering-production/terraform-state"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/airflow-create-a-pipeline"
@@ -49,6 +53,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/athena"
       - "terraform/aws/analytical-platform-data-production/auth0-log-streams"
       - "terraform/aws/analytical-platform-data-production/cloudtrail-athena-events"
+      - "terraform/aws/analytical-platform-data-production/coat-integration"
       - "terraform/aws/analytical-platform-data-production/control-panel-message-broker"
       - "terraform/aws/analytical-platform-data-production/create-a-derived-table"
       - "terraform/aws/analytical-platform-data-production/data-engineering-pipelines"
@@ -56,7 +61,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/github-actions-roles"
       - "terraform/aws/analytical-platform-data-production/ingestion-egress"
       - "terraform/aws/analytical-platform-data-production/ingestion-ingress"
-      - "terraform/aws/analytical-platform-data-production/ingestion-ingress/datasync-opg"
+      - "terraform/aws/analytical-platform-data-production/ingestion-ingress/datasync"
       - "terraform/aws/analytical-platform-data-production/ingestion-ingress/dms"
       - "terraform/aws/analytical-platform-data-production/joiners-movers-leavers"
       - "terraform/aws/analytical-platform-data-production/lakeformation-external-data/digital-prison-reporting-development"

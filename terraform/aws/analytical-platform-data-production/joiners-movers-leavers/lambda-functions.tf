@@ -2,7 +2,7 @@
 module "jml_report_lambda" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   source  = "terraform-aws-modules/lambda/aws"
-  version = "7.21.0"
+  version = "8.0.1"
 
   publish        = true
   create_package = false

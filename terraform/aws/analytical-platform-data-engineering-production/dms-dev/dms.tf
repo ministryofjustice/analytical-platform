@@ -2,12 +2,15 @@ module "dev_dms_oasys" {
   # checkov:skip=CKV_TF_1: Skipping because currently want to reference a branch whilst making changes to the dms module. Will update once dms module is stable.
   # checkov:skip=CKV_TF_2: Skipping as waiting for dms module to be stable before making a release.
 
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=intial_branch"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=88087cfac0f0a3f6e60705696ca4e74fb548dbb2"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
   db                      = "oasys-dev"
   slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
+  output_key_prefix       = "hmpps/oasys"
+  output_key_suffix       = "-tf"
+  output_bucket           = "mojap-raw-hist-dev"
 
   dms_replication_instance = {
     replication_instance_id    = "oasys-dev"
@@ -45,5 +48,6 @@ module "dev_dms_oasys" {
     var.tags
   )
 
-  glue_catalog_arn = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-engineering-production"]}:catalog"
+  glue_catalog_arn      = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
+  glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
 }
