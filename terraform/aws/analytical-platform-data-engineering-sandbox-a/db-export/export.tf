@@ -57,7 +57,11 @@ resource "aws_security_group_rule" "db_ingress" {
 }
 
 module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=sql-backup-ln-changes"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=sql-backup-restore-rds-updates"
+
+  providers = {
+      aws = aws
+    }
 
   name                = local.name
   vpc_id              = data.aws_vpc.selected.id
