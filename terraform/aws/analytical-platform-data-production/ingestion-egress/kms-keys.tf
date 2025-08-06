@@ -3,7 +3,7 @@ module "development_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.0.0"
 
   aliases               = ["s3/mojap-data-production-bold-egress-development"]
   description           = "MoJ AP BOLD Egress - Development"
@@ -18,7 +18,7 @@ module "development_kms_eu_west_1_replica" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.0.0"
 
   providers = {
     aws = aws.eu-west-1
@@ -38,7 +38,7 @@ module "production_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.0.0"
 
   aliases               = ["s3/mojap-data-production-bold-egress-production"]
   description           = "MoJ AP BOLD Egress - Production"
@@ -53,7 +53,7 @@ module "production_kms_eu_west_1_replica" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.0.0"
 
   providers = {
     aws = aws.eu-west-1
