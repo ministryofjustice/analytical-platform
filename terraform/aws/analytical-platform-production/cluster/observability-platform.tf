@@ -3,7 +3,7 @@ module "observability_platform_tenant" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "ministryofjustice/observability-platform-tenant/aws"
-  version = "1.2.0"
+  version = "2.0.0"
 
   observability_platform_account_id = "319748487814" # observability-platform-production
   enable_prometheus                 = true
@@ -13,7 +13,7 @@ module "observability_platform_tenant" {
 }
 
 module "analytical_platform_observability" {
-  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=ccefcbdcecd3c5dfd25474b66ac06a58bd810928" # 2.0.0
+  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=81b051e4ab8c19442a091599ad9ed21e9a610661" # 3.0.0
 
   enable_amazon_prometheus_query_access = true
   enable_aws_xray_read_only_access      = true
