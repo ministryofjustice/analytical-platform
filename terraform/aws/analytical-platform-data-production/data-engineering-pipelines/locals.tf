@@ -1733,7 +1733,7 @@ locals {
         permission = "FULL_CONTROL",
         type       = "CanonicalUser"
       }]
-      force_destroy       = false
+      force_destroy       = true
       object_lock_enabled = false
       acl                 = "private"
       versioning = {
@@ -1835,7 +1835,7 @@ locals {
         permission = "FULL_CONTROL",
         type       = "CanonicalUser"
       }]
-      force_destroy       = false
+      force_destroy       = true
       object_lock_enabled = false
       acl                 = "private"
       versioning = {
@@ -1937,7 +1937,7 @@ locals {
         permission = "FULL_CONTROL",
         type       = "CanonicalUser"
       }]
-      force_destroy       = false
+      force_destroy       = true
       object_lock_enabled = false
       acl                 = "private"
       versioning = {
