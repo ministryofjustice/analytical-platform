@@ -56,8 +56,8 @@ efs_low_credit_burst_balance_alarm_threshold = 50000
 
 rds_instance_class        = "db.t3.micro"
 rds_engine                = "postgres"
-rds_family                = "postgres13"
-rds_engine_version        = "13.20"
+rds_family                = "postgres17"
+rds_engine_version        = "17.4"
 rds_allocated_storage     = 10
 rds_max_allocated_storage = 100
 rds_deletion_protection   = true
@@ -72,8 +72,9 @@ rds_monitoring_interval   = 30
 rds_monitoring_role_name  = "ControlPanelRDSMonitoringRole_psgdb-encrypted"
 rds_paramaters = [
   {
-    name  = "rds.force_ssl"
-    value = 1
+    name         = "rds.force_ssl"
+    value        = 1
+    apply_method = "pending-reboot"
   },
   {
     name  = "log_statement"
@@ -113,8 +114,8 @@ rds_high_swap_usage_alarm_threshold        = 256000000
 
 redis_enabled                    = true
 redis_instance_type              = "cache.t3.medium"
-redis_family                     = "redis5.0"
-redis_engine_version             = "5.0.6"
+redis_family                     = "redis7"
+redis_engine_version             = "7.1"
 redis_cluster_size               = 3
 redis_namespace                  = "control-panel"
 redis_at_rest_encryption_enabled = true

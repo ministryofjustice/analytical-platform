@@ -7,6 +7,27 @@ module "dms_dev_kms" {
   description           = "Used in the HMPPS probation domain to encode secrets and traffic"
   enable_default_policy = true
 
+  key_statements = [
+    {
+      sid    = "AllowEventsServiceAccess"
+      effect = "Allow"
+      actions = [
+        "kms:Encrypt*",
+        "kms:Decrypt*",
+        "kms:GenerateDataKey*",
+        "kms:Describe*"
+      ]
+      resources = ["*"]
+
+      principals = [
+        {
+          type        = "Service"
+          identifiers = ["events.amazonaws.com"]
+        }
+      ]
+    }
+  ]
+
   deletion_window_in_days = 7
 
   tags = var.tags
