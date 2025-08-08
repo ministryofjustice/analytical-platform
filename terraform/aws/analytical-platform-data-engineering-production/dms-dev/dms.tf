@@ -21,7 +21,7 @@ module "dev_dms_oasys" {
     engine_version             = "3.5.4"
     kms_key_arn                = module.dms_dev_kms.key_arn
     multi_az                   = false
-    replication_instance_class = "dms.t3.medium"
+    replication_instance_class = "dms.t3.small"
     inbound_cidr               = "192.0.2.0/32" # test unassigned
     apply_immediately          = true
   }
