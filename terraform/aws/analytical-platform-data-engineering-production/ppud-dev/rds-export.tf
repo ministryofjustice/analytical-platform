@@ -3,7 +3,7 @@ locals {
 }
 
 data "aws_vpc" "selected" {
-  id = "vpc-0b9d7482fd1f0c601"
+  id     = "vpc-0b9d7482fd1f0c601"
   region = "eu-west-1"
 }
 
@@ -50,13 +50,13 @@ module "rds_export" {
   source = "github.com/ministryofjustice/terraform-rds-export?ref=sql-backup-restore-rds-updates"
 
   providers = {
-      aws = aws
-    }
+    aws = aws
+  }
 
-  name                = local.name
-  vpc_id              = data.aws_vpc.selected.id
-  database_subnet_ids = data.aws_subnets.private_subnets.ids
-  kms_key_arn         = module.rds_export_kms_dev.key_arn
+  name                  = local.name
+  vpc_id                = data.aws_vpc.selected.id
+  database_subnet_ids   = data.aws_subnets.private_subnets.ids
+  kms_key_arn           = module.rds_export_kms_dev.key_arn
   master_user_secret_id = aws_secretsmanager_secret.rds_export_dev.arn
 
   tags = var.tags
