@@ -1,1 +1,0 @@
-{"filename": "builds/f7ccfd5bd059035e26390c3aefd3658c5dea7aa4d943adfc44076c075d6cf580.zip", "runtime": "python3.12", "artifacts_dir": "builds", "build_plan": [[["zip", ".terraform/modules/rds_export/lambda-functions/upload-checker/main.py", null]]]}
