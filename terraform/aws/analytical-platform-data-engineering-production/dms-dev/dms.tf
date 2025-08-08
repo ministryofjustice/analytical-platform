@@ -2,7 +2,7 @@ module "dev_dms_oasys" {
   # checkov:skip=CKV_TF_1: Skipping because currently want to reference a branch whilst making changes to the dms module. Will update once dms module is stable.
   # checkov:skip=CKV_TF_2: Skipping as waiting for dms module to be stable before making a release.
 
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=4ef09b8e7210224ec0f4ba6167c169debe9e40f0"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=e3ddfb870d67f937cf050ba80fb6c2696c15c9f3"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
