@@ -9,7 +9,7 @@ module "dms_preprod_kms" {
 
   key_statements = [
     {
-      sid    = "AllowDMSServiceAccess"
+      sid    = "AllowEventsServiceAccess"
       effect = "Allow"
       actions = [
         "kms:Encrypt*",
@@ -22,7 +22,7 @@ module "dms_preprod_kms" {
       principals = [
         {
           type        = "Service"
-          identifiers = ["dms.amazonaws.com"]
+          identifiers = ["events.amazonaws.com"]
         }
       ]
     }
