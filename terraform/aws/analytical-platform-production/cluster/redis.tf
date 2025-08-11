@@ -6,7 +6,7 @@ module "control_panel_redis" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "cloudposse/elasticache-redis/aws"
-  version = "1.9.1"
+  version = "1.9.2"
 
   enabled                    = var.redis_enabled
   replication_group_id       = local.redis_replication_group_id
