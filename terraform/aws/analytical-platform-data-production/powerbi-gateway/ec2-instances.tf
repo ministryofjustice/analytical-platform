@@ -25,7 +25,7 @@ module "ec2" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                      = "terraform-aws-modules/ec2-instance/aws"
-  version                     = "5.8.0"
+  version                     = "6.0.2"
   name                        = local.powerbi_gateway_ec2.instance_name
   ami                         = data.aws_ami.windows_server_2022.id
   instance_type               = local.powerbi_gateway_ec2.instance_type
