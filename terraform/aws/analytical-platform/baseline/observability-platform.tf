@@ -7,7 +7,7 @@ module "data_development_observability_platform" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "ministryofjustice/observability-platform-tenant/aws"
-  version = "1.2.0"
+  version = "2.0.0"
 
   providers = {
     aws = aws.analytical-platform-data-development-eu-west-2
@@ -35,7 +35,7 @@ module "data_engineering_production_observability_platform" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "ministryofjustice/observability-platform-tenant/aws"
-  version = "1.2.0"
+  version = "2.0.0"
 
   providers = {
     aws = aws.analytical-platform-data-engineering-production-eu-west-2
@@ -63,7 +63,7 @@ module "data_engineering_sandbox_a_observability_platform" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "ministryofjustice/observability-platform-tenant/aws"
-  version = "1.2.0"
+  version = "2.0.0"
 
   providers = {
     aws = aws.analytical-platform-data-engineering-sandbox-a-eu-west-2
@@ -91,7 +91,7 @@ module "data_production_observability_platform" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "ministryofjustice/observability-platform-tenant/aws"
-  version = "1.2.0"
+  version = "2.0.0"
 
   providers = {
     aws = aws.analytical-platform-data-production-eu-west-2
@@ -125,7 +125,7 @@ module "landing_production_observability_platform" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "ministryofjustice/observability-platform-tenant/aws"
-  version = "1.2.0"
+  version = "2.0.0"
 
   providers = {
     aws = aws.analytical-platform-landing-production-eu-west-2
@@ -153,7 +153,7 @@ module "management_production_observability_platform" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "ministryofjustice/observability-platform-tenant/aws"
-  version = "1.2.0"
+  version = "2.0.0"
 
   providers = {
     aws = aws.analytical-platform-management-production-eu-west-2
