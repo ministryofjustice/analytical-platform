@@ -80,7 +80,7 @@ module "state_bucket" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.3.0"
+  version = "5.3.1"
 
   bucket = "global-tf-state-aqsvzyd5u9"
 
