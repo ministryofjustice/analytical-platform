@@ -5,7 +5,7 @@ module "dms_ingress_iam_role" {
   for_each = local.analytical_platform_ingestion_environments
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.59.0"
+  version = "5.60.0"
 
   create_role = true
 
