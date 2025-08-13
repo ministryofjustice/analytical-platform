@@ -141,6 +141,21 @@ resource "aws_flow_log" "airflow_dev" {
   }
 }
 
+resource "aws_security_group" "airflow_dev" {
+  name        = "airflow-dev"
+  description = "Managed by Pulumi"
+  vpc_id      = aws_vpc.airflow_dev.id
+
+  tags = {
+    Name = "airflow-dev"
+  }
+}
+
+import {
+  to = aws_security_group.airflow_dev
+  id = "sg-0a0e48d87c9abe924"
+}
+
 #      _     _         __  _                   ____                   _               _    _
 #     / \   (_) _ __  / _|| |  ___ __      __ |  _ \  _ __  ___    __| | _   _   ___ | |_ (_)  ___   _ __
 #    / _ \  | || '__|| |_ | | / _ \\ \ /\ / / | |_) || '__|/ _ \  / _` || | | | / __|| __|| | / _ \ | '_ \
