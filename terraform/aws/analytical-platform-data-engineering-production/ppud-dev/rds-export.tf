@@ -3,6 +3,7 @@ locals {
 }
 
 # Security group for the RDS instance
+# checkov:skip=CKV2_AWS_5: Attached to VPC
 resource "aws_security_group" "db" {
   name        = local.name
   description = "Security group for RDS instance ${local.name}"
@@ -19,8 +20,10 @@ resource "aws_security_group_rule" "db_ingress" {
   protocol          = "tcp"
   security_group_id = aws_security_group.db.id
   cidr_blocks       = [module.vpc.vpc_cidr_block]
+  description       = "Allow access to the RDS instance from the VPC"
 }
-
+# checkov:skip=CKV_TF_1: Pointing to branch name whilst in development, will change to commit hash once in main
+# checkov:skip=CKV_TF_2: Pointing to branch name whilst in development, will change to commit hash once in main
 module "rds_export" {
   source = "github.com/ministryofjustice/terraform-rds-export?ref=sql-backup-restore-rds-updates"
 
