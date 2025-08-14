@@ -20,7 +20,7 @@ module "bold_rr_pilot_families_nlp_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.60.0"
+  version = "6.0.0"
 
   name_prefix = "github-bold-rr-pilot-families-nlp"
 
@@ -31,7 +31,7 @@ module "bold_rr_pilot_families_nlp_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
-  version = "5.60.0"
+  version = "6.0.0"
 
   name = "github-bold-rr-pilot-families-nlp"
 
