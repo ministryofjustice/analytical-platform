@@ -76,4 +76,6 @@ module "ppud_dev" {
       Version = "2012-10-17"
     }
   )
+
+  tags = var.tags
 }
