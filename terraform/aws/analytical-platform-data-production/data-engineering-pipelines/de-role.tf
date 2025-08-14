@@ -28,14 +28,6 @@ module "data_engineering_probation_glue_access_iam_role" {
     }
   }
 
-  # trusted_role_arns = [
-  #   "arn:aws:iam::189157455002:role/oasys-dev-metadata-generator",
-  #   "arn:aws:iam::189157455002:role/oasys-preprod-metadata-generator",
-  #   "arn:aws:iam::189157455002:role/oasys-prod-metadata-generator",
-  #   "arn:aws:iam::189157455002:role/delius-preprod-metadata-generator",
-  #   "arn:aws:iam::189157455002:role/delius-prod-metadata-generator"
-  # ]
-
   create_inline_policy = true
   inline_policy_permissions = {
     glue_access = {
@@ -69,38 +61,4 @@ module "data_engineering_probation_glue_access_iam_role" {
       ]
     }
   }
-
-  # inline_policy_statements = [
-  #   {
-  #     sid    = "GlueAccess"
-  #     effect = "Allow"
-  #     actions = [
-  #       "glue:GetTable",
-  #       "glue:GetDatabase",
-  #       "glue:GetCatalog",
-  #       "glue:UpdateTable",
-  #       "glue:UpdatePartition",
-  #       "glue:UpdateDatabase",
-  #       "glue:DeleteTableVersion",
-  #       "glue:DeleteTable",
-  #       "glue:DeletePartition",
-  #       "glue:DeleteDatabase",
-  #       "glue:CreateTable",
-  #       "glue:CreatePartition",
-  #       "glue:CreateDatabase",
-  #       "glue:BatchDeleteTableVersion",
-  #       "glue:BatchDeleteTable",
-  #       "glue:BatchDeletePartition",
-  #       "glue:BatchCreatePartition"
-  #     ]
-  #     resources = [
-  #       "arn:aws:glue:eu-west-1:593291632749:table/oasys*/*",
-  #       "arn:aws:glue:eu-west-1:593291632749:database/oasys*",
-  #       "arn:aws:glue:eu-west-1:593291632749:table/delius*/*",
-  #       "arn:aws:glue:eu-west-1:593291632749:database/delius*",
-  #       "arn:aws:glue:eu-west-1:593291632749:catalog"
-  #     ]
-  #   }
-  # ]
-
 }
