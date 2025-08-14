@@ -79,9 +79,10 @@ module "data_engineering_datalake_access_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.60.0"
+  version = "6.0.0"
 
   name_prefix = "data-engineering-datalake-access"
+  description = "IAM Policy"
 
   policy = data.aws_iam_policy_document.data_engineering_datalake_access.json
 }
@@ -90,15 +91,26 @@ module "data_engineering_datalake_access_iam_role" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.60.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "6.0.0"
 
-  create_role = true
+  name            = "data-engineering-datalake-access"
+  use_name_prefix = false
 
-  role_name         = "data-engineering-datalake-access"
-  role_requires_mfa = false
+  trust_policy_permissions = {
+    trusted_role_arns = {
+      actions = [
+        "sts:AssumeRole",
+        "sts:TagSession"
+      ]
+      principals = [{
+        type        = "AWS"
+        identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-commons-production"]}:role/data-engineering-datalake-access-github-actions"]
+      }]
+    }
+  }
 
-  trusted_role_arns = ["arn:aws:iam::${var.account_ids["analytical-platform-commons-production"]}:role/data-engineering-datalake-access-github-actions"]
-
-  custom_role_policy_arns = [module.data_engineering_datalake_access_iam_policy.arn]
+  policies = {
+    data_engineering_datalake_access = module.data_engineering_datalake_access_iam_policy.arn
+  }
 }
