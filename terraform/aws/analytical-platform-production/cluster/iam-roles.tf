@@ -22,7 +22,7 @@ module "iam_assumable_role_control_panel_api" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.60.0"
+  version = "6.0.0"
 
   providers = {
     aws = aws.analytical-platform-data-production
@@ -47,7 +47,7 @@ module "iam_assumable_role_cert_manager" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.60.0"
+  version = "6.0.0"
 
   create_role                   = true
   role_name_prefix              = "cert_manager"
@@ -64,7 +64,7 @@ module "iam_assumable_role_cluster_autoscaler" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.60.0"
+  version = "6.0.0"
 
   create_role                   = true
   role_name_prefix              = substr("cluster-autoscaler-${module.eks.cluster_id}", 0, 31)
@@ -81,7 +81,7 @@ module "iam_assumable_role_external_dns" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.60.0"
+  version = "6.0.0"
 
   create_role                   = true
   role_name_prefix              = "external_dns"
@@ -98,7 +98,7 @@ module "iam_assumable_role_external_secrets" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.60.0"
+  version = "6.0.0"
 
   create_role                   = true
   role_name_prefix              = "external_secrets"
@@ -115,7 +115,7 @@ module "iam_assumable_role_prometheus_remote_ingest" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.60.0"
+  version = "6.0.0"
 
   create_role                   = true
   role_name                     = "prometheus_remote_ingest"
@@ -193,7 +193,7 @@ module "aws_for_fluent_bit_iam_role" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.60.0"
+  version = "6.0.0"
 
   role_name_prefix = "aws-for-fluent-bit"
 
@@ -219,7 +219,7 @@ module "amazon_prometheus_proxy_iam_role" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.60.0"
+  version = "6.0.0"
 
   role_name_prefix = "amazon-prometheus-proxy"
 
