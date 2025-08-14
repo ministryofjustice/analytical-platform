@@ -87,4 +87,3 @@ updates:
       - "terraform/aws/analytical-platform/oidc"
       - "terraform/cloud-platform/live/analytical-platform-development/grafana"
       - "terraform/cloud-platform/live/analytical-platform-production/observability"
-      - "terraform/pagerduty"
