@@ -30,6 +30,7 @@ module "rds_export_dev" {
   name                  = local.name
   vpc_id                = module.vpc_dev.vpc_id
   database_subnet_ids   = module.vpc_dev.private_subnets
+  database_subnet_ids   = module.vpc_dev.private_subnets
   kms_key_arn           = module.rds_export_kms_dev.key_arn
   master_user_secret_id = module.rds_export_secret.secret_arn
 
