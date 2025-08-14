@@ -34,6 +34,7 @@ module "athena_iam_policy" {
   version = "6.0.0"
 
   name_prefix = "athena_spark"
+  description = "IAM Policy" # This was added to avoid forced replacement when upgrading to 6.0.0
 
   policy = data.aws_iam_policy_document.athena_spark.json
 }
