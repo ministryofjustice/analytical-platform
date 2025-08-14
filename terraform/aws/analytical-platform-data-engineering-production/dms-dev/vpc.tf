@@ -58,6 +58,9 @@ module "endpoints" {
   create_security_group      = true
   security_group_description = "Managed by Terraform"
   security_group_tags        = { Name : "eu-west-1-dev" }
+  lifecycle {
+    create_before_destroy = true
+  }
   security_group_rules = {
     ingress_https = {
       description = "HTTPS from VPC"
