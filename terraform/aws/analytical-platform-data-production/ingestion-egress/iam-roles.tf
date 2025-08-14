@@ -3,7 +3,7 @@ module "development_replication_iam_role" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.60.0"
+  version = "6.0.0"
 
   create_role = true
 
@@ -20,7 +20,7 @@ module "production_replication_iam_role" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.60.0"
+  version = "6.0.0"
 
   create_role = true
 
