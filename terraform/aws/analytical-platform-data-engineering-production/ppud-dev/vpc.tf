@@ -1,4 +1,4 @@
-module "vpc" {
+module "vpc_dev" {
 
   # Commit has for v5.21.0
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc?ref=7c1f791efd61f326ed6102d564d1a65d1eceedf0"
@@ -28,18 +28,18 @@ module "vpc" {
 }
 
 
-module "endpoints" {
+module "endpoints_dev" {
   # Commit has for v5.21.0
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc//modules/vpc-endpoints?ref=507193ee659f6f0ecdd4a75107e59e2a6c1ac3cc"
 
-  vpc_id                     = module.vpc.vpc_id
+  vpc_id                     = module.vpc_dev.vpc_id
   create_security_group      = true
   security_group_description = "PPUD dev - Managed by Terraform"
-  security_group_tags        = { Name : "eu-west-2-dev" }
+  security_group_tags        = { Name : "eu-west-2-${local.name}" }
   security_group_rules = {
     ingress_https = {
       description = "HTTPS from VPC"
-      cidr_blocks = [module.vpc.vpc_cidr_block]
+      cidr_blocks = [module.vpc_dev.vpc_cidr_block]
     }
   }
   endpoints = {
@@ -48,22 +48,22 @@ module "endpoints" {
     logs = {
       service      = "logs"
       service_type = "Interface"
-      tags         = { Name = "logs-api-vpc-endpoint" }
+      tags         = { Name = "logs-api-vpc-endpoint-${local.name}" }
     },
     ssmmessages = {
       service             = "ssmmessages"
       service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
+      subnet_ids          = module.vpc_dev.private_subnets
       private_dns_enabled = true
-      tags                = { Name = "ssmmessages-eu-west-2c-dev" }
+      tags                = { Name = "ssmmessages-eu-west-2-${local.name}" }
     }
 
     ssm = {
       service             = "ssm"
       service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
+      subnet_ids          = module.vpc_dev.private_subnets
       private_dns_enabled = true
-      tags                = { Name = "ssm-eu-west-2c-dev" }
+      tags                = { Name = "ssm-eu-west-2-${local.name}" }
     }
 
 
@@ -71,30 +71,30 @@ module "endpoints" {
 
       service_type    = "Gateway" # gateway endpoint
       service         = "s3"
-      route_table_ids = module.vpc.private_route_table_ids
-      tags            = { Name = "s3-eu-west-2-dev" }
+      route_table_ids = module.vpc_dev.private_route_table_ids
+      tags            = { Name = "s3-eu-west-2-${local.name}" }
     }
 
     secrets_manager = {
       service             = "secretsmanager"
       service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
+      subnet_ids          = module.vpc_dev.private_subnets
       private_dns_enabled = true
-      tags                = { Name = "secretsmanager-eu-west-2-dev" }
+      tags                = { Name = "secretsmanager-eu-west-2-${local.name}" }
     }
     glue = {
       service             = "glue"
       service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
+      subnet_ids          = module.vpc_dev.private_subnets
       private_dns_enabled = true
-      tags                = { Name = "glue-eu-west-2-dev" }
+      tags                = { Name = "glue-eu-west-2-${local.name}" }
     }
     sts = {
       service             = "sts"
       service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
+      subnet_ids          = module.vpc_dev.private_subnets
       private_dns_enabled = true
-      tags                = { Name = "sts-eu-west-2-dev" }
+      tags                = { Name = "sts-eu-west-2-${local.name}" }
     }
 
   }
