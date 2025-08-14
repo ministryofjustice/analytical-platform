@@ -1,15 +1,15 @@
-module "dms_preprod_kms" {
+module "rds_export_kms_dev" {
 
   # Commit hash for v3.1.0
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-kms?ref=fe1beca2118c0cb528526e022a53381535bb93cd"
 
-  aliases               = ["dms/dms-preprod"]
-  description           = "Used in the HMPPS probation domain to encode secrets and traffic"
+  aliases               = ["rds/rds-${local.name}"]
+  description           = "Used in the HMPPS probation domain to encode secrets and exported snapshots for RDS export"
   enable_default_policy = true
 
   key_statements = [
     {
-      sid    = "AllowEventsServiceAccess"
+      sid    = "AllowLambdaServiceAccess"
       effect = "Allow"
       actions = [
         "kms:Encrypt*",
@@ -22,7 +22,7 @@ module "dms_preprod_kms" {
       principals = [
         {
           type        = "Service"
-          identifiers = ["events.amazonaws.com"]
+          identifiers = ["lambda.amazonaws.com"]
         }
       ]
     }
