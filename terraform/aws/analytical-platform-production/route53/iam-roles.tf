@@ -3,7 +3,7 @@ module "analytical_platform_compute_route53_access_iam_role" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version = "6.0.0"
+  version = "6.1.0"
 
   name            = "analytical-platform-compute-route53-access"
   use_name_prefix = false
