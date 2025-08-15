@@ -17,7 +17,7 @@ module "data_development_observability_platform" {
 }
 
 module "data_development_analytical_platform_observability" {
-  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=be3e7097df63ab33349dbd1fe91de9a2c89f69ed" # 4.1.0
+  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=4b9c9013bff6035e8e3b77a00d124e62bbb4de56" # 4.2.0
 
   providers = {
     aws = aws.analytical-platform-data-development-eu-west-2
@@ -45,7 +45,7 @@ module "data_engineering_production_observability_platform" {
 }
 
 module "data_engineering_production_analytical_platform_observability" {
-  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=be3e7097df63ab33349dbd1fe91de9a2c89f69ed" # 4.1.0
+  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=4b9c9013bff6035e8e3b77a00d124e62bbb4de56" # 4.2.0
 
   providers = {
     aws = aws.analytical-platform-data-engineering-production-eu-west-2
@@ -73,7 +73,7 @@ module "data_engineering_sandbox_a_observability_platform" {
 }
 
 module "data_engineering_sandbox_a_analytical_platform_observability" {
-  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=be3e7097df63ab33349dbd1fe91de9a2c89f69ed" # 4.1.0
+  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=4b9c9013bff6035e8e3b77a00d124e62bbb4de56" # 4.2.0
 
   providers = {
     aws = aws.analytical-platform-data-engineering-sandbox-a-eu-west-2
@@ -101,7 +101,7 @@ module "data_production_observability_platform" {
 }
 
 module "data_production_analytical_platform_observability" {
-  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=be3e7097df63ab33349dbd1fe91de9a2c89f69ed" # 4.1.0
+  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=4b9c9013bff6035e8e3b77a00d124e62bbb4de56" # 4.2.0
 
   providers = {
     aws = aws.analytical-platform-data-production-eu-west-2
@@ -135,7 +135,7 @@ module "landing_production_observability_platform" {
 }
 
 module "landing_production_analytical_platform_observability" {
-  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=be3e7097df63ab33349dbd1fe91de9a2c89f69ed" # 4.1.0
+  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=4b9c9013bff6035e8e3b77a00d124e62bbb4de56" # 4.2.0
 
   providers = {
     aws = aws.analytical-platform-landing-production-eu-west-2
@@ -163,7 +163,7 @@ module "management_production_observability_platform" {
 }
 
 module "management_production_analytical_platform_observability" {
-  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=be3e7097df63ab33349dbd1fe91de9a2c89f69ed" # 4.1.0
+  source = "github.com/ministryofjustice/terraform-aws-analytical-platform-observability?ref=4b9c9013bff6035e8e3b77a00d124e62bbb4de56" # 4.2.0
 
   providers = {
     aws = aws.analytical-platform-management-production-eu-west-2
