@@ -9,7 +9,7 @@ module "analytical_platform_infrastructure_access_iam_role" {
   use_name_prefix = false
 
   trust_policy_permissions = {
-    trusted_role_arns = {
+    TrustRoleAndServiceToAssume = {
       actions = [
         "sts:AssumeRole",
         "sts:TagSession"
