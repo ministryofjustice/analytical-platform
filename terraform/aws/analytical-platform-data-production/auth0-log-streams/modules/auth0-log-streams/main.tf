@@ -2,7 +2,7 @@ module "kms_key" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.0.0"
 
   aliases               = ["auth0/${var.name}"]
   description           = "Auth0 KMS Key for ${var.name}"
@@ -42,7 +42,7 @@ module "kms_key" {
           identifiers = ["logs.${data.aws_region.current.name}.amazonaws.com"]
         }
       ]
-      conditions = [
+      condition = [
         {
           test     = "ArnLike"
           variable = "kms:EncryptionContext:aws:logs:arn"
