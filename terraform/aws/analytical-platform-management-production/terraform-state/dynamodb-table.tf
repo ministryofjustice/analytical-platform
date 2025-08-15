@@ -59,7 +59,7 @@ data "aws_iam_policy_document" "state_locking_policy" {
     resources = [module.state_locking.dynamodb_table_arn]
     principals {
       type        = "AWS"
-      identifiers = [module.data_engineering_state_access_iam_role.iam_role_arn]
+      identifiers = [module.data_engineering_state_access_iam_role.arn]
     }
   }
 }

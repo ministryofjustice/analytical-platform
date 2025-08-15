@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "state_bucket_policy" {
     resources = [module.state_bucket.s3_bucket_arn]
     principals {
       type        = "AWS"
-      identifiers = [module.data_engineering_state_access_iam_role.iam_role_arn]
+      identifiers = [module.data_engineering_state_access_iam_role.arn]
     }
   }
   statement {
@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "state_bucket_policy" {
     ]
     principals {
       type        = "AWS"
-      identifiers = [module.data_engineering_state_access_iam_role.iam_role_arn]
+      identifiers = [module.data_engineering_state_access_iam_role.arn]
     }
   }
 }
@@ -80,7 +80,7 @@ module "state_bucket" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.3.1"
+  version = "5.4.0"
 
   bucket = "global-tf-state-aqsvzyd5u9"
 
