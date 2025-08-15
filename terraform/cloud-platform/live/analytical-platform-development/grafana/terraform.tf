@@ -62,13 +62,13 @@ provider "github" {
 provider "kubernetes" {
   host                   = "https://${data.aws_secretsmanager_secret_version.cloud_platform_live_cluster_endpoint.secret_string}"
   cluster_ca_certificate = base64decode(data.aws_secretsmanager_secret_version.cloud_platform_live_cluster_ca_cert.secret_string)
-  token                  = data.aws_secretsmanager_secret_version.cloud_platform_live_analytical_platform_development_token.secret_string
+  token                  = data.aws_secretsmanager_secret_version.cloud_platform_live_analytical_platform_production_token.secret_string
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     host                   = "https://${data.aws_secretsmanager_secret_version.cloud_platform_live_cluster_endpoint.secret_string}"
     cluster_ca_certificate = base64decode(data.aws_secretsmanager_secret_version.cloud_platform_live_cluster_ca_cert.secret_string)
-    token                  = data.aws_secretsmanager_secret_version.cloud_platform_live_analytical_platform_development_token.secret_string
+    token                  = data.aws_secretsmanager_secret_version.cloud_platform_live_analytical_platform_production_token.secret_string
   }
 }
