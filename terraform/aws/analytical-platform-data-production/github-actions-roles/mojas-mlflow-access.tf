@@ -81,7 +81,7 @@ module "mlflow_access_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.0.0"
+  version = "6.1.0"
 
   name_prefix = "github-mlflow-access"
   description = "IAM Policy"
@@ -93,7 +93,7 @@ module "mlflow_access_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version = "6.0.0"
+  version = "6.1.0"
 
   enable_github_oidc = true
 
