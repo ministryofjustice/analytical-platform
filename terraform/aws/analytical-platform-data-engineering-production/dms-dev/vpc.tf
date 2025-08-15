@@ -56,7 +56,7 @@ module "endpoints" {
 
   vpc_id                     = module.vpc.vpc_id
   create_security_group      = true
-  security_group_description = "Managed by Terraform"
+  security_group_description = "Managed by Pulumi"
   security_group_tags        = { Name : "eu-west-1-dev" }
   security_group_rules = {
     ingress_https = {
