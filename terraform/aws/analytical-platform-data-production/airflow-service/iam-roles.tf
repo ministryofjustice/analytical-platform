@@ -4,10 +4,13 @@ module "mojap_compute_external_secrets_iam_role" {
 
   for_each = local.analytical_platform_compute_environments
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.60.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "6.1.0"
 
-  role_name                      = "mojap-compute-${each.key}-external-secrets"
+  name            = "mojap-compute-${each.key}-external-secrets"
+  policy_name     = "mojap-compute-${each.key}-external-secrets"
+  use_name_prefix = false
+
   attach_external_secrets_policy = true
   external_secrets_kms_key_arns = [
     module.secrets_manager_kms.key_arn,
