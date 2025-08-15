@@ -96,11 +96,12 @@ module "athena_read_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.0.0"
+  version = "6.1.0"
 
-  path   = "/airflow-service/"
-  name   = "athena-read"
-  policy = data.aws_iam_policy_document.athena_read.json
+  path        = "/airflow-service/"
+  name        = "athena-read"
+  policy      = data.aws_iam_policy_document.athena_read.json
+  description = "IAM Policy"
 }
 
 data "aws_iam_policy_document" "athena_write" {
@@ -137,11 +138,12 @@ module "athena_write_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.0.0"
+  version = "6.1.0"
 
-  path   = "/airflow-service/"
-  name   = "athena-write"
-  policy = data.aws_iam_policy_document.athena_write.json
+  path        = "/airflow-service/"
+  name        = "athena-write"
+  policy      = data.aws_iam_policy_document.athena_write.json
+  description = "IAM Policy"
 }
 
 data "aws_iam_policy_document" "bedrock" {
@@ -212,11 +214,12 @@ module "bedrock_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.0.0"
+  version = "6.1.0"
 
-  path   = "/airflow-service/"
-  name   = "bedrock"
-  policy = data.aws_iam_policy_document.bedrock.json
+  path        = "/airflow-service/"
+  name        = "bedrock"
+  policy      = data.aws_iam_policy_document.bedrock.json
+  description = "IAM Policy"
 }
 
 data "aws_iam_policy_document" "glue" {
@@ -284,11 +287,12 @@ module "glue_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.0.0"
+  version = "6.1.0"
 
-  path   = "/airflow-service/"
-  name   = "glue"
-  policy = data.aws_iam_policy_document.glue.json
+  path        = "/airflow-service/"
+  name        = "glue"
+  policy      = data.aws_iam_policy_document.glue.json
+  description = "IAM Policy"
 }
 
 data "aws_iam_policy_document" "kms" {
@@ -308,11 +312,12 @@ module "kms_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.0.0"
+  version = "6.1.0"
 
-  path   = "/airflow-service/"
-  name   = "kms"
-  policy = data.aws_iam_policy_document.kms.json
+  path        = "/airflow-service/"
+  name        = "kms"
+  policy      = data.aws_iam_policy_document.kms.json
+  description = "IAM Policy"
 }
 
 data "aws_iam_policy_document" "create_a_derived_table" {
@@ -404,9 +409,10 @@ module "cadet_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.0.0"
+  version = "6.1.0"
 
-  path   = "/airflow-service/"
-  name   = "cadet"
-  policy = data.aws_iam_policy_document.create_a_derived_table.json
+  path        = "/airflow-service/"
+  name        = "cadet"
+  policy      = data.aws_iam_policy_document.create_a_derived_table.json
+  description = "IAM Policy"
 }
