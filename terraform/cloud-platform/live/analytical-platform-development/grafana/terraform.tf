@@ -10,7 +10,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.3.0"
+      version = "6.8.0"
     }
     github = {
       source  = "integrations/github"
@@ -18,11 +18,11 @@ terraform {
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.36.0"
+      version = "2.38.0"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.17.0"
+      version = "3.0.2"
     }
   }
   required_version = "~> 1.11"
@@ -66,7 +66,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     host                   = "https://${data.aws_secretsmanager_secret_version.cloud_platform_live_cluster_endpoint.secret_string}"
     cluster_ca_certificate = base64decode(data.aws_secretsmanager_secret_version.cloud_platform_live_cluster_ca_cert.secret_string)
     token                  = data.aws_secretsmanager_secret_version.cloud_platform_live_analytical_platform_development_token.secret_string
