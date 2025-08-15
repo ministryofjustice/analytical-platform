@@ -26,11 +26,11 @@ resource "helm_release" "grafana" {
   set_sensitive = [
     {
       name  = "env.GF_AUTH_GITHUB_CLIENT_ID"
-      value = data.aws_secretsmanager_secret_version.analytical_platform_grafana_production_github_client_id.secret_string
+      value = data.aws_secretsmanager_secret_version.analytical_platform_grafana_development_github_client_id.secret_string
     },
     {
       name  = "env.GF_AUTH_GITHUB_CLIENT_SECRET"
-      value = data.aws_secretsmanager_secret_version.analytical_platform_grafana_production_github_client_secret.secret_string
+      value = data.aws_secretsmanager_secret_version.analytical_platform_grafana_development_github_client_secret.secret_string
     }
   ]
 }
