@@ -98,14 +98,14 @@ module "data_engineering_datalake_access_iam_role" {
   use_name_prefix = false
 
   trust_policy_permissions = {
-    trusted_role_arns = {
+    TrustRoleAndServiceToAssume = {
       actions = [
         "sts:AssumeRole",
         "sts:TagSession"
       ]
       principals = [{
         type        = "AWS"
-        identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-commons-production"]}:role/data-engineering-datalake-access-github-actions"]
+        identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-common-production"]}:role/data-engineering-datalake-access-github-actions"]
       }]
     }
   }
