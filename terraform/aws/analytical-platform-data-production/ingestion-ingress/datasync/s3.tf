@@ -39,7 +39,7 @@ module "datasync_opg_ingress_s3" {
   for_each = local.analytical_platform_ingestion_environments
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.3.1"
+  version = "5.4.0"
 
   bucket = "mojap-data-production-datasync-opg-ingress-${each.key}"
 
@@ -140,7 +140,7 @@ module "datasync_laa_ingress_s3" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.3.1"
+  version = "5.4.0"
 
   bucket = "mojap-data-production-datasync-laa-ingress-production"
 
@@ -252,7 +252,7 @@ module "mojap_access_logging_eu_west_2_s3" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.3.1"
+  version = "5.4.0"
 
   bucket = "mojap-s3-bucket-access-logs-eu-west-2"
 
