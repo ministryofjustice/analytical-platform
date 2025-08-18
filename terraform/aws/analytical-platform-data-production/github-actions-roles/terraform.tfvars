@@ -1,5 +1,5 @@
 account_ids = {
-  analytical-platform-commons-production    = "509399598587"
+  analytical-platform-common-production     = "509399598587"
   analytical-platform-data-production       = "593291632749"
   analytical-platform-management-production = "042130406152"
   analytical-platform-compute-production    = "992382429243"
