@@ -38,6 +38,10 @@ module "production_replication_iam_role" {
 
   trust_policy_permissions = {
     TrustS3AndIngestRoles = {
+      actions = [
+        "sts:AssumeRole",
+        "sts:TagSession"
+      ]
       principals = concat(
         [
           {
