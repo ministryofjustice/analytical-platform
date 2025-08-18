@@ -81,9 +81,10 @@ module "mlflow_access_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.60.0"
+  version = "6.1.0"
 
   name_prefix = "github-mlflow-access"
+  description = "IAM Policy"
 
   policy = data.aws_iam_policy_document.mlflow_access.json
 }
@@ -91,12 +92,15 @@ module "mlflow_access_iam_policy" {
 module "mlflow_access_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
-  version = "5.60.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "6.1.0"
 
-  name = "github-mlflow-access"
+  enable_github_oidc = true
 
-  subjects = ["moj-analytical-services/mlflow-access:*"]
+  name            = "github-mlflow-access"
+  use_name_prefix = false
+
+  oidc_wildcard_subjects = ["moj-analytical-services/mlflow-access:*"]
 
   policies = {
     github_mlflow_access = module.mlflow_access_iam_policy.arn

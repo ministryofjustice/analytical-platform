@@ -27,9 +27,10 @@ module "analytical_platform_compute_route53_access_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.60.0"
+  version = "6.1.0"
 
   name_prefix = "analytical-platform-compute-route53-access"
+  description = "IAM Policy"
 
   policy = data.aws_iam_policy_document.analytical_platform_compute_route53_access.json
 }
