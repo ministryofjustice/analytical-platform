@@ -3,7 +3,7 @@ module "development_replication_iam_role" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version = "6.0.0"
+  version = "6.1.0"
 
   name            = "mojap-data-production-bold-egress-development"
   use_name_prefix = false
@@ -35,7 +35,7 @@ module "production_replication_iam_role" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version = "6.0.0"
+  version = "6.1.0"
 
   name            = "mojap-data-production-bold-egress-production"
   use_name_prefix = false
