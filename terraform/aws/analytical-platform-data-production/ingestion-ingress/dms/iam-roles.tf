@@ -5,7 +5,7 @@ module "dms_ingress_iam_role" {
   for_each = local.analytical_platform_ingestion_environments
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version = "6.1.0"
+  version = "6.1.1"
 
   name            = "mojap-data-production-dms-ingress-${each.key}"
   use_name_prefix = false
