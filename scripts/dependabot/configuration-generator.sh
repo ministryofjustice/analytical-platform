@@ -20,6 +20,16 @@ updates:
     commit-message:
       prefix: ":dependabot: github-actions"
       include: "scope"
+
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: ":dependabot: devcontainers"
+      include: "scope"
 EOL
 
 for package_ecosystem in pip terraform; do
