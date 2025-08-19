@@ -34,7 +34,7 @@ module "cica_dms_ingress_s3" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.3.1"
+  version = "5.4.0"
 
   bucket = "mojap-data-production-cica-dms-ingress-production"
 
@@ -86,7 +86,7 @@ module "shared_services_client_team_gov_29148_s3" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.3.1"
+  version = "5.4.0"
 
   bucket = "mojap-data-production-shared-services-client-team-gov-29148"
 
