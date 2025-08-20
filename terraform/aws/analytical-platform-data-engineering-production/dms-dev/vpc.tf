@@ -50,10 +50,10 @@ data "aws_iam_policy_document" "flow_logs_trust" {
   }
 }
 
-resource "aws_iam_role" "flow_log_role"{
-  name = "managed-pipelines-core-dev-flow-log-role"
+resource "aws_iam_role" "flow_log_role" {
+  name               = "managed-pipelines-core-dev-flow-log-role"
   assume_role_policy = data.aws_iam_policy_document.flow_logs_trust.json
-  tags = merge(var.tags, { network = "Private", Name = "managed-pipelines-core-dev-flow-log-role" })
+  tags               = merge(var.tags, { network = "Private", Name = "managed-pipelines-core-dev-flow-log-role" })
 }
 
 # Inline policy: permissions for writing to CloudWatch Logs
@@ -71,19 +71,19 @@ data "aws_iam_policy_document" "cloudwatch_logs" {
   }
 }
 
-resource "aws_iam_role_policy" "cloudwatch_logs"{
+resource "aws_iam_role_policy" "cloudwatch_logs" {
   name   = "managed-pipelines-core-dev-cloudwatch-logs"
   role   = aws_iam_role.flow_log_role.id
   policy = data.aws_iam_policy_document.cloudwatch_logs.json
 }
 
 resource "aws_cloudwatch_log_group" "log_group" {
-  name = "managed-pipelines-core-dev-vpc-flow-log"
+  name              = "managed-pipelines-core-dev-vpc-flow-log"
   retention_in_days = 400
 
   tags = {
     network = "Private"
-    Name = "managed-pipelines-core-dev-vpc-flow-log"
+    Name    = "managed-pipelines-core-dev-vpc-flow-log"
   }
 }
 
@@ -101,11 +101,11 @@ module "vpc" {
 
   enable_nat_gateway = false
 
-  enable_flow_log = true
+  enable_flow_log                  = true
   flow_log_cloudwatch_iam_role_arn = aws_iam_role.flow_log_role.arn
-  flow_log_destination_arn = aws_cloudwatch_log_group.log_group.arn
+  flow_log_destination_arn         = aws_cloudwatch_log_group.log_group.arn
   vpc_flow_log_tags = {
-    Name = "managed-pipelines-core-dev"
+    Name    = "managed-pipelines-core-dev"
     network = "Private"
   }
 
@@ -122,7 +122,7 @@ module "vpc" {
 }
 
 resource "aws_network_acl" "network_acl" {
-  vpc_id = module.vpc.vpc_id
+  vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
   egress {
@@ -130,8 +130,8 @@ resource "aws_network_acl" "network_acl" {
     rule_no    = 100
     action     = "allow"
     cidr_block = "0.0.0.0/0"
-    from_port = 0
-    to_port = 0
+    from_port  = 0
+    to_port    = 0
   }
 
   ingress {
@@ -139,12 +139,12 @@ resource "aws_network_acl" "network_acl" {
     rule_no    = 100
     action     = "allow"
     cidr_block = "0.0.0.0/0"
-    from_port = 0
-    to_port = 0
+    from_port  = 0
+    to_port    = 0
   }
 
   tags = {
-    Name = "eu-west-1-dev"
+    Name    = "eu-west-1-dev"
     network = "Private"
   }
 }
@@ -154,7 +154,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "transit_gateway_attachment" {
   transit_gateway_id = "tgw-0e7b982ea47c28fba"
   vpc_id             = module.vpc.vpc_id
   tags = {
-    Name = "eu-west-1-dev-moj"
+    Name    = "eu-west-1-dev-moj"
     network = "Private"
   }
 }
