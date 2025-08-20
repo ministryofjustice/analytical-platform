@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "flow_logs_trust" {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = "${var.account_ids["analytical-platform-data-engineering-production"]}"
+      values   = var.account_ids["analytical-platform-data-engineering-production"]
     }
 
     condition {
