@@ -14,6 +14,16 @@ updates:
     commit-message:
       prefix: ":dependabot: github-actions"
       include: "scope"
+
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: ":dependabot: devcontainers"
+      include: "scope"
   - package-ecosystem: "pip"
     schedule:
       interval: "daily"
@@ -48,7 +58,6 @@ updates:
       - "terraform/aws/analytical-platform-data-engineering-production/terraform-state"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/airflow-create-a-pipeline"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/github-actions-roles"
-      - "terraform/aws/analytical-platform-data-production/airflow"
       - "terraform/aws/analytical-platform-data-production/airflow-service"
       - "terraform/aws/analytical-platform-data-production/artifact-repos"
       - "terraform/aws/analytical-platform-data-production/athena"
