@@ -7,49 +7,49 @@ locals {
         {
           name                         = "DE Daily Support Rota HEO_SEO"
           start                        = "2023-03-27T09:00:00Z"
-          rotation_virtual_start       = "2025-07-04T09:00:00+01:00"
+          rotation_virtual_start       = "2025-08-25T00:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
             module.users_de_seo["guy.wheeler@justice.gov.uk"].id,
             module.users_de_seo["siva.bathina@digital.justice.gov.uk"].id,
-            module.users_de_seo["murad.ali@justice.gov.uk"].id,
             module.users_de_seo["andrew.cook@digital.justice.gov.uk"].id,
             module.users_de_seo["anthony.cody@digital.justice.gov.uk"].id,
             module.users_de_seo["thomas.hirsch@justice.gov.uk"].id,
             module.users_de_seo["william.orr@digital.justice.gov.uk"].id,
             module.users_de_seo["khristiania.raihan@justice.gov.uk"].id,
             module.users_de_seo["mohammed.ahad1@justice.gov.uk"].id,
+            module.users_de_seo["theodoros.manassis@justice.gov.uk"].id,
           ]
           restrictions = [
             {
               type              = "weekly_restriction"
               start_day_of_week = 1
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
+              start_time_of_day = "00:00:00"
+              duration_seconds  = 86400
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 2
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
+              start_time_of_day = "00:00:00"
+              duration_seconds  = 86400
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 3
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
+              start_time_of_day = "00:00:00"
+              duration_seconds  = 86400
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 4
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
+              start_time_of_day = "00:00:00"
+              duration_seconds  = 86400
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 5
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
+              start_time_of_day = "00:00:00"
+              duration_seconds  = 86400
             }
           ]
         }
@@ -62,7 +62,7 @@ locals {
         {
           name                         = "DE Daily Support Rota G7"
           start                        = "2023-03-27T09:00:00Z"
-          rotation_virtual_start       = "2025-07-04T09:00:00+01:00"
+          rotation_virtual_start       = "2025-09-05T00:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
             module.users_de_g7["matt.heery@justice.gov.uk"].id,
@@ -71,7 +71,6 @@ locals {
             module.users_de_g7["andrew.craik@justice.gov.uk"].id,
             module.users_de_g7["supratik.chowdhury@digital.justice.gov.uk"].id,
             module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].id,
-            module.users_de_g7["thomas.hepworth@justice.gov.uk"].id,
             module.users_de_g7["philip.sinfield@justice.gov.uk"].id,
             module.users_de_g7["laurence.droy@justice.gov.uk"].id,
           ]
@@ -79,32 +78,32 @@ locals {
             {
               type              = "weekly_restriction"
               start_day_of_week = 1
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
+              start_time_of_day = "00:00:00"
+              duration_seconds  = 86400
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 2
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
+              start_time_of_day = "00:00:00"
+              duration_seconds  = 86400
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 3
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
+              start_time_of_day = "00:00:00"
+              duration_seconds  = 86400
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 4
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
+              start_time_of_day = "00:00:00"
+              duration_seconds  = 86400
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 5
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
+              start_time_of_day = "00:00:00"
+              duration_seconds  = 86400
             }
           ]
         }
@@ -147,11 +146,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Murad Ali"
-      email = "murad.ali@justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Andrew Cook"
       email = "andrew.cook@digital.justice.gov.uk"
       role  = "responder"
@@ -179,6 +173,11 @@ locals {
     {
       name  = "Mohammed Ahad"
       email = "mohammed.ahad1@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Theodoros Manassis"
+      email = "theodoros.manassis@justice.gov.uk"
       role  = "responder"
     },
 
@@ -213,11 +212,6 @@ locals {
     {
       name  = "Tapan Perkins"
       email = "tapan.perkins@digital.justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Thomas Hepworth"
-      email = "thomas.hepworth@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -296,11 +290,6 @@ import {
 }
 
 import {
-  to = module.users_de_seo["murad.ali@justice.gov.uk"].pagerduty_user.this
-  id = "PFFFZBU"
-}
-
-import {
   to = module.users_de_seo["andrew.cook@digital.justice.gov.uk"].pagerduty_user.this
   id = "PZDNZKP"
 }
@@ -331,11 +320,6 @@ import {
 }
 
 import {
-  to = module.users_de_g7["thomas.hepworth@justice.gov.uk"].pagerduty_user.this
-  id = "PINRNK0"
-}
-
-import {
   to = module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].pagerduty_user.this
   id = "PXAKE4K"
 }
@@ -358,4 +342,9 @@ import {
 import {
   to = module.users_de_seo["mohammed.ahad1@justice.gov.uk"].pagerduty_user.this
   id = "P1USSNR"
+}
+
+import {
+  to = module.users_de_seo["theodoros.manassis@justice.gov.uk"].pagerduty_user.this
+  id = "P34BQ78"
 }
