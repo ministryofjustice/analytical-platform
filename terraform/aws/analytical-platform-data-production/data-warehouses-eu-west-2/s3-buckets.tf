@@ -4,7 +4,7 @@ module "mojap_national_security_data_s3" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.4.0"
+  version = "5.5.0"
 
   bucket = "mojap-data-production-national-security-data"
 
