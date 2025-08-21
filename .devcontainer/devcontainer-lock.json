@@ -1,14 +1,14 @@
 {
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "version": "2.12.0",
-      "resolved": "ghcr.io/devcontainers/features/docker-in-docker@sha256:5f3e2005aad161ce3ff7700b2603f11935348c039f9166960efd050d69cd3014",
-      "integrity": "sha256:5f3e2005aad161ce3ff7700b2603f11935348c039f9166960efd050d69cd3014"
+      "version": "2.12.2",
+      "resolved": "ghcr.io/devcontainers/features/docker-in-docker@sha256:842d2ed40827dc91b95ef727771e170b0e52272404f00dba063cee94eafac4bb",
+      "integrity": "sha256:842d2ed40827dc91b95ef727771e170b0e52272404f00dba063cee94eafac4bb"
     },
-    "ghcr.io/devcontainers/features/github-cli:1": {
-      "version": "1.0.13",
-      "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:13b301a039ce9e0bb07d45ea0c106c946cfff01c3b9844bbec6b0c7bacba8de3",
-      "integrity": "sha256:13b301a039ce9e0bb07d45ea0c106c946cfff01c3b9844bbec6b0c7bacba8de3"
+    "ghcr.io/devcontainers/features/github-cli:": {
+      "version": "1.0.14",
+      "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:ca677566507c4118e4368cd76a4800807e911e5e350cc3525fb67ebc9132dfa1",
+      "integrity": "sha256:ca677566507c4118e4368cd76a4800807e911e5e350cc3525fb67ebc9132dfa1"
     },
     "ghcr.io/ministryofjustice/devcontainer-feature/aws:1": {
       "version": "1.1.0",
@@ -16,9 +16,9 @@
       "integrity": "sha256:64240f48a66e28fc065d58d2c3aa75319106ec4293b0a0736402290317b256d5"
     },
     "ghcr.io/ministryofjustice/devcontainer-feature/kubernetes:1": {
-      "version": "1.0.2",
-      "resolved": "ghcr.io/ministryofjustice/devcontainer-feature/kubernetes@sha256:d24f235b7578a71a60fce981d250fa300e9f353911561648c31a7022fd8ded6a",
-      "integrity": "sha256:d24f235b7578a71a60fce981d250fa300e9f353911561648c31a7022fd8ded6a"
+      "version": "1.1.0",
+      "resolved": "ghcr.io/ministryofjustice/devcontainer-feature/kubernetes@sha256:f58b01629d00cc9105dfda5d54a4ba33dd21e41f9a132e22e2ad12f15bc4f03d",
+      "integrity": "sha256:f58b01629d00cc9105dfda5d54a4ba33dd21e41f9a132e22e2ad12f15bc4f03d"
     },
     "ghcr.io/ministryofjustice/devcontainer-feature/static-analysis:1": {
       "version": "1.0.0",

@@ -2,32 +2,62 @@ module "development_replication_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.60.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "6.1.2"
 
-  create_role = true
+  name            = "mojap-data-production-bold-egress-development"
+  use_name_prefix = false
 
-  role_name         = "mojap-data-production-bold-egress-development"
-  role_requires_mfa = false
+  trust_policy_permissions = {
+    TrustS3AndIngestRoles = {
+      actions = [
+        "sts:AssumeRole",
+        "sts:TagSession"
+      ]
+      principals = concat(
+        [
+          {
+            type        = "Service"
+            identifiers = ["s3.amazonaws.com"]
+          }
+        ]
+      )
+    }
+  }
 
-  trusted_role_services = ["s3.amazonaws.com"]
-
-  custom_role_policy_arns = [module.development_replication_iam_policy.arn]
+  policies = {
+    custom = module.development_replication_iam_policy.arn
+  }
 }
 
 module "production_replication_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.60.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "6.1.2"
 
-  create_role = true
+  name            = "mojap-data-production-bold-egress-production"
+  use_name_prefix = false
 
-  role_name         = "mojap-data-production-bold-egress-production"
-  role_requires_mfa = false
+  trust_policy_permissions = {
+    TrustS3AndIngestRoles = {
+      actions = [
+        "sts:AssumeRole",
+        "sts:TagSession"
+      ]
+      principals = concat(
+        [
+          {
+            type        = "Service"
+            identifiers = ["s3.amazonaws.com"]
+          }
+        ]
+      )
+    }
+  }
 
-  trusted_role_services = ["s3.amazonaws.com"]
-
-  custom_role_policy_arns = [module.production_replication_iam_policy.arn]
+  policies = {
+    custom = module.production_replication_iam_policy.arn
+  }
 }

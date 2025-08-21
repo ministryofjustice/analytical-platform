@@ -35,7 +35,7 @@ module "sagemaker_ai_probation_search_models_s3" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.3.1"
+  version = "5.5.0"
 
   bucket = "mojap-data-production-sagemaker-ai-probation-search-models"
 
