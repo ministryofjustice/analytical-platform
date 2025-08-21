@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "state_bucket_policy" {
     resources = [module.state_bucket.s3_bucket_arn]
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.analytical_platform_team_access_role.names)}"]
+      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.region}/${one(data.aws_iam_roles.analytical_platform_team_access_role.names)}"]
     }
   }
   statement {
@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "state_bucket_policy" {
     resources = ["${module.state_bucket.s3_bucket_arn}/*"]
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.name}/${one(data.aws_iam_roles.analytical_platform_team_access_role.names)}"]
+      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/aws-reserved/sso.amazonaws.com/${data.aws_region.current.region}/${one(data.aws_iam_roles.analytical_platform_team_access_role.names)}"]
     }
   }
   // Data Engineering Team
@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "state_bucket_policy" {
     resources = [module.state_bucket.s3_bucket_arn]
     principals {
       type        = "AWS"
-      identifiers = [module.data_engineering_state_access_iam_role.iam_role_arn]
+      identifiers = [module.data_engineering_state_access_iam_role.arn]
     }
   }
   statement {
@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "state_bucket_policy" {
     ]
     principals {
       type        = "AWS"
-      identifiers = [module.data_engineering_state_access_iam_role.iam_role_arn]
+      identifiers = [module.data_engineering_state_access_iam_role.arn]
     }
   }
 }
@@ -80,7 +80,7 @@ module "state_bucket" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.11.0"
+  version = "5.5.0"
 
   bucket = "global-tf-state-aqsvzyd5u9"
 

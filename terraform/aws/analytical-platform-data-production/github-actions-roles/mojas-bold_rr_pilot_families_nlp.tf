@@ -20,9 +20,10 @@ module "bold_rr_pilot_families_nlp_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.58.0"
+  version = "6.1.0"
 
   name_prefix = "github-bold-rr-pilot-families-nlp"
+  description = "IAM Policy"
 
   policy = data.aws_iam_policy_document.bold_rr_pilot_families_nlp.json
 }
@@ -30,12 +31,15 @@ module "bold_rr_pilot_families_nlp_iam_policy" {
 module "bold_rr_pilot_families_nlp_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
-  version = "5.58.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "6.1.0"
 
-  name = "github-bold-rr-pilot-families-nlp"
+  enable_github_oidc = true
 
-  subjects = ["moj-analytical-services/bold_rr_pilot_families_nlp:*"]
+  name            = "github-bold-rr-pilot-families-nlp"
+  use_name_prefix = false
+
+  oidc_wildcard_subjects = ["moj-analytical-services/bold_rr_pilot_families_nlp:*"]
 
   policies = {
     github_bold_rr_pilot_families_nlp = module.bold_rr_pilot_families_nlp_iam_policy.arn
