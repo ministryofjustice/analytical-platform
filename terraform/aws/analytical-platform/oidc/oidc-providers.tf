@@ -228,7 +228,7 @@ data "aws_iam_policy_document" "analytical_platform_management_production_github
 module "analytical_platform_management_production_github_oidc_provider" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v3.1.1"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=v4.0.0"
 
   providers = {
     aws = aws.analytical-platform-management-production
