@@ -143,3 +143,77 @@ module "production_s3" {
     }
   }
 }
+
+#tfsec:ignore:AVD-AWS-0088:Bucket is encrypted with CMK KMS, but not detected by Trivy
+#tfsec:ignore:AVD-AWS-0089:Bucket logging not enabled currently
+#tfsec:ignore:AVD-AWS-0132:Bucket is encrypted with CMK KMS, but not detected by Trivy
+module "shared_services_client_team_gov_29148_egress_s3" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+  #checkov:skip=CKV_AWS_18:Access logging not enabled currently
+  #checkov:skip=CKV_AWS_21:Versioning is enabled, but not detected by Checkov
+  #checkov:skip=CKV_AWS_145:Bucket is encrypted with CMK KMS, but not detected by Checkov
+  #checkov:skip=CKV_AWS_300:Lifecycle configuration not enabled currently
+  #checkov:skip=CKV_AWS_144:Cross-region replication is not required currently
+  #checkov:skip=CKV2_AWS_6:Public access block is enabled, but not detected by Checkov
+  #checkov:skip=CKV2_AWS_61:Lifecycle configuration not enabled currently
+  #checkov:skip=CKV2_AWS_62:Bucket notifications not required currently
+  #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
+
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "5.5.0"
+
+  bucket        = "mojap-data-production-ssct-gov-29148-egress"
+  force_destroy = true
+
+  versioning = {
+    enabled = true
+  }
+
+  replication_configuration = {
+    role = module.shared_services_client_team_gov_29148_egress_iam_role.arn
+    rules = [
+      {
+        id                        = "mojap-ingestion-production-ssct-gov-29148-egress"
+        status                    = "Enabled"
+        delete_marker_replication = true
+
+        source_selection_criteria = {
+          sse_kms_encrypted_objects = {
+            enabled = true
+          }
+        }
+
+        destination = {
+          account_id    = "471112983409"
+          bucket        = "arn:aws:s3:::mojap-ingestion-production-ssct-gov-29148-egress"
+          storage_class = "STANDARD"
+          access_control_translation = {
+            owner = "Destination"
+          }
+          encryption_configuration = {
+            replica_kms_key_id = "arn:aws:kms:eu-west-2:471112983409:key/ad799e93-7e99-4b42-9753-8cad9d5b05f4"
+          }
+          metrics = {
+            status  = "Enabled"
+            minutes = 15
+          }
+          replication_time = {
+            status  = "Enabled"
+            minutes = 15
+          }
+        }
+      }
+    ]
+  }
+
+  server_side_encryption_configuration = {
+    rule = {
+      bucket_key_enabled = true
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = module.shared_services_client_team_gov_29148_egress_kms.key_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+}
