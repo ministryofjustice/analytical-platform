@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.79.0"
+      version = "6.8.0"
     }
   }
 
@@ -13,5 +13,6 @@ terraform {
     key     = "rds-export-serj-test/terraform.tfstate"
     #use_lockfile = true
     region = "eu-west-1"
+    profile = "sso-de-sandbox"
   }
 }
