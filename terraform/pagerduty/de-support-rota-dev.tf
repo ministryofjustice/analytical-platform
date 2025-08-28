@@ -10,7 +10,6 @@ locals {
           rotation_virtual_start       = "2025-07-05T00:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users_de_seo_dev["murad.ali@justice.gov.uk"].id,
             module.users_de_seo_dev["andrew.cook@digital.justice.gov.uk"].id,
             module.users_de_seo_dev["anthony.cody@digital.justice.gov.uk"].id,
             module.users_de_seo_dev["thomas.hirsch@justice.gov.uk"].id,
@@ -59,7 +58,6 @@ locals {
           users = [
             module.users_de_seo_dev["guy.wheeler@justice.gov.uk"].id,
             module.users_de_seo_dev["siva.bathina@digital.justice.gov.uk"].id,
-            module.users_de_seo_dev["murad.ali@justice.gov.uk"].id,
             module.users_de_seo_dev["andrew.cook@digital.justice.gov.uk"].id,
             module.users_de_seo_dev["anthony.cody@digital.justice.gov.uk"].id,
             module.users_de_seo_dev["thomas.hirsch@justice.gov.uk"].id,
@@ -112,7 +110,6 @@ locals {
             module.users_de_g7_dev["andrew.craik@justice.gov.uk"].id,
             module.users_de_g7_dev["supratik.chowdhury@digital.justice.gov.uk"].id,
             module.users_de_g7_dev["tapan.perkins@digital.justice.gov.uk"].id,
-            module.users_de_g7_dev["thomas.hepworth@justice.gov.uk"].id,
             module.users_de_g7_dev["philip.sinfield@justice.gov.uk"].id,
             module.users_de_g7_dev["laurence.droy@justice.gov.uk"].id,
           ]
@@ -188,11 +185,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Murad Ali"
-      email = "murad.ali@justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Andrew Cook"
       email = "andrew.cook@digital.justice.gov.uk"
       role  = "responder"
@@ -254,11 +246,6 @@ locals {
     {
       name  = "Tapan Perkins"
       email = "tapan.perkins@digital.justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Thomas Hepworth"
-      email = "thomas.hepworth@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -337,11 +324,6 @@ import {
 }
 
 import {
-  to = module.users_de_seo_dev["murad.ali@justice.gov.uk"].pagerduty_user.this
-  id = "PFFFZBU"
-}
-
-import {
   to = module.users_de_seo_dev["andrew.cook@digital.justice.gov.uk"].pagerduty_user.this
   id = "PZDNZKP"
 }
@@ -369,11 +351,6 @@ import {
 import {
   to = module.users_de_g7_dev["supratik.chowdhury@digital.justice.gov.uk"].pagerduty_user.this
   id = "PUZN13S"
-}
-
-import {
-  to = module.users_de_g7_dev["thomas.hepworth@justice.gov.uk"].pagerduty_user.this
-  id = "PINRNK0"
 }
 
 import {
