@@ -4,7 +4,7 @@ module "mojap_cadet_production" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.5.0"
+  version = "5.6.0"
 
   bucket = "mojap-derived-tables"
   grant = [{
