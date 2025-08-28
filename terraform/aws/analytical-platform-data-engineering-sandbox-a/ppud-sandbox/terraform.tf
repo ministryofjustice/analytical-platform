@@ -23,9 +23,9 @@ provider "aws" {
 
 provider "aws" {
   region = "eu-west-1"
-  # assume_role {
-  #   role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
-  # }
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
+  }
   default_tags {
     tags = var.tags
   }
