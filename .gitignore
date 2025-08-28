@@ -19,3 +19,4 @@ __pycache__
 .github/path-filter/terraform.yml
 .coverage
 *.pub
+**/builds/
