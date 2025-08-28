@@ -344,7 +344,8 @@ resource "pagerduty_service_integration" "pingdom" {
 
   name    = data.pagerduty_vendor.pingdom.name
   service = pagerduty_service.this.id
-  vendor  = data.pagerduty_vendor.pingdom.id
+  #vendor  = data.pagerduty_vendor.pingdom.id
+  vendor = "PQXZU5E"
 }
 
 #tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
