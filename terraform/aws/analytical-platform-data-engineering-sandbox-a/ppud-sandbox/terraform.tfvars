@@ -1,6 +1,10 @@
 ##################################################
 # General
 ##################################################
+account_ids = {
+  analytical-platform-data-engineering-sandbox-a = "684969100054"
+  analytical-platform-management-production      = "042130406152"
+}
 
 tags = {
   business-unit = "HMPPS"
