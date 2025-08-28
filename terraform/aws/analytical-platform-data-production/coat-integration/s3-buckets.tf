@@ -15,6 +15,34 @@ data "aws_iam_policy_document" "coat_bucket_policy" {
     ]
     resources = ["arn:aws:s3:::${local.bucket_name}/*"]
   }
+
+  statement {
+    sid    = "DataSyncCreateS3LocationAndTaskAccess"
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::684969100054:role/coat-datasync-iam-role"] #TODO: Change this in the root account implementation
+    }
+
+    actions = [
+      "s3:GetBucketLocation",
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+      "s3:AbortMultipartUpload",
+      "s3:DeleteObject",
+      "s3:GetObject",
+      "s3:ListMultipartUploadParts",
+      "s3:PutObject",
+      "s3:GetObjectTagging",
+      "s3:PutObjectTagging",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${local.bucket_name}",
+      "arn:aws:s3:::${local.bucket_name}/*"
+    ]
+  }
 }
 
 #trivy:ignore:AVD-AWS-0089:Bucket logging not enabled currently
@@ -28,6 +56,10 @@ module "coat_s3" {
   bucket = local.bucket_name
 
   force_destroy = true
+
+  acl              = "private"             # Ensures no public ACLs are applied
+  object_ownership = "BucketOwnerEnforced" # Disables ACLs
+
 
   versioning = {
     enabled = true
