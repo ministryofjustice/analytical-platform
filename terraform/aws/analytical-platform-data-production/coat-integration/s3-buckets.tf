@@ -60,7 +60,6 @@ module "coat_s3" {
   acl              = "private"             # Ensures no public ACLs are applied
   object_ownership = "BucketOwnerEnforced" # Disables ACLs
 
-
   versioning = {
     enabled = true
   }
