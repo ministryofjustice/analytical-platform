@@ -53,6 +53,34 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       values   = ["593291632749"] #TODO: Update
     }
   }
+
+  statement {
+    sid    = "SourceKeyPermissions"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:DescribeKey",
+      "kms:GenerateDataKey",
+    ]
+    resources = [
+      module.coat_kms.key_arn
+    ]
+  }
+
+  statement {
+    sid    = "DestinationKeyPermissions"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+    resources = [
+      "arn:aws:kms:eu-west-1:593291632749:key/*" #TODO: Update call
+    ]
+  }
 }
 
 module "coat_datasync_iam_policy" {
