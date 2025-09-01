@@ -5,7 +5,7 @@ module "coat_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "4.0.0"
 
-  aliases               = ["s3/coat-testing-bucket-"]
+  aliases               = ["s3/coat-testing-bucket"]
   enable_default_policy = true
   #   key_statements = [
   #     {
