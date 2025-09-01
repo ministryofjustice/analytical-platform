@@ -1,6 +1,6 @@
 data "aws_iam_policy_document" "coat_datasync_iam_policy" {
   statement {
-    sid    = "coat-datasync-dms-permissions"
+    sid    = "CoatDatasyncDmsPermissions"
     effect = "Allow"
     actions = [
       "dms:DescribeEndpoints",
@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
   }
 
   statement {
-    sid    = "coat-datasync-s3-bucket-permissions"
+    sid    = "CoatDatasyncS3BucketPermissions"
     effect = "Allow"
     actions = [
       "s3:GetBucketLocation",
@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "s3:ListBucketMultipartUploads",
     ]
     resources = [
-      "arn:aws:s3:::<DESTINATION_BUCKET_NAME>"
+      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly"
     ]
     condition {
       test     = "StringEquals"
@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
   }
 
   statement {
-    sid    = "coat-datasync-s3-object-permissions"
+    sid    = "CoatDatasyncS3ObjectPermissions"
     effect = "Allow"
     actions = [
       "s3:AbortMultipartUpload",
@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "s3:PutObjectTagging",
     ]
     resources = [
-      "arn:aws:s3:::<DESTINATION_BUCKET_NAME>/*"
+      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly/*"
     ]
     condition {
       test     = "StringEquals"
