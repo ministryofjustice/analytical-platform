@@ -6,6 +6,7 @@ account_ids = {
   analytical-platform-data-engineering-sandbox-a = "684969100054"
   analytical-platform-management-production      = "042130406152"
   analytical-platform-compute-production         = "992382429243"
+  analytical-platform-data-production            = "593291632749"
 
 }
 
