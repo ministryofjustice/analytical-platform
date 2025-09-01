@@ -20,3 +20,9 @@ resource "aws_datasync_location_s3" "apdp_account" {
     bucket_access_role_arn = "arn:aws:iam::684969100054:role/coat-datasync-iam-role" #TODO: Update call
   }
 }
+
+resource "aws_datasync_task" "coat_to_apdp_task" {
+  destination_location_arn = aws_datasync_location_s3.apdp_account.arn
+  name                     = "COAT to APDP"
+  source_location_arn      = aws_datasync_location_s3.root_account.arn
+}
