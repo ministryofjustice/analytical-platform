@@ -1,5 +1,5 @@
 module "prod_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=d3eefc53c2132b64973eb386ca563c10bf4ec5f2"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=7a329647835b12c1b97c7a23801735d9e6c43b10"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -50,7 +50,7 @@ module "prod_dms_oasys" {
 }
 
 module "prod_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=d3eefc53c2132b64973eb386ca563c10bf4ec5f2"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=7a329647835b12c1b97c7a23801735d9e6c43b10"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
