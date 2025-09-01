@@ -21,12 +21,12 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "s3:ListBucketMultipartUploads",
     ]
     resources = [
-      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly"
+      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly" #TODO: Update call
     ]
     condition {
       test     = "StringEquals"
       variable = "aws:ResourceAccount"
-      values   = [data.aws_caller_identity.session.account_id]
+      values   = ["593291632749"] #TODO: Update call
     }
   }
 
@@ -45,12 +45,12 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "s3:PutObjectTagging",
     ]
     resources = [
-      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly/*"
+      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly/*" #TODO: Update call
     ]
     condition {
       test     = "StringEquals"
       variable = "aws:ResourceAccount"
-      values   = ["123456789012"]
+      values   = ["593291632749"] #TODO: Update
     }
   }
 }
