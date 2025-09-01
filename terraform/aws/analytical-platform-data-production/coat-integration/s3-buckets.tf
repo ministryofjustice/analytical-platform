@@ -1,19 +1,46 @@
 data "aws_iam_policy_document" "coat_bucket_policy" {
+  # statement {
+  #   sid    = "AllowReplicationRole"
+  #   effect = "Allow"
+  #   principals {
+  #     type        = "AWS"
+  #     identifiers = [local.source_replication_role]
+  #   }
+  #   actions = [
+  #     "s3:GetObjectVersionTagging",
+  #     "s3:ObjectOwnerOverrideToBucketOwner",
+  #     "s3:ReplicateDelete",
+  #     "s3:ReplicateObject",
+  #     "s3:ReplicateTags"
+  #   ]
+  #   resources = ["arn:aws:s3:::${local.bucket_name}/*"]
+  # }
   statement {
-    sid    = "AllowReplicationRole"
+    sid    = "DataSyncCreateS3LocationAndTaskAccess"
     effect = "Allow"
+
     principals {
       type        = "AWS"
-      identifiers = [local.source_replication_role]
+      identifiers = ["arn:aws:iam::684969100054:role/coat-datasync-iam-role"] #TODO: Change this in the root account implementation
     }
+
     actions = [
-      "s3:GetObjectVersionTagging",
-      "s3:ObjectOwnerOverrideToBucketOwner",
-      "s3:ReplicateDelete",
-      "s3:ReplicateObject",
-      "s3:ReplicateTags"
+      "s3:GetBucketLocation",
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+      "s3:AbortMultipartUpload",
+      "s3:DeleteObject",
+      "s3:GetObject",
+      "s3:ListMultipartUploadParts",
+      "s3:PutObject",
+      "s3:GetObjectTagging",
+      "s3:PutObjectTagging",
     ]
-    resources = ["arn:aws:s3:::${local.bucket_name}/*"]
+
+    resources = [
+      "arn:aws:s3:::${local.bucket_name}",
+      "arn:aws:s3:::${local.bucket_name}/*"
+    ]
   }
 }
 
