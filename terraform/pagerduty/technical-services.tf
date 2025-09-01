@@ -39,6 +39,7 @@ locals {
       enable_cloudwatch_integration    = true
       enable_email_integration         = true
       enable_alert_manager_integration = true
+      enable_pingdom_integration       = true
     },
     {
       name              = "Analytical Platform Identity"
@@ -264,6 +265,7 @@ module "technical_services" {
   enable_email_integration            = try(each.value.enable_email_integration, false)
   enable_airflow_integration          = try(each.value.enable_airflow_integration, false)
   enable_alert_manager_integration    = try(each.value.enable_alert_manager_integration, false)
+  enable_pingdom_integration          = try(each.value.enable_pingdom_integration, false)
 
   depends_on = [module.escalation_policies]
 }

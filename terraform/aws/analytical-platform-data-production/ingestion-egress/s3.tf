@@ -15,7 +15,7 @@ module "development_s3" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.6.0"
+  version = "5.7.0"
 
   bucket        = "mojap-data-production-bold-egress-development"
   force_destroy = true
@@ -88,7 +88,7 @@ module "production_s3" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.6.0"
+  version = "5.7.0"
 
   bucket        = "mojap-data-production-bold-egress-production"
   force_destroy = true
@@ -161,7 +161,7 @@ module "shared_services_client_team_gov_29148_egress_s3" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.6.0"
+  version = "5.7.0"
 
   bucket        = "mojap-data-production-ssct-gov-29148-egress"
   force_destroy = true
