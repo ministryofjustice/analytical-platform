@@ -3,7 +3,7 @@ module "mojap_national_security_data_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "4.0.0"
+  version = "4.1.0"
 
   aliases               = ["s3/mojap-data-production-national-security-data"]
   description           = "National Security Data KMS Key"
