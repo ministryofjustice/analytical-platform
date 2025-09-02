@@ -6,7 +6,7 @@ module "rds_export_secret" {
   version = "1.3.1"
 
   name       = "rds_export_ppud_preprod"
-  kms_key_id = module.rds_export_kms_dev.key_arn
+  kms_key_id = module.rds_export_kms_preprod.key_arn
 
   ignore_secret_changes  = true
   create_random_password = true

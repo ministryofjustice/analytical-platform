@@ -28,6 +28,7 @@ module "rds_export_preprod" {
   }
 
   name                  = local.name
+  database_refresh_mode = "incremental"
   vpc_id                = module.vpc_preprod.vpc_id
   database_subnet_ids   = module.vpc_preprod.private_subnets
   kms_key_arn           = module.rds_export_kms_preprod.key_arn
