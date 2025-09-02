@@ -3,7 +3,7 @@ module "production_cica_dms_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "4.0.0"
+  version = "4.1.0"
 
   aliases               = ["s3/mojap-data-production-cica-dms-ingress-production"]
   description           = "MoJ AP CICA DMS Ingress - Production"
@@ -33,7 +33,7 @@ module "shared_services_client_team_gov_29148_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "4.0.0"
+  version = "4.1.0"
 
   aliases               = ["s3/mojap-data-production-shared-services-client-team-gov-29148"]
   description           = "Shared Services Client Team GOV-29148"
