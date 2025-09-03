@@ -1,4 +1,3 @@
-
 module "coat_datasync_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions

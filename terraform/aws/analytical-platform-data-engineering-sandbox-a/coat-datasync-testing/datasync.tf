@@ -25,4 +25,13 @@ resource "aws_datasync_task" "coat_to_apdp_task" {
   destination_location_arn = aws_datasync_location_s3.apdp_account.arn
   name                     = "COAT to APDP"
   source_location_arn      = aws_datasync_location_s3.root_account.arn
+
+  cloudwatch_log_group_arn = module.datasync_events_log_group.cloudwatch_log_group_arn
+
+  options {
+    log_level         = "BASIC"
+    posix_permissions = "NONE"
+    uid               = "NONE"
+    gid               = "NONE"
+  }
 }
