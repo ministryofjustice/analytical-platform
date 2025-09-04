@@ -1,20 +1,20 @@
 data "aws_iam_policy_document" "coat_bucket_policy" {
-  # statement {
-  #   sid    = "AllowReplicationRole"
-  #   effect = "Allow"
-  #   principals {
-  #     type        = "AWS"
-  #     identifiers = [local.source_replication_role]
-  #   }
-  #   actions = [
-  #     "s3:GetObjectVersionTagging",
-  #     "s3:ObjectOwnerOverrideToBucketOwner",
-  #     "s3:ReplicateDelete",
-  #     "s3:ReplicateObject",
-  #     "s3:ReplicateTags"
-  #   ]
-  #   resources = ["arn:aws:s3:::${local.bucket_name}/*"]
-  # }
+  statement {
+    sid    = "AllowReplicationRole"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = [local.source_replication_role]
+    }
+    actions = [
+      "s3:GetObjectVersionTagging",
+      "s3:ObjectOwnerOverrideToBucketOwner",
+      "s3:ReplicateDelete",
+      "s3:ReplicateObject",
+      "s3:ReplicateTags"
+    ]
+    resources = ["arn:aws:s3:::${local.bucket_name}/*"]
+  }
   statement {
     sid    = "DataSyncCreateS3LocationAndTaskAccess"
     effect = "Allow"

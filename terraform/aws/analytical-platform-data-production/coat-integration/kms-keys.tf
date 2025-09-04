@@ -8,21 +8,21 @@ module "coat_kms" {
   aliases               = ["s3/${local.bucket_name}"]
   enable_default_policy = true
   key_statements = [
-    # {
-    #   sid = "AllowReplicationRole"
-    #   actions = [
-    #     "kms:Encrypt",
-    #     "kms:GenerateDataKey"
-    #   ]
-    #   resources = ["*"]
-    #   effect    = "Allow"
-    #   principals = [
-    #     {
-    #       type        = "AWS"
-    #       identifiers = [local.source_replication_role]
-    #     }
-    #   ]
-    # },
+    {
+      sid = "AllowReplicationRole"
+      actions = [
+        "kms:Encrypt",
+        "kms:GenerateDataKey"
+      ]
+      resources = ["*"]
+      effect    = "Allow"
+      principals = [
+        {
+          type        = "AWS"
+          identifiers = [local.source_replication_role]
+        }
+      ]
+    },
     {
       sid = "AllowDataSyncRole"
       actions = [
