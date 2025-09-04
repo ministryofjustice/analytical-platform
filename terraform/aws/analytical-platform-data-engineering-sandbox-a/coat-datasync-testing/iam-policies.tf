@@ -81,23 +81,6 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "arn:aws:kms:eu-west-1:593291632749:key/*" #TODO: Update call
     ]
   }
-
-  statement {
-    sid    = "CloudWatchLogsPermissions"
-    effect = "Allow"
-    actions = [
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-      "logs:DescribeLogStreams",
-      "logs:CreateLogGroup",
-      "logs:DeleteLogGroup"
-    ]
-    resources = [
-      "${module.datasync_events_log_group.cloudwatch_log_group_arn}",
-      "${module.datasync_events_log_group.cloudwatch_log_group_arn}:*",
-      "${module.datasync_events_log_group.cloudwatch_log_group_arn}/*"
-    ]
-  }
 }
 
 module "coat_datasync_iam_policy" {
