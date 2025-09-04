@@ -92,6 +92,10 @@ locals {
       component        = "dbt-bold-daily-dev",
       environment_name = "dev"
     },
+    "dbt-oasys-question" = {
+      name      = "dbt-oasys-question",
+      component = "dbt-oasys-question"
+    },
   }
   dbt_spark_workgroups = {
     "dbt-spark" = {
