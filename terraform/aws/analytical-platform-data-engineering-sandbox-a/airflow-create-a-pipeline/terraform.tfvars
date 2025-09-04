@@ -12,5 +12,4 @@ tags = {
   owner                  = "analytical-platform:analytical-platform@digital.justice.gov.uk"
   infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
   source-code            = "github.com/ministryofjustice/analytical-platform/terraform/aws/analytical-platform-data-engineering-sandbox-a/airflow-create-a-pipeline"
-  de-sandbox-nuke-keep   = "true"
 }
