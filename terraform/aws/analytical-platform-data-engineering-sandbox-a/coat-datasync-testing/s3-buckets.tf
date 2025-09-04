@@ -1,22 +1,5 @@
 data "aws_iam_policy_document" "coat_bucket_policy" {
   statement {
-    sid    = "AllowReplicationRole"
-    effect = "Allow"
-    principals {
-      type        = "AWS"
-      identifiers = [local.source_replication_role]
-    }
-    actions = [
-      "s3:GetObjectVersionTagging",
-      "s3:ObjectOwnerOverrideToBucketOwner",
-      "s3:ReplicateDelete",
-      "s3:ReplicateObject",
-      "s3:ReplicateTags"
-    ]
-    resources = ["arn:aws:s3:::${local.bucket_name}/*"]
-  }
-
-  statement {
     sid    = "DataSyncCreateS3LocationAndTaskAccess"
     effect = "Allow"
 
@@ -39,8 +22,8 @@ data "aws_iam_policy_document" "coat_bucket_policy" {
     ]
 
     resources = [
-      "arn:aws:s3:::${local.bucket_name}",
-      "arn:aws:s3:::${local.bucket_name}/*"
+      "arn:aws:s3:::coat-testing-bucket",  #TODO: Update call
+      "arn:aws:s3:::coat-testing-bucket/*" #TODO: Update call
     ]
   }
 }
@@ -51,14 +34,11 @@ module "coat_s3" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.7.0"
+  version = "5.6.0"
 
-  bucket = local.bucket_name
+  bucket = "coat-testing-bucket"
 
   force_destroy = true
-
-  acl              = "private"             # Ensures no public ACLs are applied
-  object_ownership = "BucketOwnerEnforced" # Disables ACLs
 
   versioning = {
     enabled = true
