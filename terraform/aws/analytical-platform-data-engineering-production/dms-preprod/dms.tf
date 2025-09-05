@@ -60,6 +60,13 @@ module "preprod_dms_delius" {
   output_key_suffix       = "-tf"
   output_bucket           = "mojap-raw-hist-preprod"
 
+  s3_target_config = {
+    add_column_name       = true
+    max_batch_interval    = 600   # <-- override default (10 minutes)
+    min_file_size         = 32000 # keep default (32 MB)
+    timestamp_column_name = "EXTRACTION_TIMESTAMP"
+  }
+
   dms_replication_instance = {
     replication_instance_id    = "delius-preprod"
     subnet_ids                 = module.vpc.private_subnets
