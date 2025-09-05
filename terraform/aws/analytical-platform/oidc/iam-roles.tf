@@ -2,7 +2,7 @@ module "analytical_platform_data_development_assumable_role" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.55.0"
+  version = "6.1.0"
 
   providers = {
     aws = aws.analytical-platform-data-development
@@ -32,7 +32,7 @@ module "analytical_platform_data_engineering_production_assumable_role" {
   for_each = local.deployment_roles
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.55.0"
+  version = "6.1.0"
 
   providers = {
     aws = aws.analytical-platform-data-engineering-production
@@ -60,7 +60,7 @@ module "analytical_platform_data_engineering_sandbox_a_assumable_role" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.55.0"
+  version = "6.1.0"
 
   providers = {
     aws = aws.analytical-platform-data-engineering-sandbox-a
@@ -94,7 +94,7 @@ module "analytical_platform_data_production_assumable_role" {
   for_each = local.deployment_roles
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.55.0"
+  version = "6.1.0"
 
   providers = {
     aws = aws.analytical-platform-data-production
@@ -123,7 +123,7 @@ module "analytical_platform_development_assumable_role" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.55.0"
+  version = "6.1.0"
 
   providers = {
     aws = aws.analytical-platform-development
@@ -151,7 +151,7 @@ module "analytical_platform_landing_production_assumable_role" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.55.0"
+  version = "6.1.0"
 
   providers = {
     aws = aws.analytical-platform-landing-production
@@ -179,7 +179,7 @@ module "analytical_platform_management_production_assumable_role" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.55.0"
+  version = "6.1.0"
 
   providers = {
     aws = aws.analytical-platform-management-production
@@ -207,7 +207,7 @@ module "analytical_platform_production_assumable_role" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.55.0"
+  version = "6.1.0"
 
   providers = {
     aws = aws.analytical-platform-production
