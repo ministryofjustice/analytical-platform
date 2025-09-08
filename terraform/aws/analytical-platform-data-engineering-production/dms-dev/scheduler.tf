@@ -34,7 +34,7 @@ resource "aws_iam_role_policy" "scheduler_dms_policy" {
 
 # Stop DMS task — Monday 14:00 UK time (later need to change to weekend for preprod)
 resource "aws_scheduler_schedule" "dms_stop_mon_1630" {
-  name                         = "dms-stop-mon-4:30pm-uk-dev"
+  name                         = "dms-stop-mon-4-30pm-uk-dev"
   description                  = "Stop DMS replication task every mon 16:30 UK"
   schedule_expression          = "cron(30 16 ? * 2 *)"
   schedule_expression_timezone = "Europe/London"
