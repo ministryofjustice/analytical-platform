@@ -5,7 +5,7 @@ data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
 locals {
-  dms_task_id  = "oasys-dev-cdc" 
+  dms_task_id  = "oasys-dev-cdc"
   dms_task_arn = "arn:aws:dms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:task:${local.dms_task_id}"
 }
 resource "aws_iam_role" "scheduler_dms_role" {
