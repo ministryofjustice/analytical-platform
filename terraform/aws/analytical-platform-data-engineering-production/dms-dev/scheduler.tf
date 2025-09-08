@@ -40,11 +40,11 @@ resource "aws_iam_role_policy" "scheduler_dms_policy" {
   })
 }
 
-# Stop DMS task — Monday 13:00 UK time (later need to change to weekend for preprod)
+# Stop DMS task — Monday 14:00 UK time (later need to change to weekend for preprod)
 resource "aws_scheduler_schedule" "dms_stop_mon_13" {
-  name                         = "dms-stop-thu-1pm-uk-dev"
-  description                  = "Stop DMS replication task every Thu 17:00 UK"
-  schedule_expression          = "cron(0 13 ? * 2 *)"
+  name                         = "dms-stop-mon-2pm-uk-dev"
+  description                  = "Stop DMS replication task every mon 14:00 UK"
+  schedule_expression          = "cron(0 14 ? * 2 *)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
 
@@ -59,10 +59,10 @@ resource "aws_scheduler_schedule" "dms_stop_mon_13" {
 }
 
 # Start DMS task — Thursdays 13:30 UK time (later need to change to weekend for preprod)
-resource "aws_scheduler_schedule" "dms_start_thu_1330" {
-  name                         = "dms-start-thu-1-30pm-uk-dev"
-  description                  = "Start DMS replication task every Thu 13:30 UK"
-  schedule_expression          = "cron(30 13 ? * 2 *)"
+resource "aws_scheduler_schedule" "dms_start_mon_1430" {
+  name                         = "dms-start-mon-2-30pm-uk-dev"
+  description                  = "Start DMS replication task every mon 14:30 UK"
+  schedule_expression          = "cron(30 14 ? * 2 *)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
 
