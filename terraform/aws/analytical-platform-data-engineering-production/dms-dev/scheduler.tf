@@ -43,7 +43,7 @@ resource "aws_scheduler_schedule" "dms_stop_mon_1630" {
   flexible_time_window { mode = "OFF" }
 
   target {
-    arn      = "arn:aws:scheduler:::aws-sdk:dms:stopReplicationTask"
+    arn      = "arn:aws:scheduler:::aws-sdk:dms:StopReplicationTask"
     role_arn = aws_iam_role.scheduler_dms_role.arn
     input    = jsonencode({ ReplicationTaskArn = module.dev_dms_oasys.dms_cdc_task_arn })
   }
@@ -61,7 +61,7 @@ resource "aws_scheduler_schedule" "dms_start_mon_1700" {
   flexible_time_window { mode = "OFF" }
 
   target {
-    arn      = "arn:aws:scheduler:::aws-sdk:dms:startReplicationTask"
+    arn      = "arn:aws:scheduler:::aws-sdk:dms:StartReplicationTask"
     role_arn = aws_iam_role.scheduler_dms_role.arn
     input = jsonencode({
       ReplicationTaskArn       = module.dev_dms_oasys.dms_cdc_task_arn,
