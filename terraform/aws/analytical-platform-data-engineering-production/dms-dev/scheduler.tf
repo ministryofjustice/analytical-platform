@@ -1,4 +1,13 @@
 # Execution role for EventBridge Scheduler
+
+
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
+
+locals {
+  dms_task_id  = "oasys-dev-cdc" 
+  dms_task_arn = "arn:aws:dms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:task:${local.dms_task_id}"
+}
 resource "aws_iam_role" "scheduler_dms_role" {
   name = "eventbridge-scheduler-dms-dev"
 
@@ -26,7 +35,7 @@ resource "aws_iam_role_policy" "scheduler_dms_policy" {
         "dms:StartReplicationTask",
         "dms:StopReplicationTask"
       ],
-      Resource = var.dms_task_arn
+      Resource = local.dms_task_arn
     }]
   })
 }
@@ -44,7 +53,7 @@ resource "aws_scheduler_schedule" "dms_stop_mon_13" {
   target {
     arn      = "arn:aws:scheduler:::aws-sdk:dms:stopReplicationTask"
     role_arn = aws_iam_role.scheduler_dms_role.arn
-    input    = jsonencode({ ReplicationTaskArn = var.dms_task_arn })
+    input    = jsonencode({ ReplicationTaskArn = local.dms_task_arn })
   }
 
 }
@@ -63,7 +72,7 @@ resource "aws_scheduler_schedule" "dms_start_thu_1330" {
     arn      = "arn:aws:scheduler:::aws-sdk:dms:startReplicationTask"
     role_arn = aws_iam_role.scheduler_dms_role.arn
     input = jsonencode({
-      ReplicationTaskArn       = var.dms_task_arn
+      ReplicationTaskArn       = local.dms_task_arn
       StartReplicationTaskType = "resume-processing"
     })
   }

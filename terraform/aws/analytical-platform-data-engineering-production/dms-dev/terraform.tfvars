@@ -16,5 +16,3 @@ tags = {
   owner            = "Data Engineering:dataengineering@digital.justice.gov.uk"
   source-code      = "https://github.com/ministryofjustice/analytical-platform/tree/main/terraform/aws/analytical-platform-data-engineering-production/dms-dev"
 }
-
-dms_task_arn = "arn:aws:dms:eu-west-1:189157455002:task:2GBI4MGM35F7ND4TGVJCPBYFJY"
