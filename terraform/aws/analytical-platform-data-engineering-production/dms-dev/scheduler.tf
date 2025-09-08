@@ -3,7 +3,7 @@ resource "aws_iam_role" "scheduler_dms_role" {
   name = "eventbridge-scheduler-dms-dev"
 
   assume_role_policy = jsonencode({
-    Version   = "2012-10-17",
+    Version = "2012-10-17",
     Statement = [{
       Effect    = "Allow",
       Principal = { Service = "scheduler.amazonaws.com" },
@@ -19,10 +19,10 @@ resource "aws_iam_role_policy" "scheduler_dms_policy" {
   role = aws_iam_role.scheduler_dms_role.id
 
   policy = jsonencode({
-    Version   = "2012-10-17",
+    Version = "2012-10-17",
     Statement = [{
-      Effect   = "Allow",
-      Action   = [
+      Effect = "Allow",
+      Action = [
         "dms:StartReplicationTask",
         "dms:StopReplicationTask"
       ],
