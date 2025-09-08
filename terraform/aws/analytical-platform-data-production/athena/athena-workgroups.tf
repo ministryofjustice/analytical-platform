@@ -92,6 +92,10 @@ locals {
       component        = "dbt-bold-daily-dev",
       environment_name = "dev"
     },
+    "dbt-oasys-question" = {
+      name      = "dbt-oasys-question",
+      component = "dbt-oasys-question"
+    },
   }
   dbt_spark_workgroups = {
     "dbt-spark" = {
@@ -164,15 +168,6 @@ resource "aws_athena_workgroup" "dbt" {
       "owner"            = "Data Engineering:dataengineering@digital.justice.gov.uk"
     }
   )
-}
-
-# Import any existing DBT Athena workgroups into Terraform state
-# This ensures Terraform recognizes workgroups already in AWS
-# and skips creating duplicates on apply.
-import {
-  for_each = local.dbt_athena_workgroups
-  id       = each.value.name # AWS workgroup name
-  to       = aws_athena_workgroup.dbt[each.key]
 }
 
 #trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently

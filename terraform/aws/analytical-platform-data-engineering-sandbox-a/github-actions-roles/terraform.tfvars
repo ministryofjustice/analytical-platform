@@ -18,4 +18,5 @@ tags = {
   owner                  = "analytical-platform:analytical-platform@digital.justice.gov.uk"
   infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
   source-code            = "github.com/ministryofjustice/analytical-platform/tree/main/terraform/aws/analytical-platform-data-engineering-sandbox-a/github-actions-roles"
+  de-sandbox-nuke-keep   = "true"
 }
