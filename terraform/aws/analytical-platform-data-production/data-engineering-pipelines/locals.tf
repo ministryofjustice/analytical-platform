@@ -567,7 +567,8 @@ locals {
                 "arn:aws:s3:::mojap-land/sscl/sscl_data_dump/*",
                 "arn:aws:s3:::mojap-land/cps/*",
                 "arn:aws:s3:::mojap-land/property/planetfm/backupfiles/*",
-                "arn:aws:s3:::mojap-land/opg/prod/ocr/*"
+                "arn:aws:s3:::mojap-land/opg/prod/ocr/*",
+                "arn:aws:s3:::mojap-land/corporate/epm/*"
               ]
             },
             {
