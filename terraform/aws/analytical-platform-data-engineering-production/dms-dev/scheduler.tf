@@ -51,17 +51,17 @@ resource "aws_sfn_state_machine" "dms_control" {
     StartAt = "ChooseOp",
     States = {
       ChooseOp = {
-        Type    = "Choice",
+        Type = "Choice",
         Choices = [
-          { Variable = "$.Op", StringEquals = "stop",  Next = "Stop"  },
+          { Variable = "$.Op", StringEquals = "stop", Next = "Stop" },
           { Variable = "$.Op", StringEquals = "start", Next = "Start" }
         ],
         Default = "FailOp"
       },
 
       Stop = {
-        Type       = "Task",
-        Resource   = "arn:aws:states:::aws-sdk:databasemigration:stopReplicationTask",
+        Type     = "Task",
+        Resource = "arn:aws:states:::aws-sdk:databasemigration:stopReplicationTask",
         Parameters = {
           "ReplicationTaskArn.$" = "$.ReplicationTaskArn"
         },
@@ -72,10 +72,10 @@ resource "aws_sfn_state_machine" "dms_control" {
         Type     = "Task",
         Resource = "arn:aws:states:::aws-sdk:databasemigration:startReplicationTask",
         Parameters = {
-          "ReplicationTaskArn.$"       = "$.ReplicationTaskArn",
-          "StartReplicationTaskType"   = "start-replication",
+          "ReplicationTaskArn.$"     = "$.ReplicationTaskArn",
+          "StartReplicationTaskType" = "start-replication",
 
-          "CdcStartTime.$"             = "$$.Execution.StartTime"
+          "CdcStartTime.$" = "$$.Execution.StartTime"
         },
         End = true
       },
@@ -130,9 +130,9 @@ resource "aws_scheduler_schedule" "dms_stop_test" {
   target {
     arn      = "arn:aws:scheduler:::aws-sdk:sfn:startExecution"
     role_arn = aws_iam_role.scheduler_role.arn
-    input    = jsonencode({
+    input = jsonencode({
       StateMachineArn = aws_sfn_state_machine.dms_control.arn,
-      Input           = jsonencode({
+      Input = jsonencode({
         Op                 = "stop",
         ReplicationTaskArn = module.dev_dms_oasys.dms_cdc_task_arn
       })
@@ -145,7 +145,7 @@ resource "aws_scheduler_schedule" "dms_stop_test" {
 resource "aws_scheduler_schedule" "dms_start_test" {
   name                         = "dms-start-test-4-0pm-uk"
   description                  = "Restart DMS CDC at 16:00 UK today"
-  schedule_expression          = "cron(0 16 9 9 ? 2025)" 
+  schedule_expression          = "cron(0 16 9 9 ? 2025)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
@@ -153,9 +153,9 @@ resource "aws_scheduler_schedule" "dms_start_test" {
   target {
     arn      = "arn:aws:scheduler:::aws-sdk:sfn:startExecution"
     role_arn = aws_iam_role.scheduler_role.arn
-    input    = jsonencode({
+    input = jsonencode({
       StateMachineArn = aws_sfn_state_machine.dms_control.arn,
-      Input           = jsonencode({
+      Input = jsonencode({
         Op                 = "start",
         ReplicationTaskArn = module.dev_dms_oasys.dms_cdc_task_arn
       })
