@@ -39,7 +39,6 @@ resource "aws_iam_role_policy" "sfn_dms_policy" {
 # Step Functions state machine
 # - Op: "stop" or "start"
 # - For "start": restart with start-replication
-#   and CDC time = Execution.StartTime + CdcOffsetMinutes
 ##################################################
 
 resource "aws_sfn_state_machine" "dms_control" {
@@ -121,9 +120,9 @@ resource "aws_iam_role_policy" "scheduler_start_sfn" {
 # EventBridge Schedules (Europe/London)
 # Stop 
 resource "aws_scheduler_schedule" "dms_stop_test" {
-  name                         = "dms-stop-test-4pm-uk"
-  description                  = "Stop DMS CDC at 16:00 UK today"
-  schedule_expression          = "cron(0 16 9 9 ? 2025)"
+  name                         = "dms-stop-test-3-30pm-uk"
+  description                  = "Stop DMS CDC at 15:30 UK today"
+  schedule_expression          = "cron(30 15 9 9 ? 2025)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
@@ -144,9 +143,9 @@ resource "aws_scheduler_schedule" "dms_stop_test" {
 
 # Restart AFTER refresh
 resource "aws_scheduler_schedule" "dms_start_test" {
-  name                         = "dms-start-test-4-30pm-uk"
-  description                  = "Restart DMS CDC at 16:30 UK today"
-  schedule_expression          = "cron(30 16 9 9 ? 2025)" 
+  name                         = "dms-start-test-4-0pm-uk"
+  description                  = "Restart DMS CDC at 16:00 UK today"
+  schedule_expression          = "cron(0 16 9 9 ? 2025)" 
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
