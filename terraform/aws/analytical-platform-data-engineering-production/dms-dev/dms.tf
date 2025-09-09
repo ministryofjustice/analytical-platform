@@ -1,7 +1,5 @@
-# checkov:skip=CKV_TF_1: Skipping because currently want to reference a branch whilst making changes to the dms module. Will update once dms module is stable.
-# checkov:skip=CKV_TF_2: Skipping as waiting for dms module to be stable before making a release.
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=add-cloudwatch-logs-eventbridge"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b30f641947c4d72ebb8abf9587d531dc8ae80500"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
