@@ -118,7 +118,7 @@ resource "aws_iam_role_policy" "scheduler_start_sfn" {
 
 
 # EventBridge Schedules (Europe/London)
-# Stop 
+# Stop
 resource "aws_scheduler_schedule" "dms_stop_test" {
   name                         = "dms-stop-test-3-30pm-uk"
   description                  = "Stop DMS CDC at 15:30 UK today"
