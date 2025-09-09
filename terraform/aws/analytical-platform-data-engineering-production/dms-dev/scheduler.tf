@@ -90,7 +90,7 @@ resource "aws_sfn_state_machine" "dms_control" {
 ##################################################
 
 resource "aws_iam_role" "scheduler_role" {
-  name = "eventbridge-scheduler-dms-dev"
+  name = "eventbridge-scheduler-dms-dev-sm"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
@@ -120,9 +120,9 @@ resource "aws_iam_role_policy" "scheduler_start_sfn" {
 # EventBridge Schedules (Europe/London)
 # Stop
 resource "aws_scheduler_schedule" "dms_stop_test" {
-  name                         = "dms-stop-test-3-30pm-uk"
-  description                  = "Stop DMS CDC at 15:30 UK today"
-  schedule_expression          = "cron(30 15 9 9 ? 2025)"
+  name                         = "dms-stop-test-3-45pm-uk"
+  description                  = "Stop DMS CDC at 15:45 UK today"
+  schedule_expression          = "cron(45 15 9 9 ? 2025)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
