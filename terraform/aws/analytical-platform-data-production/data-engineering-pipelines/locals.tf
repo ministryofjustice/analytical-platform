@@ -744,7 +744,8 @@ locals {
                 "arn:aws:s3:::mojap-land-dev/bold/essex-police/*",
                 "arn:aws:s3:::mojap-land-dev/sscl/sscl_data_dump/*",
                 "arn:aws:s3:::mojap-land-dev/cps/*",
-                "arn:aws:s3:::mojap-land-dev/opg/dev/ocr/*"
+                "arn:aws:s3:::mojap-land-dev/opg/dev/ocr/*",
+                "arn:aws:s3:::mojap-land-dev/laa/dev/maatxhibit/*"
               ]
             },
             {
