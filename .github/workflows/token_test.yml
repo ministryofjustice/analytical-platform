@@ -8,25 +8,28 @@ on:
 jobs:
   test-pat:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Checkout repo
+      - name: Checkout PR head (avoids merge commit)
         uses: actions/checkout@v4
+        with:
+          # For PR events, use the head SHA so the working tree is exactly the PR branch
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
 
-      - name: Make a trivial change
+      - name: Make a trivial change (always dirty)
         run: |
           echo "last tested: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> PAT_TEST.md
-          cat PAT_TEST.md
+          ls -la
+          git status --porcelain || true
 
-
-      - name: Commit via planetscale/ghcommit-action using PAT
+      - name: Commit via ghcommit-action using PAT
         uses: planetscale/ghcommit-action@322be9669498a4be9ce66efc1169f8f43f6bd883 # v0.2.17
         with:
           commit_message: "Test commit via PAT"
           file_pattern: "PAT_TEST.md"
           repo: ${{ github.repository }}
-          # Push to a scratch branch so you don't touch protected branches
           branch: pat-test-branch
         env:
-          # Your fine-grained PAT stored as a secret
           GITHUB_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
 
