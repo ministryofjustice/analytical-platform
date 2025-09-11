@@ -17,7 +17,7 @@ resource "aws_iam_role" "dms_vpc_role" {
   tags = var.tags
 }
 
-resource "aws_iam_role_policy_attachment" "dms-vpc-role-recreate-AmazonDMSVPCManagementRole" {
+resource "aws_iam_role_policy_attachment" "dms_vpc_role_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonDMSVPCManagementRole"
   role       = aws_iam_role.dms_vpc_role.name
   provisioner "local-exec" {
