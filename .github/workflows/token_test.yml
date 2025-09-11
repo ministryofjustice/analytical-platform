@@ -2,6 +2,8 @@ name: Test PAT
 
 on:
   workflow_dispatch: # so you can trigger it manually
+  pull_request:
+    branches: [ main ]
 
 jobs:
   test-pat:
