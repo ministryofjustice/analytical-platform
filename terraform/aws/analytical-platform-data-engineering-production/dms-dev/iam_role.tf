@@ -15,7 +15,6 @@ resource "aws_iam_role" "dms_vpc_role" {
   })
 
   tags = var.tags
-  
 }
 
 resource "aws_iam_role_policy_attachment" "dms_vpc_role_AmazonDMSVPCManagementRole" {
