@@ -1,0 +1,28 @@
+name: Test PAT
+
+on:
+  workflow_dispatch: # so you can trigger it manually
+
+jobs:
+  test-pat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure git user
+        run: |
+          git config --global user.name "PAT Test Bot"
+          git config --global user.email "pat-test-bot@example.com"
+
+      - name: Make a test commit
+        run: |
+          echo "# Test $(date)" >> PAT_TEST.md
+          git add PAT_TEST.md
+          git commit -m "Test commit with PAT"
+
+      - name: Push commit using PAT
+        env:
+          GITHUB_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
+        run: |
+          git push origin HEAD:pat-test-branch
