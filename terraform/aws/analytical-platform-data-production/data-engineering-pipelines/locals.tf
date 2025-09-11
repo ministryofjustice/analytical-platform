@@ -1488,6 +1488,60 @@ locals {
               ]
               Effect = "Allow"
               Principal = {
+                AWS = ["arn:aws:iam::189157455002:role/delius-dev-validation"]
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/delius/*"
+              Sid      = "WriteOnlyAccess-mojap-raw-hist-dev-hmpps-delius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-acl" = "bucket-owner-full-control"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = ["arn:aws:iam::189157455002:role/delius-dev-validation"]
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/delius/*"
+              Sid      = "112-mojap-raw-hist-dev-hmpps-delius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                StringNotEquals = {
+                  "s3:x-amz-server-side-encryption" = "AES256"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = ["arn:aws:iam::189157455002:role/delius-dev-validation"]
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/delius/*"
+              Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-dev-hmpps-delius"
+            },
+            {
+              Action = "s3:PutObject"
+              Condition = {
+                Null = {
+                  "s3:x-amz-server-side-encryption" = "true"
+                }
+              }
+              Effect = "Deny"
+              Principal = {
+                AWS = ["arn:aws:iam::189157455002:role/delius-dev-validation"]
+              }
+              Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/delius/*"
+              Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-dev-hmpps-delius"
+            },
+            {
+              Action = [
+                "s3:PutObject",
+                "s3:ListMultipartUploadParts",
+              ]
+              Effect = "Allow"
+              Principal = {
                 AWS = ["arn:aws:iam::189157455002:role/oasys-dev-validation"]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-dev/hmpps/oasys/*"
