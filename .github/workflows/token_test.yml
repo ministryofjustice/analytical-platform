@@ -12,10 +12,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # Make a change but DO NOT git commit it; the action will do that
       - name: Make a trivial change
         run: |
           echo "last tested: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> PAT_TEST.md
+          cat PAT_TEST.md
+
 
       - name: Commit via planetscale/ghcommit-action using PAT
         uses: planetscale/ghcommit-action@322be9669498a4be9ce66efc1169f8f43f6bd883 # v0.2.17
