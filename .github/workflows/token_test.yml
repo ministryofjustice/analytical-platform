@@ -1,7 +1,7 @@
-name: Test PAT
+name: Test PAT (ghcommit-action)
 
 on:
-  workflow_dispatch: # so you can trigger it manually
+  workflow_dispatch:
   pull_request:
     branches: [ main ]
 
@@ -12,19 +12,20 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Configure git user
+      # Make a change but DO NOT git commit it; the action will do that
+      - name: Make a trivial change
         run: |
-          git config --global user.name "PAT Test Bot"
-          git config --global user.email "pat-test-bot@example.com"
+          echo "last tested: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> PAT_TEST.md
 
-      - name: Make a test commit
-        run: |
-          echo "# Test $(date)" >> PAT_TEST.md
-          git add PAT_TEST.md
-          git commit -m "Test commit with PAT"
-
-      - name: Push commit using PAT
+      - name: Commit via planetscale/ghcommit-action using PAT
+        uses: planetscale/ghcommit-action@322be9669498a4be9ce66efc1169f8f43f6bd883 # v0.2.17
+        with:
+          commit_message: "Test commit via PAT"
+          file_pattern: "PAT_TEST.md"
+          repo: ${{ github.repository }}
+          # Push to a scratch branch so you don't touch protected branches
+          branch: pat-test-branch
         env:
+          # Your fine-grained PAT stored as a secret
           GITHUB_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
-        run: |
-          git push origin HEAD:pat-test-branch
+
