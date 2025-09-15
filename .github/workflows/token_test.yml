@@ -1,35 +1,53 @@
-name: Test PAT (ghcommit-action)
+name: Test PAT (raw git push)
 
 on:
-  workflow_dispatch:
-  pull_request:
+  workflow_dispatch:      # run manually
+  pull_request:           # optional: auto-run on PRs to main
     branches: [ main ]
 
 jobs:
   test-pat:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read      # built-in token not used to push; PAT does the push
+
     steps:
-      - name: Checkout PR head (avoids merge commit)
+      - name: Checkout repo (PR-safe)
         uses: actions/checkout@v4
         with:
-          # For PR events, use the head SHA so the working tree is exactly the PR branch
+          # Use PR head sha when present; falls back to current ref
           ref: ${{ github.event.pull_request.head.sha || github.ref }}
+          fetch-depth: 0   # good hygiene for branch creation
 
-      - name: Make a trivial change (always dirty)
+      - name: Mark repo as safe (avoids "unsafe repository" errors)
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Configure git author (cosmetic; does not affect auth)
+        run: |
+          git config --global user.name  "data-platform-robot"
+          git config --global user.email "data-platform-robot@users.noreply.github.com"
+
+      - name: Create a unique scratch branch
+        run: |
+          BRANCH="pat-test/${GITHUB_RUN_ID}"
+          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
+          git switch -c "$BRANCH"
+
+      - name: Make a trivial change (ensures a diff every run)
         run: |
           echo "last tested: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> PAT_TEST.md
-          ls -la
-          git status --porcelain || true
+          git add PAT_TEST.md
+          git commit -m "Test: verify PAT can push (run $GITHUB_RUN_ID)"
 
-      - name: Commit via ghcommit-action using PAT
-        uses: planetscale/ghcommit-action@322be9669498a4be9ce66efc1169f8f43f6bd883 # v0.2.17
-        with:
-          commit_message: "Test commit via PAT"
-          file_pattern: "PAT_TEST.md"
-          repo: ${{ github.repository }}
-          branch: pat-test-branch
+      - name: Push using PAT
         env:
-          GITHUB_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
+          PAT:  ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}  # your fine-grained PAT
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ env.BRANCH }}
+        run: |
+          # Use PAT for auth on push
+          git remote set-url origin "https://x-access-token:${PAT}@github.com/${REPO}.git"
+          git push -u origin "$BRANCH"
 
+      - name: Summarise result
+        run: echo "Pushed branch: $BRANCH"
