@@ -17,6 +17,8 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.ref }}
           fetch-depth: 0
+          persist-credentials: false   # 👈 prevents the extraheader from being set
+
 
       - name: Mark repo as safe
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -45,21 +47,20 @@ jobs:
           REPO: ${{ github.repository }}
           BRANCH: ${{ env.BRANCH }}
         run: |
-          # Remove checkout's default auth header so our PAT is used
-          git config --global --unset-all http.https://github.com/.extraheader || true
+          # Remove checkout's auth header from the LOCAL repo (not global)
+          git config --local --unset-all http.https://github.com/.extraheader || true
 
-          # Sanity check: should print nothing now
-          git config --global --get-all http.https://github.com/.extraheader || true
+          # Sanity check: should output nothing
+          git config --local --get-all http.https://github.com/.extraheader || true
 
-          # Re-set origin URL to use the PAT
+          # Point origin at a URL that uses your PAT
           git remote set-url origin "https://x-access-token:${PAT}@github.com/${REPO}.git"
 
-          # Optional: test auth quickly
+          # Quick auth probe; will 403 if still using bot creds
           git ls-remote --heads origin >/dev/null
 
-          # Push to the branch
+          # Push to the test branch
           git push --force-with-lease origin "$BRANCH"
-
 
       - name: Summarise result
         run: |
