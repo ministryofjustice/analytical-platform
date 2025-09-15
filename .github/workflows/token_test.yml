@@ -45,8 +45,21 @@ jobs:
           REPO: ${{ github.repository }}
           BRANCH: ${{ env.BRANCH }}
         run: |
+          # Remove checkout's default auth header so our PAT is used
+          git config --global --unset-all http.https://github.com/.extraheader || true
+
+          # Sanity check: should print nothing now
+          git config --global --get-all http.https://github.com/.extraheader || true
+
+          # Re-set origin URL to use the PAT
           git remote set-url origin "https://x-access-token:${PAT}@github.com/${REPO}.git"
+
+          # Optional: test auth quickly
+          git ls-remote --heads origin >/dev/null
+
+          # Push to the branch
           git push --force-with-lease origin "$BRANCH"
+
 
       - name: Summarise result
         run: |
