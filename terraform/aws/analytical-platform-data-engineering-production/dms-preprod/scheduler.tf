@@ -23,7 +23,7 @@ resource "aws_iam_role_policy" "sfn_dms_policy" {
     Statement = [
       {
         Effect   = "Allow",
-        Action   = ["dms:StartReplicationTask", "dms:StopReplicationTask"],
+        Action   = ["dms:StartReplicationTask", "dms:StopReplicationTask", "dms:DescribeReplicationTasks"],
         Resource = module.preprod_dms_oasys.dms_cdc_task_arn
       }
     ]
@@ -43,7 +43,7 @@ resource "aws_sfn_state_machine" "dms_control" {
         Type = "Choice",
         Choices = [
           { Variable = "$.Op", StringEquals = "stop", Next = "Stop" },
-          { Variable = "$.Op", StringEquals = "start", Next = "Start" }
+          { Variable = "$.Op", StringEquals = "start", Next = "GetCdcStartTime" }
         ],
         Default = "FailOp"
       },
@@ -55,13 +55,30 @@ resource "aws_sfn_state_machine" "dms_control" {
         },
         End = true
       },
+      GetCdcStartTime = {
+        Type     = "Task",
+        Resource = "arn:aws:states:::aws-sdk:databasemigration:describeReplicationTasks",
+        Parameters = {
+          "Filters" : [
+            {
+              "Name" : "replication-task-arn",
+              "Values" : ["$.ReplicationTaskArn"]
+            }
+          ]
+        }
+        ResultSelector = {
+          "CdcStopTime.$" : "$.ReplicationTasks[0].StopDate"
+        },
+        ResultPath = "$.Last"
+        Next       = "Start"
+      },
       Start = {
         Type     = "Task",
         Resource = "arn:aws:states:::aws-sdk:databasemigration:startReplicationTask",
         Parameters = {
           "ReplicationTaskArn.$"     = "$.ReplicationTaskArn",
           "StartReplicationTaskType" = "start-replication",
-          "CdcStartTime.$"           = "$$.Execution.StartTime"
+          "CdcStartTime.$"           = "$.Last.CdcStopTime"
         },
         End = true
       },
