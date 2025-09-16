@@ -117,7 +117,7 @@ resource "aws_iam_role_policy" "scheduler_start_sfn" {
 resource "aws_scheduler_schedule" "dms_stop_test" {
   name                         = "dms-stop-test-dev"
   description                  = "Stop DMS CDC"
-  schedule_expression          = "cron(0 14 35 * TUE *)"
+  schedule_expression          = "cron(0 15 * * TUE)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
@@ -138,7 +138,7 @@ resource "aws_scheduler_schedule" "dms_stop_test" {
 resource "aws_scheduler_schedule" "dms_start_test" {
   name                         = "dms-start-test-dev"
   description                  = "Restart DMS CDC"
-  schedule_expression          = "cron(0 14 45 * TUE *)"
+  schedule_expression          = "cron(15 15 * * TUE)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
