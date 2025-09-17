@@ -24,7 +24,7 @@ resource "aws_iam_role_policy" "sfn_dms_policy" {
       {
         Effect   = "Allow",
         Action   = ["dms:StartReplicationTask", "dms:StopReplicationTask"],
-        Resource = module.dev_dms_oasys.dms_cdc_task_arn
+        Resource = module.preprod.dms_cdc_task_arn
       },
       {
         Effect   = "Allow",
