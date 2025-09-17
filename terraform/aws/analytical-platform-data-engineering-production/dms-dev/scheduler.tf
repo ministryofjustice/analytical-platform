@@ -67,7 +67,7 @@ resource "aws_sfn_state_machine" "dms_control" {
           "Filters" : [
             {
               "Name" : "replication-task-arn",
-              "Values.$" : ["$.ReplicationTaskArn"]
+              "Values.$" : "$.ReplicationTaskArn"
             }
           ]
         }
