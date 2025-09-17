@@ -23,8 +23,13 @@ resource "aws_iam_role_policy" "sfn_dms_policy" {
     Statement = [
       {
         Effect   = "Allow",
-        Action   = ["dms:StartReplicationTask", "dms:StopReplicationTask", "dms:DescribeReplicationTasks"],
+        Action   = ["dms:StartReplicationTask", "dms:StopReplicationTask"],
         Resource = module.dev_dms_oasys.dms_cdc_task_arn
+      },
+      {
+        Effect   = "Allow",
+        Action   = ["dms:DescribeReplicationTasks"],
+        Resource = "arn:aws:dms:eu-west-1:${var.account_ids["analytical-platform-data-engineering-production"]}:*:*"
       }
     ]
   })
@@ -117,7 +122,7 @@ resource "aws_iam_role_policy" "scheduler_start_sfn" {
 resource "aws_scheduler_schedule" "dms_stop_test" {
   name                         = "dms-stop-test-dev"
   description                  = "Stop DMS CDC"
-  schedule_expression          = "cron(40 15 ? * TUE *)"
+  schedule_expression          = "cron(15 13 ? * WED *)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
@@ -138,7 +143,7 @@ resource "aws_scheduler_schedule" "dms_stop_test" {
 resource "aws_scheduler_schedule" "dms_start_test" {
   name                         = "dms-start-test-dev"
   description                  = "Restart DMS CDC"
-  schedule_expression          = "cron(55 15 ? * TUE *)"
+  schedule_expression          = "cron(15 16 ? * WED *)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
