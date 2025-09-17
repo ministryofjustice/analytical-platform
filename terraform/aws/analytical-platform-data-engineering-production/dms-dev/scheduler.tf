@@ -72,7 +72,7 @@ resource "aws_sfn_state_machine" "dms_control" {
           ]
         }
         ResultSelector = {
-          "CdcStopTime.$" : "$.ReplicationTasks[0].StopDate"
+          "CdcStopTime.$" : "$.ReplicationTasks[0].ReplicationTaskStats.StopDate"
         },
         ResultPath = "$.Last"
         Next       = "Start"
