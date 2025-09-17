@@ -23,8 +23,13 @@ resource "aws_iam_role_policy" "sfn_dms_policy" {
     Statement = [
       {
         Effect   = "Allow",
-        Action   = ["dms:StartReplicationTask", "dms:StopReplicationTask", "dms:DescribeReplicationTasks"],
+        Action   = ["dms:StartReplicationTask", "dms:StopReplicationTask"],
         Resource = module.preprod_dms_oasys.dms_cdc_task_arn
+      },
+      {
+        Effect   = "Allow",
+        Action   = ["dms:DescribeReplicationTasks"],
+        Resource = "arn:aws:dms:eu-west-1:${var.account_ids["analytical-platform-data-engineering-production"]}:*:*"
       }
     ]
   })
@@ -62,12 +67,12 @@ resource "aws_sfn_state_machine" "dms_control" {
           "Filters" : [
             {
               "Name" : "replication-task-arn",
-              "Values" : ["$.ReplicationTaskArn"]
+              "Values.$" : "States.Array($.ReplicationTaskArn)"
             }
           ]
         }
         ResultSelector = {
-          "CdcStopTime.$" : "$.ReplicationTasks[0].StopDate"
+          "CdcStopTime.$" : "$.ReplicationTasks[0].ReplicationTaskStats.StopDate"
         },
         ResultPath = "$.Last"
         Next       = "Start"
