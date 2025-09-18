@@ -45,4 +45,4 @@ jobs:
           repo: ${{ github.repository }}
           branch: ${{ github.head_ref || github.ref_name }}
         env:
-          GITHUB_TOKEN: ${{ secrets.DATA_PLATFORM_ROBOT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
