@@ -1,8 +1,7 @@
-resource "aws_s3_bucket" "opg_entra_fabric" {
-  bucket = "alpha-opg-entra"
+resource "aws_s3_bucket" "opg_fabric_store" {
+  bucket = "alpha-opg-fabric"
 
   tags = {
-    Name        = "alpha-opg-entra"
-    Environment = "sandbox"
+    Name = "alpha-opg-fabric"
   }
 }

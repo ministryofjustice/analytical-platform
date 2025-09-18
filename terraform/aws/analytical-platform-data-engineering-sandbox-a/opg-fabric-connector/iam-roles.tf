@@ -1,4 +1,4 @@
-resource "aws_iam_role" "entra_role" {
-  name               = "opg-entra-oidc-s3"
-  assume_role_policy = data.aws_iam_policy_document.entra_trust.json
+resource "aws_iam_role" "opg_fabric_access" {
+  name               = "opg-fabric-s3"
+  assume_role_policy = data.aws_iam_policy_document.opg_fabric_trust.json
 }

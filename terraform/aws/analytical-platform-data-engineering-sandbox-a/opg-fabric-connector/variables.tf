@@ -1,8 +1,11 @@
-variable "region" {
-  type    = string
-  default = "eu-west-2"
+variable "default_tenant_value" {
+  type      = string
+  sensitive = true
+  default   = "CHANGEME"
 }
-variable "environment" {
-  type    = string
-  default = "sandbox"
+
+variable "default_object_value" {
+  type      = string
+  sensitive = true
+  default   = "CHANGEME"
 }

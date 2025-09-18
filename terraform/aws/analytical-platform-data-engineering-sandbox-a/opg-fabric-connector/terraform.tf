@@ -17,13 +17,13 @@ terraform {
 }
 
 provider "aws" {
-  region = var.region
+  region = "eu-west-2"
 
   default_tags {
     tags = {
-      Environment = var.environment
+      Environment = "sandbox"
       ManagedBy   = "terraform"
-      Owner       = "opg-de"
+      Owner       = "OPG-DE"
       Project     = "OPG"
     }
   }
