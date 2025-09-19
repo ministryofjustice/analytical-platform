@@ -1,0 +1,67 @@
+name: Test PAT (raw git push)
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-pat:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repo (PR-safe)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+          fetch-depth: 0
+          persist-credentials: false   # 👈 prevents the extraheader from being set
+
+
+      - name: Mark repo as safe
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Configure git author
+        run: |
+          git config --global user.name "data-platform-robot"
+          git config --global user.email "data-platform-robot@users.noreply.github.com"
+
+      - name: Set branch name
+        run: echo "BRANCH=pat-test-branch" >> "$GITHUB_ENV"
+
+      - name: Create or switch to branch
+        run: |
+          git switch -c "$BRANCH" || git switch "$BRANCH"
+
+      - name: Make a trivial change
+        run: |
+          echo "last tested: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> PAT_TEST.md
+          git add PAT_TEST.md
+          git commit -m "Test: verify PAT can push"
+
+      - name: Push using PAT
+        env:
+          PAT: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ env.BRANCH }}
+        run: |
+          # Remove checkout's auth header from the LOCAL repo (not global)
+          git config --local --unset-all http.https://github.com/.extraheader || true
+
+          # Sanity check: should output nothing
+          git config --local --get-all http.https://github.com/.extraheader || true
+
+          # Point origin at a URL that uses your PAT
+          git remote set-url origin "https://x-access-token:${PAT}@github.com/${REPO}.git"
+
+          # Quick auth probe; will 403 if still using bot creds
+          git ls-remote --heads origin >/dev/null
+
+          # Push to the test branch
+          git push --force-with-lease origin "$BRANCH"
+
+      - name: Summarise result
+        run: |
+          echo "Pushed branch: $BRANCH"
