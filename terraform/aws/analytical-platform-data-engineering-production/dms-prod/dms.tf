@@ -49,6 +49,7 @@ module "prod_dms_oasys" {
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
 }
 
+#comment to trigger tf apply
 module "prod_dms_delius" {
   source      = "github.com/ministryofjustice/terraform-dms-module?ref=b190c92217786c0454b756996cdb2fcb190256db"
   vpc_id      = module.vpc.vpc_id
