@@ -29,6 +29,4 @@ module "opg_kms_dev" {
   ]
 
   deletion_window_in_days = 7
-
-  tags = var.tags
 }
