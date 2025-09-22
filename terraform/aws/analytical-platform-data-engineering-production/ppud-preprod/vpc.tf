@@ -50,7 +50,7 @@ module "endpoints_preprod" {
       service_type        = "Interface"
       subnet_ids          = module.vpc_preprod.private_subnets
       private_dns_enabled = true
-      tags                = { Name = "ec2messages-eu-west-1c-${local.name}" }
+      tags                = { Name = "ec2messages-eu-west-2-${local.name}" }
     }
     logs = {
       service      = "logs"
