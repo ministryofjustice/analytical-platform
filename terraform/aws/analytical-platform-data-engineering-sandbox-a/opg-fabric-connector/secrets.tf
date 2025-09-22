@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "fabric_connector_tenant" {
-  name        = "opg-fabric-connector/tentant-id"
+  name        = "opg-fabric-connector/tenant-id"
   description = "Tenant ID for OPG fabric application"
 }
 
