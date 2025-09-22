@@ -17,7 +17,7 @@ module "tenant_id_secret" {
   description = "Tenant ID for OPG Fabric application"
   kms_key_id  = aws_kms_key.secrets.arn
   ignore_secret_changes = true
- secret_string = var.default_tenant_value
+  secret_string = var.default_tenant_value
 }
 
 module "object_id_secret" {
