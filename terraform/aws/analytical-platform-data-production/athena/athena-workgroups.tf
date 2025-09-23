@@ -96,6 +96,10 @@ locals {
       name      = "dbt-oasys-question",
       component = "dbt-oasys-question"
     },
+    "dbt-coat-daily" = {
+      name      = "dbt-coat-daily",
+      component = "dbt-coat-daily"
+    },
   }
   dbt_spark_workgroups = {
     "dbt-spark" = {
