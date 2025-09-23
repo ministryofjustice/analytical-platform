@@ -1,7 +1,7 @@
 module "opg_fabric_store" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
-  #tfsec:ignore:AVD-AWS-0089
+  #trivy:ignore:AVD-AWS-0089
 
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "5.7.0"
