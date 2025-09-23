@@ -13,7 +13,8 @@ locals {
             module.users_ae_seo["owen.buckley@justice.gov.uk"].id,
             module.users_ae_seo["matthew.rixson@justice.gov.uk"].id,
             module.users_ae_seo["vijay.solanki@justice.gov.uk"].id,
-            module.users_ae_seo["billy.pawsey@justice.gov.uk"].id
+            module.users_ae_seo["billy.pawsey@justice.gov.uk"].id,
+            module.users_ae_seo["chris.sheldon@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -148,6 +149,11 @@ locals {
       name  = "Vijay Solanki"
       email = "vijay.solanki@justice.gov.uk"
       role  = "responder"
+    },
+    {
+      name  = "Chris Sheldon"
+      email = "chris.sheldon@justice.gov.uk"
+      role  = "responder"
     }
   ]
 
@@ -279,4 +285,9 @@ import {
 import {
   to = module.users_ae_g7["quinta.davies@justice.gov.uk"].pagerduty_user.this
   id = "P5D5U7A"
+}
+
+import {
+  to = module.users_ae_g7["chris.sheldon@justice.gov.uk"].pagerduty_user.this
+  id = "PEQFG5K"
 }
