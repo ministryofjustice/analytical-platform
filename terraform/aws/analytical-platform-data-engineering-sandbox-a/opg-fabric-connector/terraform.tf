@@ -21,10 +21,15 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Environment = "sandbox"
-      ManagedBy   = "terraform"
-      Owner       = "OPG-DE"
-      Project     = "OPG"
+      business-unit          = "Central Digital"
+      application            = "Analytical Platform"
+      component              = "OPG Fabric Connector"
+      environment            = "sandbox"
+      is-production          = "false"
+      owner                  = "analytical-platform:analytical-platform@digital.justice.gov.uk"
+      infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
+      source-code            = "https://github.com/ministryofjustice/analytical-platform/tree/opg-fabric-connector/terraform/aws/analytical-platform-data-engineering-sandbox-a/opg-fabric-connector"
+      de-sandbox-nuke-keep   = "true"
     }
   }
 }
