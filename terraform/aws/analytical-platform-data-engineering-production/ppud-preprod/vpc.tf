@@ -45,6 +45,13 @@ module "endpoints_preprod" {
   endpoints = {
     # interface endpoints  need  subnet_ids and sg_id
     # Interface endpoint for ec2messages
+    ec2messages = {
+      service             = "ec2messages"
+      service_type        = "Interface"
+      subnet_ids          = module.vpc_preprod.private_subnets
+      private_dns_enabled = true
+      tags                = { Name = "ec2messages-eu-west-2-${local.name}" }
+    }
     logs = {
       service      = "logs"
       service_type = "Interface"
