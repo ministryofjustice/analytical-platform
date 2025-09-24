@@ -10,5 +10,5 @@ tags = {
   is-production          = "true"
   owner                  = "analytical-platform:analytical-platform@justice.gov.uk"
   infrastructure-support = "analytical-platform:analytical-platform@justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/analytical-platform/terraform/aws/analytical-platform-management-production/aws-secret-manager"
+  source-code            = "github.com/ministryofjustice/analytical-platform/terraform/aws/analytical-platform-management-production/aws-secrets-manager"
 }
