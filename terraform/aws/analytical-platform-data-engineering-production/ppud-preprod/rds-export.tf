@@ -21,7 +21,7 @@ resource "aws_security_group_rule" "db_ingress" {
 # checkov:skip=CKV_TF_1: Pointing to branch name whilst in development, will change to commit hash once in main
 # checkov:skip=CKV_TF_2: Pointing to branch name whilst in development, will change to commit hash once in main
 module "rds_export_preprod" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=ppud-rds-export-split"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=ppud-rds-check"
 
   providers = {
     aws = aws
@@ -33,6 +33,7 @@ module "rds_export_preprod" {
   database_subnet_ids   = module.vpc_preprod.private_subnets
   kms_key_arn           = module.rds_export_kms_preprod.key_arn
   master_user_secret_id = module.rds_export_secret.secret_arn
+  environment           = var.tags["environment"]
 
   tags = var.tags
 }
