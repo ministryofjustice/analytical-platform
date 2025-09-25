@@ -1,9 +1,9 @@
 tags = {
-    Environment = "antony-vpc-sandbox"
-    Project     = "analytical-platform-data-engineering-sandbox-a"
-    Terraform   = "true"
-    Name        = "antony-vpc-sandbox"
-    nuke        = "true"
+  Environment = "antony-vpc-sandbox"
+  Project     = "analytical-platform-data-engineering-sandbox-a"
+  Terraform   = "true"
+  Name        = "antony-vpc-sandbox"
+  nuke        = "true"
 }
 
 vpc_default_sg_id   = "sg-0a1b2c3d45e6f7g8h"

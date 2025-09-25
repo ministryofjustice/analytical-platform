@@ -10,13 +10,13 @@ resource "aws_security_group" "database" {
 
 # Allow access to the RDS instance from the VPC
 resource "aws_security_group_rule" "database_rule" {
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.database.id
-  description              = "Allow Postgres access from VPC"
-  cidr_blocks              = [module.vpc.vpc_cidr_block]
+  type              = "ingress"
+  from_port         = 5432
+  to_port           = 5432
+  protocol          = "tcp"
+  security_group_id = aws_security_group.database.id
+  description       = "Allow Postgres access from VPC"
+  cidr_blocks       = [module.vpc.vpc_cidr_block]
 }
 # checkov:skip=CKV_TF_1: Pointing to branch name whilst in development, will change to commit hash once in main
 # checkov:skip=CKV_TF_2: Pointing to branch name whilst in development, will change to commit hash once in main
@@ -34,6 +34,6 @@ module "rds_export_dev" {
   master_user_secret_id = aws_secretsmanager_secret.rds_export_master_user.arn
   database_refresh_mode = "incremental"
 
-  tags                  = var.tags
+  tags = var.tags
 
 }
