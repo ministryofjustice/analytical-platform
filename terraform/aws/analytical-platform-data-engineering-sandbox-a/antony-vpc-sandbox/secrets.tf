@@ -1,0 +1,22 @@
+resource "random_password" "rds_export_master_password" {
+  length              = 24
+  special             = true
+  upper               = true
+  lower               = true
+  number              = true
+}
+
+resource "aws_secretsmanager_secret" "rds_export_master_user" {
+  name          = "ppud-sandbox-rds-export-master-user"
+  description   = "RDS export master user for ppud-sandbox"
+  tags          = var.tags
+  kms_key_id    = var.kms_key_arn
+}
+
+resource "aws_secretsmanager_secret_version" "rds_export_master_user" {
+  secret_id     = aws_secretsmanager_secret.rds_export_master_user.id
+  secret_string = jsonencode({
+    username = "rdsadmin"
+    password = random_password.rds_export_master_password.result
+  })
+}
