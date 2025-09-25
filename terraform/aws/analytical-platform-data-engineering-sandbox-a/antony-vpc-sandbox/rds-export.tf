@@ -1,6 +1,6 @@
-#checkov:skip=CKV2_AWS_5
 
 # Security group for the RDS instance
+# checkov:skip=CKV2_AWS_5: Attached to VPC
 resource "aws_security_group" "database" {
   name        = "antony-vpc-sandbox-sg"
   description = "Security group for RDS export instance"
@@ -19,8 +19,8 @@ resource "aws_security_group_rule" "database_rule" {
   description       = "Allow Postgres access from VPC"
   cidr_blocks       = [module.vpc.vpc_cidr_block]
 }
-#checkov:skip=CKV_TF_1: Pointing to branch name whilst in development, will change to commit hash once in main
-#checkov:skip=CKV_TF_2: Pointing to branch name whilst in development, will change to commit hash once in main
+# checkov:skip=CKV_TF_1: Pointing to branch name whilst in development, will change to commit hash once in main
+# checkov:skip=CKV_TF_2: Pointing to branch name whilst in development, will change to commit hash once in main
 module "rds_export_dev" {
   source = "github.com/ministryofjustice/terraform-rds-export?ref=ppud-rds-export-split"
 
