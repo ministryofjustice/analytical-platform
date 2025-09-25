@@ -1,6 +1,6 @@
 
 # Security group for the RDS instance
-# checkov:skip=CKV2_AWS_5: Attached to VPC
+#checkov:skip=CKV2_AWS_5: Attached to VPC
 resource "aws_security_group" "database" {
   name        = "antony-vpc-sandbox-sg"
   description = "Security group for RDS export instance"
