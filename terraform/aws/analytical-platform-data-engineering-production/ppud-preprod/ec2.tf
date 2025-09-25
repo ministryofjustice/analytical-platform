@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ec2_role" {
-  name = "${local.name}-ec2-${local.env}"
+  name = "${local.name}-${local.env}-ec2"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -25,7 +25,7 @@ resource "aws_iam_role_policy_attachment" "ec2_ssm_policy" {
 
 # Instance Profile for EC2
 resource "aws_iam_instance_profile" "ec2_profile" {
-  name = "${local.name}-ec2-instance-profile-${local.env}"
+  name = "${local.name}-${local.env}-ec2-instance-profile"
   role = aws_iam_role.ec2_role.name
 }
 
@@ -66,7 +66,7 @@ resource "aws_instance" "ec2" {
 
   tags = merge(
     {
-      Name = "${local.name}-ec2-${local.env}"
+      Name = "${local.name}-${local.env}-ec2"
     },
     var.tags
   )
