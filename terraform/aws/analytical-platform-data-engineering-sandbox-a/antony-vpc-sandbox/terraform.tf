@@ -5,7 +5,7 @@ terraform {
     bucket         = "global-tf-state-aqsvzyd5u9"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
     encrypt        = true
-    key            = "aws/analytical-platform-data-engineering-sandbox-a/antony-vpc-sandbox/terraform.tfstate"
+    key            = "aws/analytical-platform-data-engineering-sandbox-a/antony-vpc-sandbox/.terraform/terraform.tfstate"
     region         = "eu-west-2"
   }
 
