@@ -2,8 +2,8 @@ terraform {
 
   backend "s3" {
     acl            = "private"
-    bucket         = "moj-analytical-platform-terraform-state-dwwaswef2r"
-    dynamodb_table = "moj-analytical-platform-terraform-locks"
+    bucket         = "global-tf-state-aqsvzyd5u9"
+    dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
     encrypt        = true
     key            = "aws/analytical-platform-data-engineering-sandbox-a/antony-vpc-sandbox/terraform.tfstate"
     region         = "eu-west-2"
