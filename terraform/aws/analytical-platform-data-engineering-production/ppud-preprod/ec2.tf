@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ec2_role" {
-  name = "${local.name}-ec2"
+  name = "${local.name}-ec2-${local.env}"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -25,7 +25,7 @@ resource "aws_iam_role_policy_attachment" "ec2_ssm_policy" {
 
 # Instance Profile for EC2
 resource "aws_iam_instance_profile" "ec2_profile" {
-  name = "${local.name}-ec2-instance-profile"
+  name = "${local.name}-ec2-instance-profile-${local.env}"
   role = aws_iam_role.ec2_role.name
 }
 
@@ -33,10 +33,10 @@ data "aws_ssm_parameter" "al2023" {
   name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
 }
 
-resource "aws_security_group" "ppud_ec2" {
+resource "aws_security_group" "ec2_sg" {
   name        = "allow_access"
   description = "allow inbound traffic"
-  vpc_id      = module.vpc_preprod.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   egress {
     from_port   = 0
@@ -55,8 +55,8 @@ resource "aws_instance" "ec2" {
   ami                    = data.aws_ssm_parameter.al2023.value
   instance_type          = "t3a.nano"
   iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
-  subnet_id              = module.vpc_preprod.private_subnets[0]
-  vpc_security_group_ids = [aws_security_group.ppud_ec2.id]
+  subnet_id              = module.vpc.private_subnets[0]
+  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   root_block_device {
     encrypted = true #fixes CKV_AWS_8
   }
@@ -66,7 +66,7 @@ resource "aws_instance" "ec2" {
 
   tags = merge(
     {
-      Name = "${local.name}-ec2"
+      Name = "${local.name}-ec2-${local.env}"
     },
     var.tags
   )

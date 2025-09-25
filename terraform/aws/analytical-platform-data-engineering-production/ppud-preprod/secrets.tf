@@ -5,8 +5,8 @@ module "rds_export_secret" {
   source  = "terraform-aws-modules/secrets-manager/aws"
   version = "1.3.1"
 
-  name       = "rds_export_ppud_preprod"
-  kms_key_id = module.rds_export_kms_preprod.key_arn
+  name_prefix = "rds_export_${local.name}_${local.env}"
+  kms_key_id  = module.rds_export_kms.key_arn
 
   ignore_secret_changes  = true
   create_random_password = true
