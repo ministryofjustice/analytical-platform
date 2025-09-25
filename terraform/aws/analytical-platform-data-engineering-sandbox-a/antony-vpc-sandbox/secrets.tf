@@ -1,9 +1,9 @@
 resource "random_password" "vpc_master_password" {
-  length  = 24
-  special = true
-  upper   = true
-  lower   = true
-  number  = true
+  length   = 24
+  special  = true
+  upper    = true
+  lower    = true
+  numeric  = true
 }
 
 resource "aws_secretsmanager_secret" "vpc_master_user" {
@@ -13,7 +13,7 @@ resource "aws_secretsmanager_secret" "vpc_master_user" {
   kms_key_id  = var.kms_key_arn
 }
 
-resource "aws_secretsmanager_secret_version" "rds_export_master_user" {
+resource "aws_secretsmanager_secret_version" "vpc_master_user" {
   secret_id = aws_secretsmanager_secret.vpc_master_user.id
   secret_string = jsonencode({
     username = "rdsadmin"

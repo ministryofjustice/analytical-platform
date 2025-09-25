@@ -31,7 +31,7 @@ module "rds_export_dev" {
   vpc_id                = module.vpc.vpc_id
   database_subnet_ids   = var.database_subnet_ids
   kms_key_arn           = var.kms_key_arn
-  master_user_secret_id = aws_secretsmanager_secret.rds_export_master_user.arn
+  master_user_secret_id = aws_secretsmanager_secret_version.vpc_master_user.arn
   database_refresh_mode = "incremental"
 
   tags = var.tags
