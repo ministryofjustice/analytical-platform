@@ -1,4 +1,4 @@
-resource "random_password" "rds_export_master_password" {
+resource "random_password" "vpc_master_password" {
   length  = 24
   special = true
   upper   = true
@@ -6,7 +6,7 @@ resource "random_password" "rds_export_master_password" {
   number  = true
 }
 
-resource "aws_secretsmanager_secret" "rds_export_master_user" {
+resource "aws_secretsmanager_secret" "vpc_master_user" {
   name        = "antony-vpc-sandbox-master-user"
   description = "RDS export master user for antony-vpc-sandbox"
   tags        = var.tags
@@ -14,7 +14,7 @@ resource "aws_secretsmanager_secret" "rds_export_master_user" {
 }
 
 resource "aws_secretsmanager_secret_version" "rds_export_master_user" {
-  secret_id = aws_secretsmanager_secret.rds_export_master_user.id
+  secret_id = aws_secretsmanager_secret.vpc_master_user.id
   secret_string = jsonencode({
     username = "rdsadmin"
     password = random_password.vpc_master_password.result
