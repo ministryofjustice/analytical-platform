@@ -3,7 +3,7 @@ terraform {
     acl            = "private"
     bucket         = "global-tf-state-aqsvzyd5u9"
     encrypt        = true
-    key            = "aws/analytical-platform-management-production/aws-secret-manger/terraform.tfstate"
+    key            = "aws/analytical-platform-management-production/aws-secrets-manager/terraform.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
 
@@ -11,7 +11,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.8.0"
+      version = "6.14.1"
     }
     github = {
       source  = "integrations/github"
