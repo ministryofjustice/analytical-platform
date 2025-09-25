@@ -1,5 +1,5 @@
 module "vpc" {
-  source             = "github.com/terraform-aws-modules/terraform-aws-vpc?ref=master"
+  source             = "github.com/terraform-aws-modules/terraform-aws-vpc"
   name               = "antony-vpc-sandbox-vpc"
   cidr               = "10.0.0.0/16"
   azs                = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
@@ -15,7 +15,7 @@ module "vpc" {
 }
 
 module "endpoints" {
-  source = "github.com/terraform-aws-modules/terraform-aws-vpc//modules/vpc-endpoints?ref=master"
+  source = "github.com/terraform-aws-modules/terraform-aws-vpc//modules/vpc-endpoints"
 
   vpc_id             = "vpc-12345678"
   security_group_ids = ["sg-12345678"]
