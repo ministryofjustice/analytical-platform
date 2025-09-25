@@ -1,8 +1,8 @@
 tags = {
-    Environment = "ppud-sandbox"
+    Environment = "antony-vpc-sandbox"
     Project     = "analytical-platform-data-engineering-sandbox-a"
     Terraform   = "true"
-    Name        = "ppud-sandbox-vpc"
+    Name        = "antony-vpc-sandbox"
     nuke        = "true"
 }
 
