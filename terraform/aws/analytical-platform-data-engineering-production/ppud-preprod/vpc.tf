@@ -34,7 +34,7 @@ module "endpoints" {
 
   vpc_id                     = module.vpc.vpc_id
   create_security_group      = true
-  security_group_description = "${local.name} ${local.environment} - Managed by Terraform"
+  security_group_description = "${local.name} ${local.env} - Managed by Terraform"
   security_group_tags        = { Name : "${data.aws_region.current.id}-${local.name}-${local.env}" }
   security_group_rules = {
     ingress_https = {
