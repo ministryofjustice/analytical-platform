@@ -2,7 +2,7 @@ module "vpc" {
 
   # Commit has for v5.21.0
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc?ref=7c1f791efd61f326ed6102d564d1a65d1eceedf0"
-  name   = local.name
+  name   = "${local.name}-${local.env}"
   cidr   = "10.1.0.0/16"
   azs    = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
 
