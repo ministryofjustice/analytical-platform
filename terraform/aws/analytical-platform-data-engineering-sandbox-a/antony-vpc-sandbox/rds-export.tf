@@ -12,11 +12,11 @@ resource "aws_security_group" "database" {
 # Allow access to the RDS instance from the VPC
 resource "aws_security_group_rule" "database_rule" {
   type              = "ingress"
-  from_port         = 5432
-  to_port           = 5432
+  from_port         = 1433
+  to_port           = 1433
   protocol          = "tcp"
   security_group_id = aws_security_group.database.id
-  description       = "Allow Postgres access from VPC"
+  description       = "Allow rds database access from VPC"
   cidr_blocks       = [module.vpc.vpc_cidr_block]
 }
 module "rds_export_dev" {
@@ -31,8 +31,8 @@ module "rds_export_dev" {
 
   name                  = "antony-rds-export"
   vpc_id                = module.vpc.vpc_id
-  database_subnet_ids   = var.database_subnet_ids
-  kms_key_arn           = var.kms_key_arn
+  database_subnet_ids   = module.vpc.private_subnets
+  kms_key_arn           = module.antony-vpc-sandbox-kms.key_arn
   master_user_secret_id = aws_secretsmanager_secret_version.vpc_master_user.arn
   database_refresh_mode = "incremental"
 
