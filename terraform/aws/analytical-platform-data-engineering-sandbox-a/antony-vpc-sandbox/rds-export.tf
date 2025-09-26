@@ -32,7 +32,7 @@ module "rds_export_dev" {
   name                  = "antony-rds-export"
   vpc_id                = module.vpc.vpc_id
   database_subnet_ids   = module.vpc.private_subnets
-  kms_key_arn           = module.antony-vpc-sandbox-kms.key_arn
+  kms_key_arn           = module.antony_vpc_sandbox_kms.key_arn
   master_user_secret_id = aws_secretsmanager_secret_version.vpc_master_user.arn
   database_refresh_mode = "incremental"
 

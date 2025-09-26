@@ -10,7 +10,7 @@ resource "aws_secretsmanager_secret" "vpc_master_user" {
   name        = "antony-vpc-sandbox-master-user"
   description = "RDS export master user for antony-vpc-sandbox"
   tags        = var.tags
-  kms_key_id  = module.antony-vpc-sandbox-kms.key_arn
+  kms_key_id  = module.antony_vpc_sandbox_kms.key_arn
 }
 
 resource "aws_secretsmanager_secret_version" "vpc_master_user" {
