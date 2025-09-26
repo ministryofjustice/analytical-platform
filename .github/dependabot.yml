@@ -92,4 +92,3 @@ updates:
       - "terraform/cloud-platform/live/analytical-platform-development/grafana"
       - "terraform/cloud-platform/live/analytical-platform-production/observability"
       - "terraform/pagerduty"
-      - "terraform/aws/analytical-platform-management-production/aws-secrets-manager"
