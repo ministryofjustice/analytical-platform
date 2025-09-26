@@ -24,14 +24,14 @@ module "endpoints" {
   }
 
   endpoints = {
-    s3 = {
+    s3_interface = {
       # interface endpoint
       service         = "s3"
       tags            = { Name = "s3-vpc-interface" }
       service_type    = "Interface"
       route_table_ids = module.vpc.private_subnets
     },
-    s3 = {
+    s3_gateway = {
       # gateway endpoint
       service         = "s3"
       service_type    = "Gateway"
