@@ -1,15 +1,12 @@
 module "vpc" {
   source             = "github.com/terraform-aws-modules/terraform-aws-vpc?ref=7c1f791efd61f326ed6102d564d1a65d1eceedf0"
   name               = "antony-vpc-sandbox-vpc"
-  cidr               = "70.0.0.0/16"
+  cidr               = "10.173.0.0/16"
   azs                = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
-  private_subnets    = ["70.0.1.0/24", "70.0.2.0/24", "70.0.3.0/24"]
+  private_subnets    = ["10.173.174.0/24", "10.173.175.0/24", "10.173.176.0/24"]
   enable_vpn_gateway = true
 
-  tags = {
-    terraform   = "true"
-    Environment = "antony-vpc-sandbox"
-  }
+  tags = var.tags
 }
 
 module "endpoints" {
@@ -29,27 +26,36 @@ module "endpoints" {
   endpoints = {
     s3 = {
       # interface endpoint
-      service = "s3"
-      tags    = { Name = "s3-vpc-endpoint" }
+      service         = "s3"
+      tags            = { Name = "s3-vpc-interface" }
+      service_type    = "Interface"
+      route_table_ids = module.vpc.private_subnets
+    },
+    s3 = {
+      # gateway endpoint
+      service         = "s3"
+      service_type    = "Gateway"
+      route_table_ids = module.vpc.private_subnets
+      tags            = { Name = "s3-vpc-endpoint" }
     },
     dynamodb = {
       # gateway endpoint
       service         = "dynamodb"
       service_type    = "Gateway"
-      route_table_ids = ["rt-12322456", "rt-43433343", "rt-11223344"]
+      route_table_ids = module.vpc.private_subnets
       tags            = { Name = "dynamodb-vpc-endpoint" }
     },
     sns = {
       service    = "sns"
-      subnet_ids = ["subnet-12345678", "subnet-87654321"]
+      subnet_ids = module.vpc.private_subnets
       subnet_configurations = [
         {
-          ipv4      = "10.8.34.10"
-          subnet_id = "subnet-12345678"
+          ipv4      = "10.173.174.0/24"
+          subnet_id = "eu-west-2a"
         },
         {
-          ipv4      = "10.8.35.10"
-          subnet_id = "subnet-87654321"
+          ipv4      = "10.173.175.0/24"
+          subnet_id = "eu-west-2b"
         }
       ]
       tags = { Name = "sns-vpc-endpoint" }
@@ -57,14 +63,11 @@ module "endpoints" {
     sqs = {
       service             = "sqs"
       private_dns_enabled = true
-      security_group_ids  = ["sg-987654321"]
-      subnet_ids          = ["subnet-12345678", "subnet-87654321"]
+      security_group_ids  = [aws_security_group.database.id]
+      subnet_ids          = module.vpc.private_subnets
       tags                = { Name = "sqs-vpc-endpoint" }
-    },
+    }
   }
 
-  tags = {
-    terraform   = "true"
-    Environment = "antony-vpc-sandbox"
-  }
+  tags = var.tags
 }

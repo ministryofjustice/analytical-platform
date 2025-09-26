@@ -15,8 +15,5 @@ resource "aws_secretsmanager_secret" "vpc_master_user" {
 
 resource "aws_secretsmanager_secret_version" "vpc_master_user" {
   secret_id = aws_secretsmanager_secret.vpc_master_user.id
-  secret_string = jsonencode({
-    username = "rdsadmin"
-    password = random_password.vpc_master_password.result
-  })
+  secret_string = random_password.vpc_master_password.result
 }
