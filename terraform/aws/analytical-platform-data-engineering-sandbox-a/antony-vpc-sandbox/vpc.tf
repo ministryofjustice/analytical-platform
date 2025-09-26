@@ -15,14 +15,14 @@ module "vpc" {
 module "endpoints" {
   source = "github.com/terraform-aws-modules/terraform-aws-vpc//modules/vpc-endpoints?ref=507193ee659f6f0ecdd4a75107e59e2a6c1ac3cc"
 
-  vpc_id                      = module.vpc.vpc_id
-  create_security_group       = true
-  security_group_description  = "endpoints security group"
-  security_group_tags         = {Name = "endpoints-sg1"}
-  security_group_rules        = {
+  vpc_id                     = module.vpc.vpc_id
+  create_security_group      = true
+  security_group_description = "endpoints security group"
+  security_group_tags        = { Name = "endpoints-sg1" }
+  security_group_rules = {
     ingress_https = {
-      description      = "Allow HTTPS traffic"
-      cidr_blocks      = [module.vpc.vpc_cidr_block]
+      description = "Allow HTTPS traffic"
+      cidr_blocks = [module.vpc.vpc_cidr_block]
     }
   }
 
