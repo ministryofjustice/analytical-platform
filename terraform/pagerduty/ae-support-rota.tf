@@ -171,6 +171,7 @@ locals {
     {
       name  = "Neil Wilkins"
       email = "neil.wilkins@justice.gov.uk"
+      role = "responder"
     },
     {
       name  = "Ivy Lau"
