@@ -253,6 +253,11 @@ import {
 }
 
 import {
+  to = module.users_ae_seo["chris.sheldon@justice.gov.uk"].pagerduty_user.this
+  id = "PEQFG5K"
+}
+
+import {
   to = module.users_ae_g7["neil.wilkins@justice.gov.uk"].pagerduty_user.this
   id = "PFUIUUH"
 }
@@ -285,9 +290,4 @@ import {
 import {
   to = module.users_ae_g7["quinta.davies@justice.gov.uk"].pagerduty_user.this
   id = "P5D5U7A"
-}
-
-import {
-  to = module.users_ae_g7["chris.sheldon@justice.gov.uk"].pagerduty_user.this
-  id = "PEQFG5K"
 }
