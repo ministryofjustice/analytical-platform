@@ -11,10 +11,31 @@ locals {
 
   databases = [
     {
-      name                         = "dpr-ap-integration-test"
+      name                         = "dpr_ap_integration_test_tag_dev_dbt"
       share_all_tables             = true
       share_all_tables_permissions = ["DESCRIBE", "SELECT"]
 
+    }
+  ]
+
+  tables = [
+    {
+      source_database = "dpr_ap_integration_test_tag_dev_dbt"
+      source_table    = "dev_model_1_notag"
+      destination_database = {
+        database_name   = "dpr_ap_integration_test_tag_dev_dbt_resource_link"
+        create_database = false
+      }
+      permissions = ["DESCRIBE", "SELECT"]
+    },
+    {
+      source_database = "dpr_ap_integration_test_tag_dev_dbt"
+      source_table    = "dev_model_2_tag"
+      destination_database = {
+        database_name   = "dpr_ap_integration_test_tag_dev_dbt_resource_link"
+        create_database = false
+      }
+      permissions = ["DESCRIBE", "SELECT"]
     }
   ]
 

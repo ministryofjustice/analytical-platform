@@ -10,7 +10,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.94.0"
+      version = "6.9.0"
     }
   }
   required_version = "~> 1.5"
@@ -87,7 +87,12 @@ provider "aws" {
     role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
-    tags = var.tags
+    tags = merge(
+      {
+        de-sandbox-nuke-keep = "true"
+      },
+      var.tags
+    )
   }
 }
 

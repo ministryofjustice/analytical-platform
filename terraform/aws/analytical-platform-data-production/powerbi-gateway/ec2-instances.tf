@@ -25,7 +25,7 @@ module "ec2" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source                      = "terraform-aws-modules/ec2-instance/aws"
-  version                     = "5.8.0"
+  version                     = "6.1.1"
   name                        = local.powerbi_gateway_ec2.instance_name
   ami                         = data.aws_ami.windows_server_2022.id
   instance_type               = local.powerbi_gateway_ec2.instance_type
@@ -43,33 +43,44 @@ module "ec2" {
     PowerBI_DataAccess = data.aws_iam_policy.powerbi_user.arn
     ReadOnlyAccess     = "arn:aws:iam::aws:policy/ReadOnlyAccess"
   }
-  root_block_device = [
-    {
-      encrypted   = true
-      volume_type = "gp3"
-      volume_size = 100
-      tags = merge({
-        Name = "${local.powerbi_gateway_ec2.instance_name}-root-volume"
-      }, var.tags)
-    },
-  ]
+  root_block_device = {
+    encrypted = true
+    type      = "gp3"
+    size      = 100
+    tags = merge({
+      Name = "${local.powerbi_gateway_ec2.instance_name}-root-volume"
+    }, var.tags)
+  }
 
-  ebs_block_device = [
-    {
-      volume_type = "gp3"
-      device_name = "/dev/sdf"
-      volume_size = 300
-      encrypted   = true
+  ebs_volumes = {
+    "/dev/sdf" = {
+      encrypted = true
+      type      = "gp3"
+      size      = 300
       tags = merge({
         Name = "${local.powerbi_gateway_ec2.instance_name}-data-volume"
       }, var.tags)
     }
-  ]
+  }
   metadata_options = {
     http_tokens = "required"
   }
+
+  create_security_group  = false
   vpc_security_group_ids = [module.security_group.security_group_id]
   subnet_id              = module.vpc.private_subnets[0]
 
   tags = var.tags
+}
+
+# Required for terraform-aws-modules/ec2-instance v6 update
+# https://github.com/terraform-aws-modules/terraform-aws-ec2-instance/blob/master/docs/UPGRADE-6.0.md
+import {
+  to = module.ec2.aws_ebs_volume.this["/dev/sdf"]
+  id = "vol-0e5e107a9fa170d75"
+}
+
+import {
+  to = module.ec2.aws_volume_attachment.this["/dev/sdf"]
+  id = "/dev/sdf:vol-0e5e107a9fa170d75:i-0e4ebbfb11d8afeaf"
 }

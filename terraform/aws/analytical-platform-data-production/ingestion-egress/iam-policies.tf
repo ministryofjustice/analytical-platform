@@ -56,7 +56,7 @@ module "development_replication_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.58.0"
+  version = "6.1.2"
 
   name_prefix = "mojap-data-production-bold-egress-development"
 
@@ -121,9 +121,74 @@ module "production_replication_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.58.0"
+  version = "6.1.2"
 
   name_prefix = "mojap-data-production-bold-egress-production"
 
   policy = data.aws_iam_policy_document.production_replication.json
+}
+
+data "aws_iam_policy_document" "shared_services_client_team_gov_29148_egress" {
+  statement {
+    sid    = "DestinationBucketPermissions"
+    effect = "Allow"
+    actions = [
+      "s3:ReplicateObject",
+      "s3:ObjectOwnerOverrideToBucketOwner",
+      "s3:GetObjectVersionTagging",
+      "s3:ReplicateTags",
+      "s3:ReplicateDelete"
+    ]
+    resources = ["arn:aws:s3:::mojap-ingestion-production-ssct-gov-29148-egress/*"]
+  }
+  statement {
+    sid    = "DestinationBucketKMSKey"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:GenerateDataKey"
+    ]
+    resources = ["arn:aws:kms:eu-west-2:471112983409:key/ad799e93-7e99-4b42-9753-8cad9d5b05f4"]
+  }
+  statement {
+    sid    = "SourceBucketPermissions"
+    effect = "Allow"
+    actions = [
+      "s3:GetReplicationConfiguration",
+      "s3:ListBucket"
+    ]
+    resources = [module.shared_services_client_team_gov_29148_egress_s3.s3_bucket_arn]
+  }
+  statement {
+    sid    = "SourceBucketObjectPermissions"
+    effect = "Allow"
+    actions = [
+      "s3:GetObjectVersionForReplication",
+      "s3:GetObjectVersionAcl",
+      "s3:GetObjectVersionTagging",
+      "s3:ObjectOwnerOverrideToBucketOwner"
+    ]
+    resources = ["${module.shared_services_client_team_gov_29148_egress_s3.s3_bucket_arn}/*"]
+  }
+  statement {
+    sid    = "SourceBucketKMSKey"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey"
+    ]
+    resources = [module.shared_services_client_team_gov_29148_egress_kms.key_arn]
+  }
+}
+
+module "shared_services_client_team_gov_29148_egress_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "6.1.2"
+
+  name = "mojap-data-production-ssct-gov-29148-egress"
+
+  policy = data.aws_iam_policy_document.shared_services_client_team_gov_29148_egress.json
 }

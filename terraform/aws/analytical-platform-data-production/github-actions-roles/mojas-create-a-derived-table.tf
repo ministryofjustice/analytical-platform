@@ -110,15 +110,26 @@ data "aws_iam_policy_document" "create_a_derived_table" {
     actions   = ["sts:AssumeRole", "sts:TagSession"]
     resources = ["arn:aws:iam::${var.account_ids["analytical-platform-compute-production"]}:role/copy-apdp-cadet-metadata-to-compute"]
   }
+  statement {
+    sid    = "KMSDecryptActions"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt"
+    ]
+    resources = [
+      "arn:aws:kms:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:key/0409ddbc-b6a2-46c4-a613-6145f6a16215"
+    ]
+  }
 }
 
 module "create_a_derived_table_iam_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.58.0"
+  version = "6.1.0"
 
   name_prefix = "create-a-derived-table"
+  description = "IAM Policy"
 
   policy = data.aws_iam_policy_document.create_a_derived_table.json
 }
@@ -126,14 +137,15 @@ module "create_a_derived_table_iam_policy" {
 module "create_a_derived_table_iam_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.58.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "6.1.0"
 
-  role_name = "create-a-derived-table"
+  name            = "create-a-derived-table"
+  use_name_prefix = false
 
   max_session_duration = 10800
 
-  role_policy_arns = {
+  policies = {
     policy = module.create_a_derived_table_iam_policy.arn
   }
 

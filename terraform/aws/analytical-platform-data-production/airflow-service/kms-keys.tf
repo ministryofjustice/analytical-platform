@@ -3,7 +3,7 @@ module "secrets_manager_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.1.0"
 
   aliases               = ["secretsmanager/airflow"]
   description           = "Airflow Service Secrets Manager KMS Key"
@@ -18,7 +18,7 @@ module "secrets_manager_eu_west_1_replica_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  version = "4.1.0"
 
   providers = {
     aws = aws.eu-west-1

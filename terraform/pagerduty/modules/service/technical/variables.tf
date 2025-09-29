@@ -96,3 +96,8 @@ variable "enable_alert_manager_integration" {
   type        = bool
   description = "Enable Alert Manager integration for this service"
 }
+
+variable "enable_pingdom_integration" {
+  type        = bool
+  description = "Enable Pingdom integration for this service"
+}

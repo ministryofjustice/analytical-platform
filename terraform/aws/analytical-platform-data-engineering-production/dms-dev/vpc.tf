@@ -1,11 +1,14 @@
 locals {
   name = "eu-west-1-dev"
 
-  tgw_destinations = ["10.26.12.211/32",
+  tgw_destinations = [
+    "10.26.12.211/32",
     "10.101.0.0/16",
     "10.161.4.0/22",
     "10.161.20.0/22",
-  "172.20.0.0/16"]
+    "172.20.0.0/16",
+    "10.26.24.0/21"
+  ]
 
   route_tables_ids = toset(module.vpc.private_route_table_ids)
 
@@ -19,6 +22,69 @@ locals {
       }
     ]
   ])
+}
+
+# Trust policy: allow VPC Flow Logs service to assume the role
+data "aws_iam_policy_document" "flow_logs_trust" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["vpc-flow-logs.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [var.account_ids["analytical-platform-data-engineering-production"]]
+    }
+
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = ["arn:aws:ec2:eu-west-1:${var.account_ids["analytical-platform-data-engineering-production"]}:vpc-flow-log/*"]
+    }
+  }
+}
+
+resource "aws_iam_role" "flow_log_role" {
+  name               = "managed-pipelines-core-dev-flow-log-role"
+  assume_role_policy = data.aws_iam_policy_document.flow_logs_trust.json
+  tags               = merge(var.tags, { network = "Private", Name = "managed-pipelines-core-dev-flow-log-role" })
+}
+
+# Inline policy: permissions for writing to CloudWatch Logs
+data "aws_iam_policy_document" "cloudwatch_logs" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "cloudwatch_logs" {
+  name   = "managed-pipelines-core-dev-cloudwatch-logs"
+  role   = aws_iam_role.flow_log_role.id
+  policy = data.aws_iam_policy_document.cloudwatch_logs.json
+}
+
+resource "aws_cloudwatch_log_group" "log_group" {
+  name              = "managed-pipelines-core-dev-vpc-flow-log"
+  retention_in_days = 400
+
+  tags = {
+    network = "Private"
+    Name    = "managed-pipelines-core-dev-vpc-flow-log"
+  }
 }
 
 module "vpc" {
@@ -35,8 +101,14 @@ module "vpc" {
 
   enable_nat_gateway = false
 
+  enable_flow_log                  = true
+  flow_log_cloudwatch_iam_role_arn = aws_iam_role.flow_log_role.arn
+  flow_log_destination_arn         = aws_cloudwatch_log_group.log_group.arn
+  vpc_flow_log_tags = {
+    Name    = "managed-pipelines-core-dev"
+    network = "Private"
+  }
 
-  tags = var.tags
   private_subnet_tags = {
     network = "Private"
   }
@@ -44,6 +116,47 @@ module "vpc" {
     network = "Private"
   }
 
+  tags = var.tags
+
+
+}
+
+resource "aws_network_acl" "network_acl" {
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.private_subnets
+
+  egress {
+    protocol   = -1
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
+  }
+
+  ingress {
+    protocol   = -1
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
+  }
+
+  tags = {
+    Name    = "eu-west-1-dev"
+    network = "Private"
+  }
+}
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "transit_gateway_attachment" {
+  subnet_ids         = module.vpc.private_subnets
+  transit_gateway_id = "tgw-0e7b982ea47c28fba"
+  vpc_id             = module.vpc.vpc_id
+  tags = {
+    Name    = "eu-west-1-dev-moj"
+    network = "Private"
+  }
 }
 
 
@@ -109,6 +222,14 @@ module "endpoints" {
       service_type        = "Interface"
       subnet_ids          = module.vpc.private_subnets
       private_dns_enabled = true
+      tags                = { Name = "glue-eu-west-1-dev" }
+    }
+    sts = {
+      service             = "sts"
+      service_type        = "Interface"
+      subnet_ids          = module.vpc.private_subnets
+      private_dns_enabled = true
+      tags                = { Name = "sts-eu-west-1-dev" }
     }
 
   }
