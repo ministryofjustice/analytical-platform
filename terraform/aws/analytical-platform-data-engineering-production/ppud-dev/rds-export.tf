@@ -35,6 +35,7 @@ module "rds_export_dev" {
   master_user_secret_id    = module.rds_export_secret.secret_arn
   environment              = var.tags["environment"]
   output_parquet_file_size = 50
+  db_name                  = "ppud_dev"
 
   tags = var.tags
 }
