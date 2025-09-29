@@ -14,7 +14,7 @@ locals {
             module.users_ae_seo["matthew.rixson@justice.gov.uk"].id,
             module.users_ae_seo["vijay.solanki@justice.gov.uk"].id,
             module.users_ae_seo["billy.pawsey@justice.gov.uk"].id,
-            module.users_ae_seo["chris.sheldon@justice.gov.uk"].id,
+            module.users_ae_seo["chris.sheldon@justice.gov.uk"].id
           ]
           restrictions = [
             {
