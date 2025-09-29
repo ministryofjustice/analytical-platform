@@ -11,7 +11,7 @@ tags = {
   business-unit = "HMPPS"
   application   = "Data Engineering"
   component     = "Data Engineering PPUD"
-  environment   = "development"
+  environment   = "dev"
   is-production = "false"
   owner         = "Data Engineering:dataengineering@digital.justice.gov.uk"
 }
