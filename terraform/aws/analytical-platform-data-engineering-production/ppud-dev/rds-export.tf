@@ -1,8 +1,8 @@
 # Security group for the RDS instance
 # checkov:skip=CKV2_AWS_5: Attached to VPC
 resource "aws_security_group" "db" {
-  name        = local.name
-  description = "Security group for RDS instance ${local.name}"
+  name        = "${local.name}-${local.env}"
+  description = "Security group for RDS instance ${local.name}-${local.env}"
   vpc_id      = module.vpc_dev.vpc_id
 
   tags = var.tags
@@ -33,6 +33,7 @@ module "rds_export_dev" {
   database_subnet_ids   = module.vpc_dev.private_subnets
   kms_key_arn           = module.rds_export_kms_dev.key_arn
   master_user_secret_id = module.rds_export_secret.secret_arn
+  environment           = var.tags["environment"]
 
   tags = var.tags
 }
