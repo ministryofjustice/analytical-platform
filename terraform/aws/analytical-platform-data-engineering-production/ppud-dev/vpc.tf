@@ -101,7 +101,7 @@ module "endpoints_dev" {
       service_type        = "Interface"
       subnet_ids          = module.vpc_dev.private_subnets
       private_dns_enabled = true
-      tages               = { Name = "athena-eu-west-2-${local.name}-${local.env}" }
+      tags                = { Name = "athena-eu-west-2-${local.name}-${local.env}" }
     }
 
   }
