@@ -28,7 +28,7 @@ module "rds_export_dev" {
   }
 
   name                     = local.name
-  database_refresh_mode    = "incremental"
+  database_refresh_mode    = "full"
   vpc_id                   = module.vpc_dev.vpc_id
   database_subnet_ids      = module.vpc_dev.private_subnets
   kms_key_arn              = module.rds_export_kms_dev.key_arn
