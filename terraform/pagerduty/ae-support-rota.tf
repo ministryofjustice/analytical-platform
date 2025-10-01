@@ -291,3 +291,8 @@ import {
   to = module.users_ae_g7["quinta.davies@justice.gov.uk"].pagerduty_user.this
   id = "P5D5U7A"
 }
+
+moved {
+  from = module.users_ae_seo["neil.wilkins@justice.gov.uk"].pagerduty_user.this
+  to   = module.users_ae_g7["neil.wilkins@justice.gov.uk"].pagerduty_user.this
+}
