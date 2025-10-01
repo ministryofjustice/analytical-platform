@@ -63,7 +63,6 @@ locals {
           users = [
             module.users_ae_g7["alex.pavlopoulos@justice.gov.uk"].id,
             module.users_ae_g7["holly.furniss@justice.gov.uk"].id,
-            module.users_ae_g7["neil.wilkins@justice.gov.uk"].id,
             module.users_ae_g7["ivy.lau1@justice.gov.uk"].id,
             module.users_ae_g7["ian.rickard@justice.gov.uk"].id,
             module.users_ae_g7["ben.waterfield1@justice.gov.uk"].id,
@@ -169,11 +168,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Neil Wilkins"
-      email = "neil.wilkins@justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Ivy Lau"
       email = "ivy.lau1@justice.gov.uk"
       role  = "responder"
@@ -255,11 +249,6 @@ import {
 import {
   to = module.users_ae_seo["chris.sheldon@justice.gov.uk"].pagerduty_user.this
   id = "PEQFG5K"
-}
-
-import {
-  to = module.users_ae_g7["neil.wilkins@justice.gov.uk"].pagerduty_user.this
-  id = "PFUIUUH"
 }
 
 import {
