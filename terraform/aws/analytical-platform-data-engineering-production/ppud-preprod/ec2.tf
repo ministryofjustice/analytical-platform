@@ -34,6 +34,8 @@ data "aws_ssm_parameter" "al2023" {
 }
 
 resource "aws_security_group" "ec2_sg" {
+  # trivy:ignore:avd-aws-0104: Required for SSM
+  # checkov:skip=CKV_AWS_382: Required for SSM
   name        = "allow_access"
   description = "allow inbound traffic"
   vpc_id      = module.vpc.vpc_id
