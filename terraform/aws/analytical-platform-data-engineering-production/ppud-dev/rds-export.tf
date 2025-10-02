@@ -20,22 +20,22 @@ resource "aws_security_group_rule" "db_ingress" {
 }
 # checkov:skip=CKV_TF_1: Pointing to branch name whilst in development, will change to commit hash once in main
 # checkov:skip=CKV_TF_2: Pointing to branch name whilst in development, will change to commit hash once in main
-module "rds_export_dev" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=ppud-rds-check"
+# module "rds_export_dev" {
+#   source = "github.com/ministryofjustice/terraform-rds-export?ref=ppud-rds-check"
 
-  providers = {
-    aws = aws
-  }
+#   providers = {
+#     aws = aws
+#   }
 
-  name                     = local.name
-  database_refresh_mode    = "full"
-  vpc_id                   = module.vpc_dev.vpc_id
-  database_subnet_ids      = module.vpc_dev.private_subnets
-  kms_key_arn              = module.rds_export_kms_dev.key_arn
-  master_user_secret_id    = module.rds_export_secret.secret_arn
-  environment              = var.tags["environment"]
-  output_parquet_file_size = 50
-  db_name                  = "ppud_dev"
+#   name                     = local.name
+#   database_refresh_mode    = "full"
+#   vpc_id                   = module.vpc_dev.vpc_id
+#   database_subnet_ids      = module.vpc_dev.private_subnets
+#   kms_key_arn              = module.rds_export_kms_dev.key_arn
+#   master_user_secret_id    = module.rds_export_secret.secret_arn
+#   environment              = var.tags["environment"]
+#   output_parquet_file_size = 50
+#   db_name                  = "ppud_dev"
 
-  tags = var.tags
-}
+#   tags = var.tags
+# }
