@@ -1,6 +1,6 @@
 # Security group for the RDS instance
 resource "aws_security_group" "db" {
-  #checkov:skip=CKV2_AWS_5: Attached to VPC
+  # checkov:skip=CKV2_AWS_5: Attached to VPC
   name        = "${local.name}-${local.env}"
   description = "Security group for RDS instance ${local.name}-${local.env}"
   vpc_id      = module.vpc_dev.vpc_id

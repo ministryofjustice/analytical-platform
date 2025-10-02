@@ -1,9 +1,9 @@
-#trivy:ignore:avd-aws-0132: Skipping because replicating existing bucket that does not encrypt data with a customer managed key
-#trivy:ignore:avd-aws-0088: Skipping because has server side encryption
-#trivy:ignore:avd-aws-0089: Skipping because access logging is managed externally.
+# trivy:ignore:avd-aws-0132: Skipping because replicating existing bucket that does not encrypt data with a customer managed key
+# trivy:ignore:avd-aws-0088: Skipping because has server side encryption
+# trivy:ignore:avd-aws-0089: Skipping because access logging is managed externally.
 module "ppud_dev" {
-  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
-  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+  # checkov:skip=CKV_TF_1: Module registry does not support commit hashes for versions
+  # checkov:skip=CKV_TF_2: Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "5.3.1"
