@@ -100,6 +100,10 @@ locals {
       name      = "dbt-coat-daily",
       component = "dbt-coat-daily"
     },
+    "dbt-cica-daily" = {
+      name      = "dbt-cica-daily"
+      component = "dbt-coat-daily"
+    },
   }
   dbt_spark_workgroups = {
     "dbt-spark" = {
