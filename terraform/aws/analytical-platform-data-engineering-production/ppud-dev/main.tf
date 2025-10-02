@@ -1,9 +1,3 @@
-# checkov:skip=CKV2_AWS_62: Skipping because event notifications are not applicable for this bucket.
-# checkov:skip=CKV_AWS_18: Skipping because access logging is managed externally.
-# checkov:skip=CKV_AWS_145: Skipping because KMS encryption is handled at the account level.
-# checkov:skip=CKV2_AWS_61: Skipping because a lifecycle configuration is not required.
-# checkov:skip=CKV_AWS_144: Skipping because cross-region replication is not needed.
-
 #trivy:ignore:avd-aws-0132: Skipping because replicating existing bucket that does not encrypt data with a customer managed key
 #trivy:ignore:avd-aws-0088: Skipping because has server side encryption
 #trivy:ignore:avd-aws-0089: Skipping because access logging is managed externally.
