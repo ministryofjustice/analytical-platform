@@ -44,8 +44,3 @@ provider "aws" {
     tags = var.tags
   }
 }
-
-provider "github" {
-  token = data.aws_secretsmanager_secret_version.github_token.secret_string
-  owner = "ministryofjustice"
-}
