@@ -71,6 +71,10 @@ locals {
       name      = "dbt-opg",
       component = "dbt-opg"
     },
+    "dbt-cica" = {
+      name      = "dbt-cica",
+      component = "dbt-cica"
+    },
     # dev workgroups
     "dbt-curated-dev" = {
       name             = "dbt-curated-dev",
