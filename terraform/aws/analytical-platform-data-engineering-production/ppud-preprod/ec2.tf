@@ -33,8 +33,8 @@ data "aws_ssm_parameter" "al2023" {
   name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
 }
 
+# trivy:ignore:avd-aws-0104: Required for SSM
 resource "aws_security_group" "ec2_sg" {
-  # trivy:ignore:avd-aws-0104: Required for SSM
   # checkov:skip=CKV_AWS_382: Required for SSM
   name        = "allow_access"
   description = "allow inbound traffic"
