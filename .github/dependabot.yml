@@ -85,6 +85,7 @@ updates:
       - "terraform/aws/analytical-platform-development/auth0-log-streams"
       - "terraform/aws/analytical-platform-development/control-panel-message-broker"
       - "terraform/aws/analytical-platform-development/tooling-iam"
+      - "terraform/aws/analytical-platform-management-production/aws-secrets-manager"
       - "terraform/aws/analytical-platform-management-production/terraform-state"
       - "terraform/aws/analytical-platform-production/route53"
       - "terraform/aws/analytical-platform/baseline"
