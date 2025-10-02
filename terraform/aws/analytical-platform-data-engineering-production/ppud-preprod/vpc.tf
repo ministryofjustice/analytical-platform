@@ -103,7 +103,13 @@ module "endpoints" {
       private_dns_enabled = true
       tags                = { Name = "sts-${data.aws_region.current.id}-${local.name}-${local.env}" }
     }
-
+    athena = {
+      service             = "athena"
+      service_type        = "Interface"
+      subnet_ids          = module.vpc.private_subnets
+      private_dns_enabled = true
+      tags                = { Name = "athena-${data.aws_region.current.id}-${local.name}-${local.env}" }
+    }
   }
 
 
