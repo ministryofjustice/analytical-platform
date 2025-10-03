@@ -13,39 +13,38 @@ locals {
             module.users_ae_seo["owen.buckley@justice.gov.uk"].id,
             module.users_ae_seo["matthew.rixson@justice.gov.uk"].id,
             module.users_ae_seo["vijay.solanki@justice.gov.uk"].id,
-            module.users_ae_seo["billy.pawsey@justice.gov.uk"].id,
-            module.users_ae_seo["chris.sheldon@justice.gov.uk"].id
+            module.users_ae_seo["billy.pawsey@justice.gov.uk"].id
           ]
           restrictions = [
             {
               type              = "weekly_restriction"
               start_day_of_week = 1
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 2
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 3
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 4
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 5
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             }
           ]
         }
@@ -66,38 +65,39 @@ locals {
             module.users_ae_g7["ivy.lau1@justice.gov.uk"].id,
             module.users_ae_g7["ian.rickard@justice.gov.uk"].id,
             module.users_ae_g7["ben.waterfield1@justice.gov.uk"].id,
-            module.users_ae_g7["quinta.davies@justice.gov.uk"].id
+            module.users_ae_g7["quinta.davies@justice.gov.uk"].id,
+            module.users_ae_g7["danielle.kelly1@justice.gov.uk"].id
           ]
           restrictions = [
             {
               type              = "weekly_restriction"
               start_day_of_week = 1
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 2
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 3
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 4
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 5
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             }
           ]
         }
@@ -148,11 +148,6 @@ locals {
       name  = "Vijay Solanki"
       email = "vijay.solanki@justice.gov.uk"
       role  = "responder"
-    },
-    {
-      name  = "Chris Sheldon"
-      email = "chris.sheldon@justice.gov.uk"
-      role  = "responder"
     }
   ]
 
@@ -185,6 +180,11 @@ locals {
     {
       name  = "Quin Davies"
       email = "quinta.davies@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Danielle Kelly"
+      email = "danielle.kelly1@justice.gov.uk"
       role  = "responder"
     }
   ]
@@ -247,11 +247,6 @@ import {
 }
 
 import {
-  to = module.users_ae_seo["chris.sheldon@justice.gov.uk"].pagerduty_user.this
-  id = "PEQFG5K"
-}
-
-import {
   to = module.users_ae_g7["alex.pavlopoulos@justice.gov.uk"].pagerduty_user.this
   id = "PEMXSEN"
 }
@@ -279,4 +274,9 @@ import {
 import {
   to = module.users_ae_g7["quinta.davies@justice.gov.uk"].pagerduty_user.this
   id = "P5D5U7A"
+}
+
+import {
+  to = module.users_ae_g7["danielle.kelly1@justice.gov.uk"].pagerduty_user.this
+  id = "PYZL4R9"
 }
