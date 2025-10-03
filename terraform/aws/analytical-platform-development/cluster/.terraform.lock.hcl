@@ -5,6 +5,7 @@ provider "registry.terraform.io/auth0/auth0" {
   version     = "1.26.0"
   constraints = "1.26.0"
   hashes = [
+    "h1:6sNF3+0GF4Hxs5IohgFnFmNGFaV8IuVcsUcqLiJhEQ8=",
     "h1:ZRLHFPnbA2s34L7GHkQxjFL2bGe5IVEuCV2g1IddqAI=",
     "zh:3d177b95f5339fb308eedcf359606c59cd9800d311d04eceeaecde6e94ae4dfb",
     "zh:408cd08abefa4285f738f30b6d03e6012bbf0fd3f03986c3c6b1ebc66feacdd1",
@@ -25,8 +26,9 @@ provider "registry.terraform.io/auth0/auth0" {
 
 provider "registry.terraform.io/hashicorp/aws" {
   version     = "5.94.0"
-  constraints = ">= 3.0.0, >= 3.56.0, >= 4.0.0, >= 4.47.0, ~> 5.0, >= 5.47.0, >= 5.79.0, >= 5.92.0, 5.94.0"
+  constraints = ">= 3.0.0, >= 3.56.0, >= 4.0.0, >= 4.47.0, ~> 5.0, >= 5.73.0, >= 5.79.0, >= 5.92.0, 5.94.0"
   hashes = [
+    "h1:H6ZcjtKcgks0v0DorEc4WnMJQVUIr82ZCKCXQHLEk8w=",
     "h1:vnBmHfkDQmLW3f3Xug40PJdqWQerNt8yfIguCcfM6sk=",
     "zh:1486b66ae5ed92260bc24a4ec98f8fbf60a2bf880f036c0cb992f9567eccbb66",
     "zh:302d702609d0d91bcc37ecd4bd777e40f6f1c267a28b6eb28ccba99714f03762",
@@ -51,6 +53,7 @@ provider "registry.terraform.io/hashicorp/cloudinit" {
   constraints = ">= 2.0.0"
   hashes = [
     "h1:ET4K0kdtPzOEr2M4hmA26jkAHbqN8YTSpcKtPDJxgyU=",
+    "h1:PTPDNobmkvWZu6U7k/s5yFXOSktFK5iwu67HAkPJ4t8=",
     "zh:1321b5ddede56be3f9b35bf75d7cda79adcb357fad62eb8677b6595e0baaa6cd",
     "zh:265d66e61b9cd16ca1182ebf094cc0a08fb3687e8193a1dbac6899b16c237151",
     "zh:3875c3a20e082ac55d5ff24bcaf7133ebc90c7f999fd0fb37cf0f0003474c94c",
@@ -114,6 +117,7 @@ provider "registry.terraform.io/hashicorp/local" {
   version     = "2.5.2"
   constraints = ">= 1.4.0"
   hashes = [
+    "h1:6XyefmvbkprppmYbGmMcQW5NB4w6C363SSShzuhF4R0=",
     "h1:JlMZD6nYqJ8sSrFfEAH0Vk/SL8WLZRmFaMUF9PJK5wM=",
     "zh:136299545178ce281c56f36965bf91c35407c11897f7082b3b983d86cb79b511",
     "zh:3b4486858aa9cb8163378722b642c57c529b6c64bfbfc9461d940a84cd66ebea",
@@ -135,6 +139,7 @@ provider "registry.terraform.io/hashicorp/null" {
   constraints = ">= 3.0.0"
   hashes = [
     "h1:+AnORRgFbRO6qqcfaQyeX80W0eX3VmjadjnUFUJTiXo=",
+    "h1:obXguGZUWtNAO09f1f9Cb7hsPCOGXuGdN8bn/ohKRBQ=",
     "zh:22d062e5278d872fe7aed834f5577ba0a5afe34a3bdac2b81f828d8d3e6706d2",
     "zh:23dead00493ad863729495dc212fd6c29b8293e707b055ce5ba21ee453ce552d",
     "zh:28299accf21763ca1ca144d8f660688d7c2ad0b105b7202554ca60b02a3856d3",
