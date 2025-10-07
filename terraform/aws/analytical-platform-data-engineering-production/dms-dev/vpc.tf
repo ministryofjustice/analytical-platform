@@ -7,7 +7,8 @@ locals {
     "10.161.4.0/22",
     "10.161.20.0/22",
     "172.20.0.0/16",
-    "10.26.24.0/21"
+    "10.26.24.0/21",
+    "10.26.8.0/21"
   ]
 
   route_tables_ids = toset(module.vpc.private_route_table_ids)
