@@ -79,7 +79,7 @@ module "dev_dms_delius" {
     secrets_manager_kms_arn = module.dms_dev_kms.key_arn
     sid                     = "TSTNDA"
 
-    extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=3;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=delius-core-test-db-1.hmpps-test.modernisation-platform.internal/+ASM;asm_user=delius_analytics_platform;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N"
+    extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=3;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=delius-core-test-db-1.delius-core.hmpps-test.modernisation-platform.service.justice.gov.uk/+ASM;asm_user=delius_analytics_platform;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N"
     cdc_start_time              = "2025-04-25T12:00:00Z"
   }
   replication_task_id = {
