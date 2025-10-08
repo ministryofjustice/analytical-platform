@@ -1,6 +1,6 @@
 # Security group for the RDS instance
-# checkov:skip=CKV2_AWS_5: Attached to VPC
 resource "aws_security_group" "db" {
+  # checkov:skip=CKV2_AWS_5: Attached to VPC
   name        = "${local.name}-${local.env}"
   description = "Security group for RDS instance ${local.name}-${local.env}"
   vpc_id      = module.vpc_dev.vpc_id
@@ -18,10 +18,9 @@ resource "aws_security_group_rule" "db_ingress" {
   cidr_blocks       = [module.vpc_dev.vpc_cidr_block]
   description       = "Allow access to the RDS instance from the VPC"
 }
-# checkov:skip=CKV_TF_1: Pointing to branch name whilst in development, will change to commit hash once in main
-# checkov:skip=CKV_TF_2: Pointing to branch name whilst in development, will change to commit hash once in main
-module "rds_export_dev" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=ppud-rds-check"
+
+module "rds_export" {
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=13a3343195f5158889def9147d7c73bf346e2925"
 
   providers = {
     aws = aws
