@@ -10,15 +10,39 @@ module "opg_kms_dev" {
 
   key_statements = [
     {
-      sid        = "AllowSecretsManagerUseOfKey"
-      effect     = "Allow"
+      sid        = "DenyNonSecretsManagerUse"
+      effect     = "Deny"
+      principals = [{ type = "*", identifiers = ["*"] }]
       actions    = ["kms:Encrypt", "kms:Decrypt", "kms:ReEncrypt*", "kms:GenerateDataKey*", "kms:DescribeKey"]
       resources  = ["*"]
-      principals = [{ type = "Service", identifiers = ["secretsmanager.amazonaws.com"] }]
+      conditions = [
+        {
+          test     = "StringNotEquals"
+          variable = "kms:ViaService"
+          values   = ["secretsmanager.${data.aws_region.current.name}.amazonaws.com"]
+        }
+      ]
+    },
+    {
+      sid       = "AllowViaSecretsManagerForFabricRole"
+      effect    = "Allow"
+      actions   = ["kms:Encrypt", "kms:Decrypt", "kms:ReEncrypt*", "kms:GenerateDataKey*", "kms:DescribeKey"]
+      resources = ["*"]
+      principals = [{
+        type = "AWS"
+        identifiers = [
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/opg-fabric-s3"
+        ]
+      }]
       conditions = [
         { test = "StringEquals", variable = "kms:ViaService", values = ["secretsmanager.${data.aws_region.current.name}.amazonaws.com"] },
-        { test = "StringEquals", variable = "kms:CallerAccount", values = [data.aws_caller_identity.current.account_id] }
+        {
+          test     = "StringLike",
+          variable = "kms:EncryptionContext:aws:secretsmanager:arn",
+          values   = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:opg-fabric-connector/*"]
+        }
       ]
     }
   ]
 }
+
