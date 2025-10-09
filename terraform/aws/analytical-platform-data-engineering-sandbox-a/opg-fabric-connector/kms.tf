@@ -45,4 +45,3 @@ module "opg_kms_dev" {
     }
   ]
 }
-
