@@ -741,6 +741,7 @@ locals {
               ]
               Resource = [
                 "arn:aws:s3:::mojap-land-dev",
+                "arn:aws:s3:::mojap-land-dev/analytical-platform/*",
                 "arn:aws:s3:::mojap-land-dev/bold/essex-police/*",
                 "arn:aws:s3:::mojap-land-dev/sscl/sscl_data_dump/*",
                 "arn:aws:s3:::mojap-land-dev/cps/*",
