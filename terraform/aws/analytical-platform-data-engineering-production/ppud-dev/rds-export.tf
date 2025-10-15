@@ -20,7 +20,9 @@ resource "aws_security_group_rule" "db_ingress" {
 }
 
 module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=13a3343195f5158889def9147d7c73bf346e2925"
+  # checkov:skip=CKV_TF_1: Pointing to branch name whilst in development, will change to commit hash once in main
+  # checkov:skip=CKV_TF_2: Pointing to branch name whilst in development, will change to commit hash once in main
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=update-db-export"
 
   providers = {
     aws = aws
