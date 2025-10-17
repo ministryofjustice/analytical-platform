@@ -69,5 +69,5 @@ module "users" {
 
 import {
   to = module.users["tamsin.forbes@justice.gov.uk"].pagerduty_user.this
-  id = "P0CZ3OE"  # PagerDuty user ID
+  id = "P0CZ3OE"
 }
