@@ -49,6 +49,11 @@ locals {
       name  = "Yvan Smith"
       email = "yvan.smith@digital.justice.gov.uk"
       role  = "manager"
+    },
+    {
+      name  = "Tamsin Forbes"
+      email = "tamsin.forbes@justice.gov.uk"
+      role  = "responder"
     }
   ]
 }
@@ -60,4 +65,9 @@ module "users" {
   source = "./modules/user"
   name   = each.value.name
   email  = each.key
+}
+
+import {
+  to = module.users["tamsin.forbes@justice.gov.uk"].pagerduty_user.this
+  id = "P0CZ3OE"  # PagerDuty user ID
 }
