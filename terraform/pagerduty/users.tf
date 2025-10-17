@@ -66,8 +66,3 @@ module "users" {
   name   = each.value.name
   email  = each.key
 }
-
-import {
-  to = module.users["tamsin.forbes@justice.gov.uk"].pagerduty_user.this
-  id = "P0CZ3OE"
-}
