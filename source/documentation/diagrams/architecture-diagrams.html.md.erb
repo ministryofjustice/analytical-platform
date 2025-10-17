@@ -7,9 +7,9 @@ review_in: 6 months
 
 # <%= current_page.data.title %>
 
-These pages document the technical architecture that makes up the Analytical Platform (AP).
+These pages document the technical and logical architecture that makes up the Analytical Platform (AP).
 
-To ease understanding and maintenance of these diagrams, we provide a number of diagrams at varying levels of detail. Higher level diagrams attempt to aid understanding of the platform as a whole, but omit engineering detail. Other, more detailed diagrams may document logical parts of the platform and omit high-level context.
+To ease understanding and maintenance of these diagrams, we provide a number of diagrams at varying levels of detail. Higher level diagrams attempt to aid understanding of the platform as a whole, but omit engineering detail. Other, more detailed diagrams may document parts of the platform in more detail and omit high-level context.
 
 These diagrams are not sacred objects - we encourage developers, engineers and others, if they feel comfortable, to submit updates and improvements. For more information see [contributing and updating](#contributing-and-updating) below.
 
@@ -38,13 +38,17 @@ This diagram shows the logical components, and the AWS services used to deliver 
 
 ![High level architecture](ap-hld.excalidraw.png)
 
-## Complete list of diagrams
+## List of diagrams
 
-[High level context (C4) diagrams]
+### High level
+
+- [High level context (C4) diagrams](./c4/c4-diagrams.html.md.erb). These represent and its external dependencies, such as users, external systems, and APIs. The intended audience is both technical and non-technical people.
+- [Wardley maps](./wardley-maps/wardley-maps.html.md.erb). These offer a visual framework to understand and plan the evolution of the AP. They help map out system components, their dependencies, and their maturity.
+- [AWS accounts diagram](./architecture-diagrams/aws-account-view.excalidraw.png). Documents key AP components, the AWS accounts in which they are hosted, and key interactions between those accounts.
 
 ## Contributing and updating
 
-We created these diagrams using the open source tool [Excalidraw](https://docs.excalidraw.com/). The files have `.png` appended onto the filename, e.g `diagram.excalidraw.png`. This allows the editors below to manipulate and version the files without the need to export after every change. It also allows the GitHub user interface to display th diagrams as images.
+We created these diagrams using the open source tool [Excalidraw](https://docs.excalidraw.com/). The files have `.png` appended onto the filename, e.g `diagram.excalidraw.png`. This allows the editors below to manipulate and version the files without the need to export after every change. It also allows the GitHub user interface to display the diagrams as images.
 
 Excalidraw supports several styles, ranging from "rough sketch" to more formal. Athough we love the rougher "sloppiness" style and the handwriting font, **we ask that diagrams look more formal** - straight clean lines, a sans-serif font etc.
 
