@@ -25,6 +25,7 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Super-Linter
         id: super_linter
@@ -50,3 +51,6 @@ jobs:
           VALIDATE_CHECKOV: false
           VALIDATE_JSCPD: false
           VALIDATE_CSS: false
+          # Biome linter disabled as not required
+          VALIDATE_BIOME_FORMAT: false
+          VALIDATE_BIOME_LINT: false
