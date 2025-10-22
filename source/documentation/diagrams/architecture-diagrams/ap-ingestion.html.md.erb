@@ -1,0 +1,20 @@
+---
+owner_slack: "#analytical-platform-notifications"
+title: Analytical Platform ingestion
+last_reviewed_on: 2025-10-17
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+The AP offers a number of ways for users and data engineers to move data onto the platform. We collectively refer to these services as "ingestion".
+
+In general, ingested data will intially be transferred to "landing" S3 buckets, before being moved to "production" buckets from which users can access the data.
+
+- **Data uploader.** This is a web application which allows users to upload their own data to S3 without requiring the intervention of date engineers or AP support. Data is registered in Glue and is avaiable to query in Athena or other tooling.
+- **Managed pipelines.** The are managed by data engineers and transfer data from production operational systems such as NOMIS.
+- **Register my data.** This is service configured by YAML files in a [GitHub repository](https://github.com/ministryofjustice/register-my-data). It allows users to configure an S3 location on the AP with write permissions, providing them with a way to automate data transfers to the AP.
+- **Secure FTP (SFTP).** A service managed by the AP team which allows external teams (suppliers) to transfer data from their services to the AP
+- **TODO** talk to Jacob about how DataSync works
+
+![Ingestion diagram](./ap-ingestion.excalidraw.png)
