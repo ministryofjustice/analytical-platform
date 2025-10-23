@@ -169,7 +169,7 @@ module "endpoints" {
   }
   endpoints = {
     # interface endpoints  need  subnet_ids and sg_id
-    
+
     # Interface endpoint for ec2 bastion
     # ec2messages = {
     #   service             = "ec2messages"
@@ -194,7 +194,6 @@ module "endpoints" {
     #   private_dns_enabled = true
     #   tags                = { Name = "ssm-eu-west-1c-preprod" }
     # }
-
 
     s3 = {
 
