@@ -47,21 +47,6 @@ module "endpoints_dev" {
       service      = "logs"
       service_type = "Interface"
       tags         = { Name = "logs-api-vpc-endpoint-${local.name}-${local.env}" }
-    },
-    ssmmessages = {
-      service             = "ssmmessages"
-      service_type        = "Interface"
-      subnet_ids          = module.vpc_dev.private_subnets
-      private_dns_enabled = true
-      tags                = { Name = "ssmmessages-eu-west-2-${local.name}-${local.env}" }
-    }
-
-    ssm = {
-      service             = "ssm"
-      service_type        = "Interface"
-      subnet_ids          = module.vpc_dev.private_subnets
-      private_dns_enabled = true
-      tags                = { Name = "ssm-eu-west-2-${local.name}-${local.env}" }
     }
 
     s3 = {
