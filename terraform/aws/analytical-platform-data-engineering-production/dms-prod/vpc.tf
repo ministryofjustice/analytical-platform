@@ -177,6 +177,31 @@ module "endpoints" {
 
   endpoints = {
     # interface endpoints  need  subnet_ids and sg_id.
+
+    ec2messages = {
+      service             = "ec2messages"
+      service_type        = "Interface"
+      subnet_ids          = module.vpc.private_subnets
+      private_dns_enabled = true
+      tags                = { Name = "ec2messages-eu-west-1-prod" }
+    }
+
+    ssmmessages = {
+      service             = "ssmmessages"
+      service_type        = "Interface"
+      subnet_ids          = module.vpc.private_subnets
+      private_dns_enabled = true
+      tags                = { Name = "ssmmessages-eu-west-1-prod" }
+    }
+
+    ssm = {
+      service             = "ssm"
+      service_type        = "Interface"
+      subnet_ids          = module.vpc.private_subnets
+      private_dns_enabled = true
+      tags                = { Name = "ssm-eu-west-1-prod" }
+    }
+
     s3 = {
       service_type    = "Gateway"
       service         = "s3"
@@ -206,31 +231,6 @@ module "endpoints" {
       subnet_ids          = module.vpc.private_subnets
       private_dns_enabled = true
       tags                = { Name = "sts-eu-west-1-prod" }
-    }
-
-    # Interface endpoints for ec2 bastion host
-    ec2messages = {
-      service             = "ec2messages"
-      service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
-      private_dns_enabled = true
-      tags                = { Name = "ec2messages-eu-west-1-prod" }
-    }
-
-    ssmmessages = {
-      service             = "ssmmessages"
-      service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
-      private_dns_enabled = true
-      tags                = { Name = "ssmmessages-eu-west-1-prod" }
-    }
-
-    ssm = {
-      service             = "ssm"
-      service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
-      private_dns_enabled = true
-      tags                = { Name = "ssm-eu-west-1-prod" }
     }
   }
 
