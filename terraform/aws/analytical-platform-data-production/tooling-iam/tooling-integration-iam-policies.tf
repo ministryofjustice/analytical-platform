@@ -28,18 +28,12 @@ data "aws_iam_policy_document" "bedrock_integration" {
       "bedrock:ListTagsForResource",
       "bedrock:UntagResource",
       "bedrock:TagResource",
-      "bedrock:PutFoundationModelEntitlement",
       "bedrock:GetModelInvocationLoggingConfiguration",
       "bedrock:PutModelInvocationLoggingConfiguration",
-      "bedrock:CreateFoundationModelAgreement",
-      "bedrock:DeleteFoundationModelAgreement",
-      "bedrock:ListFoundationModelAgreementOffers",
-      "bedrock:GetUseCaseForModelAccess",
       "bedrock:CreateModelInvocationJob",
       "bedrock:GetModelInvocationJob",
       "bedrock:ListModelInvocationJobs",
       "bedrock:GetInferenceProfile",
-      "bedrock:DeleteInferenceProfile",
       "bedrock:StopModelInvocationJob"
     ]
     resources = ["*"]
