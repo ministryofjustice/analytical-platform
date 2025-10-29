@@ -169,6 +169,7 @@ data "aws_iam_policy_document" "bedrock" {
       "bedrock:StopModelCustomizationJob",
       "bedrock:TagResource",
       "bedrock:UntagResource",
+      "aws-marketplace:ViewSubscriptions"
     ]
     resources = ["*"]
     condition {
