@@ -4,19 +4,10 @@ module "opg_fabric_store" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.7.0"
+  version = "5.8.2"
 
   bucket              = "alpha-opg-fabric-sandbox"
   force_destroy       = false
-  object_lock_enabled = true
-  object_lock_configuration = {
-    rule = {
-      default_retention = {
-        mode = "GOVERNANCE"
-        days = 30
-      }
-    }
-  }
   versioning = {
     enabled = true
   }
