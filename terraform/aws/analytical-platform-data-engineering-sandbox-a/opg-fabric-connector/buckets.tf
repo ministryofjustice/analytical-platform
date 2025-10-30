@@ -5,7 +5,6 @@ module "opg_fabric_store" {
 
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "5.8.2"
-
   bucket              = "alpha-opg-fabric-sandbox"
   force_destroy       = false
   versioning = {
