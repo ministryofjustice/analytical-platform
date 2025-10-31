@@ -3,7 +3,7 @@ module "rds_export_secret" {
   # checkov:skip=CKV_TF_2: Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/secrets-manager/aws"
-  version = "1.3.1"
+  version = "2.0.1"
 
   name       = "rds_export_${local.name}_${local.env}"
   kms_key_id = module.rds_export_kms_dev.key_arn
