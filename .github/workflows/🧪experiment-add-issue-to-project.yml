@@ -1,0 +1,48 @@
+---
+name: 🧪📥 Experiment - Add Issue to Project
+
+on:
+  schedule:
+    - cron: "0 8 1 * *" # UTC time: “At 08:00 on first day-of-month”
+  pull_request:
+    branches:
+      - main
+
+permissions: {}
+
+jobs:
+  experiment-add-issue-to-project:
+    name: Experiment - Add Issue to Project
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Create Test Issue
+        id: create_test_issue
+        run: |
+          bash scripts/github/issue-creation/create-maintenance-issue.sh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TITLE: 🧪 Testing Issue Creation - Ignore
+          ASSIGNEES:
+          LABELS: maintenance
+          BODY: |
+            > [!NOTE]
+            > This issue is created by a scheduled workflow.
+
+            ### User Story
+
+            As an… engineer on the Analytical Platform
+            I need/want/expect to… keep TESTING TESTING TESTING
+            So that…
+
+            ### Definition of Done
+            - [ ] Tests pass
+            - [ ] Issue is visible in KanBan view
+
+          PINNED: false
+          CLOSE_PREVIOUS: false
