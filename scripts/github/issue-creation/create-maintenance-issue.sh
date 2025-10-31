@@ -16,4 +16,3 @@ new_issue_url=$(gh issue create \
 if [[ $PINNED == true ]]; then
   gh issue pin "$new_issue_url"
 fi
-gh project item-add 27 --owner ministryofjustice --url "$new_issue_url"
