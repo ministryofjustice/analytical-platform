@@ -38,6 +38,7 @@ jobs:
           if [[ $PINNED == true ]]; then
             gh issue pin "$new_issue_url"
           fi
+          gh project item-add 27 --owner ministryofjustice --url "$new_issue_url"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
