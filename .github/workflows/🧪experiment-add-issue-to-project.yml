@@ -43,7 +43,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
           TITLE: 🧪 Testing Issue Creation - Ignore
           ASSIGNEES:
-          LABELS: test
+          LABELS: maintenance
           BODY: |
             > [!NOTE]
             > This issue is created by a scheduled workflow.
