@@ -25,7 +25,7 @@ jobs:
         run: |
           bash scripts/github/issue-creation/create-maintenance-issue.sh
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.MOJ_PROJECT_ANALYTICAL_PLATFORM_WRITE }}
           GH_REPO: ${{ github.repository }}
           TITLE: 🧪 Testing Issue Creation - Ignore
           ASSIGNEES:
