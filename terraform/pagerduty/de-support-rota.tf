@@ -18,7 +18,11 @@ locals {
             module.users_de_seo["william.orr@digital.justice.gov.uk"].id,
             module.users_de_seo["khristiania.raihan@justice.gov.uk"].id,
             module.users_de_seo["mohammed.ahad1@justice.gov.uk"].id,
-            module.users_de_seo["theodoros.manassis@justice.gov.uk"].id,
+            module.users_de_seo["damilola.oyebade@justice.gov.uk"].id,
+            module.users_de_seo["antony.scott@justice.gov.uk"].id,
+            module.users_de_seo["lucy.astleyjones@justice.gov.uk"].id,
+            module.users_de_seo["kashif.malik@justice.gov.uk"].id,
+            module.users_de_seo["daniel.johnstone@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -73,6 +77,8 @@ locals {
             module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].id,
             module.users_de_g7["philip.sinfield@justice.gov.uk"].id,
             module.users_de_g7["laurence.droy@justice.gov.uk"].id,
+            module.users_de_g7["jovita.brundziene@justice.gov.uk"].id,
+            module.users_de_g7["stuart.james1@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -176,8 +182,28 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Theodoros Manassis"
-      email = "theodoros.manassis@justice.gov.uk"
+      name  = "Damilola Oyebade"
+      email = "damilola.oyebade@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Antony Scott"
+      email = "antony.scott@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Lucy AstleyJones"
+      email = "lucy.astleyjones@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Kashif Malik"
+      email = "kashif.malik@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Daniel Johnstone"
+      email = "daniel.johnstone@justice.gov.uk"
       role  = "responder"
     },
 
@@ -222,6 +248,16 @@ locals {
     {
       name  = "Laurence Droy"
       email = "laurence.droy@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Stuart James"
+      email = "stuart.james1@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Jovita Brundziene"
+      email = "jovita.brundziene@justice.gov.uk"
       role  = "responder"
     },
 
@@ -345,6 +381,36 @@ import {
 }
 
 import {
-  to = module.users_de_seo["theodoros.manassis@justice.gov.uk"].pagerduty_user.this
-  id = "P34BQ78"
+  to = module.users_de_seo["damilola.oyebade@justice.gov.uk"].pagerduty_user.this
+  id = "PA22HVA"
+}
+
+import {
+  to = module.users_de_seo["antony.scott@justice.gov.uk"].pagerduty_user.this
+  id = "PWSEGGN"
+}
+
+import {
+  to = module.users_de_g7["jovita.brundziene@justice.gov.uk"].pagerduty_user.this
+  id = "PKJMJZD"
+}
+
+import {
+  to = module.users_de_seo["lucy.astleyjones@justice.gov.uk"].pagerduty_user.this
+  id = "PLV2QS6"
+}
+
+import {
+  to = module.users_de_g7["stuart.james1@justice.gov.uk"].pagerduty_user.this
+  id = "PPIALTZ"
+}
+
+import {
+  to = module.users_de_seo["kashif.malik@justice.gov.uk"].pagerduty_user.this
+  id = "P5A1K1J"
+}
+
+import {
+  to = module.users_de_seo["daniel.johnstone@justice.gov.uk"].pagerduty_user.this
+  id = "PPO08VA"
 }
