@@ -28,10 +28,10 @@ project_item_id=$(gh project item-list 27 \
 field_list=$(gh project field-list 27 --owner "ministryofjustice" --format=json)
 
 kanban_status_field_id=$(echo "$field_list" | jq -r '.fields[] | select(.name=="Kanban Status") | .id')
-kanban_status_ready_id=$(echo "$field_list" | jq -r'.fields[] | select(.name=="Kanban Status") | .options[] | select(.name=="Ready") | .id')
+kanban_status_ready_id=$(echo "$field_list" | jq -r '.fields[] | select(.name=="Kanban Status") | .options[] | select(.name=="Ready") | .id')
 refined_field_id=$(echo "$field_list" | jq -r '.fields[] | select(.name=="Refined") | .id')
 refined_yes_id=$(echo "$field_list" | jq -r '.fields[] | select(.name=="Refined") | .options[] | select(.name=="Yes") | .id')
-estimation_field_id=$(echo "$field_list" | jq -r'.fields[] | select(.name=="Estimation") | .id')
+estimation_field_id=$(echo "$field_list" | jq -r '.fields[] | select(.name=="Estimation") | .id')
 estimation_2_id=$(echo "$field_list" | jq -r '.fields[] | select(.name=="Estimation") | .options[] | select(.name=="2") | .id')
 priority_field_id=$(echo "$field_list" | jq -r '.fields[] | select(.name=="Priority") | .id')
 priority_medium_id=$(echo "$field_list" | jq -r '.fields[] | select(.name=="Priority") | .options[] | select(.name=="Medium") | .id')
