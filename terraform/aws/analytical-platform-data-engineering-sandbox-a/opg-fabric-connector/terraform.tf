@@ -26,8 +26,8 @@ provider "aws" {
       component              = "OPG Fabric Connector"
       environment            = "sandbox"
       is-production          = "false"
-      owner                  = "analytical-platform:analytical-platform@digital.justice.gov.uk"
-      infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
+      owner                  = "data-engineering:DataEngineering-gg@justice.gov.uk"
+      infrastructure-support = "data-engineering:DataEngineering-gg@justice.gov.uk"
       source-code            = "https://github.com/ministryofjustice/analytical-platform/tree/opg-fabric-connector/terraform/aws/analytical-platform-data-engineering-sandbox-a/opg-fabric-connector"
       de-sandbox-nuke-keep   = "true"
     }
