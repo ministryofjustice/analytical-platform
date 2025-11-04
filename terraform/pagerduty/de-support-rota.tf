@@ -69,16 +69,16 @@ locals {
           rotation_virtual_start       = "2025-09-05T00:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users_de_g7["matt.heery@justice.gov.uk"].id,
-            module.users_de_g7["lalitha.nagarur3@justice.gov.uk"].id,
-            module.users_de_g7["matthew.price2@justice.gov.uk"].id,
-            module.users_de_g7["andrew.craik@justice.gov.uk"].id,
             module.users_de_g7["supratik.chowdhury@digital.justice.gov.uk"].id,
             module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].id,
             module.users_de_g7["philip.sinfield@justice.gov.uk"].id,
             module.users_de_g7["laurence.droy@justice.gov.uk"].id,
             module.users_de_g7["jovita.brundziene@justice.gov.uk"].id,
             module.users_de_g7["stuart.james1@justice.gov.uk"].id,
+            module.users_de_g7["matt.heery@justice.gov.uk"].id,
+            module.users_de_g7["lalitha.nagarur3@justice.gov.uk"].id,
+            module.users_de_g7["matthew.price2@justice.gov.uk"].id,
+            module.users_de_g7["andrew.craik@justice.gov.uk"].id,
           ]
           restrictions = [
             {
