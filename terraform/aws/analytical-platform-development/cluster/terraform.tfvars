@@ -188,7 +188,7 @@ eks_role_mappings = [
 
 eks_node_group_ami_type       = "AL2023_x86_64_STANDARD"
 eks_node_group_disk_size      = 250
-eks_node_group_instance_types = ["r8i.2xlarge"]
+eks_node_group_instance_types = ["r7i.2xlarge"]
 
 ### GPU-enable node group
 eks_node_group_instance_types_gpu_node = ["g5.4xlarge"]
