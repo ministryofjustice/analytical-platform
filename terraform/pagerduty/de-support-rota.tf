@@ -174,7 +174,7 @@ locals {
       email = "mohammed.ahad1@justice.gov.uk"
       role  = "responder"
     },
-  
+
   ]
 
   users_de_g7 = [
