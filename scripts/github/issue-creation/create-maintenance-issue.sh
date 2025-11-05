@@ -33,10 +33,10 @@ if [[ -z "$project_item_id" ]]; then
   exit 1
 fi
 
-echo "Getting field list for Project Analytical Platform (Project 27)"
-field_list=$(gh project field-list 27 --owner "ministryofjustice" --format=json)
+echo "Getting Project Field List for Project Analytical Platform (Project 27)"
+field_list=$(gh project field-list 300 --owner "ministryofjustice" --format=json)
 if [[ -z "$field_list" ]]; then
-  echo "❌ Error: Could not find field list for project: Analytical Platform (Project 27)"
+  echo "❌ Error: Could not find Field List for project: Analytical Platform (Project 27)"
   exit 1
 fi
 kanban_status_field_id=$(echo "$field_list" | jq -r '.fields[] | select(.name=="Kanban Status") | .id')
