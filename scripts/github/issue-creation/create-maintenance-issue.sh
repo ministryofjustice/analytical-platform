@@ -18,12 +18,14 @@ if [[ $PINNED == true ]]; then
 fi
 echo "Created new issue: ${new_issue_url}"
 sleep 30
-project_view=$(gh project view 27 --owner ministryofjustice --format=json)
+project_number=27
+project_owner="ministryofjustice"
+project_view=$(gh project view "$project_number" --owner "$project_owner" --format=json)
 count_of_project_items=$(echo "$project_view" | jq '.items[]')
 project_id=$(echo "$project_view" | jq -r '.id')
 echo "Getting Project V2 Item (PVTI) ID for new issue: ${new_issue_url}, using page limit: ${count_of_project_items}"
-project_item_id=$(gh project item-list 27 \
-  --owner ministryofjustice \
+project_item_id=$(gh project item-list "$project_number" \
+  --owner "$project_owner" \
   --limit="$count_of_project_items" \
   --format=json \
   | jq -r --arg url "$new_issue_url" '.items[] | select(.content.url==$url) | .id')
@@ -33,10 +35,10 @@ if [[ -z "$project_item_id" ]]; then
   exit 1
 fi
 
-echo "Getting Project Field List for Project Analytical Platform (Project 27)"
-field_list=$(gh project field-list 300 --owner "ministryofjustice" --format=json)
+echo "Getting Project Field List for Project Analytical Platform (Project ${project_number})"
+field_list=$(gh project field-list "$project_number" --owner "$project_owner" --format=json)
 if [[ -z "$field_list" ]]; then
-  echo "❌ Error: Could not find Field List for project: Analytical Platform (Project 27)"
+  echo "❌ Error: Could not find Field List for project: Analytical Platform (Project ${project_number})"
   exit 1
 fi
 kanban_status_field_id=$(echo "$field_list" | jq -r '.fields[] | select(.name=="Kanban Status") | .id')
