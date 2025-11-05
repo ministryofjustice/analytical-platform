@@ -4,6 +4,9 @@ name: 📥 Maintenance - Create Visual Studio Code Issue
 on:
   schedule:
     - cron: "0 8 1 * *" # UTC time: “At 08:00 on first day-of-month”
+  pull_request:
+    branches:
+      - main
 
 permissions: {}
 
