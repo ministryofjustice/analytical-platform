@@ -16,6 +16,7 @@ locals {
             module.users["james.stott@digital.justice.gov.uk"].id,
             module.users["michael.collins@digital.justice.gov.uk"].id,
             module.users["tamsin.forbes@justice.gov.uk"].id,
+            module.users["theodoros.manassis@justice.gov.uk"].id,
           ]
           restrictions = [
             {
