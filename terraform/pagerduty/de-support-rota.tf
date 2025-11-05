@@ -18,7 +18,6 @@ locals {
             module.users_de_seo["william.orr@digital.justice.gov.uk"].id,
             module.users_de_seo["khristiania.raihan@justice.gov.uk"].id,
             module.users_de_seo["mohammed.ahad1@justice.gov.uk"].id,
-            module.users_de_seo["theodoros.manassis@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -173,11 +172,6 @@ locals {
     {
       name  = "Mohammed Ahad"
       email = "mohammed.ahad1@justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Theodoros Manassis"
-      email = "theodoros.manassis@justice.gov.uk"
       role  = "responder"
     },
 
@@ -342,9 +336,4 @@ import {
 import {
   to = module.users_de_seo["mohammed.ahad1@justice.gov.uk"].pagerduty_user.this
   id = "P1USSNR"
-}
-
-import {
-  to = module.users_de_seo["theodoros.manassis@justice.gov.uk"].pagerduty_user.this
-  id = "P34BQ78"
 }
