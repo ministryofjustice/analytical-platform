@@ -18,6 +18,8 @@ if [[ $PINNED == true ]]; then
 fi
 echo $new_issue_url
 
+sleep 30
+
 project_view=$(gh project view 27 --owner ministryofjustice --format=json)
 count_of_project_items=$(echo "$project_view" | jq '.items[]')
 echo $count_of_project_items
