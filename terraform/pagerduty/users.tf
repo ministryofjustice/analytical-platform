@@ -54,6 +54,11 @@ locals {
       name  = "Tamsin Forbes"
       email = "tamsin.forbes@justice.gov.uk"
       role  = "responder"
+    },
+    {
+      name  = "Theo Manassis"
+      email = "theodoros.manassis@justice.gov.uk"
+      role  = "responder"
     }
   ]
 }
