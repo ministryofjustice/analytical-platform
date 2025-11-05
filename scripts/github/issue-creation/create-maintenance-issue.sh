@@ -17,7 +17,7 @@ if [[ $PINNED == true ]]; then
   gh issue pin "$new_issue_url"
 fi
 echo "Created new issue: ${new_issue_url}"
-sleep 30
+# sleep 30
 project_view=$(gh project view 27 --owner ministryofjustice --format=json)
 count_of_project_items=$(echo "$project_view" | jq '.items[]')
 project_id=$(echo "$project_view" | jq -r '.id')
@@ -33,10 +33,10 @@ if [[ -z "$project_item_id" ]]; then
   exit 1
 fi
 
-echo "Getting field list for Project Analytical Platform (27)"
+echo "Getting field list for Project Analytical Platform (Project 27)"
 field_list=$(gh project field-list 27 --owner "ministryofjustice" --format=json)
 if [[ -z "$field_list" ]]; then
-  echo "Error: Could not find field list for project: Analytical Platform (27)"
+  echo "Error: Could not find field list for project: Analytical Platform (Project 27)"
   exit 1
 fi
 kanban_status_field_id=$(echo "$field_list" | jq -r '.fields[] | select(.name=="Kanban Status") | .id')
