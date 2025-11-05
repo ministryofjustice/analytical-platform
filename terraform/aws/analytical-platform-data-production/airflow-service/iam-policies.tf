@@ -151,29 +151,25 @@ data "aws_iam_policy_document" "bedrock" {
     sid    = "Bedrock"
     effect = "Allow"
     actions = [
-      "bedrock:CreateFoundationModelAgreement",
       "bedrock:CreateModelCustomizationJob",
       "bedrock:DeleteCustomModel",
-      "bedrock:DeleteFoundationModelAgreement",
       "bedrock:GetCustomModel",
       "bedrock:GetFoundationModel",
       "bedrock:GetFoundationModelAvailability",
       "bedrock:GetModelCustomizationJob",
       "bedrock:GetModelInvocationLoggingConfiguration",
-      "bedrock:GetUseCaseForModelAccess",
       "bedrock:InvokeModel",
       "bedrock:InvokeModelWithResponseStream",
       "bedrock:ListCustomModels",
-      "bedrock:ListFoundationModelAgreementOffers",
       "bedrock:ListFoundationModels",
       "bedrock:ListModelCustomizationJobs",
       "bedrock:ListProvisionedModelThroughputs",
       "bedrock:ListTagsForResource",
-      "bedrock:PutFoundationModelEntitlement",
       "bedrock:PutModelInvocationLoggingConfiguration",
       "bedrock:StopModelCustomizationJob",
       "bedrock:TagResource",
       "bedrock:UntagResource",
+      "aws-marketplace:ViewSubscriptions"
     ]
     resources = ["*"]
     condition {
