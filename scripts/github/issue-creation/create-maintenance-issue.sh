@@ -58,5 +58,4 @@ gh project item-edit --project-id "$project_id" --id "$project_item_id" --field-
 gh project item-edit --project-id "$project_id" --id "$project_item_id" --field-id "$estimation_field_id"  --single-select-option-id "$estimation_2_id"
 gh project item-edit --project-id "$project_id" --id "$project_item_id" --field-id "$priority_field_id"  --single-select-option-id "$priority_medium_id"
 
-echo "🎉 Updated Analytical Platform Project Item fields: Kanban Status, Refined, Estimation, Priority"
-echo "For issue ${new_issue_url}"
+echo "🎉 Updated Analytical Platform Project Item ${new_issue_url} fields: Kanban Status, Refined, Estimation, Priority"
