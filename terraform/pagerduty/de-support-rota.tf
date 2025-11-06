@@ -7,7 +7,7 @@ locals {
         {
           name                         = "DE Daily Support Rota HEO_SEO"
           start                        = "2023-03-27T09:00:00Z"
-          rotation_virtual_start       = "2025-11-06T00:00:00+01:00"
+          rotation_virtual_start       = "2025-11-06T00:00:00+00:00"
           rotation_turn_length_seconds = 86400
           users = [
             module.users_de_seo["guy.wheeler@justice.gov.uk"].id,
@@ -66,7 +66,7 @@ locals {
         {
           name                         = "DE Daily Support Rota G7"
           start                        = "2023-03-27T09:00:00Z"
-          rotation_virtual_start       = "2025-11-06T00:00:00+01:00"
+          rotation_virtual_start       = "2025-11-06T00:00:00+00:00"
           rotation_turn_length_seconds = 86400
           users = [
             module.users_de_g7["supratik.chowdhury@digital.justice.gov.uk"].id,
