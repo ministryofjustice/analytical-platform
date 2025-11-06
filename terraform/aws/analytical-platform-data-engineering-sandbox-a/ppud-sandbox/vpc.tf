@@ -35,7 +35,7 @@ module "endpoints_dev" {
   vpc_id                     = module.vpc_dev.vpc_id
   create_security_group      = true
   security_group_description = "PPUD dev - Managed by Terraform"
-  security_group_tags        = { Name : "eu-west-1-${local.name}" }
+  security_group_tags        = { Name : "${data.aws_region.current.id}-${local.name}-${local.env}" }
   security_group_rules = {
     ingress_https = {
       description = "HTTPS from VPC"
@@ -48,7 +48,7 @@ module "endpoints_dev" {
     logs = {
       service      = "logs"
       service_type = "Interface"
-      tags         = { Name = "logs-api-vpc-endpoint-${local.name}" }
+      tags         = { Name = "logs-api-vpc-${data.aws_region.current.id}-${local.name}-${local.env}" }
     }
 
     # ssmmessages = {
@@ -73,7 +73,7 @@ module "endpoints_dev" {
       service_type    = "Gateway" # gateway endpoint
       service         = "s3"
       route_table_ids = module.vpc_dev.private_route_table_ids
-      tags            = { Name = "s3-eu-west-1-${local.name}" }
+      tags            = { Name = "s3-${data.aws_region.current.id}-${local.name}-${local.env}" }
     }
 
     secrets_manager = {
@@ -81,7 +81,7 @@ module "endpoints_dev" {
       service_type        = "Interface"
       subnet_ids          = module.vpc_dev.private_subnets
       private_dns_enabled = true
-      tags                = { Name = "secretsmanager-eu-west-1-${local.name}" }
+      tags                = { Name = "secretsmanager-${data.aws_region.current.id}-${local.name}-${local.env}" }
     }
 
     glue = {
@@ -89,7 +89,7 @@ module "endpoints_dev" {
       service_type        = "Interface"
       subnet_ids          = module.vpc_dev.private_subnets
       private_dns_enabled = true
-      tags                = { Name = "glue-eu-west-1-${local.name}" }
+      tags                = { Name = "glue-${data.aws_region.current.id}-${local.name}-${local.env}" }
     }
 
     # sts = {
@@ -97,7 +97,7 @@ module "endpoints_dev" {
     #   service_type        = "Interface"
     #   subnet_ids          = module.vpc_dev.private_subnets
     #   private_dns_enabled = true
-    #   tags                = { Name = "sts-eu-west-1-${local.name}" }
+    #   tags                = { Name = "sts-${data.aws_region.current.id}-${local.name}-${local.env}" }
     # }
 
   }
