@@ -22,26 +22,6 @@ module "coat_kms" {
           identifiers = [local.source_replication_role]
         }
       ]
-    },
-    {
-      sid = "AllowDataSyncRole"
-      actions = [
-        "kms:Encrypt",
-        "kms:Decrypt",
-        "kms:ReEncrypt*",
-        "kms:GenerateDataKey*",
-        "kms:DescribeKey"
-      ]
-      resources = ["*"]
-      effect    = "Allow"
-      principals = [
-        {
-          type = "AWS"
-          identifiers = [
-            "arn:aws:iam::295814833350:role/coat-datasync"
-          ]
-        }
-      ]
     }
   ]
   deletion_window_in_days = 7
