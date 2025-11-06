@@ -33,6 +33,8 @@ module "rds_export_dev" {
   database_subnet_ids   = module.vpc_dev.private_subnets
   kms_key_arn           = module.rds_export_kms_dev.key_arn
   master_user_secret_id = module.rds_export_secret.secret_arn
+  environment           = var.tags["environment"]
+  db_name               = "ppud_sandbox"
 
   tags = var.tags
 }
