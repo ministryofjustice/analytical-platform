@@ -1,3 +1,3 @@
 locals {
-  name = "ppud-sandbox"
+  name = "ppud"
 }
