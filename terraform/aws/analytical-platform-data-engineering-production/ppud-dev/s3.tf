@@ -64,7 +64,7 @@ resource "aws_iam_role_policy_attachment" "replication" {
 }
 
 resource "aws_s3_bucket_replication_configuration" "replication" {
-  region = "${data.aws_region.current.id}"
+  region = data.aws_region.current.id
 
   role   = aws_iam_role.replication.arn
   bucket = module.ppud_dev.s3_bucket_id
