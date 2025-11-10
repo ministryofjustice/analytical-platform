@@ -1,3 +1,5 @@
 locals {
-  name = "ppud-sandbox"
+  name = "ppud"
+
+  env = var.tags["environment"]
 }

@@ -26,7 +26,7 @@ jobs:
 
       - name: Run analysis
         id: run_analysis
-        uses: ossf/scorecard-action@05b42c624433fc40578a4040d5cf5e36ddca8cde # v2.4.2
+        uses: ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           results_file: results.sarif
@@ -35,7 +35,7 @@ jobs:
 
       - name: Upload SARIF results
         id: upload_sarif_results
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v3.1.0
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: SARIF results
           path: results.sarif
@@ -43,6 +43,6 @@ jobs:
 
       - name: Upload to CodeQL
         id: upload_to_codeql
-        uses: github/codeql-action/upload-sarif@192325c86100d080feab897ff886c34abd4c83a3 # v3.29.5
+        uses: github/codeql-action/upload-sarif@0499de31b99561a6d14a36a5f662c2a54f91beee # v3.29.5
         with:
           sarif_file: results.sarif

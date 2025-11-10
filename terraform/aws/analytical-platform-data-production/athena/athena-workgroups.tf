@@ -71,6 +71,10 @@ locals {
       name      = "dbt-opg",
       component = "dbt-opg"
     },
+    "dbt-cica" = {
+      name      = "dbt-cica",
+      component = "dbt-cica"
+    },
     # dev workgroups
     "dbt-curated-dev" = {
       name             = "dbt-curated-dev",
@@ -95,6 +99,10 @@ locals {
     "dbt-oasys-question" = {
       name      = "dbt-oasys-question",
       component = "dbt-oasys-question"
+    },
+    "dbt-coat-daily" = {
+      name      = "dbt-coat-daily",
+      component = "dbt-coat-daily"
     },
   }
   dbt_spark_workgroups = {

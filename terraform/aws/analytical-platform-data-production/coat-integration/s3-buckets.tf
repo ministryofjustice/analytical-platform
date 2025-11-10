@@ -15,34 +15,6 @@ data "aws_iam_policy_document" "coat_bucket_policy" {
     ]
     resources = ["arn:aws:s3:::${local.bucket_name}/*"]
   }
-
-  statement {
-    sid    = "DataSyncCreateS3LocationAndTaskAccess"
-    effect = "Allow"
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::295814833350:role/coat-datasync"]
-    }
-
-    actions = [
-      "s3:GetBucketLocation",
-      "s3:ListBucket",
-      "s3:ListBucketMultipartUploads",
-      "s3:AbortMultipartUpload",
-      "s3:DeleteObject",
-      "s3:GetObject",
-      "s3:ListMultipartUploadParts",
-      "s3:PutObject",
-      "s3:GetObjectTagging",
-      "s3:PutObjectTagging",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${local.bucket_name}",
-      "arn:aws:s3:::${local.bucket_name}/*"
-    ]
-  }
 }
 
 #trivy:ignore:AVD-AWS-0089:Bucket logging not enabled currently
@@ -51,7 +23,7 @@ module "coat_s3" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.7.0"
+  version = "5.8.2"
 
   bucket = local.bucket_name
 
