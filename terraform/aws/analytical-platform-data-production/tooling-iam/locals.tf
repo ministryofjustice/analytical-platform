@@ -17,4 +17,11 @@ locals {
     formatlist("arn:aws:s3:::%s/*", var.data_buckets),
     formatlist("arn:aws:s3:::%s", var.data_buckets)
   )
+
+  transcribe_users = [
+    "alpha_user_rogerbrownmoj",
+    "alpha_user_laura-auburn",
+    "alpha_user_rob-mcnaughter"
+  ]
+
 }
