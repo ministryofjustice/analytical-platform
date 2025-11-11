@@ -27,6 +27,7 @@ def handler(event):
             s3.meta.client.copy(
                 {"Bucket": land_bucket, "Key": key}, bak_upload_bucket, key
             )
+            logger.info(f"Copied file: {key} from {land_bucket} to {bak_upload_bucket}")
         else:
             logger.info(f"Key:{key} does not follow naming convention")
 
