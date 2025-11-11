@@ -25,9 +25,9 @@ data "aws_iam_policy_document" "transcribe_service_access" {
       "transcribe:CreateLanguageModel",
     ]
     resources = [
-      "arn:aws:transcribe:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:vocabulary/*",
-      "arn:aws:transcribe:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:transcription-job/*",
-      "arn:aws:transcribe:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:language-model/*"
+      "arn:aws:transcribe:${data.aws_region.current.name}:${var.account_ids["analytical-platform-data-production"]}:vocabulary/*",
+      "arn:aws:transcribe:${data.aws_region.current.name}:${var.account_ids["analytical-platform-data-production"]}:transcription-job/*",
+      "arn:aws:transcribe:${data.aws_region.current.name}:${var.account_ids["analytical-platform-data-production"]}:language-model/*"
     ]
   }
   statement {
