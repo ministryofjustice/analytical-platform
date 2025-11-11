@@ -1,0 +1,76 @@
+data "aws_iam_policy_document" "copy_object" {
+  statement {
+    // Allow the lambda to read and copy the files from the land S3 bucket
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectTagging",
+    ]
+
+    resources = [
+      module.ppud_dev.bucket.arn,
+      "${module.ppud_dev.bucket.arn}/*"
+    ]
+  }
+
+  statement {
+    // Allow the lambda to write the files to the bak upload S3 bucket
+    actions = [
+      "s3:PutObject",
+      "s3:PutObjectTagging"
+    ]
+
+    resources = [
+      module.rds-export.backup_uploads_s3_bucket_arn,
+      "${module.rds-export.backup_uploads_s3_bucket_arn}/*"
+    ]
+  }
+}
+
+module "copy_object" {
+  # Commit hash for v7.20.1
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-lambda?ref=84dfbfddf9483bc56afa0aff516177c03652f0c7"
+
+  function_name   = "${local.name}-${local.env}-copy"
+  description     = "Lambda to copy a file from the land bucket to bak upload bucket"
+  handler         = "main.handler"
+  runtime         = "python3.12"
+  memory_size     = 1024
+  timeout         = 10
+  architectures   = ["x86_64"]
+  build_in_docker = false
+
+  attach_policy_json = true
+  policy_json        = data.aws_iam_policy_document.copy_object.json
+
+  environment_variables = {
+    LAND_BUCKET           = module.ppud_dev.bucket.id
+    BACKUP_UPLOADS_BUCKET = module.rds-export.backup_uploads_s3_bucket_id
+    REGION                = data.aws_region.current
+  }
+
+  source_path = [{
+    path = "${path.module}/lambda-functions/main.py"
+  }]
+
+  tags = var.tags
+}
+
+resource "aws_lambda_permission" "allow_bucket" {
+  statement_id  = "AllowExecutionFromS3Bucket"
+  action        = "lambda:InvokeFunction"
+  function_name = module.copy_object.lambda_function_arn
+  principal     = "s3.amazonaws.com"
+  source_arn    = module.ppud_dev.bucket.arn
+}
+
+# Bucket Notification to trigger Lambda function
+resource "aws_s3_bucket_notification" "land_bucket" {
+  bucket = module.ppud_dev.bucket.id
+
+  lambda_function {
+    lambda_function_arn = module.copy_object.lambda_function_arn
+    events              = ["s3:ObjectCreated:*"]
+  }
+
+  depends_on = [aws_lambda_permission.allow_bucket]
+}
