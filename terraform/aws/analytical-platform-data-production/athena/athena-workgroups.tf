@@ -105,11 +105,6 @@ locals {
       component = "dbt-coat-daily"
     },
   }
-  dbt_spark_workgroups = {
-    "dbt-spark" = {
-      name = "dbt-spark"
-    }
-  }
 }
 
 #trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
