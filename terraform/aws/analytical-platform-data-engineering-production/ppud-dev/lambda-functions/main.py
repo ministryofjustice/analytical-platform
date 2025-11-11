@@ -8,7 +8,7 @@ logger = logging.getLogger()
 logger.setLevel(os.getenv("LOG_LEVEL", "INFO"))
 
 
-def handler(event):
+def handler(event, context): # pylint: disable=unused-argument
     bak_upload_bucket = os.environ["BACKUP_UPLOADS_BUCKET"]
     land_bucket = os.environ["LAND_BUCKET"]
     region = os.environ["REGION"]
