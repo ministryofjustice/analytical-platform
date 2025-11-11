@@ -1,0 +1,50 @@
+---
+name: 📥 Maintenance - Create Modernisation Platform Environments Issue
+
+on:
+  schedule:
+    - cron: "0 8 1 * *" # UTC time: “At 08:00 on first day-of-month”
+
+permissions: {}
+
+jobs:
+  create-maintenance-issue:
+    name: Create Maintenance Issue
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Create Maintenance Issue
+        id: create_maintenance_issue
+        run: |
+          bash scripts/github/issue-creation/create-maintenance-issue.sh
+        env:
+          GH_TOKEN: ${{ secrets.MOJ_PROJECT_ANALYTICAL_PLATFORM_WRITE }}
+          GH_REPO: ${{ github.repository }}
+          TITLE: 📥 Maintenance - Modernisation Platform Environments
+          ASSIGNEES:
+          LABELS: maintenance
+          BODY: |
+            > [!NOTE]
+            > This issue is created by a scheduled workflow.
+
+            ### User Story
+
+            As an… engineer on the Analytical Platform
+            I need/want/expect to… keep the accounts in Modernisation Platform Environments up to date
+            So that… security / best practice etc
+
+            ### Definition of Done
+            - [ ] For the following environments patch as per the documetation [here](https://justiceuk.sharepoint.com/:fl:/r/contentstorage/CSP_71247c2f-e336-422e-91f0-f5ad7aabd727/Document%20Library/LoopAppData/Patching%20Analytical%20Platform%20accounts%20in%20Modernisation%20Platform%20Environments.loop?d=w2533a42ffb5b4e99a5340a460f35016b&csf=1&web=1&e=DkTCFT&nav=cz0lMkZjb250ZW50c3RvcmFnZSUyRkNTUF83MTI0N2MyZi1lMzM2LTQyMmUtOTFmMC1mNWFkN2FhYmQ3MjcmZD1iJTIxTDN3a2NUYmpMa0tSOFBXdGVxdlhKNGQ5NTNkU1A3WkpqV2JUbU8xNEZyN05CZ3ZFNTl6ZFRxWnF1SkZ5TmFyViZmPTAxSkk2S0s1WlBVUVpTS1c3M1RGSEtLTkFLSVlIVEtBTEwmYz0lMkYmYT1Mb29wQXBwJnA9JTQwZmx1aWR4JTJGbG9vcC1wYWdlLWNvbnRhaW5lciZ4PSU3QiUyMnclMjIlM0ElMjJUMFJUVUh4cWRYTjBhV05sZFdzdWMyaGhjbVZ3YjJsdWRDNWpiMjE4WWlGTU0zZHJZMVJpYWt4clMxSTRVRmQwWlhGMldFbzBaRGsxTTJSVFVEZGFTbXBYWWxSdFR6RTBSbkkzVGtKbmRrVTFPWHBrVkhGYWNYVktSbmxPWVhKV2ZEQXhTa2syUzBzMVdqTlJTVkEyTlVaVlQxYzFTRXhSUkROSk5ETlhORmRRTmxVJTNEJTIyJTJDJTIyaSUyMiUzQSUyMjBmNWMyOGFlLTYxOGMtNDhlNS1hMDljLWRlMWNmZmYxNzA3ZCUyMiU3RA%3D%3D).
+            - [ ] [analytical-platform-common](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-common)
+            - [ ] [analytical-platform-compute](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-compute)
+            - [ ] [analytical-platform-ingestion](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-ingestion)
+            - [ ] [analytical-platform-next-poc-hub](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-next-poc-hub)
+            - [ ] [analytical-platform-next-poc-producer](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-next-poc-producer)
+            - [ ] Add any not included here if they are created.
+
+          PINNED: false
+          CLOSE_PREVIOUS: false
