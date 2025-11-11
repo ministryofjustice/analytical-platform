@@ -8,7 +8,7 @@ logger = logging.getLogger()
 logger.setLevel(os.getenv("LOG_LEVEL", "INFO"))
 
 
-def handler(event):
+def handler(event, context):  # pylint: disable=unused-argument
     bak_upload_bucket = os.environ["BACKUP_UPLOADS_BUCKET"]
     land_bucket = os.environ["LAND_BUCKET"]
     region = os.environ["REGION"]
@@ -29,7 +29,9 @@ def handler(event):
             )
             logger.info(f"Copied file: {key} from {land_bucket} to {bak_upload_bucket}")
         else:
-            logger.info(f"Key:{key} does not follow naming convention")
+            logger.info(
+                f"File not copied as key:{key} does not follow naming convention"
+            )
 
     except Exception as e:
         logger.error(f"Error copying file to bucket: {str(e)}")
