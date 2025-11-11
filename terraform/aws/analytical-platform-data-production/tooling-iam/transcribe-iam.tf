@@ -1,4 +1,5 @@
 data "aws_iam_policy_document" "transcribe_service_access" {
+  #checkov:skip=CKV_AWS_356: skip requires access to multiple resources
   statement {
     sid    = "transcribeGenericAccess"
     effect = "Allow"
