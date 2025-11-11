@@ -1,6 +1,5 @@
 #trivy:ignore:avd-aws-0132:Replicating existing bucket that does not encrypt data with a customer managed key
 #trivy:ignore:avd-aws-0090:Bucket versioning is not preferred for this bucket for now as data is processed on-demand
-#trivy:ignore:avd-aws-0089:Bucket logging is not required
 module "mojap_transcribe_spike" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
@@ -22,6 +21,11 @@ module "mojap_transcribe_spike" {
         sse_algorithm = "AES256"
       }
     }
+  }
+
+  logging = {
+    target_bucket = "moj-analytics-s3-logs"
+    target_prefix = "mojap-transcribe-spike/"
   }
 
   attach_policy = true
