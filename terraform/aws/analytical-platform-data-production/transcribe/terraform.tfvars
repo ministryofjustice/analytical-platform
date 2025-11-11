@@ -1,11 +1,11 @@
-variable "account_ids" {
+account_ids = {
   analytical-platform-data-production       = "593291632749"
   analytical-platform-management-production = "042130406152"
   analytical-platform-compute-development   = "381491960855"
   analytical-platform-compute-production    = "992382429243"
 }
 
-variable "tags" {
+tags = {
   business-unit          = "Platforms"
   application            = "Analytical Platform"
   component              = "transcribe"
