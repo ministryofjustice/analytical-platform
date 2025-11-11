@@ -79,6 +79,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/s3-glue-crawler"
       - "terraform/aws/analytical-platform-data-production/sagemaker-service"
       - "terraform/aws/analytical-platform-data-production/tooling-iam"
+      - "terraform/aws/analytical-platform-data-production/transcribe"
       - "terraform/aws/analytical-platform-development/auth0-log-streams"
       - "terraform/aws/analytical-platform-development/control-panel-message-broker"
       - "terraform/aws/analytical-platform-development/tooling-iam"
