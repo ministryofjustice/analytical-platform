@@ -45,7 +45,7 @@ module "copy_object" {
   environment_variables = {
     LAND_BUCKET           = module.ppud_dev.s3_bucket_id
     BACKUP_UPLOADS_BUCKET = module.rds_export.backup_uploads_s3_bucket_id
-    REGION                = data.aws_region.current
+    REGION                = "${data.aws_region.current}"
   }
 
   source_path = [{
