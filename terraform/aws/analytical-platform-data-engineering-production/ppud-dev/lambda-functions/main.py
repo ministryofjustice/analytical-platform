@@ -29,7 +29,9 @@ def handler(event, context):  # pylint: disable=unused-argument
             )
             logger.info(f"Copied file: {key} from {land_bucket} to {bak_upload_bucket}")
         else:
-            logger.info(f"File not copied as key:{key} does not follow naming convention")
+            logger.info(
+                f"File not copied as key:{key} does not follow naming convention"
+            )
 
     except Exception as e:
         logger.error(f"Error copying file to bucket: {str(e)}")
