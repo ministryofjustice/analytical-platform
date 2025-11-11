@@ -7,8 +7,8 @@ data "aws_iam_policy_document" "copy_object" {
     ]
 
     resources = [
-      module.ppud_dev.bucket.arn,
-      "${module.ppud_dev.bucket.arn}/*"
+      module.ppud_dev.s3_bucket_arn,
+      "${module.ppud_dev.s3_bucket_arn}/*"
     ]
   }
 
@@ -20,8 +20,8 @@ data "aws_iam_policy_document" "copy_object" {
     ]
 
     resources = [
-      module.rds-export.backup_uploads_s3_bucket_arn,
-      "${module.rds-export.backup_uploads_s3_bucket_arn}/*"
+      module.rds_export.backup_uploads_s3_bucket_arn,
+      "${module.rds_export.backup_uploads_s3_bucket_arn}/*"
     ]
   }
 }
@@ -43,8 +43,8 @@ module "copy_object" {
   policy_json        = data.aws_iam_policy_document.copy_object.json
 
   environment_variables = {
-    LAND_BUCKET           = module.ppud_dev.bucket.id
-    BACKUP_UPLOADS_BUCKET = module.rds-export.backup_uploads_s3_bucket_id
+    LAND_BUCKET           = module.ppud_dev.s3_bucket_id
+    BACKUP_UPLOADS_BUCKET = module.rds_export.backup_uploads_s3_bucket_id
     REGION                = data.aws_region.current
   }
 
@@ -60,12 +60,12 @@ resource "aws_lambda_permission" "allow_bucket" {
   action        = "lambda:InvokeFunction"
   function_name = module.copy_object.lambda_function_arn
   principal     = "s3.amazonaws.com"
-  source_arn    = module.ppud_dev.bucket.arn
+  source_arn    = module.ppud_dev.s3_bucket_arn
 }
 
 # Bucket Notification to trigger Lambda function
 resource "aws_s3_bucket_notification" "land_bucket" {
-  bucket = module.ppud_dev.bucket.id
+  bucket = module.ppud_dev.s3_bucket_id
 
   lambda_function {
     lambda_function_arn = module.copy_object.lambda_function_arn
