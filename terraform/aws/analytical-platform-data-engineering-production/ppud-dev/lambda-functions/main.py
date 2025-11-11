@@ -1,15 +1,14 @@
-import json
 import logging
 import os
-import boto3
 import re
-from datetime import datetime, timezone
+
+import boto3
 
 logger = logging.getLogger()
 logger.setLevel(os.getenv("LOG_LEVEL", "INFO"))
 
 
-def handler(event, context):
+def handler(event):
     bak_upload_bucket = os.environ["BACKUP_UPLOADS_BUCKET"]
     land_bucket = os.environ["LAND_BUCKET"]
     region = os.environ["REGION"]
@@ -26,9 +25,7 @@ def handler(event, context):
 
         if match is not None:
             s3.meta.client.copy(
-                {"Bucket": land_bucket, "Key": key},
-                bak_upload_bucket,
-                key
+                {"Bucket": land_bucket, "Key": key}, bak_upload_bucket, key
             )
         else:
             logger.info(f"Key:{key} does not follow naming convention")
