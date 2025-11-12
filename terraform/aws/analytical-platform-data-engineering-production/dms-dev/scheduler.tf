@@ -24,13 +24,13 @@ resource "aws_iam_role_policy" "sfn_dms_policy" {
       {
         Effect   = "Allow",
         Action   = ["dms:StartReplicationTask", "dms:StopReplicationTask"],
-        Resource = module.dev_dms_oasys.dms_cdc_task_arn
-      },
-      {
-        Effect   = "Allow",
-        Action   = ["dms:DescribeReplicationTasks"],
-        Resource = "arn:aws:dms:eu-west-1:${var.account_ids["analytical-platform-data-engineering-production"]}:*:*"
+        Resource = module.dev_dms_delius.dms_cdc_task_arn
       }
+      # {
+      #   Effect   = "Allow",
+      #   Action   = ["dms:DescribeReplicationTasks"],
+      #   Resource = "arn:aws:dms:eu-west-1:${var.account_ids["analytical-platform-data-engineering-production"]}:*:*"
+      # }
     ]
   })
 }
@@ -119,10 +119,10 @@ resource "aws_iam_role_policy" "scheduler_start_sfn" {
   })
 }
 
-resource "aws_scheduler_schedule" "dms_stop_sun_0300" {
-  name                         = "dms-stop-sun-3am-uk-dev"
-  description                  = "Stop DMS CDC every Sunday 03:00 UK"
-  schedule_expression          = "cron(0 3 ? * SUN *)"
+resource "aws_scheduler_schedule" "dms_stop" {
+  name                         = "dms-stop-uk-dev"
+  description                  = "Stop DMS CDC every weekday at 20:45 UK"
+  schedule_expression          = "cron(45 20 * * 2-6)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
@@ -134,16 +134,16 @@ resource "aws_scheduler_schedule" "dms_stop_sun_0300" {
       StateMachineArn = aws_sfn_state_machine.dms_control.arn,
       Input = jsonencode({
         Op                 = "stop",
-        ReplicationTaskArn = module.dev_dms_oasys.dms_cdc_task_arn
+        ReplicationTaskArn = module.dev_dms_delius.dms_cdc_task_arn
       })
     })
   }
 }
 
-resource "aws_scheduler_schedule" "dms_start_sun_1900" {
-  name                         = "dms-start-sun-7pm-uk-dev"
-  description                  = "Restart DMS CDC every Sunday 19:00 UK"
-  schedule_expression          = "cron(0 19 ? * SUN *)"
+resource "aws_scheduler_schedule" "dms_start" {
+  name                         = "dms-start-uk-dev"
+  description                  = "Restart DMS CDC every weekday at 6:15 UK"
+  schedule_expression          = "cron(15 6 * * 2-6)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
@@ -155,7 +155,7 @@ resource "aws_scheduler_schedule" "dms_start_sun_1900" {
       StateMachineArn = aws_sfn_state_machine.dms_control.arn,
       Input = jsonencode({
         Op                 = "start",
-        ReplicationTaskArn = module.dev_dms_oasys.dms_cdc_task_arn
+        ReplicationTaskArn = module.dev_dms_delius.dms_cdc_task_arn
       })
     })
   }
