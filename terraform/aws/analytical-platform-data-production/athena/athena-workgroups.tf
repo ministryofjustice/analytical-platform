@@ -105,11 +105,6 @@ locals {
       component = "dbt-coat-daily"
     },
   }
-  dbt_spark_workgroups = {
-    "dbt-spark" = {
-      name = "dbt-spark"
-    }
-  }
 }
 
 #trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
@@ -160,40 +155,6 @@ resource "aws_athena_workgroup" "dbt" {
     engine_version {
       selected_engine_version = "Athena engine version 3"
     }
-    result_configuration {
-      output_location = "s3://dbt-query-dump/"
-    }
-  }
-
-  tags = merge(var.tags,
-    {
-      "Name"             = each.value.name
-      "application"      = "CaDeT"
-      "business-unit"    = try(each.value.business_unit, var.tags["business-unit"])
-      "component"        = try(each.value.component, var.tags["component"])
-      "environment-name" = strcontains(each.value.name, "dev") ? "dev" : "prod"
-      "is-production"    = strcontains(each.value.name, "dev") ? "False" : "True"
-      "owner"            = "Data Engineering:dataengineering@digital.justice.gov.uk"
-    }
-  )
-}
-
-#trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
-#trivy:ignore:avd-aws-0007:Can't enforce output location due to DBT requirements
-resource "aws_athena_workgroup" "spark" {
-  #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
-  #checkov:skip=CKV_AWS_82:Can't enforce output location due to DBT requirements
-
-  for_each = local.dbt_spark_workgroups
-
-  name = each.value.name
-
-  configuration {
-    enforce_workgroup_configuration = false
-    engine_version {
-      selected_engine_version = "PySpark engine version 3"
-    }
-    execution_role = aws_iam_role.athena_spark_execution_role.arn
     result_configuration {
       output_location = "s3://dbt-query-dump/"
     }

@@ -46,15 +46,15 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Yvan Smith"
-      email = "yvan.smith@digital.justice.gov.uk"
-      role  = "manager"
-    },
-    {
       name  = "Tamsin Forbes"
       email = "tamsin.forbes@justice.gov.uk"
       role  = "responder"
-    }
+    },
+    {
+      name  = "Theo Manassis"
+      email = "theodoros.manassis@justice.gov.uk"
+      role  = "responder"
+    },
   ]
 }
 
