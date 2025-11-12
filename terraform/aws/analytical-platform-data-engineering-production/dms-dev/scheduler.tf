@@ -90,6 +90,9 @@ resource "aws_sfn_state_machine" "dms_control" {
       FailOp = { Type = "Fail", Error = "InvalidOp", Cause = "Op must be 'start' or 'stop'." }
     }
   })
+  tracing_configuration {
+    enabled = true
+  }
 }
 
 resource "aws_iam_role" "scheduler_role" {
