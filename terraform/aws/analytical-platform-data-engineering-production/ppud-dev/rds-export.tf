@@ -37,6 +37,7 @@ module "rds_export" {
   environment              = var.tags["environment"]
   output_parquet_file_size = 50
   db_name                  = "ppud_dev"
+  slack_webhook_secret_id  = module.slack_webhook_secret.secret_id
 
   tags = var.tags
 }
