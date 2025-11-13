@@ -3,7 +3,7 @@ module "cloudtrail_athena_event_processor_function" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/lambda/aws"
-  version = "8.1.0"
+  version = "8.1.2"
 
   function_name = "cloudtrail-athena-event-processor"
   description   = "Processes incoming CloudTrail events and forwards them to CloudWatch Logs"
