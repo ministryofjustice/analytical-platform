@@ -125,6 +125,7 @@ resource "aws_iam_role_policy" "scheduler_start_sfn" {
 resource "aws_scheduler_schedule" "dms_stop" {
   name                         = "dms-stop-uk-dev"
   description                  = "Stop DMS CDC every weekday at 20:55 UK"
+
   schedule_expression          = "cron(55 20 ? * MON-FRI *)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
