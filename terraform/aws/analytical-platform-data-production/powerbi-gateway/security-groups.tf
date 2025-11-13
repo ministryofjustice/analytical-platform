@@ -2,7 +2,7 @@ module "security_group" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.3.0"
+  version = "5.3.1"
 
   name        = local.name
   description = "PowerBI Gateway SG"
