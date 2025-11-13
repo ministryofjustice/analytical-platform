@@ -41,10 +41,10 @@ module "rds_export" {
   tags = var.tags
 }
 
-# # Create a resource to subscribe to SNS topic
-# # Slack notifications
-# resource "aws_sns_topic_subscription" "sfn_events" {
-#   topic_arn = module.rds_export.sns_topic_arn
-#   protocol  = "https"
-#   endpoint  = data.aws_secretsmanager_secret_version.slack_webhook.secret_string
-# }
+# Create a resource to subscribe to SNS topic
+# Slack notifications
+resource "aws_sns_topic_subscription" "sfn_events" {
+  topic_arn = module.rds_export.sns_topic_arn
+  protocol  = "https"
+  endpoint  = data.aws_secretsmanager_secret_version.slack_webhook.secret_string
+}
