@@ -35,7 +35,7 @@ module "copy_object" {
   handler         = "main.handler"
   runtime         = "python3.12"
   memory_size     = 1024
-  timeout         = 10
+  timeout         = 900
   architectures   = ["x86_64"]
   build_in_docker = false
 
