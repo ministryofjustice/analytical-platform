@@ -10,25 +10,6 @@ module "opg_kms_dev" {
 
   key_statements = [
     {
-      sid    = "DenyNonSecretsManagerUse"
-      effect = "Deny"
-      principals = [
-        {
-          type        = "AWS"
-          identifiers = ["*"]
-        }
-      ]
-      actions   = ["kms:Encrypt", "kms:Decrypt", "kms:ReEncrypt*", "kms:GenerateDataKey*", "kms:DescribeKey"]
-      resources = ["*"]
-      conditions = [
-        {
-          test     = "StringNotEquals"
-          variable = "kms:ViaService"
-          values   = ["secretsmanager.${data.aws_region.current.name}.amazonaws.com"]
-        }
-      ]
-    },
-    {
       sid       = "AllowViaSecretsManagerForFabricRole"
       effect    = "Allow"
       actions   = ["kms:Encrypt", "kms:Decrypt", "kms:ReEncrypt*", "kms:GenerateDataKey*", "kms:DescribeKey"]
