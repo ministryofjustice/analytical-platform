@@ -12,7 +12,7 @@ module "opg_kms_dev" {
     {
       sid        = "DenyNonSecretsManagerUse"
       effect     = "Deny"
-      principals = [{ type = "*", identifiers = ["*"] }]
+      principals = [{ type = "AWS", identifiers = ["*"] }]
       actions    = ["kms:Encrypt", "kms:Decrypt", "kms:ReEncrypt*", "kms:GenerateDataKey*", "kms:DescribeKey"]
       resources  = ["*"]
       conditions = [
