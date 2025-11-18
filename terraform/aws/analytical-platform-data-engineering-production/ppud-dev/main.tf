@@ -4,7 +4,7 @@ data "aws_iam_policy_document" "ppud_dev" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${local.account_ids["ppud-development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev_test", "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/GlobalGitHubActionAdmin", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/GlobalGitHubActionAdmin"]
+      identifiers = ["arn:aws:iam::${local.account_ids["ppud-development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev_test"]
     }
     actions = [
       "s3:ReplicateObject",
