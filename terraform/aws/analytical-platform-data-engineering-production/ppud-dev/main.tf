@@ -43,12 +43,13 @@ module "ppud_dev" {
           Effect = "Allow"
           Principal = {
             AWS = [
-              "arn:aws:iam::${local.account_ids["ppud_development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev"
+              "arn:aws:iam::${local.account_ids["ppud-development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev"
             ]
           }
           Action = [
             "s3:ReplicateObject",
-            "s3:ReplicateDelete"
+            "s3:ReplicateDelete",
+            "s3:GetBucketVersioning"
           ]
           Resource = "arn:aws:s3:::mojap-data-engineering-production-ppud-dev/*"
         },
@@ -57,12 +58,13 @@ module "ppud_dev" {
           Effect = "Allow"
           Principal = {
             AWS = [
-              "arn:aws:iam::${local.account_ids["ppud_development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev"
+              "arn:aws:iam::${local.account_ids["ppud-development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev"
             ]
           }
           Action = [
             "s3:GetBucketVersioning",
-            "s3:PutBucketVersioning"
+            "s3:PutBucketVersioning",
+            "s3:ReplicateDelete"
           ]
           Resource = "arn:aws:s3:::mojap-data-engineering-production-ppud-dev"
         }
