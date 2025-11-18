@@ -4,26 +4,26 @@ data "aws_iam_policy_document" "ppud_dev"{
     effect = "Allow"
     principals {
       type = "AWS"
-      identifiers = "arn:aws:iam::${local.account_ids["ppud-development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev_test"
+      identifiers = ["arn:aws:iam::${local.account_ids["ppud-development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev_test"]
     }
     actions = [
       "s3:ReplicateObject",
       "s3:ReplicateDelete"
     ]
-    resources = "arn:aws:s3:::mojap-data-engineering-production-ppud-dev/*"
+    resources = ["arn:aws:s3:::mojap-data-engineering-production-ppud-dev/*"]
   }
   statement {
     sid    = "Set-permissions-on-bucket"
     effect = "Allow"
     principals {
       type = "AWS"
-      identifiers = "arn:aws:iam::${local.account_ids["ppud-development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev_test"
+      identifiers = ["arn:aws:iam::${local.account_ids["ppud-development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev_test"]
     }
     actions = [
       "s3:GetBucketVersioning",
       "s3:PutBucketVersioning"
     ]
-    resources = "arn:aws:s3:::mojap-data-engineering-production-ppud-dev"
+    resources = ["arn:aws:s3:::mojap-data-engineering-production-ppud-dev"]
   }
 }
 
