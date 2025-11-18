@@ -1,9 +1,9 @@
-data "aws_iam_policy_document" "ppud_dev"{
+data "aws_iam_policy_document" "ppud_dev" {
   statement {
     sid    = "Set-permissions-for-objects"
     effect = "Allow"
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = ["arn:aws:iam::${local.account_ids["ppud-development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev_test"]
     }
     actions = [
@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "ppud_dev"{
     sid    = "Set-permissions-on-bucket"
     effect = "Allow"
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = ["arn:aws:iam::${local.account_ids["ppud-development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev_test"]
     }
     actions = [
@@ -64,7 +64,7 @@ module "ppud_dev" {
     restrict_public_buckets = true
   }
   attach_policy = true
-  policy = sensitive(data.aws_iam_policy_document.ppud_dev.json)
+  policy        = sensitive(data.aws_iam_policy_document.ppud_dev.json)
 
   tags = var.tags
 }
