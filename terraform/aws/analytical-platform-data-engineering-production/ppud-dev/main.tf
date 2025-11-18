@@ -43,7 +43,7 @@ module "ppud_dev" {
           Effect = "Allow"
           Principal = {
             AWS = [
-              "arn:aws:iam::${local.account_ids["ppud-development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev"
+              "arn:aws:iam::${data.aws_secretsmanager_secret_version.account_ids_version.secret_string}:role/service-role/iam_role_s3_bucket_moj_database_source_dev"
             ]
           }
           Action = [
@@ -57,7 +57,7 @@ module "ppud_dev" {
           Effect = "Allow"
           Principal = {
             AWS = [
-              "arn:aws:iam::${local.account_ids["ppud-development"]}:role/service-role/iam_role_s3_bucket_moj_database_source_dev"
+              "arn:aws:iam::${data.aws_secretsmanager_secret_version.account_ids_version.secret_string}:role/service-role/iam_role_s3_bucket_moj_database_source_dev"
             ]
           }
           Action = [
