@@ -32,7 +32,7 @@ At a high level, the AP exposes services which enable users to:
 - Transform data
 - Manage access to data
 - Query and analyse data
-- Disseminate analysis
+- Disseminate analysis via apps
 
 This diagram shows the logical components, and the AWS services used to deliver those services. Scroll down for more.
 
@@ -41,17 +41,18 @@ This diagram shows the logical components, and the AWS services used to deliver 
 ## List of diagrams
 
 - [High level context (C4) diagrams](./c4/c4-diagrams.html). These represent and its external dependencies, such as users, external systems, and APIs. The intended audience is both technical and non-technical people.
-- [Wardley maps](./wardley-maps/wardley-maps.html). These offer a visual framework to understand and plan the evolution of the AP. They help map out system components, their dependencies, and their maturity.
-- [MoJ accounts diagram](./architecture-diagrams/aws-account-view.excalidraw.png). Documents key AP components, the AWS accounts in which they are hosted, and key interactions between those and other key MoJ accounts and services. This is not a commplete list of AP accounts - please refer to this in conjuction with the AP AWS accounts diagram.
+- [AWS accounts diagram](./architecture-diagrams/aws-account-view.excalidraw.png). Documents key AP components, the AWS accounts in which they are hosted, and key interactions between those and other key MOJ accounts and services. Please refer to this in conjuction with the AP data and compute accounts diagram.
 - [Analytical Platform data and compute accounts](./architecture-diagrams/ap-accounts.excalidraw.png). Shows data and compute accounts (ingestion omitted from this view).
 - [Analytical Platform ingestion](./architecture-diagrams/ap-ingestion.html). Shows ingestions services and key interactions with other services (compute omitted from this view).
-- [Apps workflow and HLD](./architecture-diagrams/ap-apps.excalidraw.png). A process flow of how apps are created and deployed, alongside a high-leel diagram of services employed.
+- [Apps workflow and HLD](./architecture-diagrams/ap-apps.excalidraw.png). A process flow of how apps are created and deployed, alongside a high-level diagram of services employed.
+
+We also have a collection [Wardley maps](./wardley-maps/wardley-maps.html). The intention was offer a visual framework to understand and plan the evolution of the AP. They help map out system components, their dependencies, and their maturity. **These have not been maintained or updated**.
 
 ## Contributing and updating
 
 We created these diagrams using the open source tool [Excalidraw](https://docs.excalidraw.com/). The files have `.png` appended onto the filename, e.g `diagram.excalidraw.png`. This allows the editors below to manipulate and version the files without the need to export after every change. It also allows the GitHub user interface to display the diagrams as images.
 
-Excalidraw supports several styles, ranging from "rough sketch" to more formal. Athough we love the rougher "sloppiness" style and the handwriting font, **we ask that diagrams look more formal** - straight clean lines, a sans-serif font etc.
+Excalidraw supports several styles, ranging from "rough sketch" to more formal. When updating or creating diagrams, **we ask that diagrams look more formal** - i.e. straight clean lines, square corners and the sans-serif font.
 
 This helps some users with readability, and also the "rough sketch" style can appear unprofessional or unfinished to other teams who are more used to diagramming software like draw.io or Visio.
 
