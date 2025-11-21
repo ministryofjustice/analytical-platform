@@ -8,7 +8,7 @@ module "ppud_prod" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "5.8.2"
 
-  bucket_prefix       = "mojap-de-prod-ppud-prod"
+  bucket_prefix       = "mojap-de-prod-ppud-prod-"
   force_destroy       = false
   object_lock_enabled = true
   object_lock_configuration = {
