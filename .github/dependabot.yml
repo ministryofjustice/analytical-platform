@@ -55,6 +55,7 @@ updates:
       - "terraform/aws/analytical-platform-data-engineering-production/dms-prod"
       - "terraform/aws/analytical-platform-data-engineering-production/ppud-dev"
       - "terraform/aws/analytical-platform-data-engineering-production/ppud-preprod"
+      - "terraform/aws/analytical-platform-data-engineering-production/ppud-prod"
       - "terraform/aws/analytical-platform-data-engineering-production/terraform-state"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/airflow-create-a-pipeline"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/github-actions-roles"
