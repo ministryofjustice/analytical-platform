@@ -163,3 +163,45 @@ resource "aws_scheduler_schedule" "dms_start" {
     })
   }
 }
+
+resource "aws_scheduler_schedule" "dms_tue_pause" {
+  name                         = "dms-tue-pause-uk-dev"
+  description                  = "Pause DMS CDC every Tuesday at 10:00 UK for maintenance"
+  schedule_expression          = "cron(0 10 ? * TUE *)"
+  schedule_expression_timezone = "Europe/London"
+  state                        = "ENABLED"
+  flexible_time_window { mode = "OFF" }
+
+  target {
+    arn      = "arn:aws:scheduler:::aws-sdk:sfn:startExecution"
+    role_arn = aws_iam_role.scheduler_role.arn
+    input = jsonencode({
+      StateMachineArn = aws_sfn_state_machine.dms_control.arn,
+      Input = jsonencode({
+        Op                 = "stop",
+        ReplicationTaskArn = module.dev_dms_delius.dms_cdc_task_arn
+      })
+    })
+  }
+}
+
+resource "aws_scheduler_schedule" "dms_tue_resume" {
+  name                         = "dms-tue-resume-uk-dev"
+  description                  = "Resume DMS CDC every Tuesday at 12:30 UK after maintenance"
+  schedule_expression          = "cron(30 12 ? * TUE *)"
+  schedule_expression_timezone = "Europe/London"
+  state                        = "ENABLED"
+  flexible_time_window { mode = "OFF" }
+
+  target {
+    arn      = "arn:aws:scheduler:::aws-sdk:sfn:startExecution"
+    role_arn = aws_iam_role.scheduler_role.arn
+    input = jsonencode({
+      StateMachineArn = aws_sfn_state_machine.dms_control.arn,
+      Input = jsonencode({
+        Op                 = "start",
+        ReplicationTaskArn = module.dev_dms_delius.dms_cdc_task_arn
+      })
+    })
+  }
+}
