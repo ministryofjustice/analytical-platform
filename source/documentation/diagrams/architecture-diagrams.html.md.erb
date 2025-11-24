@@ -1,64 +1,72 @@
 ---
 owner_slack: "#analytical-platform-notifications"
 title: Analytical Platform Architectural Diagrams
-last_reviewed_on: 2024-12-19
+last_reviewed_on: 2025-10-17
 review_in: 6 months
 ---
 
 # <%= current_page.data.title %>
 
-This page documents the technical architecture diagrams that make up the Analytical Platform.
+These pages document the technical and logical architecture that makes up the Analytical Platform (AP).
 
-## C4 Model Diagrams
+To ease understanding and maintenance of these diagrams, we provide a number of diagrams at varying levels of detail. Higher level diagrams attempt to aid understanding of the platform as a whole, but omit engineering detail. Other, more detailed diagrams may document parts of the platform in more detail and omit high-level context.
 
-In the [C4 model](https://c4model.com/), the four C's represent [context](https://c4model.com/#SystemContextDiagram), [containers](https://c4model.com/#ContainerDiagram), [components](https://c4model.com/#ComponentDiagram), and [code](https://c4model.com/#CodeDiagram). These different levels help tell the right story, to the right audience.
+These diagrams are not sacred objects - we encourage developers, engineers and others, if they feel comfortable, to submit updates and improvements. For more information see [contributing and updating](#contributing-and-updating) below.
 
-### Level 1 - Analytical Platform System Context
+## High level diagrams
 
-This is the highest level of abstraction and provides an overview of the entire system. It shows the system under consideration and its external dependencies, such as users, external systems, and APIs. The Intended audience is everybody, both technical and non-technical people, inside and outside of the software development team.
+These two diagrams should be sufficient for anyone who is looking for a quick, high-level overview of the components which comprise the Analytical Platform. Below is an index of more detailed diagrams.
 
-#### Level 1 Diagram
+### High level context (C4) diagram
 
-![Level 1 Diagram](c4-model-level1.excalidraw.png)
+This is the highest level of abstraction and provides an overview of the entire platform. It shows the system and its external dependencies, such as users, external systems, and APIs. The intended audience is everybody, both technical and non-technical.
 
-When thinking about the System Context we can ask ourselves the following questions.
+![C4 level 1 Diagram](./c4/c4-model-level1.excalidraw.png)
 
-- What is the scope of the software system we are building? or what as a team are we looking after?
-- Who is using it and what are they doing?
-- What system integrations does it need to support?
+### High level architecture
 
-### Level 2 - Analytical Platform Container
+At a high level, the AP exposes services which enable users to:
 
-This level focuses on the software system's high-level [containers](https://c4model.com/#ContainerDiagram), which are typically applications or services. It illustrates the major components of the system and their interactions. Web servers, databases, desktop and S3 buckets are all examples of containers.
+- Upload or transfer data
+- Store data
+- Transform data
+- Manage access to data
+- Query and analyse data
+- Disseminate analysis via apps
 
-![Level 2 Diagram](c4-model-level2.excalidraw.png)
+This diagram shows the logical components, and the AWS services used to deliver those services. Scroll down for more.
 
-## C4 Model Diagrams Future
+![High level architecture](./architecture-diagrams/ap-hld.excalidraw.png)
 
-The following C4 diagram is a forward view of the analytical platform’s architecture.
+## List of diagrams
 
-### Level 2 - Analytical Platform Container - Future
+- [High level context (C4) diagrams](./c4/c4-diagrams.html). These represent and its external dependencies, such as users, external systems, and APIs. The intended audience is both technical and non-technical people.
+- [AWS accounts diagram](./architecture-diagrams/aws-account-view.excalidraw.png). Documents key AP components, the AWS accounts in which they are hosted, and key interactions between those and other key MOJ accounts and services. Please refer to this in conjuction with the AP data and compute accounts diagram.
+- [Analytical Platform data and compute accounts](./architecture-diagrams/ap-accounts.excalidraw.png). Shows data and compute accounts (ingestion omitted from this view).
+- [Analytical Platform ingestion](./architecture-diagrams/ap-ingestion.html). Shows ingestions services and key interactions with other services (compute omitted from this view).
+- [Apps workflow and HLD](./architecture-diagrams/ap-apps.excalidraw.png). A process flow of how apps are created and deployed, alongside a high-level diagram of services employed.
 
-![Level 2 Container Diagram](c4-model-level2-future.excalidraw.png)
-
-## Additional context
-
-Additional diagrams which show the data catalogue in the context of Analytical Platform can be found [here](https://runbooks.find-moj-data.service.justice.gov.uk/documentation/diagrams/#high-level-architecture).
+We also have a collection [Wardley maps](./wardley-maps/wardley-maps.html). The intention was offer a visual framework to understand and plan the evolution of the AP. They help map out system components, their dependencies, and their maturity. **These have not been maintained or updated**.
 
 ## Contributing and updating
 
-We created these diagrams using the open source tool [Excalidraw](https://docs.excalidraw.com/). The files have `.png` appended onto the filename, e.g `diagram.excalidraw.png`. This allows the editors below to manipulate and version the files without the need to export after every change.
+We created these diagrams using the open source tool [Excalidraw](https://docs.excalidraw.com/). The files have `.png` appended onto the filename, e.g `diagram.excalidraw.png`. This allows the editors below to manipulate and version the files without the need to export after every change. It also allows the GitHub user interface to display the diagrams as images.
+
+Excalidraw supports several styles, ranging from "rough sketch" to more formal. When updating or creating diagrams, **we ask that diagrams look more formal** - i.e. straight clean lines, square corners and the sans-serif font.
+
+This helps some users with readability, and also the "rough sketch" style can appear unprofessional or unfinished to other teams who are more used to diagramming software like draw.io or Visio.
 
 If you would like to edit Excalidraw files, then use one of the following methods.
 
-- On the web using [vscode.dev](https://github.dev/ministryofjustice/analytical-platform/tree/main/docs/diagrams) with the [Excalidraw extenstion](https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor)
+- In GitHub on the web using [vscode.dev](https://github.dev/ministryofjustice/analytical-platform/tree/main/docs/diagrams) with the [Excalidraw extension](https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor)
 
 > Recommended for small changes, requires no software.
 
-- Using [Visual Studio Code](https://code.visualstudio.com/download) with the [Excalidraw extension](https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor)
+- Using [Visual Studio Code](https://code.visualstudio.com/download) with the [Excalidraw extension](https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor). Create a branch for your changes, submit a pull request and the approver will see a visual comparsion of your changes.
 
 > Recommended for creating diagrams.
 
 - Using the web version of [Excalidraw](https://excalidraw.com/) and opening the the cloned, or downloaded [files](https://github.com/ministryofjustice/analytical-platform/tree/main/source/documentation/diagrams)
 
 > Recommended for small group sessions using [live collaboration](https://blog.excalidraw.com/building-excalidraw-p2p-collaboration-feature/)
+> Diagrams created this way can get lost or forgotten, especially if the author moves teams. We recommend once you are happy with the online version, you use Excalidraw's "download file" feature to add the diagram to this repository. Note that the downloaded file will have a `.excalidraw` file extension. To make it work in VS Code, you need to change the extension to `.excalidraw.png` (and accept the warning your operating system gives you about changing file extensions).
