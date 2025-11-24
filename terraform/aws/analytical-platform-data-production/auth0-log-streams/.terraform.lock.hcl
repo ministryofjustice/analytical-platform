@@ -2,8 +2,8 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/hashicorp/aws" {
-  version     = "6.21.0"
-  constraints = ">= 6.0.0, ~> 6.0, 6.21.0"
+  version     = "6.22.0"
+  constraints = ">= 6.0.0, ~> 6.0, 6.22.0"
   hashes = [
     "h1:YfPC5vxQr014wnHI6tBqLxaHZcZQvkaVr19ipqXijdw=",
     "h1:cx/bK3Gt1jl9VhRsH44MmKecxdX5FdeKMLl+VozS/r0=",
@@ -17,10 +17,9 @@ provider "registry.terraform.io/hashicorp/aws" {
     "zh:86c89c7dd5866fcb57c4d35e7ba6ec849caf70c2fdd2d23c9d05da919ec06c8b",
     "zh:94186ec3908ce6e89eaf98767b6b1e40acfb258de9fe8c09f2a100eb5cfca597",
     "zh:9b12af85486a96aedd8d7984b0ff811a4b42e3d88dad1a3fb4c0b580d04fa425",
-    "zh:9d5863a6970735c9e428be91c301789c1e228a3105f711d77efe9c6056bb8295",
-    "zh:a94f9abe91656d68a0657d877665766931ae381825fa0b5121da26b3aa3ed15d",
-    "zh:df2b293078bb3d31b45bcc6e83c17e790dca40198b8d7069dc3e3b387146937f",
-    "zh:e7666954631899756e3bb428c64abcff1c94b7355f7d92eba29541c3d401e472",
-    "zh:f142320e9d4a5c663f6e9924abe05274bbbc4031700bac3387e0a67ec6c951ef",
+    "zh:a007de80ffde8539a73ee39fcfbe7ed12e025c98cd29b2110a7383b41a4aad39",
+    "zh:aae7b7aed8bf3a4bea80a9a2f08fef1adeb748beff236c4a54af93bb6c09a56c",
+    "zh:b5a16b59d4210c1eaf35c8c027ecdab9e074dd081d602f5112eecdebf2e1866d",
+    "zh:d479bad0a004e4893bf0ba6c6cd867fefd14000051bbe3de5b44a925e3d46cd5",
   ]
 }
