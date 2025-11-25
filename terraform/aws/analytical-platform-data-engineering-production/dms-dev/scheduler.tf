@@ -48,7 +48,7 @@ resource "aws_sfn_state_machine" "dms_control" {
         Type = "Choice",
         Choices = [
           { Variable = "$.Op", StringEquals = "stop", Next = "Stop" },
-          { Variable = "$.Op", StringEquals = "start",  Next = "GetCdcStartTime" },
+          { Variable = "$.Op", StringEquals = "start", Next = "GetCdcStartTime" },
           { Variable = "$.Op", StringEquals = "resume", Next = "GetCdcStartTime" }
         ],
         Default = "FailOp"
