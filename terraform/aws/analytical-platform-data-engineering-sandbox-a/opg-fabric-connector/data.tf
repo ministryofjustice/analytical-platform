@@ -26,4 +26,3 @@ data "aws_secretsmanager_secret_version" "object_id_secret" {
 }
 
 data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
