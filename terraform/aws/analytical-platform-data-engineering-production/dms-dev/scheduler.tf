@@ -48,7 +48,8 @@ resource "aws_sfn_state_machine" "dms_control" {
         Type = "Choice",
         Choices = [
           { Variable = "$.Op", StringEquals = "stop", Next = "Stop" },
-          { Variable = "$.Op", StringEquals = "start", Next = "GetCdcStartTime" }
+          { Variable = "$.Op", StringEquals = "start",  Next = "GetCdcStartTime" },
+          { Variable = "$.Op", StringEquals = "resume", Next = "GetCdcStartTime" }
         ],
         Default = "FailOp"
       },
@@ -75,7 +76,15 @@ resource "aws_sfn_state_machine" "dms_control" {
           "CdcStopTime.$" : "$.ReplicationTasks[0].ReplicationTaskStats.StopDate"
         },
         ResultPath = "$.Last"
-        Next       = "Start"
+        Next       = "ChooseStartOrResume"
+      },
+      ChooseStartOrResume = {
+        Type = "Choice",
+        Choices = [
+          { Variable = "$.Op", StringEquals = "start", Next = "Start" },
+          { Variable = "$.Op", StringEquals = "resume", Next = "Resume" }
+        ],
+        Default = "FailOp"
       },
       Start = {
         Type     = "Task",
@@ -83,6 +92,16 @@ resource "aws_sfn_state_machine" "dms_control" {
         Parameters = {
           "ReplicationTaskArn.$"     = "$.ReplicationTaskArn",
           "StartReplicationTaskType" = "start-replication",
+          "CdcStartTime.$"           = "$.Last.CdcStopTime"
+        },
+        End = true
+      },
+      Resume = {
+        Type     = "Task",
+        Resource = "arn:aws:states:::aws-sdk:databasemigration:startReplicationTask",
+        Parameters = {
+          "ReplicationTaskArn.$"     = "$.ReplicationTaskArn",
+          "StartReplicationTaskType" = "resume-processing",
           "CdcStartTime.$"           = "$.Last.CdcStopTime"
         },
         End = true
@@ -199,7 +218,7 @@ resource "aws_scheduler_schedule" "dms_tue_resume" {
     input = jsonencode({
       StateMachineArn = aws_sfn_state_machine.dms_control.arn,
       Input = jsonencode({
-        Op                 = "start",
+        Op                 = "resume",
         ReplicationTaskArn = module.dev_dms_delius.dms_cdc_task_arn
       })
     })
