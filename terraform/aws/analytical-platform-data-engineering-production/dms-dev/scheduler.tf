@@ -49,7 +49,7 @@ resource "aws_sfn_state_machine" "dms_control" {
         Choices = [
           { Variable = "$.Op", StringEquals = "stop", Next = "Stop" },
           { Variable = "$.Op", StringEquals = "start", Next = "GetCdcStartTime" },
-          { Variable = "$.Op", StringEquals = "resume", Next = "GetCdcStartTime" }
+          { Variable = "$.Op", StringEquals = "resume", Next = "Resume" }
         ],
         Default = "FailOp"
       },
@@ -76,15 +76,7 @@ resource "aws_sfn_state_machine" "dms_control" {
           "CdcStopTime.$" : "$.ReplicationTasks[0].ReplicationTaskStats.StopDate"
         },
         ResultPath = "$.Last"
-        Next       = "ChooseStartOrResume"
-      },
-      ChooseStartOrResume = {
-        Type = "Choice",
-        Choices = [
-          { Variable = "$.Op", StringEquals = "start", Next = "Start" },
-          { Variable = "$.Op", StringEquals = "resume", Next = "Resume" }
-        ],
-        Default = "FailOp"
+        Next       = "Start"
       },
       Start = {
         Type     = "Task",
@@ -101,8 +93,7 @@ resource "aws_sfn_state_machine" "dms_control" {
         Resource = "arn:aws:states:::aws-sdk:databasemigration:startReplicationTask",
         Parameters = {
           "ReplicationTaskArn.$"     = "$.ReplicationTaskArn",
-          "StartReplicationTaskType" = "resume-processing",
-          "CdcStartTime.$"           = "$.Last.CdcStopTime"
+          "StartReplicationTaskType" = "resume-processing"
         },
         End = true
       },
