@@ -39,8 +39,8 @@ module "ppud_prod" {
   policy = jsonencode(
     {
       Statement = [
-        {  
-          Sid = "Set-permissions-for-objects"
+        {
+          Sid    = "Set-permissions-for-objects"
           Effect = "Allow"
           Principal = {
             AWS = [
@@ -48,13 +48,13 @@ module "ppud_prod" {
             ]
           }
           Action = [
-            "s3:ReplicateObject", 
+            "s3:ReplicateObject",
             "s3:ReplicateDelete"
           ]
           Resource = "arn:aws:s3:::mojap-data-engineering-production-ppud-prod/*"
         },
         {
-          Sid = "Set-permissions-on-buckets"
+          Sid    = "Set-permissions-on-buckets"
           Effect = "Allow"
           Principal = {
             AWS = [
@@ -62,7 +62,7 @@ module "ppud_prod" {
             ]
           }
           Action = [
-            "s3:GetBucketVersioning", 
+            "s3:GetBucketVersioning",
             "s3:PutBucketVersioning"
           ]
           Resource = "arn:aws:s3:::mojap-data-engineering-production-ppud-prod"
