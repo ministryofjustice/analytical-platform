@@ -1,11 +1,11 @@
 terraform {
   backend "s3" {
-    acl            = "private"
-    bucket         = "global-tf-state-aqsvzyd5u9"
-    encrypt        = true
-    key            = "aws/analytical-platform-data-production/cloudtrail-athena-events/terraform.tfstate"
-    region         = "eu-west-2"
-    dynamodb_table = "global-tf-state-aqsvzyd5u9-locks"
+    acl          = "private"
+    bucket       = "global-tf-state-aqsvzyd5u9"
+    encrypt      = true
+    key          = "aws/analytical-platform-data-production/cloudtrail-athena-events/terraform.tfstate"
+    region       = "eu-west-2"
+    use_lockfile = true
   }
   required_providers {
     aws = {
