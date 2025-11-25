@@ -97,7 +97,7 @@ resource "aws_sfn_state_machine" "dms_control" {
         },
         End = true
       },
-      FailOp = { Type = "Fail", Error = "InvalidOp", Cause = "Op must be 'start' or 'stop'." }
+      FailOp = { Type = "Fail", Error = "InvalidOp", Cause = "Op must be 'start', 'stop' or 'resume'." }
     }
   })
   tracing_configuration {
