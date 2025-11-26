@@ -6,6 +6,7 @@ provider "registry.terraform.io/auth0/auth0" {
   constraints = "1.34.0"
   hashes = [
     "h1:LgxPQ71TcntmmZwyXpezcv2TYX/NOdP8laEIGoYV8Cs=",
+    "h1:kSCP3rTHeS6X7wB2mpEOPnYsoeNZF742AseR7+Dqxek=",
     "zh:3723dfe56cf10a028d3f83d7cdc2eec107828373f8001ac81b207c9dcf0986df",
     "zh:41c6265d0cc6cea9d7d01b76d959e2725854fed664ddc17b2703a0d15f26a117",
     "zh:5995a145ab7d81911cfe554e7f964e9ac9fc18c062e9c92843d6989f14d6b5ee",
@@ -27,6 +28,7 @@ provider "registry.terraform.io/hashicorp/aws" {
   version     = "6.14.0"
   constraints = "6.14.0"
   hashes = [
+    "h1:MHSiHnXU6DcXC/suxG00SvfAtPRiNnvVKOkGUAZG39g=",
     "h1:wm0x2PXrphyC+dFsZ2NKeweMJoYr03kbwbPxtuxaCMc=",
     "zh:35bd9514b397e96f40eaf5dea7de007e4105e804db3b246ee83edc31260f3251",
     "zh:5662381971177f552b44b0f96e5aeb117b8c2e5c118845be41b19d44daed94d7",
