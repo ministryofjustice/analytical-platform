@@ -330,3 +330,37 @@ resource "aws_secretsmanager_secret_version" "pagerduty_alert_manager_integratio
   secret_id     = aws_secretsmanager_secret.pagerduty_alert_manager_integration_key[0].id
   secret_string = pagerduty_service_integration.alert_manager[0].integration_key
 }
+
+##################################################
+# Pingdom Integration
+##################################################
+
+data "pagerduty_vendor" "pingdom" {
+  name = "Pingdom"
+}
+
+resource "pagerduty_service_integration" "pingdom" {
+  count = var.enable_pingdom_integration ? 1 : 0
+
+  name    = data.pagerduty_vendor.pingdom.name
+  service = pagerduty_service.this.id
+  #vendor  = data.pagerduty_vendor.pingdom.id
+  vendor = "PQXZU5E"
+}
+
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
+resource "aws_secretsmanager_secret" "pagerduty_pingdom_integration_key" {
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
+  count = var.enable_pingdom_integration ? 1 : 0
+
+  name       = "${local.secretsmanager_prefix}/pingdom"
+  kms_key_id = "alias/aws/secretsmanager"
+}
+
+resource "aws_secretsmanager_secret_version" "pagerduty_pingdom_integration_key" {
+  count = var.enable_pingdom_integration ? 1 : 0
+
+  secret_id     = aws_secretsmanager_secret.pagerduty_pingdom_integration_key[0].id
+  secret_string = pagerduty_service_integration.pingdom[0].integration_key
+}

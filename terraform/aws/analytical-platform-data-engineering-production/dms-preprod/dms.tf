@@ -1,5 +1,5 @@
 module "preprod_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=a8f5d7d6f4984d3d7cf62d1410d49512a31f3556"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b190c92217786c0454b756996cdb2fcb190256db"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -49,8 +49,9 @@ module "preprod_dms_oasys" {
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
 }
 
+# retrigger
 module "preprod_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=a8f5d7d6f4984d3d7cf62d1410d49512a31f3556"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b190c92217786c0454b756996cdb2fcb190256db"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 

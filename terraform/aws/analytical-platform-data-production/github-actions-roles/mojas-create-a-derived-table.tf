@@ -110,6 +110,16 @@ data "aws_iam_policy_document" "create_a_derived_table" {
     actions   = ["sts:AssumeRole", "sts:TagSession"]
     resources = ["arn:aws:iam::${var.account_ids["analytical-platform-compute-production"]}:role/copy-apdp-cadet-metadata-to-compute"]
   }
+  statement {
+    sid    = "KMSDecryptActions"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt"
+    ]
+    resources = [
+      "arn:aws:kms:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:key/0409ddbc-b6a2-46c4-a613-6145f6a16215"
+    ]
+  }
 }
 
 module "create_a_derived_table_iam_policy" {

@@ -7,7 +7,8 @@ locals {
     "10.161.4.0/22",
     "10.161.20.0/22",
     "172.20.0.0/16",
-    "10.26.24.0/21"
+    "10.26.24.0/21",
+    "10.26.8.0/21"
   ]
 
   route_tables_ids = toset(module.vpc.private_route_table_ids)
@@ -176,31 +177,6 @@ module "endpoints" {
   }
   endpoints = {
     # interface endpoints  need  subnet_ids and sg_id
-    # Interface endpoint for ec2messages
-    ec2messages = {
-      service             = "ec2messages"
-      service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
-      private_dns_enabled = true
-      tags                = { Name = "ec2messages-eu-west-1c-dev" }
-    }
-
-    ssmmessages = {
-      service             = "ssmmessages"
-      service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
-      private_dns_enabled = true
-      tags                = { Name = "ssmmessages-eu-west-1c-dev" }
-    }
-
-    ssm = {
-      service             = "ssm"
-      service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
-      private_dns_enabled = true
-      tags                = { Name = "ssm-eu-west-1c-dev" }
-    }
-
 
     s3 = {
 
@@ -232,6 +208,30 @@ module "endpoints" {
       tags                = { Name = "sts-eu-west-1-dev" }
     }
 
+    # # Interface endpoints for ec2 bastion host
+    # ec2messages = {
+    #   service             = "ec2messages"
+    #   service_type        = "Interface"
+    #   subnet_ids          = module.vpc.private_subnets
+    #   private_dns_enabled = true
+    #   tags                = { Name = "ec2messages-eu-west-1c-dev" }
+    # }
+
+    # ssmmessages = {
+    #   service             = "ssmmessages"
+    #   service_type        = "Interface"
+    #   subnet_ids          = module.vpc.private_subnets
+    #   private_dns_enabled = true
+    #   tags                = { Name = "ssmmessages-eu-west-1c-dev" }
+    # }
+
+    # ssm = {
+    #   service             = "ssm"
+    #   service_type        = "Interface"
+    #   subnet_ids          = module.vpc.private_subnets
+    #   private_dns_enabled = true
+    #   tags                = { Name = "ssm-eu-west-1c-dev" }
+    # }
   }
 
 

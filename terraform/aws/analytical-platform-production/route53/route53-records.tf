@@ -98,5 +98,11 @@ module "route53_records" {
         "ns-1929.awsdns-49.co.uk."
       ]
     },
+    {
+      name    = "next"
+      type    = "CNAME"
+      ttl     = 300
+      records = ["ingress.compute.development.analytical-platform.service.justice.gov.uk."]
+    },
   ]
 }

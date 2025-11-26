@@ -151,45 +151,24 @@ data "aws_iam_policy_document" "bedrock" {
     sid    = "Bedrock"
     effect = "Allow"
     actions = [
-      "bedrock:CreateActionGroup",
-      "bedrock:CreateAgent",
-      "bedrock:CreateAgentAlias",
-      "bedrock:CreateAgentDraftSnapshot",
-      "bedrock:CreateFoundationModelAgreement",
       "bedrock:CreateModelCustomizationJob",
       "bedrock:DeleteCustomModel",
-      "bedrock:DeleteFoundationModelAgreement",
-      "bedrock:GetActionGroup",
-      "bedrock:GetAgent",
-      "bedrock:GetAgentAlias",
-      "bedrock:GetAgentVersion",
       "bedrock:GetCustomModel",
       "bedrock:GetFoundationModel",
       "bedrock:GetFoundationModelAvailability",
       "bedrock:GetModelCustomizationJob",
       "bedrock:GetModelInvocationLoggingConfiguration",
-      "bedrock:GetUseCaseForModelAccess",
-      "bedrock:InvokeAgent",
       "bedrock:InvokeModel",
       "bedrock:InvokeModelWithResponseStream",
-      "bedrock:ListActionGroups",
-      "bedrock:ListAgentAliases",
-      "bedrock:ListAgents",
-      "bedrock:ListAgentVersions",
       "bedrock:ListCustomModels",
-      "bedrock:ListFoundationModelAgreementOffers",
       "bedrock:ListFoundationModels",
       "bedrock:ListModelCustomizationJobs",
       "bedrock:ListProvisionedModelThroughputs",
       "bedrock:ListTagsForResource",
-      "bedrock:PutFoundationModelEntitlement",
       "bedrock:PutModelInvocationLoggingConfiguration",
       "bedrock:StopModelCustomizationJob",
       "bedrock:TagResource",
-      "bedrock:UntagResource",
-      "bedrock:UpdateActionGroup",
-      "bedrock:UpdateAgent",
-      "bedrock:UpdateAgentAlias"
+      "bedrock:UntagResource"
     ]
     resources = ["*"]
     condition {

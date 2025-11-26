@@ -1,18 +1,12 @@
-# checkov:skip=CKV2_AWS_62: Skipping because event notifications are not applicable for this bucket.
-# checkov:skip=CKV_AWS_18: Skipping because access logging is managed externally.
-# checkov:skip=CKV_AWS_145: Skipping because KMS encryption is handled at the account level.
-# checkov:skip=CKV2_AWS_61: Skipping because a lifecycle configuration is not required.
-# checkov:skip=CKV_AWS_144: Skipping because cross-region replication is not needed.
-
 #trivy:ignore:avd-aws-0132: Skipping because replicating existing bucket that does not encrypt data with a customer managed key
 #trivy:ignore:avd-aws-0088: Skipping because has server side encryption
 #trivy:ignore:avd-aws-0089: Skipping because access logging is managed externally.
 module "ppud_preprod" {
-  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
-  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+  #checkov:skip=CKV_TF_1: Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2: Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.5.0"
+  version = "5.8.2"
 
   bucket              = "mojap-data-engineering-production-ppud-preprod"
   force_destroy       = false
