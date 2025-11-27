@@ -18,3 +18,12 @@ resource "aws_secretsmanager_secret" "moj_analytical_services_github_token" {
   kms_key_id  = "alias/aws/secretsmanager"
 }
 
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
+resource "aws_secretsmanager_secret" "container_test_slack_webhook_url" {
+  provider = aws.analytical-platform-management-production-eu-west-1
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
+  name        = "container-test-slack-webhook-url"
+  description = "Slack webhook URL for container test notifications"
+  kms_key_id  = "alias/aws/secretsmanager"
+}
