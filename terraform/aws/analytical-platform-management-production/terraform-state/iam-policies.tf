@@ -10,7 +10,8 @@ data "aws_iam_policy_document" "data_engineering_state_access" {
     effect = "Allow"
     actions = [
       "s3:GetObject",
-      "s3:PutObject"
+      "s3:PutObject",
+      "s3:DeleteObject"
     ]
     resources = [
       "${module.state_bucket.s3_bucket_arn}/aws/analytical-platform-data-engineering-production/*",
