@@ -197,8 +197,8 @@ resource "aws_scheduler_schedule" "dms_tue_pause" {
 
 resource "aws_scheduler_schedule" "dms_tue_resume" {
   name                         = "dms-tue-resume-uk-dev"
-  description                  = "Resume DMS CDC every Tuesday at 12:30 UK after maintenance"
-  schedule_expression          = "cron(30 12 ? * TUE *)"
+  description                  = "Resume DMS CDC every Tuesday at 15:00 UK after maintenance"
+  schedule_expression          = "cron(00 15 ? * TUE *)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
