@@ -1,0 +1,45 @@
+---
+owner_slack: "#analytical-platform-notifications"
+title: Business continuity and disaster recovery
+last_reviewed_on: 2025-12-02
+review_in: 6 months
+weight: 0
+---
+
+# <%= current_page.data.title %>
+
+## Overview
+
+This document outlines thge business continuity and disaster recovery (BCDR) processes for the Analytical Platform, as well as our appetite for risk in relation to the uptime and recoverability of the service.
+
+### Data loss
+
+**In general** data is owned by users of the platform, and we do not currently back up or replicate user data held in S3 buckets. In the event of data loss, data must be re-ingested or re-uploaded from the original sources.
+
+We do not guarantee protection against accidental deletion or modification of data by users.
+
+### Platform recovery
+
+All infrastructure is defined in code, with the core of the platform being defined in the Modernisation Platform environments:
+
+(list of core repos)
+
+### Data access
+
+Data engineering data access repo can re-create project access, but the S3 paths could be different. IAM ARNS?
+
+### Register My Data
+
+Re-create - as above; paths and IAM roles ARNs could change
+
+### Airflow and managed pipelines
+
+Something here
+
+### Tooling
+
+Rocovery of CP and tooling
+
+### User-defined code
+
+Analysis code?
