@@ -176,8 +176,8 @@ resource "aws_scheduler_schedule" "dms_start" {
 
 resource "aws_scheduler_schedule" "dms_tue_pause" {
   name                         = "dms-tue-pause-uk-dev"
-  description                  = "Pause DMS CDC every Tuesday at 10:00 UK for maintenance"
-  schedule_expression          = "cron(0 10 ? * TUE *)"
+  description                  = "Pause DMS CDC every Tuesday at 9:00 UK for maintenance"
+  schedule_expression          = "cron(0 9 ? * TUE *)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
@@ -197,8 +197,8 @@ resource "aws_scheduler_schedule" "dms_tue_pause" {
 
 resource "aws_scheduler_schedule" "dms_tue_resume" {
   name                         = "dms-tue-resume-uk-dev"
-  description                  = "Resume DMS CDC every Tuesday at 15:00 UK after maintenance"
-  schedule_expression          = "cron(0 15 ? * TUE *)"
+  description                  = "Resume DMS CDC every Tuesday at 17:00 UK after maintenance"
+  schedule_expression          = "cron(0 17 ? * TUE *)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
