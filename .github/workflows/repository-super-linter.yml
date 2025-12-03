@@ -25,10 +25,11 @@ jobs:
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Super-Linter
         id: super_linter
-        uses: super-linter/super-linter/slim@5119dcd8011e92182ce8219d9e9efc82f16fddb6 # v8.0.0
+        uses: super-linter/super-linter/slim@2bdd90ed3262e023ac84bf8fe35dc480721fc1f2 # v8.2.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: main
@@ -50,3 +51,6 @@ jobs:
           VALIDATE_CHECKOV: false
           VALIDATE_JSCPD: false
           VALIDATE_CSS: false
+          # Biome linter disabled as not required
+          VALIDATE_BIOME_FORMAT: false
+          VALIDATE_BIOME_LINT: false
