@@ -23,14 +23,14 @@ resource "aws_security_group_rule" "db_ingress" {
 # checkov:skip=CKV_TF_1: Pointing to branch name whilst in development, will change to commit hash
 # checkov:skip=CKV_TF_2: Pointing to branch name whilst in development, will change to commit hash
 module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=add-tf-tests"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=update-module"
 
   providers = {
     aws = aws
   }
 
   name                     = local.name
-  database_refresh_mode    = "full"
+  database_refresh_mode    = "incremental"
   vpc_id                   = module.vpc_dev.vpc_id
   database_subnet_ids      = module.vpc_dev.private_subnets
   kms_key_arn              = module.rds_export_kms_dev.key_arn
