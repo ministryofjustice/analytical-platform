@@ -1,7 +1,7 @@
 ---
 owner_slack: "#analytical-platform-notifications"
 title: Business continuity and disaster recovery
-last_reviewed_on: 2025-12-02
+last_reviewed_on: 2025-12-03
 review_in: 6 months
 weight: 0
 ---
@@ -12,17 +12,50 @@ weight: 0
 
 This document outlines thge business continuity and disaster recovery (BCDR) processes for the Analytical Platform, as well as our appetite for risk in relation to the uptime and recoverability of the service.
 
+## Steps to take
+
+If an incident which requires full or partial platform recovery occurs, follow these steps:
+
+- Communicate the issue - see the [section below](#communication-plan)
+- Identify the cause
+- Agree on recovery action(s)
+- Update communications
+- Perform recovery actions
+- Verify that operations are restored
+- Update communications
+- Perform a post-incident review and identify actions (this can be done later)
+
+## Communication plan
+
+- **Internal Communication**:
+  - Notify the Analytical Platform team immediately when a incident is identified via the [#analytical-platform] Slack channel.
+  - Create an incident thread in the above channel and tag the team using the `@analytical-platform-team` tag (not @`here` or @`channel`)
+- **External Communication**:
+  - Inform users about any relevant service disruptions via the [#ask-analytical-plaform] Slack channel and user groups such as the #ask-data-engineering Slack channel or DEDS email group.
+
+## Business appetite for time to recovery
+
+A week?
+
 ### Data loss
 
-**In general** data is owned by users of the platform, and we do not currently back up or replicate user data held in S3 buckets. In the event of data loss, data must be re-ingested or re-uploaded from the original sources.
+In general data is owned by users of the platform, and we do not currently back up or replicate user data held in S3 buckets. In the event of data loss, data must be re-ingested or re-uploaded from the original sources.
+
+We rely on the reliability of AWS S3 standard storage:
+
+- Backed with the [Amazon S3 Service Level Agreement](https://aws.amazon.com/s3/sla/).
+- Designed to provide 99.999999999% durability and 99.99% availability of objects over a given year.
+- S3 Standard (... etc.) are all designed to sustain data in the event of the loss of an entire Amazon S3 Availability Zone.
+
+([Source](https://docs.aws.amazon.com/AmazonS3/latest/userguide/DataDurability.html))
+
+Given the above we do not consider it cost-effective to replicate or otherwise back up petabytes of data.
 
 We do not guarantee protection against accidental deletion or modification of data by users.
 
 ### Platform recovery
 
-All infrastructure is defined in code, with the core of the platform being defined in the Modernisation Platform environments:
-
-(list of core repos)
+All infrastructure is defined in code, with the core of the platform being defined in the Modernisation Platform environments repository.
 
 ### Data access
 
@@ -36,6 +69,10 @@ Re-create - as above; paths and IAM roles ARNs could change
 
 Something here
 
+### Create a Derived Table (CaDeT)
+
+[CaDeT](https://github.com/moj-analytical-services/create-a-derived-table/tree/main) is based on [dbt](https://www.getdbt.com/) where all workflows and derived data defintions are defined in code. Once source data has been re-ingested the models can be updated to reflect any changed S3 paths and re-run.
+
 ### Tooling
 
 Rocovery of CP and tooling
@@ -43,3 +80,11 @@ Rocovery of CP and tooling
 ### User-defined code
 
 Analysis code?
+
+<!-- external links -->
+[#ask-analytical-platform] : https://moj.enterprise.slack.com/archives/C4PF7QAJZ
+[#analytical-platform] : https://moj.enterprise.slack.com/archives/C04M8224WCV
+[#modernisation-platform-update] : https://moj.enterprise.slack.com/archives/C02L5MCJ12N
+[#ask-moderinsation-platform]: https://moj.enterprise.slack.com/archives/C57UPMZLY
+[#cloud-platform-update] : https://moj.enterprise.slack.com/archives/CH6D099DF
+[#ask-cloud-platform]: https://moj.enterprise.slack.com/archives/C57UPMZLY
