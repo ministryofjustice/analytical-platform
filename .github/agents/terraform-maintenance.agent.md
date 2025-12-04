@@ -1,8 +1,7 @@
 ---
-description:
-  Agent to patch Terraform module versions on environements in the analytical-platform repository.
+description: Agent to patch Terraform module versions on environments in the analytical-platform repository.
 
-tools: ['runCommands', 'edit', 'search', 'fetch']
+tools: ["runCommands", "edit", "search", "fetch"]
 ---
 
 # Terraform Maintenance Agent
@@ -112,16 +111,19 @@ Create a PR with:
 ```markdown
 ## Terraform Module Updates
 
-| Module | Old Version | New Version | Notes |
-|--------|-------------|-------------|-------|
-| [terraform-aws-modules/s3-bucket/aws](https://registry.terraform.io/modules/terraform-aws-modules/s3-bucket/aws) | [5.2.0](https://github.com/terraform-aws-modules/terraform-aws-s3-bucket/releases/tag/v5.2.0) | [5.9.0](https://github.com/terraform-aws-modules/terraform-aws-s3-bucket/releases/tag/v5.9.0) | |
-| [terraform-aws-modules/iam/aws](https://registry.terraform.io/modules/terraform-aws-modules/iam/aws) | [5.59.0](https://github.com/terraform-aws-modules/terraform-aws-iam/releases/tag/v5.59.0) | [5.60.0](https://github.com/terraform-aws-modules/terraform-aws-iam/releases/tag/v5.60.0) | ⚠️ v6.x skipped - breaking changes |
+| Module                                                                                                           | Old Version                                                                                   | New Version                                                                                   | Notes                              |
+| ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------- |
+| [terraform-aws-modules/s3-bucket/aws](https://registry.terraform.io/modules/terraform-aws-modules/s3-bucket/aws) | [5.2.0](https://github.com/terraform-aws-modules/terraform-aws-s3-bucket/releases/tag/v5.2.0) | [5.9.0](https://github.com/terraform-aws-modules/terraform-aws-s3-bucket/releases/tag/v5.9.0) |                                    |
+| [terraform-aws-modules/iam/aws](https://registry.terraform.io/modules/terraform-aws-modules/iam/aws)             | [5.59.0](https://github.com/terraform-aws-modules/terraform-aws-iam/releases/tag/v5.59.0)     | [5.60.0](https://github.com/terraform-aws-modules/terraform-aws-iam/releases/tag/v5.60.0)     | ⚠️ v6.x skipped - breaking changes |
 
 ### Skipped Updates
+
 - **module-name**: Reason for skipping (e.g., breaking changes in v6.0)
 
 ### Breaking Changes Avoided
+
 If any major versions were skipped, explain:
+
 - What breaking changes exist
 - Link to the upgrade guide
 - What would be required to migrate
