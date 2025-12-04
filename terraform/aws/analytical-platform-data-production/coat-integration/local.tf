@@ -9,7 +9,7 @@ locals {
 
     coat_cur_reports_v2_hourly_enriched = {
       bucket_name = "mojap-data-production-coat-cur-reports-v2-hourly-enriched"
-      source_replication_role = "arn:aws:iam::${var.account_ids["coat_production"]}:role/moj-cur-v2-hourly-enriched-replication-role"
+      source_replication_role = "arn:aws:iam::${var.account_ids["coat-production"]}:role/moj-cur-v2-hourly-enriched-replication-role"
     }
   }
 }
