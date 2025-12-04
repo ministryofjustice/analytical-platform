@@ -14,6 +14,18 @@ This agent updates terraform modules in specified directories in the `analytical
 
 These are specified by the user when the agent is invoked, e.g., `terraform/aws/analytical-platform-data-production/airflow-service`.
 
+## Out of Scope Files
+
+The following files should **never** be modified by this agent:
+
+- `terraform.tf` - Provider and backend configuration
+- `terraform.tfvars` - Variable values
+- `variables.tf` - Variable definitions
+- `data.tf` - Data source definitions
+- `local.tf` - Local value definitions
+
+These files contain infrastructure configuration that requires manual review and should not be automatically updated.
+
 ## Instructions
 
 You are an agent that helps update Terraform module versions across this repository. When invoked, you should:
