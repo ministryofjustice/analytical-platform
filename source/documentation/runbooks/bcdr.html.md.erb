@@ -20,16 +20,24 @@ If an incident which requires full or partial platform recovery occurs, follow t
 - Identify the cause
 - Agree on recovery action(s)
 - Update communications
-- Perform recovery actions
+- Perform recovery actions (or monitor external incident sources - see below)
 - Verify that operations are restored
 - Update communications
-- Perform a post-incident review and identify actions (this can be done later)
+- Perform a post-incident review, identify actions and update runbooks if applicable (this can be done later)
+
+### Issues with underlying platforms
+
+If the cause is identified as being an incident or issue with Modernisation Platform (or Cloud Platform for user-deployed apps) then recovery will largely be out of the hands of this team. Monitor the [#ask-moderinsation-platform] (or [#ask-cloud-platform]) channel and [relay any relevant information](#communication-plan) to users.
+
+If the issue is with underlying AWS infrastructure (an AWS outage) then monitor the relevant AWS incident page and relay information as above.
+
+Once the underlying issue is resolved, perform manual checks of the availability of AP services before communicating the resolution to users.
 
 ## Communication plan
 
 - **Internal Communication**:
   - Notify the Analytical Platform team immediately when a incident is identified via the [#analytical-platform] Slack channel.
-  - Create an incident thread in the above channel and tag the team using the `@analytical-platform-team` tag (not @`here` or @`channel`)
+  - Create an incident thread in the above channel and tag the team using the `@analytical-platform-team` tag (not `@here` or `@channel`)
 - **External Communication**:
   - Inform users about any relevant service disruptions via the [#ask-analytical-plaform] Slack channel and user groups such as the #ask-data-engineering Slack channel or DEDS email group.
 
@@ -49,13 +57,19 @@ We rely on the reliability of AWS S3 standard storage:
 
 ([Source](https://docs.aws.amazon.com/AmazonS3/latest/userguide/DataDurability.html))
 
-Given the above we do not consider it cost-effective to replicate or otherwise back up petabytes of data.
+Given the above we do not consider it cost effective to replicate or otherwise back up petabytes of data.
 
-We do not guarantee protection against accidental deletion or modification of data by users.
+We do not guarantee protection against accidental deletion or modification of data by users. Accidental deletion does not contitute an incident or disaster in the context of this documument.
 
 ### Platform recovery
 
-All infrastructure is defined in code, with the core of the platform being defined in the Modernisation Platform environments repository.
+All infrastructure is defined in code, with the core of the platform being defined in the Modernisation Platform environments repository:
+
+- [Common / core](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-common)
+- [Compute](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-compute)
+- [Ingestion](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-ingestion)
+
+Terraform actions should be run in the order above.
 
 ### Data access
 
@@ -71,11 +85,11 @@ Something here
 
 ### Create a Derived Table (CaDeT)
 
-[CaDeT](https://github.com/moj-analytical-services/create-a-derived-table/tree/main) is based on [dbt](https://www.getdbt.com/) where all workflows and derived data defintions are defined in code. Once source data has been re-ingested the models can be updated to reflect any changed S3 paths and re-run.
+[CaDeT] is based on [dbt](https://www.getdbt.com/) where all workflows and derived data defintions are defined in code. Once source data has been re-ingested the models can be updated to reflect any changed S3 paths and re-run.
 
 ### Tooling
 
-Rocovery of CP and tooling
+Recovery of CP and tooling
 
 ### User-defined code
 
@@ -88,3 +102,4 @@ Analysis code?
 [#ask-moderinsation-platform]: https://moj.enterprise.slack.com/archives/C57UPMZLY
 [#cloud-platform-update] : https://moj.enterprise.slack.com/archives/CH6D099DF
 [#ask-cloud-platform]: https://moj.enterprise.slack.com/archives/C57UPMZLY
+[CaDeT] : https://github.com/moj-analytical-services/create-a-derived-table/tree/main
