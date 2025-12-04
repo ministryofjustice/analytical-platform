@@ -26,7 +26,7 @@ module "coat_kms_keys" {
       principals = [
         {
           type        = "AWS"
-          identifiers = [ each.value.source_replication_role ]
+          identifiers = [each.value.source_replication_role]
         }
       ]
     }
