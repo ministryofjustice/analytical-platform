@@ -19,8 +19,13 @@ data "aws_iam_policy_document" "coat_bucket_policies" {
   }
 }
 
+moved {
+  from = module.coat_s3
+  to   = module.coat_s3_buckets.coat_cur_reports_v2_hourly
+}
+
 #trivy:ignore:AVD-AWS-0089:Bucket logging not enabled currently
-module "coat_s3" {
+module "coat_s3_buckets" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
@@ -44,7 +49,7 @@ module "coat_s3" {
     bucket_key_enabled = true
     rule = {
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = module.coat_kms.key_arn
+        kms_master_key_id = module.coat_kms_keys[each.key].key_arn
         sse_algorithm     = "aws:kms"
       }
     }

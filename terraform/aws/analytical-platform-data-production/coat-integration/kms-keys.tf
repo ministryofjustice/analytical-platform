@@ -1,11 +1,13 @@
-module "coat_kms" {
+module "coat_kms_keys" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  for_each = local.buckets
 
   source  = "terraform-aws-modules/kms/aws"
   version = "4.0.0"
 
-  aliases               = ["s3/${local.buckets.coat_cur_reports_v2_hourly.bucket_name}"]
+  aliases               = ["s3/${each.value.bucket_name}"]
   enable_default_policy = true
   key_statements = [
     {
@@ -19,7 +21,7 @@ module "coat_kms" {
       principals = [
         {
           type        = "AWS"
-          identifiers = [ for bucket in local.buckets : bucket.source_replication_role ]
+          identifiers = [ each.value.source_replication_role ]
         }
       ]
     }
