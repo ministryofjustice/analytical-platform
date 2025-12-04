@@ -1,3 +1,8 @@
+moved {
+  from = module.coat_kms
+  to   = module.coat_kms_keys["coat_cur_reports_v2_hourly"]
+}
+
 module "coat_kms_keys" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
