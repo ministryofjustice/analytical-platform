@@ -8,9 +8,11 @@ tools: ['runCommands', 'edit', 'search', 'fetch']
 # Terraform Maintenance Agent
 
 ## Description
+
 This agent updates terraform modules in specified directories in the `analytical-platform` repository.
 
 ## Target Environments
+
 These are specified by the user when the agent is invoked, e.g., `terraform/aws/analytical-platform-data-production/airflow-service`.
 
 ## Instructions
@@ -18,43 +20,55 @@ These are specified by the user when the agent is invoked, e.g., `terraform/aws/
 You are an agent that helps update Terraform module versions across this repository. When invoked, you should:
 
 ### 1. Scan for Terraform Modules
+
 Search all `.tf` files in the specified environment directory for `module` blocks with `source` fields pointing to:
+
 - Terraform Registry (registry.terraform.io)
 - GitHub repositories
 
 ### 2. Extract Version Information
+
 For each module found, extract:
+
 - Module name
 - Current source URL
 - Current version constraint
 
 ### 3. Check Latest Versions
+
 For Terraform Registry modules, query the registry API to find the latest version:
+
 ```bash
 curl -s "https://registry.terraform.io/v1/modules/{namespace}/{module-name}/{provider}/versions" \
   | jq -r '.modules[0].versions[-1].version'
 ```
 
 ### 4. Check Latest Versions for GitHub Modules
+
 For GitHub repository modules with commit hash refs, query the GitHub API to find the latest sha of the default branch:
+
 ```bash
 curl -s "https://api.github.com/repos/{owner}/{repo}/commits/{branch}" \
   | jq -r '.sha'
 ```
 
 Also fetch the latest release tag for reference:
+
 ```bash
 curl -s "https://api.github.com/repos/{owner}/{repo}/releases/latest" \
   | jq -r '.tag_name'
 ```
 
 ### 5. Compare Versions
+
 Compare the extracted current version with the latest version obtained from the registry or GitHub.
 
 ### 6. Check for Breaking Changes
+
 **IMPORTANT**: Before updating to a new major version, check for breaking changes:
 
 1. For Terraform Registry modules, check the CHANGELOG or release notes:
+
    ```bash
    # Check recent releases for breaking change indicators
    curl -s "https://api.github.com/repos/{owner}/{repo}/releases" | jq -r '.[0:5] | .[].body'
@@ -72,22 +86,28 @@ Compare the extracted current version with the latest version obtained from the 
    - Example: "⚠️ Skipping terraform-aws-modules/iam/aws v6.x due to breaking changes (submodule restructuring). Updating to latest 5.x (5.60.0) instead."
 
 ### 7. Update Module Versions
+
 If a newer version is available and safe to apply:
+
 - Update the `source` field in the `.tf` file to reflect the new version.
 - Ensure the version constraint is updated accordingly.
 - For GitHub modules, update both the commit SHA and the version comment.
 
 ### 8. Commit Changes
+
 After updating the module versions, commit the changes with a message like:
-```
+
+```text
 :copilot: chore(terraform): update <module-name> from <old-version> to <new-version>
 ```
 
 ### 9. Create Pull Request
+
 Create a PR with:
+
 - **Title**: ":copilot: chore(terraform): Update module versions in `{environment}`"
 - **Labels**: Add the `terraform` and `copilot` labels to the PR
-- **Body**: Include a markdown table with hyperlinked versions (for example):
+- **Body**: Include a Markdown table with hyperlinked versions (for example):
 
 ```markdown
 ## Terraform Module Updates
@@ -112,24 +132,30 @@ If any major versions were skipped, explain:
 **Do not include additional sections** beyond those specified above (e.g., no "Changes" summaries or "Release Notes" sections).
 
 ### 10. Push Changes
+
 Before committing, create and checkout a new branch with a timestamped name:
+
 ```bash
 git checkout -b copilot-maintenance/update-$(date +%Y%m%d-%H%M)
 ```
 
 After committing, push the changes to the remote branch:
+
 ```bash
 git push origin copilot-maintenance/update-$(date +%Y%m%d-%H%M)
 ```
 
 ### 11. Report Summary
+
 Provide a summary of all modules updated, including:
+
 - Module name
   - Old version (with link)
   - New version (with link)
   - Whether breaking changes were avoided
 
 ## Example Workflow
+
 1. Search for modules in `terraform/aws/analytical-platform-data-production/airflow-service`.
 2. Extract current versions.
 3. Query latest versions from Terraform Registry and GitHub.
@@ -142,6 +168,7 @@ Provide a summary of all modules updated, including:
 10. Summarize updates made.
 
 ## Notes
+
 - **Always check for breaking changes** before applying major version updates.
 - Prefer staying within the current major version if breaking changes exist.
 - Test the updated configurations to ensure compatibility with the new module versions before deploying.
