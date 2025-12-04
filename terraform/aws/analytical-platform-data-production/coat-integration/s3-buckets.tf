@@ -24,6 +24,8 @@ module "coat_s3" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
+  for_each = local.buckets
+
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "5.8.2"
 
