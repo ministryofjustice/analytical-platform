@@ -5,7 +5,7 @@ module "coat_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "4.0.0"
 
-  aliases               = ["s3/${local.bucket_name}"]
+  aliases               = ["s3/${local.buckets.coat_cur_reports_v2_hourly.bucket_name}"]
   enable_default_policy = true
   key_statements = [
     {
@@ -19,7 +19,7 @@ module "coat_kms" {
       principals = [
         {
           type        = "AWS"
-          identifiers = [local.source_replication_role]
+          identifiers = [ for bucket in local.buckets : bucket.source_replication_role ]
         }
       ]
     }
