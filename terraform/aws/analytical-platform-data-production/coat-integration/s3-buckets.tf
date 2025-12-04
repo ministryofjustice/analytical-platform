@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "coat_bucket_policies" {
 
 moved {
   from = module.coat_s3
-  to   = module.coat_s3_buckets.coat_cur_reports_v2_hourly
+  to   = module.coat_s3_buckets["coat_cur_reports_v2_hourly"]
 }
 
 #trivy:ignore:AVD-AWS-0089:Bucket logging not enabled currently
