@@ -43,7 +43,17 @@ Once the underlying issue is resolved, perform manual checks of the availability
 
 ## Business appetite for time to recovery
 
-A week?
+While we offer 24/7 availability, the Analytical Platform is delivered as a "9-5 weekday" service - we do not offer out of hours support. In that context, we do not consider the platform **as a whole** to be a business-critical service, in the same way as strategic hosting or core case management applications. However we are aware that certain user-developed processes and apps on the AP *may* be considered business critical.
+
+Consequently, our target recovery time for the platform is **two working days**.
+
+### Consequences of platform unavailability
+
+- Potential delays to published statistics
+- Potential delays in answering PQs or FOI requests
+- Potential delays to internal publications such as prison or probation performance packs
+- Delays to data updates of user-deployed apps (R-Shiny), or consequential downtime for those apps
+- Faults in applications dependent on platform-hosted APIs (for example LLMs)
 
 ### Data loss
 
@@ -69,8 +79,6 @@ All infrastructure is defined in code, with the core of the platform being defin
 - [Compute](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-compute)
 - [Ingestion](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-ingestion)
 
-Terraform actions should be run in the order above.
-
 ### Data access
 
 Data engineering data access repo can re-create project access, but the S3 paths could be different. IAM ARNS?
@@ -81,7 +89,7 @@ Re-create - as above; paths and IAM roles ARNs could change
 
 ### Airflow and managed pipelines
 
-Something here
+Something here from JHP
 
 ### Create a Derived Table (CaDeT)
 
@@ -91,9 +99,6 @@ Something here
 
 Recovery of CP and tooling
 
-### User-defined code
-
-Analysis code?
 
 <!-- external links -->
 [#ask-analytical-platform] : https://moj.enterprise.slack.com/archives/C4PF7QAJZ
