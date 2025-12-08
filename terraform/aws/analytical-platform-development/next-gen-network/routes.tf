@@ -6,13 +6,13 @@ resource "aws_route" "public_internet_gateway" {
   gateway_id             = aws_internet_gateway.main.id
 }
 
-# resource "aws_route" "private_nat_gateway" {
-#   for_each = local.environment_configuration.vpc_subnets.private
+resource "aws_route" "firewall_nat_gateway" {
+  for_each = local.environment_configuration.vpc_subnets.firewall
 
-#   route_table_id         = aws_route_table.main["private-${each.key}"].id
-#   destination_cidr_block = "0.0.0.0/0"
-#   nat_gateway_id         = aws_nat_gateway.main[each.key].id
-# }
+  route_table_id         = aws_route_table.main["firewall-${each.key}"].id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.main[each.key].id
+}
 
 resource "aws_route" "private_network_firewall" {
   for_each = local.environment_configuration.vpc_subnets.private
