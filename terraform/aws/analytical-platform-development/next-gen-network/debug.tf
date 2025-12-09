@@ -1,0 +1,32 @@
+// EC2 Instance for debugging purposes
+module "debug_instance" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "6.1.5"
+
+  name = "debug-instance"
+
+  subnet_id     = aws_subnet.main["private-a"].id
+  ami           = "ami-09eaa54de6f278f78" // Amazon Linux 2023 AMI 2023.9.20251208.0 arm64 HVM kernel-6.12
+  instance_type = "t4g.micro"
+
+  security_group_egress_rules = {
+    vpc-endpoints = {
+      description = "Allow outbound traffic to VPC endpoints"
+      cidr_ipv4   = aws_vpc.main.cidr_block
+      from_port   = 443
+    }
+    internet-https = {
+      description = "Allow outbound HTTPS traffic to the internet"
+      cidr_ipv4   = "0.0.0.0/0"
+      from_port   = 443
+      to_port     = 443
+      ip_protocol = "tcp"
+    }
+  }
+
+  create_iam_instance_profile = true
+  iam_role_description        = "IAM role for EC2 instance"
+  iam_role_policies = {
+    AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  }
+}
