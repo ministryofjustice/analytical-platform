@@ -1,5 +1,6 @@
-#checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 module "tenant_id_secret" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
   source  = "terraform-aws-modules/secrets-manager/aws"
   version = "2.0.1"
 
@@ -10,6 +11,8 @@ module "tenant_id_secret" {
 }
 
 module "object_id_secret" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
   source  = "terraform-aws-modules/secrets-manager/aws"
   version = "2.0.1"
 
