@@ -12,7 +12,7 @@
 
 ## Terraform
 
-- Follow the Modernisation Platform's [Terraform Style Guide](https://user-guide.modernisation-platform.service.justice.gov.uk/team/terraform-style-guide)
+- Follow the Analytical Platform's [Terraform Style Guide](https://docs.analytical-platform.service.justice.gov.uk/documentation/platform/infrastructure/terraform.html#style-guide)
 - Do not append the resource type to the resource name (e.g., use `my-resource` instead of `my-resource-s3-bucket`)
 - Use kebab case for resource names (e.g., `my-resource-name`)
 - Include comments for complex logic or non-obvious decisions
