@@ -93,6 +93,16 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:catalog"
     ]
   }
+  
+  statement {
+    sid    = "LakeFormationGetDataAccess"
+    effect = "Allow"
+    actions = [
+      "lakeformation:GetDataAccess"
+    ]
+    resources = ["*"]
+  }
+
   statement {
     sid    = "AirflowAccess"
     effect = "Allow"
