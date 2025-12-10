@@ -10,7 +10,7 @@ weight: 0
 
 ## Overview
 
-This document outlines thge business continuity and disaster recovery (BCDR) processes for the Analytical Platform, as well as our appetite for risk in relation to the uptime and recoverability of the service.
+This document outlines the business continuity and disaster recovery (BCDR) processes for the Analytical Platform, as well as our appetite for risk in relation to the uptime and recoverability of the service.
 
 ## Steps to take
 
@@ -43,16 +43,19 @@ Once the underlying issue is resolved, perform manual checks of the availability
 
 ## Business appetite for time to recovery
 
-While we offer 24/7 availability, the Analytical Platform is delivered as a "9-5 weekday" service - we do not offer out of hours support. In that context, we do not consider the platform **as a whole** to be a business-critical service, in the same way as strategic hosting or core case management applications. However we are aware that certain user-developed processes and apps on the AP *may* be considered business critical.
+While we offer 24/7 availability, the Analytical Platform is delivered as a "business hours" service - we do not offer out of hours support. In that context, we do not currently consider the platform **as a whole** to be a business-critical service, in the same way as strategic hosting or core case management applications would be. However we are aware that certain user-developed processes and apps on the AP *may* be considered business critical.
 
-Consequently, our target recovery time for the platform is **two working days**.
+Consequently, our target recovery time for platform unavailability is **three working days**.
 
 ### Consequences of platform unavailability
 
 - Potential delays to published statistics
+  - The outputs (ODS / CSV) for these will generally have been generated ahead of publication date for signoff and scheduling purposes
 - Potential delays in answering PQs or FOI requests
-- Potential delays to internal publications such as prison or probation performance packs
+  - These will generally have a reasonable SLA for turnaround
+- Potential delays to internal publications such as departmental dashboards, prison or probation performance packs
 - Delays to data updates of user-deployed apps (R-Shiny), or consequential downtime for those apps
+- Delays to data processing for onward consumption by other services
 - Faults in applications dependent on platform-hosted APIs (for example LLMs)
 
 ### Data loss
@@ -71,34 +74,43 @@ Given the above we do not consider it cost effective to replicate or otherwise b
 
 We do not guarantee protection against accidental deletion or modification of data by users. Accidental deletion does not contitute an incident or disaster in the context of this documument.
 
+### Audit log loss
+
+*this is potentally a big one*
+
 ### Platform recovery
 
 All infrastructure is defined in code, with the core of the platform being defined in the Modernisation Platform environments repository:
 
-- [Common / core](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-common)
+- [Common](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-common)
 - [Compute](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-compute)
 - [Ingestion](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-ingestion)
 
+Disaster recovery is effectively re-running infrastructure as code to recreate the AWS resources which comprise the platform.
+
 ### Data access
 
-Data engineering data access repo can re-create project access, but the S3 paths could be different. IAM ARNS?
+*Data engineering data access repo can re-create project access, but the S3 paths could be different. IAM ARNS?*
 
 ### Register My Data
 
-Re-create - as above; paths and IAM roles ARNs could change
+*Re-create - as above; paths and IAM roles ARNs could change*
 
 ### Airflow and managed pipelines
 
-Something here from JHP
+*Something here from JHP*
+
+Rebuild from [airflow-repo]
 
 ### Create a Derived Table (CaDeT)
 
-[CaDeT] is based on [dbt](https://www.getdbt.com/) where all workflows and derived data defintions are defined in code. Once source data has been re-ingested the models can be updated to reflect any changed S3 paths and re-run.
+[CaDeT] is based on [dbt](https://www.getdbt.com/) where all workflows and derived data defintions are defined in code. Once source data has been re-ingested the models can be updated to reflect any changed S3 paths and IAM role ARNs and re-run.
 
 ### Tooling
 
-Recovery of CP and tooling
+*Recovery of CP and tooling - tooling will be rebuilt as part of the infrastructre; CP re-deployed from its GHA*
 
+*CP RDS?*
 
 <!-- external links -->
 [#ask-analytical-platform] : https://moj.enterprise.slack.com/archives/C4PF7QAJZ
@@ -108,3 +120,4 @@ Recovery of CP and tooling
 [#cloud-platform-update] : https://moj.enterprise.slack.com/archives/CH6D099DF
 [#ask-cloud-platform]: https://moj.enterprise.slack.com/archives/C57UPMZLY
 [CaDeT] : https://github.com/moj-analytical-services/create-a-derived-table/tree/main
+[airflow-repo] : https://github.com/ministryofjustice/analytical-platform-airflow
