@@ -11,7 +11,7 @@ data "aws_iam_session_context" "session" {
 data "aws_region" "current" {}
 
 data "aws_vpc_endpoint" "network_firewall" {
-  for_each = local.environment_configuration.vpc_subnets.private
+  for_each = local.environment_configuration.vpc_subnets.firewall
   vpc_id   = aws_vpc.main.id
 
   tags = {
