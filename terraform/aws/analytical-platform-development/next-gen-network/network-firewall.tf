@@ -24,3 +24,16 @@ resource "aws_networkfirewall_firewall" "main" {
     }
   }
 }
+
+resource "aws_networkfirewall_logging_configuration" "cloudwatch" {
+  firewall_arn = aws_networkfirewall_firewall.main.arn
+  logging_configuration {
+    log_destination_config {
+      log_destination = {
+        logGroup = module.network_firewall_flow_logs_log_group.cloudwatch_log_group_name
+      }
+      log_destination_type = "CloudWatchLogs"
+      log_type             = "FLOW"
+    }
+  }
+}
