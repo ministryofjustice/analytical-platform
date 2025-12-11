@@ -35,6 +35,7 @@ module "rds_export" {
   environment              = var.tags["environment"]
   output_parquet_file_size = 200
   db_name                  = "ppud_preprod"
+  get_views                = true
 
   tags = var.tags
 }
