@@ -1,7 +1,7 @@
 ---
 owner_slack: "#analytical-platform-notifications"
 title: Business continuity and disaster recovery
-last_reviewed_on: 2025-12-10
+last_reviewed_on: 2025-12-12
 review_in: 6 months
 weight: 0
 ---
@@ -43,10 +43,13 @@ Once the underlying issue is resolved, perform manual checks of the availability
 
 ## Business appetite for time to recovery
 
-While we offer 24/7 availability, the Analytical Platform is delivered as a "business hours" service - we do not offer out of hours support. In that context, we do not currently consider the platform **as a whole** to be a business-critical service, in the same way as strategic hosting or core case management applications would be. However we are aware that certain user-developed processes and apps on the AP *may* be considered business critical.
+While we offer 24/7 availability, the Analytical Platform is delivered as a "business hours" service - we do not offer out of hours support.
 
-Consequently, our target recovery time for platform unavailability is **five working days**.
-*for a barebones recreation of the AP but not roles, paths etc.*
+The AP was not orginally developed as a business critical service, and any business criticality has evolved as a consequence of way it has been used.
+
+Consequently, our target recovery time for platform availability is **five working days**.
+
+It is important to note that "platform availability" is not the same as a full platform recovery. While core functionality will be restored, this will be a barebones recreation of the AP. Recovery of data, user roles and access to data would will take considerably longer and full restoration may not be possible in all cases.
 
 ### Consequences of platform unavailability
 
@@ -76,9 +79,11 @@ Given the above we do not consider it cost effective to replicate or otherwise b
 
 We do not guarantee protection against accidental deletion or modification of data by users. Accidental deletion does not constitute an incident or disaster in the context of this documument.
 
+For context, the AP was not orignally designed as a primary data store - it is a secondary store of data which exists elsewhere. If apps have been developed which collect data, these should have their own processes for ensuring business continuity.
+
 ## Platform recovery
 
-The AP contains some technical debt which makes committing to an exact recovery plan difficult. In early iterations of the platform, some resouces (infrastructure, roles etc.) were created in the AWS console ("click ops").
+The AP contains some technical debt which makes committing to an exact recovery plan difficult. In early iterations of the platform, some resouces (infrastructure, roles etc.) were created in the AWS console ("clickops").
 
 That said, much of the infrastructure is defined in code, with the core of the platform being defined in Terraform in the main Analytical Platform repository, and newer infrastructure defined entirely in code in the Modernisation Platform environments repository.
 
@@ -89,45 +94,44 @@ That said, much of the infrastructure is defined in code, with the core of the p
 - [Compute](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-compute)
 - [Ingestion](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-ingestion)
 
-Disaster recovery is effectively re-running infrastructure as code to recreate the AWS resources which comprise the platform. At the time of writing, we have not been able to simulate a recovery, which means the recovery plan follows an iterative process.
+Disaster recovery is effectively re-running infrastructure as code to recreate the AWS resources which comprise the platform. At the time of writing, we have not simulated a recovery, which means the recovery plan follows an iterative process.
 
-### Recovery plan
+## Recovery plan
 
 1. Identify stages or platform components for partial recovery (identify order of operations for running Terraform)
-2. Run Terraform for the first platform components
+2. Run Terraform for the first platform component(s)
 3. Run manual checks of restored resources, and attempt to identify missing resources which were created manually
 4. Update infrastructure code with those resources
 5. Apply infrastructure code
 6. Run manual tests
 7. Iterate from step 3 for the next logical component
 
-### Data access
+The above will result in a recovered, operational platform. The next steps are:
 
-*Data engineering data access repo can re-create project access, but the S3 paths could be different. IAM ARNS?*
+- Restore user accounts - these are based on GitHub users, so are separate from the platform itself
+- Restore ETL jobs (see [section below](#etl-airflow))
+- Re-run Airflow jobs - this could take several days
+- Restore and re-run CaDeT jobs (see [section below](#create-a-derived-table-cadet)) - this could also take several days
+- Restore user data access permissions (see [section below](#data-access))
+- Restore Control Panel (see [section below](#control-panel))
 
-### Register My Data
+When restoring pipelines, derived data jobs, user access, and the Control Panel database, it is possible that S3 paths and IAM role ARNs could have re-created. In this scenario, restoration would require re-mapping of the equivalent paths and roles.
 
-*Re-create - as above; paths and IAM roles ARNs could change*
+### ETL (Airflow)
 
-### Airflow and managed pipelines
-
-*Something here from JHP*
-
-Rebuild from [airflow-repo]
+After core infrastructure has been recovered, data pipelines to the AP can be rebuilt from the [airflow-repo]. All jobs are defined in code.
 
 ### Create a Derived Table (CaDeT)
 
 [CaDeT] is based on [dbt](https://www.getdbt.com/) where all workflows and derived data defintions are defined in code. Once source data has been re-ingested the models can be updated to reflect any changed S3 paths and IAM role ARNs and re-run.
 
+### Data access
 
-as a consequence, a full restoration of the state of the AP may take months or be impossible
+User access to data is defined in code in the data engineering database access repo: [data-access-repo].
 
+### Control Panel
 
-### Tooling
-
-*Recovery of CP and tooling - tooling will be rebuilt as part of the infrastructre; CP re-deployed from its GHA*
-
-CP RDS from snapshot, again S3 path and and role ARNs
+Control Panel ([repository](https://github.com/ministryofjustice/analytics-platform-control-panel)) is a Python-based web application with an RDS data store. Once the infrastructure is restored, recovery of Control Panel would comprise restoring the database from the latest snapshot, and re-deploying the application using its GitHub action.
 
 <!-- external links -->
 [#ask-analytical-platform] : https://moj.enterprise.slack.com/archives/C4PF7QAJZ
@@ -139,5 +143,4 @@ CP RDS from snapshot, again S3 path and and role ARNs
 [#ap-repo]: https://github.com/ministryofjustice/analytical-platform
 [CaDeT] : https://github.com/moj-analytical-services/create-a-derived-table/tree/main
 [airflow-repo] : https://github.com/ministryofjustice/analytical-platform-airflow
-
-<!-- Log retenion - MP default 365 days. S3 object logging. -->
+[data-access-repo]: https://github.com/moj-analytical-services/data-engineering-database-access
