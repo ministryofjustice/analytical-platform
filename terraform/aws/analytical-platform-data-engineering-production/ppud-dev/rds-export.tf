@@ -19,11 +19,8 @@ resource "aws_security_group_rule" "db_ingress" {
   description       = "Allow access to the RDS instance from the VPC"
 }
 
-
-# checkov:skip=CKV_TF_1: Pointing to branch name whilst in development, will change to commit hash
-# checkov:skip=CKV_TF_2: Pointing to branch name whilst in development, will change to commit hash
 module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=update-module"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=326edc67dc1cd89207662c425fbfa47839396212"
 
   providers = {
     aws = aws
