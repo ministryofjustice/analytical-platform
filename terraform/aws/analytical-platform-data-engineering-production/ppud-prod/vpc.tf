@@ -86,7 +86,7 @@ module "endpoints" {
       private_dns_enabled = true
       tags                = { Name = "athena-${data.aws_region.current.id}-${local.name}-${local.env}" }
     }
-      # Interface endpoint for ec2 bastion
+    # Interface endpoint for ec2 bastion
     ec2messages = {
       service             = "ec2messages"
       service_type        = "Interface"
