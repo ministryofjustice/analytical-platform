@@ -91,6 +91,26 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:database/*",
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:table/*/*",
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:catalog"
+
+    ]
+  }
+  # Lake formation shares - glue catalog access
+  statement {
+    sid    = "GlueAccessLFShares"
+    effect = "Allow"
+    actions = [
+      "glue:GetDatabase",
+      "glue:GetDatabases",
+      "glue:GetTable",
+      "glue:GetTables",
+      "glue:GetPartitions"
+    ]
+
+    resources = [
+      "arn:aws:glue:*:${var.account_ids["digital-prison-reporting-production"]}:schema/*",
+      "arn:aws:glue:*:${var.account_ids["digital-prison-reporting-production"]}:database/*",
+      "arn:aws:glue:*:${var.account_ids["digital-prison-reporting-production"]}:table/*/*",
+      "arn:aws:glue:*:${var.account_ids["digital-prison-reporting-production"]}:catalog"
     ]
   }
   statement {
