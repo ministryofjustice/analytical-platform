@@ -9,10 +9,14 @@ data "aws_iam_policy_document" "create_a_derived_table_dev" {
       "s3:PutObject*"
     ]
     resources = [
-      "arn:aws:s3:::dbt-tables-sandbox/*",
-      "arn:aws:s3:::dbt-tables-sandbox",
-      "arn:aws:s3:::dbt-query-dump-sandbox/*",
-      "arn:aws:s3:::dbt-query-dump-sandbox",
+      "arn:aws:s3:::de-probation-datalake-dev/*",
+      "arn:aws:s3:::de-probation-datalake-dev",
+      "arn:aws:s3:::de-probation-query-results-dev/*",
+      "arn:aws:s3:::de-probation-query-results-dev",
+      "arn:aws:s3:::de-probation-datalake-preprod/*",
+      "arn:aws:s3:::de-probation-datalake-preprod",
+      "arn:aws:s3:::de-probation-query-results-preprod/*",
+      "arn:aws:s3:::de-probation-query-results-preprod",
     ]
   }
   statement {
@@ -38,8 +42,8 @@ data "aws_iam_policy_document" "create_a_derived_table_dev" {
       "athena:StopQueryExecution"
     ]
     resources = [
-      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:datacatalog/*",
-      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:workgroup/*"
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:datacatalog/*",
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:workgroup/*"
     ]
   }
   statement {
@@ -65,10 +69,10 @@ data "aws_iam_policy_document" "create_a_derived_table_dev" {
       "glue:CreateDatabase"
     ]
     resources = [
-      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:schema/*",
-      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:database/*",
-      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:table/*/*",
-      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:catalog"
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-production"]}:schema/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-production"]}:database/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-production"]}:table/*/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-production"]}:catalog"
     ]
   }
 }
@@ -78,35 +82,34 @@ module "create_a_derived_table_dev_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.60.0"
+  version = "6.2.3"
 
-  name_prefix = "create-a-derived-table"
-  policy      = data.aws_iam_policy_document.create_a_derived_table.json
+  name_prefix = "probation-cadet-dev"
+  policy      = data.aws_iam_policy_document.create_a_derived_table_dev.json
 }
 
 module "create_a_derived_table_dev_iam_role" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.60.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "6.2.3"
 
-  role_name            = "create-a-derived-table"
+  name            = "probation-cadet-dev"
   max_session_duration = 10800
 
-  role_policy_arns = {
-    policy = module.create_a_derived_table_iam_policy.arn
+  policies = {
+    policy = module.create_a_derived_table_dev_iam_policy.arn
   }
 
   oidc_providers = {
     analytical-platform-compute-production = {
       provider_arn = format(
-        "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:oidc-provider/%s",
+        "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:oidc-provider/%s",
         trimprefix(jsondecode(data.aws_secretsmanager_secret_version.analytical_platform_compute_cluster_data.secret_string)["analytical-platform-compute-production-oidc-endpoint"], "https://")
       )
       namespace_service_accounts = [
-        "actions-runners:actions-runner-mojas-cadt-sandbox-a",
-        "actions-runners:actions-runner-mojas-cadt-sandbox-a-non-spot"
+        "actions-runner-mojas-cadt-probation-dev"
       ]
     }
   }

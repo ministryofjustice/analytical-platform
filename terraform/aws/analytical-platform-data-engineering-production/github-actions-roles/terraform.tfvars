@@ -10,11 +10,11 @@ account_ids = {
 }
 
 tags = {
-  business-unit          = "HMPPS"
-  application            = "Data Engineering"
-  component              = "GitHub Actions Roles"
-  environment            = "production"
-  is-production          = "true"
-  owner                  = "analytical-platform:analytical-platform@digital.justice.gov.uk"
-  source-code            = "github.com/ministryofjustice/analytical-platform/tree/main/terraform/aws/analytical-platform-data-engineering-production/github-actions-roles"
+  business-unit = "HMPPS"
+  application   = "Data Engineering"
+  component     = "Data Engineering Probation"
+  environment   = "dev"
+  is-production = "false"
+  owner         = "Data Engineering:dataengineering@digital.justice.gov.uk"
+  source-code   = "https://github.com/ministryofjustice/analytical-platform/tree/main/terraform/aws/analytical-platform-data-engineering-production/github-actions-roles"
 }
