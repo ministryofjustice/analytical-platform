@@ -9,14 +9,10 @@ data "aws_iam_policy_document" "create_a_derived_table_dev" {
       "s3:PutObject*"
     ]
     resources = [
-      "arn:aws:s3:::de-probation-datalake-dev/*",
-      "arn:aws:s3:::de-probation-datalake-dev",
-      "arn:aws:s3:::de-probation-query-results-dev/*",
-      "arn:aws:s3:::de-probation-query-results-dev",
-      "arn:aws:s3:::de-probation-datalake-preprod/*",
-      "arn:aws:s3:::de-probation-datalake-preprod",
-      "arn:aws:s3:::de-probation-query-results-preprod/*",
-      "arn:aws:s3:::de-probation-query-results-preprod",
+      "arn:aws:s3:::probation-datalake-dev*/*",
+      "arn:aws:s3:::probation-datalake-dev*",
+      "arn:aws:s3:::probation-query-results-dev*/*",
+      "arn:aws:s3:::probation-query-results-dev*",
     ]
   }
   statement {
@@ -28,8 +24,8 @@ data "aws_iam_policy_document" "create_a_derived_table_dev" {
       "s3:GetBucket*"
     ]
     resources = [
-      "arn:aws:s3:::*",
-      "arn:aws:s3:::*/*"
+      "arn:aws:s3:::ppud-parquet-exports-dev*",
+      "arn:aws:s3:::ppud-parquet-exports-dev*/*"
     ]
   }
   statement {
