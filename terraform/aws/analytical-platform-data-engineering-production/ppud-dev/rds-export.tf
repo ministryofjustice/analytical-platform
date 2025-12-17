@@ -19,18 +19,15 @@ resource "aws_security_group_rule" "db_ingress" {
   description       = "Allow access to the RDS instance from the VPC"
 }
 
-
-# checkov:skip=CKV_TF_1: Pointing to branch name whilst in development, will change to commit hash
-# checkov:skip=CKV_TF_2: Pointing to branch name whilst in development, will change to commit hash
 module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=add-tf-tests"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=326edc67dc1cd89207662c425fbfa47839396212"
 
   providers = {
     aws = aws
   }
 
   name                     = local.name
-  database_refresh_mode    = "full"
+  database_refresh_mode    = "incremental"
   vpc_id                   = module.vpc_dev.vpc_id
   database_subnet_ids      = module.vpc_dev.private_subnets
   kms_key_arn              = module.rds_export_kms_dev.key_arn
@@ -38,6 +35,7 @@ module "rds_export" {
   environment              = var.tags["environment"]
   output_parquet_file_size = 50
   db_name                  = "ppud_dev"
+  get_views                = true
 
   tags = var.tags
 }
