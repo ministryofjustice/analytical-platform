@@ -10,6 +10,8 @@ module "query_results_dev" {
     aws.bucket-replication = aws
   }
 
+  lifecycle_rule = []
+
   sse_algorithm = "AES256"
 
   tags = var.tags
@@ -26,6 +28,8 @@ module "datalake_dev" {
   providers = {
     aws.bucket-replication = aws
   }
+
+  lifecycle_rule = []
 
   sse_algorithm = "AES256"
 
@@ -44,6 +48,8 @@ module "query_results_preprod" {
     aws.bucket-replication = aws
   }
 
+  lifecycle_rule = []
+
   sse_algorithm = "AES256"
 
   tags = var.tags
@@ -60,6 +66,8 @@ module "datalake_preprod" {
   providers = {
     aws.bucket-replication = aws
   }
+
+  lifecycle_rule = []
 
   sse_algorithm = "AES256"
 
