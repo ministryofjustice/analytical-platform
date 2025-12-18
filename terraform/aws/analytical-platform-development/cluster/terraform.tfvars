@@ -29,7 +29,8 @@ tags = {
 # Route53
 ##################################################
 
-route53_zone = "dev.analytical-platform.service.justice.gov.uk"
+route53_zone          = "dev.analytical-platform.service.justice.gov.uk"
+route53_zone_apps_dev = "apps-dev.analytical-platform.service.justice.gov.uk"
 
 ##################################################
 # VPC
