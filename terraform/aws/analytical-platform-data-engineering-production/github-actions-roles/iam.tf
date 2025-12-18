@@ -83,9 +83,9 @@ module "create_a_derived_table_dev_iam_policy" {
   name_prefix = "probation-cadet-dev"
   policy      = data.aws_iam_policy_document.create_a_derived_table_dev.json
 
-  tags = merge(var.tags, 
+  tags = merge(var.tags,
     {
-      "environment" = "dev"
+      "environment"   = "dev"
       "is_production" = "false"
     }
   )
@@ -115,9 +115,9 @@ module "create_a_derived_table_dev_iam_role" {
     }
   }
 
-  tags = merge(var.tags, 
+  tags = merge(var.tags,
     {
-      "environment" = "dev"
+      "environment"   = "dev"
       "is_production" = "false"
     }
   )

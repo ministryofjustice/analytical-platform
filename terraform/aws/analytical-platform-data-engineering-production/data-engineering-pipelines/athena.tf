@@ -12,9 +12,9 @@ resource "aws_athena_workgroup" "create_a_derived_table_dev" {
     }
   }
 
-  tags = merge(var.tags, 
+  tags = merge(var.tags,
     {
-      "environment" = "dev"
+      "environment"   = "dev"
       "is_production" = "false"
     }
   )
