@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "create_a_derived_table_dev" {
     ]
     resources = [
       "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:datacatalog/*",
-      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:workgroup/*"
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:workgroup/dbt-probation-dev"
     ]
   }
   statement {
@@ -82,6 +82,13 @@ module "create_a_derived_table_dev_iam_policy" {
 
   name_prefix = "probation-cadet-dev"
   policy      = data.aws_iam_policy_document.create_a_derived_table_dev.json
+
+  tags = merge(var.tags, 
+    {
+      "environment" = "dev"
+      "is_production" = "false"
+    }
+  )
 }
 
 module "create_a_derived_table_dev_iam_role" {
@@ -107,6 +114,13 @@ module "create_a_derived_table_dev_iam_role" {
       namespace_service_accounts = ["actions-runner-mojas-cadt-probation-dev"]
     }
   }
+
+  tags = merge(var.tags, 
+    {
+      "environment" = "dev"
+      "is_production" = "false"
+    }
+  )
 }
 
 # unsure if the below is required as not being used anywhere

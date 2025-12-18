@@ -13,7 +13,7 @@ tags = {
   business-unit = "HMPPS"
   application   = "Data Engineering"
   component     = "Data Engineering Probation"
-  resource      = "S3 Buckets"
+  resource      = "DE Pipelines"
   owner         = "Data Engineering:dataengineering@digital.justice.gov.uk"
   source-code   = "https://github.com/ministryofjustice/analytical-platform/tree/main/terraform/aws/analytical-platform-data-engineering-production/data-engineering-buckets"
 }

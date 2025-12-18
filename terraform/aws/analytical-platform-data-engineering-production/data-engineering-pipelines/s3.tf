@@ -14,7 +14,12 @@ module "query_results_dev" {
 
   sse_algorithm = "AES256"
 
-  tags = var.tags
+  tags = merge(var.tags, 
+    {
+      "environment" = "dev"
+      "is_production" = "false"
+    }
+  )  
 }
 
 module "datalake_dev" {
@@ -33,5 +38,10 @@ module "datalake_dev" {
 
   sse_algorithm = "AES256"
 
-  tags = var.tags
+  tags = merge(var.tags, 
+    {
+      "environment" = "dev"
+      "is_production" = "false"
+    }
+  )  
 }
