@@ -27,6 +27,11 @@ data "aws_route53_zone" "main" {
   private_zone = false
 }
 
+data "aws_route53_zone" "apps_dev" {
+  name         = var.route53_zone_apps_dev
+  private_zone = false
+}
+
 data "aws_iam_roles" "aws_sso_administrator_access" {
   name_regex  = "AWSReservedSSO_${var.aws_sso_role_prefix}_.*"
   path_prefix = "/aws-reserved/sso.amazonaws.com/"

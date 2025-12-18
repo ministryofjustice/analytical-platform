@@ -31,6 +31,11 @@ variable "route53_zone" {
   description = "Name of the Route53 zone"
 }
 
+variable "route53_zone_apps_dev" {
+  type        = string
+  description = "Name of the Route53 apps-dev zone"
+}
+
 ##################################################
 # VPC
 ##################################################
