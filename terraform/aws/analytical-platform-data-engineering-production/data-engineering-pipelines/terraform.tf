@@ -3,7 +3,7 @@ terraform {
     acl          = "private"
     bucket       = "global-tf-state-aqsvzyd5u9"
     encrypt      = true
-    key          = "aws/analytical-platform-data-engineering-production/github-actions-roles/terraform.tfstate"
+    key          = "aws/analytical-platform-data-engineering-production/data-engineering-pipelines/terraform.tfstate"
     region       = "eu-west-2"
     use_lockfile = true
   }
