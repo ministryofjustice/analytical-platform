@@ -20,7 +20,7 @@ resource "aws_security_group_rule" "db_ingress" {
 }
 
 module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=6ecc78081f5b8d31512fadc860ab6f146b37aa70"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=400ce87b8ff68d6b5cd37095c9637bdb2b1935c1"
 
   providers = {
     aws = aws

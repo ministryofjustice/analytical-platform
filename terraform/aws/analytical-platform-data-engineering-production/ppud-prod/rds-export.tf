@@ -20,7 +20,7 @@ resource "aws_security_group_rule" "db_ingress" {
 }
 
 module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=update-bucket-policy"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=400ce87b8ff68d6b5cd37095c9637bdb2b1935c1"
 
   providers = {
     aws = aws
@@ -36,8 +36,8 @@ module "rds_export" {
   output_parquet_file_size       = 200
   db_name                        = "ppud_prod"
   get_views                      = true
-  lifecycle_rule_backup_uploads  = local.lifecycle_config
-  lifecycle_rule_parquet_exports = local.lifecycle_config
+  lifecycle_rule_backup_uploads  = local.lifecycle_config_backup_uploads
+  lifecycle_rule_parquet_exports = local.lifecycle_config_parquet_exports
 
   tags = var.tags
 }
