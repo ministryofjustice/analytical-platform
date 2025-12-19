@@ -136,10 +136,7 @@ data "aws_iam_policy_document" "external_dns" {
       "route53:ChangeResourceRecordSets",
       "route53:ListResourceRecordSets",
     ]
-    resources = [
-      "arn:aws:route53:::hostedzone/${data.aws_route53_zone.main.zone_id}",
-      "arn:aws:route53:::hostedzone/${data.aws_route53_zone.apps_dev.zone_id}"
-    ]
+    resources = ["arn:aws:route53:::hostedzone/${data.aws_route53_zone.main.zone_id}"]
   }
 }
 
