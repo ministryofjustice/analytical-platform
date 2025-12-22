@@ -80,7 +80,7 @@ module "create_a_derived_table_dev_iam_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "6.2.3"
 
-  name_prefix = "probation-cadet-dev"
+  name_prefix = "probation-cadet-dev-"
   policy      = data.aws_iam_policy_document.create_a_derived_table_dev.json
 
   tags = merge(var.tags,
@@ -99,6 +99,7 @@ module "create_a_derived_table_dev_iam_role" {
   version = "6.2.3"
 
   name                 = "probation-cadet-dev"
+  use_name_prefix      = false
   max_session_duration = 10800
 
   policies = {
@@ -215,7 +216,7 @@ module "create_a_derived_table_preprod_iam_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "6.2.3"
 
-  name_prefix = "probation-cadet-preprod"
+  name_prefix = "probation-cadet-preprod-"
   policy      = data.aws_iam_policy_document.create_a_derived_table_preprod.json
 
   tags = merge(var.tags,
@@ -234,6 +235,7 @@ module "create_a_derived_table_preprod_iam_role" {
   version = "6.2.3"
 
   name                 = "probation-cadet-preprod"
+  use_name_prefix      = false
   max_session_duration = 10800
 
   policies = {
