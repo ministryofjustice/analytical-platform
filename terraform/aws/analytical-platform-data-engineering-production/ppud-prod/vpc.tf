@@ -1,7 +1,7 @@
 module "vpc" {
 
-  # Commit has for v5.21.0
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc?ref=7c1f791efd61f326ed6102d564d1a65d1eceedf0"
+  # Commit has for v6.5.1
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc?ref=cf73787bc163944d63a82e0898aee2bc7ade27ca"
   name   = "${local.name}-${local.env}"
   cidr   = "10.2.0.0/16"
   azs    = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
@@ -86,8 +86,31 @@ module "endpoints" {
       private_dns_enabled = true
       tags                = { Name = "athena-${data.aws_region.current.id}-${local.name}-${local.env}" }
     }
-  }
+    # # Interface endpoint for ec2 bastion
+    # ec2messages = {
+    # #   service             = "ec2messages"
+    #   service_type        = "Interface"
+    #   subnet_ids          = module.vpc.private_subnets
+    #   private_dns_enabled = true
+    #   tags                = { Name = "ec2messages-${data.aws_region.current.id}-${local.name}-${local.env}" }
+    # }
+    # ssmmessages = {
+    #   service             = "ssmmessages"
+    #   service_type        = "Interface"
+    #   subnet_ids          = module.vpc.private_subnets
+    #   private_dns_enabled = true
+    #   tags                = { Name = "ssmmessages-${data.aws_region.current.id}-${local.name}-${local.env}" }
+    # }
 
+    # ssm = {
+    #   service             = "ssm"
+    #   service_type        = "Interface"
+    #   subnet_ids          = module.vpc.private_subnets
+    #   private_dns_enabled = true
+    #   tags                = { Name = "ssm-${data.aws_region.current.id}-${local.name}-${local.env}" }
+    # }
+
+  }
 
   tags = merge(var.tags, { network = "Private" })
 

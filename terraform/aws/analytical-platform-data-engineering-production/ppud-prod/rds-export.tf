@@ -20,21 +20,24 @@ resource "aws_security_group_rule" "db_ingress" {
 }
 
 module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=d8a7a1d03f212ac203112cf729d6c27d7030f42c"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=d66ba75bd8f7b00971da82f2e6b332cd9d554aa9"
 
   providers = {
     aws = aws
   }
 
-  name                     = local.name
-  database_refresh_mode    = "incremental"
-  vpc_id                   = module.vpc.vpc_id
-  database_subnet_ids      = module.vpc.private_subnets
-  kms_key_arn              = module.rds_export_kms.key_arn
-  master_user_secret_id    = module.rds_export_secret.secret_arn
-  environment              = var.tags["environment"]
-  output_parquet_file_size = 200
-  db_name                  = "ppud_prod"
+  name                           = local.name
+  database_refresh_mode          = "incremental"
+  vpc_id                         = module.vpc.vpc_id
+  database_subnet_ids            = module.vpc.private_subnets
+  kms_key_arn                    = module.rds_export_kms.key_arn
+  master_user_secret_id          = module.rds_export_secret.secret_arn
+  environment                    = var.tags["environment"]
+  output_parquet_file_size       = 200
+  db_name                        = "ppud_prod"
+  get_views                      = true
+  lifecycle_rule_backup_uploads  = local.lifecycle_config_backup_uploads
+  lifecycle_rule_parquet_exports = local.lifecycle_config_parquet_exports
 
   tags = var.tags
 }

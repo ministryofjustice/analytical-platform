@@ -91,7 +91,35 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:database/*",
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:table/*/*",
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:catalog"
+
     ]
+  }
+  # Lake formation shares - glue catalog access
+  statement {
+    sid    = "GlueAccessLFShares"
+    effect = "Allow"
+    actions = [
+      "glue:GetDatabase",
+      "glue:GetDatabases",
+      "glue:GetTable",
+      "glue:GetTables",
+      "glue:GetPartitions"
+    ]
+
+    resources = [
+      "arn:aws:glue:*:${var.account_ids["digital-prison-reporting-production"]}:schema/*",
+      "arn:aws:glue:*:${var.account_ids["digital-prison-reporting-production"]}:database/*",
+      "arn:aws:glue:*:${var.account_ids["digital-prison-reporting-production"]}:table/*/*",
+      "arn:aws:glue:*:${var.account_ids["digital-prison-reporting-production"]}:catalog"
+    ]
+  }
+  statement {
+    sid    = "LakeFormationGetDataAccess"
+    effect = "Allow"
+    actions = [
+      "lakeformation:GetDataAccess"
+    ]
+    resources = ["*"]
   }
   statement {
     sid    = "AirflowAccess"
@@ -117,7 +145,8 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "kms:Decrypt"
     ]
     resources = [
-      "arn:aws:kms:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:key/0409ddbc-b6a2-46c4-a613-6145f6a16215"
+      "arn:aws:kms:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:key/0409ddbc-b6a2-46c4-a613-6145f6a16215",
+      "arn:aws:kms:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:key/0d21d1cf-b9da-43f3-999b-da7f0d376bfd"
     ]
   }
 }
