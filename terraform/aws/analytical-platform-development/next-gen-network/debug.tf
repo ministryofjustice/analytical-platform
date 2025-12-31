@@ -22,6 +22,13 @@ module "debug_instance" {
       to_port     = 443
       ip_protocol = "tcp"
     }
+    internet-all = {
+      description = "Allow all outbound traffic to the internet"
+      cidr_ipv4   = "0.0.0.0/0"
+      from_port   = 0
+      to_port     = 65535
+      ip_protocol = "tcp"
+    }
   }
 
   create_iam_instance_profile = true
