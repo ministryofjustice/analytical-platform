@@ -159,6 +159,21 @@ resource "aws_networkfirewall_firewall_policy" "strict" {
       "aws:alert_established",
     ]
 
+    stateful_rule_group_reference {
+      priority     = 1
+      resource_arn = "arn:aws:network-firewall:eu-west-2:aws-managed:stateful-rulegroup/AttackInfrastructureStrictOrder"
+    }
+
+    stateful_rule_group_reference {
+      priority     = 2
+      resource_arn = "arn:aws:network-firewall:eu-west-2:aws-managed:stateful-rulegroup/BotNetCommandAndControlDomainsStrictOrder"
+    }
+
+    stateful_rule_group_reference {
+      priority     = 3
+      resource_arn = "arn:aws:network-firewall:eu-west-2:aws-managed:stateful-rulegroup/MalwareDomainsStrictOrder"
+    }
+
     # 1) IP/port allowlist (SSH)
     stateful_rule_group_reference {
       resource_arn = aws_networkfirewall_rule_group.strict.arn
