@@ -1,0 +1,4 @@
+### Generated ###
+%{ for idx, key in keys(rules) ~}
+${rules[key].action} ${rules[key].protocol} ${rules[key].source_ip} ${rules[key].source_port} ${rules[key].direction} ${rules[key].destination_ip} ${rules[key].destination_port} (msg:"${rules[key].description}"; flow:to_server,established; ${rules[key].type}; content:"${rules[key].content}"; nocase; startswith; endswith; sid:${2000000 + idx + 1}; rev:${rules[key].revision};)
+%{ endfor ~}
