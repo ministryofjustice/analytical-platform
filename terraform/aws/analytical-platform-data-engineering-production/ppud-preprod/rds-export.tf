@@ -20,7 +20,7 @@ resource "aws_security_group_rule" "db_ingress" {
 }
 
 module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=c3fb3a1e4d2068a280a05251da413b8c820c21df"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=d66ba75bd8f7b00971da82f2e6b332cd9d554aa9"
 
   providers = {
     aws = aws
@@ -35,6 +35,7 @@ module "rds_export" {
   environment              = var.tags["environment"]
   output_parquet_file_size = 200
   db_name                  = "ppud_preprod"
+  get_views                = true
 
   tags = var.tags
 }

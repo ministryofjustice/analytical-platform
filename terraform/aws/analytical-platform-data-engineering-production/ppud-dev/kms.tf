@@ -9,7 +9,7 @@ module "rds_export_kms_dev" {
 
   key_statements = [
     {
-      sid    = "AllowLambdaServiceAccess"
+      sid    = "AllowServiceAccess"
       effect = "Allow"
       actions = [
         "kms:Encrypt*",
@@ -21,8 +21,12 @@ module "rds_export_kms_dev" {
 
       principals = [
         {
-          type        = "Service"
-          identifiers = ["lambda.amazonaws.com"]
+          type = "Service"
+          identifiers = [
+            "lambda.amazonaws.com",
+            "sns.amazonaws.com",
+            "logs.${data.aws_region.current.id}.amazonaws.com"
+          ]
         }
       ]
     }

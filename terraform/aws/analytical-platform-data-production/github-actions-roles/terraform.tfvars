@@ -3,6 +3,7 @@ account_ids = {
   analytical-platform-data-production       = "593291632749"
   analytical-platform-management-production = "042130406152"
   analytical-platform-compute-production    = "992382429243"
+  digital-prison-reporting-production       = "004723187462"
 }
 
 tags = {

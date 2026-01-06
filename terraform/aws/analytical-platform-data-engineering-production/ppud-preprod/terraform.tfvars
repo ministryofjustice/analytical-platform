@@ -14,4 +14,6 @@ tags = {
   environment   = "preprod"
   is-production = "false"
   owner         = "Data Engineering:dataengineering@digital.justice.gov.uk"
+  source-code   = "https://github.com/ministryofjustice/analytical-platform/tree/main/terraform/aws/analytical-platform-data-engineering-production/ppud-preprod"
+
 }

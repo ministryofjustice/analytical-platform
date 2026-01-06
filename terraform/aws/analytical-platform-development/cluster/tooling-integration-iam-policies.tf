@@ -50,8 +50,7 @@ data "aws_iam_policy_document" "bedrock_integration" {
       "bedrock:GetModelInvocationJob",
       "bedrock:ListModelInvocationJobs",
       "bedrock:GetInferenceProfiles",
-      "bedrock:StopModelInvocationJob",
-      "aws-marketplace:ViewSubscriptions"
+      "bedrock:StopModelInvocationJob"
     ]
 
     resources = ["*"]
