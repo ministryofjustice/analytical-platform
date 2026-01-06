@@ -160,3 +160,45 @@ resource "aws_scheduler_schedule" "dms_start_sun_1900" {
     })
   }
 }
+
+resource "aws_scheduler_schedule" "dms_stop_8th_jan_2026" {
+  name                         = "dms-stop-8th-jan-2026-0830-uk-preprod"
+  description                  = "Stop DMS CDC on 8th January 2026 at 08:30 UK"
+  schedule_expression          = "cron(30 8 8 1 ? 2026)"
+  schedule_expression_timezone = "Europe/London"
+  state                        = "ENABLED"
+  flexible_time_window { mode = "OFF" }
+
+  target {
+    arn      = "arn:aws:scheduler:::aws-sdk:sfn:startExecution"
+    role_arn = aws_iam_role.scheduler_role.arn
+    input = jsonencode({
+      StateMachineArn = aws_sfn_state_machine.dms_control.arn,
+      Input = jsonencode({
+        Op                 = "stop",
+        ReplicationTaskArn = module.preprod_dms_oasys.dms_cdc_task_arn
+      })
+    })
+  }
+}
+
+resource "aws_scheduler_schedule" "dms_start_8th_jan_2026" {
+  name                         = "dms-start-8th-jan-2026-1900-uk-preprod"
+  description                  = "Restart DMS CDC on 8th January 2026 at 19:00 UK"
+  schedule_expression          = "cron(00 19 8 1 ? 2026)"
+  schedule_expression_timezone = "Europe/London"
+  state                        = "ENABLED"
+  flexible_time_window { mode = "OFF" }
+
+  target {
+    arn      = "arn:aws:scheduler:::aws-sdk:sfn:startExecution"
+    role_arn = aws_iam_role.scheduler_role.arn
+    input = jsonencode({
+      StateMachineArn = aws_sfn_state_machine.dms_control.arn,
+      Input = jsonencode({
+        Op                 = "start",
+        ReplicationTaskArn = module.preprod_dms_oasys.dms_cdc_task_arn
+      })
+    })
+  }
+}
