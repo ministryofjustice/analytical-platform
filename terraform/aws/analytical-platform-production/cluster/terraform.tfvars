@@ -193,7 +193,7 @@ eks_node_group_ami_type_gpu_node       = "AL2023_x86_64_NVIDIA"
 
 eks_node_group_capacities_gpu_node = {
   desired = 1
-  max     = 10
+  max     = 50
   min     = 0
 }
 
