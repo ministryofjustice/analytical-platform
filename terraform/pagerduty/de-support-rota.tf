@@ -10,9 +10,6 @@ locals {
           rotation_virtual_start       = "2025-11-06T00:00:00+00:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users_de_seo["guy.wheeler@justice.gov.uk"].id,
-            module.users_de_seo["siva.bathina@digital.justice.gov.uk"].id,
-            module.users_de_seo["andrew.cook@digital.justice.gov.uk"].id,
             module.users_de_seo["anthony.cody@digital.justice.gov.uk"].id,
             module.users_de_seo["thomas.hirsch@justice.gov.uk"].id,
             module.users_de_seo["william.orr@digital.justice.gov.uk"].id,
@@ -23,6 +20,9 @@ locals {
             module.users_de_seo["lucy.astleyjones@justice.gov.uk"].id,
             module.users_de_seo["kashif.malik@justice.gov.uk"].id,
             module.users_de_seo["daniel.johnstone@justice.gov.uk"].id,
+            module.users_de_seo["guy.wheeler@justice.gov.uk"].id,
+            module.users_de_seo["siva.bathina@digital.justice.gov.uk"].id,
+            module.users_de_seo["andrew.cook@digital.justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -377,7 +377,7 @@ import {
 
 import {
   to = module.users_de_seo["mohammed.ahad1@justice.gov.uk"].pagerduty_user.this
-  id = "P1USSNR"
+  id = "PJ6XUZ1"
 }
 
 import {
