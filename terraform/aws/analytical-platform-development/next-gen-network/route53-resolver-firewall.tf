@@ -16,11 +16,12 @@ resource "aws_route53_resolver_firewall_rule" "aws_managed_domains" {
 
   firewall_rule_group_id = aws_route53_resolver_firewall_rule_group.aws_managed_domains.id
 
-  name                               = each.key
-  action                             = "ALERT"
-  firewall_domain_list_id            = each.value
-  firewall_domain_redirection_action = "INSPECT_REDIRECTION_DOMAIN"
-  priority                           = format("10%d", index(keys(local.route53_dns_firewall_aws_managed_domain_lists), each.key))
+  name                    = each.key
+  action                  = "BLOCK"
+  block_response          = "NXDOMAIN"
+  firewall_domain_list_id = each.value
+
+  priority = format("10%d", index(keys(local.route53_dns_firewall_aws_managed_domain_lists), each.key))
 }
 
 resource "aws_route53_resolver_firewall_rule_group_association" "aws_managed_domains" {

@@ -57,9 +57,6 @@ resource "aws_networkfirewall_firewall_policy" "strict" {
     stateful_rule_group_reference {
       priority     = 1
       resource_arn = "arn:aws:network-firewall:eu-west-2:aws-managed:stateful-rulegroup/AttackInfrastructureStrictOrder"
-      override {
-        action = "DROP_TO_ALERT"
-      }
     }
 
     stateful_rule_group_reference {

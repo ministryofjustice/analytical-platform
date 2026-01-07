@@ -4,7 +4,7 @@ module "vpc_endpoints" {
 
   vpc_id = aws_vpc.main.id
 
-  endpoints = { for service in toset(["ssm", "ssmmessages", "ec2messages"]) :
+  endpoints = merge({ for service in toset(["ssm", "ssmmessages", "ec2messages"]) :
     replace(service, ".", "_") =>
     {
       service = service
@@ -16,7 +16,19 @@ module "vpc_endpoints" {
       private_dns_enabled = true
       tags                = { Name = "${local.application_name}-${local.environment}-${service}" }
     }
-  }
+    },
+    {
+      s3 = {
+        service      = "s3"
+        service_type = "Gateway"
+        route_table_ids = [
+          aws_route_table.main["private-a"].id,
+          aws_route_table.main["private-b"].id,
+          aws_route_table.main["private-c"].id
+        ]
+        tags = { Name = "${local.application_name}-${local.environment}-s3-gateway" }
+      }
+  })
 
   create_security_group      = true
   security_group_name_prefix = "${local.application_name}-${local.environment}-vpc-endpoints-"
