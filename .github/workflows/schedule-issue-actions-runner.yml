@@ -41,7 +41,7 @@ jobs:
             - [ ] Merge any open dependabot Pull Requests in the [Actions Runner repository](https://github.com/ministryofjustice/analytical-platform-actions-runner/pulls/app%2Fdependabot).
             - [ ] Update [Chart.yml](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/main/chart/Chart.yaml) and [values.yml](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/main/chart/values.yaml).
             - [ ] Carry out patching as per the [README](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/main/README.md).
-            - [ ] Update values in [test/container-structure-test.yml](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/main/test/container-structure-test.yml). 
+            - [ ] Update values in [test/container-structure-test.yml](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/main/test/container-structure-test.yml).
                   Note: The value for actions-runner [here](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/d2c4b8c3bb3ed77b2a2dafd4c3ff963f95706994/test/container-structure-test.yml#L32) should match the ACTIONS_RUNNER_VERSION in the Dockerfile.
             - [ ] Create new [release](https://github.com/ministryofjustice/analytical-platform-actions-runner).
             - [ ] Update the images used in the Modernisation Platform environments repository (in the manner done [here](https://github.com/ministryofjustice/modernisation-platform-environments/commit/13f8345673fc128b5219eab23ae5556292a73051)).
