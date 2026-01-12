@@ -47,8 +47,7 @@ module "ppud_dev" {
             ]
           }
           Action = [
-            "s3:ReplicateObject",
-            "s3:ReplicateDelete"
+            "s3:ReplicateObject"
           ]
           Resource = "arn:aws:s3:::mojap-data-engineering-production-ppud-dev/*"
         },
