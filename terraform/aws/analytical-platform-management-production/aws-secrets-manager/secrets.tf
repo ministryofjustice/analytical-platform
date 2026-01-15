@@ -47,3 +47,5 @@ resource "aws_secretsmanager_secret" "github_token" {
     credential-expiration = "2027-01-06"
   }
 }
+
+# a test comment
