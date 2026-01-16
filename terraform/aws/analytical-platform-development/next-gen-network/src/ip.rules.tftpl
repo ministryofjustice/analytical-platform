@@ -1,0 +1,7 @@
+### Generated ###
+%{ for idx, key in keys(rules) ~}
+${rules[key].action} ${rules[key].protocol} ${rules[key].source_ip} ${rules[key].source_port} ${rules[key].direction} ${rules[key].destination_ip} ${rules[key].destination_port} (msg:"${rules[key].description}"; sid:${1000000 + idx + 1}; rev:${rules[key].revision};)
+%{ endfor ~}
+
+### Static ###
+reject tcp $HOME_NET any -> any 22 (msg:"REJECT outbound SSH not allowlisted"; flow:to_server; sid:1100001; rev:1;)
