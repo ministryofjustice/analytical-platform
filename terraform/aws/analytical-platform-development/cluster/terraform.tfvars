@@ -110,7 +110,7 @@ rds_high_swap_usage_alarm_threshold        = 256000000
 # Redis
 ##################################################
 
-redis_enabled                    = false
+redis_enabled                    = true
 redis_instance_type              = "cache.t3.medium"
 redis_family                     = "redis7"
 redis_engine_version             = "7.1"
