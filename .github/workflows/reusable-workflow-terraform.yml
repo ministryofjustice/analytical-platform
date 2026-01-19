@@ -333,7 +333,7 @@ jobs:
         id: process_terraform_plan
         shell: bash
         run: |
-          PLAN_OUTPUT=$(bash "${GITHUB_WORKSPACE}/scripts/terraform/plan-processor.sh)
+          PLAN_OUTPUT=$(bash ${GITHUB_WORKSPACE}/scripts/terraform/plan-processor.sh)
           echo "${PLAN_OUTPUT}"
           {
             echo "plan-summary<<EOF"
