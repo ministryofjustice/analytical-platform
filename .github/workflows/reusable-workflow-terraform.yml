@@ -261,7 +261,7 @@ jobs:
         working-directory: ${{ env.working-directory }}
         shell: bash
         run: |
-          terraform plan -input=false -no-color
+          terraform plan -input=false -no-color -out=plan.tfplan
         continue-on-error: true
 
       - name: Comment on Pull Request
@@ -398,7 +398,7 @@ jobs:
         working-directory: ${{ env.working-directory }}
         shell: bash
         run: |
-          terraform apply -input=false -auto-approve -no-color
+          terraform apply -input=false -auto-approve -no-color plan.tfplan
 
       - name: Extract PR number from commit message
         if: failure() && steps.terraform_apply.outcome == 'failure'
