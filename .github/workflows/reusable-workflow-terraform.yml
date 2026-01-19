@@ -331,6 +331,7 @@ jobs:
       - name: Process Terraform Plan
         if: github.event_name == 'pull_request'
         id: process_terraform_plan
+        working-directory: ${{ env.working-directory }}
         shell: bash
         run: |
           PLAN_OUTPUT=$(bash ${GITHUB_WORKSPACE}/scripts/terraform/plan-processor.sh)
