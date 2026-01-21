@@ -360,7 +360,7 @@ jobs:
             })
 
             const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Terraform Plan Summary (${process.env.COMPONENT})')
+              return comment.user.type === 'Bot' && comment.body.includes(`Terraform Plan Summary (${process.env.COMPONENT})`)
             })
 
             const output = `${process.env.PLAN_SUMMARY}`;
