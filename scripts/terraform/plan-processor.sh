@@ -3,7 +3,8 @@
 # This is an experimental script to process a Terraform plan file and output a summary of changes.
 # terraform plan -out=plan.tfplan && bash scripts/terraform/plan-processor.sh plan.tfplan
 
-INPUT_PLAN="${1:-plan.tfplan}"
+COMPONENT="${1}"
+INPUT_PLAN="${2:-plan.tfplan}"
 
 print_resources() {
   local symbol=$1
@@ -42,7 +43,7 @@ REPLACE_COUNT=$(echo "${PLAN_JSON}" | jq '[.resource_changes[] | select(.change.
 TOTAL_CHANGES=$((CREATE_COUNT + UPDATE_COUNT + DELETE_COUNT + REPLACE_COUNT))
 
 # Print summary header
-echo "# Terraform Plan Summary"
+echo "# Terraform Plan Summary (${GITHUB_ACTIONS})"
 
 if [[ ${TOTAL_CHANGES} -eq 0 ]]; then
   echo ""

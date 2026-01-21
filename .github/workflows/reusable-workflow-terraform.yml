@@ -333,8 +333,10 @@ jobs:
         id: process_terraform_plan
         working-directory: ${{ env.working-directory }}
         shell: bash
+        env:
+          COMPONENT: ${{ inputs.component }}
         run: |
-          PLAN_OUTPUT=$(bash ${GITHUB_WORKSPACE}/scripts/terraform/plan-processor.sh)
+          PLAN_OUTPUT=$(bash ${GITHUB_WORKSPACE}/scripts/terraform/plan-processor.sh "${COMPONENT}")
           echo "${PLAN_OUTPUT}"
           {
             echo "plan-summary<<EOF"
@@ -347,6 +349,7 @@ jobs:
         id: plan_comment
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
+          COMPONENT: ${{ inputs.component }}
           PLAN_SUMMARY: ${{ steps.process_terraform_plan.outputs.plan-summary }}
         with:
           script: |
@@ -357,17 +360,26 @@ jobs:
             })
 
             const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Terraform Plan Summary')
+              return comment.user.type === 'Bot' && comment.body.includes('Terraform Plan Summary (${process.env.ENVIRONMENT})')
             })
 
             const output = `${process.env.PLAN_SUMMARY}`;
 
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
+            if (botComment) {
+              github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: output
+              })
+            } else {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              })
+            }
 
 
       - name: Automatic Approval for Dependabot
