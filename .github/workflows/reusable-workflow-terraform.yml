@@ -261,7 +261,7 @@ jobs:
         working-directory: ${{ env.working-directory }}
         shell: bash
         run: |
-          terraform plan -input=false -no-color
+          terraform plan -input=false -no-color -out=plan.tfplan
         continue-on-error: true
 
       - name: Comment on Pull Request
@@ -328,6 +328,59 @@ jobs:
             exit 1
           fi
 
+      - name: Process Terraform Plan
+        if: github.event_name == 'pull_request'
+        id: process_terraform_plan
+        working-directory: ${{ env.working-directory }}
+        shell: bash
+        env:
+          COMPONENT: ${{ inputs.component }}
+        run: |
+          PLAN_OUTPUT=$(bash ${GITHUB_WORKSPACE}/scripts/terraform/plan-processor.sh "${COMPONENT}")
+          echo "${PLAN_OUTPUT}"
+          {
+            echo "plan-summary<<EOF"
+            echo "${PLAN_OUTPUT}"
+            echo "EOF"
+          } >>"${GITHUB_OUTPUT}"
+
+      - name: Comment on Pull Request
+        if: github.event_name == 'pull_request'
+        id: plan_comment
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          COMPONENT: ${{ inputs.component }}
+          PLAN_SUMMARY: ${{ steps.process_terraform_plan.outputs.plan-summary }}
+        with:
+          script: |
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes(`Terraform Plan Summary (${process.env.COMPONENT})`)
+            })
+
+            const output = `${process.env.PLAN_SUMMARY}`;
+
+            if (botComment) {
+              github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: output
+              })
+            } else {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              })
+            }
+
       - name: Automatic Approval for Dependabot
         if: (github.event_name == 'pull_request' && github.actor == 'dependabot[bot]' && contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
         id: automatic_approval
@@ -349,7 +402,7 @@ jobs:
         working-directory: ${{ env.working-directory }}
         shell: bash
         run: |
-          terraform apply -input=false -auto-approve -no-color
+          terraform apply -input=false -auto-approve -no-color plan.tfplan
 
       - name: Extract PR number from commit message
         if: failure() && steps.terraform_apply.outcome == 'failure'
