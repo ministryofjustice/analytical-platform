@@ -43,7 +43,7 @@ REPLACE_COUNT=$(echo "${PLAN_JSON}" | jq '[.resource_changes[] | select(.change.
 TOTAL_CHANGES=$((CREATE_COUNT + UPDATE_COUNT + DELETE_COUNT + REPLACE_COUNT))
 
 # Print summary header
-echo "# Terraform Plan Summary (${GITHUB_ACTIONS})"
+echo "# Terraform Plan Summary (${COMPONENT})"
 
 if [[ ${TOTAL_CHANGES} -eq 0 ]]; then
   echo ""
