@@ -42,8 +42,6 @@ jobs:
             - [ ] [analytical-platform-common](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-common)
             - [ ] [analytical-platform-compute](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-compute)
             - [ ] [analytical-platform-ingestion](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-ingestion)
-            - [ ] [analytical-platform-next-poc-hub](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-next-poc-hub)
-            - [ ] [analytical-platform-next-poc-producer](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-next-poc-producer)
             - [ ] Add any not included here if they are created.
 
           PINNED: false
