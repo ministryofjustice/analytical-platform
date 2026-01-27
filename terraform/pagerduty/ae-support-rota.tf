@@ -11,7 +11,6 @@ locals {
           rotation_turn_length_seconds = 86400
           users = [
             module.users_ae_seo["owen.buckley@justice.gov.uk"].id,
-            module.users_ae_seo["matthew.rixson@justice.gov.uk"].id,
             module.users_ae_seo["vijay.solanki@justice.gov.uk"].id,
             module.users_ae_seo["billy.pawsey@justice.gov.uk"].id,
             module.users_ae_seo["brian.seery@justice.gov.uk"].id
@@ -67,7 +66,8 @@ locals {
             module.users_ae_g7["ian.rickard@justice.gov.uk"].id,
             module.users_ae_g7["ben.waterfield1@justice.gov.uk"].id,
             module.users_ae_g7["quinta.davies@justice.gov.uk"].id,
-            module.users_ae_g7["danielle.kelly1@justice.gov.uk"].id
+            module.users_ae_g7["danielle.kelly1@justice.gov.uk"].id,
+            module.users_ae_g7["matthew.rixson@justice.gov.uk"].id
           ]
           restrictions = [
             {
@@ -136,11 +136,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Matthew Rixson"
-      email = "matthew.rixson@justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Billy Pawsey"
       email = "billy.pawsey@justice.gov.uk"
       role  = "responder"
@@ -192,6 +187,11 @@ locals {
       name  = "Danielle Kelly"
       email = "danielle.kelly1@justice.gov.uk"
       role  = "responder"
+    },
+    {
+      name  = "Matthew Rixson"
+      email = "matthew.rixson@justice.gov.uk"
+      role  = "responder"
     }
   ]
 }
@@ -235,11 +235,6 @@ module "users_ae_g7" {
 import {
   to = module.users_ae_seo["owen.buckley@justice.gov.uk"].pagerduty_user.this
   id = "PRTC0Q5"
-}
-
-import {
-  to = module.users_ae_seo["matthew.rixson@justice.gov.uk"].pagerduty_user.this
-  id = "PTAERP7"
 }
 
 import {
@@ -290,4 +285,9 @@ import {
 import {
   to = module.users_ae_g7["danielle.kelly1@justice.gov.uk"].pagerduty_user.this
   id = "PYZL4R9"
+}
+
+import {
+  to = module.users_ae_g7["matthew.rixson@justice.gov.uk"].pagerduty_user.this
+  id = "PTAERP7"
 }
