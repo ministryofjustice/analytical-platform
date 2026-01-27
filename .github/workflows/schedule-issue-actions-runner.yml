@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Create Maintenance Issue
         id: create_maintenance_issue
         run: |
@@ -40,6 +40,9 @@ jobs:
             ### Definition of Done
             - [ ] Merge any open dependabot Pull Requests in the [Actions Runner repository](https://github.com/ministryofjustice/analytical-platform-actions-runner/pulls/app%2Fdependabot).
             - [ ] Update [Chart.yml](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/main/chart/Chart.yaml) and [values.yml](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/main/chart/values.yaml).
+            - [ ] Carry out patching as per the [README](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/main/README.md).
+            - [ ] Update values in [test/container-structure-test.yml](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/main/test/container-structure-test.yml).
+                  Note: The value for actions-runner [here](https://github.com/ministryofjustice/analytical-platform-actions-runner/blob/d2c4b8c3bb3ed77b2a2dafd4c3ff963f95706994/test/container-structure-test.yml#L32) should reflect the latest Github Actions Runner version found [here](https://github.com/actions/runner/releases).
             - [ ] Create new [release](https://github.com/ministryofjustice/analytical-platform-actions-runner).
             - [ ] Update the images used in the Modernisation Platform environments repository (in the manner done [here](https://github.com/ministryofjustice/modernisation-platform-environments/commit/13f8345673fc128b5219eab23ae5556292a73051)).
             - [ ] Deployment to relevant the Modernisation Platform environments.

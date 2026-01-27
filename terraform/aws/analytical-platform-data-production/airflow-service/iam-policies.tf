@@ -168,8 +168,7 @@ data "aws_iam_policy_document" "bedrock" {
       "bedrock:PutModelInvocationLoggingConfiguration",
       "bedrock:StopModelCustomizationJob",
       "bedrock:TagResource",
-      "bedrock:UntagResource",
-      "aws-marketplace:ViewSubscriptions"
+      "bedrock:UntagResource"
     ]
     resources = ["*"]
     condition {

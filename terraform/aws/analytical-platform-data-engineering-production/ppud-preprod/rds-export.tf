@@ -20,7 +20,7 @@ resource "aws_security_group_rule" "db_ingress" {
 }
 
 module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=00ad82af97df2ba70973b0f9db9b35249ddf8bcc"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=d66ba75bd8f7b00971da82f2e6b332cd9d554aa9"
 
   providers = {
     aws = aws
@@ -35,6 +35,15 @@ module "rds_export" {
   environment              = var.tags["environment"]
   output_parquet_file_size = 200
   db_name                  = "ppud_preprod"
+  get_views                = true
 
   tags = var.tags
+}
+
+# Create a resource to subscribe to SNS topic
+# Slack notifications
+resource "aws_sns_topic_subscription" "sfn_events" {
+  topic_arn = module.rds_export.sns_topic_arn
+  protocol  = "https"
+  endpoint  = data.aws_secretsmanager_secret_version.slack_webhook.secret_string
 }

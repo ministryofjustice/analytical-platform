@@ -1,0 +1,42 @@
+---
+owner_slack: "#analytical-platform-notifications"
+title: Analytical Platform C4 model diagrams
+last_reviewed_on: 2025-10-17
+review_in: 6 months
+---
+
+# <%= current_page.data.title %>
+
+In the [C4 model](https://c4model.com/), the four C's represent [context](https://c4model.com/#SystemContextDiagram), [containers](https://c4model.com/#ContainerDiagram), [components](https://c4model.com/#ComponentDiagram), and [code](https://c4model.com/#CodeDiagram). These different levels help tell the right story, to the right audience.
+
+## Level 1 - Analytical Platform system context
+
+This is the highest level of abstraction and provides an overview of the entire system. It shows the system under consideration and its external dependencies, such as users, external systems, and APIs. The intended audience is everybody, both technical and non-technical people, inside and outside of the engineering team.
+
+### Level 1 diagram
+
+![Level 1 Diagram](c4-model-level1.excalidraw.png)
+
+When thinking about the System Context we can ask ourselves the following questions.
+
+- What is the scope of the system we are building? Or what as a team are we looking after?
+- Who is using it and what are they doing?
+- What system integrations does it need to support?
+
+### Level 2 - Analytical Platform container
+
+This level focuses on the system's high-level [containers](https://c4model.com/#ContainerDiagram), which are typically applications or services. It illustrates the major components of the system and their interactions. Web servers, databases, desktop and S3 buckets are all examples of containers.
+
+![Level 2 diagram](c4-model-level2.excalidraw.png)
+
+## C4 Model Diagrams Future
+
+The following C4 diagram is a forward view of the analytical platform’s architecture.
+
+### Level 2 - Analytical Platform Container - Future
+
+![Level 2 container diagram](c4-model-level2-future.excalidraw.png)
+
+## Additional context
+
+Additional diagrams which show Find MoJ Data - the data catalogue - in the context of Analytical Platform can be found [in the FMD runbooks](https://runbooks.find-moj-data.service.justice.gov.uk/documentation/diagrams/#high-level-architecture).

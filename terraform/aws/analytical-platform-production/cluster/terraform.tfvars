@@ -183,17 +183,17 @@ eks_role_mappings = [
   }
 ]
 
-eks_node_group_ami_type       = "AL2_x86_64"
+eks_node_group_ami_type       = "AL2023_x86_64_STANDARD"
 eks_node_group_disk_size      = 250
-eks_node_group_instance_types = ["r5.2xlarge"]
+eks_node_group_instance_types = ["r7i.2xlarge"]
 
 ### GPU-enable node group
-eks_node_group_instance_types_gpu_node = ["g5.4xlarge"]
-eks_node_group_ami_type_gpu_node       = "AL2_x86_64_GPU"
+eks_node_group_instance_types_gpu_node = ["g5.2xlarge", "g5.4xlarge", "g5.8xlarge"]
+eks_node_group_ami_type_gpu_node       = "AL2023_x86_64_NVIDIA"
 
 eks_node_group_capacities_gpu_node = {
   desired = 1
-  max     = 10
+  max     = 50
   min     = 0
 }
 

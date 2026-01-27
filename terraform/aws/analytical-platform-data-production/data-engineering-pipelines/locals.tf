@@ -74,7 +74,8 @@ locals {
         "airflow_dev_nomis_ao_legacy",
         "airflow_dev_nomis_derive",
         "restricted-admin",
-        "create-a-derived-table"
+        "create-a-derived-table",
+        "airflow-production-analytical-platform-cadet-nomis-daily"
       ]
     },
     {

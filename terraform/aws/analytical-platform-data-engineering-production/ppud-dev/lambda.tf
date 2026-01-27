@@ -27,15 +27,15 @@ data "aws_iam_policy_document" "copy_object" {
 }
 
 module "copy_object" {
-  # Commit hash for v7.20.1
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-lambda?ref=84dfbfddf9483bc56afa0aff516177c03652f0c7"
+  # Commit hash for v8.1.2
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-lambda?ref=a7db1252f2c2048ab9a61254869eea061eae1318"
 
   function_name   = "${local.name}-${local.env}-copy"
   description     = "Lambda to copy a file from the land bucket to bak upload bucket"
   handler         = "main.handler"
   runtime         = "python3.12"
   memory_size     = 1024
-  timeout         = 10
+  timeout         = 900
   architectures   = ["x86_64"]
   build_in_docker = false
 
