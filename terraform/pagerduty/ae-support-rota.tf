@@ -7,7 +7,7 @@ locals {
         {
           name                         = "AE Daily Support Rota SEO_HEO"
           start                        = "2023-03-27T09:00:00Z"
-          rotation_virtual_start       = "2026-01-27T00:00:00+00:00"
+          rotation_virtual_start       = "2026-01-28T00:00:00+00:00"
           rotation_turn_length_seconds = 86400
           users = [
             module.users_ae_seo["vijay.solanki@justice.gov.uk"].id,
@@ -58,16 +58,16 @@ locals {
         {
           name                         = "AE Daily Support Rota G7"
           start                        = "2023-03-27T09:00:00Z"
-          rotation_virtual_start       = "2025-09-30T00:00:00+00:00"
+          rotation_virtual_start       = "2026-01-28T00:00:00+00:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users_ae_g7["alex.pavlopoulos@justice.gov.uk"].id,
-            module.users_ae_g7["holly.furniss@justice.gov.uk"].id,
             module.users_ae_g7["ivy.lau1@justice.gov.uk"].id,
             module.users_ae_g7["ian.rickard@justice.gov.uk"].id,
             module.users_ae_g7["ben.waterfield1@justice.gov.uk"].id,
             module.users_ae_g7["quinta.davies@justice.gov.uk"].id,
-            module.users_ae_g7["danielle.kelly1@justice.gov.uk"].id
+            module.users_ae_g7["danielle.kelly1@justice.gov.uk"].id,
+            module.users_ae_g7["alex.pavlopoulos@justice.gov.uk"].id,
+            module.users_ae_g7["holly.furniss@justice.gov.uk"].id
           ]
           restrictions = [
             {
