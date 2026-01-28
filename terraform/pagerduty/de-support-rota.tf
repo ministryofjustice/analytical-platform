@@ -77,7 +77,6 @@ locals {
             module.users_de_g7["stuart.james1@justice.gov.uk"].id,
             module.users_de_g7["matt.heery@justice.gov.uk"].id,
             module.users_de_g7["lalitha.nagarur3@justice.gov.uk"].id,
-            module.users_de_g7["matthew.price2@justice.gov.uk"].id,
             module.users_de_g7["andrew.craik@justice.gov.uk"].id,
           ]
           restrictions = [
@@ -221,11 +220,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Matt Price"
-      email = "matthew.price2@justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Andrew Craik"
       email = "andrew.craik@justice.gov.uk"
       role  = "responder"
@@ -313,11 +307,6 @@ import {
 import {
   to = module.users_de_g7["lalitha.nagarur3@justice.gov.uk"].pagerduty_user.this
   id = "PKIIO6K"
-}
-
-import {
-  to = module.users_de_g7["matthew.price2@justice.gov.uk"].pagerduty_user.this
-  id = "PW0GM04"
 }
 
 import {
