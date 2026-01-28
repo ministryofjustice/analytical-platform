@@ -191,7 +191,7 @@ locals {
     },
     {
       name  = "Matthew Rixson"
-      email = "Matthew.Rixson@justice.gov.uk"
+      email = "matthew.rixson@justice.gov.uk"
       role  = "responder"
     }
   ]
