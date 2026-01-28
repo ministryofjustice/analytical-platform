@@ -86,6 +86,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/transcribe"
       - "terraform/aws/analytical-platform-development/auth0-log-streams"
       - "terraform/aws/analytical-platform-development/control-panel-message-broker"
+      - "terraform/aws/analytical-platform-development/next-gen-network"
       - "terraform/aws/analytical-platform-development/tooling-iam"
       - "terraform/aws/analytical-platform-management-production/aws-secrets-manager"
       - "terraform/aws/analytical-platform-management-production/terraform-state"
