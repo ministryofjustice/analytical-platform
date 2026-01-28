@@ -67,7 +67,8 @@ locals {
             module.users_ae_g7["quinta.davies@justice.gov.uk"].id,
             module.users_ae_g7["danielle.kelly1@justice.gov.uk"].id,
             module.users_ae_g7["alex.pavlopoulos@justice.gov.uk"].id,
-            module.users_ae_g7["holly.furniss@justice.gov.uk"].id
+            module.users_ae_g7["holly.furniss@justice.gov.uk"].id,
+            module.users_ae_g7["matthew.rixson@justice.gov.uk"].id
           ]
           restrictions = [
             {
@@ -187,6 +188,11 @@ locals {
       name  = "Danielle Kelly"
       email = "danielle.kelly1@justice.gov.uk"
       role  = "responder"
+    },
+    {
+      name  = "Matthew Rixson"
+      email = "Matthew.Rixson@justice.gov.uk"
+      role  = "responder"
     }
   ]
 }
@@ -281,3 +287,9 @@ import {
   to = module.users_ae_g7["danielle.kelly1@justice.gov.uk"].pagerduty_user.this
   id = "PYZL4R9"
 }
+
+import {
+  to = module.users_ae_g7["matthew.rixson@justice.gov.uk"].pagerduty_user.this
+  id = "PREPU2L"
+}
+
