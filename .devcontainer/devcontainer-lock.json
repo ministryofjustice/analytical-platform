@@ -5,10 +5,10 @@
       "resolved": "ghcr.io/devcontainers/features/docker-in-docker@sha256:445e84b0c213225bfdae977a72b4125f65e38eadcd49616dae04f1af24aa122d",
       "integrity": "sha256:445e84b0c213225bfdae977a72b4125f65e38eadcd49616dae04f1af24aa122d"
     },
-    "ghcr.io/devcontainers/features/github-cli:1": {
-      "version": "1.0.15",
-      "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:1ad1ec1a806cc9926c84ca5b147427bba03b97e14e91f9df89af83726039ecaf",
-      "integrity": "sha256:1ad1ec1a806cc9926c84ca5b147427bba03b97e14e91f9df89af83726039ecaf"
+    "ghcr.io/devcontainers/features/github-cli:": {
+      "version": "1.1.0",
+      "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671",
+      "integrity": "sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671"
     },
     "ghcr.io/ministryofjustice/devcontainer-feature/aws:1": {
       "version": "1.1.0",
