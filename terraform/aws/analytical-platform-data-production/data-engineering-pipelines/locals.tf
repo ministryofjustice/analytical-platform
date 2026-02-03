@@ -20,8 +20,7 @@ locals {
         "airflow_prod_mags_data_processor",
         "restricted-admin",
         "airflow_dev_mags_data_processor",
-        "airflow-production-hmcts-dev-mags-combined-dev",
-        "airflow-production-hmcts-mags-combined"
+        "airflow-production-hmcts-dev-mags-combined-dev"
       ]
     },
     {
