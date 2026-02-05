@@ -395,3 +395,55 @@ module "cadet_iam_policy" {
   policy      = data.aws_iam_policy_document.create_a_derived_table.json
   description = "IAM Policy"
 }
+
+data "aws_iam_policy_document" "textract" {
+  #checkov:skip=CKV_AWS_111: This is a service policy
+  #checkov:skip=CKV_AWS_356: Needs to access multiple resources
+  statement {
+    sid    = "Textract"
+    effect = "Allow"
+
+    actions = [
+      "textract:AnalyzeDocument",
+      "textract:DetectDocumentText",
+      "textract:GetDocumentAnalysis",
+      "textract:GetLendingAnalysis",
+      "textract:ListAdapterVersions",
+      "textract:AnalyzeExpense",
+      "textract:GetAdapter",
+      "textract:GetDocumentTextDetection",
+      "textract:GetLendingAnalysisSummary",
+      "textract:ListTagsForResource",
+      "textract:AnalyzeID",
+      "textract:GetAdapterVersion",
+      "textract:GetExpenseAnalysis",
+      "textract:ListAdapters",
+      "textract:CreateAdapter",
+      "textract:DeleteAdapterVersion",
+      "textract:StartExpenseAnalysis",
+      "textract:CreateAdapterResource",
+      "textract:StartDocumentAnalysis",
+      "textract:StartLendingAnalysis",
+      "textract:DeleteAdapter",
+      "textract:StartDocumentTextDetection",
+      "textract:UpdateAdapter",
+      "textract:TagResource",
+      "textract:UntagResource",
+    ]
+
+    resources = ["*"]
+  }
+}
+
+module "textract_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "6.1.0"
+
+  path        = "/airflow-service/"
+  name        = "textract"
+  policy      = data.aws_iam_policy_document.textract.json
+  description = "IAM Policy"
+}
