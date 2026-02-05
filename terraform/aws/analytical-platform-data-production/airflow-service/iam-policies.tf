@@ -396,46 +396,35 @@ module "cadet_iam_policy" {
   description = "IAM Policy"
 }
 
-data "aws_iam_policy_document" "textract" {
+data "aws_iam_policy_document" "textract_read" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
   statement {
-    sid    = "Textract"
+    sid    = "TextractRead"
     effect = "Allow"
 
     actions = [
       "textract:AnalyzeDocument",
-      "textract:DetectDocumentText",
-      "textract:GetDocumentAnalysis",
-      "textract:GetLendingAnalysis",
-      "textract:ListAdapterVersions",
       "textract:AnalyzeExpense",
-      "textract:GetAdapter",
-      "textract:GetDocumentTextDetection",
-      "textract:GetLendingAnalysisSummary",
-      "textract:ListTagsForResource",
       "textract:AnalyzeID",
+      "textract:DetectDocumentText",
+      "textract:GetAdapter",
       "textract:GetAdapterVersion",
+      "textract:GetDocumentAnalysis",
+      "textract:GetDocumentTextDetection",
       "textract:GetExpenseAnalysis",
+      "textract:GetLendingAnalysis",
+      "textract:GetLendingAnalysisSummary",
       "textract:ListAdapters",
-      "textract:CreateAdapter",
-      "textract:DeleteAdapterVersion",
-      "textract:StartExpenseAnalysis",
-      "textract:CreateAdapterResource",
-      "textract:StartDocumentAnalysis",
-      "textract:StartLendingAnalysis",
-      "textract:DeleteAdapter",
-      "textract:StartDocumentTextDetection",
-      "textract:UpdateAdapter",
-      "textract:TagResource",
-      "textract:UntagResource",
+      "textract:ListAdapterVersions",
+      "textract:ListTagsForResource"
     ]
 
     resources = ["*"]
   }
 }
 
-module "textract_iam_policy" {
+module "textract_read_iam_policy" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
@@ -443,7 +432,45 @@ module "textract_iam_policy" {
   version = "6.1.0"
 
   path        = "/airflow-service/"
-  name        = "textract"
-  policy      = data.aws_iam_policy_document.textract.json
+  name        = "textract-read"
+  policy      = data.aws_iam_policy_document.textract_read.json
+  description = "IAM Policy"
+}
+
+data "aws_iam_policy_document" "textract_write" {
+  #checkov:skip=CKV_AWS_111: This is a service policy
+  #checkov:skip=CKV_AWS_356: Needs to access multiple resources
+  statement {
+    sid    = "TextractWrite"
+    effect = "Allow"
+
+    actions = [
+      "textract:CreateAdapter",
+      "textract:CreateAdapterResource",
+      "textract:DeleteAdapter",
+      "textract:DeleteAdapterVersion",
+      "textract:StartDocumentAnalysis",
+      "textract:StartDocumentTextDetection",
+      "textract:StartExpenseAnalysis",
+      "textract:StartLendingAnalysis",
+      "textract:TagResource",
+      "textract:UntagResource",
+      "textract:UpdateAdapter"
+    ]
+
+    resources = ["*"]
+  }
+}
+
+module "textract_write_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "6.1.0"
+
+  path        = "/airflow-service/"
+  name        = "textract-write"
+  policy      = data.aws_iam_policy_document.textract_write.json
   description = "IAM Policy"
 }
