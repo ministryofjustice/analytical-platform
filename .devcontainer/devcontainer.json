@@ -2,7 +2,7 @@
   "name": "analytical-platform",
   "image": "ghcr.io/ministryofjustice/devcontainer-base:latest",
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/ministryofjustice/devcontainer-feature/aws:1": {},
     "ghcr.io/ministryofjustice/devcontainer-feature/kubernetes:1": {

@@ -194,14 +194,14 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
 
       - name: Assume GlobalGitHubActionAdmin Role
         id: assume_global_github_action_admin_role
-        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
@@ -220,7 +220,7 @@ jobs:
 
       - name: Assume GlobalGitHubActionAccess Role
         id: assume_global_github_action_access_role
-        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
