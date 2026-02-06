@@ -170,3 +170,45 @@ resource "aws_scheduler_schedule" "dms_start_sun_1900" {
     })
   }
 }
+
+resource "aws_scheduler_schedule" "dms_stop_sun_0600" {
+  name                         = "dms-stop-sun-6am-uk-preprod"
+  description                  = "Stop DMS CDC every Sunday 06:00 UK"
+  schedule_expression          = "cron(0 6 ? * SUN *)"
+  schedule_expression_timezone = "Europe/London"
+  state                        = "ENABLED"
+  flexible_time_window { mode = "OFF" }
+
+  target {
+    arn      = "arn:aws:scheduler:::aws-sdk:sfn:startExecution"
+    role_arn = aws_iam_role.scheduler_role.arn
+    input = jsonencode({
+      StateMachineArn = aws_sfn_state_machine.dms_control.arn,
+      Input = jsonencode({
+        Op                 = "stop",
+        ReplicationTaskArn = module.preprod_dms_oasys.dms_cdc_task_arn
+      })
+    })
+  }
+}
+
+resource "aws_scheduler_schedule" "dms_start_sun_1300" {
+  name                         = "dms-start-sun-1pm-uk-preprod"
+  description                  = "Restart DMS CDC every Sunday 13:00 UK"
+  schedule_expression          = "cron(0 13 ? * SUN *)"
+  schedule_expression_timezone = "Europe/London"
+  state                        = "ENABLED"
+  flexible_time_window { mode = "OFF" }
+
+  target {
+    arn      = "arn:aws:scheduler:::aws-sdk:sfn:startExecution"
+    role_arn = aws_iam_role.scheduler_role.arn
+    input = jsonencode({
+      StateMachineArn = aws_sfn_state_machine.dms_control.arn,
+      Input = jsonencode({
+        Op                 = "start",
+        ReplicationTaskArn = module.preprod_dms_oasys.dms_cdc_task_arn
+      })
+    })
+  }
+}
