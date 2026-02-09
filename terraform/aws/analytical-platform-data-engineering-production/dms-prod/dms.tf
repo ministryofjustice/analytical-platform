@@ -65,7 +65,7 @@ module "prod_dms_delius" {
     replication_instance_id    = "delius-prod"
     subnet_ids                 = module.vpc.private_subnets
     subnet_group_name          = "delius-prod"
-    allocated_storage          = 200
+    allocated_storage          = 500
     availability_zone          = data.aws_availability_zones.available.names[0]
     engine_version             = "3.5.4"
     kms_key_arn                = module.dms_prod_kms.key_arn
