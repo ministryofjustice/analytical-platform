@@ -408,15 +408,8 @@ data "aws_iam_policy_document" "textract_read" {
       "textract:AnalyzeExpense",
       "textract:AnalyzeID",
       "textract:DetectDocumentText",
-      "textract:GetAdapter",
-      "textract:GetAdapterVersion",
       "textract:GetDocumentAnalysis",
       "textract:GetDocumentTextDetection",
-      "textract:GetExpenseAnalysis",
-      "textract:GetLendingAnalysis",
-      "textract:GetLendingAnalysisSummary",
-      "textract:ListAdapters",
-      "textract:ListAdapterVersions",
       "textract:ListTagsForResource"
     ]
 
@@ -445,17 +438,10 @@ data "aws_iam_policy_document" "textract_write" {
     effect = "Allow"
 
     actions = [
-      "textract:CreateAdapter",
-      "textract:CreateAdapterResource",
-      "textract:DeleteAdapter",
-      "textract:DeleteAdapterVersion",
       "textract:StartDocumentAnalysis",
       "textract:StartDocumentTextDetection",
-      "textract:StartExpenseAnalysis",
-      "textract:StartLendingAnalysis",
       "textract:TagResource",
       "textract:UntagResource",
-      "textract:UpdateAdapter"
     ]
 
     resources = ["*"]
