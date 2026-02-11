@@ -192,10 +192,10 @@ resource "aws_scheduler_schedule" "delius_dms_stop_tue_17th_feb_0800" {
   }
 }
 
-resource "aws_scheduler_schedule" "delius_dms_start_tue_17th_feb_2000" {
-  name                         = "dms-start-tue-17th-feb-8pm-uk-preprod"
-  description                  = "Restart DMS CDC on Tuesday 20:00 UK"
-  schedule_expression          = "cron(0 20 17 2 ? *)"
+resource "aws_scheduler_schedule" "delius_dms_start_thu_19th_feb_2000" {
+  name                         = "dms-start-thu-19th-feb-8pm-uk-preprod"
+  description                  = "Restart DMS CDC on Thursday 20:00 UK"
+  schedule_expression          = "cron(0 20 19 2 ? *)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
@@ -212,4 +212,3 @@ resource "aws_scheduler_schedule" "delius_dms_start_tue_17th_feb_2000" {
     })
   }
 }
-
