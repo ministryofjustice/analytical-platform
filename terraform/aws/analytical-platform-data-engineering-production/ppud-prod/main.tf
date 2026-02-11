@@ -6,7 +6,7 @@ module "ppud_prod" {
   #checkov:skip=CKV_TF_2: Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.8.2"
+  version = "5.10.0"
 
   bucket              = "mojap-data-engineering-production-ppud-prod"
   force_destroy       = false
