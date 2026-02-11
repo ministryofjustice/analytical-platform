@@ -2,7 +2,7 @@ module "tenant_id_secret" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
   source  = "terraform-aws-modules/secrets-manager/aws"
-  version = "2.0.1"
+  version = "2.1.0"
 
   name                  = "opg-fabric-connector/tenant-id"
   description           = "Tenant ID for OPG Fabric application"
@@ -14,7 +14,7 @@ module "object_id_secret" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
   source  = "terraform-aws-modules/secrets-manager/aws"
-  version = "2.0.1"
+  version = "2.1.0"
 
   name                  = "opg-fabric-connector/object-id"
   description           = "Object ID for OPG Fabric application"
