@@ -221,15 +221,22 @@ locals {
     "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived/table_name=opg_annual_report",
     "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=prison/database_name=calculate_release_dates_api"
   ]
+
+  lf_data_location_roles = [
+    "arn:aws:iam::593291632749:role/airflow_prod_cadet_deploy_nomis_daily",
+    "arn:aws:iam::593291632749:role/create-a-derived-table"
+  ]
 }
 
-resource "aws_lakeformation_permissions" "create_a_derived_table_data_locations" {
-  for_each = toset(local.create_a_derived_table_data_locations)
 
-  principal   = "arn:aws:iam::593291632749:role/create-a-derived-table"
+
+resource "aws_lakeformation_permissions" "create_a_derived_table_data_locations" {
+  for_each = setproduct(local.lf_data_location_roles, local.create_a_derived_table_data_locations)
+
+  principal   = each.value[0]
   permissions = ["DATA_LOCATION_ACCESS"]
 
   data_location {
-    arn = each.value
+    arn = each.value[1]
   }
 }
