@@ -228,13 +228,24 @@ locals {
   ]
 }
 
+# Give all s3 locations to each role
 resource "aws_lakeformation_permissions" "create_a_derived_table_data_locations" {
-  for_each = setproduct(local.lf_data_location_roles, local.create_a_derived_table_data_locations)
 
-  principal   = each.value[0]
+  for_each = {
+    for pair in setproduct(
+      local.lf_data_location_roles,
+      local.create_a_derived_table_data_locations
+    ) :
+    "${pair[0]}|${pair[1]}" => {
+      principal = pair[0]
+      location  = pair[1]
+    }
+  }
+
+  principal   = each.value.principal
   permissions = ["DATA_LOCATION_ACCESS"]
 
   data_location {
-    arn = each.value[1]
+    arn = each.value.location
   }
 }
