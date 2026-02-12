@@ -228,8 +228,6 @@ locals {
   ]
 }
 
-
-
 resource "aws_lakeformation_permissions" "create_a_derived_table_data_locations" {
   for_each = setproduct(local.lf_data_location_roles, local.create_a_derived_table_data_locations)
 
