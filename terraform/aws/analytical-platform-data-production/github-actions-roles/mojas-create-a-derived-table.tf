@@ -122,6 +122,21 @@ data "aws_iam_policy_document" "create_a_derived_table" {
     resources = ["*"]
   }
   statement {
+    sid    = "LakeFormationDataLocationAccess"
+    effect = "Allow"
+    actions = [
+      "lakeformation:GrantPermissions"
+    ]
+    resources = [
+      "arn:aws:s3:::alpha-app-opg-lpa-dashboard/prod/models/domain_name=opg/database_name=sirius_derived",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=guardianship_derived",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived/table_name=opg_annual_report",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=prison/database_name=calculate_release_dates_api"
+    ]
+  }
+
+  statement {
     sid    = "AirflowAccess"
     effect = "Allow"
     actions = [
@@ -194,5 +209,43 @@ module "create_a_derived_table_iam_role" {
       provider_arn               = "arn:aws:iam::593291632749:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/F147414004D7C4CF820F21F453AF80F1"
       namespace_service_accounts = ["actions-runners:actions-runner-mojas-create-a-derived-table"]
     }
+  }
+}
+
+# Lake formation hybrid locations
+locals {
+  create_a_derived_table_data_locations = [
+    "arn:aws:s3:::alpha-app-opg-lpa-dashboard/prod/models/domain_name=opg/database_name=sirius_derived",
+    "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=guardianship_derived",
+    "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived",
+    "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived/table_name=opg_annual_report",
+    "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=prison/database_name=calculate_release_dates_api"
+  ]
+
+  lf_data_location_roles = [
+    "arn:aws:iam::593291632749:role/airflow_prod_cadet_deploy_nomis_daily",
+    "arn:aws:iam::593291632749:role/create-a-derived-table"
+  ]
+}
+# Combinations of paths and roles
+locals {
+  lf_data_location_pairs = merge([
+    for role in local.lf_data_location_roles : {
+      for location in local.create_a_derived_table_data_locations :
+      "${role}|${location}" => {
+        principal = role
+        location  = location
+      }
+    }
+  ]...)
+}
+resource "aws_lakeformation_permissions" "create_a_derived_table_data_locations" {
+  for_each = local.lf_data_location_pairs
+
+  principal   = each.value.principal
+  permissions = ["DATA_LOCATION_ACCESS"]
+
+  data_location {
+    arn = each.value.location
   }
 }
