@@ -122,6 +122,21 @@ data "aws_iam_policy_document" "create_a_derived_table" {
     resources = ["*"]
   }
   statement {
+    sid    = "LakeFormationDataLocationAccess"
+    effect = "Allow"
+    actions = [
+      "lakeformation:GrantPermissions"
+    ]
+    resources = [
+      "arn:aws:s3:::alpha-app-opg-lpa-dashboard/prod/models/domain_name=opg/database_name=sirius_derived",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=guardianship_derived",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived/table_name=opg_annual_report",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=prison/database_name=calculate_release_dates_api"
+    ]
+  }
+  
+  statement {
     sid    = "AirflowAccess"
     effect = "Allow"
     actions = [
@@ -194,5 +209,27 @@ module "create_a_derived_table_iam_role" {
       provider_arn               = "arn:aws:iam::593291632749:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/F147414004D7C4CF820F21F453AF80F1"
       namespace_service_accounts = ["actions-runners:actions-runner-mojas-create-a-derived-table"]
     }
+  }
+}
+
+# Lake formation hybrid locations
+locals {
+  create_a_derived_table_data_locations = [
+    "arn:aws:s3:::alpha-app-opg-lpa-dashboard/prod/models/domain_name=opg/database_name=sirius_derived",
+    "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=guardianship_derived",
+    "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived",
+    "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived/table_name=opg_annual_report",
+    "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=prison/database_name=calculate_release_dates_api"
+  ]
+}
+
+resource "aws_lakeformation_permissions" "create_a_derived_table_data_locations" {
+  for_each = toset(local.create_a_derived_table_data_locations)
+
+  principal   = module.create_a_derived_table_iam_role.iam_role_arn
+  permissions = ["DATA_LOCATION_ACCESS"]
+
+  data_location {
+    arn = each.value
   }
 }
