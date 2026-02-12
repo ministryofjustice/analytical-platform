@@ -226,7 +226,7 @@ locals {
 resource "aws_lakeformation_permissions" "create_a_derived_table_data_locations" {
   for_each = toset(local.create_a_derived_table_data_locations)
 
-  principal = "arn:aws:iam::593291632749:role/create-a-derived-table"
+  principal   = "arn:aws:iam::593291632749:role/create-a-derived-table"
   permissions = ["DATA_LOCATION_ACCESS"]
 
   data_location {
