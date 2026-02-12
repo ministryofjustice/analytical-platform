@@ -227,18 +227,20 @@ locals {
     "arn:aws:iam::593291632749:role/create-a-derived-table"
   ]
 }
-
-# Give all s3 locations to each role
-resource "aws_lakeformation_permissions" "create_a_derived_table_data_locations" {
-
-  for_each = {
-    for role in local.lf_data_location_roles :
-    for location in local.create_a_derived_table_data_locations :
-    "${role}|${location}" => {
-      principal = role
-      location  = location
+# Combinations of paths and roles
+locals {
+  lf_data_location_pairs = merge([
+    for role in local.lf_data_location_roles : {
+      for location in local.create_a_derived_table_data_locations :
+      "${role}|${location}" => {
+        principal = role
+        location  = location
+      }
     }
-  }
+  ]...)
+}
+resource "aws_lakeformation_permissions" "create_a_derived_table_data_locations" {
+  for_each = local.lf_data_location_pairs
 
   principal   = each.value.principal
   permissions = ["DATA_LOCATION_ACCESS"]
