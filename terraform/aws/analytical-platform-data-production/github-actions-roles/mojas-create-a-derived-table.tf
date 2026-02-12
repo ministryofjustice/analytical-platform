@@ -232,13 +232,11 @@ locals {
 resource "aws_lakeformation_permissions" "create_a_derived_table_data_locations" {
 
   for_each = {
-    for pair in setproduct(
-      local.lf_data_location_roles,
-      local.create_a_derived_table_data_locations
-    ) :
-    "${pair[0]}|${pair[1]}" => {
-      principal = pair[0]
-      location  = pair[1]
+    for role in local.lf_data_location_roles :
+    for location in local.create_a_derived_table_data_locations :
+    "${role}|${location}" => {
+      principal = role
+      location  = location
     }
   }
 
