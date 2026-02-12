@@ -135,7 +135,7 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=prison/database_name=calculate_release_dates_api"
     ]
   }
-  
+
   statement {
     sid    = "AirflowAccess"
     effect = "Allow"
