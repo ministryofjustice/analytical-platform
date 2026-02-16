@@ -15,4 +15,3 @@ resource "aws_secretsmanager_secret" "delius_dev_secret" {
   name       = "delius-dev-secret"
   kms_key_id = module.dms_dev_kms.key_arn
 }
-  
