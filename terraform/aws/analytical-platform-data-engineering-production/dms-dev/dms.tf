@@ -107,14 +107,14 @@ module "dev_dms_oasys_offender_rsr_scores" {
 
   db                      = "oasys-dev"
   slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
-  output_key_prefix       = "hmpps/oasys-offender-rsr-scores"
+  output_key_prefix       = "hmpps/oasys"
   output_key_suffix       = "-tf"
   output_bucket           = "mojap-raw-hist-dev"
 
   dms_replication_instance = {
-    replication_instance_id    = "oasys-offender-rsr-scores-dev"
+    replication_instance_id    = "oasys-dev"
     subnet_ids                 = module.vpc.private_subnets
-    subnet_group_name          = "oasys-offender-rsr-scores-dev"
+    subnet_group_name          = "oasys-dev"
     allocated_storage          = 50
     availability_zone          = data.aws_availability_zones.available.names[0]
     engine_version             = "3.5.4"
@@ -130,15 +130,14 @@ module "dev_dms_oasys_offender_rsr_scores" {
     secrets_manager_kms_arn = module.dms_dev_kms.key_arn
     sid                     = "TSTNDA"
 
-    extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=3;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=delius-core-test-db-1.delius-core.hmpps-test.modernisation-platform.service.justice.gov.uk/+ASM;asm_user=delius_analytics_platform;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N"
-    cdc_start_time              = "2025-04-25T12:00:00Z"
+    extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=2;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=10.26.12.211/+ASM;asm_user=AWS;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N;"
   }
   replication_task_id = {
-    full_load = "oasys-offender-rsr-scores-dev-full-load"
+    full_load = "oasys-dev-offender-rsr-scores-full-load"
   }
   dms_mapping_rules = {
     bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-    key    = "dev/oasys-offender-rsr/table_mappings.json"
+    key    = "dev/oasys/offender_rsr_scores_table_mappings.json"
   }
 
   tags = merge(
