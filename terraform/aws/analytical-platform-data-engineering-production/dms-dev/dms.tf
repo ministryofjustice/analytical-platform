@@ -99,3 +99,53 @@ module "dev_dms_delius" {
   glue_catalog_arn      = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
 }
+
+module "dev_dms_oasys_offender_rsr_scores" {
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b190c92217786c0454b756996cdb2fcb190256db"
+  vpc_id      = module.vpc.vpc_id
+  environment = var.tags.environment-name
+
+  db                      = "oasys-dev"
+  slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
+  output_key_prefix       = "hmpps/oasys-offender-rsr-scores"
+  output_key_suffix       = "-tf"
+  output_bucket           = "mojap-raw-hist-dev"
+
+  dms_replication_instance = {
+    replication_instance_id    = "oasys-offender-rsr-scores-dev"
+    subnet_ids                 = module.vpc.private_subnets
+    subnet_group_name          = "oasys-offender-rsr-scores-dev"
+    allocated_storage          = 50
+    availability_zone          = data.aws_availability_zones.available.names[0]
+    engine_version             = "3.5.4"
+    kms_key_arn                = module.dms_dev_kms.key_arn
+    multi_az                   = false
+    replication_instance_class = "dms.t3.medium"
+    inbound_cidr               = "192.0.2.0/32" # test unassigned
+    apply_immediately          = true
+  }
+  dms_source = {
+    engine_name             = "oracle"
+    secrets_manager_arn     = aws_secretsmanager_secret.oasys_dev_secret.arn
+    secrets_manager_kms_arn = module.dms_dev_kms.key_arn
+    sid                     = "TSTNDA"
+
+    extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=3;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=delius-core-test-db-1.delius-core.hmpps-test.modernisation-platform.service.justice.gov.uk/+ASM;asm_user=delius_analytics_platform;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N"
+    cdc_start_time              = "2025-04-25T12:00:00Z"
+  }
+  replication_task_id = {
+    full_load = "oasys-offender-rsr-scores-dev-full-load"
+  }
+  dms_mapping_rules = {
+    bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+    key    = "dev/oasys-offender-rsr/table_mappings.json"
+  }
+
+  tags = merge(
+    { "managed-by" = "Terraform" },
+    var.tags
+  )
+
+  glue_catalog_arn      = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
+  glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
+}
