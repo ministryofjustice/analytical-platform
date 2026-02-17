@@ -1,5 +1,7 @@
 #trivy:ignore:avd-aws-0132:Replicating existing bucket that does not encrypt data with a customer managed key
 #trivy:ignore:avd-aws-0090:Bucket versioning is not preferred for this bucket for now as data is processed on-demand
+# trivy:ignore:AVD-AWS-0090 Bucket versioning is not preferred for this bucket for now as data is processed on-demand
+# trivy:ignore:avd-aws-0090 Bucket versioning is not preferred for this bucket for now as data is processed on-demand
 module "mojap_transcribe_spike" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
