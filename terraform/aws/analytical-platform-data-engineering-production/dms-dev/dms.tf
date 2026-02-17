@@ -111,19 +111,8 @@ module "dev_dms_oasys_offender_rsr_scores" {
   output_key_suffix       = "-tf"
   output_bucket           = "mojap-raw-hist-dev"
 
-  dms_replication_instance = {
-    replication_instance_id    = "oasys-dev"
-    subnet_ids                 = module.vpc.private_subnets
-    subnet_group_name          = "oasys-dev"
-    allocated_storage          = 50
-    availability_zone          = data.aws_availability_zones.available.names[0]
-    engine_version             = "3.5.4"
-    kms_key_arn                = module.dms_dev_kms.key_arn
-    multi_az                   = false
-    replication_instance_class = "dms.t3.medium"
-    inbound_cidr               = "192.0.2.0/32" # test unassigned
-    apply_immediately          = true
-  }
+  dms_replication_instance = module.dev_dms_oasys.dms_replication_instance
+  
   dms_source = {
     engine_name             = "oracle"
     secrets_manager_arn     = aws_secretsmanager_secret.oasys_dev_secret.arn
