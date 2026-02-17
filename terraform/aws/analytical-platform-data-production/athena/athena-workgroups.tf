@@ -31,6 +31,10 @@ locals {
       name      = "dbt-xcjs",
       component = "dbt-xcjs"
     },
+    "dbt-performance" = {
+      name      = "dbt-performance",
+      component = "dbt-performance"
+    },
     "dbt-curated-daily" = {
       name      = "dbt-curated-daily",
       component = "dbt-curated-daily"
