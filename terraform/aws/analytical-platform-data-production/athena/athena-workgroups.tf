@@ -111,7 +111,8 @@ locals {
   }
 }
 
-#trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
+
+# trivy:ignore:AVD-AWS-0006 Not encrypting the workgroup currently
 resource "aws_athena_workgroup" "airflow" {
   #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
 
@@ -143,8 +144,8 @@ resource "aws_athena_workgroup" "airflow" {
   )
 }
 
-#trivy:ignore:avd-aws-0006:Not encrypting the workgroup currently
-#trivy:ignore:avd-aws-0007:Can't enforce output location due to DBT requirements
+# trivy:ignore:AVD-AWS-0006 Not encrypting the workgroup currently
+# trivy:ignore:AVD-AWS-0007 Can't enforce output location due to DBT requirements
 resource "aws_athena_workgroup" "dbt" {
   #checkov:skip=CKV_AWS_159:Not encrypting the workgroup currently
   #checkov:skip=CKV_AWS_82:Can't enforce output location due to DBT requirements
