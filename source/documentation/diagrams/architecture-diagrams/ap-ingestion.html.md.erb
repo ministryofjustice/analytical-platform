@@ -16,9 +16,21 @@ In general, ingested data will intially be transferred to "landing" S3 buckets, 
 - **Data uploader.** This is a web application which allows users to upload their own data to S3 without requiring the intervention of date engineers or AP support. Data is registered in Glue and is avaiable to query in Athena or other tooling via access to S3 buckets.
 - **Managed pipelines.** The are managed by data engineers and transfer data from production operational systems such as NOMIS.
 
-## Ingestion service diagrams
+## Ingestion service
+
+This service allows external providers of data a mechanism for copying data to the AP in a secure and safe way. In short:
+
+- We use AWS transfer family to expose a secure FTP (SFTP) connection using SSH authentication
+- Data uploaded via SFTP arrives in an encrypted S3 landing bucket
+- AWS GuardDuty scans files in the landing bucket:
+  - Files with no threats identified trigger a lambda function to copy them to a destination bucket in the `data-production` account where they can be accessed for analysis
+  - Files with threats identified are moved to a quarantine bucket
+  - In either scenario, files are removed from the landing bucket once one of the above operations completes
+- SNS topics are used to notify users of the various events
 
 For further information on the ingestion service, please refer to the [guidance page](https://user-guidance.analytical-platform.service.justice.gov.uk/tools/ingestion/)
+
+### Ingestion service diagrams
 
 ![Ingestion diagram 1](./ap-ingestion-01.excalidraw.png)
 
