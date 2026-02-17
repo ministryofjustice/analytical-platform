@@ -53,7 +53,7 @@ efs_low_credit_burst_balance_alarm_threshold = 50000
 # RDS
 ##################################################
 
-rds_instance_class       = "db.t3.micro"
+rds_instance_class       = "db.t3.small"
 rds_engine               = "postgres"
 rds_family               = "postgres17"
 rds_engine_version       = "17.4"
