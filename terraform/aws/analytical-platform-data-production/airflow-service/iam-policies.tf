@@ -413,3 +413,68 @@ module "cadet_iam_policy" {
   policy      = data.aws_iam_policy_document.create_a_derived_table.json
   description = "IAM Policy"
 }
+
+data "aws_iam_policy_document" "textract_read" {
+  #checkov:skip=CKV_AWS_111: This is a service policy
+  #checkov:skip=CKV_AWS_356: Needs to access multiple resources
+  statement {
+    sid    = "TextractRead"
+    effect = "Allow"
+
+    actions = [
+      "textract:AnalyzeDocument",
+      "textract:AnalyzeExpense",
+      "textract:AnalyzeID",
+      "textract:DetectDocumentText",
+      "textract:GetDocumentAnalysis",
+      "textract:GetDocumentTextDetection",
+      "textract:ListTagsForResource"
+    ]
+
+    resources = ["*"]
+  }
+}
+
+module "textract_read_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "6.1.0"
+
+  path        = "/airflow-service/"
+  name        = "textract-read"
+  policy      = data.aws_iam_policy_document.textract_read.json
+  description = "IAM Policy"
+}
+
+data "aws_iam_policy_document" "textract_write" {
+  #checkov:skip=CKV_AWS_111: This is a service policy
+  #checkov:skip=CKV_AWS_356: Needs to access multiple resources
+  statement {
+    sid    = "TextractWrite"
+    effect = "Allow"
+
+    actions = [
+      "textract:StartDocumentAnalysis",
+      "textract:StartDocumentTextDetection",
+      "textract:TagResource",
+      "textract:UntagResource",
+    ]
+
+    resources = ["*"]
+  }
+}
+
+module "textract_write_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "6.1.0"
+
+  path        = "/airflow-service/"
+  name        = "textract-write"
+  policy      = data.aws_iam_policy_document.textract_write.json
+  description = "IAM Policy"
+}
