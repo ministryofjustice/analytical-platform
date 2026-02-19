@@ -1,5 +1,5 @@
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b1369ae57a940b314d06486440a82e561022eaed"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=1cc5ed4319e859360ae51fe44f2df6d225767fd2"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -72,7 +72,7 @@ module "dev_dms_oasys" {
 }
 
 module "dev_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=59375703fba30d2809feb740ac0dbd5b3f009e15"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=1cc5ed4319e859360ae51fe44f2df6d225767fd2"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -104,13 +104,27 @@ module "dev_dms_delius" {
     extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=3;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=delius-core-test-db-1.delius-core.hmpps-test.modernisation-platform.service.justice.gov.uk/+ASM;asm_user=delius_analytics_platform;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N"
     cdc_start_time              = "2025-04-25T12:00:00Z"
   }
-  replication_task_id = {
-    full_load = "delius-dev-full-load"
-    cdc       = "delius-dev-cdc"
+
+  full_load_jobs = {
+    base = {
+      replication_task_id = "delius-dev-full-load"
+      mapping_rules = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/delius/table_mappings.json"
+      }
+    }
   }
-  dms_mapping_rules = {
-    bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-    key    = "dev/delius/table_mappings.json"
+
+  # optional, if you want multiple CDC tasks too
+  cdc_jobs = {
+    base = {
+      replication_task_id = "delius-dev-cdc"
+      cdc_start_time      = "2025-04-25T12:00:00Z"
+      mapping_rules = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/delius/table_mappings.json"
+      }
+    }
   }
 
   tags = merge(
