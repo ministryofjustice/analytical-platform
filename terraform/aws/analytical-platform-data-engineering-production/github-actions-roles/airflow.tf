@@ -9,10 +9,10 @@ module "cadet_airflow_iam_role" {
   }
 
   oidc_providers = {
-    analytical-platform-compute-production = {
+    analytical-platform-compute-development = {
       provider_arn = format(
         "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:oidc-provider/%s",
-        trimprefix(jsondecode(data.aws_secretsmanager_secret_version.analytical_platform_compute_cluster_data.secret_string)["analytical-platform-compute-production-oidc-endpoint"], "https://")
+        trimprefix(jsondecode(data.aws_secretsmanager_secret_version.analytical_platform_compute_cluster_data.secret_string)["analytical-platform-compute-development-oidc-endpoint"], "https://")
       )
       namespace_service_accounts = ["mwaa:probation-cadet"]
     }
@@ -24,5 +24,14 @@ module "cadet_airflow_iam_role" {
       "is_production" = "false"
     }
   )
+
+}
+
+resource "aws_iam_openid_connect_provider" "analytical_platform_compute_dev_cluster_oidc_provider" {
+  url = jsondecode(data.aws_secretsmanager_secret_version.analytical_platform_compute_cluster_data.secret_string)["analytical-platform-compute-development-oidc-endpoint"]
+
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
 
 }
