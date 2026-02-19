@@ -28,6 +28,11 @@ resource "aws_iam_role_policy" "sfn_dms_policy" {
       },
       {
         Effect   = "Allow",
+        Action   = ["dms:StartReplicationTask", "dms:StopReplicationTask"],
+        Resource = module.preprod_dms_delius.dms_cdc_task_arn
+      },
+      {
+        Effect   = "Allow",
         Action   = ["dms:DescribeReplicationTasks"],
         Resource = "arn:aws:dms:eu-west-1:${var.account_ids["analytical-platform-data-engineering-production"]}:*:*"
       }

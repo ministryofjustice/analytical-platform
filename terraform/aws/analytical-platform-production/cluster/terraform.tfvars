@@ -54,7 +54,7 @@ efs_low_credit_burst_balance_alarm_threshold = 50000
 # RDS
 ##################################################
 
-rds_instance_class        = "db.t3.micro"
+rds_instance_class        = "db.t3.small"
 rds_engine                = "postgres"
 rds_family                = "postgres17"
 rds_engine_version        = "17.4"
@@ -65,7 +65,7 @@ rds_multi_az              = true
 rds_storage_encrypted     = true
 rds_db_name               = "controlpanel"
 rds_snapshot_identifier   = "eks-production-control-panelspsg-db-newly-encrypted"
-rds_maintenance_window    = "Mon:00:00-Mon:03:00"
+rds_maintenance_window    = "Wed:00:00-Wed:03:00"
 rds_backup_window         = "03:00-06:00"
 rds_ca_cert_identifier    = "rds-ca-rsa2048-g1"
 rds_monitoring_interval   = 30
