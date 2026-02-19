@@ -301,7 +301,8 @@ data "aws_iam_policy_document" "create_a_derived_table_prod" {
     ]
     resources = [
       "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:datacatalog/*",
-      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:workgroup/dbt-probation-prod"
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:workgroup/dbt-probation-prod",
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:workgroup/dbt-probation-prod-dev"
     ]
   }
   statement {
