@@ -219,4 +219,3 @@ module "datalake_prod" {
     }
   )
 }
-
