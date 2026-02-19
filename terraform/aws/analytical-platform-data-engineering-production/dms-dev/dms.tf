@@ -111,6 +111,8 @@ module "dev_dms_oasys_offender_rsr_scores" {
   output_key_suffix       = "-tf"
   output_bucket           = "mojap-raw-hist-dev"
 
+  existing_replication_instance_arn = module.dev_dms_oasys.replication_instance_arn
+
   dms_replication_instance = {
     replication_instance_id    = "oasys-dev"
     subnet_ids                 = module.vpc.private_subnets
