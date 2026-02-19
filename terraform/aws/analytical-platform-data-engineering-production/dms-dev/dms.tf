@@ -1,5 +1,5 @@
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=f0e4d126328e39f0dba738eb156400f8b03ee420"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=59375703fba30d2809feb740ac0dbd5b3f009e15"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -50,7 +50,7 @@ module "dev_dms_oasys" {
 }
 
 module "dev_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=f0e4d126328e39f0dba738eb156400f8b03ee420"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=59375703fba30d2809feb740ac0dbd5b3f009e15"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -101,7 +101,7 @@ module "dev_dms_delius" {
 }
 
 module "dev_dms_oasys_offender_rsr_scores" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=f0e4d126328e39f0dba738eb156400f8b03ee420"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=59375703fba30d2809feb740ac0dbd5b3f009e15"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
