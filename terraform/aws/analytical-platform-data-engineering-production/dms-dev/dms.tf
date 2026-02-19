@@ -1,5 +1,5 @@
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=59375703fba30d2809feb740ac0dbd5b3f009e15"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=72dd35903eb03f232983af0fa8d8e53fd2d42745"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -31,14 +31,36 @@ module "dev_dms_oasys" {
     extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=2;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=10.26.12.211/+ASM;asm_user=AWS;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N;"
     cdc_start_time              = "2025-04-25T12:00:00Z"
   }
-  replication_task_id = {
-    full_load = "oasys-dev-full-load"
-    cdc       = "oasys-dev-cdc"
+  full_load_jobs = {
+    base = {
+      replication_task_id = "oasys-dev-full-load"
+      mapping_rules = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/oasys/table_mappings.json"
+      }
+    }
+
+    offender_rsr_scores = {
+      replication_task_id = "oasys-dev-offender-rsr-scores-full-load"
+      mapping_rules = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/oasys/offender_rsr_scores_table_mappings.json"
+      }
+    }
   }
-  dms_mapping_rules = {
-    bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-    key    = "dev/oasys/table_mappings.json"
+
+  # optional, if you want multiple CDC tasks too
+  cdc_jobs = {
+    base = {
+      replication_task_id = "oasys-dev-cdc"
+      cdc_start_time      = "2025-04-25T12:00:00Z"
+      mapping_rules = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/oasys/table_mappings.json"
+      }
+    }
   }
+
 
   tags = merge(
     { "managed-by" = "Terraform" },
@@ -89,58 +111,6 @@ module "dev_dms_delius" {
   dms_mapping_rules = {
     bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
     key    = "dev/delius/table_mappings.json"
-  }
-
-  tags = merge(
-    { "managed-by" = "Terraform" },
-    var.tags
-  )
-
-  glue_catalog_arn      = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
-  glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
-}
-
-module "dev_dms_oasys_offender_rsr_scores" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=59375703fba30d2809feb740ac0dbd5b3f009e15"
-  vpc_id      = module.vpc.vpc_id
-  environment = var.tags.environment-name
-
-  db                      = "oasys-dev"
-  slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
-  output_key_prefix       = "hmpps/oasys"
-  output_key_suffix       = "-tf"
-  output_bucket           = "mojap-raw-hist-dev"
-
-  existing_replication_instance_arn = module.dev_dms_oasys.dms_replication_instance_arn
-
-  dms_replication_instance = {
-    replication_instance_id    = "oasys-dev"
-    subnet_ids                 = module.vpc.private_subnets
-    subnet_group_name          = "oasys-dev"
-    allocated_storage          = 50
-    availability_zone          = data.aws_availability_zones.available.names[0]
-    engine_version             = "3.5.4"
-    kms_key_arn                = module.dms_dev_kms.key_arn
-    multi_az                   = false
-    replication_instance_class = "dms.t3.medium"
-    inbound_cidr               = "192.0.2.0/32" # test unassigned
-    apply_immediately          = true
-  }
-
-  dms_source = {
-    engine_name             = "oracle"
-    secrets_manager_arn     = aws_secretsmanager_secret.oasys_dev_secret.arn
-    secrets_manager_kms_arn = module.dms_dev_kms.key_arn
-    sid                     = "TSTNDA"
-
-    extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=2;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=10.26.12.211/+ASM;asm_user=AWS;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N;"
-  }
-  replication_task_id = {
-    full_load = "oasys-dev-offender-rsr-scores-full-load"
-  }
-  dms_mapping_rules = {
-    bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-    key    = "dev/oasys/offender_rsr_scores_table_mappings.json"
   }
 
   tags = merge(
