@@ -124,7 +124,6 @@ module "create_a_derived_table_dev_iam_role" {
   )
 }
 
-# unsure if the below is required as not being used anywhere
 resource "aws_iam_openid_connect_provider" "analytical_platform_compute_cluster_oidc_provider" {
   url = jsondecode(data.aws_secretsmanager_secret_version.analytical_platform_compute_cluster_data.secret_string)["analytical-platform-compute-production-oidc-endpoint"]
 
