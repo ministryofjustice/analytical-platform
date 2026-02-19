@@ -1,11 +1,11 @@
 module "cadet_airflow_iam_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
   version = "6.4.0"
 
   name = "probation-cadet-airflow-dev"
 
   policies = {
-      policy = module.create_a_derived_table_dev_iam_policy.arn
+    policy = module.create_a_derived_table_dev_iam_policy.arn
   }
 
   oidc_providers = {
