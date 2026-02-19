@@ -1,5 +1,5 @@
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b190c92217786c0454b756996cdb2fcb190256db"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=7507cd9128f379577950a189f850c201ddc2fa41"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -50,7 +50,7 @@ module "dev_dms_oasys" {
 }
 
 module "dev_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b190c92217786c0454b756996cdb2fcb190256db"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=7507cd9128f379577950a189f850c201ddc2fa41"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -101,7 +101,7 @@ module "dev_dms_delius" {
 }
 
 module "dev_dms_oasys_offender_rsr_scores" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b190c92217786c0454b756996cdb2fcb190256db"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=7507cd9128f379577950a189f850c201ddc2fa41"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -111,8 +111,20 @@ module "dev_dms_oasys_offender_rsr_scores" {
   output_key_suffix       = "-tf"
   output_bucket           = "mojap-raw-hist-dev"
 
-  dms_replication_instance = module.dev_dms_oasys.dms_replication_instance
-  
+  dms_replication_instance = {
+    replication_instance_id    = "oasys-dev"
+    subnet_ids                 = module.vpc.private_subnets
+    subnet_group_name          = "oasys-dev"
+    allocated_storage          = 50
+    availability_zone          = data.aws_availability_zones.available.names[0]
+    engine_version             = "3.5.4"
+    kms_key_arn                = module.dms_dev_kms.key_arn
+    multi_az                   = false
+    replication_instance_class = "dms.t3.medium"
+    inbound_cidr               = "192.0.2.0/32" # test unassigned
+    apply_immediately          = true
+  }
+
   dms_source = {
     engine_name             = "oracle"
     secrets_manager_arn     = aws_secretsmanager_secret.oasys_dev_secret.arn
