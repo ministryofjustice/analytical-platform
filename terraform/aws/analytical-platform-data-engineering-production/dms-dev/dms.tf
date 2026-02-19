@@ -1,5 +1,5 @@
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=984c58db23f54f79bacb3cb316cd5c744c2c1f9c"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=f0e4d126328e39f0dba738eb156400f8b03ee420"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -50,7 +50,7 @@ module "dev_dms_oasys" {
 }
 
 module "dev_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=984c58db23f54f79bacb3cb316cd5c744c2c1f9c"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=f0e4d126328e39f0dba738eb156400f8b03ee420"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -101,7 +101,7 @@ module "dev_dms_delius" {
 }
 
 module "dev_dms_oasys_offender_rsr_scores" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=984c58db23f54f79bacb3cb316cd5c744c2c1f9c"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=f0e4d126328e39f0dba738eb156400f8b03ee420"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -111,7 +111,7 @@ module "dev_dms_oasys_offender_rsr_scores" {
   output_key_suffix       = "-tf"
   output_bucket           = "mojap-raw-hist-dev"
 
-  existing_replication_instance_arn = module.dev_dms_oasys.replication_instance_arn
+  existing_replication_instance_arn = module.dev_dms_oasys.dms_replication_instance_arn
 
   dms_replication_instance = {
     replication_instance_id    = "oasys-dev"
