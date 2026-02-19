@@ -27,6 +27,10 @@ locals {
       name      = "dbt-avature",
       component = "dbt-avature",
     },
+    "dbt-corporate" = {
+      name      = "dbt-corporate",
+      component = "dbt-corporate",
+    },
     "dbt-xcjs" = {
       name      = "dbt-xcjs",
       component = "dbt-xcjs"
