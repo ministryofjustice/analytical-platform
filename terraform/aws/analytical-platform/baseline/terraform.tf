@@ -25,6 +25,21 @@ provider "aws" {
 }
 
 ##################################################
+# Platform Engineer Admin Source
+##################################################
+
+provider "aws" {
+  alias  = "platform-engineer-admin-source-eu-west-2"
+  region = "eu-west-2"
+  assume_role {
+    role_arn = "arn:aws:iam::509399598587:role/analytical-platform-infrastructure-access"
+  }
+  default_tags {
+    tags = var.tags
+  }
+}
+
+##################################################
 # Data Development
 ##################################################
 
