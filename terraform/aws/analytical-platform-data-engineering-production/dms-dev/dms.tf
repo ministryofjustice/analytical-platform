@@ -1,5 +1,5 @@
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=7b23b588cefdaff16983b15a7ecb9974252b716d"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=f6b551d78f42958a816556c2d77caa12b51c5556"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
