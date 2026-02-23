@@ -1,5 +1,5 @@
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b190c92217786c0454b756996cdb2fcb190256db"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=7b23b588cefdaff16983b15a7ecb9974252b716d"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -31,13 +31,24 @@ module "dev_dms_oasys" {
     extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=2;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=10.26.12.211/+ASM;asm_user=AWS;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N;"
     cdc_start_time              = "2025-04-25T12:00:00Z"
   }
-  replication_task_id = {
-    full_load = "oasys-dev-full-load"
-    cdc       = "oasys-dev-cdc"
+  full_load_jobs = {
+    base = {
+      replication_task_id = "oasys-dev-full-load"
+      dms_mapping_rules = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/oasys/table_mappings.json"
+      }
+    }
   }
-  dms_mapping_rules = {
-    bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-    key    = "dev/oasys/table_mappings.json"
+
+  cdc_jobs = {
+    base = {
+      replication_task_id = "oasys-dev-cdc"
+      dms_mapping_rules = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/oasys/table_mappings.json"
+      }
+    }
   }
 
   tags = merge(
