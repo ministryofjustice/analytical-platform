@@ -47,3 +47,13 @@ resource "aws_secretsmanager_secret" "github_token" {
     credential-expiration = "2027-01-06"
   }
 }
+
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
+resource "aws_secretsmanager_secret" "chainguard_image_pull_token" {
+  provider = aws.analytical-platform-management-production-eu-west-1
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
+  name        = "chainguard-image-pull-token"
+  description = "Token for Chainguard image registry pull access"
+  kms_key_id  = "alias/aws/secretsmanager"
+}
