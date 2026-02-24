@@ -62,12 +62,12 @@ module "dev_dms_oasys" {
 
 import {
   to = module.dev_dms_oasys.aws_dms_replication_task.full_load_replication_task["base"]
-  id = "module.dev_dms_oasys.aws_dms_replication_task.full_load_replication_task"
+  id = "oasys-dev-full-load"
 }
 
 import {
   to = module.dev_dms_oasys.aws_dms_replication_task.cdc_replication_task["base"]
-  id = "module.dev_dms_oasys.aws_dms_replication_task.cdc_replication_task[0]"
+  id = "oasys-dev-cdc"
 }
 
 
