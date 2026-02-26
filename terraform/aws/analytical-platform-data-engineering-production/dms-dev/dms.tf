@@ -1,5 +1,5 @@
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=99ced9a5c3915222c4bfdd00450023619bbac7e8"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=ee6f04093a8dc990e66cd6258df7d57957ee8971"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -40,15 +40,15 @@ module "dev_dms_oasys" {
     key    = "dev/oasys/table_mappings.json"
   }
 
-  # independent_full_loads = {
-  #   oasys_dev_offender_rsr_scores = {
-  #     full_load_name = "oasys-dev-offender-rsr-scores"
-  #     path = {
-  #       bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-  #       key    = "dev/oasys/offender_rsr_scores_full_load.json"
-  #     }
-  #   }
-  # }
+  independent_full_loads = {
+    oasys_dev_offender_rsr_scores = {
+      full_load_name = "oasys-dev-offender-rsr-scores"
+      path = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/oasys/offender_rsr_scores_full_load.json"
+      }
+    }
+  }
 
   tags = merge(
     { "managed-by" = "Terraform" },
