@@ -37,13 +37,13 @@ resource "aws_secretsmanager_secret_version" "initial" {
   secret_string = "initial-placeholder"
 }
 
-# module "prison_curious_secret_updater" {
-#   source = "../../analytical-platform/baseline/modules/lambda-secret-updater"
+module "prison_curious_secret_updater" {
+  source = "../../analytical-platform/baseline/modules/lambda-secret-updater"
 
-#   lambda_name = "prison-curious2-secret-updater-sandbox"
+  lambda_name = "prison-curious2-secret-updater-sandbox"
 
-#   bucket_name = aws_s3_bucket.curious_sandbox_sas_bucket.bucket
-#   object_key  = aws_s3_object.sas_token_file.key
+  bucket_name = aws_s3_bucket.curious_sandbox_sas_bucket.bucket
+  object_key  = aws_s3_object.sas_token_file.key
 
-#   secret_name = aws_secretsmanager_secret.curious_sandbox_secret.name
-# }
+  secret_name = aws_secretsmanager_secret.curious_sandbox_secret.name
+}
