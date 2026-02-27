@@ -239,6 +239,7 @@ module "datasync_laa_ingress_s3" {
 
 #tfsec:ignore:AVD-AWS-0088:Bucket is encrypted with CMK KMS, but not detected by Trivy
 #tfsec:ignore:AVD-AWS-0132:Bucket is encrypted with CMK KMS, but not detected by Trivy
+#trivy:ignore:AVD-AWS-0089:False positive in remote scan; module logging input is set below
 module "mojap_access_logging_eu_west_2_s3" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
