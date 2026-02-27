@@ -46,7 +46,8 @@ locals {
         "create-a-derived-table",
         "github-actions-infrastructure",
         "restricted-admin",
-        "data-engineering-probation-glue"
+        "data-engineering-probation-glue",
+        "airflow-production-analytical-platform-cadet-curated-daily"
       ]
     },
     {
@@ -58,7 +59,8 @@ locals {
         "create-a-derived-table",
         "github-actions-infrastructure",
         "restricted-admin",
-        "data-engineering-probation-glue"
+        "data-engineering-probation-glue",
+        "airflow-production-analytical-platform-cadet-curated-daily"
       ]
     },
     {
