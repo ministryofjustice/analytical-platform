@@ -60,7 +60,8 @@ locals {
         "github-actions-infrastructure",
         "restricted-admin",
         "data-engineering-probation-glue",
-        "airflow-production-analytical-platform-cadet-curated-daily"
+        "airflow-production-analytical-platform-cadet-curated-daily",
+        "airflow-production-analytical-platform-cadet-oasys-question"
       ]
     },
     {
