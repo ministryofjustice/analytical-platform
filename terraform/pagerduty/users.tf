@@ -41,11 +41,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Sijy Mathew"
-      email = "sijy.mathew1@justice.gov.uk"
-      role  = "manager"
-    },
-    {
       name  = "Tamsin Forbes"
       email = "tamsin.forbes@justice.gov.uk"
       role  = "responder"
