@@ -21,8 +21,9 @@ data "aws_iam_policy_document" "datasync_opg_ingress_bucket_policy" {
 }
 
 #tfsec:ignore:AVD-AWS-0088:Bucket is encrypted with CMK KMS, but not detected by Trivy
-#tfsec:ignore:AVD-AWS-0089:Bucket logging not enabled currently
+#tfsec:ignore:AVD-AWS-0089:False positive in remote scan; module logging input is set below
 #tfsec:ignore:AVD-AWS-0132:Bucket is encrypted with CMK KMS, but not detected by Trivy
+#trivy:ignore:AVD-AWS-0089:False positive in remote scan; module logging input is set below
 module "datasync_opg_ingress_s3" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
@@ -39,7 +40,7 @@ module "datasync_opg_ingress_s3" {
   for_each = local.analytical_platform_ingestion_environments
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.8.2"
+  version = "5.10.0"
 
   bucket = "mojap-data-production-datasync-opg-ingress-${each.key}"
 
@@ -140,7 +141,7 @@ module "datasync_laa_ingress_s3" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.8.2"
+  version = "5.10.0"
 
   bucket = "mojap-data-production-datasync-laa-ingress-production"
 
@@ -238,6 +239,7 @@ module "datasync_laa_ingress_s3" {
 
 #tfsec:ignore:AVD-AWS-0088:Bucket is encrypted with CMK KMS, but not detected by Trivy
 #tfsec:ignore:AVD-AWS-0132:Bucket is encrypted with CMK KMS, but not detected by Trivy
+#trivy:ignore:AVD-AWS-0089:False positive in remote scan; module logging input is set below
 module "mojap_access_logging_eu_west_2_s3" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
@@ -252,7 +254,7 @@ module "mojap_access_logging_eu_west_2_s3" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.8.2"
+  version = "5.10.0"
 
   bucket = "mojap-s3-bucket-access-logs-eu-west-2"
 
