@@ -11,11 +11,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "David Sibley"
-      email = "david.sibley@digital.justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Gary Henderson"
       email = "gary.henderson@digital.justice.gov.uk"
       role  = "responder"
