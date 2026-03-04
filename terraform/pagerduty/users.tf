@@ -31,6 +31,11 @@ locals {
       role  = "responder"
     },
     {
+      name  = "Lauren Taylor-Brown"
+      email = "lauren.taylor-brown@justice.gov.uk"
+      role  = "responder"
+    },
+    {
       name  = "Michael Collins"
       email = "michael.collins@digital.justice.gov.uk"
       role  = "responder"
