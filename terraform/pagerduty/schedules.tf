@@ -14,9 +14,9 @@ locals {
             module.users["brian.ellwood@digital.justice.gov.uk"].id,
             module.users["gary.henderson@digital.justice.gov.uk"].id,
             module.users["james.stott@digital.justice.gov.uk"].id,
-            module.users["lauren.taylor-brown@justice.gov.uk"].id,
             module.users["michael.collins@digital.justice.gov.uk"].id,
-            module.users["tamsin.forbes@justice.gov.uk"].id
+            module.users["tamsin.forbes@justice.gov.uk"].id,
+            data.pagerduty_user.lauren_taylor_brown.id,
           ]
           restrictions = [
             {
