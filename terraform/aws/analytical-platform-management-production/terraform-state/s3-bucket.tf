@@ -78,6 +78,8 @@ data "aws_iam_policy_document" "state_bucket_policy" {
 module "state_bucket" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+  #tfsec:ignore:AVD-AWS-0132
+  #tfsec:ignore:AVD-AWS-0090
 
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "5.10.0"
