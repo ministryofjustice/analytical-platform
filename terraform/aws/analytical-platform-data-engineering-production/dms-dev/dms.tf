@@ -1,4 +1,3 @@
-# Comment 
 
 module "dev_dms_oasys" {
   source      = "github.com/ministryofjustice/terraform-dms-module?ref=dms-module-full-load-min-change"
