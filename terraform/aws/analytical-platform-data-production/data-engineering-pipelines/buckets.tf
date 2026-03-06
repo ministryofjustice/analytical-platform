@@ -5,7 +5,7 @@ module "data_engineering_pipeline_buckets" {
 
   for_each = local.data_engineering_buckets
   source   = "terraform-aws-modules/s3-bucket/aws"
-  version  = "5.8.2"
+  version  = "5.10.0"
 
   bucket                               = each.key
   force_destroy                        = each.value.force_destroy
