@@ -42,16 +42,6 @@ module "dev_dms_oasys" {
     key    = "dev/oasys/table_mappings.json"
   }
 
-  independent_full_loads = {
-    oasys_dev_offender_rsr_scores = {
-      full_load_name = "offender-rsr-scores"
-      path = {
-        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-        key    = "dev/oasys/offender_rsr_scores_table_mappings.json"
-      }
-    }
-  }
-
   tags = merge(
     { "managed-by" = "Terraform" },
     var.tags
