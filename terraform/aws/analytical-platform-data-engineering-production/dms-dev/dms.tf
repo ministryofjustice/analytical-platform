@@ -30,7 +30,7 @@ module "dev_dms_oasys" {
     sid                     = "OASYS_TAF"
 
     extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=2;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=10.26.12.211/+ASM;asm_user=AWS;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N;"
-    cdc_start_time              = "2026-03-06T10:29:00Z"
+    cdc_start_time              = "2025-04-25T12:00:00Z"
   }
   replication_task_id = {
     full_load = "oasys-dev-full-load"
