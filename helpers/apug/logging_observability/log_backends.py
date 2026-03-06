@@ -1,0 +1,260 @@
+# log_backends.py
+
+""" 
+- Defines an abstract LogBackend interface for pluggable log storage.
+- Includes three backend implementations:
+    - CloudWatchBackend
+        - Outputs logs as single-line JSON for AWS Lambda (or pretty JSON when local).
+        - Emits conversation summaries at the end of each request.
+    - DynamoDBBackend
+        - Placeholder for future persistence of full conversation records.
+    - S3Backend
+        - Placeholder for future batched JSONL log storage in S3.
+- Provides methods for writing individual logs, conversation-level logs, and flushing buffered data.
+
+
+
+SmartRAGLogger (orchestrator)
+    ↓
+LogBackend Interface (abstraction)
+    ├── CloudWatchBackend (stdout → Lambda → CloudWatch)
+    ├── DynamoDBBackend (conversation history - TODO)
+    └── S3Backend (analytics archive - TODO)
+
+Multi-layer logging:
+
+Layer 1: Component-level logs (query_analyser, bedrock_retrieve, etc.)
+Layer 2: Conversation-level summaries
+Layer 3: CloudWatch Insights queryable logs
+
+"""
+
+
+import os
+import sys
+import json
+import logging
+from abc import ABC, abstractmethod
+from typing import Dict, Any, List, Optional
+
+class LogBackend(ABC):
+    """Interface for log storage backends"""
+    
+    @abstractmethod
+    def write_log(self, log_data: Dict[str, Any]):
+        """Write individual log entry"""
+        pass
+    
+    @abstractmethod
+    def write_conversation(self, conversation_data: Dict[str, Any]):
+        """Write complete conversation record (called at end)"""
+        pass
+    
+    @abstractmethod
+    def flush(self):
+        """Flush any buffered data"""
+        pass
+
+
+# ==================== Infrastructure Backends ====================
+
+class CloudWatchBackend(LogBackend):
+    """Writes logs to stdout (captured by CloudWatch in Lambda)"""
+    
+    def __init__(self):
+        # Detect environment
+        self.environment = "lambda" if os.environ.get("AWS_LAMBDA_FUNCTION_NAME") else "local"
+
+        # Get or create logger
+        self.logger = logging.getLogger() #This makes Lambda's root logger and CloudWatch backend use the same stream.
+
+        # Only configure if not already configured
+        if not self.logger.handlers:
+            self.logger.setLevel(logging.INFO)
+            
+            # Create console handler
+            handler = logging.StreamHandler(sys.stdout)
+            handler.setLevel(logging.INFO)
+            
+            # Format: plain JSON (no extra formatting for CloudWatch Insights)
+            formatter = logging.Formatter('%(message)s')
+            handler.setFormatter(formatter)
+            
+            self.logger.addHandler(handler)
+            self.logger.propagate = False  # Don't propagate to root logger
+    
+    def write_log(self, log_data: Dict[str, Any]):
+        """Smart filtering based on environment"""
+        
+        log_level = os.environ.get("LOG_LEVEL", "INFO")
+        log_type = log_data.get("log_type")
+        level = log_data.get("level")
+        
+        # Always log critical events
+        critical_logs = ['request_start', 'request_success', 'request_error']
+        
+        should_log = (
+            log_type in critical_logs or
+            level == "ERROR" or
+            log_level == "DEBUG"
+        )
+        
+        if not should_log:
+            return
+        
+        # Write to stdout
+        print(json.dumps(log_data))
+    
+    def write_conversation(self, conversation_data: Dict[str, Any]):
+        """Write summary with failure diagnostics"""
+        
+        success = conversation_data.get("success", False)
+        logs = conversation_data.get("logs", [])
+        
+        summary = {
+            "log_type": "conversation_complete",
+            "request_id": conversation_data["request_id"],
+            "timestamp": conversation_data["timestamp"],
+            "query": conversation_data["query"][:200],
+            "success": success
+        }
+        
+        if success:
+            summary.update({
+                "total_duration_ms": sum(log.get("duration_ms", 0) for log in logs),
+                "confidence": conversation_data.get("confidence"),
+                "answer_length": len(conversation_data.get("answer", ""))
+            })
+        else:
+            # Failure diagnostics
+            component_logs = [log for log in logs if log.get("log_type") == "component"]
+            error_log = next((log for log in logs if log.get("log_type") == "request_error"), None)
+            
+            summary.update({
+                "error_type": error_log.get("error_type") if error_log else "Unknown",
+                "error_message": error_log.get("error_message") if error_log else "Unknown",
+                "failed_component": error_log.get("failed_component") if error_log else "Unknown",
+                "completed_components": [
+                    {"name": log["component_name"], "duration_ms": log["duration_ms"]}
+                    for log in component_logs
+                ],
+                "duration_before_failure_ms": sum(log.get("duration_ms", 0) for log in component_logs)
+            })
+        
+        print(json.dumps(summary))
+
+    def flush(self):
+        """No buffering needed for stdout"""
+        #pass
+        for handler in self.logger.handlers:
+            handler.flush()
+
+
+class DynamoDBBackend(LogBackend):
+    """Writes conversation records to DynamoDB (implement later)"""
+    
+    def __init__(self, table_name: str = None):
+        self.table_name = table_name or os.environ.get('DYNAMODB_TABLE_NAME')
+        # TODO: Initialize boto3 DynamoDB client
+        #   import boto3
+        #   self.dynamodb = boto3.resource('dynamodb')
+        #   self.table = self.dynamodb.Table(self.table_name)
+    
+    def write_log(self, log_data: Dict[str, Any]):
+        """DynamoDB only stores conversation summaries, not individual logs"""
+        pass
+    
+    def write_conversation(self, conversation_data: Dict[str, Any]):
+        """Write complete conversation to DynamoDB"""
+        # TODO: Implement
+        #   import time
+        #   self.table.put_item(Item={
+        #       'request_id': conversation_data['request_id'],
+        #       'timestamp': conversation_data['timestamp'],
+        #       'query': conversation_data['query'],
+        #       'success': conversation_data['success'],
+        #       'confidence': conversation_data.get('confidence', 0.0),
+        #       'answer': conversation_data.get('answer', ''),
+        #       'logs': json.dumps(conversation_data['logs']),  # Store as JSON string
+        #       'ttl': int(time.time()) + 30*24*60*60  # 30 days retention
+        #   })
+        pass
+    
+    def flush(self):
+        """No buffering in current design"""
+        pass
+
+
+class S3Backend(LogBackend):
+    """Writes logs to S3 for analytics (implement post-POC)"""
+    
+    def __init__(self, bucket: str = None, prefix: str = "rag-logs"):
+        self.bucket = bucket or os.environ.get('S3_LOG_BUCKET')
+        self.prefix = prefix
+        self.buffer = []  # Buffer logs for batch write
+    
+    def write_log(self, log_data: Dict[str, Any]):
+        """Buffer individual component logs"""
+        # TODO: Store in buffer for batch write
+        #   self.buffer.append(log_data) # List append is NOT thread-safe - consider using a thread-safe queue if needed
+        pass
+    
+    def write_conversation(self, conversation_data: Dict[str, Any]):
+        """Buffer conversation summary for S3"""
+        # TODO: Add conversation to buffer
+        #   self.buffer.append({
+        #       **conversation_data,
+        #       "log_type": "conversation_complete"
+        #   })
+        pass
+    
+    def flush(self):
+        """Write buffered logs to S3 in JSON Lines format"""
+        # TODO: Implement S3 batch write
+        #   if not self.buffer:
+        #       return
+        #   
+        #   import boto3
+        #   import uuid
+        #   from datetime import datetime
+        #   
+        #   s3 = boto3.client('s3')
+        #   timestamp = datetime.utcnow().strftime('%Y/%m/%d/%H')
+        #   key = f"{self.prefix}/{timestamp}/{uuid.uuid4()}.jsonl"
+        #   
+        #   # Write as JSON Lines format (one JSON per line)
+        #   content = '\n'.join([json.dumps(log) for log in self.buffer])
+        #   s3.put_object(
+        #       Bucket=self.bucket, 
+        #       Key=key, 
+        #       Body=content,
+        #       ContentType='application/x-ndjson'
+        #   )
+        #   
+        #   print(f"[S3Backend] Flushed {len(self.buffer)} logs to s3://{self.bucket}/{key}")
+        #   self.buffer.clear()
+        pass
+
+########
+
+# ==================== Backend Factory ====================
+def get_log_backends():
+    """Return appropriate log backends based on environment."""
+    import os
+    
+    backends = [CloudWatchBackend()]  # Always include CloudWatch
+    
+    # Optional: DynamoDB for queryable conversation history
+    if os.environ.get("DYNAMODB_LOG_TABLE"):
+        backends.append(DynamoDBBackend(
+            table_name=os.environ.get("DYNAMODB_LOG_TABLE")
+        ))
+    
+    # Optional: S3 for long-term analytics
+    if os.environ.get("S3_LOG_BUCKET"):
+        backends.append(S3Backend(
+            bucket=os.environ.get("S3_LOG_BUCKET"),
+            prefix="rag-logs"
+        ))
+    
+    return backends
