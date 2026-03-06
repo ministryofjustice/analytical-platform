@@ -1,3 +1,6 @@
+# the following alerts were raised after upgrading to version = "5.10.0"
+#tfsec:ignore:AVD-AWS-0024:Known false positive for this external module in static analysis
+#tfsec:ignore:AVD-AWS-0025:Known false positive for this external module in static analysis
 module "state_locking" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions

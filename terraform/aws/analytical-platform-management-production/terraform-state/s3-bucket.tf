@@ -75,12 +75,16 @@ data "aws_iam_policy_document" "state_bucket_policy" {
   }
 }
 
+# the following alerts were raised after upgrading to version = "5.10.0"
+#tfsec:ignore:AVD-AWS-0132:Known false positive for this external module in static analysis
+#tfsec:ignore:AVD-AWS-0090:Known false positive for this external module in static analysis
+#tfsec:ignore:AVD-AWS-0089:Known false positive for this external module in static analysis
 module "state_bucket" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.8.0"
+  version = "5.10.0"
 
   bucket = "global-tf-state-aqsvzyd5u9"
 
