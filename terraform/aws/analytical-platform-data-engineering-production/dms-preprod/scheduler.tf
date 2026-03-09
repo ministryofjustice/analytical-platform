@@ -28,6 +28,11 @@ resource "aws_iam_role_policy" "sfn_dms_policy" {
       },
       {
         Effect   = "Allow",
+        Action   = ["dms:StartReplicationTask", "dms:StopReplicationTask"],
+        Resource = module.preprod_dms_delius.dms_cdc_task_arn
+      },
+      {
+        Effect   = "Allow",
         Action   = ["dms:DescribeReplicationTasks"],
         Resource = "arn:aws:dms:eu-west-1:${var.account_ids["analytical-platform-data-engineering-production"]}:*:*"
       }
@@ -166,6 +171,27 @@ resource "aws_scheduler_schedule" "dms_start_sun_1900" {
       Input = jsonencode({
         Op                 = "start",
         ReplicationTaskArn = module.preprod_dms_oasys.dms_cdc_task_arn
+      })
+    })
+  }
+}
+
+resource "aws_scheduler_schedule" "delius_pre_prod_dms_stop_wed_8am_11_mar_2026" {
+  name                         = "dms-stop-wed-8am-11-mar-2026"
+  description                  = "Stop DMS CDC on Wednesday 11th March 2026 at 08:00 UK"
+  schedule_expression          = "cron(0 8 11 3 ? 2026)"
+  schedule_expression_timezone = "Europe/London"
+  state                        = "ENABLED"
+  flexible_time_window { mode = "OFF" }
+
+  target {
+    arn      = "arn:aws:scheduler:::aws-sdk:sfn:startExecution"
+    role_arn = aws_iam_role.scheduler_role.arn
+    input = jsonencode({
+      StateMachineArn = aws_sfn_state_machine.dms_control.arn,
+      Input = jsonencode({
+        Op                 = "stop",
+        ReplicationTaskArn = module.preprod_dms_delius.dms_cdc_task_arn
       })
     })
   }
