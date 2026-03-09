@@ -196,24 +196,3 @@ resource "aws_scheduler_schedule" "delius_pre_prod_dms_stop_wed_8am_11_mar_2026"
     })
   }
 }
-
-resource "aws_scheduler_schedule" "delius_pre_prod_dms_start_thu_11am_12_mar_2026" {
-  name                         = "dms-start-thu-11am-12-mar-2026"
-  description                  = "Restart DMS CDC on Thursday 12th March 2026 at 11:00 UK"
-  schedule_expression          = "cron(0 11 12 3 ? 2026)"
-  schedule_expression_timezone = "Europe/London"
-  state                        = "ENABLED"
-  flexible_time_window { mode = "OFF" }
-
-  target {
-    arn      = "arn:aws:scheduler:::aws-sdk:sfn:startExecution"
-    role_arn = aws_iam_role.scheduler_role.arn
-    input = jsonencode({
-      StateMachineArn = aws_sfn_state_machine.dms_control.arn,
-      Input = jsonencode({
-        Op                 = "start",
-        ReplicationTaskArn = module.preprod_dms_delius.dms_cdc_task_arn
-      })
-    })
-  }
-}
