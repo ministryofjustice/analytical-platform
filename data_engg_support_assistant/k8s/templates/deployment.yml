@@ -21,11 +21,13 @@ spec:
         env:
         - name: API_GATEWAY_URL
           value: "https://d1iuduqmg4.execute-api.eu-west-2.amazonaws.com/prod"
+
         - name: BEARER_TOKEN
           valueFrom:
             secretKeyRef:
               name: api-bearer-token
               key: token
+
         resources:
           limits:
             cpu: 1000m
@@ -33,6 +35,7 @@ spec:
           requests:
             cpu: 250m
             memory: 512Mi
+
         livenessProbe:
           httpGet:
             path: /_stcore/health
@@ -41,6 +44,7 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 3
+          
         readinessProbe:
           httpGet:
             path: /_stcore/health
