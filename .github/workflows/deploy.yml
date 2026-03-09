@@ -3,7 +3,7 @@ name: Build and Deploy to Cloud Platform
 on:
   push:
     branches:
-      - main
+      - dev
     paths:
       - 'data_engg_support_assistant/**'
       - '.github/workflows/deploy.yml'
