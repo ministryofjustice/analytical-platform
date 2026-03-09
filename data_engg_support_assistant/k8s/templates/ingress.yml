@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: data-engg-support-assistant-ingress
+  namespace: ${KUBE_NAMESPACE}
+  annotations:
+    external-dns.alpha.kubernetes.io/set-identifier: data-engg-support-assistant-${KUBE_NAMESPACE}-green
+    external-dns.alpha.kubernetes.io/aws-weight: "100"
+spec:
+  ingressClassName: default
+  tls:
+  - hosts:
+    - ${KUBE_NAMESPACE}.apps.live.cloud-platform.service.justice.gov.uk
+  rules:
+  - host: ${KUBE_NAMESPACE}.apps.live.cloud-platform.service.justice.gov.uk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: data-engg-support-assistant-svc
+            port:
+              number: 8501

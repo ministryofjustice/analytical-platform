@@ -101,3 +101,6 @@ build/
 dist/
 __pycache__/
 *.egg-info/
+
+.DS_Store
+**/.DS_Store

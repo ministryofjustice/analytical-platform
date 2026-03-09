@@ -1,0 +1,113 @@
+name: Build and Deploy to Cloud Platform
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data_engg_support_assistant/**'
+      - '.github/workflows/deploy.yml'
+
+env:
+  APP_DIR: data_engg_support_assistant
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.ECR_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.ECR_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push image to Amazon ECR
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t ${{ secrets.ECR_URL }}:${IMAGE_TAG} .
+          docker push ${{ secrets.ECR_URL }}:${IMAGE_TAG}
+          docker tag ${{ secrets.ECR_URL }}:${IMAGE_TAG} ${{ secrets.ECR_URL }}:latest
+          docker push ${{ secrets.ECR_URL }}:latest
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+
+      - name: Install envsubst
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gettext-base
+
+      - name: Generate Kubernetes manifests
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+          ECR_URL: ${{ secrets.ECR_URL }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          mkdir -p manifests
+          for file in k8s/templates/*.yml; do
+            envsubst < "$file" > "manifests/$(basename $file)"
+          done
+          echo "Generated manifests:"
+          cat manifests/*.yml
+
+      - name: Authenticate to Kubernetes
+        env:
+          KUBE_CLUSTER: ${{ secrets.KUBE_CLUSTER }}
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+          KUBE_CERT: ${{ secrets.KUBE_CERT }}
+          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+        run: |
+          echo "${KUBE_CERT}" > ca.crt
+          kubectl config set-cluster ${KUBE_CLUSTER} \
+            --certificate-authority=./ca.crt \
+            --server=https://${KUBE_CLUSTER}
+          kubectl config set-credentials deploy-user \
+            --token=${KUBE_TOKEN}
+          kubectl config set-context ${KUBE_CLUSTER} \
+            --cluster=${KUBE_CLUSTER} \
+            --user=deploy-user \
+            --namespace=${KUBE_NAMESPACE}
+          kubectl config use-context ${KUBE_CLUSTER}
+
+      - name: Create bearer token secret
+        env:
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
+        run: |
+          kubectl create secret generic api-bearer-token \
+            --from-literal=token="${BEARER_TOKEN}" \
+            --dry-run=client -o yaml | kubectl apply -f - -n ${KUBE_NAMESPACE}
+
+      - name: Apply Kubernetes manifests
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+        run: |
+          kubectl apply -f manifests/ -n ${KUBE_NAMESPACE}
+          
+      - name: Wait for deployment rollout
+        env:
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+        run: |
+          kubectl rollout status deployment/data-engg-support-assistant -n ${KUBE_NAMESPACE} --timeout=5m
+
+      - name: Verify deployment
+        env:
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+        run: |
+          echo "Pods:"
+          kubectl get pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant
+          echo "Services:"
+          kubectl get svc -n ${KUBE_NAMESPACE}
+          echo "Ingress:"
+          kubectl get ingress -n ${KUBE_NAMESPACE}
