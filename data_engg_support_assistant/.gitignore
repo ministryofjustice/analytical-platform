@@ -104,3 +104,4 @@ __pycache__/
 
 .DS_Store
 **/.DS_Store
+data/kb_catalog.json

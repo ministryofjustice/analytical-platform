@@ -22,6 +22,9 @@ Configuration for AWS Bedrock Knowledge Base
 """
 
 import os
+import json
+import boto3
+from dotenv import load_dotenv
 from pathlib import Path
 
 # ============================================================================
@@ -30,20 +33,40 @@ from pathlib import Path
 IS_LAMBDA = os.environ.get('AWS_EXECUTION_ENV') is not None
 
 # ============================================================================
-# Load .env only for local development
-# ============================================================================
-if not IS_LAMBDA:
-    from dotenv import load_dotenv
-    load_dotenv()
-
-# ============================================================================
 # AWS Configuration
 # ============================================================================
-KB_ID = os.getenv("KB_ID")
-MODEL_ID = os.getenv("MODEL_ID")
+#KB_ID = os.getenv("KB_ID")
+#MODEL_ID = os.getenv("MODEL_ID")
 REGION = os.getenv("AWS_REGION", "eu-west-2")
 
-# Validate required AWS configs
+# ============================================================================
+# Secret Management: Load from Secrets Manager in Lambda, .env locally
+# ============================================================================
+if IS_LAMBDA:
+  
+    secrets_client = boto3.client('secretsmanager', region_name=REGION)
+    response = secrets_client.get_secret_value(
+        SecretId='genai-data-eng-assistant-dev/lambda-config'
+    )
+    secrets = json.loads(response['SecretString'])
+    
+    KB_ID = secrets['KB_ID']
+    MODEL_ID = secrets['MODEL_ID']
+    GUARDRAIL_ID = secrets.get('GUARDRAIL_ID')
+    GUARDRAIL_VERSION = secrets.get('GUARDRAIL_VERSION', '1')
+else:
+    # Local: read from .env
+    
+    load_dotenv()
+    
+    KB_ID = os.getenv("KB_ID")
+    MODEL_ID = os.getenv("MODEL_ID")
+    GUARDRAIL_ID = os.getenv('GUARDRAIL_ID')
+    GUARDRAIL_VERSION = os.getenv('GUARDRAIL_VERSION', '1')
+
+# ============================================================================
+# Validate Required Secrets
+# ============================================================================
 if not KB_ID:
     raise ValueError("KB_ID environment variable must be set")
 if not MODEL_ID:

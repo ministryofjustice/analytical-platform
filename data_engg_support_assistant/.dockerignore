@@ -36,3 +36,7 @@ Dockerfile
 *.zip
 layer/
 package/
+
+data/
+.github/
+*.log
