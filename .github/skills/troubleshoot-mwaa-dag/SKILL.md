@@ -46,6 +46,7 @@ kubectl describe pod <pod-name> -n mwaa
 ```
 
 Key things to note:
+
 - **Status**: Running, Succeeded, Failed, Error, OOMKilled
 - **Restart count**: Non-zero suggests crashes
 - **Resource requests/limits**: CPU and memory (check for OOM risk)
@@ -67,6 +68,7 @@ kubectl logs <pod-name> -n mwaa
 ```
 
 Look for:
+
 - Error messages or stack traces
 - Progress indicators (varies by workload)
 - The last meaningful output and when it occurred
@@ -226,6 +228,7 @@ kubectl exec <pod-name> -n mwaa -- find /tmp -type f -mmin -5 2>/dev/null | head
 ## Reporting
 
 When summarising findings to the user, include:
+
 1. **Pod status** and how long it has been running
 2. **Workload type** and what it is doing
 3. **Progress**: Any measurable progress indicators
