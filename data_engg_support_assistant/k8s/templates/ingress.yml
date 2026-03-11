@@ -4,7 +4,7 @@ metadata:
   name: data-engg-support-assistant-ingress
   namespace: ${KUBE_NAMESPACE}
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: data-engg-support-assistant-ingress-${KUBE_NAMESPACE}-live
+    external-dns.alpha.kubernetes.io/set-identifier: data-engg-support-assistant-ingress-${KUBE_NAMESPACE}-green
     external-dns.alpha.kubernetes.io/aws-weight: "100"
 spec:
   ingressClassName: default
