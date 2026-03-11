@@ -101,7 +101,16 @@ jobs:
           kubectl create secret generic api-bearer-token \
             --from-literal=token="${BEARER_TOKEN}" \
             --dry-run=client -o yaml | kubectl apply -f - -n ${KUBE_NAMESPACE}
-
+      
+      - name: Debug namespace and ingress annotation
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          echo "KUBE_NAMESPACE value: ${KUBE_NAMESPACE}"
+          echo "Expected annotation: data-engg-support-assistant-ingress-${KUBE_NAMESPACE}-live"
+          grep "set-identifier" manifests/ingress.yml
+        env:
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+      
       - name: Apply Kubernetes manifests
         working-directory: ${{ env.APP_DIR }}
         env:
