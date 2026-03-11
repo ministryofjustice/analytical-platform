@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.9.0"
+    }
+  }
+  required_version = "~> 1.5"
+}
+
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_file = "${path.module}/lambda/lambda_function.py"
