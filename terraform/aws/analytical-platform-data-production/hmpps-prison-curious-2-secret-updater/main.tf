@@ -16,7 +16,7 @@ module "hmpps_prison_curious2_secret_updater" {
   lambda_name = "hmpps-prison-curious2-secret-updater-apdp"
 
   bucket_name = "mojap-land"
-  object_key  = "s3://mojap-land/hmpps/prison-curious//sas_token_info.txt"
+  object_key  = "hmpps/prison-curious//sas_token_info.txt"
 
   secret_name = "/airflow/production/hmpps/prison-curious2/curious-azure-credential"
 }
@@ -39,7 +39,7 @@ resource "aws_s3_bucket_notification" "lambda_trigger" {
     lambda_function_arn = module.hmpps_prison_curious2_secret_updater.lambda_arn
     events              = ["s3:ObjectCreated:Put"]
 
-    filter_suffix = aws_s3_object.sas_token_file.key
+    filter_suffix = module.hmpps_prison_curious2_secret_updater.object_key
   }
 
   depends_on = [aws_lambda_permission.allow_s3]
