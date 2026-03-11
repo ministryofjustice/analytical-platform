@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: streamlit
-        image: ${ECR_URL}:${IMAGE_TAG}
+        image: ${ECR_REGISTRY_URL}:${IMAGE_TAG}
         ports:
         - containerPort: 8501
         env:
