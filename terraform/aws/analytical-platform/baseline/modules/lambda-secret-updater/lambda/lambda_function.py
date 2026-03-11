@@ -12,6 +12,15 @@ MARKER = "SAS URL:"
 
 
 def extract_sas_url(content: str) -> str:
+    """
+    Extract the SAS URL from the string.
+    Args:
+        content: The string content to search for the SAS URL.
+    Returns:
+        The extracted SAS URL string.
+    Raises:
+        Exception: If SAS URL block is found but no URL is detected.
+    """
     lines = content.splitlines()
 
     for i, line in enumerate(lines):
@@ -30,6 +39,15 @@ def extract_sas_url(content: str) -> str:
 
 
 def lambda_handler(event, context):
+    """
+    AWS Lambda handler function that retrieves a file from S3,
+        extracts a SAS URL, and updates a secret.
+    Args:
+        event: Lambda event object.
+        context: Lambda context object.
+    Returns:
+        dict: Status dictionary indicating the operation was successful.
+    """
     print("Lambda triggered")
 
     response = s3.get_object(Bucket=BUCKET, Key=KEY)
@@ -42,6 +60,6 @@ def lambda_handler(event, context):
         SecretString=sas_url
     )
 
-    print("Secret successfully updated.")
+    print(f"Secret successfully updated: {SECRET_NAME}")
 
     return {"status": "updated"}
