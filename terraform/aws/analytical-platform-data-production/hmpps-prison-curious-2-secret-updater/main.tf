@@ -18,7 +18,7 @@ module "hmpps_prison_curious2_secret_updater" {
   bucket_name = "mojap-land"
   object_key  = "s3://mojap-land/hmpps/prison-curious//sas_token_info.txt"
 
-  secret_name = aws_secretsmanager_secret.curious_sandbox_secret.name
+  secret_name = "/airflow/production/hmpps/prison-curious2/curious-azure-credential"
 }
 
 # Allow s3 to invoke the lambda when the file is updated
