@@ -43,6 +43,8 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         working-directory: ${{ env.APP_DIR }}
         env:
+          ECR_REGISTRY_URL: ${{ secrets.ECR_REGISTRY_URL }}
+          ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t ${{ secrets.ECR_REGISTRY_URL }}:${IMAGE_TAG} .
@@ -60,7 +62,7 @@ jobs:
         working-directory: ${{ env.APP_DIR }}
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
-          ECR_REGISTRY_URL: ${{ secrets.ECR_REGISTRY_URL }}
+          ECR_REGISTRY_URL: ${{ secrets.ECR_REGISTRY_URL }}/${{ vars.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           mkdir -p manifests
