@@ -19,7 +19,7 @@ module "prison_curious_secret_updater" {
 
 The S3 file must contain a `SAS URL:` marker followed by the URL, with separator lines (`===`) and blank lines ignored. For example:
 
-```
+```plaintext
 ==============================================
 SAS URL:
 ==============================================
