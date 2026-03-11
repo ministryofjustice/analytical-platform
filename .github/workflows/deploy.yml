@@ -101,6 +101,8 @@ jobs:
           kubectl create secret generic api-bearer-token \
             --from-literal=token="${BEARER_TOKEN}" \
             --dry-run=client -o yaml | kubectl apply -f - -n ${KUBE_NAMESPACE}
+          echo "✅ Secret 'api-bearer-token' created/updated in namespace ${KUBE_NAMESPACE}"
+
       
       - name: Debug namespace and ingress annotation
         working-directory: ${{ env.APP_DIR }}
@@ -117,20 +119,49 @@ jobs:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
           kubectl apply -f manifests/ -n ${KUBE_NAMESPACE}
-          
+      
+   
       - name: Wait for deployment rollout
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
-          kubectl rollout status deployment/data-engg-support-assistant -n ${KUBE_NAMESPACE} --timeout=5m
+          kubectl rollout status deployment/data-engg-support-assistant -n ${KUBE_NAMESPACE} --timeout=10m || {
+            echo " Rollout failed! Gathering debug information..."
+            echo ""
+            echo "=== POD STATUS ==="
+            kubectl get pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant -o wide
+            echo ""
+            echo "=== POD EVENTS ==="
+            kubectl get events -n ${KUBE_NAMESPACE} --sort-by='.lastTimestamp' | grep data-engg-support-assistant
+            echo ""
+            echo "=== POD DESCRIPTIONS ==="
+            kubectl describe pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant
+            echo ""
+            echo "=== POD LOGS ==="
+            for pod in $(kubectl get pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant -o jsonpath='{.items[*].metadata.name}'); do
+              echo "--- Logs from $pod ---"
+              kubectl logs -n ${KUBE_NAMESPACE} $pod --tail=200 || echo "Failed to get logs from $pod"
+              echo ""
+            done
+            exit 1
+          }
 
       - name: Verify deployment
+        if: success()
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
-          echo "Pods:"
-          kubectl get pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant
-          echo "Services:"
+          echo " Deployment successful!"
+          echo ""
+          echo "=== PODS ==="
+          kubectl get pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant -o wide
+          echo ""
+          echo "=== SERVICES ==="
           kubectl get svc -n ${KUBE_NAMESPACE}
-          echo "Ingress:"
+          echo ""
+          echo "=== INGRESS ==="
           kubectl get ingress -n ${KUBE_NAMESPACE}
+          echo ""
+          echo "=== APPLICATION URL ==="
+          echo "https://${KUBE_NAMESPACE}.apps.live.cloud-platform.service.justice.gov.uk"
+

@@ -16,13 +16,16 @@ spec:
       containers:
       - name: streamlit
         image: ${ECR_REGISTRY_URL}:${IMAGE_TAG}
+        imagePullPolicy: Always
         ports:
         - containerPort: 8501
         env:
-        - name: API_GATEWAY_URL
+        # Changed: RAG_API_URL (what streamlit_app.py expects)
+        - name: RAG_API_URL
           value: "https://d1iuduqmg4.execute-api.eu-west-2.amazonaws.com/prod"
 
-        - name: BEARER_TOKEN
+        # Changed: AUTH_TOKEN (what streamlit_app.py expects)
+        - name: AUTH_TOKEN
           valueFrom:
             secretKeyRef:
               name: api-bearer-token
@@ -40,16 +43,16 @@ spec:
           httpGet:
             path: /_stcore/health
             port: 8501
-          initialDelaySeconds: 30
-          periodSeconds: 10
+          initialDelaySeconds: 60
+          periodSeconds: 15
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 5
           
         readinessProbe:
           httpGet:
             path: /_stcore/health
             port: 8501
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 3
-          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 5
