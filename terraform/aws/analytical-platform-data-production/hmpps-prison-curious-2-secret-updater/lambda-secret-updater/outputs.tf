@@ -17,3 +17,8 @@ output "bucket_arn" {
   description = "The ARN of the S3 bucket configured for the Lambda trigger."
   value       = "arn:aws:s3:::${var.bucket_name}"
 }
+
+output "object_key" {
+  description = "The S3 object key configured for the Lambda trigger."
+  value       = var.object_key
+}
