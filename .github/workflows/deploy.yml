@@ -98,17 +98,13 @@ jobs:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
           BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
         run: |
+          kubectl delete secret api-bearer-token -n ${KUBE_NAMESPACE} --ignore-not-found=true
           kubectl create secret generic api-bearer-token \
             --from-literal=token="${BEARER_TOKEN}" \
-            --dry-run=client -o yaml | kubectl apply -f - -n ${KUBE_NAMESPACE}
-          echo "✅ Secret created/updated"
-    
-          echo "Verifying secret..."
+            -n ${KUBE_NAMESPACE}
+          echo "✅ Secret created"
           kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE}
-          
-          echo "Checking secret has 'token' key..."
-          kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE} -o jsonpath='{.data.token}' | base64 -d | wc -c
-          echo " characters in token"
+          sleep 5
       
       - name: Verify secret exists            # ← ADD THIS NEW STEP HERE
         env:
