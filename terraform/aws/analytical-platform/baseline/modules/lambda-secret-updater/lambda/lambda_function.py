@@ -60,6 +60,11 @@ def lambda_handler(event, context):
         SecretString=sas_url
     )
 
+    # Remove object once processed
+    s3.delete_object(Bucket=BUCKET, Key=KEY)
+    
     print(f"Secret successfully updated: {SECRET_NAME}")
 
     return {"status": "updated"}
+
+
