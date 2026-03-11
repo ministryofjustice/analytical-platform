@@ -1,6 +1,6 @@
 # lambda-secret-updater
 
-A Lambda function that reads an Azure SAS token file from S3 and updates an AWS Secrets Manager secret with the extracted URL. The file is deleted from S3 after successful processing.
+A Lambda function that reads an Azure SAS token file from S3 and updates an AWS Secrets Manager secret with the extracted URL. By default, the file is deleted from S3 after successful processing.
 
 ## Usage
 
@@ -60,6 +60,7 @@ resource "aws_s3_bucket_notification" "lambda_trigger" {
 | `bucket_name` | Name of the S3 bucket containing the SAS token file. | `string` | yes |
 | `object_key` | Full S3 object key path to sas_token_info.txt. | `string` | yes |
 | `secret_name` | Name of the Secrets Manager secret to update (without ARN). | `string` | yes |
+| `delete_after_processing` | Whether to delete the S3 object after successfully updating the secret. | `bool` | no (default: `true`) |
 
 ## Outputs
 
