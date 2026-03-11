@@ -33,6 +33,13 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Debug ECR URL
+        run: |
+          echo "Registry URL length: ${#ECR_REGISTRY_URL}"
+          echo "Registry URL (masked): ${ECR_REGISTRY_URL:0:50}..."
+        env:
+          ECR_REGISTRY_URL: ${{ secrets.ECR_REGISTRY_URL }}
+
       - name: Build, tag, and push image to Amazon ECR
         working-directory: ${{ env.APP_DIR }}
         env:
