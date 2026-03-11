@@ -43,7 +43,7 @@
 # # Create a lambda which takes the content of the bucket/object key and
 # # updates the secret with name secret_name
 # module "prison_curious_secret_updater" {
-#   source = "../../analytical-platform/baseline/modules/lambda-secret-updater"
+#   source = "../../analytical-platform-data-production/hmpps-prison-curious-2-secret-updater/lambda-secret-updater"
 
 #   lambda_name = "prison-curious2-secret-updater-sandbox"
 
