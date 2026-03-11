@@ -14,45 +14,45 @@ spec:
         app: data-engg-support-assistant
     spec:
       containers:
-      - name: streamlit
-        image: ${ECR_REGISTRY_URL}:${IMAGE_TAG}
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8501
-        env:
-        # Changed: RAG_API_URL (what streamlit_app.py expects)
-        - name: RAG_API_URL
-          value: "https://d1iuduqmg4.execute-api.eu-west-2.amazonaws.com/prod"
+        - name: streamlit
+          image: ${ECR_REGISTRY_URL}:${IMAGE_TAG}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8501
+          env:
+            # Changed: RAG_API_URL (what streamlit_app.py expects)
+            - name: RAG_API_URL
+              value: https://d1iuduqmg4.execute-api.eu-west-2.amazonaws.com/prod
 
-        # Changed: AUTH_TOKEN (what streamlit_app.py expects)
-        - name: AUTH_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: api-bearer-token
-              key: token
+            # Changed: AUTH_TOKEN (what streamlit_app.py expects)
+            - name: AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: api-bearer-token
+                  key: token
 
-        resources:
-          limits:
-            cpu: 1000m
-            memory: 1Gi
-          requests:
-            cpu: 250m
-            memory: 512Mi
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 512Mi
 
-        livenessProbe:
-          httpGet:
-            path: /_stcore/health
-            port: 8501
-          initialDelaySeconds: 60
-          periodSeconds: 15
-          timeoutSeconds: 5
-          failureThreshold: 5
-          
-        readinessProbe:
-          httpGet:
-            path: /_stcore/health
-            port: 8501
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /_stcore/health
+              port: 8501
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 5
+
+          readinessProbe:
+            httpGet:
+              path: /_stcore/health
+              port: 8501
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5

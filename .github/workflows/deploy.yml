@@ -110,6 +110,12 @@ jobs:
           kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE} -o jsonpath='{.data.token}' | base64 -d | wc -c
           echo " characters in token"
       
+      - name: Verify secret exists            # ← ADD THIS NEW STEP HERE
+        env:
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+        run: |
+          kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE}
+
       - name: Clean up old deployments
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
