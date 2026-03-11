@@ -27,13 +27,13 @@ resource "aws_lambda_permission" "allow_s3" {
   action        = "lambda:InvokeFunction"
   function_name = module.hmpps_prison_curious2_secret_updater.lambda_name
   principal     = "s3.amazonaws.com"
-  source_arn    = aws_s3_bucket.curious_sandbox_sas_bucket.arn
+  source_arn    = module.hmpps_prison_curious2_secret_updater.bucket_arn
 }
 
 # Configure S3 to invoke the Lambda when sas_token_info.txt
 # is created or updated in hmpps/prison-curious/
 resource "aws_s3_bucket_notification" "lambda_trigger" {
-  bucket = aws_s3_bucket.curious_sandbox_sas_bucket.id
+  bucket = module.hmpps_prison_curious2_secret_updater.bucket_name
 
   lambda_function {
     lambda_function_arn = module.hmpps_prison_curious2_secret_updater.lambda_arn
