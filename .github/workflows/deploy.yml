@@ -101,9 +101,30 @@ jobs:
           kubectl create secret generic api-bearer-token \
             --from-literal=token="${BEARER_TOKEN}" \
             --dry-run=client -o yaml | kubectl apply -f - -n ${KUBE_NAMESPACE}
-          echo "✅ Secret 'api-bearer-token' created/updated in namespace ${KUBE_NAMESPACE}"
-
+          echo "✅ Secret created/updated"
+    
+          echo "Verifying secret..."
+          kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE}
+          
+          echo "Checking secret has 'token' key..."
+          kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE} -o jsonpath='{.data.token}' | base64 -d | wc -c
+          echo " characters in token"
       
+      - name: Clean up old deployments
+        env:
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+        run: |
+          echo "Checking for existing deployment..."
+          if kubectl get deployment data-engg-support-assistant -n ${KUBE_NAMESPACE} 2>/dev/null; then
+            echo "Deleting existing deployment to force fresh start..."
+            kubectl delete deployment data-engg-support-assistant -n ${KUBE_NAMESPACE} --wait=true
+            echo "Waiting for pods to terminate..."
+            kubectl wait --for=delete pod -l app=data-engg-support-assistant -n ${KUBE_NAMESPACE} --timeout=60s || true
+            echo "✅ Old deployment cleaned up"
+          else
+            echo "No existing deployment found"
+          fi
+          
       - name: Debug namespace and ingress annotation
         working-directory: ${{ env.APP_DIR }}
         run: |
@@ -120,6 +141,14 @@ jobs:
         run: |
           kubectl apply -f manifests/ -n ${KUBE_NAMESPACE}
       
+      - name: Describe pods immediately
+        if: always()
+        env:
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+        run: |
+          sleep 10
+          echo "=== Pod Descriptions ==="
+          kubectl describe pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant
    
       - name: Wait for deployment rollout
         env:
