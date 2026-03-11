@@ -7,6 +7,7 @@ secrets = boto3.client("secretsmanager")
 BUCKET = os.environ["BUCKET_NAME"]
 KEY = os.environ["OBJECT_KEY"]
 SECRET_NAME = os.environ["SECRET_NAME"]
+DELETE_AFTER_PROCESSING = os.environ.get("DELETE_AFTER_PROCESSING", True)
 
 MARKER = "SAS URL:"
 
@@ -60,11 +61,10 @@ def lambda_handler(event, context):
         SecretString=sas_url
     )
 
-    # Remove object once processed
-    s3.delete_object(Bucket=BUCKET, Key=KEY)
-    
+    if DELETE_AFTER_PROCESSING:
+        # Remove object once processed
+        s3.delete_object(Bucket=BUCKET, Key=KEY)
+
     print(f"Secret successfully updated: {SECRET_NAME}")
 
     return {"status": "updated"}
-
-
