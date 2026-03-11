@@ -1,6 +1,6 @@
 #comment to trigger tf apply
 module "prod_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b190c92217786c0454b756996cdb2fcb190256db"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=dms-module-full-load-min-change"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -39,6 +39,16 @@ module "prod_dms_oasys" {
   dms_mapping_rules = {
     bucket = "mojap-data-engineering-prod-table-mappings-metadata-prod"
     key    = "prod/oasys/table_mappings.json"
+  }
+
+  independent_full_loads = {
+    oasys_prod_offender_rsr_scores = {
+      full_load_name = "offender-rsr-scores"
+      path = {
+        bucket = "mojap-data-engineering-prod-table-mappings-metadata-prod"
+        key    = "prod/oasys/offender_rsr_scores_table_mappings.json"
+      }
+    }
   }
 
   tags = merge(
