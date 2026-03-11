@@ -147,6 +147,20 @@ jobs:
         run: |
           kubectl apply -f manifests/ -n ${KUBE_NAMESPACE}
       
+      - name: Debug secret in deployment
+        env:
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+        run: |
+          echo "=== Checking if secret exists ==="
+          kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE}
+          
+          echo "=== Checking secret content ==="
+          kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE} -o yaml
+          
+          echo "=== Pod description ==="
+          sleep 5
+          kubectl describe pods -l app=data-engg-support-assistant -n ${KUBE_NAMESPACE} | grep -A 10 "Events:"
+
       - name: Describe pods immediately
         if: always()
         env:
