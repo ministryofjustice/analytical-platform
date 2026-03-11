@@ -1,4 +1,6 @@
-data "aws_caller_identity" "current" {}
+terraform {
+  required_version = ">= 1.0"
+}
 
 # Create a lambda which takes the content of the bucket/object key and
 # updates the secret with name secret_name
