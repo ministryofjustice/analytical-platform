@@ -75,6 +75,7 @@ updates:
       - "terraform/aws/analytical-platform-data-production/data-engineering-pipelines"
       - "terraform/aws/analytical-platform-data-production/data-warehouses-eu-west-2"
       - "terraform/aws/analytical-platform-data-production/github-actions-roles"
+      - "terraform/aws/analytical-platform-data-production/hmpps-prison-curious-2-secret-updater"
       - "terraform/aws/analytical-platform-data-production/ingestion-egress"
       - "terraform/aws/analytical-platform-data-production/ingestion-ingress"
       - "terraform/aws/analytical-platform-data-production/ingestion-ingress/datasync"
