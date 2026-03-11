@@ -1,7 +1,5 @@
 data "aws_caller_identity" "current" {}
 
-
-
 # Create a lambda which takes the content of the bucket/object key and
 # updates the secret with name secret_name
 module "hmpps_prison_curious2_secret_updater" {
