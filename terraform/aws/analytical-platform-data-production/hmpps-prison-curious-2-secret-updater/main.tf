@@ -1,11 +1,17 @@
 terraform {
-  required_version = ">= 1.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.9.0"
+    }
+  }
+  required_version = "~> 1.5"
 }
 
 # Create a lambda which takes the content of the bucket/object key and
 # updates the secret with name secret_name
 module "hmpps_prison_curious2_secret_updater" {
-  source = "../../analytical-platform/baseline/modules/lambda-secret-updater"
+  source = "./lambda-secret-updater"
 
   lambda_name = "hmpps-prison-curious2-secret-updater-apdp"
 
