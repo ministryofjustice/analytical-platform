@@ -7,8 +7,10 @@ secrets = boto3.client("secretsmanager")
 BUCKET = os.environ["BUCKET_NAME"]
 KEY = os.environ["OBJECT_KEY"]
 SECRET_NAME = os.environ["SECRET_NAME"]
-DELETE_AFTER_PROCESSING = os.environ.get("DELETE_AFTER_PROCESSING", True)
+_delete_env = os.environ.get("DELETE_AFTER_PROCESSING", "true")
+DELETE_AFTER_PROCESSING = _delete_env.lower() == "true"
 
+# Start of actual token
 MARKER = "SAS URL:"
 
 

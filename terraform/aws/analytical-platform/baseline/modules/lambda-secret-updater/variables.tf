@@ -17,3 +17,9 @@ variable "secret_name" {
   type        = string
   description = "Name of the Secrets Manager secret to update (without ARN)."
 }
+
+variable "delete_after_processing" {
+  type        = bool
+  description = "Whether to delete the S3 object after successfully updating the secret."
+  default     = true
+}

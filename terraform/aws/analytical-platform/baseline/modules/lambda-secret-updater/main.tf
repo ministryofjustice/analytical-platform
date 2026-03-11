@@ -71,9 +71,10 @@ resource "aws_lambda_function" "this" {
 
   environment {
     variables = {
-      BUCKET_NAME = var.bucket_name
-      OBJECT_KEY  = var.object_key
-      SECRET_NAME = var.secret_name
+      BUCKET_NAME             = var.bucket_name
+      OBJECT_KEY              = var.object_key
+      SECRET_NAME             = var.secret_name
+      DELETE_AFTER_PROCESSING = tostring(var.delete_after_processing)
     }
   }
 }
