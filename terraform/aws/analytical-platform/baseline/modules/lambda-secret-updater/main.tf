@@ -29,7 +29,10 @@ resource "aws_iam_role_policy" "lambda_policy" {
     Statement = [
       {
         Effect = "Allow"
-        Action = ["s3:GetObject"]
+        Action = [
+          "s3:GetObject",
+          "s3:DeleteObject"
+        ]
         Resource = local.s3_object_arn
       },
       {
@@ -40,6 +43,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
         ]
         Resource = local.secret_arn
       },
+
       {
         Effect = "Allow"
         Action = [
