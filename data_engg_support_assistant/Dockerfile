@@ -15,6 +15,13 @@ COPY streamlit_app.py .
 COPY helpers/ ./helpers/
 COPY config.py .
 
+# Create non-root user
+RUN useradd -m -u 1000 appuser && \
+    chown -R appuser:appuser /app
+
+# Switch to non-root user
+USER appuser
+
 # Expose Streamlit port
 EXPOSE 8501
 
@@ -24,3 +31,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 # Run Streamlit
 CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+
