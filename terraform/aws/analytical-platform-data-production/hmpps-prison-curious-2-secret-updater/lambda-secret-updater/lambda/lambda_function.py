@@ -1,6 +1,6 @@
 import os
-import boto3
 
+import boto3
 s3 = boto3.client("s3")
 secrets = boto3.client("secretsmanager")
 
@@ -29,7 +29,7 @@ def extract_sas_url(content: str) -> str:
     for i, line in enumerate(lines):
         if MARKER in line:
             # Look at lines after MARKER"
-            for next_line in lines[i + 1:]:
+            for next_line in lines[i + 1 :]:
                 stripped = next_line.strip()
 
                 # Skip separator lines (====) and blanks
@@ -41,7 +41,7 @@ def extract_sas_url(content: str) -> str:
     raise Exception("SAS URL block found but no URL detected.")
 
 
-def lambda_handler(event, context):
+def lambda_handler():
     """
     AWS Lambda handler function that retrieves a file from S3,
         extracts a SAS URL, and updates a secret.
@@ -58,10 +58,7 @@ def lambda_handler(event, context):
 
     sas_url = extract_sas_url(file_content)
 
-    secrets.put_secret_value(
-        SecretId=SECRET_NAME,
-        SecretString=sas_url
-    )
+    secrets.put_secret_value(SecretId=SECRET_NAME, SecretString=sas_url)
 
     if DELETE_AFTER_PROCESSING:
         # Remove object once processed
