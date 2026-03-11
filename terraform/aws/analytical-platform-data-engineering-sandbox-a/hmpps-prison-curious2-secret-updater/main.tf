@@ -24,6 +24,7 @@ EOT
   content_type = "text/plain"
 }
 
+# Create a secret (for testing)
 resource "aws_secretsmanager_secret" "curious_sandbox_secret" {
   name = "/airflow/sandbox/prison-curious/test/curious-azure-credential"
 
@@ -32,6 +33,7 @@ resource "aws_secretsmanager_secret" "curious_sandbox_secret" {
   }
 }
 
+# The value to go in the secret
 resource "aws_secretsmanager_secret_version" "initial" {
   secret_id     = aws_secretsmanager_secret.curious_sandbox_secret.id
   secret_string = "initial-placeholder"
