@@ -109,6 +109,19 @@ jobs:
         run: |
           kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE}
 
+      - name: Debug secret and namespace
+        env:
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+        run: |
+          echo "=== Current namespace ==="
+          kubectl config view --minify -o jsonpath='{.contexts[0].context.namespace}'
+          echo ""
+          echo "=== Secrets in namespace ==="
+          kubectl get secrets -n ${KUBE_NAMESPACE}
+          echo ""
+          echo "=== Deployment namespace ==="
+          kubectl get deployment data-engg-support-assistant -n ${KUBE_NAMESPACE} -o yaml | grep namespace
+          
       - name: Generate Kubernetes manifests # Step 10: Replace environment variables in template files to create final manifests
         working-directory: ${{ env.APP_DIR }}
         env:

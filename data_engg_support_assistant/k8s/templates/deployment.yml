@@ -13,6 +13,7 @@ spec:
       labels:
         app: data-engg-support-assistant
     spec:
+      serviceAccountName: cd-serviceaccount
       containers:
         - name: streamlit
           image: ${ECR_REGISTRY_URL}:${IMAGE_TAG}
