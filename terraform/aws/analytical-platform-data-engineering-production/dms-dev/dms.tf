@@ -42,16 +42,6 @@ module "dev_dms_oasys" {
     key    = "dev/oasys/table_mappings.json"
   }
 
-  independent_full_loads = {
-    delius_dev_fts_result = {
-      full_load_name = "fts-result"
-      path = {
-        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-        key    = "dev/delius/fts_result_table_mappings.json"
-      }
-    }
-  }
-
   tags = merge(
     { "managed-by" = "Terraform" },
     var.tags
@@ -101,6 +91,16 @@ module "dev_dms_delius" {
   dms_mapping_rules = {
     bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
     key    = "dev/delius/table_mappings.json"
+  }
+
+   independent_full_loads = {
+    delius_dev_fts_result = {
+      full_load_name = "fts-result"
+      path = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/delius/fts_result_table_mappings.json"
+      }
+    }
   }
 
   tags = merge(
