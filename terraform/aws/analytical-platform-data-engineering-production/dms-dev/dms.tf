@@ -93,7 +93,7 @@ module "dev_dms_delius" {
     key    = "dev/delius/table_mappings.json"
   }
 
-   independent_full_loads = {
+  independent_full_loads = {
     delius_dev_fts_result = {
       full_load_name = "fts-result"
       path = {
