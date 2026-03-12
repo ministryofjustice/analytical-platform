@@ -18,7 +18,6 @@ jobs:
       id-token: write
       contents: read  
 
-    
     steps:
       - name: Checkout code # Step 1: Get the code from repository
         uses: actions/checkout@v4
@@ -78,6 +77,7 @@ jobs:
             --user=deploy-user \
             --namespace=${KUBE_NAMESPACE}
           kubectl config use-context ${KUBE_CLUSTER}
+          echo "✅ Kubernetes authentication complete"
       
       - name: Check BEARER_TOKEN exists # Step 7.1: Verify GitHub secret has a value before using it
         run: |
@@ -90,37 +90,32 @@ jobs:
         env:
           BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
 
-      - name: Create bearer token secret # Step 8: Create K8s secret containing API authentication token
+      - name: Create and verify bearer token secret
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
           BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
         run: |
+          echo "=== Creating secret ==="
           kubectl delete secret api-bearer-token -n ${KUBE_NAMESPACE} --ignore-not-found=true
           kubectl create secret generic api-bearer-token \
             --from-literal=token="${BEARER_TOKEN}" \
             -n ${KUBE_NAMESPACE}
-          echo "✅ Secret created"
+          
+          echo "=== Verifying secret ==="
+          # Wait and verify secret is fully available
+          for i in {1..10}; do
+            if kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE} -o jsonpath='{.data.token}' | base64 -d > /dev/null 2>&1; then
+              echo "✅ Secret created and verified (attempt $i)"
+              sleep 5  # Extra buffer for propagation
+              break
+            fi
+            echo "⏳ Waiting for secret availability (attempt $i/10)..."
+            sleep 3
+          done
+          
+          # Final verification
           kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE}
-          sleep 5
-      
-      - name: Verify secret exists       # Step 9: Confirm secret was created successfully     
-        env:
-          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
-        run: |
-          kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE}
-
-      - name: Debug secret and namespace
-        env:
-          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
-        run: |
-          echo "=== Current namespace ==="
-          kubectl config view --minify -o jsonpath='{.contexts[0].context.namespace}'
-          echo ""
-          echo "=== Secrets in namespace ==="
-          kubectl get secrets -n ${KUBE_NAMESPACE}
-          echo ""
-          echo "=== Deployment namespace ==="
-          kubectl get deployment data-engg-support-assistant -n ${KUBE_NAMESPACE} -o yaml | grep namespace
+          echo "✅ Secret is ready"
           
       - name: Generate Kubernetes manifests # Step 10: Replace environment variables in template files to create final manifests
         working-directory: ${{ env.APP_DIR }}
@@ -130,10 +125,24 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           mkdir -p manifests
+
+          echo "=== Generating manifests ==="
           for file in k8s/templates/*.yml; do
             envsubst < "$file" > "manifests/$(basename $file)"
           done
-          echo "Generated manifests:"
+
+          echo "=== Validating manifests ==="
+          # Check for unsubstituted variables
+          if grep -r '\${' manifests/; then
+            echo "❌ Found unsubstituted variables!"
+            exit 1
+          fi
+          
+          echo "✅ Manifests generated successfully:"
+          ls -la manifests/
+          
+          echo ""
+          echo "=== Manifest contents ==="
           cat manifests/*.yml
 
       - name: Clean up old deployments # Step 11: Delete existing deployment to ensure fresh start
@@ -150,58 +159,76 @@ jobs:
           else
             echo "No existing deployment found"
           fi
-          
-      - name: Debug namespace and ingress annotation # Step 12: Verify namespace substitution in ingress manifest
-        working-directory: ${{ env.APP_DIR }}
-        run: |
-          echo "KUBE_NAMESPACE value: ${KUBE_NAMESPACE}"
-          echo "Expected annotation: data-engg-support-assistant-ingress-${KUBE_NAMESPACE}-live"
-          grep "set-identifier" manifests/ingress.yml
-        env:
-          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
       
       - name: Apply Kubernetes manifests # Step 13: Deploy all K8s resources (deployment, service, ingress)
         working-directory: ${{ env.APP_DIR }}
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
-          kubectl apply -f manifests/ -n ${KUBE_NAMESPACE}
-      
-      - name: Debug secret in deployment # Step 14: Verify secret is accessible and check pod creation
-        env:
-          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
-        run: |
-          echo "=== Checking if secret exists ==="
-          kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE}
+          echo "=== Applying manifests in order ==="
           
-          echo "=== Checking secret content ==="
-          kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE} -o yaml
+          # 1. Apply in dependency order
+          kubectl apply -f manifests/service.yml -n ${KUBE_NAMESPACE}
+          echo "✅ Service applied"
           
-          echo "=== Pod description ==="
-          sleep 5
-          kubectl describe pods -l app=data-engg-support-assistant -n ${KUBE_NAMESPACE} | grep -A 10 "Events:"
+          # 2. Deployment (depends on secret and service)
+          kubectl apply -f manifests/deployment.yml -n ${KUBE_NAMESPACE}
+          echo "✅ Deployment applied"
+          
+          # 3. Ingress last (depends on service)
+          kubectl apply -f manifests/ingress.yml -n ${KUBE_NAMESPACE}
+          echo "✅ Ingress applied"
 
-      - name: Describe pods immediately # Step 15: Get detailed pod information for debugging
+          # Brief wait for pods to start creating
+          sleep 10
+      
+      - name: Debug deployment status
         if: always()
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
-          sleep 10
-          echo "=== Pod Descriptions ==="
-          kubectl describe pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant
+          echo "=== Secret Status ==="
+          kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE}
+          
+          echo ""
+          echo "=== Pod Status ==="
+          kubectl get pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant -o wide
+          
+          echo ""
+          echo "=== Recent Pod Events ==="
+          kubectl describe pods -l app=data-engg-support-assistant -n ${KUBE_NAMESPACE} | grep -A 20 "Events:" || echo "No events yet"
    
       - name: Wait for deployment rollout # Step 16: Wait for deployment to complete and gather debug info if it fails
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
-          kubectl rollout status deployment/data-engg-support-assistant -n ${KUBE_NAMESPACE} --timeout=10m || {
-            echo " Rollout failed! Gathering debug information..."
+          echo "=== Starting deployment rollout ==="
+    
+          # Start rollout status in background
+          kubectl rollout status deployment/data-engg-support-assistant -n ${KUBE_NAMESPACE} --timeout=10m &
+          ROLLOUT_PID=$!
+          
+          # Monitor pods while waiting
+          for i in {1..60}; do
+            if ! kill -0 $ROLLOUT_PID 2>/dev/null; then
+              break
+            fi
+            
+            echo ""
+            echo "=== Check $i/60 ==="
+            kubectl get pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant --no-headers
+            sleep 10
+          done
+          
+          # Wait for rollout to complete
+          if wait $ROLLOUT_PID; then
+            echo "✅ Rollout completed successfully!"
+            exit 0
+          else
+            echo "❌ Rollout failed! Gathering debug information..."
             echo ""
             echo "=== POD STATUS ==="
             kubectl get pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant -o wide
-            echo ""
-            echo "=== POD EVENTS ==="
-            kubectl get events -n ${KUBE_NAMESPACE} --sort-by='.lastTimestamp' | grep data-engg-support-assistant
             echo ""
             echo "=== POD DESCRIPTIONS ==="
             kubectl describe pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant
@@ -209,12 +236,12 @@ jobs:
             echo "=== POD LOGS ==="
             for pod in $(kubectl get pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant -o jsonpath='{.items[*].metadata.name}'); do
               echo "--- Logs from $pod ---"
-              kubectl logs -n ${KUBE_NAMESPACE} $pod --tail=200 || echo "Failed to get logs from $pod"
+              kubectl logs -n ${KUBE_NAMESPACE} $pod --tail=200 --all-containers=true || echo "Failed to get logs from $pod"
               echo ""
             done
             exit 1
-          }
-
+          fi
+          
       - name: Verify deployment # Step 17: Display final deployment status and application URL
         if: success()
         env:
