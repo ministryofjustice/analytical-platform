@@ -317,7 +317,7 @@ class APIGatewayDeployer:
             
             # Create deployment package
             with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-                zipf.write(authorizer_file, 'lambda_authoriser.py')
+                zipf.write(authorizer_file, 'lambda_authorizer.py')
             
             with open(zip_path, 'rb') as f:
                 zip_content = f.read()
