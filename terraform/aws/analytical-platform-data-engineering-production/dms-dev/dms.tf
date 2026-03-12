@@ -46,7 +46,7 @@ module "dev_dms_oasys" {
     delius_dev_fts_result = {
       full_load_name = "fts-result"
       path = {
-        bucket = "mojap-data-engineering-prod-table-mappings-metadata-dev"
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
         key    = "dev/delius/fts_result_table_mappings.json"
       }
     }
