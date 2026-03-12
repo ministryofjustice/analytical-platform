@@ -17,6 +17,10 @@ spec:
       containers:
         - name: streamlit
           image: ${ECR_REGISTRY_URL}:${IMAGE_TAG}
+          securityContext:
+            runAsUser: 1000
+            runAsNonRoot: true
+
           imagePullPolicy: Always
           ports:
             - containerPort: 8501

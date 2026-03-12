@@ -17,10 +17,10 @@ COPY config.py .
 
 # Create non-root user
 RUN useradd -m -u 1000 appuser && \
-    chown -R appuser:appuser /app
+    chown -R 1000:1000 /app
 
 # Switch to non-root user
-USER appuser
+USER 1000
 
 # Expose Streamlit port
 EXPOSE 8501
