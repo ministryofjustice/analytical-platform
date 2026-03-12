@@ -21,7 +21,6 @@ resource "aws_security_group" "efs" {
 ##################################################
 
 resource "aws_security_group" "aps" {
-  #checkov:skip=CKV_AWS_382: skip not atttached to ec2
   name        = "aps"
   description = "allow EKS cluster to access VPC endpoint for managed prometheus"
   vpc_id      = module.vpc.vpc_id
