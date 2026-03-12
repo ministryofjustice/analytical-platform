@@ -20,20 +20,20 @@ jobs:
 
     
     steps:
-      - name: Checkout code
+      - name: Checkout code # Step 1: Get the code from repository
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
+      - name: Configure AWS credentials # Step 2: Authenticate to AWS using OIDC role
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.ECR_ROLE_TO_ASSUME }}
           aws-region: eu-west-2
 
-      - name: Login to Amazon ECR
+      - name: Login to Amazon ECR # Step 3: Get ECR login credentials
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Debug ECR values
+      - name: Debug ECR values # Step 4: Verify ECR configuration values
         run: |
           echo "ECR_REGISTRY_URL: ${ECR_REGISTRY_URL}"
           echo "ECR_REPOSITORY: ${ECR_REPOSITORY}"
@@ -42,7 +42,7 @@ jobs:
           ECR_REGISTRY_URL: ${{ secrets.ECR_REGISTRY_URL }}
           ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
 
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Build, tag, and push image to Amazon ECR # Step 5: Build Docker image and push to ECR
         working-directory: ${{ env.APP_DIR }}
         env:
           ECR_REGISTRY_URL: ${{ secrets.ECR_REGISTRY_URL }}
@@ -55,26 +55,12 @@ jobs:
           docker push ${ECR_REGISTRY_URL}/${ECR_REPOSITORY}:latest
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
 
-      - name: Install envsubst
+      - name: Install envsubst # Step 6: Install tool for environment variable substitution in templates
         run: |
           sudo apt-get update
           sudo apt-get install -y gettext-base
-
-      - name: Generate Kubernetes manifests
-        working-directory: ${{ env.APP_DIR }}
-        env:
-          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
-          ECR_REGISTRY_URL: ${{ secrets.ECR_REGISTRY_URL }}/${{ vars.ECR_REPOSITORY }}
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          mkdir -p manifests
-          for file in k8s/templates/*.yml; do
-            envsubst < "$file" > "manifests/$(basename $file)"
-          done
-          echo "Generated manifests:"
-          cat manifests/*.yml
-
-      - name: Authenticate to Kubernetes
+      
+      - name: Authenticate to Kubernetes # Step 7: Configure kubectl to connect to Cloud Platform cluster (MUST be before any kubectl commands)
         env:
           KUBE_CLUSTER: ${{ secrets.KUBE_CLUSTER }}
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
@@ -92,8 +78,19 @@ jobs:
             --user=deploy-user \
             --namespace=${KUBE_NAMESPACE}
           kubectl config use-context ${KUBE_CLUSTER}
+      
+      - name: Check BEARER_TOKEN exists # Step 7.1: Verify GitHub secret has a value before using it
+        run: |
+          if [ -z "${{ secrets.BEARER_TOKEN }}" ]; then
+            echo "❌ BEARER_TOKEN is empty!"
+            exit 1
+          else
+            echo "✅ BEARER_TOKEN is set"
+          fi
+        env:
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
 
-      - name: Create bearer token secret
+      - name: Create bearer token secret # Step 8: Create K8s secret containing API authentication token
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
           BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
@@ -106,13 +103,27 @@ jobs:
           kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE}
           sleep 5
       
-      - name: Verify secret exists            # ← ADD THIS NEW STEP HERE
+      - name: Verify secret exists       # Step 9: Confirm secret was created successfully     
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
           kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE}
 
-      - name: Clean up old deployments
+      - name: Generate Kubernetes manifests # Step 10: Replace environment variables in template files to create final manifests
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+          ECR_REGISTRY_URL: ${{ secrets.ECR_REGISTRY_URL }}/${{ vars.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          mkdir -p manifests
+          for file in k8s/templates/*.yml; do
+            envsubst < "$file" > "manifests/$(basename $file)"
+          done
+          echo "Generated manifests:"
+          cat manifests/*.yml
+
+      - name: Clean up old deployments # Step 11: Delete existing deployment to ensure fresh start
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
@@ -127,7 +138,7 @@ jobs:
             echo "No existing deployment found"
           fi
           
-      - name: Debug namespace and ingress annotation
+      - name: Debug namespace and ingress annotation # Step 12: Verify namespace substitution in ingress manifest
         working-directory: ${{ env.APP_DIR }}
         run: |
           echo "KUBE_NAMESPACE value: ${KUBE_NAMESPACE}"
@@ -136,14 +147,14 @@ jobs:
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
       
-      - name: Apply Kubernetes manifests
+      - name: Apply Kubernetes manifests # Step 13: Deploy all K8s resources (deployment, service, ingress)
         working-directory: ${{ env.APP_DIR }}
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
           kubectl apply -f manifests/ -n ${KUBE_NAMESPACE}
       
-      - name: Debug secret in deployment
+      - name: Debug secret in deployment # Step 14: Verify secret is accessible and check pod creation
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
@@ -157,7 +168,7 @@ jobs:
           sleep 5
           kubectl describe pods -l app=data-engg-support-assistant -n ${KUBE_NAMESPACE} | grep -A 10 "Events:"
 
-      - name: Describe pods immediately
+      - name: Describe pods immediately # Step 15: Get detailed pod information for debugging
         if: always()
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
@@ -166,7 +177,7 @@ jobs:
           echo "=== Pod Descriptions ==="
           kubectl describe pods -n ${KUBE_NAMESPACE} -l app=data-engg-support-assistant
    
-      - name: Wait for deployment rollout
+      - name: Wait for deployment rollout # Step 16: Wait for deployment to complete and gather debug info if it fails
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
@@ -191,7 +202,7 @@ jobs:
             exit 1
           }
 
-      - name: Verify deployment
+      - name: Verify deployment # Step 17: Display final deployment status and application URL
         if: success()
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
