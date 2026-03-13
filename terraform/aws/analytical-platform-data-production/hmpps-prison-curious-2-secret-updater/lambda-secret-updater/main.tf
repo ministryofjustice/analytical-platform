@@ -54,21 +54,6 @@ resource "aws_sqs_queue" "dlq" {
   kms_master_key_id = aws_kms_key.lambda.id
 }
 
-resource "aws_security_group" "lambda" {
-  name_prefix = "${var.lambda_name}-"
-  description = "Security group for ${var.lambda_name} Lambda"
-  vpc_id      = var.vpc_id
-
-  egress {
-    description = "Allow outbound HTTPS within the VPC"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.vpc_cidr_block]
-  }
-}
-
-
 resource "aws_iam_role" "lambda_role" {
   name = local.lambda_role_name
 
@@ -141,26 +126,6 @@ resource "aws_iam_role_policy" "lambda_policy" {
           "xray:PutTraceSegments"
         ]
         Resource = "*"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "ec2:CreateNetworkInterface",
-          "ec2:DeleteNetworkInterface",
-          "ec2:DescribeNetworkInterfaces",
-          "ec2:AssignPrivateIpAddresses",
-          "ec2:UnassignPrivateIpAddresses"
-        ]
-        Resource = "*"
-        Condition = {
-          StringEquals = {
-            "ec2:Vpc"               = var.vpc_id
-            "ec2:AuthorizedService" = "lambda.amazonaws.com"
-          }
-          "ForAnyValue:StringEquals" = {
-            "ec2:Subnet" = var.vpc_subnet_ids
-          }
-        }
       }
     ]
   })
@@ -186,6 +151,8 @@ resource "aws_lambda_code_signing_config" "this" {
   }
 }
 
+#checkov:skip=CKV_AWS_117:Lambda runs outside a VPC 
+# by design to keep the component minimal while using tightly scoped IAM permissions.
 # The lambda function
 resource "aws_lambda_function" "this" {
   function_name = var.lambda_name
@@ -204,11 +171,6 @@ resource "aws_lambda_function" "this" {
 
   tracing_config {
     mode = "Active"
-  }
-
-  vpc_config {
-    subnet_ids         = var.vpc_subnet_ids
-    security_group_ids = [aws_security_group.lambda.id]
   }
 
   dead_letter_config {
