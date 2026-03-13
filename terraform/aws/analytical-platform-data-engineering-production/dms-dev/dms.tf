@@ -97,7 +97,7 @@ module "dev_dms_delius" {
     delius_dev_sr_thirty_two = {
       full_load_name = "sr-thirty-two"
       path = {
-        bucket = "mojap-data-engineering-prod-table-mappings-metadata-dev"
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
         key    = "dev/delius/sr_thirty_two_table_mappings.json"
       }
     }
