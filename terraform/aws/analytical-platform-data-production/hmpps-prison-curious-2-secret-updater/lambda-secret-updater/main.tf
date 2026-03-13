@@ -151,9 +151,7 @@ resource "aws_lambda_code_signing_config" "this" {
   }
 }
 
-#checkov:skip=CKV_AWS_117:Lambda runs outside a VPC 
-# by design to keep the component minimal while using tightly scoped IAM permissions.
-# The lambda function
+#checkov:skip=CKV_AWS_117:Lambda runs outside a VPC by design to keep the component minimal while using tightly scoped IAM permissions.
 resource "aws_lambda_function" "this" {
   function_name = var.lambda_name
 
