@@ -14,7 +14,42 @@ data "archive_file" "lambda_zip" {
   output_path = "${path.module}/lambda/function.zip"
 }
 
+data "aws_iam_policy_document" "lambda_kms_key" {
+  statement {
+    sid     = "EnableIAMUserPermissions"
+    effect  = "Allow"
+    actions = ["kms:*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "AllowLambdaFunctionUse"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "kms:GenerateDataKey*",
+      "kms:ReEncrypt*"
+    ]
+
+    principals {
+      type        = "AWS"
+      identifiers = [aws_iam_role.lambda_role.arn]
+    }
+
+    resources = ["*"]
+  }
+}
+
 resource "aws_kms_key" "lambda" {
+  policy                  = data.aws_iam_policy_document.lambda_kms_key.json
   description             = "KMS key for ${var.lambda_name} Lambda environment variables"
   deletion_window_in_days = 7
   enable_key_rotation     = true
@@ -90,9 +125,37 @@ resource "aws_iam_role_policy" "lambda_policy" {
           "kms:GenerateDataKey"
         ]
         Resource = aws_kms_key.lambda.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "xray:PutTelemetryRecords",
+          "xray:PutTraceSegments"
+        ]
+        Resource = "*"
       }
     ]
   })
+}
+
+resource "aws_signer_signing_profile" "lambda" {
+  name_prefix = var.lambda_name
+  platform_id = "AWSLambda-SHA384-ECDSA"
+
+  signature_validity_period {
+    value = 365
+    type  = "DAYS"
+  }
+}
+
+resource "aws_lambda_code_signing_config" "this" {
+  allowed_publishers {
+    signing_profile_version_arns = [aws_signer_signing_profile.lambda.version_arn]
+  }
+
+  policies {
+    untrusted_artifact_on_deployment = "Enforce"
+  }
 }
 
 # The lambda function
@@ -107,8 +170,13 @@ resource "aws_lambda_function" "this" {
   runtime = "python3.12"
   timeout = 60
 
+  code_signing_config_arn        = aws_lambda_code_signing_config.this.arn
   kms_key_arn                    = aws_kms_key.lambda.arn
   reserved_concurrent_executions = var.reserved_concurrent_executions
+
+  tracing_config {
+    mode = "Active"
+  }
 
   dead_letter_config {
     target_arn = aws_sqs_queue.dlq.arn
