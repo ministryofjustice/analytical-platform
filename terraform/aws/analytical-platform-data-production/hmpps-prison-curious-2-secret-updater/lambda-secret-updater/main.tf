@@ -60,11 +60,11 @@ resource "aws_security_group" "lambda" {
   vpc_id      = var.vpc_id
 
   egress {
-    description = "Allow outbound HTTPS for AWS API calls"
+    description = "Allow outbound HTTPS within the VPC"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.vpc_cidr_block]
   }
 }
 

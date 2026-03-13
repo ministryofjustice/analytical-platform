@@ -37,6 +37,7 @@ module "hmpps_prison_curious2_secret_updater" {
   object_key  = "hmpps/prison-curious//sas_token_info.txt"
 
   vpc_id         = data.aws_vpc.airflow_prod.id
+  vpc_cidr_block = data.aws_vpc.airflow_prod.cidr_block
   vpc_subnet_ids = data.aws_subnets.airflow_prod_private.ids
 
   secret_name = "/airflow/production/hmpps/prison-curious2/curious-azure-credential"
