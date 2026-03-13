@@ -60,6 +60,19 @@ resource "aws_sqs_queue" "dlq" {
   kms_master_key_id = aws_kms_key.lambda.id
 }
 
+resource "aws_security_group" "lambda" {
+  name_prefix = "${var.lambda_name}-"
+  description = "Security group for ${var.lambda_name} Lambda"
+  vpc_id      = var.vpc_id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 
 resource "aws_iam_role" "lambda_role" {
   name = local.lambda_role_name
@@ -133,6 +146,26 @@ resource "aws_iam_role_policy" "lambda_policy" {
           "xray:PutTraceSegments"
         ]
         Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ec2:CreateNetworkInterface",
+          "ec2:DeleteNetworkInterface",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:AssignPrivateIpAddresses",
+          "ec2:UnassignPrivateIpAddresses"
+        ]
+        Resource = "*"
+        Condition = {
+          StringEquals = {
+            "ec2:Vpc"               = var.vpc_id
+            "ec2:AuthorizedService" = "lambda.amazonaws.com"
+          }
+          "ForAnyValue:StringEquals" = {
+            "ec2:Subnet" = var.vpc_subnet_ids
+          }
+        }
       }
     ]
   })
@@ -176,6 +209,11 @@ resource "aws_lambda_function" "this" {
 
   tracing_config {
     mode = "Active"
+  }
+
+  vpc_config {
+    subnet_ids         = var.vpc_subnet_ids
+    security_group_ids = [aws_security_group.lambda.id]
   }
 
   dead_letter_config {
