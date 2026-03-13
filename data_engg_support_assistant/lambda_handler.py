@@ -122,7 +122,8 @@ def lambda_handler(event, context):
         body = json.loads(event.get('body', '{}'))
         
         # Extract query text (direct access for REST API)
-        query = body.get('text', '').strip()
+        query = body.get('text') or body.get('query', '')
+        query = query.strip() if query else ''
         
         if not query:
             return {

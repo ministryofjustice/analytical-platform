@@ -128,7 +128,7 @@ TROUBLESHOOTING:
     - Check CloudWatch Logs for validation attempts
     - Verify AUTH_TOKEN set correctly in Lambda environment
 """
-# lambda_authoriser.py. --> Bearer token auth
+# lambda_authorizer.py. --> Bearer token auth
 import os
 import json
 import hmac
