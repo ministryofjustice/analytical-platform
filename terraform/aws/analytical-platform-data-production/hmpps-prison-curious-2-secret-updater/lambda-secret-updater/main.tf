@@ -167,7 +167,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
 }
 
 resource "aws_signer_signing_profile" "lambda" {
-  name_prefix = var.lambda_name
+  name_prefix = local.signer_profile_name_prefix
   platform_id = "AWSLambda-SHA384-ECDSA"
 
   signature_validity_period {
