@@ -15,6 +15,7 @@ Diagnose issues with Airflow DAG pods running in the `mwaa` Kubernetes namespace
 - A pod is taking longer than expected
 - A previous run failed and the user wants to monitor a retry
 - Investigating pod errors, OOM kills, or scheduling issues
+
 ## Procedure
 
 ### Step 1: Identify the Pod
