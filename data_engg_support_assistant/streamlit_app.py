@@ -370,18 +370,17 @@ for message in st.session_state.messages:
         # Show metadata for assistant messages
         if message["role"] == "assistant" and "metadata" in message:
             with st.expander(" Details"):
-                col1, col2, col3 = st.columns(3)
+                col1, col2 = st.columns(2)
                 with col1:
-                    st.metric("Confidence", f"{message['metadata']['confidence']:.0%}")
-                with col2:
                     st.metric("Sources", message['metadata']['num_sources'])
-                with col3:
+                with col2:
                     st.caption(f"ID: {message['metadata']['request_id'][:8]}")
                 
                 if message['metadata'].get('sources'):
                     st.markdown("** Sources:**")
                     for i, src in enumerate(message['metadata']['sources'], 1):
                         title = src.get('title', 'Unknown')
+                        url = src.get('url', '#')
                         score = src.get('score', 0)
                         excerpt = src.get('excerpt', '')
                         
@@ -416,7 +415,6 @@ if prompt := st.chat_input("Ask me anything..."):
                 "role": "assistant",
                 "content": answer,
                 "metadata": {
-                    "confidence": data.get("confidence", 0),
                     "num_sources": len(data.get("sources", [])),
                     "sources": data.get("sources", []),
                     "request_id": data.get("request_id", "unknown")
@@ -424,15 +422,19 @@ if prompt := st.chat_input("Ask me anything..."):
             })
             
             # Show quick metrics
-            col1, col2, col3 = st.columns(3)
+            col1, col2 = st.columns(2)
             with col1:
-                confidence = data.get("confidence", 0)
-                confidence_color = "🟢" if confidence > 0.8 else "🟡" if confidence > 0.5 else "🔴"
-                st.metric("Confidence", f"{confidence_color} {confidence:.0%}")
-            with col2:
                 st.metric("Sources", len(data.get("sources", [])))
-            with col3:
+            with col2:
                 st.caption(f"Request ID: {data.get('request_id', 'N/A')[:8]}")
+            
+            # Show source links
+            if data.get("sources"):
+                st.markdown("** Sources:**")
+                for i, src in enumerate(data.get("sources", []), 1):
+                    title = src.get('title', 'Unknown')
+                    url = src.get('url', '#')
+                    st.markdown(f"{i}. [{title}]({url})")
         
         else:
             error_msg = f" {result.get('error', 'Unknown error')}"
