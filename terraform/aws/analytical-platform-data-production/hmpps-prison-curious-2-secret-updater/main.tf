@@ -8,6 +8,24 @@ terraform {
   required_version = "~> 1.5"
 }
 
+data "aws_vpc" "airflow_prod" {
+  tags = {
+    Name = "airflow-prod"
+  }
+}
+
+data "aws_subnets" "airflow_prod_private" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.airflow_prod.id]
+  }
+
+  filter {
+    name   = "tag:Name"
+    values = ["airflow-prod-private-*"]
+  }
+}
+
 # Create a lambda which takes the content of the bucket/object key and
 # updates the secret with name secret_name
 module "hmpps_prison_curious2_secret_updater" {
@@ -17,6 +35,9 @@ module "hmpps_prison_curious2_secret_updater" {
 
   bucket_name = "mojap-land"
   object_key  = "hmpps/prison-curious//sas_token_info.txt"
+
+  vpc_id         = data.aws_vpc.airflow_prod.id
+  vpc_subnet_ids = data.aws_subnets.airflow_prod_private.ids
 
   secret_name = "/airflow/production/hmpps/prison-curious2/curious-azure-credential"
 }
