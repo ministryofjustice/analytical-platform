@@ -15,7 +15,6 @@ Diagnose issues with Airflow DAG pods running in the `mwaa` Kubernetes namespace
 - A pod is taking longer than expected
 - A previous run failed and the user wants to monitor a retry
 - Investigating pod errors, OOM kills, or scheduling issues
-
 ## Procedure
 
 ### Step 1: Identify the Pod
@@ -65,6 +64,12 @@ For a completed/failed pod, get all logs:
 
 ```shell
 kubectl logs <pod-name> -n mwaa
+```
+
+If the pod has restarted (restart count > 0 from Step 2, e.g., after an OOMKill), the current container's logs may be empty or only show the latest attempt. Retrieve the **previous** container's logs:
+
+```shell
+kubectl logs <pod-name> -n mwaa --previous --tail=100
 ```
 
 Look for:
