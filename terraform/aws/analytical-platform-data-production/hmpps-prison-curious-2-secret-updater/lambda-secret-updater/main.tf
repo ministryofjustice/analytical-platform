@@ -14,6 +14,17 @@ data "archive_file" "lambda_zip" {
   output_path = "${path.module}/lambda/function.zip"
 }
 
+resource "aws_kms_key" "lambda" {
+  description             = "KMS key for ${var.lambda_name} Lambda environment variables"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
+}
+
+resource "aws_sqs_queue" "dlq" {
+  name              = "${var.lambda_name}-dlq"
+  kms_master_key_id = aws_kms_key.lambda.id
+}
+
 
 resource "aws_iam_role" "lambda_role" {
   name = local.lambda_role_name
@@ -55,13 +66,30 @@ resource "aws_iam_role_policy" "lambda_policy" {
       },
 
       {
+        Effect   = "Allow"
+        Action   = ["logs:CreateLogGroup"]
+        Resource = local.log_group_arn
+      },
+      {
         Effect = "Allow"
         Action = [
-          "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ]
-        Resource = "*"
+        Resource = "${local.log_group_arn}:log-stream:*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["sqs:SendMessage"]
+        Resource = aws_sqs_queue.dlq.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt",
+          "kms:GenerateDataKey"
+        ]
+        Resource = aws_kms_key.lambda.arn
       }
     ]
   })
@@ -78,6 +106,13 @@ resource "aws_lambda_function" "this" {
   handler = "lambda_function.lambda_handler"
   runtime = "python3.12"
   timeout = 60
+
+  kms_key_arn                    = aws_kms_key.lambda.arn
+  reserved_concurrent_executions = var.reserved_concurrent_executions
+
+  dead_letter_config {
+    target_arn = aws_sqs_queue.dlq.arn
+  }
 
   environment {
     variables = {
