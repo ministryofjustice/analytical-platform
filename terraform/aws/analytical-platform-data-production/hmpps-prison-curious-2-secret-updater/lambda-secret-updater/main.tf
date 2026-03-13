@@ -14,42 +14,36 @@ data "archive_file" "lambda_zip" {
   output_path = "${path.module}/lambda/function.zip"
 }
 
-data "aws_iam_policy_document" "lambda_kms_key" {
-  statement {
-    sid     = "EnableIAMUserPermissions"
-    effect  = "Allow"
-    actions = ["kms:*"]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-    }
-
-    resources = ["*"]
-  }
-
-  statement {
-    sid    = "AllowLambdaFunctionUse"
-    effect = "Allow"
-    actions = [
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:Encrypt",
-      "kms:GenerateDataKey*",
-      "kms:ReEncrypt*"
-    ]
-
-    principals {
-      type        = "AWS"
-      identifiers = [aws_iam_role.lambda_role.arn]
-    }
-
-    resources = ["*"]
-  }
-}
-
 resource "aws_kms_key" "lambda" {
-  policy                  = data.aws_iam_policy_document.lambda_kms_key.json
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "EnableIAMUserPermissions"
+        Effect = "Allow"
+        Action = "kms:*"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Resource = "*"
+      },
+      {
+        Sid    = "AllowLambdaFunctionUse"
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt",
+          "kms:DescribeKey",
+          "kms:Encrypt",
+          "kms:GenerateDataKey*",
+          "kms:ReEncrypt*"
+        ]
+        Principal = {
+          AWS = aws_iam_role.lambda_role.arn
+        }
+        Resource = "*"
+      }
+    ]
+  })
   description             = "KMS key for ${var.lambda_name} Lambda environment variables"
   deletion_window_in_days = 7
   enable_key_rotation     = true
