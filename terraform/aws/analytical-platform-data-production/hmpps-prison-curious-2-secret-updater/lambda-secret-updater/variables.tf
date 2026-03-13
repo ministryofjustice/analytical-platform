@@ -23,3 +23,9 @@ variable "delete_after_processing" {
   description = "Whether to delete the S3 object after successfully updating the secret."
   default     = true
 }
+
+variable "reserved_concurrent_executions" {
+  type        = number
+  description = "Amount of reserved concurrent executions for the Lambda function."
+  default     = 5
+}
