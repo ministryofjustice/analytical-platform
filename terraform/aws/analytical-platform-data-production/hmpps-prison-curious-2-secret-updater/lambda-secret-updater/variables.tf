@@ -13,6 +13,16 @@ variable "object_key" {
   description = "Full S3 object key path to sas_token_info.txt."
 }
 
+variable "vpc_id" {
+  type        = string
+  description = "VPC ID where the Lambda function should run."
+}
+
+variable "vpc_subnet_ids" {
+  type        = list(string)
+  description = "Private subnet IDs for Lambda ENIs."
+}
+
 variable "secret_name" {
   type        = string
   description = "Name of the Secrets Manager secret to update (without ARN)."
