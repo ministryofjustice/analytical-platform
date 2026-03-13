@@ -10,6 +10,7 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+package/
 .eggs/
 
 # -------------------------
@@ -25,10 +26,10 @@ pip-wheel-metadata/
 # Editor/OS miscellany
 # -------------------------
 .DS_Store
+**/.DS_Store
 Thumbs.db
 *.swp
 *.swo
-*.log
 .vscode/
 .idea/
 
@@ -38,21 +39,24 @@ Thumbs.db
 .ipynb_checkpoints/
 .profiler/
 
-# Lambda build artifacts
-lambda.zip
-env_config.json
-
-
 # -------------------------
 # Environment & secrets
 # -------------------------
 .env
 .env.*
 *.env
-
 *.pem
 *.key
 config_local.py
+
+# -------------------------
+# AWS Lambda artifacts
+# -------------------------
+lambda.zip
+env_config.json
+payload.json
+trust-policy.json
+response.json
 
 # -------------------------
 # Test/coverage
@@ -64,44 +68,37 @@ htmlcov/
 pytest_cache/
 
 # -------------------------
+# Logs
+# -------------------------
+*.log
+logs_*.txt
+debug_output.txt
+cloudwatch_logs/
+
+# -------------------------
 # Project data folders
 # -------------------------
-# Ignore large/generated artifacts
 data/images/
 data/text_chunks/
 data/processed/
+data/kb_catalog.json
 reports/validation.md
 
-# Ignore temporary/aux files in processed,
-# but keep final JSON outputs (see allowlist below)
+# Keep final JSON outputs
 data/processed/*
 !data/processed/*.json
 
 # -------------------------
-# Node (if any front-end assets)
+# Node (if any front-end)
 # -------------------------
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Generated resources JSONs in build dirs
+# -------------------------
+# CDK/Build artifacts
+# -------------------------
+cdk.out/
 package/resources-*.json
 notebooks/package/resources-*.json
-cdk.out/
-
-# Debug logs
-logs_*.txt
-debug_output.txt
-cloudwatch_logs/
-*.log
-
-package/
-build/
-dist/
-__pycache__/
-*.egg-info/
-
-.DS_Store
-**/.DS_Store
-data/kb_catalog.json
