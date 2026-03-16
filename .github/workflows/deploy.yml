@@ -79,7 +79,7 @@ jobs:
           kubectl config use-context ${KUBE_CLUSTER}
           echo "✅ Kubernetes authentication complete"
       
-      - name: Check BEARER_TOKEN exists # Step 7.1: Verify GitHub secret has a value before using it
+      - name: Check BEARER_TOKEN exists # Step 8: Verify GitHub secret has a value before using it
         run: |
           if [ -z "${{ secrets.BEARER_TOKEN }}" ]; then
             echo "❌ BEARER_TOKEN is empty!"
@@ -117,7 +117,7 @@ jobs:
           kubectl get secret api-bearer-token -n ${KUBE_NAMESPACE}
           echo "✅ Secret is ready"
           
-      - name: Generate Kubernetes manifests # Step 10: Replace environment variables in template files to create final manifests
+      - name: Generate Kubernetes manifests # Step 9: Replace environment variables in template files to create final manifests
         working-directory: ${{ env.APP_DIR }}
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
@@ -145,7 +145,7 @@ jobs:
           echo "=== Manifest contents ==="
           cat manifests/*.yml
 
-      - name: Clean up old deployments # Step 11: Delete existing deployment to ensure fresh start
+      - name: Clean up old deployments # Step 10: Delete existing deployment to ensure fresh start
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
@@ -160,7 +160,7 @@ jobs:
             echo "No existing deployment found"
           fi
       
-      - name: Apply Kubernetes manifests # Step 13: Deploy all K8s resources (deployment, service, ingress)
+      - name: Apply Kubernetes manifests # Step 11: Deploy all K8s resources (deployment, service, ingress)
         working-directory: ${{ env.APP_DIR }}
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
@@ -198,7 +198,7 @@ jobs:
           echo "=== Recent Pod Events ==="
           kubectl describe pods -l app=data-engg-support-assistant -n ${KUBE_NAMESPACE} | grep -A 20 "Events:" || echo "No events yet"
    
-      - name: Wait for deployment rollout # Step 16: Wait for deployment to complete and gather debug info if it fails
+      - name: Wait for deployment rollout # Step 12: Wait for deployment to complete and gather debug info if it fails
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
         run: |
@@ -242,7 +242,7 @@ jobs:
             exit 1
           fi
           
-      - name: Verify deployment # Step 17: Display final deployment status and application URL
+      - name: Verify deployment # Step 13: Display final deployment status and application URL
         if: success()
         env:
           KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}

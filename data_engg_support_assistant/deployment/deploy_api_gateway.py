@@ -508,7 +508,7 @@ class APIGatewayDeployer:
                 responseTemplates={'application/json': ''}
             )
             
-            print("   ✓ CORS configured (Streamlit ready)")
+            print("   ✓ CORS preflight configured  (Lambda handles POST headers)")
             
         except Exception as e:
             print(f"   ⚠️  CORS setup warning: {e}")

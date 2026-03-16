@@ -67,6 +67,17 @@ from helpers.apug.rag.query_processor import process_query, format_json_response
 from helpers.apug.logging_observability.smart_rag_logger import SmartRAGLogger
 from helpers.apug.logging_observability.log_backends import get_log_backends
 
+# ================== CORS helper function ===============
+
+def get_cors_headers():
+    """Standard CORS headers for all responses."""
+    return {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+        'Access-Control-Allow-Methods': 'POST,OPTIONS'
+    }
+
 # ==================== REST API HANDLER ====================
 
 def lambda_handler(event, context):
@@ -128,7 +139,7 @@ def lambda_handler(event, context):
         if not query:
             return {
                 'statusCode': 400,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': get_cors_headers(),
                 'body': json.dumps({
                     'error': 'Bad Request',
                     'message': 'Missing "text" field in request body'
@@ -190,7 +201,7 @@ def lambda_handler(event, context):
         #print(f"[DEBUG] body length: {len(body_str)}")
         return {
             'statusCode': 200,
-            'headers': {'Content-Type': 'application/json'},
+            'headers': get_cors_headers(),
             'body': json.dumps(json_response)
         }
 
@@ -204,7 +215,7 @@ def lambda_handler(event, context):
         return {
             'statusCode': 429,
             'headers': {
-                'Content-Type': 'application/json',
+                **get_cors_headers(),
                 'Retry-After': str(e.retry_after)
             },
             'body': json.dumps({
@@ -222,7 +233,7 @@ def lambda_handler(event, context):
         
         return {
             'statusCode': 503,
-            'headers': {'Content-Type': 'application/json'},
+            'headers': get_cors_headers(),
             'body': json.dumps({
                 'error': 'Service Unavailable',
                 'message': 'AI service temporarily unavailable. Please try again later.',
@@ -243,7 +254,7 @@ def lambda_handler(event, context):
         
         return {
             'statusCode': 400,
-            'headers': {'Content-Type': 'application/json'},
+            'headers': get_cors_headers(),
             'body': json.dumps({
                 'error': 'Bad Request',
                 'message': 'Invalid JSON format',
@@ -258,7 +269,7 @@ def lambda_handler(event, context):
         
         return {
             'statusCode': 400,
-            'headers': {'Content-Type': 'application/json'},
+            'headers': get_cors_headers(),
             'body': json.dumps({
                 'error': 'Bad Request',
                 'message': str(e),
@@ -273,7 +284,7 @@ def lambda_handler(event, context):
         
         return {
             'statusCode': 503,
-            'headers': {'Content-Type': 'application/json'},
+            'headers': get_cors_headers(),
             'body': json.dumps({
                 'error': 'Service Unavailable',
                 'message': 'RAG pipeline not initialized. Please try again.',
@@ -304,7 +315,7 @@ def lambda_handler(event, context):
         
         return {
             'statusCode': 500,
-            'headers': {'Content-Type': 'application/json'},
+            'headers': get_cors_headers(),
             'body': json.dumps({
                 'error': 'Internal Server Error',
                 'message': 'An unexpected error occurred. Please try again or contact support.',
