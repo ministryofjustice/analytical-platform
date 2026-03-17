@@ -419,17 +419,36 @@ if prompt := st.chat_input("Ask me anything..."):
 
                 with col1: 
                     if st.button("👍", key=f"pos_{request_id}"):
-                        feedback_result = client.submit_feedback(request_id, "positive")
-                        if feedback_result.get("success"):
-                            st.success("Thanks for your feedback!")
-                        else:
-                            st.error("Failed to submit feedback")
+                        feedback_result = client.submit_feedback(request_id, "positive")     
 
                 with col2:
                     if st.button("👎", key=f"neg_{request_id}"):
                         feedback_result = client.submit_feedback(request_id, "negative")
+                        
+                # Show text input if feedback button was clicked
+                if f"feedback_mode_{request_id}" in st.session_state:
+                    feedback_type = st.session_state[f"feedback_mode_{request_id}"]
+                    
+                    prompt_text = "Why did you like it?" if feedback_type == "positive" else "Why didn't you like it?"
+                    
+                    feedback_text = st.text_area(
+                        prompt_text,
+                        key=f"feedback_text_{request_id}",
+                        placeholder="Optional: Tell us more..."
+                    )
+                    
+                    if st.button("Submit Feedback", key=f"submit_{request_id}"):
+                        # Submit to backend with comment
+                        feedback_result = client.submit_feedback(
+                            request_id, 
+                            feedback_type,
+                            comment=feedback_text  # Add this parameter
+                        )
+                        
                         if feedback_result.get("success"):
                             st.success("Thanks for your feedback!")
+                            # Clean up session state
+                            del st.session_state[f"feedback_mode_{request_id}"]
                         else:
                             st.error("Failed to submit feedback")
 

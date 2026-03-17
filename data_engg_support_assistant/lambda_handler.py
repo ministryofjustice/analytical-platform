@@ -97,6 +97,7 @@ def dynamodb_handle_feedback(event: Dict[str, Any]) -> Dict[str, Any]:
         # Validate required fields
         request_id = body.get('request_id')
         feedback = body.get('feedback')
+        comment = body.get('comment', '')
         
         if not request_id:
             return {
@@ -114,7 +115,7 @@ def dynamodb_handle_feedback(event: Dict[str, Any]) -> Dict[str, Any]:
         
         # Update DynamoDB
         timestamp = datetime.now(timezone.utc).isoformat()
-        success = update_feedback(request_id, feedback, timestamp)
+        success = update_feedback(request_id, feedback, timestamp, comment)
         
         if success:
             lambda_logger.info(f"✅ Feedback recorded: {request_id} = {feedback}")

@@ -321,14 +321,23 @@ class S3Backend(LogBackend):
 def get_log_backends():
     """Return appropriate log backends based on environment."""
     import os
+
+    # DEBUG
+    print(f" DEBUG: Checking for DynamoDB env var...")
+    print(f" DEBUG: DYNAMODB_TABLE_NAME = {os.environ.get('DYNAMODB_TABLE_NAME')}")
+    print(f" DEBUG: All env vars: {list(os.environ.keys())}")
     
     backends = [CloudWatchBackend()]  # Always include CloudWatch
     
     # Optional: DynamoDB for queryable conversation history
     if os.environ.get('DYNAMODB_TABLE_NAME'):
-        backends.append(DynamoDBBackend(
-            table_name = os.environ.get('DYNAMODB_TABLE_NAME')
-        ))
+        print(f" DEBUG: Creating DynamoDB backend...")
+        backends.append(DynamoDBBackend(os.environ.get('DYNAMODB_TABLE_NAME')))
+    
+    else:
+        print(f" DEBUG: Skipping DynamoDB - env var not found")
+    
+    print(f" DEBUG: Total backends: {len(backends)}")
     
     # Optional: S3 for long-term analytics
     if os.environ.get("S3_LOG_BUCKET"):
