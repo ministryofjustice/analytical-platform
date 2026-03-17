@@ -33,11 +33,10 @@ from pathlib import Path
 import boto3
 from typing import List, Dict, Any, Optional
 from botocore.exceptions import ClientError
-from config import DYNAMODB_TABLE_NAME
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from config import DYNAMODB_TABLE_NAME
-table_name = DYNAMODB_TABLE_NAME
+#sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+#from config import DYNAMODB_TABLE_NAME
+table_name = os.environ.get('DYNAMODB_TABLE_NAME')
 
 
 def get_table():

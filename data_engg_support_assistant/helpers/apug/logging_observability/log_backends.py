@@ -51,9 +51,9 @@ from pathlib import Path
 from abc import ABC, abstractmethod
 from typing import Dict, Any, List, Optional
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from config import DYNAMODB_TABLE_NAME
-table_name = DYNAMODB_TABLE_NAME
+#sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+#from config import DYNAMODB_TABLE_NAME
+#table_name = DYNAMODB_TABLE_NAME
 
 class LogBackend(ABC):
     """Interface for log storage backends"""
@@ -172,7 +172,7 @@ class DynamoDBBackend(LogBackend):
     """Writes conversation records to DynamoDB (implement later)"""
     
     def __init__(self, table_name: str = None):
-        self.table_name = table_name or os.environ.get('DYNAMODB_TABLE_NAME')
+        self.table_name = os.environ.get('DYNAMODB_TABLE_NAME')
         self._table_verified = False
 
         if not self.table_name:
@@ -327,7 +327,7 @@ def get_log_backends():
     # Optional: DynamoDB for queryable conversation history
     if os.environ.get('DYNAMODB_TABLE_NAME'):
         backends.append(DynamoDBBackend(
-            table_name = table_name
+            table_name = os.environ.get('DYNAMODB_TABLE_NAME')
         ))
     
     # Optional: S3 for long-term analytics
