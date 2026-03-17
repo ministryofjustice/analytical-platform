@@ -42,7 +42,7 @@ table_name = DYNAMODB_TABLE_NAME
 
 def get_table():
     """Get DynamoDB table resource"""
-    table_name = table_name
+    #table_name = table_name or os.getenv('DYNAMODB_TABLE_NAME', 'RAG-ConversationLogs')
     dynamodb = boto3.resource('dynamodb')
     return dynamodb.Table(table_name)
 

@@ -325,7 +325,7 @@ def get_log_backends():
     backends = [CloudWatchBackend()]  # Always include CloudWatch
     
     # Optional: DynamoDB for queryable conversation history
-    if os.environ.get("DYNAMODB_LOG_TABLE"):
+    if os.environ.get('DYNAMODB_TABLE_NAME'):
         backends.append(DynamoDBBackend(
             table_name = table_name
         ))
