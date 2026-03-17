@@ -409,6 +409,30 @@ if prompt := st.chat_input("Ask me anything..."):
             
             # Display answer
             st.markdown(answer)
+
+            # ============== ADD FEEDBACK BUTTONS HERE =======
+
+            request_id = data.get("request_id")
+            if request_id:
+                st.markdown("**Was this helpful?**")
+                col1, col2, col3 = st.columns([1,1,8])
+
+                with col1: 
+                    if st.button("👍", key=f"pos_{request_id}"):
+                        feedback_result = client.submit_feedback(request_id, "positive")
+                        if feedback_result.get("success"):
+                            st.success("Thanks for your feedback!")
+                        else:
+                            st.error("Failed to submit feedback")
+
+                with col2:
+                    if st.button("👎", key=f"neg_{request_id}"):
+                        feedback_result = client.submit_feedback(request_id, "negative")
+                        if feedback_result.get("success"):
+                            st.success("Thanks for your feedback!")
+                        else:
+                            st.error("Failed to submit feedback")
+
             
             # Store in session with metadata
             st.session_state.messages.append({

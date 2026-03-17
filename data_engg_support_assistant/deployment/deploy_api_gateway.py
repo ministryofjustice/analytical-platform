@@ -167,6 +167,24 @@ class APIGatewayDeployer:
             )
             self.resource_id = response['id']
             print(f"   ✓ Created /ask resource: {self.resource_id}")
+        
+        # Setup /feedback resource
+        feedback_resource = next(
+            (r for r in resources['items'] if r['path'] == '/feedback'),
+            None
+        )
+        
+        if feedback_resource:
+            self.feedback_resource_id = feedback_resource['id']
+            print(f"   ✓ Found existing /feedback resource: {self.feedback_resource_id}")
+        else:
+            response = self.apigw_client.create_resource(
+                restApiId=self.api_id,
+                parentId=root_id,
+                pathPart='feedback'
+            )
+            self.feedback_resource_id = response['id']
+            print(f"   ✓ Created /feedback resource: {self.feedback_resource_id}")
     
     def _setup_request_validation(self):
         """Step 4: Create request validator and model."""
@@ -400,12 +418,14 @@ class APIGatewayDeployer:
         print("\n✓ 6. Configuring HTTP methods...")
         
         # Configure POST method
-        self._configure_post_method()
+        self._configure_post_method(self.ask_resource_id, '/ask')
+        self._configure_cors(self.ask_resource_id)
         
         # Configure CORS (OPTIONS method)
-        self._configure_cors()
+        self._configure_post_method(self.feedback_resource_id, '/feedback')
+        self._configure_cors(self.feedback_resource_id)
     
-    def _configure_post_method(self):
+    def _configure_post_method(self, resource_id: str, path: str):
         """Configure POST /ask method with Lambda integration."""
         print("   → Configuring POST /ask...")
         
@@ -432,7 +452,8 @@ class APIGatewayDeployer:
         if self.authorizer_id:
             method_config['authorizerId'] = self.authorizer_id
         
-        if self.validator_id:
+        # Only validate /ask requests (feedback has different schema)
+        if path == '/ask' and self.validator_id:
             method_config['requestValidatorId'] = self.validator_id
             method_config['requestModels'] = {'application/json': self.model_name}
         
@@ -450,7 +471,7 @@ class APIGatewayDeployer:
         
         print("   ✓ POST method configured with Lambda integration")
     
-    def _configure_cors(self):
+    def _configure_cors(self, resource_id: str):
         """Configure CORS with OPTIONS method."""
         print("   → Configuring CORS (OPTIONS method)...")
         
@@ -619,12 +640,12 @@ class APIGatewayDeployer:
             print(f"""   curl -X POST {endpoint}/ask \\
      -H "Content-Type: application/json" \\
      -H "Authorization: Bearer {AUTH_TOKEN[:4]}***..." \\
-     -d '{{"text": "What is RAG?"}}'""")
+     -d '{{"text": "What is R-studio?"}}'""")
         else:
             print(f"\n Test with curl (public):")
             print(f"""   curl -X POST {endpoint}/ask \\
      -H "Content-Type: application/json" \\
-     -d '{{"text": "What is RAG?"}}'""")
+     -d '{{"text": "What is R-studio?"}}'""")
         
         print(f"\n AWS Console:")
         print(f"   https://console.aws.amazon.com/apigateway/home?region={self.region}#/apis/{self.api_id}")

@@ -2,15 +2,26 @@
 
 """ 
 - Defines an abstract LogBackend interface for pluggable log storage.
+
+- Abstract base class LogBackend with 3 methods: write_log(), write_conversation(), flush()
 - Includes three backend implementations:
     - CloudWatchBackend
-        - Outputs logs as single-line JSON for AWS Lambda (or pretty JSON when local).
-        - Emits conversation summaries at the end of each request.
+        - Outputs logs as single-line JSON for AWS Lambda (or pretty JSON when local) to stdout
+        - Smart filtering (critical logs, errors, DEBUG mode)
+        - Separate summary for success/failure cases
     - DynamoDBBackend
-        - Placeholder for future persistence of full conversation records.
+        - Verfies table on init
+        - Stores: request_id, timestamp, user_id, session_id, answer, success, duration_ms, etc.
+        - Adds TTL(90 days)
+        - Handles success vs failure cases
+        - Has feedback placeholders (user_feedback, feedback_timestamp)
+        - Error handling (doesn't break requests if DynamoDB fails)
     - S3Backend
         - Placeholder for future batched JSONL log storage in S3.
 - Provides methods for writing individual logs, conversation-level logs, and flushing buffered data.
+- Factory function get_log_backends() checks env vars:
+    - DYNAMODB_LOG_TABLE → adds DynamoDB
+    - S3_LOG_BUCKET → adds S3
 
 
 
@@ -32,10 +43,17 @@ Layer 3: CloudWatch Insights queryable logs
 
 import os
 import sys
+import time
+import boto3
 import json
 import logging
+from pathlib import Path
 from abc import ABC, abstractmethod
 from typing import Dict, Any, List, Optional
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+from config import DYNAMODB_TABLE_NAME
+table_name = DYNAMODB_TABLE_NAME
 
 class LogBackend(ABC):
     """Interface for log storage backends"""
@@ -155,10 +173,21 @@ class DynamoDBBackend(LogBackend):
     
     def __init__(self, table_name: str = None):
         self.table_name = table_name or os.environ.get('DYNAMODB_TABLE_NAME')
-        # TODO: Initialize boto3 DynamoDB client
-        #   import boto3
-        #   self.dynamodb = boto3.resource('dynamodb')
-        #   self.table = self.dynamodb.Table(self.table_name)
+        self._table_verified = False
+
+        if not self.table_name:
+            print("⚠️  DYNAMODB_TABLE_NAME not set - skipping DynamoDB logging")
+            return
+        
+        try:
+            self.dynamodb = boto3.resource('dynamodb')
+            self.table = self.dynamodb.Table(self.table_name)
+            self.table.load()  # Verify table exists
+            self._table_verified = True
+            print(f"✅ DynamoDB backend ready: {self.table_name}")
+        except Exception as e:
+            print(f"⚠️  DynamoDB init failed: {e}")
+
     
     def write_log(self, log_data: Dict[str, Any]):
         """DynamoDB only stores conversation summaries, not individual logs"""
@@ -166,19 +195,70 @@ class DynamoDBBackend(LogBackend):
     
     def write_conversation(self, conversation_data: Dict[str, Any]):
         """Write complete conversation to DynamoDB"""
-        # TODO: Implement
-        #   import time
-        #   self.table.put_item(Item={
-        #       'request_id': conversation_data['request_id'],
-        #       'timestamp': conversation_data['timestamp'],
-        #       'query': conversation_data['query'],
-        #       'success': conversation_data['success'],
-        #       'confidence': conversation_data.get('confidence', 0.0),
-        #       'answer': conversation_data.get('answer', ''),
-        #       'logs': json.dumps(conversation_data['logs']),  # Store as JSON string
-        #       'ttl': int(time.time()) + 30*24*60*60  # 30 days retention
-        #   })
-        pass
+        if not self._table_verified:
+            return
+        
+        try:
+            # Base item
+            item = {
+                # Primary keys
+                'request_id': conversation_data['request_id'],
+                'timestamp': conversation_data['timestamp'],
+                
+                # User context (required for GSIs)
+                'user_id': conversation_data.get('user_id', 'anonymous'),
+                'session_id': conversation_data.get('session_id', conversation_data['request_id']),
+                
+                # Q&A content
+                'query': conversation_data['query'][:1000],
+                'success': conversation_data.get('success', False),
+                
+                # Metadata
+                'ttl': int(time.time()) + (90 * 24 * 60 * 60),
+                'environment': os.environ.get('ENVIRONMENT', 'dev'),
+                
+                # Feedback placeholders (updated later)
+                'user_feedback': None,  # 'positive' | 'negative' | None
+                'feedback_timestamp': None
+            }
+            
+            # Success fields
+            if conversation_data.get('success'):
+                item.update({
+                    'answer': conversation_data.get('answer', '')[:5000],
+                    'confidence': float(conversation_data.get('confidence', 0.0)),
+                    'duration_ms': int(conversation_data.get('duration_ms', 0)),
+                    'answer_length': len(conversation_data.get('answer', ''))
+                })
+                
+                # Component execution summary
+                component_logs = [
+                    {'name': log.get('component_name'), 'duration_ms': log.get('duration_ms')}
+                    for log in conversation_data.get('logs', [])
+                    if log.get('log_type') == 'component'
+                ]
+                if component_logs:
+                    item['components'] = json.dumps(component_logs)
+            
+            # Failure fields
+            else:
+                error_log = next(
+                    (log for log in conversation_data.get('logs', []) 
+                     if log.get('log_type') == 'request_error'),
+                    {}
+                )
+                item['error_type'] = error_log.get('error_type', 'Unknown')
+                item['error_message'] = error_log.get('error_message', '')[:500]
+                item['answer'] = None
+            
+            # Write to DynamoDB
+            self.table.put_item(Item=item)
+            print(f"✅ Logged to DynamoDB: {item['request_id']}")
+            
+        except Exception as e:
+            print(f"❌ DynamoDB write failed: {e}")
+            # Don't raise - logging shouldn't break requests
+    
     
     def flush(self):
         """No buffering in current design"""
@@ -247,7 +327,7 @@ def get_log_backends():
     # Optional: DynamoDB for queryable conversation history
     if os.environ.get("DYNAMODB_LOG_TABLE"):
         backends.append(DynamoDBBackend(
-            table_name=os.environ.get("DYNAMODB_LOG_TABLE")
+            table_name = table_name
         ))
     
     # Optional: S3 for long-term analytics

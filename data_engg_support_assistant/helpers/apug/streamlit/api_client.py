@@ -122,3 +122,28 @@ class RAGAPIClient:
             return response.json()
         except:
             return {"status": "unhealthy"}
+
+    def submit_feedback(self, request_id: str, feedback:str) -> Dict[str,Any]:
+        """
+        Submit user feedback for a response
+        Args:
+        request_id: The request ID from the original query
+        feedback: 'positive' or 'negative'
+    
+        Returns:
+        Dict with 'success' and 'data'/'error'
+        
+        """
+
+        try:
+            response = requests.post(
+                f"{self.api_url}/feedback",
+                json = {"request_id": request_id, "feedback": feedback},
+                headers = self.headers,
+                timeout=5
+                
+                )
+            response.raise_for_status()
+            return {"success": True, "data": response.json()}
+        except Exception as e:
+            return {"success", False, "error", str(e)}

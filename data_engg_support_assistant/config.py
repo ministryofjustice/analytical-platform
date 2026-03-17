@@ -138,6 +138,28 @@ else:
 DEFAULT_SEARCH_TYPE = "HYBRID"  # HYBRID, SEMANTIC, or KEYWORD
 
 # ============================================================================
+# DynamoDB Configuration
+# ============================================================================
+DYNAMODB_TABLE_NAME = os.getenv('DYNAMODB_TABLE_NAME', 'RAG-ConversationLogs')
+DYNAMODB_LOGGING_ENABLED = os.getenv('DYNAMODB_LOGGING_ENABLED', 'true').lower() == 'true'
+
+# FAQ caching (DISABLED for now)
+#FEATURE_FAQ_CACHE = os.getenv('FEATURE_FAQ_CACHE', 'false').lower() == 'true'
+#CACHE_LOOKUP_TIMEOUT_MS = int(os.getenv('CACHE_LOOKUP_TIMEOUT_MS', '200'))
+#CACHE_TTL_DAYS = int(os.getenv('CACHE_TTL_DAYS', '7'))
+#CACHE_CONFIDENCE_THRESHOLD = float(os.getenv('CACHE_CONFIDENCE_THRESHOLD', '0.90'))
+
+
+# Session Management
+SESSION_WINDOW_MINUTES = int(os.getenv('SESSION_WINDOW_MINUTES', '30'))
+
+# ============================================================================
+# Validation
+# ============================================================================
+if DYNAMODB_LOGGING_ENABLED and not DYNAMODB_TABLE_NAME:
+    raise ValueError("DYNAMODB_TABLE_NAME required when logging enabled")
+
+# ============================================================================
 # Startup Validation & Logging
 # ============================================================================
 if not IS_LAMBDA:
