@@ -1,5 +1,3 @@
-# log_backends.py
-
 """ 
 - Defines an abstract LogBackend interface for pluggable log storage.
 
@@ -38,7 +36,7 @@ Layer 2: Conversation-level summaries
 Layer 3: CloudWatch Insights queryable logs
 
 """
-
+# log_backends.py
 import os
 import sys
 import time
