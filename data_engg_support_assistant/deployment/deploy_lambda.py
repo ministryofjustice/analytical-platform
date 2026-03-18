@@ -116,6 +116,66 @@ def ensure_bedrock_permissions(lambda_client, function_name):
             return False
 
 
+# ================== DynamoDB permissions for Lambda execution role====================
+def ensure_dynamodb_permissions(lambda_client, function_name):
+    """
+    Ensure DynamoDB permissions are attached to Lambda role for conversation logging
+    
+    Allows Lambda to write conversation logs to the RAG-ConversationLogs table.
+    """
+    import boto3
+    import json
+    
+    try:
+        # Get Lambda's execution role
+        response = lambda_client.get_function(FunctionName=function_name)
+        role_arn = response['Configuration']['Role']
+        role_name = role_arn.split('/')[-1]
+        
+        # Create inline policy for DynamoDB
+        iam = boto3.client('iam')
+        policy_name = 'RAGDynamoDBConversationLogging'
+        
+        dynamodb_policy = {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Action": [
+                        "dynamodb:PutItem",
+                        "dynamodb:UpdateItem",
+                        "dynamodb:GetItem",
+                        "dynamodb:Query"
+                    ],
+                    "Resource": [
+                        f"arn:aws:dynamodb:{REGION}:*:table/RAG-ConversationLogs",
+                        f"arn:aws:dynamodb:{REGION}:*:table/RAG-ConversationLogs/index/*"
+                    ]
+                }
+            ]
+        }
+        
+        iam.put_role_policy(
+            RoleName=role_name,
+            PolicyName=policy_name,
+            PolicyDocument=json.dumps(dynamodb_policy)
+        )
+        print("   ✓ DynamoDB permissions attached")
+        return True
+        
+    except iam.exceptions.NoSuchEntityException:
+        print(f"   ⚠️  Role not found: {role_name}")
+        return False
+        
+    except Exception as e:
+        if 'no changes' in str(e).lower():
+            print("   ✓ DynamoDB permissions already attached")
+            return True
+        else:
+            print(f"   ⚠️  DynamoDB permission error: {e}")
+            return False
+
+
 
 # ==================== LAYER CONFIGURATION ====================
 LAYER_ARN = None
@@ -386,6 +446,10 @@ def deploy_lambda():
         # ==================== ENSURE BEDROCK PERMISSIONS ====================
         print("   → Checking Bedrock permissions...")
         ensure_bedrock_permissions(lambda_client, FUNCTION_NAME)
+        
+        # ==================== ENSURE DYNAMODB PERMISSIONS ====================
+        print("   → Checking DynamoDB permissions...")
+        ensure_dynamodb_permissions(lambda_client, FUNCTION_NAME)
         
     except Exception as e:
         print(f"\n Configuration update failed: {e}")

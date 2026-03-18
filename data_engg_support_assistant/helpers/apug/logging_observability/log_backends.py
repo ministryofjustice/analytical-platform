@@ -24,7 +24,6 @@
     - S3_LOG_BUCKET → adds S3
 
 
-
 SmartRAGLogger (orchestrator)
     ↓
 LogBackend Interface (abstraction)
@@ -39,7 +38,6 @@ Layer 2: Conversation-level summaries
 Layer 3: CloudWatch Insights queryable logs
 
 """
-
 
 import os
 import sys
@@ -169,14 +167,23 @@ class CloudWatchBackend(LogBackend):
 
 
 class DynamoDBBackend(LogBackend):
-    """Writes conversation records to DynamoDB (implement later)"""
+    """Writes conversation logs to DynamoDB for queryable history and feedback tracking"""
     
     def __init__(self, table_name: str = None):
-        self.table_name = os.environ.get('DYNAMODB_TABLE_NAME')
+        """
+        Initialize DynamoDB backend.
+        
+        Args:
+            table_name: Override env var DYNAMODB_TABLE_NAME (for testing)
+        """
+        # Use provided table name or fall back to environment variable
+        self.table_name = table_name or os.environ.get('DYNAMODB_TABLE_NAME')
         self._table_verified = False
+        self.dynamodb = None
+        self.table = None
 
         if not self.table_name:
-            print("⚠️  DYNAMODB_TABLE_NAME not set - skipping DynamoDB logging")
+            print("⚠️  DYNAMODB_TABLE_NAME not set - DynamoDB logging disabled")
             return
         
         try:
@@ -184,9 +191,11 @@ class DynamoDBBackend(LogBackend):
             self.table = self.dynamodb.Table(self.table_name)
             self.table.load()  # Verify table exists
             self._table_verified = True
-            print(f"✅ DynamoDB backend ready: {self.table_name}")
+            print(f"✅ DynamoDB backend initialized: {self.table_name}")
         except Exception as e:
-            print(f"⚠️  DynamoDB init failed: {e}")
+            print(f"⚠️  DynamoDB initialization warning: {e}")
+            print(f"   Will attempt writes anyway (table may not exist yet)")
+            # Don't fail - table might exist but we just can't verify
 
     
     def write_log(self, log_data: Dict[str, Any]):
@@ -195,10 +204,26 @@ class DynamoDBBackend(LogBackend):
     
     def write_conversation(self, conversation_data: Dict[str, Any]):
         """Write complete conversation to DynamoDB"""
-        if not self._table_verified:
+        
+        print(f"[DynamoDB] write_conversation called with data keys: {list(conversation_data.keys())}")
+        
+        # Lazy table initialization if not done yet
+        if not self.table and self.table_name:
+            try:
+                self.dynamodb = boto3.resource('dynamodb')
+                self.table = self.dynamodb.Table(self.table_name)
+                self._table_verified = True
+                print(f"✅ DynamoDB table connected: {self.table_name}")
+            except Exception as e:
+                print(f"❌ DynamoDB connection failed: {e}")
+                return
+        
+        if not self.table:
+            print(f"[DynamoDB] No table available, skipping write")
             return
         
         try:
+            print(f"[DynamoDB] Building item from conversation data...")
             # Base item
             item = {
                 # Primary keys
@@ -253,10 +278,12 @@ class DynamoDBBackend(LogBackend):
             
             # Write to DynamoDB
             self.table.put_item(Item=item)
-            print(f"✅ Logged to DynamoDB: {item['request_id']}")
+            print(f"✅✅✅ Successfully written to DynamoDB: request_id={item['request_id']}, success={item['success']}")
             
         except Exception as e:
             print(f"❌ DynamoDB write failed: {e}")
+            import traceback
+            print(traceback.format_exc())
             # Don't raise - logging shouldn't break requests
     
     

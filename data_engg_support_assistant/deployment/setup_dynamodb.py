@@ -40,9 +40,6 @@ import sys
 from botocore.exceptions import ClientError
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from config import REGION
-
 # Configuration
 TABLE_NAME = os.environ.get('DYNAMODB_TABLE_NAME', 'RAG-ConversationLogs')
 REGION = os.environ.get('AWS_REGION', 'eu-west-2')
