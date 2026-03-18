@@ -427,14 +427,14 @@ class APIGatewayDeployer:
     
     def _configure_post_method(self, resource_id: str, path: str):
         """Configure POST /ask method with Lambda integration."""
-        print("   → Configuring POST /ask...")
+        print("   → Configuring POST {path}...")
         
         # Remove existing method
         try:
             self.apigw_client.delete_method(
-                restApiId=self.api_id,
-                resourceId=self.resource_id,
-                httpMethod='POST'
+                restApiId = self.api_id,
+                resourceId = resource_id,
+                httpMethod = 'POST'
             )
             time.sleep(1)
         except self.apigw_client.exceptions.NotFoundException:
@@ -443,7 +443,7 @@ class APIGatewayDeployer:
         # Create method
         method_config = {
             'restApiId': self.api_id,
-            'resourceId': self.resource_id,
+            'resourceId': resource_id,
             'httpMethod': 'POST',
             'authorizationType': 'CUSTOM' if self.authorizer_id else 'NONE',
             'apiKeyRequired': False
@@ -461,12 +461,12 @@ class APIGatewayDeployer:
         
         # Configure Lambda integration
         self.apigw_client.put_integration(
-            restApiId=self.api_id,
-            resourceId=self.resource_id,
-            httpMethod='POST',
-            type='AWS_PROXY',
-            integrationHttpMethod='POST',
-            uri=f'arn:aws:apigateway:{self.region}:lambda:path/2015-03-31/functions/{self.lambda_arn}/invocations'
+            restApiId = self.api_id,
+            resourceId = resource_id,
+            httpMethod = 'POST',
+            type = 'AWS_PROXY',
+            integrationHttpMethod =' POST',
+            uri = f'arn:aws:apigateway:{self.region}:lambda:path/2015-03-31/functions/{self.lambda_arn}/invocations'
         )
         
         print("   ✓ POST method configured with Lambda integration")
@@ -480,13 +480,13 @@ class APIGatewayDeployer:
             try:
                 self.apigw_client.get_method(
                     restApiId=self.api_id,
-                    resourceId=self.resource_id,
+                    resourceId= resource_id,
                     httpMethod='OPTIONS'
                 )
             except self.apigw_client.exceptions.NotFoundException:
                 self.apigw_client.put_method(
                     restApiId=self.api_id,
-                    resourceId=self.resource_id,
+                    resourceId=resource_id,
                     httpMethod='OPTIONS',
                     authorizationType='NONE',
                     apiKeyRequired=False
@@ -495,7 +495,7 @@ class APIGatewayDeployer:
             # MOCK integration
             self.apigw_client.put_integration(
                 restApiId=self.api_id,
-                resourceId=self.resource_id,
+                resourceId= resource_id,
                 httpMethod='OPTIONS',
                 type='MOCK',
                 requestTemplates={'application/json': '{"statusCode": 200}'}
@@ -504,7 +504,7 @@ class APIGatewayDeployer:
             # Method response
             self.apigw_client.put_method_response(
                 restApiId=self.api_id,
-                resourceId=self.resource_id,
+                resourceId= resource_id,
                 httpMethod='OPTIONS',
                 statusCode='200',
                 responseParameters={
@@ -518,7 +518,7 @@ class APIGatewayDeployer:
             # Integration response
             self.apigw_client.put_integration_response(
                 restApiId=self.api_id,
-                resourceId=self.resource_id,
+                resourceId= resource_id,
                 httpMethod='OPTIONS',
                 statusCode='200',
                 responseParameters={
@@ -633,6 +633,8 @@ class APIGatewayDeployer:
         
         print(f"\n Endpoint:")
         print(f"   {endpoint}/ask")
+        print(f"   {endpoint}/feedback")  
+        print(f"   {endpoint}/health")
         
         # Test command
         if self.authorizer_id:

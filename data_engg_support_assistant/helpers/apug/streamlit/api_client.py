@@ -123,12 +123,13 @@ class RAGAPIClient:
         except:
             return {"status": "unhealthy"}
 
-    def submit_feedback(self, request_id: str, feedback:str) -> Dict[str,Any]:
+    def submit_feedback(self, request_id: str, feedback:str, comment: str = None) -> Dict[str,Any]:
         """
         Submit user feedback for a response
         Args:
         request_id: The request ID from the original query
         feedback: 'positive' or 'negative'
+        comment: Optional text comment explaining the feedback
     
         Returns:
         Dict with 'success' and 'data'/'error'
@@ -136,14 +137,24 @@ class RAGAPIClient:
         """
 
         try:
+            payload = {
+            "request_id": request_id, 
+            "feedback": feedback
+        }
+        
+            # Add comment if provided
+            if comment:
+                payload["comment"] = comment
+
             response = requests.post(
                 f"{self.api_url}/feedback",
-                json = {"request_id": request_id, "feedback": feedback},
+                json = payload,
                 headers = self.headers,
                 timeout=5
                 
                 )
             response.raise_for_status()
             return {"success": True, "data": response.json()}
+        
         except Exception as e:
-            return {"success", False, "error", str(e)}
+            return {"success": False, "error": str(e)}
