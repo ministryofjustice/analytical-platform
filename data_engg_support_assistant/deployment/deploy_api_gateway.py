@@ -418,8 +418,8 @@ class APIGatewayDeployer:
         print("\n✓ 6. Configuring HTTP methods...")
         
         # Configure POST method
-        self._configure_post_method(self.ask_resource_id, '/ask')
-        self._configure_cors(self.ask_resource_id)
+        self._configure_post_method(self.resource_id, '/ask')
+        self._configure_cors(self.resource_id)
         
         # Configure CORS (OPTIONS method)
         self._configure_post_method(self.feedback_resource_id, '/feedback')
@@ -465,7 +465,7 @@ class APIGatewayDeployer:
             resourceId = resource_id,
             httpMethod = 'POST',
             type = 'AWS_PROXY',
-            integrationHttpMethod =' POST',
+            integrationHttpMethod ='POST',
             uri = f'arn:aws:apigateway:{self.region}:lambda:path/2015-03-31/functions/{self.lambda_arn}/invocations'
         )
         

@@ -409,7 +409,8 @@ for message in st.session_state.messages:
                             del st.session_state[f"feedback_mode_{request_id}"]
                             st.rerun()
                         else:
-                            st.error("Failed to submit")
+                            error_msg = feedback_result.get("error", "Unknown error")
+                            st.error(f"Failed to submit: {error_msg}")
 
             # Show confirmation if already submitted
             elif message["metadata"].get("feedback_submitted"):
