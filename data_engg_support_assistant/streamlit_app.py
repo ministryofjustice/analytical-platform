@@ -420,12 +420,10 @@ if prompt := st.chat_input("Ask me anything..."):
                 with col1: 
                     if st.button("👍", key=f"pos_{request_id}"):
                         st.session_state[f"feedback_mode_{request_id}"] = "positive"
-                        st.rerun()
 
                 with col2:
                     if st.button("👎", key=f"neg_{request_id}"):
                         st.session_state[f"feedback_mode_{request_id}"] = "negative"
-                        st.rerun()
                         
                 # Show text input if feedback button was clicked
                 if f"feedback_mode_{request_id}" in st.session_state:
@@ -444,14 +442,14 @@ if prompt := st.chat_input("Ask me anything..."):
                         feedback_result = client.submit_feedback(
                             request_id, 
                             feedback_type,
-                            comment=feedback_text  # Add this parameter
+                            comment=feedback_text
                         )
                         
                         if feedback_result.get("success"):
                             st.success("Thanks for your feedback!")
                             # Clean up session state
-                            del st.session_state[f"feedback_mode_{request_id}"]
-                            st.rerun()
+                            if f"feedback_mode_{request_id}" in st.session_state:
+                                del st.session_state[f"feedback_mode_{request_id}"]
                         else:
                             st.error("Failed to submit feedback")
 
