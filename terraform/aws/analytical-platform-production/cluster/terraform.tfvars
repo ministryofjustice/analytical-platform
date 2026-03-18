@@ -130,14 +130,14 @@ redis_alarm_memory_threshold_bytes = 100000
 # EKS
 ##################################################
 eks_versions = {
-  cluster    = "1.30"
+  cluster    = "1.31"
   node-group = "1.30"
 }
 eks_addon_versions = {
   coredns        = "v1.11.4-eksbuild.28"
-  ebs-csi-driver = "v1.54.0-eksbuild.1"
-  kube-proxy     = "v1.30.14-eksbuild.20"
-  vpc-cni        = "v1.21.1-eksbuild.1"
+  ebs-csi-driver = "v1.56.0-eksbuild.1"
+  kube-proxy     = "v1.31.14-eksbuild.5"
+  vpc-cni        = "v1.21.1-eksbuild.3"
 }
 eks_node_group_name_prefix = "prod"
 eks_node_group_capacities = {
