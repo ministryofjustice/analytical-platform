@@ -369,6 +369,52 @@ for message in st.session_state.messages:
         
         # Show metadata for assistant messages
         if message["role"] == "assistant" and "metadata" in message:
+            request_id = message["metadata"].get("request_id")
+
+            # Render feedback for assistant messages and show only feedback if not yet submitted
+            if request_id and not message["metadata"].get("feedback_submitted"):
+                st.markdown("**Was this helpful?**")
+                col1, col2, col3 = st.columns([1,1,8])
+
+                with col1: 
+                    if st.button("👍", key=f"pos_{request_id}"):
+                        st.session_state[f"feedback_mode_{request_id}"] = "positive"
+                        st.rerun()
+
+                with col2:
+                    if st.button("👎", key=f"neg_{request_id}"):
+                        st.session_state[f"feedback_mode_{request_id}"] = "negative"
+                        st.rerun()
+                        
+                # Show text input if feedback button was clicked
+                if f"feedback_mode_{request_id}" in st.session_state:
+                    feedback_type = st.session_state[f"feedback_mode_{request_id}"]
+                    prompt_text = "Why?" if feedback_type == "positive" else "What went wrong?"
+                    
+                    feedback_text = st.text_area(
+                        prompt_text,
+                        key=f"feedback_text_{request_id}"
+                    )
+                    
+                    if st.button("Submit", key=f"submit_{request_id}"):
+                        feedback_result = client.submit_feedback(
+                            request_id, 
+                            feedback_type,
+                            comment=feedback_text
+                        )
+                        
+                        if feedback_result.get("success"):
+                            st.success("✓ Feedback saved!")
+                            message["metadata"]["feedback_submitted"] = True
+                            del st.session_state[f"feedback_mode_{request_id}"]
+                            st.rerun()
+                        else:
+                            st.error("Failed to submit")
+
+            # Show confirmation if already submitted
+            elif message["metadata"].get("feedback_submitted"):
+                st.caption("✓ Feedback received. Thank you!")
+
             with st.expander(" Details"):
                 col1, col2 = st.columns(2)
                 with col1:
@@ -409,51 +455,7 @@ if prompt := st.chat_input("Ask me anything..."):
             
             # Display answer
             st.markdown(answer)
-
-            # ============== ADD FEEDBACK BUTTONS HERE =======
-
-            request_id = data.get("request_id")
-            if request_id:
-                st.markdown("**Was this helpful?**")
-                col1, col2, col3 = st.columns([1,1,8])
-
-                with col1: 
-                    if st.button("👍", key=f"pos_{request_id}"):
-                        st.session_state[f"feedback_mode_{request_id}"] = "positive"
-
-                with col2:
-                    if st.button("👎", key=f"neg_{request_id}"):
-                        st.session_state[f"feedback_mode_{request_id}"] = "negative"
-                        
-                # Show text input if feedback button was clicked
-                if f"feedback_mode_{request_id}" in st.session_state:
-                    feedback_type = st.session_state[f"feedback_mode_{request_id}"]
-                    
-                    prompt_text = "Why did you like it?" if feedback_type == "positive" else "Why didn't you like it?"
-                    
-                    feedback_text = st.text_area(
-                        prompt_text,
-                        key=f"feedback_text_{request_id}",
-                        placeholder="Optional: Tell us more..."
-                    )
-                    
-                    if st.button("Submit Feedback", key=f"submit_{request_id}"):
-                        # Submit to backend with comment
-                        feedback_result = client.submit_feedback(
-                            request_id, 
-                            feedback_type,
-                            comment=feedback_text
-                        )
-                        
-                        if feedback_result.get("success"):
-                            st.success("Thanks for your feedback!")
-                            # Clean up session state
-                            if f"feedback_mode_{request_id}" in st.session_state:
-                                del st.session_state[f"feedback_mode_{request_id}"]
-                        else:
-                            st.error("Failed to submit feedback")
-
-            
+  
             # Store in session with metadata
             st.session_state.messages.append({
                 "role": "assistant",
@@ -461,7 +463,8 @@ if prompt := st.chat_input("Ask me anything..."):
                 "metadata": {
                     "num_sources": len(data.get("sources", [])),
                     "sources": data.get("sources", []),
-                    "request_id": data.get("request_id", "unknown")
+                    "request_id": data.get("request_id", "unknown"),
+                    "feedback_submitted": False
                 }
             })
             
@@ -479,6 +482,9 @@ if prompt := st.chat_input("Ask me anything..."):
                     title = src.get('title', 'Unknown')
                     url = src.get('url', '#')
                     st.markdown(f"{i}. [{title}]({url})")
+
+            # Trigger rerun to show feedback buttons from history
+            st.rerun()
         
         else:
             error_msg = f" {result.get('error', 'Unknown error')}"
