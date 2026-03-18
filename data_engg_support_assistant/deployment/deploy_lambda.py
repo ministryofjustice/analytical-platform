@@ -366,7 +366,8 @@ def deploy_lambda():
                 'Variables': {
                     'KB_ID': KB_ID,
                     'MODEL_ID': MODEL_ID,
-                    'MAX_CONTEXT_TOKENS': str(MAX_CONTEXT_TOKENS)
+                    'MAX_CONTEXT_TOKENS': str(MAX_CONTEXT_TOKENS),
+                    'DYNAMODB_TABLE_NAME': 'RAG-ConversationLogs'
                 }
             }
         }
