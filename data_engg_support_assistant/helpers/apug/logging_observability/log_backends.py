@@ -46,6 +46,7 @@ import boto3
 import json
 import logging
 from pathlib import Path
+from decimal import Decimal
 from abc import ABC, abstractmethod
 from typing import Dict, Any, List, Optional
 
@@ -196,6 +197,22 @@ class DynamoDBBackend(LogBackend):
             print(f"⚠️  DynamoDB initialization warning: {e}")
             print(f"   Will attempt writes anyway (table may not exist yet)")
             # Don't fail - table might exist but we just can't verify
+    
+    @staticmethod
+    def _convert_to_dynamodb_compatible(obj):
+        """Convert Python objects to DynamoDB-compatible types"""
+        if isinstance(obj, dict):
+            return {k: DynamoDBBackend._convert_to_dynamodb_compatible(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [DynamoDBBackend._convert_to_dynamodb_compatible(item) for item in obj]
+        elif isinstance(obj, float):
+            return Decimal(str(obj))
+        elif isinstance(obj, bool):
+            return obj  # Booleans are supported
+        elif obj is None:
+            return None
+        else:
+            return obj
 
     
     def write_log(self, log_data: Dict[str, Any]):
@@ -251,7 +268,7 @@ class DynamoDBBackend(LogBackend):
             if conversation_data.get('success'):
                 item.update({
                     'answer': conversation_data.get('answer', '')[:5000],
-                    'confidence': float(conversation_data.get('confidence', 0.0)),
+                    'confidence': Decimal(str(conversation_data.get('confidence', 0.0))),
                     'duration_ms': int(conversation_data.get('duration_ms', 0)),
                     'answer_length': len(conversation_data.get('answer', ''))
                 })
@@ -275,6 +292,9 @@ class DynamoDBBackend(LogBackend):
                 item['error_type'] = error_log.get('error_type', 'Unknown')
                 item['error_message'] = error_log.get('error_message', '')[:500]
                 item['answer'] = None
+            
+            # Convert to DynamoDB-compatible types (Decimal instead of float)
+            item = self._convert_to_dynamodb_compatible(item)
             
             # Write to DynamoDB
             self.table.put_item(Item=item)

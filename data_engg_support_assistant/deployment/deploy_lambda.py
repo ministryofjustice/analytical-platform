@@ -145,7 +145,8 @@ def ensure_dynamodb_permissions(lambda_client, function_name):
                         "dynamodb:PutItem",
                         "dynamodb:UpdateItem",
                         "dynamodb:GetItem",
-                        "dynamodb:Query"
+                        "dynamodb:Query",
+                        "dynamodb:DescribeTable"
                     ],
                     "Resource": [
                         f"arn:aws:dynamodb:{REGION}:*:table/RAG-ConversationLogs",
