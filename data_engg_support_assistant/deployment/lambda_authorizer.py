@@ -231,6 +231,18 @@ def generate_response(is_authorized, event, request_id='unknown', reason=''):
         IAM Policy document for API Gateway
     """
     effect = 'Allow' if is_authorized else 'Deny'
+
+    method_arn = event.get('methodArn', '*')
+    
+    # Allow all methods/paths in SAME STAGE only
+    if method_arn != '*':
+        # Convert: arn:aws:execute-api:region:account:api-id/stage/METHOD/path
+        # To:      arn:aws:execute-api:region:account:api-id/stage/*
+        arn_parts = method_arn.split('/')
+        # Keep stage, wildcard everything after
+        resource = f"{arn_parts[0]}/{arn_parts[1]}/*"  # api-id/prod/*
+    else:
+        resource = '*'
     
     return {
         'principalId': 'user',
@@ -239,7 +251,7 @@ def generate_response(is_authorized, event, request_id='unknown', reason=''):
             'Statement': [{
                 'Action': 'execute-api:Invoke',
                 'Effect': effect,
-                'Resource':  event.get('methodArn', '*') 
+                'Resource':  resource #api-id/prod/* , specific to prod
             }]
         },
         'context': {
