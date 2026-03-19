@@ -471,6 +471,20 @@ class APIGatewayDeployer:
             method_config['requestModels'] = {'application/json': self.model_name}
         
         self.apigw_client.put_method(**method_config)
+
+        # Method response with CORS headers
+        try:
+            self.apigw_client.put_method_response(
+                restApiId=self.api_id,
+                resourceId=resource_id,
+                httpMethod='POST',
+                statusCode='200',
+                responseParameters={
+                    'method.response.header.Access-Control-Allow-Origin': False
+                }
+            )
+        except Exception as e:
+            print(f"      Warning: method response: {e}")
         
         # Configure Lambda integration
         self.apigw_client.put_integration(
