@@ -419,7 +419,7 @@ class APIGatewayDeployer:
                 StatementId='apigateway-authorizer-invoke',
                 Action='lambda:InvokeFunction',
                 Principal='apigateway.amazonaws.com',
-                SourceArn=f'arn:aws:execute-api:{self.region}:{account_id}:{self.api_id}/authorizers/{self.authorizer_id}'
+                SourceArn=f'arn:aws:execute-api:{self.region}:{account_id}:{self.api_id}/prod/*'
             )
             print("   ✓ Authorizer permission configured")
         except Exception as e:

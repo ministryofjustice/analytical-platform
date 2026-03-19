@@ -35,8 +35,6 @@ IS_LAMBDA = os.environ.get('AWS_EXECUTION_ENV') is not None
 # ============================================================================
 # AWS Configuration
 # ============================================================================
-#KB_ID = os.getenv("KB_ID")
-#MODEL_ID = os.getenv("MODEL_ID")
 REGION = os.getenv("AWS_REGION", "eu-west-2")
 
 # ============================================================================
