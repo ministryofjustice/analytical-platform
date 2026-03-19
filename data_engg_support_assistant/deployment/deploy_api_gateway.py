@@ -150,7 +150,10 @@ class APIGatewayDeployer:
         resources = self.apigw_client.get_resources(restApiId=self.api_id)
         root_id = next(r['id'] for r in resources['items'] if r['path'] == '/')
         
-        # Check if /ask exists
+        
+        # ------------------------------
+        #   /ask
+        # ------------------------------
         ask_resource = next(
             (r for r in resources['items'] if r['path'] == '/ask'),
             None
@@ -168,7 +171,17 @@ class APIGatewayDeployer:
             self.resource_id = response['id']
             print(f"   ✓ Created /ask resource: {self.resource_id}")
         
-        # Setup /feedback resource
+
+        
+        # ------------------------------
+        #   REFRESH resource tree
+        # ------------------------------
+        resources = self.apigw_client.get_resources(restApiId=self.api_id)
+
+        
+        # ------------------------------
+         #   /feedback
+        # ------------------------------
         feedback_resource = next(
             (r for r in resources['items'] if r['path'] == '/feedback'),
             None
