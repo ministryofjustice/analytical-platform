@@ -106,6 +106,7 @@ def update_feedback(request_id: str, feedback: str, timestamp: str, comment: str
         request_id: Question ID
         feedback: 'positive' or 'negative'
         timestamp: ISO timestamp of feedback
+        comment: Optional user comment
     """
     try:
         table = get_table()
@@ -116,17 +117,25 @@ def update_feedback(request_id: str, feedback: str, timestamp: str, comment: str
             print(f"❌ Request ID not found: {request_id}")
             return False
         
+        # Build expression dynamically based on whether comment exists
+        update_expr = 'SET user_feedback = :feedback, feedback_timestamp = :ts'
+        expr_values = {
+            ':feedback': feedback,
+            ':ts': timestamp
+        }
+        
+        if comment:
+            update_expr += ', feedback_comment = :comment'
+            expr_values[':comment'] = comment
+        
         # Update with both keys
         table.update_item(
             Key={
                 'request_id': request_id,
                 'timestamp': item['timestamp']
             },
-            UpdateExpression='SET user_feedback = :feedback, feedback_timestamp = :ts, feedback_comment = :comment',
-            ExpressionAttributeValues={
-                ':feedback': feedback,
-                ':ts': timestamp
-            }
+            UpdateExpression = update_expr,
+            ExpressionAttributeValues = expr_values
         )
         print(f"✅ Feedback updated: {request_id} = {feedback}")
         return True
