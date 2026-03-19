@@ -82,7 +82,7 @@ def get_cors_headers():
 
 def dynamodb_handle_feedback(event: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Handle user feedback submission
+    Handle user feedback submission (requries authentication)
     
     Expected body:
     {
@@ -92,6 +92,21 @@ def dynamodb_handle_feedback(event: Dict[str, Any]) -> Dict[str, Any]:
     """
 
     try:
+        # ✓ Check authorization first
+        authorizer_data = event.get('requestContext', {}).get('authorizer', {})
+        auth_reason = authorizer_data.get('reason', 'unauthorized')
+        
+        if auth_reason != 'authorized':
+            lambda_logger.warning(f"Unauthorized feedback attempt: {auth_reason}")
+            return {
+                'statusCode': 403,
+                'headers': get_cors_headers(),
+                'body': json.dumps({
+                    'error': 'Forbidden',
+                    'message': 'Authentication required'
+                })
+            }
+        
         body = json.loads(event.get('body', '{}'))
         
         # Validate required fields
