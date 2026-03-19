@@ -98,7 +98,7 @@ def get_conversation_by_id(request_id: str) -> Optional[Dict[str, Any]]:
         return None
 
 
-def update_feedback(request_id: str, feedback: str, timestamp: str) -> bool:
+def update_feedback(request_id: str, feedback: str, timestamp: str, comment: str = None) -> bool:
     """
     Update feedback for a Q&A
     
@@ -122,7 +122,7 @@ def update_feedback(request_id: str, feedback: str, timestamp: str) -> bool:
                 'request_id': request_id,
                 'timestamp': item['timestamp']
             },
-            UpdateExpression='SET user_feedback = :feedback, feedback_timestamp = :ts',
+            UpdateExpression='SET user_feedback = :feedback, feedback_timestamp = :ts, feedback_comment = :comment',
             ExpressionAttributeValues={
                 ':feedback': feedback,
                 ':ts': timestamp
