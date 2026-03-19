@@ -134,8 +134,8 @@ def update_feedback(request_id: str, feedback: str, timestamp: str, comment: str
                 'request_id': request_id,
                 'timestamp': item['timestamp']
             },
-            UpdateExpression = update_expr,
-            ExpressionAttributeValues = expr_values
+            UpdateExpression=update_expr,
+            ExpressionAttributeValues=expr_values
         )
         print(f"✅ Feedback updated: {request_id} = {feedback}")
         return True
