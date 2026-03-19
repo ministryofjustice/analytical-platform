@@ -405,7 +405,13 @@ for message in st.session_state.messages:
                         
                         if feedback_result.get("success"):
                             st.success("✓ Feedback saved!")
-                            message["metadata"]["feedback_submitted"] = True
+
+                            # Update the actual message in session state
+                            for message in st.session_state.messages:
+                                if (message.get("role") == "assistant" and message.get("metadata", {}).get("request_id") == request_id):  
+                                    message["metadata"]["feedback_submitted"] = True
+                                    break
+                                
                             del st.session_state[f"feedback_mode_{request_id}"]
                             st.rerun()
                         else:
