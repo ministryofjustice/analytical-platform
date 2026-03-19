@@ -23,8 +23,7 @@ module "data_engineering_probation_glue_access_iam_role" {
           "arn:aws:iam::189157455002:role/oasys-prod-metadata-generator",
           "arn:aws:iam::189157455002:role/delius-preprod-metadata-generator",
           "arn:aws:iam::189157455002:role/delius-prod-metadata-generator",
-          "arn:aws:iam::189157455002:role/delius-dev-metadata-generator",
-          "arn:aws:iam::189157455002:role/independent-oasys-dev-offender-rsr-scores-metadata-generator"
+          "arn:aws:iam::189157455002:role/delius-dev-metadata-generator"
         ]
       }]
     }

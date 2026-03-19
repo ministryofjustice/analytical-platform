@@ -1,4 +1,4 @@
-# Comment
+# Apply trigger  comment
 
 module "dev_dms_oasys" {
   source      = "github.com/ministryofjustice/terraform-dms-module?ref=dms-module-full-load-min-change"
@@ -42,16 +42,6 @@ module "dev_dms_oasys" {
     key    = "dev/oasys/table_mappings.json"
   }
 
-  independent_full_loads = {
-    oasys_dev_offender_rsr_scores = {
-      full_load_name = "oasys-dev-offender-rsr-scores"
-      path = {
-        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-        key    = "dev/oasys/offender_rsr_scores_table_mappings.json"
-      }
-    }
-  }
-
   tags = merge(
     { "managed-by" = "Terraform" },
     var.tags
@@ -62,7 +52,7 @@ module "dev_dms_oasys" {
 }
 
 module "dev_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b190c92217786c0454b756996cdb2fcb190256db"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=dms-module-full-load-min-change"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
