@@ -2,7 +2,7 @@
 # Retrigger apply
 
 module "prod_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=main"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=5ae53ee6ed0ada0cf63613050b79c1468d565638"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -53,7 +53,7 @@ module "prod_dms_oasys" {
 }
 
 module "prod_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=main"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=5ae53ee6ed0ada0cf63613050b79c1468d565638"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
