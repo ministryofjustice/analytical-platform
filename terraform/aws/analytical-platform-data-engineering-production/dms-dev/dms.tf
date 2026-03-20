@@ -93,6 +93,16 @@ module "dev_dms_delius" {
     key    = "dev/delius/table_mappings.json"
   }
 
+  independent_full_loads = {
+    delius_dev_sr_thirty_two = {
+      full_load_name = "sr-thirty-two"
+      path = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/delius/sr_thirty_two_table_mappings.json"
+      }
+    }
+  }
+
   tags = merge(
     { "managed-by" = "Terraform" },
     var.tags
