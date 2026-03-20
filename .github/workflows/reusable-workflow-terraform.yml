@@ -63,12 +63,6 @@ jobs:
           output_format: cli
         continue-on-error: true
 
-      - name: Trivy
-        if: github.ref != 'refs/heads/main'
-        id: terraform_static_analysis_trivy
-        run: exit 0 # trivy-action step removed
-        continue-on-error: true
-
       - name: Check for Static Analysis Override Label
         if: github.ref != 'refs/heads/main'
         id: check_for_static_analysis_override
@@ -102,7 +96,6 @@ jobs:
           script: |
             const output = `### Terraform Component 🧱: \`${{ inputs.component }}\`
             #### Checkov 🛂: \`${{ steps.terraform_static_analysis_checkov.outcome }}\`
-            #### Trivy 🛂: \`${{ steps.terraform_static_analysis_trivy.outcome }}\`
             #### Static Analysis Override Label 🏷️: \`${{ steps.check_for_static_analysis_override.outputs.result }}\`
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`, Marker: \`${{ inputs.component }}_static_analysis\`*`;
@@ -149,17 +142,6 @@ jobs:
             echo "OVERRIDDEN (by label): Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
           elif [[ "${{ steps.terraform_static_analysis_checkov.outcome }}" == "success" ]]; then
             echo "PASS: Terraform Static Analysis - Checkov" >>"${GITHUB_STEP_SUMMARY}"
-          fi
-
-          if [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
-            echo "OVERRIDDEN (Dependabot): Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "false" ]]; then
-            export failBuild=true
-            echo "FAIL: Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" != "success" ]] && [[ "${{ steps.check_for_static_analysis_override.outputs.result }}" == "true" ]]; then
-            echo "OVERRIDDEN (by label): Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.terraform_static_analysis_trivy.outcome }}" == "success" ]]; then
-            echo "PASS: Terraform Static Analysis - Trivy" >>"${GITHUB_STEP_SUMMARY}"
           fi
 
           if [[ "${failBuild}" == "true" ]]; then
