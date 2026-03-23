@@ -174,7 +174,7 @@ resource "aws_scheduler_schedule" "dms_start_sun_1900" {
 resource "aws_scheduler_schedule" "dms_stop_delius" {
   name                         = "dms-stop-delius-24-04-preprod"
   description                  = "Stop Delius pre-prod DMS CDC 24th March UK"
-  schedule_expression          = "cron(30 9 24 3 TUE 2026)"
+  schedule_expression          = "cron(30 9 24 3 ? 2026)"
   schedule_expression_timezone = "Europe/London"
   state                        = "ENABLED"
   flexible_time_window { mode = "OFF" }
