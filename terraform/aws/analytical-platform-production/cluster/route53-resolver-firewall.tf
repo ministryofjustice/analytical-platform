@@ -1,5 +1,6 @@
 resource "aws_secretsmanager_secret" "route53_resolver_firewall_blocked_domains" {
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   name        = "production/route53-resolver-firewall-blocked-domains"
   description = "Blocked domains for the Route53 resolver firewall"
   kms_key_id  = "alias/aws/secretsmanager"
