@@ -13,7 +13,9 @@ resource "aws_secretsmanager_secret_version" "route53_resolver_firewall_blocked_
     ignore_changes = [secret_string]
   }
 
-  secret_string = "CHANGE_ME"
+  secret_string = jsonencode({
+    domains = ["CHANGE_ME"]
+  })
 }
 
 locals {
