@@ -1,0 +1,1285 @@
+{
+  "headings_by_page": {
+    "Acceptable use policy - Analytical Platform User Guidance": [
+      "General principles",
+      "GitHub",
+      "Scope",
+      "Who this policy applies to"
+    ],
+    "Accessing private repositories from GitHub Actions": [
+      "Accessing private repositories from GitHub Actions"
+    ],
+    "Airflow - Analytical Platform User Guidance": [
+      "Accessing the Airflow console",
+      "Airflow - Analytical Platform User Guidance",
+      "Concepts",
+      "Getting started",
+      "Important links",
+      "Overview",
+      "Python DAG configuration",
+      "Runtime images",
+      "Runtime templates",
+      "To find out more",
+      "Workflow identity",
+      "Workflow metrics",
+      "Workflow notifications",
+      "Workflow scheduling",
+      "Workflow secrets",
+      "Workflow tasks"
+    ],
+    "Airflow Concepts - Analytical Platform User Guidance": [
+      "Airflow Environments",
+      "Airflow Pipeline",
+      "Component Responsibilities",
+      "DAG Pipeline",
+      "Image Pipeline",
+      "What is Airflow",
+      "What is Kubernetes",
+      "When not to use an Airflow",
+      "Why use Airflow"
+    ],
+    "Airflow Instructions - Analytical Platform User Guidance": [
+      "Airflow Instructions - Analytical Platform User Guidance",
+      "Create DAG and IAM Role",
+      "Create image and save to ECR",
+      "Prerequisites",
+      "Run the Airflow Pipeline"
+    ],
+    "Alerting on an app - Analytical Platform User Guidance": [
+      "Alert config",
+      "Alerting on an app - Analytical Platform User Guidance"
+    ],
+    "Amazon Athena - Analytical Platform User Guidance": [
+      "Accessing Amazon Athena",
+      "Amazon Athena - Analytical Platform User Guidance",
+      "Previewing tables",
+      "Using JupyterLab",
+      "Using RStudio",
+      "Using the Athena UI",
+      "Working with tables"
+    ],
+    "Amazon S3 - Analytical Platform User Guidance": [
+      "Interacting with Amazon S3 via the Analytical Platform",
+      "What is Amazon S3?",
+      "Working with Amazon S3 buckets"
+    ],
+    "Annexes - Analytical Platform User Guidance": [
+      "Benefits of GitHub",
+      "Infrastructure Migration - step by step instructions",
+      "Memory limits",
+      "Reproducible Analytical Pipelines"
+    ],
+    "Appendix": [
+      "Appendix"
+    ],
+    "Apps": [
+      "Apps"
+    ],
+    "Athena workgroup upgrade - Analytical Platform User Guidance": [
+      "Background",
+      "How do I prepare for the new version?",
+      "How do I use the testing workgroup?"
+    ],
+    "Bedrock - Analytical Platform User Guidance": [
+      "AWS Bedrock Cross-Region Inference",
+      "Accessing Data with Amazon Bedrock",
+      "Central Digital & Data Office guidance",
+      "Getting Access to Amazon Bedrock in the Analytical Platform",
+      "Getting started with Amazon Bedrock",
+      "What can Amazon Bedrock be used for?",
+      "What is Amazon Bedrock?"
+    ],
+    "Best Practices - Analytical Platform User Guidance": [
+      "Collaboration",
+      "Dashboard Design",
+      "Maintenance",
+      "Performance Optimization",
+      "Security"
+    ],
+    "Botor - Analytical Platform User Guidance": [
+      "Botor - Analytical Platform User Guidance",
+      "Installation",
+      "Migrating froms3tools",
+      "Table of Contents",
+      "Usage"
+    ],
+    "Collaborate on a project": [
+      "Collaborate on a project"
+    ],
+    "Collaborating with Git - Analytical Platform User Guidance": [
+      "Collaborating with Git - Analytical Platform User Guidance",
+      "Updating your branch with main"
+    ],
+    "Common Errors and Solutions": [
+      "Common Errors and Solutions"
+    ],
+    "Common Issues and Troubleshooting": [
+      "Common Issues and Troubleshooting"
+    ],
+    "Control Panel - Analytical Platform User Guidance": [
+      "Analytical tools",
+      "Control Panel - Analytical Platform User Guidance"
+    ],
+    "Create a Derived Table - Analytical Platform User Guidance": [
+      "Create a Derived Table - Analytical Platform User Guidance",
+      "Creating Models",
+      "Deploying Models",
+      "Further documentation",
+      "Getting Started",
+      "License",
+      "Linting",
+      "Overview",
+      "Planning Models",
+      "Resources"
+    ],
+    "Create a new project in GitHub": [
+      "Create a new project in GitHub"
+    ],
+    "Curated databases": [
+      "Curated databases"
+    ],
+    "DAG Pipeline - Analytical Platform User Guidance": [
+      "DAG Pipeline - Analytical Platform User Guidance",
+      "Define the DAG",
+      "Define the IAM Policy",
+      "Deploy the changes",
+      "Validate from the command line (optional)"
+    ],
+    "Dash - Analytical Platform User Guidance": [
+      "Dash - Analytical Platform User Guidance",
+      "Running PlotlyDashapps"
+    ],
+    "Dashboard Service - Analytical Platform User Guidance": [
+      "Dashboard Service - Analytical Platform User Guidance",
+      "Getting Started",
+      "Overview"
+    ],
+    "Data - Analytical Platform User Guidance": [
+      "Data - Analytical Platform User Guidance",
+      "FAQs",
+      "Getting the data you need"
+    ],
+    "Data Discovery and Documentation": [
+      "Data Discovery and Documentation"
+    ],
+    "Data FAQs - Analytical Platform User Guidance": [
+      "How do I gain access to existing data?",
+      "How do I query a database on the Platform?",
+      "How do I read/write data from an s3 bucket?",
+      "I am running into memory issues using Python/R, what should I do?",
+      "What should I use to process my data?",
+      "What types of data are on the Platform?",
+      "Where do I find out what data is already on the Platform?",
+      "Where should I store my own data?"
+    ],
+    "Data Linking": [
+      "Data Linking"
+    ],
+    "Data Uploader - Analytical Platform User Guidance": [
+      "Data Uploader - Analytical Platform User Guidance",
+      "Data Uploader pre-requisites",
+      "Front page",
+      "Getting access to uploaded data",
+      "Step 1 of 4: Data governance requirements",
+      "Step 2 of 4: Choose database",
+      "Step 3 of 4: Choose table",
+      "Step 4 of 4: Check your inputs before uploading your data",
+      "Upload complete",
+      "Uploader flowchart",
+      "Why use the Uploader?"
+    ],
+    "Database Access - Analytical Platform User Guidance": [
+      "Database Access - Analytical Platform User Guidance",
+      "Standard database access",
+      "Your Data Engineering Database Access project access file"
+    ],
+    "Databases - Analytical Platform User Guidance": [
+      "Databases - Analytical Platform User Guidance",
+      "Joining temporal-schema tables",
+      "User-maintained databases",
+      "Usingmojap_*_timestampfilters"
+    ],
+    "Databases for analysis and apps - Analytical Platform User Guidance": [
+      "Databases for analysis and apps - Analytical Platform User Guidance",
+      "Guidance on using databases / data for deployed apps",
+      "Guidance on using our databases for analysis"
+    ],
+    "Deploy a Webapp - Analytical Platform User Guidance": [
+      "Accessing the Application",
+      "Cloud Platform Environments",
+      "GitHub Repository",
+      "Register the application"
+    ],
+    "Deploy an RShiny app - Analytical Platform User Guidance": [
+      "Advanced",
+      "App deployment",
+      "Deploy an RShiny app - Analytical Platform User Guidance",
+      "Managing and Monitoring Deployments",
+      "Managing published apps",
+      "Publish your R Shiny app",
+      "Shiny server",
+      "Troubleshooting and monitoring"
+    ],
+    "Deploying to Dev - Analytical Platform User Guidance": [
+      "Helpful commands",
+      "Important Note - Before you deploy",
+      "Using the + prefix"
+    ],
+    "Exporting data to other platforms": [
+      "Exporting data to other platforms"
+    ],
+    "FAQs - Analytical Platform User Guidance": [
+      "Can I share the dashboards that I create?",
+      "How can I optimize the performance of my QuickSight dashboards?",
+      "How do I know if I should be able to see a particular table/database/domain in QuickSight?",
+      "I’m already a user of another version of QuickSight on the AP, what should I do if:",
+      "What should I do if I encounter an error while using QuickSight?",
+      "When should I use SPICE?"
+    ],
+    "Frequently asked questions - Analytical Platform User Guidance": [
+      "I have been removed from the GitHub Organisation",
+      "What IP addresses does the Analytical Platform use?"
+    ],
+    "GPU Enabled Workloads": [
+      "GPU Enabled Workloads"
+    ],
+    "Get Started - Analytical Platform User Guidance": [
+      "1. Read Terms of Use",
+      "2. Create Slack account",
+      "3. Create GitHub account",
+      "4. Access the Analytical Platform",
+      "5. Set up JupyterLab",
+      "6. Set up RStudio",
+      "7. Set up Visual Studio Code",
+      "Before you begin",
+      "Get Started - Analytical Platform User Guidance"
+    ],
+    "Getting Started - Analytical Platform User Guidance": [
+      "Accessing QuickSight",
+      "Managing dashboard access",
+      "Prerequisites to registering dashboards",
+      "Prerequisites to using QuickSight in Analytical Platform",
+      "Register dashboard in Analytical Platform Control Panel",
+      "Viewing shared dashboards"
+    ],
+    "Git and GitHub": [
+      "Git and GitHub"
+    ],
+    "Home directories": [
+      "Home directories"
+    ],
+    "How to get support - Analytical Platform User Guidance": [
+      "Check for a known fix to your problem",
+      "How to get support - Analytical Platform User Guidance",
+      "Raise an issue",
+      "Troubleshoot your problem"
+    ],
+    "IDE Maintenance Policy - Analytical Platform User Guidance": [
+      "Release Communications",
+      "Release Naming",
+      "Release Schedule"
+    ],
+    "Image Pipeline - Analytical Platform User Guidance": [
+      "Dockerfile",
+      "Environment Variables",
+      "Image Pipeline - Analytical Platform User Guidance",
+      "Test Docker image (optional)",
+      "Tips on writing the code"
+    ],
+    "Information governance - Analytical Platform User Guidance": [
+      "Data management",
+      "Data movements",
+      "Reporting security incidents"
+    ],
+    "Ingestion - Analytical Platform User Guidance": [
+      "Choose your destination bucket",
+      "Connection Instructions",
+      "Ingestion - Analytical Platform User Guidance",
+      "Known Limitations",
+      "Request access if you need to download files"
+    ],
+    "Install packages from GitHub": [
+      "Install packages from GitHub"
+    ],
+    "Interactive Development Environment (IDE) Set Up - Analytical Platform User Guidance": [
+      "Clone the repository using the RStudio GUI",
+      "Clone the repository using the terminal",
+      "Interactive Development Environment (IDE) Set Up - Analytical Platform User Guidance",
+      "Setting up a Python virtual environment",
+      "Show indent guides in RStudio"
+    ],
+    "Introduction - Analytical Platform User Guidance": [
+      "Benefits of Using the Analytical Platform",
+      "Intended users",
+      "Introduction - Analytical Platform User Guidance"
+    ],
+    "JupyterLab - Analytical Platform User Guidance": [
+      "Accessing a Locally Running Application",
+      "Hidden Files",
+      "JupyterLab - Analytical Platform User Guidance",
+      "Run notebooks",
+      "Run scripts"
+    ],
+    "Learning resources": [
+      "Learning resources"
+    ],
+    "Linting SQL Files - Analytical Platform User Guidance": [
+      "Linting SQL Files - Analytical Platform User Guidance"
+    ],
+    "Linting YAML Files - Analytical Platform User Guidance": [
+      "Folded style>",
+      "Linting YAML Files - Analytical Platform User Guidance",
+      "Literal style|"
+    ],
+    "MLFlow Tracking Server - Analytical Platform User Guidance": [
+      "How do I get access to the MLFlow Tracking Server?",
+      "How do I upload data to the Tracking Server?",
+      "Known Issues",
+      "MLFlow Tracking Server - Analytical Platform User Guidance",
+      "Who is the MLFlow Tracking Server for?"
+    ],
+    "Macros": [
+      "Macros"
+    ],
+    "Manage access in GitHub": [
+      "Manage access in GitHub"
+    ],
+    "Manage deployment settings of an app on Control Panel - Analytical Platform User Guidance": [
+      "Can I make changes(add/remove/update) the secrets/vars on GitHub repo directly?",
+      "Context",
+      "Introduction to the settings",
+      "Manage deployment settings of an app on Control Panel - Analytical Platform User Guidance",
+      "Permission required",
+      "Want to make change toAUTHENTICATION_REQUIREDflag?",
+      "When will the changes made on Control Panel will be applied to the deployment pipeline?"
+    ],
+    "Migration - Analytical Platform User Guidance": [
+      "Important Notes - Change in Default Region",
+      "Important Notes - Package Versioning in Images",
+      "Migration - Analytical Platform User Guidance"
+    ],
+    "Models - Analytical Platform User Guidance": [
+      "Model properties",
+      "What is a model?",
+      "Where can I define configs?"
+    ],
+    "Ollama - Analytical Platform User Guidance": [
+      "How to use Ollama on Visual Studio Code"
+    ],
+    "Organisation Management - Analytical Platform User Guidance": [
+      "Automation",
+      "Contact",
+      "Organisation Management - Analytical Platform User Guidance",
+      "Processes and practices"
+    ],
+    "Parameters - Analytical Platform User Guidance": [
+      "A file which is not committed to git",
+      "About parameters",
+      "GitHub repositories - DO NOT use for secrets",
+      "Parameters - Analytical Platform User Guidance",
+      "S3 bucket"
+    ],
+    "Project Structure - Analytical Platform User Guidance": [
+      "1-guide-overview",
+      "2-staging",
+      "3-intermediate",
+      "4-datamarts",
+      "5-derived",
+      "6-the-rest-of-the-project",
+      "Project Structure - Analytical Platform User Guidance"
+    ],
+    "Python Package Management - Analytical Platform User Guidance": [
+      "Basic usage",
+      "Using a project that has a requirements.txt",
+      "venv and pip"
+    ],
+    "Quick Reference - Analytical Platform User Guidance": [
+      "Contents",
+      "Gitcommands",
+      "Glossary",
+      "Moving models to production:",
+      "Quick Reference - Analytical Platform User Guidance",
+      "Tips",
+      "Virtual environment set up",
+      "dbtcommands",
+      "sqlfluffcommands",
+      "yamllintcommands"
+    ],
+    "QuickSight - Analytical Platform User Guidance": [
+      "Getting Started",
+      "Offboarding from QuickSight",
+      "Overview",
+      "QuickSight - Analytical Platform User Guidance",
+      "Resources",
+      "Working with QuickSight"
+    ],
+    "QuickSight Offboarding - Analytical Platform User Guidance": [
+      "QuickSight Offboarding - Analytical Platform User Guidance",
+      "Transferring analyses",
+      "Transferring dashboards",
+      "Transferring datasets"
+    ],
+    "R Package Management - Analytical Platform User Guidance": [
+      "Conda",
+      "R Package Management - Analytical Platform User Guidance",
+      "Renv",
+      "Why use a package manager?"
+    ],
+    "RStudio - Analytical Platform User Guidance": [
+      "Clearing your RStudio session",
+      "RStudio - Analytical Platform User Guidance",
+      "RStudio memory issues"
+    ],
+    "SQL - Analytical Platform User Guidance": [
+      "Commands",
+      "Data types",
+      "Database structure",
+      "Functions",
+      "SQL - Analytical Platform User Guidance"
+    ],
+    "Scheduling to Prod": [
+      "Scheduling to Prod"
+    ],
+    "Security in GitHub": [
+      "Security in GitHub"
+    ],
+    "Seeds - Analytical Platform User Guidance": [
+      "What are seeds?"
+    ],
+    "Set up GitHub": [
+      "Set up GitHub"
+    ],
+    "Shared Responsibility Model - Analytical Platform User Guidance": [
+      "Shared Responsibility Model - Analytical Platform User Guidance",
+      "Tools and packages"
+    ],
+    "Source and Ref Functions - Analytical Platform User Guidance": [
+      "Adding a new source",
+      "Sources",
+      "Thereffunction"
+    ],
+    "Style Guide - Analytical Platform User Guidance": [
+      "How we style our Jinja",
+      "How we style our SQL",
+      "How we style our YAML",
+      "How we style our create-a-derived-table projects",
+      "How we style our dbt models",
+      "Style Guide - Analytical Platform User Guidance"
+    ],
+    "Tools - Analytical Platform User Guidance": [
+      "Core Tools and Services",
+      "Data Ingest",
+      "Data Science Tools and Services",
+      "Data Visualisation",
+      "Generative AI",
+      "Integrated Development Environments (IDE)",
+      "Orchestration",
+      "Python Packages",
+      "R Packages",
+      "Tools - Analytical Platform User Guidance"
+    ],
+    "Tools for Data Processing - Analytical Platform User Guidance": [
+      "Example of deciding between Airflow or Create a Derived Table",
+      "FAQ",
+      "Processing data manually for exploration",
+      "Processing data using an automated pipeline",
+      "Tools for Data Processing - Analytical Platform User Guidance",
+      "What tools can I use to create and run my data processing?"
+    ],
+    "Troubleshooting - Analytical Platform User Guidance": [
+      "Contents",
+      "Delete dev models instructions",
+      "General troubleshooting tips",
+      "Troubleshooting - Analytical Platform User Guidance",
+      "Troubleshooting list",
+      "dbt artefacts"
+    ],
+    "Troubleshooting Airflow Pipelines": [
+      "Troubleshooting Airflow Pipelines"
+    ],
+    "Upgrading RStudio - Analytical Platform User Guidance": [
+      "2.2.6 to 3.0.12",
+      "Upgrading RStudio - Analytical Platform User Guidance",
+      "Why should I upgrade?"
+    ],
+    "Visual Studio Code - Analytical Platform User Guidance": [
+      "Accessing a Locally Running Application",
+      "Known Issues and Limitations",
+      "Packaged Tools"
+    ],
+    "What data is on Create a Derived Table?": [
+      "What data is on Create a Derived Table?"
+    ],
+    "What is Create a Derived Table?": [
+      "What is Create a Derived Table?"
+    ],
+    "Work with git in JupyterLab": [
+      "Work with git in JupyterLab"
+    ],
+    "Work with git in RStudio": [
+      "Work with git in RStudio"
+    ],
+    "Work with git on the command line": [
+      "Work with git on the command line"
+    ],
+    "Working with QuickSight - Analytical Platform User Guidance": [
+      "Adding a dataset",
+      "Publishing Dashboards",
+      "Sharing Dashboards"
+    ],
+    "dbt-athena Upgrade Guidance - Analytical Platform User Guidance": [
+      "Table of contents",
+      "Test set up",
+      "Testdevmodels",
+      "Testprodmodels",
+      "Update your feature branch with thedbt-athenaupgrades during testing",
+      "Working with the current version after testing.",
+      "dbt-athena Upgrade Guidance - Analytical Platform User Guidance"
+    ],
+    "dbtools - Analytical Platform User Guidance": [
+      "Python - pydbtools",
+      "R - Rdbtools",
+      "R - dbtools",
+      "dbtools - Analytical Platform User Guidance"
+    ],
+    "tests - Analytical Platform User Guidance": [
+      "Available tests",
+      "Configuring tests",
+      "Custom generic tests",
+      "Singular tests",
+      "tests - Analytical Platform User Guidance"
+    ]
+  },
+  "all_headings": [
+    "1-guide-overview",
+    "1. Read Terms of Use",
+    "2-staging",
+    "2. Create Slack account",
+    "2.2.6 to 3.0.12",
+    "3-intermediate",
+    "3. Create GitHub account",
+    "4-datamarts",
+    "4. Access the Analytical Platform",
+    "5-derived",
+    "5. Set up JupyterLab",
+    "6-the-rest-of-the-project",
+    "6. Set up RStudio",
+    "7. Set up Visual Studio Code",
+    "A file which is not committed to git",
+    "AWS Bedrock Cross-Region Inference",
+    "About parameters",
+    "Accessing Amazon Athena",
+    "Accessing Data with Amazon Bedrock",
+    "Accessing QuickSight",
+    "Accessing a Locally Running Application",
+    "Accessing private repositories from GitHub Actions",
+    "Accessing the Airflow console",
+    "Accessing the Application",
+    "Adding a dataset",
+    "Adding a new source",
+    "Advanced",
+    "Airflow - Analytical Platform User Guidance",
+    "Airflow Environments",
+    "Airflow Instructions - Analytical Platform User Guidance",
+    "Airflow Pipeline",
+    "Alert config",
+    "Alerting on an app - Analytical Platform User Guidance",
+    "Amazon Athena - Analytical Platform User Guidance",
+    "Analytical tools",
+    "App deployment",
+    "Appendix",
+    "Apps",
+    "Automation",
+    "Available tests",
+    "Background",
+    "Basic usage",
+    "Before you begin",
+    "Benefits of GitHub",
+    "Benefits of Using the Analytical Platform",
+    "Botor - Analytical Platform User Guidance",
+    "Can I make changes(add/remove/update) the secrets/vars on GitHub repo directly?",
+    "Can I share the dashboards that I create?",
+    "Central Digital & Data Office guidance",
+    "Check for a known fix to your problem",
+    "Choose your destination bucket",
+    "Clearing your RStudio session",
+    "Clone the repository using the RStudio GUI",
+    "Clone the repository using the terminal",
+    "Cloud Platform Environments",
+    "Collaborate on a project",
+    "Collaborating with Git - Analytical Platform User Guidance",
+    "Collaboration",
+    "Commands",
+    "Common Errors and Solutions",
+    "Common Issues and Troubleshooting",
+    "Component Responsibilities",
+    "Concepts",
+    "Conda",
+    "Configuring tests",
+    "Connection Instructions",
+    "Contact",
+    "Contents",
+    "Context",
+    "Control Panel - Analytical Platform User Guidance",
+    "Core Tools and Services",
+    "Create DAG and IAM Role",
+    "Create a Derived Table - Analytical Platform User Guidance",
+    "Create a new project in GitHub",
+    "Create image and save to ECR",
+    "Creating Models",
+    "Curated databases",
+    "Custom generic tests",
+    "DAG Pipeline",
+    "DAG Pipeline - Analytical Platform User Guidance",
+    "Dash - Analytical Platform User Guidance",
+    "Dashboard Design",
+    "Dashboard Service - Analytical Platform User Guidance",
+    "Data - Analytical Platform User Guidance",
+    "Data Discovery and Documentation",
+    "Data Ingest",
+    "Data Linking",
+    "Data Science Tools and Services",
+    "Data Uploader - Analytical Platform User Guidance",
+    "Data Uploader pre-requisites",
+    "Data Visualisation",
+    "Data management",
+    "Data movements",
+    "Data types",
+    "Database Access - Analytical Platform User Guidance",
+    "Database structure",
+    "Databases - Analytical Platform User Guidance",
+    "Databases for analysis and apps - Analytical Platform User Guidance",
+    "Define the DAG",
+    "Define the IAM Policy",
+    "Delete dev models instructions",
+    "Deploy an RShiny app - Analytical Platform User Guidance",
+    "Deploy the changes",
+    "Deploying Models",
+    "Dockerfile",
+    "Environment Variables",
+    "Example of deciding between Airflow or Create a Derived Table",
+    "Exporting data to other platforms",
+    "FAQ",
+    "FAQs",
+    "Folded style>",
+    "Front page",
+    "Functions",
+    "Further documentation",
+    "GPU Enabled Workloads",
+    "General principles",
+    "General troubleshooting tips",
+    "Generative AI",
+    "Get Started - Analytical Platform User Guidance",
+    "Getting Access to Amazon Bedrock in the Analytical Platform",
+    "Getting Started",
+    "Getting access to uploaded data",
+    "Getting started",
+    "Getting started with Amazon Bedrock",
+    "Getting the data you need",
+    "Git and GitHub",
+    "GitHub",
+    "GitHub Repository",
+    "GitHub repositories - DO NOT use for secrets",
+    "Gitcommands",
+    "Glossary",
+    "Guidance on using databases / data for deployed apps",
+    "Guidance on using our databases for analysis",
+    "Helpful commands",
+    "Hidden Files",
+    "Home directories",
+    "How can I optimize the performance of my QuickSight dashboards?",
+    "How do I gain access to existing data?",
+    "How do I get access to the MLFlow Tracking Server?",
+    "How do I know if I should be able to see a particular table/database/domain in QuickSight?",
+    "How do I prepare for the new version?",
+    "How do I query a database on the Platform?",
+    "How do I read/write data from an s3 bucket?",
+    "How do I upload data to the Tracking Server?",
+    "How do I use the testing workgroup?",
+    "How to get support - Analytical Platform User Guidance",
+    "How to use Ollama on Visual Studio Code",
+    "How we style our Jinja",
+    "How we style our SQL",
+    "How we style our YAML",
+    "How we style our create-a-derived-table projects",
+    "How we style our dbt models",
+    "I am running into memory issues using Python/R, what should I do?",
+    "I have been removed from the GitHub Organisation",
+    "Image Pipeline",
+    "Image Pipeline - Analytical Platform User Guidance",
+    "Important Note - Before you deploy",
+    "Important Notes - Change in Default Region",
+    "Important Notes - Package Versioning in Images",
+    "Important links",
+    "Infrastructure Migration - step by step instructions",
+    "Ingestion - Analytical Platform User Guidance",
+    "Install packages from GitHub",
+    "Installation",
+    "Integrated Development Environments (IDE)",
+    "Intended users",
+    "Interacting with Amazon S3 via the Analytical Platform",
+    "Interactive Development Environment (IDE) Set Up - Analytical Platform User Guidance",
+    "Introduction - Analytical Platform User Guidance",
+    "Introduction to the settings",
+    "I’m already a user of another version of QuickSight on the AP, what should I do if:",
+    "Joining temporal-schema tables",
+    "JupyterLab - Analytical Platform User Guidance",
+    "Known Issues",
+    "Known Issues and Limitations",
+    "Known Limitations",
+    "Learning resources",
+    "License",
+    "Linting",
+    "Linting SQL Files - Analytical Platform User Guidance",
+    "Linting YAML Files - Analytical Platform User Guidance",
+    "Literal style|",
+    "MLFlow Tracking Server - Analytical Platform User Guidance",
+    "Macros",
+    "Maintenance",
+    "Manage access in GitHub",
+    "Manage deployment settings of an app on Control Panel - Analytical Platform User Guidance",
+    "Managing and Monitoring Deployments",
+    "Managing dashboard access",
+    "Managing published apps",
+    "Memory limits",
+    "Migrating froms3tools",
+    "Migration - Analytical Platform User Guidance",
+    "Model properties",
+    "Moving models to production:",
+    "Offboarding from QuickSight",
+    "Orchestration",
+    "Organisation Management - Analytical Platform User Guidance",
+    "Overview",
+    "Packaged Tools",
+    "Parameters - Analytical Platform User Guidance",
+    "Performance Optimization",
+    "Permission required",
+    "Planning Models",
+    "Prerequisites",
+    "Prerequisites to registering dashboards",
+    "Prerequisites to using QuickSight in Analytical Platform",
+    "Previewing tables",
+    "Processes and practices",
+    "Processing data manually for exploration",
+    "Processing data using an automated pipeline",
+    "Project Structure - Analytical Platform User Guidance",
+    "Publish your R Shiny app",
+    "Publishing Dashboards",
+    "Python - pydbtools",
+    "Python DAG configuration",
+    "Python Packages",
+    "Quick Reference - Analytical Platform User Guidance",
+    "QuickSight - Analytical Platform User Guidance",
+    "QuickSight Offboarding - Analytical Platform User Guidance",
+    "R - Rdbtools",
+    "R - dbtools",
+    "R Package Management - Analytical Platform User Guidance",
+    "R Packages",
+    "RStudio - Analytical Platform User Guidance",
+    "RStudio memory issues",
+    "Raise an issue",
+    "Register dashboard in Analytical Platform Control Panel",
+    "Register the application",
+    "Release Communications",
+    "Release Naming",
+    "Release Schedule",
+    "Renv",
+    "Reporting security incidents",
+    "Reproducible Analytical Pipelines",
+    "Request access if you need to download files",
+    "Resources",
+    "Run notebooks",
+    "Run scripts",
+    "Run the Airflow Pipeline",
+    "Running PlotlyDashapps",
+    "Runtime images",
+    "Runtime templates",
+    "S3 bucket",
+    "SQL - Analytical Platform User Guidance",
+    "Scheduling to Prod",
+    "Scope",
+    "Security",
+    "Security in GitHub",
+    "Set up GitHub",
+    "Setting up a Python virtual environment",
+    "Shared Responsibility Model - Analytical Platform User Guidance",
+    "Sharing Dashboards",
+    "Shiny server",
+    "Show indent guides in RStudio",
+    "Singular tests",
+    "Sources",
+    "Standard database access",
+    "Step 1 of 4: Data governance requirements",
+    "Step 2 of 4: Choose database",
+    "Step 3 of 4: Choose table",
+    "Step 4 of 4: Check your inputs before uploading your data",
+    "Style Guide - Analytical Platform User Guidance",
+    "Table of Contents",
+    "Table of contents",
+    "Test Docker image (optional)",
+    "Test set up",
+    "Testdevmodels",
+    "Testprodmodels",
+    "Thereffunction",
+    "Tips",
+    "Tips on writing the code",
+    "To find out more",
+    "Tools - Analytical Platform User Guidance",
+    "Tools and packages",
+    "Tools for Data Processing - Analytical Platform User Guidance",
+    "Transferring analyses",
+    "Transferring dashboards",
+    "Transferring datasets",
+    "Troubleshoot your problem",
+    "Troubleshooting - Analytical Platform User Guidance",
+    "Troubleshooting Airflow Pipelines",
+    "Troubleshooting and monitoring",
+    "Troubleshooting list",
+    "Update your feature branch with thedbt-athenaupgrades during testing",
+    "Updating your branch with main",
+    "Upgrading RStudio - Analytical Platform User Guidance",
+    "Upload complete",
+    "Uploader flowchart",
+    "Usage",
+    "User-maintained databases",
+    "Using JupyterLab",
+    "Using RStudio",
+    "Using a project that has a requirements.txt",
+    "Using the + prefix",
+    "Using the Athena UI",
+    "Usingmojap_*_timestampfilters",
+    "Validate from the command line (optional)",
+    "Viewing shared dashboards",
+    "Virtual environment set up",
+    "Want to make change toAUTHENTICATION_REQUIREDflag?",
+    "What IP addresses does the Analytical Platform use?",
+    "What are seeds?",
+    "What can Amazon Bedrock be used for?",
+    "What data is on Create a Derived Table?",
+    "What is Airflow",
+    "What is Amazon Bedrock?",
+    "What is Amazon S3?",
+    "What is Create a Derived Table?",
+    "What is Kubernetes",
+    "What is a model?",
+    "What should I do if I encounter an error while using QuickSight?",
+    "What should I use to process my data?",
+    "What tools can I use to create and run my data processing?",
+    "What types of data are on the Platform?",
+    "When not to use an Airflow",
+    "When should I use SPICE?",
+    "When will the changes made on Control Panel will be applied to the deployment pipeline?",
+    "Where can I define configs?",
+    "Where do I find out what data is already on the Platform?",
+    "Where should I store my own data?",
+    "Who is the MLFlow Tracking Server for?",
+    "Who this policy applies to",
+    "Why should I upgrade?",
+    "Why use Airflow",
+    "Why use a package manager?",
+    "Why use the Uploader?",
+    "Work with git in JupyterLab",
+    "Work with git in RStudio",
+    "Work with git on the command line",
+    "Workflow identity",
+    "Workflow metrics",
+    "Workflow notifications",
+    "Workflow scheduling",
+    "Workflow secrets",
+    "Workflow tasks",
+    "Working with Amazon S3 buckets",
+    "Working with QuickSight",
+    "Working with tables",
+    "Working with the current version after testing.",
+    "Your Data Engineering Database Access project access file",
+    "dbt artefacts",
+    "dbt-athena Upgrade Guidance - Analytical Platform User Guidance",
+    "dbtcommands",
+    "dbtools - Analytical Platform User Guidance",
+    "sqlfluffcommands",
+    "tests - Analytical Platform User Guidance",
+    "venv and pip",
+    "yamllintcommands"
+  ],
+  "page_h1_list": [
+    "Acceptable use policy - Analytical Platform User Guidance",
+    "Accessing private repositories from GitHub Actions",
+    "Airflow - Analytical Platform User Guidance",
+    "Airflow Concepts - Analytical Platform User Guidance",
+    "Airflow Instructions - Analytical Platform User Guidance",
+    "Alerting on an app - Analytical Platform User Guidance",
+    "Amazon Athena - Analytical Platform User Guidance",
+    "Amazon S3 - Analytical Platform User Guidance",
+    "Annexes - Analytical Platform User Guidance",
+    "Appendix",
+    "Apps",
+    "Athena workgroup upgrade - Analytical Platform User Guidance",
+    "Bedrock - Analytical Platform User Guidance",
+    "Best Practices - Analytical Platform User Guidance",
+    "Botor - Analytical Platform User Guidance",
+    "Collaborate on a project",
+    "Collaborating with Git - Analytical Platform User Guidance",
+    "Common Errors and Solutions",
+    "Common Issues and Troubleshooting",
+    "Control Panel - Analytical Platform User Guidance",
+    "Create a Derived Table - Analytical Platform User Guidance",
+    "Create a new project in GitHub",
+    "Curated databases",
+    "DAG Pipeline - Analytical Platform User Guidance",
+    "Dash - Analytical Platform User Guidance",
+    "Dashboard Service - Analytical Platform User Guidance",
+    "Data - Analytical Platform User Guidance",
+    "Data Discovery and Documentation",
+    "Data FAQs - Analytical Platform User Guidance",
+    "Data Linking",
+    "Data Uploader - Analytical Platform User Guidance",
+    "Database Access - Analytical Platform User Guidance",
+    "Databases - Analytical Platform User Guidance",
+    "Databases for analysis and apps - Analytical Platform User Guidance",
+    "Deploy a Webapp - Analytical Platform User Guidance",
+    "Deploy an RShiny app - Analytical Platform User Guidance",
+    "Deploying to Dev - Analytical Platform User Guidance",
+    "Exporting data to other platforms",
+    "FAQs - Analytical Platform User Guidance",
+    "Frequently asked questions - Analytical Platform User Guidance",
+    "GPU Enabled Workloads",
+    "Get Started - Analytical Platform User Guidance",
+    "Getting Started - Analytical Platform User Guidance",
+    "Git and GitHub",
+    "Home directories",
+    "How to get support - Analytical Platform User Guidance",
+    "IDE Maintenance Policy - Analytical Platform User Guidance",
+    "Image Pipeline - Analytical Platform User Guidance",
+    "Information governance - Analytical Platform User Guidance",
+    "Ingestion - Analytical Platform User Guidance",
+    "Install packages from GitHub",
+    "Interactive Development Environment (IDE) Set Up - Analytical Platform User Guidance",
+    "Introduction - Analytical Platform User Guidance",
+    "JupyterLab - Analytical Platform User Guidance",
+    "Learning resources",
+    "Linting SQL Files - Analytical Platform User Guidance",
+    "Linting YAML Files - Analytical Platform User Guidance",
+    "MLFlow Tracking Server - Analytical Platform User Guidance",
+    "Macros",
+    "Manage access in GitHub",
+    "Manage deployment settings of an app on Control Panel - Analytical Platform User Guidance",
+    "Migration - Analytical Platform User Guidance",
+    "Models - Analytical Platform User Guidance",
+    "Ollama - Analytical Platform User Guidance",
+    "Organisation Management - Analytical Platform User Guidance",
+    "Parameters - Analytical Platform User Guidance",
+    "Project Structure - Analytical Platform User Guidance",
+    "Python Package Management - Analytical Platform User Guidance",
+    "Quick Reference - Analytical Platform User Guidance",
+    "QuickSight - Analytical Platform User Guidance",
+    "QuickSight Offboarding - Analytical Platform User Guidance",
+    "R Package Management - Analytical Platform User Guidance",
+    "RStudio - Analytical Platform User Guidance",
+    "SQL - Analytical Platform User Guidance",
+    "Scheduling to Prod",
+    "Security in GitHub",
+    "Seeds - Analytical Platform User Guidance",
+    "Set up GitHub",
+    "Shared Responsibility Model - Analytical Platform User Guidance",
+    "Source and Ref Functions - Analytical Platform User Guidance",
+    "Style Guide - Analytical Platform User Guidance",
+    "Tools - Analytical Platform User Guidance",
+    "Tools for Data Processing - Analytical Platform User Guidance",
+    "Troubleshooting - Analytical Platform User Guidance",
+    "Troubleshooting Airflow Pipelines",
+    "Upgrading RStudio - Analytical Platform User Guidance",
+    "Visual Studio Code - Analytical Platform User Guidance",
+    "What data is on Create a Derived Table?",
+    "What is Create a Derived Table?",
+    "Work with git in JupyterLab",
+    "Work with git in RStudio",
+    "Work with git on the command line",
+    "Working with QuickSight - Analytical Platform User Guidance",
+    "dbt-athena Upgrade Guidance - Analytical Platform User Guidance",
+    "dbtools - Analytical Platform User Guidance",
+    "tests - Analytical Platform User Guidance"
+  ],
+  "metadata": {
+    "total_headings": 349,
+    "total_pages": 96,
+    "semantic_groups": {
+      "getting_started": [
+        "Before you begin",
+        "Getting Started",
+        "Getting started with Amazon Bedrock",
+        "Install packages from GitHub",
+        "Installation",
+        "Prerequisites",
+        "Prerequisites to registering dashboards",
+        "Prerequisites to using QuickSight in Analytical Platform"
+      ],
+      "troubleshooting": [
+        "Common Issues and Troubleshooting",
+        "Troubleshooting and monitoring",
+        "Common Errors and Solutions",
+        "General troubleshooting tips",
+        "I am running into memory issues using Python/R, what should I do?",
+        "Known Issues",
+        "Known Issues and Limitations",
+        "Managing and Monitoring Deployments"
+      ],
+      "access_permissions": [
+        "4. Access the Analytical Platform",
+        "Accessing Amazon Athena",
+        "Accessing Data with Amazon Bedrock",
+        "Accessing QuickSight",
+        "Accessing a Locally Running Application",
+        "Accessing private repositories from GitHub Actions",
+        "Accessing the Airflow console",
+        "Accessing the Application"
+      ],
+      "usage": [
+        "Accessing a Locally Running Application",
+        "Basic usage",
+        "How to get support - Analytical Platform User Guidance",
+        "How to use Ollama on Visual Studio Code",
+        "I am running into memory issues using Python/R, what should I do?",
+        "Run notebooks",
+        "Run scripts",
+        "Run the Airflow Pipeline"
+      ],
+      "data_management": [
+        "Can I make changes(add/remove/update) the secrets/vars on GitHub repo directly?",
+        "Data management",
+        "Delete dev models instructions",
+        "I have been removed from the GitHub Organisation",
+        "Step 1 of 4: Data governance requirements"
+      ],
+      "policies": [
+        "Define the IAM Policy",
+        "Reporting security incidents",
+        "Security",
+        "Security in GitHub",
+        "Shared Responsibility Model - Analytical Platform User Guidance",
+        "Step 1 of 4: Data governance requirements",
+        "Who this policy applies to"
+      ],
+      "github": [
+        "GitHub Repository",
+        "3. Create GitHub account",
+        "Accessing private repositories from GitHub Actions",
+        "Benefits of GitHub",
+        "Can I make changes(add/remove/update) the secrets/vars on GitHub repo directly?",
+        "Create a new project in GitHub",
+        "Git and GitHub",
+        "GitHub"
+      ],
+      "database": [
+        "Joining temporal-schema tables",
+        "Curated databases",
+        "Database Access - Analytical Platform User Guidance",
+        "Database structure",
+        "Databases - Analytical Platform User Guidance",
+        "Databases for analysis and apps - Analytical Platform User Guidance",
+        "Guidance on using databases / data for deployed apps",
+        "Guidance on using our databases for analysis"
+      ],
+      "deployment": [
+        "App deployment",
+        "Delete dev models instructions",
+        "Deploy an RShiny app - Analytical Platform User Guidance",
+        "Deploy the changes",
+        "Deploying Models",
+        "Guidance on using databases / data for deployed apps",
+        "Important Note - Before you deploy",
+        "Integrated Development Environments (IDE)"
+      ],
+      "pipelines": [
+        "Airflow Pipeline",
+        "DAG Pipeline",
+        "DAG Pipeline - Analytical Platform User Guidance",
+        "Run the Airflow Pipeline",
+        "Troubleshooting Airflow Pipelines",
+        "Accessing the Airflow console",
+        "Airflow - Analytical Platform User Guidance",
+        "Airflow Environments"
+      ],
+      "tools": [
+        "Show indent guides in RStudio",
+        "1-guide-overview",
+        "5. Set up JupyterLab",
+        "6. Set up RStudio",
+        "Clearing your RStudio session",
+        "Clone the repository using the RStudio GUI",
+        "Integrated Development Environments (IDE)",
+        "Interactive Development Environment (IDE) Set Up - Analytical Platform User Guidance"
+      ],
+      "visualization": [
+        "How can I optimize the performance of my QuickSight dashboards?",
+        "Accessing QuickSight",
+        "Can I share the dashboards that I create?",
+        "Dashboard Design",
+        "Dashboard Service - Analytical Platform User Guidance",
+        "How do I know if I should be able to see a particular table/database/domain in QuickSight?",
+        "I’m already a user of another version of QuickSight on the AP, what should I do if:",
+        "Managing dashboard access"
+      ]
+    },
+    "tool_mapping": {
+      "GitHub": {
+        "match_keywords": [
+          "github",
+          "git",
+          "repository",
+          "version control",
+          "branch"
+        ],
+        "page_h1_candidates": [
+          "Accessing private repositories from GitHub Actions",
+          "Create a new project in GitHub",
+          "Git and GitHub",
+          "Install packages from GitHub",
+          "Manage access in GitHub",
+          "Security in GitHub",
+          "Set up GitHub"
+        ]
+      },
+      "Airflow": {
+        "match_keywords": [
+          "airflow",
+          "dag",
+          "workflow",
+          "orchestration",
+          "pipeline"
+        ],
+        "page_h1_candidates": [
+          "Airflow - Analytical Platform User Guidance",
+          "Airflow Concepts - Analytical Platform User Guidance",
+          "Airflow Instructions - Analytical Platform User Guidance",
+          "Troubleshooting Airflow Pipelines"
+        ]
+      },
+      "Amazon Athena": {
+        "match_keywords": [
+          "athena",
+          "amazon athena",
+          "sql",
+          "sql query"
+        ],
+        "page_h1_candidates": [
+          "Amazon Athena - Analytical Platform User Guidance",
+          "Athena workgroup upgrade - Analytical Platform User Guidance",
+          "dbt-athena Upgrade Guidance - Analytical Platform User Guidance"
+        ]
+      },
+      "Bedrock": {
+        "match_keywords": [
+          "amazon bedrock",
+          "bedrock",
+          "generative ai",
+          "llm"
+        ],
+        "page_h1_candidates": [
+          "Bedrock - Analytical Platform User Guidance"
+        ]
+      },
+      "Control Panel": {
+        "match_keywords": [
+          "control panel",
+          "admin panel",
+          "administration"
+        ],
+        "page_h1_candidates": [
+          "Control Panel - Analytical Platform User Guidance",
+          "Manage deployment settings of an app on Control Panel - Analytical Platform User Guidance"
+        ]
+      },
+      "Create a Derived Table (dbt)": {
+        "match_keywords": [
+          "dbt",
+          "derived table",
+          "create a derived table"
+        ],
+        "page_h1_candidates": [
+          "Create a Derived Table - Analytical Platform User Guidance",
+          "What data is on Create a Derived Table?",
+          "What is Create a Derived Table?",
+          "dbtools - Analytical Platform User Guidance"
+        ]
+      },
+      "Data Uploader": {
+        "match_keywords": [
+          "data uploader",
+          "uploader",
+          "upload data",
+          "ingest data"
+        ],
+        "page_h1_candidates": [
+          "Data Uploader - Analytical Platform User Guidance"
+        ]
+      },
+      "JupyterLab": {
+        "match_keywords": [
+          "jupyterlab",
+          "jupyter",
+          "jupyter lab",
+          "python notebooks",
+          "notebook"
+        ],
+        "page_h1_candidates": [
+          "JupyterLab - Analytical Platform User Guidance",
+          "Work with git in JupyterLab"
+        ]
+      },
+      "MLFlow": {
+        "match_keywords": [
+          "mlflow",
+          "ml flow",
+          "model tracking",
+          "experiment tracking"
+        ],
+        "page_h1_candidates": [
+          "MLFlow Tracking Server - Analytical Platform User Guidance"
+        ]
+      },
+      "QuickSight": {
+        "match_keywords": [
+          "quicksight",
+          "quick sight",
+          "dashboard",
+          "dashboards",
+          "bi",
+          "bi tool"
+        ],
+        "page_h1_candidates": [
+          "QuickSight - Analytical Platform User Guidance",
+          "QuickSight Offboarding - Analytical Platform User Guidance",
+          "Working with QuickSight - Analytical Platform User Guidance"
+        ]
+      },
+      "RStudio": {
+        "match_keywords": [
+          "rstudio",
+          "r studio",
+          "r environment"
+        ],
+        "page_h1_candidates": [
+          "RStudio - Analytical Platform User Guidance",
+          "Upgrading RStudio - Analytical Platform User Guidance",
+          "Work with git in RStudio"
+        ]
+      },
+      "Visual Studio Code": {
+        "match_keywords": [
+          "visual studio code",
+          "vscode",
+          "vs code"
+        ],
+        "page_h1_candidates": [
+          "Visual Studio Code - Analytical Platform User Guidance"
+        ]
+      }
+    },
+    "extraction_stats": {
+      "files_processed": 358,
+      "files_without_heading": 0,
+      "files_with_errors": 0,
+      "total_files": 358
+    }
+  }
+}
