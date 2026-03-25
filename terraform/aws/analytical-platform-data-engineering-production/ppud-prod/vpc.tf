@@ -88,7 +88,7 @@ module "endpoints" {
     }
     # Interface endpoint for ec2 bastion
     ec2messages = {
-    #   service             = "ec2messages"
+      service             = "ec2messages"
       service_type        = "Interface"
       subnet_ids          = module.vpc.private_subnets
       private_dns_enabled = true
