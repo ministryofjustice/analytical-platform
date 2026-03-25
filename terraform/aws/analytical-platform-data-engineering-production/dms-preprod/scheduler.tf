@@ -24,7 +24,7 @@ resource "aws_iam_role_policy" "sfn_dms_policy" {
       {
         Effect   = "Allow",
         Action   = ["dms:StartReplicationTask", "dms:StopReplicationTask"],
-        Resource = [module.preprod_dms_oasys.dms_cdc_task_arn, module.preprod_dms_delius.dms_cdc_task_arn]
+        Resource = [module.preprod_dms_oasys.dms_cdc_task_arn]
       },
       {
         Effect   = "Allow",
@@ -170,25 +170,3 @@ resource "aws_scheduler_schedule" "dms_start_sun_1900" {
     })
   }
 }
-
-resource "aws_scheduler_schedule" "dms_stop_delius" {
-  name                         = "dms-stop-delius-24-04-preprod"
-  description                  = "Stop Delius pre-prod DMS CDC 24th March UK"
-  schedule_expression          = "cron(30 9 24 3 ? 2026)"
-  schedule_expression_timezone = "Europe/London"
-  state                        = "ENABLED"
-  flexible_time_window { mode = "OFF" }
-
-  target {
-    arn      = "arn:aws:scheduler:::aws-sdk:sfn:startExecution"
-    role_arn = aws_iam_role.scheduler_role.arn
-    input = jsonencode({
-      StateMachineArn = aws_sfn_state_machine.dms_control.arn,
-      Input = jsonencode({
-        Op                 = "stop",
-        ReplicationTaskArn = module.preprod_dms_delius.dms_cdc_task_arn
-      })
-    })
-  }
-}
-
