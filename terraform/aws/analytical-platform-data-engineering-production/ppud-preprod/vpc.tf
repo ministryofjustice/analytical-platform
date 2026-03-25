@@ -110,7 +110,7 @@ module "endpoints" {
   #     private_dns_enabled = true
   #     tags                = { Name = "ssm-${data.aws_region.current.id}-${local.name}-${local.env}" }
   #   }
-  # }
+  }
 
 
   tags = merge(var.tags, { network = "Private" })
