@@ -87,30 +87,30 @@ module "endpoints" {
       tags                = { Name = "athena-${data.aws_region.current.id}-${local.name}-${local.env}" }
     }
 
-    # Interface endpoint for ec2 bastion
-    ec2messages = {
-      service             = "ec2messages"
-      service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
-      private_dns_enabled = true
-      tags                = { Name = "ec2messages-${data.aws_region.current.id}-${local.name}-${local.env}" }
-    }
-    ssmmessages = {
-      service             = "ssmmessages"
-      service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
-      private_dns_enabled = true
-      tags                = { Name = "ssmmessages-${data.aws_region.current.id}-${local.name}-${local.env}" }
-    }
+  #   # Interface endpoint for ec2 bastion
+  #   ec2messages = {
+  #     service             = "ec2messages"
+  #     service_type        = "Interface"
+  #     subnet_ids          = module.vpc.private_subnets
+  #     private_dns_enabled = true
+  #     tags                = { Name = "ec2messages-${data.aws_region.current.id}-${local.name}-${local.env}" }
+  #   }
+  #   ssmmessages = {
+  #     service             = "ssmmessages"
+  #     service_type        = "Interface"
+  #     subnet_ids          = module.vpc.private_subnets
+  #     private_dns_enabled = true
+  #     tags                = { Name = "ssmmessages-${data.aws_region.current.id}-${local.name}-${local.env}" }
+  #   }
 
-    ssm = {
-      service             = "ssm"
-      service_type        = "Interface"
-      subnet_ids          = module.vpc.private_subnets
-      private_dns_enabled = true
-      tags                = { Name = "ssm-${data.aws_region.current.id}-${local.name}-${local.env}" }
-    }
-  }
+  #   ssm = {
+  #     service             = "ssm"
+  #     service_type        = "Interface"
+  #     subnet_ids          = module.vpc.private_subnets
+  #     private_dns_enabled = true
+  #     tags                = { Name = "ssm-${data.aws_region.current.id}-${local.name}-${local.env}" }
+  #   }
+  # }
 
 
   tags = merge(var.tags, { network = "Private" })
