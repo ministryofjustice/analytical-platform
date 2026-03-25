@@ -87,17 +87,22 @@ def dynamodb_handle_feedback(event: Dict[str, Any]) -> Dict[str, Any]:
     Expected body:
     {
         "request_id": "uuid",
-        "feedback": "positive" | "negative"
+        "feedback": "positive" | "negative",
+        "comment": "optional comment"
     }
     """
 
     try:
-        # ✓ Check authorization first
+        # ✓ Check authorization - matches authorizer response format
         authorizer_data = event.get('requestContext', {}).get('authorizer', {})
+        authenticated = authorizer_data.get('authenticated', 'false')
         auth_reason = authorizer_data.get('reason', 'unauthorized')
         
-        if auth_reason != 'authorized':
-            lambda_logger.warning(f"Unauthorized feedback attempt: {auth_reason}")
+        lambda_logger.info(f"[FEEDBACK AUTH] authenticated={authenticated}, reason={auth_reason}")
+        
+        # Authorizer returns authenticated='true' and reason='valid_token' on success
+        if authenticated != 'true' and auth_reason != 'valid_token':
+            lambda_logger.warning(f"Unauthorized feedback: auth={authenticated}, reason={auth_reason}")
             return {
                 'statusCode': 403,
                 'headers': get_cors_headers(),
