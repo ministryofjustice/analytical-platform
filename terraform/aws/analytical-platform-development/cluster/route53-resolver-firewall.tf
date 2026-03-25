@@ -10,18 +10,17 @@ resource "aws_secretsmanager_secret_version" "route53_resolver_firewall_blocked_
   secret_id = aws_secretsmanager_secret.route53_resolver_firewall_blocked_domains.id
 
   lifecycle {
-    ignore_changes = [secret_string]
+    # This secret is expected to be updated outside Terraform after bootstrap.
+    ignore_changes = all
   }
 
-  secret_string = jsonencode({
-    domains = ["CHANGE_ME"]
-  })
+  secret_string = "CHANGE_ME"
 }
 
 locals {
   route53_resolver_firewall_blocked_domains = distinct(compact([
-    for domain in try(jsondecode(data.aws_secretsmanager_secret_version.route53_resolver_firewall_blocked_domains_current.secret_string).domains, []) :
-    trimspace(tostring(domain))
+    for domain in split(",", try(data.aws_secretsmanager_secret_version.route53_resolver_firewall_blocked_domains_current.secret_string, "")) :
+    trimspace(domain)
   ]))
 }
 
@@ -46,6 +45,6 @@ resource "aws_route53_resolver_firewall_rule" "blocked_domains" {
 resource "aws_route53_resolver_firewall_rule_group_association" "vpc" {
   firewall_rule_group_id = aws_route53_resolver_firewall_rule_group.blocked_domains.id
   name                   = "development-route53-resolver-firewall"
-  priority               = 100
+  priority               = 101
   vpc_id                 = module.vpc.vpc_id
 }
