@@ -1,4 +1,4 @@
-# Apply trigger  comment
+# Apply trigger comment
 
 module "dev_dms_oasys" {
   source      = "github.com/ministryofjustice/terraform-dms-module?ref=5ae53ee6ed0ada0cf63613050b79c1468d565638"
