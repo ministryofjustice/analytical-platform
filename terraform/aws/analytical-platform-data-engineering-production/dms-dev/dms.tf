@@ -93,6 +93,24 @@ module "dev_dms_delius" {
     key    = "dev/delius/table_mappings.json"
   }
 
+  independent_full_loads = {
+    delius_dev_r_contact_type = {
+      full_load_name = "r-contact-type"
+      path = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/delius/r_contact_type_table_mappings.json"
+      }
+    },
+
+    delius_dev_audited_interaction = {
+      full_load_name = "audited-interaction"
+      path = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/delius/audited_interaction_table_mappings.json"
+      }
+    }
+  }
+
   tags = merge(
     { "managed-by" = "Terraform" },
     var.tags
