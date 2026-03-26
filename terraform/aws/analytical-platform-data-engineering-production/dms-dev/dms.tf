@@ -97,7 +97,7 @@ module "dev_dms_delius" {
     delius_dev_r_contact_type = {
       full_load_name = "r-contact-type"
       path = {
-        bucket = "mojap-data-engineering-prod-table-mappings-metadata-dev"
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
         key    = "dev/delius/r_contact_type_table_mappings.json"
       }
     },
@@ -105,7 +105,7 @@ module "dev_dms_delius" {
     delius_dev_audited_interaction = {
       full_load_name = "audited-interaction"
       path = {
-        bucket = "mojap-data-engineering-prod-table-mappings-metadata-dev"
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
         key    = "dev/delius/audited_interaction_table_mappings.json"
       }
     }
