@@ -9,6 +9,6 @@ data "aws_iam_session_context" "session" {
 }
 
 # Data block for Slack webhook for notifications
-data "aws_secretsmanager_secret_version" "slack_webhook" {
-  secret_id = "slack_webhook_ppud_dev"
+data "aws_secretsmanager_secret_version" "ae_download_athena_csv_secret_slack_webhook" {
+  secret_id = module.ae_download_athena_csv_secret.secret_id
 }
