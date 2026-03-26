@@ -81,7 +81,7 @@ cloudwatch_logs/
 data/images/
 data/text_chunks/
 data/processed/
-#data/kb_catalog.json
+data/kb_catalog.json
 reports/validation.md
 
 # Keep final JSON outputs

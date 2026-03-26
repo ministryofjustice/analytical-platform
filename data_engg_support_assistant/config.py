@@ -13,7 +13,7 @@ Configuration for AWS Bedrock Knowledge Base
 # - Provides structured refusal message when information is missing
 # 
 # ⚠️ CAUTION when modifying:
-#   - Keep \$search_results\$, \$query\$, and \$output_format_instructions\$ intact
+#   - Keep \\$search_results\\$, \\$query\\$, and \\$output_format_instructions\\$ intact
 #   - Test changes with edge cases (missing info, wrong tool, ambiguous questions)
 #   - Changes affect ALL queries - test thoroughly before deploying
 # 
