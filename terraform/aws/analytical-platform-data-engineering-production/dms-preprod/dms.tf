@@ -78,7 +78,7 @@ module "preprod_dms_delius" {
     engine_name             = "oracle"
     secrets_manager_arn     = aws_secretsmanager_secret.delius_preprod_secret.arn
     secrets_manager_kms_arn = module.dms_preprod_kms.key_arn
-    sid                     = "prendas1"
+    sid                     = "prendas2"
 
     extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=3;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=delius-db-2.pre-prod.delius.probation.hmpps.dsd.io/+ASM;asm_user=delius_analytics_platform;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N;"
     cdc_start_time              = "2025-06-24T12:00:00Z"
