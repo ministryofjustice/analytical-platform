@@ -28,25 +28,6 @@ jobs:
           role-to-assume: ${{ secrets.ECR_ROLE_TO_ASSUME }}
           aws-region: eu-west-2
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Deploy Lambda Backend
-        working-directory: ${{ env.APP_DIR }}
-        env:
-          AWS_REGION: eu-west-2
-          KB_ID: ${{ secrets.KB_ID }}
-          MODEL_ID: ${{ secrets.MODEL_ID }}
-          FUNCTION_NAME: ${{ secrets.FUNCTION_NAME }}
-          AUTH_TOKEN: ${{ secrets.BEARER_TOKEN }}
-        run: |
-          pip install boto3 python-dotenv
-          python deployment/deploy_lambda.py
-          python deployment/deploy_api_gateway.py --refresh
-      
-
       - name: Login to Amazon ECR # Step 3: Get ECR login credentials
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
