@@ -88,7 +88,7 @@ resource "aws_cloudwatch_event_target" "ae_download_athena_csv" {
 
 # Create a resource to subscribe to SNS topic
 # Slack notifications
-resource "aws_sns_topic_subscription" "ae_download_athena_csv" {
+resource "aws_sns_topic_subscription" "ae_download_athena_csv_slack" {
   topic_arn = aws_sns_topic.ae_download_athena_csv.arn
   protocol  = "https"
   endpoint  = data.aws_secretsmanager_secret_version.ae_download_athena_csv_secret_slack_webhook.secret_string
