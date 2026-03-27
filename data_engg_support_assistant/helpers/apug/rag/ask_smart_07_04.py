@@ -222,7 +222,6 @@ class SmartAnswer:
 #   - generate()
 #   - validate()
 #   - _build_context()
-#   - _build_conversation_context()
 #   - _calculate_confidence()
 #   - _detect_refusal()
 #   - _estimate_tokens()

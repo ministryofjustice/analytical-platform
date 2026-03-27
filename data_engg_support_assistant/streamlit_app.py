@@ -222,13 +222,9 @@ ACCESSIBILITY:
 FUTURE ENHANCEMENTS:
     - [ ] Streaming responses (real-time)
     - [ ] PDF export of conversations
-    - [ ] Feedback buttons (👍 👎)
-    - [ ] Multi-language support
-    - [ ] Voice input
     - [ ] Search conversation history
     - [ ] Share conversation via link
     - [ ] Dark/light theme toggle
-    - [ ] Confidence score charts
     - [ ] Source document preview
 
 RELATED FILES:
@@ -354,8 +350,8 @@ with st.sidebar:
         st.markdown("""
         1. Type your question in the chat input
         2. Press Enter or click outside
-        3. View answer with confidence score
-        4. Expand 'Details' to see sources
+        3. View the answer
+        4. Use 👍/👎 to provide feedback
         """)
 
 # Main UI
@@ -420,27 +416,7 @@ for message in st.session_state.messages:
 
             # Show confirmation if already submitted
             elif message["metadata"].get("feedback_submitted"):
-                st.caption("✓ Feedback received. Thank you!")
-
-            with st.expander(" Details"):
-                col1, col2 = st.columns(2)
-                with col1:
-                    st.metric("Sources", message['metadata']['num_sources'])
-                with col2:
-                    st.caption(f"ID: {message['metadata']['request_id'][:8]}")
-                
-                if message['metadata'].get('sources'):
-                    st.markdown("** Sources:**")
-                    for i, src in enumerate(message['metadata']['sources'], 1):
-                        title = src.get('title', 'Unknown')
-                        url = src.get('url', '#')
-                        score = src.get('score', 0)
-                        excerpt = src.get('excerpt', '')
-                        
-                        st.markdown(f"**{i}. {title}** (score: {score:.2f})")
-                        if excerpt:
-                            st.caption(excerpt[:150] + "...")
-                        st.divider()
+                st.caption("✓ Feedback received. Thank you!")                
 
 # Chat input
 if prompt := st.chat_input("Ask me anything..."):
@@ -481,14 +457,6 @@ if prompt := st.chat_input("Ask me anything..."):
                 st.metric("Sources", len(data.get("sources", [])))
             with col2:
                 st.caption(f"Request ID: {data.get('request_id', 'N/A')[:8]}")
-            
-            # Show source links
-            if data.get("sources"):
-                st.markdown("** Sources:**")
-                for i, src in enumerate(data.get("sources", []), 1):
-                    title = src.get('title', 'Unknown')
-                    url = src.get('url', '#')
-                    st.markdown(f"{i}. [{title}]({url})")
 
             # Trigger rerun to show feedback buttons from history
             st.rerun()
