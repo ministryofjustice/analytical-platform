@@ -1,5 +1,5 @@
 # Eventbridge rule to capture S3 GetObject API calls to the athena query bucket
-# With DE account to test first
+# TO DO: Change to AE SSO account - currently DE SSO account for testing only
 resource "aws_cloudwatch_event_rule" "ae_download_athena_csv" {
   name        = "capture-ae-athena-csv-download"
   description = "Captures Athena CSV downloads by the AE SSO role"
@@ -20,9 +20,11 @@ resource "aws_cloudwatch_event_rule" "ae_download_athena_csv" {
           }
         }]
       },
+      "sourceIPAddress" : [{
+        "anything-but" : ["athena.amazonaws.com"]
+      }]
       "userIdentity" : {
         "type" : ["AssumedRole"],
-        "invokedBy" : ["athena.amazonaws.com"],
         "sessionContext" : {
           "sessionIssuer" : {
             "userName" : ["AWSReservedSSO_modernisation-platform-data-eng_89c7a4cbe024b69a"]
@@ -31,11 +33,14 @@ resource "aws_cloudwatch_event_rule" "ae_download_athena_csv" {
       }
     }
   })
+
+  tags = var.tags
 }
 
 # Creating SNS for distributing messages
 resource "aws_sns_topic" "ae_download_athena_csv" {
   name = "ae-download-athena-csv-events"
+  tags = var.tags
 }
 
 data "aws_iam_policy_document" "ae_download_athena_csv" {
@@ -83,9 +88,8 @@ resource "aws_cloudwatch_event_target" "ae_download_athena_csv" {
 
 # Create a resource to subscribe to SNS topic
 # Slack notifications
-# Using dev webhook currently
-resource "aws_sns_topic_subscription" "ae_download_athena_csv" {
-  topic_arn = aws_sns_topic.ae_download_athena_csv.arn
-  protocol  = "https"
-  endpoint  = data.aws_secretsmanager_secret_version.slack_webhook.secret_string
-}
+# resource "aws_sns_topic_subscription" "ae_download_athena_csv_slack" {
+#   topic_arn = aws_sns_topic.ae_download_athena_csv.arn
+#   protocol  = "https"
+#   endpoint  = data.aws_secretsmanager_secret_version.ae_download_athena_csv_secret_slack_webhook.secret_string
+# }
