@@ -57,7 +57,7 @@ module "preprod_dms_oasys" {
       }
     },
     delius_preprod_r_contact_type = {
-      full_load_name = "r_contact_type"
+      full_load_name = "r-contact-type"
       path = {
         bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
         key    = "preprod/delius/r_contact_type_table_mappings.json"
