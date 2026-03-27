@@ -39,8 +39,8 @@ resource "aws_cloudwatch_event_rule" "ae_download_athena_csv" {
 
 # Creating SNS for distributing messages
 resource "aws_sns_topic" "ae_download_athena_csv" {
-  name = "ae-download-athena-csv-events"
-  tags = var.tags
+  name              = "ae-download-athena-csv-events"
+  tags              = var.tags
   kms_master_key_id = "alias/aws/sns"
 }
 
