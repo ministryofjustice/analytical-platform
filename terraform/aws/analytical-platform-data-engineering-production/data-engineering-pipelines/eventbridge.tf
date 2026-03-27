@@ -37,60 +37,60 @@ resource "aws_cloudwatch_event_rule" "ae_download_athena_csv" {
   tags = var.tags
 }
 
-# # Creating SNS for distributing messages
-# resource "aws_sns_topic" "ae_download_athena_csv" {
-#   name              = "ae-download-athena-csv-events"
-#   tags              = var.tags
-#   kms_master_key_id = "alias/aws/sns"
-# }
+# Creating SNS for distributing messages
+resource "aws_sns_topic" "ae_download_athena_csv" {
+  name              = "ae-download-athena-csv-events"
+  tags              = var.tags
+  kms_master_key_id = module.ae_download_athena_csv_kms.key_id
+}
 
-# data "aws_iam_policy_document" "ae_download_athena_csv" {
-#   statement {
-#     effect  = "Allow"
-#     actions = ["sns:Publish"]
+data "aws_iam_policy_document" "ae_download_athena_csv" {
+  statement {
+    effect  = "Allow"
+    actions = ["sns:Publish"]
 
-#     principals {
-#       type        = "Service"
-#       identifiers = ["events.amazonaws.com"]
-#     }
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com"]
+    }
 
-#     resources = [aws_sns_topic.ae_download_athena_csv.arn]
-#   }
-# }
+    resources = [aws_sns_topic.ae_download_athena_csv.arn]
+  }
+}
 
-# resource "aws_sns_topic_policy" "ae_download_athena_csv" {
-#   arn    = aws_sns_topic.ae_download_athena_csv.arn
-#   policy = data.aws_iam_policy_document.ae_download_athena_csv.json
-# }
+resource "aws_sns_topic_policy" "ae_download_athena_csv" {
+  arn    = aws_sns_topic.ae_download_athena_csv.arn
+  policy = data.aws_iam_policy_document.ae_download_athena_csv.json
+}
 
-# # EventBridge target
-# resource "aws_cloudwatch_event_target" "ae_download_athena_csv" {
-#   rule      = aws_cloudwatch_event_rule.ae_download_athena_csv.name
-#   target_id = "SendToSNS"
-#   arn       = aws_sns_topic.ae_download_athena_csv.arn
+# EventBridge target
+resource "aws_cloudwatch_event_target" "ae_download_athena_csv" {
+  rule      = aws_cloudwatch_event_rule.ae_download_athena_csv.name
+  target_id = "SendToSNS"
+  arn       = aws_sns_topic.ae_download_athena_csv.arn
 
-#   input_transformer {
-#     input_paths = {
-#       user   = "$.detail.userIdentity.principalId"
-#       time   = "$.detail.eventTime"
-#       bucket = "$.detail.requestParameters.bucketName"
-#       object = "$.detail.requestParameters.key"
-#     }
-#     input_template = <<EOF
-#     {
-#         "User": <user>,
-#         "Time": <time>,
-#         "Bucket": <bucket>,
-#         "Object": <object>
-#     }
-#     EOF
-#   }
-# }
+  input_transformer {
+    input_paths = {
+      user   = "$.detail.userIdentity.principalId"
+      time   = "$.detail.eventTime"
+      bucket = "$.detail.requestParameters.bucketName"
+      object = "$.detail.requestParameters.key"
+    }
+    input_template = <<EOF
+    {
+        "User": <user>,
+        "Time": <time>,
+        "Bucket": <bucket>,
+        "Object": <object>
+    }
+    EOF
+  }
+}
 
-# # Create a resource to subscribe to SNS topic
-# # Slack notifications
-# resource "aws_sns_topic_subscription" "ae_download_athena_csv_slack" {
-#   topic_arn = aws_sns_topic.ae_download_athena_csv.arn
-#   protocol  = "https"
-#   endpoint  = data.aws_secretsmanager_secret_version.ae_download_athena_csv_secret_slack_webhook.secret_string
-# }
+# Create a resource to subscribe to SNS topic
+# Slack notifications
+resource "aws_sns_topic_subscription" "ae_download_athena_csv_slack" {
+  topic_arn = aws_sns_topic.ae_download_athena_csv.arn
+  protocol  = "https"
+  endpoint  = data.aws_secretsmanager_secret_version.ae_download_athena_csv_secret_slack_webhook.secret_string
+}
