@@ -42,27 +42,27 @@ module "preprod_dms_oasys" {
   }
 
     independent_full_loads = {
-    delius_preprod_fts_result = {
-      full_load_name = "fts-result"
-      path = {
-        bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
-        key    = "preprod/delius/fts_result_table_mappings.json"
+      delius_preprod_fts_result = {
+        full_load_name = "fts-result"
+        path = {
+          bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
+          key    = "preprod/delius/fts_result_table_mappings.json"
+        }
+      },
+      delius_preprod_sr32_group = {
+        full_load_name = "sr32-group"
+        path = {
+          bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
+          key    = "preprod/delius/sr32_group_table_mappings.json"
+        }
+      },
+      delius_preprod_r_contact_type = {
+        full_load_name = "r-contact-type"
+        path = {
+          bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
+          key    = "preprod/delius/r_contact_type_table_mappings.json"
+        }
       }
-    },
-    delius_preprod_sr32_group = {
-      full_load_name = "sr32-group"
-      path = {
-        bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
-        key    = "preprod/delius/sr32_group_table_mappings.json"
-      }
-    },
-    delius_preprod_r_contact_type = {
-      full_load_name = "r-contact-type"
-      path = {
-        bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
-        key    = "preprod/delius/r_contact_type_table_mappings.json"
-      }
-    }
   }
 
   tags = merge(
