@@ -45,7 +45,7 @@ module "datalake_dev" {
   lifecycle_rule = [
     {
       "id"      = "main"
-      "enabled" = "Enabled"
+      "enabled" = "Disabled"
       "expiration" = {
         "days" = 30
       }
@@ -109,7 +109,7 @@ module "datalake_preprod" {
   lifecycle_rule = [
     {
       "id"      = "main"
-      "enabled" = "Enabled"
+      "enabled" = "Disabled"
       "expiration" = {
         "days" = 30
       }
