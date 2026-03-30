@@ -23,7 +23,6 @@ jobs:
     uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-super-linter.yml@9e604949e842733e0990f5eb6627844e8715deeb # v6.4.0
     with:
       # VALIDATE_KUBERNETES_KUBECONFORM is set to false as it cannot process Helm charts
-      # VALIDATE_PYTHON_* are set to false as we need to revisit the Python from a linting perspective
       super-linter-variables: |
         {
           "DEFAULT_BRANCH": "main",
