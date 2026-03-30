@@ -1,5 +1,5 @@
 ---
-name: Super-Linter
+name: 🦝 Super Linter
 
 on: # yamllint disable-line rule:truthy
   pull_request:
@@ -11,42 +11,34 @@ on: # yamllint disable-line rule:truthy
       - reopened
       - synchronize
 
-permissions: read-all
+permissions: {}
 
 jobs:
   super-linter:
-    name: Super-Linter
-    runs-on: ubuntu-latest
+    name: Super Linter
     permissions:
+      contents: read
+      packages: read
       statuses: write
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: 0
-
-      - name: Super-Linter
-        id: super_linter
-        uses: super-linter/super-linter/slim@5119dcd8011e92182ce8219d9e9efc82f16fddb6 # v8.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BRANCH: main
-          VALIDATE_ALL_CODEBASE: false
-          FILTER_REGEX_EXCLUDE: .*archive/.*
-          # yamllint disable rule:line-length
-          VALIDATE_GITHUB_ACTIONS: false # yaml This is disabled until Super-Linter ships with a newer version of actionlint supports the new `var` context
-          # yamllint enable rule:line-length
-          PYTHON_ISORT_CONFIG_FILE: pyproject.toml
-          # TODO: Fix all the shell scripts and re-enable these
-          VALIDATE_BASH: false
-          VALIDATE_BASH_EXEC: false
-          VALIDATE_SHELL_SHFMT: false
-          VALIDATE_HTML: false
-          VALIDATE_JAVASCRIPT_STANDARD: false
-          VALIDATE_OPENAPI: false
-          VALIDATE_KUBERNETES_KUBECONFORM: false
-          VALIDATE_TERRAFORM_TERRASCAN: false
-          VALIDATE_CHECKOV: false
-          VALIDATE_JSCPD: false
-          VALIDATE_CSS: false
+    uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-super-linter.yml@8465086d84a8ae8fb993ef582f00cf13b8ceb9c8 # v7.1.0
+    with:
+      # VALIDATE_KUBERNETES_KUBECONFORM is set to false as it cannot process Helm charts
+      super-linter-variables: |
+        {
+          "DEFAULT_BRANCH": "main",
+          "VALIDATE_ALL_CODEBASE": false,
+          "FILTER_REGEX_EXCLUDE": ".*archive/.*",
+          "VALIDATE_BASH": false,
+          "VALIDATE_BASH_EXEC": false,
+          "VALIDATE_SHELL_SHFMT": false,
+          "VALIDATE_HTML": false,
+          "VALIDATE_JAVASCRIPT_STANDARD": false,
+          "VALIDATE_OPENAPI": false,
+          "VALIDATE_KUBERNETES_KUBECONFORM": false,
+          "VALIDATE_TERRAFORM_TERRASCAN": false,
+          "VALIDATE_CHECKOV": false,
+          "VALIDATE_JSCPD": false,
+          "VALIDATE_CSS": false,
+          "VALIDATE_GITHUB_ACTIONS": false,
+          "PYTHON_ISORT_CONFIG_FILE": "pyproject.toml"
+        }
