@@ -5,7 +5,7 @@ module "lambda_smart_rag" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "8.1.0"
 
-  function_name = "lambda_smart_rag"
+  function_name = "lambda_rag_tf"
   description   = "Smart RAG Lambda function for MOJ DE User Guidance"
   handler       = "lambda_handler.lambda_handler"
   runtime       = "python3.11"
@@ -23,7 +23,7 @@ module "lambda_smart_rag" {
   environment_variables = {
     KB_ID               = var.kb_id
     MODEL_ID            = var.model_id
-    BEDROCK_REGION      = "eu-west-1"
+    BEDROCK_REGION      = "eu-west-2"
     MAX_CONTEXT_TOKENS  = var.max_context_tokens
     BUCKET_NAME         = module.moj_de_user_guidance.s3_bucket_id
   }

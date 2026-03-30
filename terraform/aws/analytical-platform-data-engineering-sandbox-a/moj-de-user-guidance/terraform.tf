@@ -16,7 +16,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-west-1"
+  region = "eu-west-2"
   assume_role {
     role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
   }
@@ -34,3 +34,10 @@ provider "aws" {
     }
   }
 }
+
+provider "awscc" {
+  region = var.region
+}
+
+data "aws_partition" "current" {}
+

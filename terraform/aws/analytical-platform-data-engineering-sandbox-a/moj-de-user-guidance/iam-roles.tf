@@ -23,7 +23,7 @@ resource "aws_iam_role_policy" "lambda_smart_rag_cloudwatch_logs" {
       {
         Effect   = "Allow"
         Action   = "logs:CreateLogGroup"
-        Resource = "arn:aws:logs:eu-west-1:684969100054:*"
+        Resource = "arn:aws:logs:eu-west-2:684969100054:*"
       },
       {
         Effect = "Allow"
@@ -32,7 +32,7 @@ resource "aws_iam_role_policy" "lambda_smart_rag_cloudwatch_logs" {
           "logs:PutLogEvents"
         ]
         Resource = [
-          "arn:aws:logs:eu-west-1:684969100054:log-group:/aws/lambda/lambda_smart_rag:*"
+          "arn:aws:logs:eu-west-2:684969100054:log-group:/aws/lambda/lambda_smart_rag:*"
         ]
       }
     ]
@@ -54,9 +54,9 @@ resource "aws_iam_role_policy" "lambda_smart_rag_bedrock_access" {
           "bedrock:InvokeModelWithResponseStream"
         ]
         Resource = [
-          "arn:aws:bedrock:eu-west-1::foundation-model/anthropic.claude-3-sonnet-20240229-v1:0",
-          "arn:aws:bedrock:eu-west-1::foundation-model/anthropic.claude-3-5-sonnet-20241022-v2:0",
-          "arn:aws:bedrock:eu-west-1::foundation-model/*"
+          "arn:aws:bedrock:eu-west-2::foundation-model/anthropic.claude-3-sonnet-20240229-v1:0",
+          "arn:aws:bedrock:eu-west-2::foundation-model/anthropic.claude-3-5-sonnet-20241022-v2:0",
+          "arn:aws:bedrock:eu-west-2::foundation-model/*"
         ]
       },
       {
@@ -67,7 +67,7 @@ resource "aws_iam_role_policy" "lambda_smart_rag_bedrock_access" {
           "bedrock:RetrieveAndGenerate"
         ]
         Resource = [
-          "arn:aws:bedrock:eu-west-1:684969100054:knowledge-base/*"
+          "arn:aws:bedrock:eu-west-2:684969100054:knowledge-base/*"
         ]
       }
     ]
