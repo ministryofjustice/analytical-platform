@@ -20,3 +20,10 @@ variable "max_context_tokens" {
   description = "Maximum context tokens for RAG"
   default     = 4000
 }
+
+variable "terraform_runner_principal_arn" {
+  type        = string
+  description = "IAM principal ARN used by Terraform runner to manage OpenSearch Serverless resources"
+  default     = null
+  nullable    = true
+}
