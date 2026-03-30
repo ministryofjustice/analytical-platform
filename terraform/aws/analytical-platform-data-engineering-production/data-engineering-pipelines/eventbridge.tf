@@ -27,7 +27,7 @@ resource "aws_cloudwatch_event_rule" "ae_download_athena_csv" {
         "type" : ["AssumedRole"],
         "sessionContext" : {
           "sessionIssuer" : {
-            "userName" : ["AWSReservedSSO_modernisation-platform-data-eng_89c7a4cbe024b69a"]
+            "userName" : ["AWSReservedSSO_mp-analytics-engineering_90d3c7659e13fe3b"]
           }
         }
       }
