@@ -90,10 +90,10 @@ resource "aws_lakeformation_resource" "probation_dev" {
 # ------------------------------------------------------------------------
 
 resource "aws_lakeformation_permissions" "probation_dev" {
-    principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
-    permissions = ["DATA_LOCATION_ACCESS"]
+  principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+  permissions = ["DATA_LOCATION_ACCESS"]
 
-    data_location {
-        arn = aws_lakeformation_resource.probation_dev.arn
-    }
+  data_location {
+    arn = aws_lakeformation_resource.probation_dev.arn
+  }
 }
