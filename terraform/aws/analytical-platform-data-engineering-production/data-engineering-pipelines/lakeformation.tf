@@ -83,16 +83,3 @@ resource "aws_lakeformation_resource" "probation_dev" {
   arn      = module.datalake_dev.bucket.arn
   role_arn = module.lakeformation_registration_iam_role.arn
 }
-
-# ------------------------------------------------------------------------
-# Lake Formation - grant permissions to principal
-# ------------------------------------------------------------------------
-
-resource "aws_lakeformation_permissions" "probation_dev" {
-  principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
-  permissions = ["DATA_LOCATION_ACCESS"]
-
-  data_location {
-    arn = aws_lakeformation_resource.probation_dev.arn
-  }
-}
