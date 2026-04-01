@@ -80,6 +80,7 @@ module "lakeformation_registration_iam_role" {
 # ------------------------------------------------------------------------
 
 resource "aws_lakeformation_resource" "probation_dev" {
-  arn      = module.datalake_dev.bucket.arn
-  role_arn = module.lakeformation_registration_iam_role.arn
+  arn                   = module.datalake_dev.bucket.arn
+  role_arn              = module.lakeformation_registration_iam_role.arn
+  hybrid_access_enabled = true
 }
