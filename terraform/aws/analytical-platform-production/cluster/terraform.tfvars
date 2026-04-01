@@ -48,7 +48,7 @@ nat_gateway_bandwidth_alarm_threshold = 90
 
 efs_file_system_performance_mode             = "generalPurpose"
 efs_file_system_throughput_mode              = "bursting"
-efs_low_credit_burst_balance_alarm_threshold = 50000
+efs_low_credit_burst_balance_alarm_threshold = 45000
 
 ##################################################
 # RDS
