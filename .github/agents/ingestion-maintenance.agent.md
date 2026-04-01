@@ -54,12 +54,26 @@ Before starting, verify that the user is authenticated with the GitHub CLI and h
 2. If the user is **not** authenticated, instruct them to sign in:
 
    ```bash
-   gh auth login
+   gh auth login --git-protocol ssh --hostname github.com --skip-ssh-key --web --scopes workflow
    ```
 
    **Do not proceed until authentication is confirmed.**
 
-3. Verify access to each of the required repositories by listing recent activity:
+3. Check that the token has the `workflow` scope (required to merge Dependabot PRs that update GitHub Actions workflow files):
+
+   ```bash
+   gh auth status 2>&1 | grep -o "'[^']*'" | tr -d "'" | tr ',' '\n' | grep -q workflow && echo "workflow scope present" || echo "workflow scope MISSING"
+   ```
+
+   If the `workflow` scope is missing, instruct the user to refresh their token:
+
+   ```bash
+   gh auth refresh -s workflow
+   ```
+
+   **Do not proceed until the `workflow` scope is confirmed.**
+
+4. Verify access to each of the required repositories by listing recent activity:
 
    ```bash
    gh repo view ministryofjustice/analytical-platform-ingestion-transfer --json name --jq '.name'
@@ -68,7 +82,7 @@ Before starting, verify that the user is authenticated with the GitHub CLI and h
    gh repo view ministryofjustice/modernisation-platform-environments --json name --jq '.name'
    ```
 
-4. If access to any repository fails, notify the user which repository is inaccessible and **stop**. The user may need to request access or use a different token with the appropriate scopes.
+5. If access to any repository fails, notify the user which repository is inaccessible and **stop**. The user may need to request access or use a different token with the appropriate scopes.
 
 ### 1. Merge Dependabot Pull Requests
 
@@ -90,18 +104,33 @@ For each repository:
    gh pr checks {pr_number} --repo ministryofjustice/{repo}
    ```
 
-3. If **all checks pass**, merge the PR:
-
-   ```bash
-   gh pr merge {pr_number} --repo ministryofjustice/{repo} --squash
-   ```
+3. If **all checks pass**, collect the PR for approval. Do **not** merge yet.
 
 4. If **any check is failing**, do **not** merge the PR. Instead:
    - Mark the repository as `BLOCKED`
    - Record the failing PR number, title, URL, and the names of the failing checks
    - Move on to the next PR in this repository
 
-5. After processing all PRs in the repository, report the results:
+5. After checking all PRs in the repository, present the results to the user:
+   - PRs ready to merge (all checks passing) — with links
+   - PRs with failing checks — with links and failure details
+   - Whether the repository is `UNBLOCKED` or `BLOCKED`
+
+6. For PRs that are ready to merge, **ask the user to approve them** (branch protection requires at least one approving review). Provide the approval commands:
+
+   ```bash
+   gh pr review {pr_number} --repo ministryofjustice/{repo} --approve
+   ```
+
+   **Wait for the user to confirm they have approved the PRs before proceeding.**
+
+7. Once the user confirms approval, merge each approved PR:
+
+   ```bash
+   gh pr merge {pr_number} --repo ministryofjustice/{repo} --squash
+   ```
+
+8. Report the final results for the repository:
    - Number of PRs merged (with links)
    - Number of PRs with failing checks (with links and failure details)
    - Whether the repository is `UNBLOCKED` or `BLOCKED`
@@ -110,89 +139,130 @@ For each repository:
 
 If there are no open Dependabot PRs for a repository, it remains `UNBLOCKED`.
 
-### 2. Verify and Update Container Structure Tests
+### 2. Update Packages and Container Structure Tests
 
-Each ingestion repository has a `test/container-structure-test.yml` file that asserts expected versions of installed packages (e.g., `pip`, `clamscan`, `freshclam`, `tar`). When Dependabot PRs update packages (Step 1), or when DNF/pip packages are updated upstream, the expected version strings in these test files may become stale. This step ensures they are kept in sync.
+The `analytical-platform-ingestion-scan` and `analytical-platform-ingestion-transfer` repositories install system packages (via DNF or pip) and have a `test/container-structure-test.yml` file that asserts expected versions of those packages. When packages are updated (e.g., new DNF or pip versions become available), both the Dockerfile/requirements and the test expected versions need updating together.
+
+**All package updates and their corresponding test version updates must be done in a single PR per repository.** Do not create separate PRs for package changes and test changes.
+
+**The only reliable way to determine actual installed versions is to build the Docker image and run the commands against it.** Do not guess versions from Dockerfiles or package registry APIs.
 
 #### 2a. Ingestion-Scan — DNF Packages and Tests
 
 The `analytical-platform-ingestion-scan` repository installs system packages via DNF and has the most extensive set of version assertions.
 
-1. Fetch the README to review the DNF packages section:
-
-   ```bash
-   gh api repos/ministryofjustice/analytical-platform-ingestion-scan/readme --jq '.content' | base64 -d
-   ```
-
-2. Fetch the container structure test configuration:
-
-   ```bash
-   gh api repos/ministryofjustice/analytical-platform-ingestion-scan/contents/test/container-structure-test.yml --jq '.content' | base64 -d
-   ```
-
-3. Review the `commandTests` entries. Each entry has an `expectedOutput` field with a version string, for example:
-
-   ```yaml
-   commandTests:
-     - name: "clamscan"
-       command: "clamscan"
-       args: ["--version"]
-       expectedOutput: ["ClamAV 1.5.1"]
-     - name: "pip"
-       command: "pip"
-       args: ["--version"]
-       expectedOutput: ["pip 24.0"]
-   ```
-
-4. For each `commandTests` entry, check whether the expected version is still correct by cross-referencing:
-   - The Dockerfile (for DNF-installed packages, check the package versions being installed)
-   - Any Dependabot PRs merged in Step 1 that may have bumped dependency versions
-   - The latest available versions of key packages (`ClamAV`, `tar`, `pip`, etc.)
-
-5. Present findings to the user:
-   - List each test entry with its current expected version
-   - Flag any entries where the version appears outdated or has been changed by a merged Dependabot PR
-   - Recommend updated version strings where applicable
-
-6. If updates are needed, clone the repository, update the `test/container-structure-test.yml` file, commit, push, and create a PR:
+1. Clone the repository:
 
    ```bash
    gh repo clone ministryofjustice/analytical-platform-ingestion-scan -- --depth 1
    cd analytical-platform-ingestion-scan
-   git checkout -b chore/update-container-structure-tests-$(date +%Y%m%d)
+   git checkout -b chore/update-packages-and-tests-$(date +%Y%m%d)
    ```
 
-   Edit the `expectedOutput` values in `test/container-structure-test.yml` to match the current installed versions, then:
+2. Review the Dockerfile and README for the current DNF packages being installed:
 
    ```bash
-   git add test/container-structure-test.yml
-   git commit -m "chore: update container structure test expected versions"
-   git push origin chore/update-container-structure-tests-$(date +%Y%m%d)
-   gh pr create \
-     --repo ministryofjustice/analytical-platform-ingestion-scan \
-     --title "chore: update container structure test expected versions" \
-     --body "Updates expected version strings in container structure tests to match current package versions."
+   cat Dockerfile
+   cat README.md
    ```
 
-   **Wait for CI to pass on this PR before proceeding.** If CI passes, merge the PR. If it fails, notify the user and mark the repository as `BLOCKED`.
+   Note which packages are installed via `dnf install` and their pinned versions (if any).
 
-#### 2b. Ingestion-Transfer — Tests
+3. Check whether newer versions of DNF packages are available. If the Dockerfile does not pin specific versions, the latest versions will be pulled at build time. If it does pin versions, check whether newer versions exist and update the pins.
+
+4. If any package versions in the Dockerfile or `requirements.txt`/`pyproject.toml` need updating, make those changes now.
+
+5. Build the Docker image:
+
+   ```bash
+   docker build -t ingestion-scan:test .
+   ```
+
+6. Read the current `test/container-structure-test.yml` to identify all `commandTests` entries and their expected versions:
+
+   ```bash
+   cat test/container-structure-test.yml
+   ```
+
+7. For each `commandTests` entry, run the same command against the built image to get the **actual** installed version. For example:
+
+   ```bash
+   docker run --rm ingestion-scan:test clamscan --version
+   docker run --rm ingestion-scan:test freshclam --version
+   docker run --rm ingestion-scan:test tar --version
+   docker run --rm ingestion-scan:test pip --version
+   ```
+
+   Run whichever commands are listed in the `commandTests` section.
+
+8. Compare the actual output against the `expectedOutput` values in the test file. Present a table to the user:
+
+   | Test Name | Expected Version | Actual Version | Status |
+   | --- | --- | --- | --- |
+   | clamscan | ClamAV 1.5.1 | ClamAV 1.5.2 | ⚠️ Outdated |
+   | pip | pip 24.0 | pip 24.0 | ✅ Up to date |
+
+9. Update the `expectedOutput` values in `test/container-structure-test.yml` to match the actual installed versions.
+
+10. Also update the README's DNF packages section if the listed versions no longer match what is installed.
+
+11. If any changes were made (package updates, test version updates, or README updates), commit everything together and create a **single** PR:
+
+    ```bash
+    git add -A
+    git commit -m "chore: update packages and container structure tests"
+    git push origin chore/update-packages-and-tests-$(date +%Y%m%d)
+    gh pr create \
+      --repo ministryofjustice/analytical-platform-ingestion-scan \
+      --title "chore: update packages and container structure tests" \
+      --body "Updates DNF/pip packages and aligns container structure test expected versions with actual installed versions."
+    ```
+
+    **Wait for CI to pass on this PR before proceeding.** If CI passes, merge the PR. If it fails, notify the user and mark the repository as `BLOCKED`.
+
+12. Clean up:
+
+    ```bash
+    cd ..
+    ```
+
+#### 2b. Ingestion-Transfer — Packages and Tests
 
 The `analytical-platform-ingestion-transfer` repository also has a `test/container-structure-test.yml` with version assertions (e.g., `pip`).
 
-1. Fetch the container structure test configuration:
+1. Clone the repository and create a branch:
 
    ```bash
-   gh api repos/ministryofjustice/analytical-platform-ingestion-transfer/contents/test/container-structure-test.yml --jq '.content' | base64 -d
+   gh repo clone ministryofjustice/analytical-platform-ingestion-transfer -- --depth 1
+   cd analytical-platform-ingestion-transfer
+   git checkout -b chore/update-packages-and-tests-$(date +%Y%m%d)
    ```
 
-2. Review the `commandTests` entries and check whether expected versions are still correct, using the same approach as Step 2a (cross-reference the Dockerfile and any merged Dependabot PRs).
+2. Review the Dockerfile and any dependency files for packages that may need updating.
 
-3. If updates are needed, follow the same clone → branch → edit → commit → PR → merge workflow as described in Step 2a, targeting the `analytical-platform-ingestion-transfer` repository.
+3. Make any necessary package updates.
+
+4. Build the Docker image:
+
+   ```bash
+   docker build -t ingestion-transfer:test .
+   ```
+
+5. Read the current `test/container-structure-test.yml` and run each listed command against the built image to get actual installed versions, as in Step 2a.
+
+6. Compare actual vs. expected and update the test file to match.
+
+7. If any changes were made, commit everything together and create a **single** PR following the same pattern as Step 2a, targeting `analytical-platform-ingestion-transfer`.
+
+8. Clean up:
+
+   ```bash
+   cd ..
+   ```
 
 #### 2c. User Confirmation
 
-After completing all test verification and updates across the three repositories:
+After completing all package and test updates across the repositories:
 
 1. Present a summary of all changes made (or confirm no changes were needed)
 2. **Wait for the user's confirmation before proceeding to Step 3.**
