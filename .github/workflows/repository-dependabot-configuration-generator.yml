@@ -12,12 +12,12 @@ jobs:
   dependabot-configuration-generator:
     name: Dependabot Configuration Generator
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Run Dependabot Configuration Generator
         id: run_dependabot_configuration_generator
@@ -27,22 +27,73 @@ jobs:
       - name: Detect Changes in .github/dependabot.yml
         id: detect_changes
         run: |
-          git diff --quiet --exit-code .github/dependabot.yml
-        continue-on-error: true
-
-      - name: DEBUG
-        id: debug
-        run: |
-          git diff .github/dependabot.yml
-          echo "detect_changes_output ${{ steps.detect_changes.outcome }}"
+          if git diff --quiet --exit-code .github/dependabot.yml; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Commit Changes
         id: commit_changes
-        uses: planetscale/ghcommit-action@25309d8005ac7c3bcd61d3fe19b69e0fe47dbdde # v0.2.20
-        with:
-          commit_message: "🤖 Update .github/dependabot.yml"
-          file_pattern: ".github/dependabot.yml"
-          repo: ${{ github.repository }}
-          branch: ${{ github.head_ref || github.ref_name }}
+        if: steps.detect_changes.outputs.changed == 'true'
+        run: |
+          branch="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+          path=".github/dependabot.yml"
+
+          expected_head_oid="$(
+            gh api graphql \
+              -f owner="${GITHUB_REPOSITORY%/*}" \
+              -f name="${GITHUB_REPOSITORY#*/}" \
+              -f qualifiedName="refs/heads/${branch}" \
+              -f query='query($owner: String!, $name: String!, $qualifiedName: String!) {
+                repository(owner: $owner, name: $name) {
+                  ref(qualifiedName: $qualifiedName) {
+                    target {
+                      ... on Commit {
+                        oid
+                      }
+                    }
+                  }
+                }
+              }' \
+              --jq '.data.repository.ref.target.oid'
+          )"
+
+          contents="$(base64 -w 0 "${path}")"
+
+          gh api graphql \
+            -f repo="${GITHUB_REPOSITORY}" \
+            -f branch="${branch}" \
+            -f expectedHeadOid="${expected_head_oid}" \
+            -f path="${path}" \
+            -f contents="${contents}" \
+            -f query='mutation(
+              $repo: String!,
+              $branch: String!,
+              $expectedHeadOid: GitObjectID!,
+              $path: String!,
+              $contents: Base64String!
+            ) {
+              createCommitOnBranch(
+                input: {
+                  branch: {
+                    repositoryNameWithOwner: $repo
+                    branchName: $branch
+                  }
+                  message: {
+                    headline: "🤖 Update .github/dependabot.yml"
+                  }
+                  expectedHeadOid: $expectedHeadOid
+                  fileChanges: {
+                    additions: [{path: $path, contents: $contents}]
+                  }
+                }
+              ) {
+                commit {
+                  oid
+                  url
+                }
+              }
+            }'
         env:
-          GITHUB_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
+          GH_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
