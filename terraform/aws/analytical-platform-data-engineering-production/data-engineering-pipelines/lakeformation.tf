@@ -84,3 +84,16 @@ resource "aws_lakeformation_resource" "probation_dev" {
   role_arn              = module.lakeformation_registration_iam_role.arn
   hybrid_access_enabled = true
 }
+
+# ------------------------------------------------------------------------
+# Lake Formation - grant permissions
+# ------------------------------------------------------------------------
+
+resource "aws_lakeformation_permissions" "probation_datalake_dev" {
+  permissions = ["SELECT", "DESCRIBE"]
+  principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+
+  database {
+    name = "ppud_dev_dbt"
+  }
+}
