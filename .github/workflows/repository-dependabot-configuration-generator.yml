@@ -12,8 +12,6 @@ jobs:
   dependabot-configuration-generator:
     name: Dependabot Configuration Generator
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout
         id: checkout
@@ -29,20 +27,15 @@ jobs:
       - name: Detect Changes in .github/dependabot.yml
         id: detect_changes
         run: |
-          git diff --quiet --exit-code .github/dependabot.yml
-        continue-on-error: true
-
-      - name: DEBUG
-        id: debug
-        env:
-          DETECT_CHANGES_OUTCOME: ${{ steps.detect_changes.outcome }}
-        run: |
-          git diff .github/dependabot.yml
-          echo "detect_changes_output ${DETECT_CHANGES_OUTCOME}"
+          if git diff --quiet --exit-code .github/dependabot.yml; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Commit Changes
         id: commit_changes
-        if: steps.detect_changes.outcome == 'failure'
+        if: steps.detect_changes.outputs.changed == 'true'
         run: |
           branch="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
           path=".github/dependabot.yml"
