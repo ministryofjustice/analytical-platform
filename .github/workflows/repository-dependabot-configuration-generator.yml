@@ -38,11 +38,65 @@ jobs:
 
       - name: Commit Changes
         id: commit_changes
-        uses: planetscale/ghcommit-action@25309d8005ac7c3bcd61d3fe19b69e0fe47dbdde # v0.2.20
-        with:
-          commit_message: "🤖 Update .github/dependabot.yml"
-          file_pattern: ".github/dependabot.yml"
-          repo: ${{ github.repository }}
-          branch: ${{ github.head_ref || github.ref_name }}
+        if: steps.detect_changes.outcome == 'failure'
+        run: |
+          branch="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+          path=".github/dependabot.yml"
+
+          expected_head_oid="$(
+            gh api graphql \
+              -f owner="${GITHUB_REPOSITORY%/*}" \
+              -f name="${GITHUB_REPOSITORY#*/}" \
+              -f qualifiedName="refs/heads/${branch}" \
+              -f query='query($owner: String!, $name: String!, $qualifiedName: String!) {
+                repository(owner: $owner, name: $name) {
+                  ref(qualifiedName: $qualifiedName) {
+                    target {
+                      ... on Commit {
+                        oid
+                      }
+                    }
+                  }
+                }
+              }' \
+              --jq '.data.repository.ref.target.oid'
+          )"
+
+          contents="$(base64 -w 0 "${path}")"
+
+          gh api graphql \
+            -f repo="${GITHUB_REPOSITORY}" \
+            -f branch="${branch}" \
+            -f expectedHeadOid="${expected_head_oid}" \
+            -f path="${path}" \
+            -f contents="${contents}" \
+            -f query='mutation(
+              $repo: String!,
+              $branch: String!,
+              $expectedHeadOid: GitObjectID!,
+              $path: String!,
+              $contents: Base64String!
+            ) {
+              createCommitOnBranch(
+                input: {
+                  branch: {
+                    repositoryNameWithOwner: $repo
+                    branchName: $branch
+                  }
+                  message: {
+                    headline: "🤖 Update .github/dependabot.yml"
+                  }
+                  expectedHeadOid: $expectedHeadOid
+                  fileChanges: {
+                    additions: [{path: $path, contents: $contents}]
+                  }
+                }
+              ) {
+                commit {
+                  oid
+                  url
+                }
+              }
+            }'
         env:
-          GITHUB_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
+          GH_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
