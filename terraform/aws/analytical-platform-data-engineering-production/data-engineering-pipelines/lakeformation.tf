@@ -93,7 +93,8 @@ resource "aws_lakeformation_permissions" "probation_datalake_dev" {
   permissions = ["SELECT", "DESCRIBE"]
   principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
 
-  database {
-    name = "ppud_dev_dbt"
+  table {
+    database_name = "ppud_dev_dbt"
+    wildcard      = true
   }
 }
