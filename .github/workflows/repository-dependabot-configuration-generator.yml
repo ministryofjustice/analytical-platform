@@ -32,9 +32,11 @@ jobs:
 
       - name: DEBUG
         id: debug
+        env:
+          DETECT_CHANGES_OUTCOME: ${{ steps.detect_changes.outcome }}
         run: |
           git diff .github/dependabot.yml
-          echo "detect_changes_output ${{ steps.detect_changes.outcome }}"
+          echo "detect_changes_output ${DETECT_CHANGES_OUTCOME}"
 
       - name: Commit Changes
         id: commit_changes
