@@ -89,11 +89,11 @@ resource "aws_lakeformation_resource" "probation_dev" {
 # Lake Formation - grant permissions
 # ------------------------------------------------------------------------
 
-resource "aws_lakeformation_permissions" "probation_datalake_dev"{
-    permissions = ["SELECT", "DESCRIBE"]
-    principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+resource "aws_lakeformation_permissions" "probation_datalake_dev" {
+  permissions = ["SELECT", "DESCRIBE"]
+  principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
 
-    database {
-        name = "ppud_dev_dbt"
-    }
+  database {
+    name = "ppud_dev_dbt"
+  }
 }
