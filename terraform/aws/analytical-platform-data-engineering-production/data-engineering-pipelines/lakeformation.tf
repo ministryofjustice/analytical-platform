@@ -15,6 +15,18 @@ resource "aws_lakeformation_data_lake_settings" "settings" {
     ]
   )
 
+  create_database_default_permissions {
+    # These settings should replicate current behaviour: LakeFormation is Ignored
+    permissions = ["ALL"]
+    principal   = "IAM_ALLOWED_PRINCIPALS"
+  }
+
+  create_table_default_permissions {
+    # These settings should replicate current behaviour: LakeFormation is Ignored
+    permissions = ["ALL"]
+    principal   = "IAM_ALLOWED_PRINCIPALS"
+  }
+
   parameters = {
     "CROSS_ACCOUNT_VERSION" = "4"
   }
@@ -180,8 +192,10 @@ resource "aws_lakeformation_permissions" "probation_datalake_databases_derived" 
 resource "aws_lakeformation_permissions" "probation_datalake_derived" {
   for_each = toset(local.derived_databases)
 
-  permissions = ["ALL"]
-  principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+  permissions = [
+    "ALL",
+  ]
+  principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
 
   table {
     database_name = each.value
