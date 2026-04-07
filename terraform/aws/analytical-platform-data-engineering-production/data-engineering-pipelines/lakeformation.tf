@@ -85,11 +85,29 @@ resource "aws_lakeformation_resource" "probation_dev" {
   hybrid_access_enabled = true
 }
 
+resource "aws_lakeformation_resource" "probation_preprod" {
+  arn                   = module.datalake_preprod.bucket.arn
+  role_arn              = module.lakeformation_registration_iam_role.arn
+  hybrid_access_enabled = true
+}
+
+resource "aws_lakeformation_resource" "probation_prod" {
+  arn                   = module.datalake_prod.bucket.arn
+  role_arn              = module.lakeformation_registration_iam_role.arn
+  hybrid_access_enabled = true
+}
+
+resource "aws_lakeformation_resource" "probation_prod_dev" {
+  arn                   = module.datalake_prod_dev.bucket.arn
+  role_arn              = module.lakeformation_registration_iam_role.arn
+  hybrid_access_enabled = true
+}
+
 # ------------------------------------------------------------------------
 # Lake Formation - grant permissions
 # ------------------------------------------------------------------------
 locals {
-  curated_databases = ["ppud_dev_dbt", "ppud_prod_dbt", "ppud_preprod_dbt"]
+  curated_databases = ["ppud_dev_dbt", "ppud_preprod_dbt", "ppud"]
 
   derived_databases = ["public_protection_int_prod_dev_dbt", "stg_ppud_prod_dev_dbt"]
 }
@@ -104,6 +122,7 @@ resource "aws_lakeformation_opt_in" "probation_datalake_curated" {
     table {
       database_name = each.value
       wildcard      = true
+      catalog_id    = "189157455002"
     }
   }
 }
@@ -117,6 +136,7 @@ resource "aws_lakeformation_permissions" "probation_datalake_curated" {
   table {
     database_name = each.value
     wildcard      = true
+    catalog_id    = "189157455002"
   }
 }
 
@@ -130,6 +150,7 @@ resource "aws_lakeformation_opt_in" "probation_datalake_derived" {
     table {
       database_name = each.value
       wildcard      = true
+      catalog_id    = "189157455002"
     }
   }
 }
@@ -141,7 +162,8 @@ resource "aws_lakeformation_permissions" "probation_datalake_databases_derived" 
   principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
 
   database {
-    name = each.value
+    name       = each.value
+    catalog_id = "189157455002"
   }
 }
 
@@ -154,5 +176,6 @@ resource "aws_lakeformation_permissions" "probation_datalake_derived" {
   table {
     database_name = each.value
     wildcard      = true
+    catalog_id    = "189157455002"
   }
 }
