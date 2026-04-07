@@ -104,6 +104,7 @@ resource "aws_lakeformation_opt_in" "probation_datalake_curated" {
     table {
       database_name = each.value
       wildcard      = true
+      catalog_id    = "189157455002"
     }
   }
 }
@@ -117,6 +118,7 @@ resource "aws_lakeformation_permissions" "probation_datalake_curated" {
   table {
     database_name = each.value
     wildcard      = true
+    catalog_id    = "189157455002"
   }
 }
 
@@ -130,6 +132,7 @@ resource "aws_lakeformation_opt_in" "probation_datalake_derived" {
     table {
       database_name = each.value
       wildcard      = true
+      catalog_id    = "189157455002"
     }
   }
 }
@@ -141,7 +144,8 @@ resource "aws_lakeformation_permissions" "probation_datalake_databases_derived" 
   principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
 
   database {
-    name = each.value
+    name       = each.value
+    catalog_id = "189157455002"
   }
 }
 
@@ -154,5 +158,6 @@ resource "aws_lakeformation_permissions" "probation_datalake_derived" {
   table {
     database_name = each.value
     wildcard      = true
+    catalog_id    = "189157455002"
   }
 }
