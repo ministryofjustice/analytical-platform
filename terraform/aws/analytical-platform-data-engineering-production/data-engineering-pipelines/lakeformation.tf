@@ -85,6 +85,24 @@ resource "aws_lakeformation_resource" "probation_dev" {
   hybrid_access_enabled = true
 }
 
+resource "aws_lakeformation_resource" "probation_preprod" {
+  arn                   = module.datalake_preprod.bucket.arn
+  role_arn              = module.lakeformation_registration_iam_role.arn
+  hybrid_access_enabled = true
+}
+
+resource "aws_lakeformation_resource" "probation_prod" {
+  arn                   = module.datalake_prod.bucket.arn
+  role_arn              = module.lakeformation_registration_iam_role.arn
+  hybrid_access_enabled = true
+}
+
+resource "aws_lakeformation_resource" "probation_prod_dev" {
+  arn                   = module.datalake_prod_dev.bucket.arn
+  role_arn              = module.lakeformation_registration_iam_role.arn
+  hybrid_access_enabled = true
+}
+
 # ------------------------------------------------------------------------
 # Lake Formation - grant permissions
 # ------------------------------------------------------------------------
