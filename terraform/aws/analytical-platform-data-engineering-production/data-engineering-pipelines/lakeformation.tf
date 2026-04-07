@@ -192,8 +192,10 @@ resource "aws_lakeformation_permissions" "probation_datalake_databases_derived" 
 resource "aws_lakeformation_permissions" "probation_datalake_derived" {
   for_each = toset(local.derived_databases)
 
-  permissions = ["ALL",]
-  principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+  permissions = [
+    "ALL",
+  ]
+  principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
 
   table {
     database_name = each.value
