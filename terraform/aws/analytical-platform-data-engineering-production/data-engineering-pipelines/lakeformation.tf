@@ -52,14 +52,24 @@ module "lakeformation_registration_iam_role" {
   create_inline_policy = true
   inline_policy_permissions = {
     S3BucketAccess = {
-      effect    = "Allow"
-      actions   = ["s3:ListBucket"]
-      resources = [module.datalake_dev.bucket.arn]
+      effect  = "Allow"
+      actions = ["s3:ListBucket"]
+      resources = [
+        module.datalake_dev.bucket.arn,
+        module.datalake_preprod.bucket.arn,
+        module.datalake_prod.bucket.arn,
+        module.datalake_prod_dev.bucket.arn
+      ]
     }
     S3ObjectAccess = {
-      effect    = "Allow"
-      actions   = ["s3:DeleteObject", "s3:GetObject", "s3:PutObject"]
-      resources = ["${module.datalake_dev.bucket.arn}/*"]
+      effect  = "Allow"
+      actions = ["s3:DeleteObject", "s3:GetObject", "s3:PutObject"]
+      resources = [
+        "${module.datalake_dev.bucket.arn}/*",
+        "${module.datalake_preprod.bucket.arn}/*",
+        "${module.datalake_prod.bucket.arn}/*",
+        "${module.datalake_prod_dev.bucket.arn}/*"
+      ]
     }
     KMSKeyAccess = {
       effect = "Allow"
