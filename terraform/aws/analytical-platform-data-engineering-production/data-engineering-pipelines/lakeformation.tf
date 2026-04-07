@@ -88,24 +88,71 @@ resource "aws_lakeformation_resource" "probation_dev" {
 # ------------------------------------------------------------------------
 # Lake Formation - grant permissions
 # ------------------------------------------------------------------------
-resource "aws_lakeformation_opt_in" "probation_datalake_dev" {
+locals {
+  curated_databases = ["ppud_dev_dbt", "ppud_prod_dbt", "ppud_preprod_dbt"]
+
+  derived_databases = ["public_protection_int_prod_dev_dbt", "stg_ppud_prod_dev_dbt"]
+}
+
+resource "aws_lakeformation_opt_in" "probation_datalake_curated" {
+  for_each = toset(local.curated_databases)
+
   principal {
     data_lake_principal_identifier = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
   }
   resource_data {
     table {
-      database_name = "ppud_dev_dbt"
+      database_name = each.value
       wildcard      = true
     }
   }
 }
 
-resource "aws_lakeformation_permissions" "probation_datalake_dev" {
+resource "aws_lakeformation_permissions" "probation_datalake_curated" {
+  for_each = toset(local.curated_databases)
+
   permissions = ["SELECT", "DESCRIBE"]
   principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
 
   table {
-    database_name = "ppud_dev_dbt"
+    database_name = each.value
+    wildcard      = true
+  }
+}
+
+resource "aws_lakeformation_opt_in" "probation_datalake_derived" {
+  for_each = toset(local.derived_databases)
+
+  principal {
+    data_lake_principal_identifier = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+  }
+  resource_data {
+    table {
+      database_name = each.value
+      wildcard      = true
+    }
+  }
+}
+
+resource "aws_lakeformation_permissions" "probation_datalake_databases_derived" {
+  for_each = toset(local.derived_databases)
+
+  permissions = ["CREATE_TABLE"]
+  principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+
+  database {
+    name = each.value
+  }
+}
+
+resource "aws_lakeformation_permissions" "probation_datalake_derived" {
+  for_each = toset(local.derived_databases)
+
+  permissions = ["ALL"]
+  principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+
+  table {
+    database_name = each.value
     wildcard      = true
   }
 }
