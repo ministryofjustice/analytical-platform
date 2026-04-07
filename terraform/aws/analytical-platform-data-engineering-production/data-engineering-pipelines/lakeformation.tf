@@ -89,7 +89,7 @@ resource "aws_lakeformation_resource" "probation_dev" {
 # Lake Formation - grant permissions
 # ------------------------------------------------------------------------
 locals {
-  curated_databases = ["ppud_dev_dbt", "ppud_prod_dbt", "ppud_preprod_dbt"]
+  curated_databases = ["ppud_dev_dbt", "ppud_preprod_dbt", "ppud"]
 
   derived_databases = ["public_protection_int_prod_dev_dbt", "stg_ppud_prod_dev_dbt"]
 }
