@@ -10,7 +10,6 @@ locals {
           rotation_virtual_start       = "2026-04-08T00:00:00+00:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users_de_seo["damilola.oyebade@justice.gov.uk"].id,
             module.users_de_seo["antony.scott@justice.gov.uk"].id,
             module.users_de_seo["lucy.astleyjones@justice.gov.uk"].id,
             module.users_de_seo["kashif.malik@justice.gov.uk"].id,
@@ -21,6 +20,7 @@ locals {
             module.users_de_seo["thomas.hirsch@justice.gov.uk"].id,
             module.users_de_seo["khristiania.raihan@justice.gov.uk"].id,
             module.users_de_seo["mohammed.ahad1@justice.gov.uk"].id,
+            module.users_de_seo["damilola.oyebade@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -67,7 +67,6 @@ locals {
           rotation_virtual_start       = "2026-04-08T00:00:00+00:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].id,
             module.users_de_g7["philip.sinfield@justice.gov.uk"].id,
             module.users_de_g7["laurence.droy@justice.gov.uk"].id,
             module.users_de_g7["jovita.brundziene@justice.gov.uk"].id,
@@ -77,6 +76,7 @@ locals {
             module.users_de_g7["andrew.craik@justice.gov.uk"].id,
             module.users_de_g7["supratik.chowdhury@digital.justice.gov.uk"].id,
             module.users_de_g7["guy.wheeler@justice.gov.uk"].id,
+            module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].id,
           ]
           restrictions = [
             {
