@@ -54,7 +54,7 @@ efs_low_credit_burst_balance_alarm_threshold = 50000
 # RDS
 ##################################################
 
-rds_instance_class        = "db.t3.micro"
+rds_instance_class        = "db.t3.small"
 rds_engine                = "postgres"
 rds_family                = "postgres17"
 rds_engine_version        = "17.4"
@@ -65,7 +65,7 @@ rds_multi_az              = true
 rds_storage_encrypted     = true
 rds_db_name               = "controlpanel"
 rds_snapshot_identifier   = "eks-production-control-panelspsg-db-newly-encrypted"
-rds_maintenance_window    = "Mon:00:00-Mon:03:00"
+rds_maintenance_window    = "Wed:00:00-Wed:03:00"
 rds_backup_window         = "03:00-06:00"
 rds_ca_cert_identifier    = "rds-ca-rsa2048-g1"
 rds_monitoring_interval   = 30
@@ -130,14 +130,14 @@ redis_alarm_memory_threshold_bytes = 100000
 # EKS
 ##################################################
 eks_versions = {
-  cluster    = "1.29"
-  node-group = "1.29"
+  cluster    = "1.32"
+  node-group = "1.32"
 }
 eks_addon_versions = {
-  coredns        = "v1.11.3-eksbuild.1"
-  ebs-csi-driver = "v1.35.0-eksbuild.1"
-  kube-proxy     = "v1.29.7-eksbuild.9"
-  vpc-cni        = "v1.18.5-eksbuild.1"
+  coredns        = "v1.11.4-eksbuild.32"
+  ebs-csi-driver = "v1.56.0-eksbuild.1"
+  kube-proxy     = "v1.32.13-eksbuild.2"
+  vpc-cni        = "v1.21.1-eksbuild.5"
 }
 eks_node_group_name_prefix = "prod"
 eks_node_group_capacities = {
@@ -188,12 +188,12 @@ eks_node_group_disk_size      = 250
 eks_node_group_instance_types = ["r7i.2xlarge"]
 
 ### GPU-enable node group
-eks_node_group_instance_types_gpu_node = ["g5.4xlarge"]
+eks_node_group_instance_types_gpu_node = ["g5.2xlarge", "g5.4xlarge", "g5.8xlarge"]
 eks_node_group_ami_type_gpu_node       = "AL2023_x86_64_NVIDIA"
 
 eks_node_group_capacities_gpu_node = {
   desired = 1
-  max     = 10
+  max     = 50
   min     = 0
 }
 

@@ -24,7 +24,7 @@ resource "aws_iam_role_policy" "sfn_dms_policy" {
       {
         Effect   = "Allow",
         Action   = ["dms:StartReplicationTask", "dms:StopReplicationTask"],
-        Resource = module.preprod_dms_oasys.dms_cdc_task_arn
+        Resource = [module.preprod_dms_oasys.dms_cdc_task_arn]
       },
       {
         Effect   = "Allow",
@@ -48,7 +48,8 @@ resource "aws_sfn_state_machine" "dms_control" {
         Type = "Choice",
         Choices = [
           { Variable = "$.Op", StringEquals = "stop", Next = "Stop" },
-          { Variable = "$.Op", StringEquals = "start", Next = "GetCdcStartTime" }
+          { Variable = "$.Op", StringEquals = "start", Next = "GetCdcStartTime" },
+          { Variable = "$.Op", StringEquals = "resume", Next = "Resume" }
         ],
         Default = "FailOp"
       },
@@ -87,7 +88,16 @@ resource "aws_sfn_state_machine" "dms_control" {
         },
         End = true
       },
-      FailOp = { Type = "Fail", Error = "InvalidOp", Cause = "Op must be 'start' or 'stop'." }
+      Resume = {
+        Type     = "Task",
+        Resource = "arn:aws:states:::aws-sdk:databasemigration:startReplicationTask",
+        Parameters = {
+          "ReplicationTaskArn.$"     = "$.ReplicationTaskArn",
+          "StartReplicationTaskType" = "resume-processing"
+        },
+        End = true
+      },
+      FailOp = { Type = "Fail", Error = "InvalidOp", Cause = "Op must be 'start', 'stop', or 'resume'." }
     }
   })
 }

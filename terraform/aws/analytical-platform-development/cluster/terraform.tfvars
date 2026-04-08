@@ -53,7 +53,7 @@ efs_low_credit_burst_balance_alarm_threshold = 50000
 # RDS
 ##################################################
 
-rds_instance_class       = "db.t3.micro"
+rds_instance_class       = "db.t3.small"
 rds_engine               = "postgres"
 rds_family               = "postgres17"
 rds_engine_version       = "17.4"
@@ -128,14 +128,14 @@ redis_alarm_memory_threshold_bytes = 100000
 ##################################################
 
 eks_versions = {
-  cluster    = "1.29"
-  node-group = "1.29"
+  cluster    = "1.33"
+  node-group = "1.33"
 }
 eks_addon_versions = {
-  coredns        = "v1.11.3-eksbuild.1"
-  ebs-csi-driver = "v1.35.0-eksbuild.1"
-  kube-proxy     = "v1.29.7-eksbuild.9"
-  vpc-cni        = "v1.18.5-eksbuild.1"
+  coredns        = "v1.13.2-eksbuild.4"
+  ebs-csi-driver = "v1.57.1-eksbuild.1"
+  kube-proxy     = "v1.33.10-eksbuild.2"
+  vpc-cni        = "v1.21.1-eksbuild.7"
 }
 eks_node_group_name_prefix = "dev"
 eks_node_group_capacities = {

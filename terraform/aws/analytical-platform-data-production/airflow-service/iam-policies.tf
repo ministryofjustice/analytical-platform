@@ -378,7 +378,25 @@ data "aws_iam_policy_document" "create_a_derived_table" {
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:schema/*",
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:database/*",
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:table/*/*",
-      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:catalog"
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:catalog",
+      "arn:aws:glue:*:${var.account_ids["electronic-monitoring-data-production"]}:schema/*",
+      "arn:aws:glue:*:${var.account_ids["electronic-monitoring-data-production"]}:database/*",
+      "arn:aws:glue:*:${var.account_ids["electronic-monitoring-data-production"]}:table/*/*",
+      "arn:aws:glue:*:${var.account_ids["electronic-monitoring-data-production"]}:catalog"
+    ]
+  }
+  statement {
+    sid    = "LakeFormationDataLocationAccess"
+    effect = "Allow"
+    actions = [
+      "lakeformation:GrantPermissions"
+    ]
+    resources = [
+      "arn:aws:s3:::alpha-app-opg-lpa-dashboard/prod/models/domain_name=opg/database_name=sirius_derived",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=guardianship_derived",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived/table_name=opg_annual_report",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=prison/database_name=calculate_release_dates_api"
     ]
   }
 }

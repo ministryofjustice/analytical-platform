@@ -6,7 +6,8 @@ locals {
       database_string_pattern = ["xhibit", "xhibit_derived"]
       role_names_to_exempt = [
         "create-a-derived-table",
-        "airflow_prod_cadet_deploy_xhibit"
+        "airflow_prod_cadet_deploy_xhibit",
+        "airflow-production-analytical-platform-cadet-onecrown-prod"
       ]
     },
     {
@@ -20,6 +21,7 @@ locals {
         "airflow_prod_mags_data_processor",
         "restricted-admin",
         "airflow_dev_mags_data_processor",
+        "airflow-production-hmcts-dev-mags-combined-dev"
       ]
     },
     {
@@ -29,7 +31,6 @@ locals {
         "data-first-data-engineer",
         "airflow_family_ap",
         "restricted-admin",
-        "alpha_user_lavmatt",
         "airflow_prod_familyman",
         "airflow_dev_familyman",
         "airflow-test-hmcts-familyman-extraction",
@@ -45,7 +46,8 @@ locals {
         "create-a-derived-table",
         "github-actions-infrastructure",
         "restricted-admin",
-        "data-engineering-probation-glue"
+        "data-engineering-probation-glue",
+        "airflow-production-analytical-platform-cadet-curated-daily"
       ]
     },
     {
@@ -57,7 +59,9 @@ locals {
         "create-a-derived-table",
         "github-actions-infrastructure",
         "restricted-admin",
-        "data-engineering-probation-glue"
+        "data-engineering-probation-glue",
+        "airflow-production-analytical-platform-cadet-curated-daily",
+        "airflow-production-analytical-platform-cadet-oasys-question"
       ]
     },
     {
@@ -569,7 +573,8 @@ locals {
                 "arn:aws:s3:::mojap-land/cps/*",
                 "arn:aws:s3:::mojap-land/property/planetfm/backupfiles/*",
                 "arn:aws:s3:::mojap-land/opg/prod/ocr/*",
-                "arn:aws:s3:::mojap-land/corporate/epm/*"
+                "arn:aws:s3:::mojap-land/corporate/epm/*",
+                "arn:aws:s3:::mojap-land/hmpps/prison-curious/*"
               ]
             },
             {

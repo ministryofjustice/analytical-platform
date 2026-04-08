@@ -12,12 +12,12 @@ jobs:
   dependabot-configuration-generator:
     name: Dependabot Configuration Generator
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Run Dependabot Configuration Generator
         id: run_dependabot_configuration_generator
@@ -27,22 +27,36 @@ jobs:
       - name: Detect Changes in .github/dependabot.yml
         id: detect_changes
         run: |
-          git diff --quiet --exit-code .github/dependabot.yml
-        continue-on-error: true
-
-      - name: DEBUG
-        id: debug
-        run: |
-          git diff .github/dependabot.yml
-          echo "detect_changes_output ${{ steps.detect_changes.outcome }}"
+          if git diff --quiet --exit-code .github/dependabot.yml; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Commit Changes
         id: commit_changes
-        uses: planetscale/ghcommit-action@25309d8005ac7c3bcd61d3fe19b69e0fe47dbdde # v0.2.20
-        with:
-          commit_message: "🤖 Update .github/dependabot.yml"
-          file_pattern: ".github/dependabot.yml"
-          repo: ${{ github.repository }}
-          branch: ${{ github.head_ref || github.ref_name }}
+        if: steps.detect_changes.outputs.changed == 'true'
+        run: |
+          branch="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+          path=".github/dependabot.yml"
+          contents="$(base64 -w 0 "${path}")"
+
+          existing_sha="$(
+            gh api "repos/${GITHUB_REPOSITORY}/contents/${path}?ref=${branch}" \
+              --jq '.sha' 2>/dev/null || echo ""
+          )"
+
+          if [ -n "${existing_sha}" ]; then
+            gh api --method PUT "repos/${GITHUB_REPOSITORY}/contents/${path}" \
+              -f message="🤖 Update .github/dependabot.yml" \
+              -f content="${contents}" \
+              -f branch="${branch}" \
+              -f sha="${existing_sha}"
+          else
+            gh api --method PUT "repos/${GITHUB_REPOSITORY}/contents/${path}" \
+              -f message="🤖 Update .github/dependabot.yml" \
+              -f content="${contents}" \
+              -f branch="${branch}"
+          fi
         env:
-          GITHUB_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
+          GH_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}

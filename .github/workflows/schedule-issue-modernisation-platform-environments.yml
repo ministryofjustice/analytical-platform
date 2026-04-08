@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Create Maintenance Issue
         id: create_maintenance_issue
         run: |
@@ -42,8 +42,6 @@ jobs:
             - [ ] [analytical-platform-common](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-common)
             - [ ] [analytical-platform-compute](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-compute)
             - [ ] [analytical-platform-ingestion](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-ingestion)
-            - [ ] [analytical-platform-next-poc-hub](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-next-poc-hub)
-            - [ ] [analytical-platform-next-poc-producer](https://github.com/ministryofjustice/modernisation-platform-environments/tree/main/terraform/environments/analytical-platform-next-poc-producer)
             - [ ] Add any not included here if they are created.
 
           PINNED: false
