@@ -14,7 +14,11 @@ resource "aws_cloudwatch_event_rule" "ae_download_athena_csv" {
       "requestParameters" : {
         "bucketName" : [{
           "wildcard" : "aws-athena-query-results-*"
-        }],
+          },
+          {
+            "wildcard" : "probation-query-results-*"
+          }
+        ],
         "key" : [{
           "suffix" : {
             "equals-ignore-case" : ".csv"
@@ -28,7 +32,7 @@ resource "aws_cloudwatch_event_rule" "ae_download_athena_csv" {
         "type" : ["AssumedRole"],
         "sessionContext" : {
           "sessionIssuer" : {
-            "userName" : [data.aws_iam_role.aws_sso_modernisation_platform_data_eng.name]
+            "userName" : [data.aws_iam_role.aws_sso_mp_analytics_eng.name]
           }
         }
       }

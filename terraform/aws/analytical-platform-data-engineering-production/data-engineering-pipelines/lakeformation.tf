@@ -180,7 +180,7 @@ resource "aws_lakeformation_opt_in" "probation_datalake_derived" {
 resource "aws_lakeformation_permissions" "probation_datalake_databases_derived" {
   for_each = toset(local.derived_databases)
 
-  permissions = ["CREATE_TABLE"]
+  permissions = ["CREATE_TABLE", "DESCRIBE"]
   principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
 
   database {
@@ -201,5 +201,57 @@ resource "aws_lakeformation_permissions" "probation_datalake_derived" {
     database_name = each.value
     wildcard      = true
     catalog_id    = "189157455002"
+  }
+}
+
+resource "aws_lakeformation_permissions" "probation_datalake_dev" {
+  for_each = toset(local.derived_databases)
+
+  permissions = [
+    "DATA_LOCATION_ACCESS",
+  ]
+  principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+
+  data_location {
+    arn = module.datalake_dev.bucket.arn
+  }
+}
+
+resource "aws_lakeformation_permissions" "probation_datalake_preprod" {
+  for_each = toset(local.derived_databases)
+
+  permissions = [
+    "DATA_LOCATION_ACCESS",
+  ]
+  principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+
+  data_location {
+    arn = module.datalake_preprod.bucket.arn
+  }
+}
+
+resource "aws_lakeformation_permissions" "probation_datalake_prod" {
+  for_each = toset(local.derived_databases)
+
+  permissions = [
+    "DATA_LOCATION_ACCESS",
+  ]
+  principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+
+  data_location {
+    arn = module.datalake_prod.bucket.arn
+  }
+}
+
+resource "aws_lakeformation_permissions" "probation_datalake_prod_dev" {
+  for_each = toset(local.derived_databases)
+
+  permissions = [
+    "DATA_LOCATION_ACCESS",
+  ]
+  principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+
+  data_location {
+    arn = module.datalake_prod_dev.bucket.arn
   }
 }
