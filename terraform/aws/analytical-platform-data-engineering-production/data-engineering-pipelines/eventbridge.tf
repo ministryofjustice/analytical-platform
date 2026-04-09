@@ -1,5 +1,4 @@
 # Eventbridge rule to capture S3 GetObject API calls to the athena query bucket
-# TO DO: Change to AE SSO account - currently DE SSO account for testing only
 
 resource "aws_cloudwatch_event_rule" "ae_download_athena_csv" {
   name        = "capture-ae-athena-csv-download"
@@ -14,7 +13,11 @@ resource "aws_cloudwatch_event_rule" "ae_download_athena_csv" {
       "requestParameters" : {
         "bucketName" : [{
           "wildcard" : "aws-athena-query-results-*"
-        }],
+          },
+          {
+            "wildcard" : "probation-query-results-*"
+          }
+        ],
         "key" : [{
           "suffix" : {
             "equals-ignore-case" : ".csv"
@@ -28,7 +31,7 @@ resource "aws_cloudwatch_event_rule" "ae_download_athena_csv" {
         "type" : ["AssumedRole"],
         "sessionContext" : {
           "sessionIssuer" : {
-            "userName" : [data.aws_iam_role.aws_sso_modernisation_platform_data_eng.name]
+            "userName" : [data.aws_iam_role.aws_sso_mp_analytics_eng.name]
           }
         }
       }
