@@ -74,7 +74,7 @@ locals {
             module.users_de_g7["matt.heery@justice.gov.uk"].id,
             module.users_de_g7["lalitha.nagarur3@justice.gov.uk"].id,
             module.users_de_g7["andrew.craik@justice.gov.uk"].id,
-            module.users_de_g7["supratik.chowdhury@digital.justice.gov.uk"].id,
+            module.users_de_g7["supratik.chowdhury@justice.gov.uk"].id,
             module.users_de_g7["guy.wheeler@justice.gov.uk"].id,
             module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].id,
           ]
@@ -220,7 +220,7 @@ locals {
     },
     {
       name  = "Supratik Chowdhury"
-      email = "supratik.chowdhury@digital.justice.gov.uk"
+      email = "supratik.chowdhury@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -339,8 +339,8 @@ import {
 }
 
 import {
-  to = module.users_de_g7["supratik.chowdhury@digital.justice.gov.uk"].pagerduty_user.this
-  id = "PUZN13S"
+  to = module.users_de_g7["supratik.chowdhury@justice.gov.uk"].pagerduty_user.this
+  id = "PT8OBYX"
 }
 
 import {
