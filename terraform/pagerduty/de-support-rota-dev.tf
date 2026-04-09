@@ -309,11 +309,6 @@ import {
 }
 
 import {
-  to = module.users_de_g7_dev["matthew.price2@justice.gov.uk"].pagerduty_user.this
-  id = "PW0GM04"
-}
-
-import {
   to = module.users_de_seo_dev["siva.bathina@digital.justice.gov.uk"].pagerduty_user.this
   id = "POQ8MD1"
 }
@@ -336,11 +331,6 @@ import {
 import {
   to = module.users_de_g7_dev["andrew.craik@justice.gov.uk"].pagerduty_user.this
   id = "PBLDKJP"
-}
-
-import {
-  to = module.users_de_g7_dev["supratik.chowdhury@digital.justice.gov.uk"].pagerduty_user.this
-  id = "PUZN13S"
 }
 
 import {
