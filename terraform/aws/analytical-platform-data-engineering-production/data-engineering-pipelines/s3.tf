@@ -222,6 +222,7 @@ module "datalake_prod" {
 
 resource "aws_s3_bucket_lifecycle_configuration" "aws_athena_results_eu_west_2" {
   bucket = "aws-athena-query-results-189157455002-eu-west-2"
+
   rule {
     id     = "expiry"
     status = "Enabled"
@@ -232,8 +233,9 @@ resource "aws_s3_bucket_lifecycle_configuration" "aws_athena_results_eu_west_2" 
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "aws_athena_results_eu_west_1" {
-  provider = aws.eu_west_1
   bucket   = "aws-athena-query-results-189157455002-eu-west-1"
+  region = "eu_west_1"
+
   rule {
     id     = "expiry"
     status = "Enabled"
