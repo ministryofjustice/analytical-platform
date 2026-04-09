@@ -15,7 +15,7 @@ resource "aws_lakeformation_data_lake_settings" "settings" {
     [
       "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/aws-reserved/sso.amazonaws.com/eu-west-2/${data.aws_iam_role.aws_sso_modernisation_platform_data_eng.name}",
       data.aws_iam_role.github_actions.arn,
-      data.aws_iam_roles.probation-cadet.arns
+      data.aws_iam_roles.probation_cadet.arns
     ]
   )
 
