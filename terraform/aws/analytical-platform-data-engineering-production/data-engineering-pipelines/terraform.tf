@@ -32,6 +32,17 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias  = "eu_west_1"
+  region = "eu-west-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/GlobalGitHubActionAdmin"
+  }
+  default_tags {
+    tags = var.tags
+  }
+}
+
+provider "aws" {
   alias  = "analytical-platform-management-production"
   region = "eu-west-2"
   assume_role {
