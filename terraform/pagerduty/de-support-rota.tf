@@ -140,11 +140,6 @@ locals {
 
   users_de_seo = [
     {
-      name  = "Siva Bathina"
-      email = "siva.bathina@digital.justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Andrew Cook"
       email = "andrew.cook@digital.justice.gov.uk"
       role  = "responder"
@@ -155,23 +150,8 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Thomas Hirsch"
-      email = "thomas.hirsch@justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "William Orr"
-      email = "william.orr@digital.justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Khristiania Raihan"
-      email = "khristiania.raihan@justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Mohammed Ahad"
-      email = "mohammed.ahad1@justice.gov.uk"
+      name  = "Antony Scott"
+      email = "antony.scott@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -180,13 +160,8 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Antony Scott"
-      email = "antony.scott@justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Lucy AstleyJones"
-      email = "lucy.astleyjones@justice.gov.uk"
+      name  = "Daniel Johnstone"
+      email = "daniel.johnstone@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -195,17 +170,46 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Daniel Johnstone"
-      email = "daniel.johnstone@justice.gov.uk"
+      name  = "Khristiania Raihan"
+      email = "khristiania.raihan@justice.gov.uk"
       role  = "responder"
     },
-
+    {
+      name  = "Lucy AstleyJones"
+      email = "lucy.astleyjones@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Mohammed Ahad"
+      email = "mohammed.ahad1@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Siva Bathina"
+      email = "siva.bathina@digital.justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Thomas Hirsch"
+      email = "thomas.hirsch@justice.gov.uk"
+      role  = "responder"
+    },
   ]
 
   users_de_g7 = [
     {
-      name  = "Matt Heery"
-      email = "matt.heery@justice.gov.uk"
+      name  = "Andrew Craik"
+      email = "andrew.craik@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Guy Wheeler"
+      email = "guy.wheeler@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Jovita Brundziene"
+      email = "jovita.brundziene@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -214,8 +218,23 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Andrew Craik"
-      email = "andrew.craik@justice.gov.uk"
+      name  = "Laurence Droy"
+      email = "laurence.droy@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Matt Heery"
+      email = "matt.heery@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Philip Sinfield"
+      email = "philip.sinfield@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Stuart James"
+      email = "stuart.james1@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -228,32 +247,6 @@ locals {
       email = "tapan.perkins@digital.justice.gov.uk"
       role  = "responder"
     },
-    {
-      name  = "Philip Sinfield"
-      email = "philip.sinfield@justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Laurence Droy"
-      email = "laurence.droy@justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Stuart James"
-      email = "stuart.james1@justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Jovita Brundziene"
-      email = "jovita.brundziene@justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Guy Wheeler"
-      email = "guy.wheeler@justice.gov.uk"
-      role  = "responder"
-    },
-
   ]
 }
 
@@ -294,13 +287,18 @@ module "users_de_g7" {
 }
 
 import {
-  to = module.users_de_seo["guy.wheeler@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_g7["andrew.craik@justice.gov.uk"].pagerduty_user.this
+  id = "PBLDKJP"
+}
+
+import {
+  to = module.users_de_g7["guy.wheeler@justice.gov.uk"].pagerduty_user.this
   id = "PWL9H7T"
 }
 
 import {
-  to = module.users_de_g7["matt.heery@justice.gov.uk"].pagerduty_user.this
-  id = "PKCT98I"
+  to = module.users_de_g7["jovita.brundziene@justice.gov.uk"].pagerduty_user.this
+  id = "PKJMJZD"
 }
 
 import {
@@ -309,33 +307,23 @@ import {
 }
 
 import {
-  to = module.users_de_seo["siva.bathina@digital.justice.gov.uk"].pagerduty_user.this
-  id = "POQ8MD1"
+  to = module.users_de_g7["laurence.droy@justice.gov.uk"].pagerduty_user.this
+  id = "P2SZG76"
 }
 
 import {
-  to = module.users_de_seo["andrew.cook@digital.justice.gov.uk"].pagerduty_user.this
-  id = "PZDNZKP"
+  to = module.users_de_g7["matt.heery@justice.gov.uk"].pagerduty_user.this
+  id = "PKCT98I"
 }
 
 import {
-  to = module.users_de_seo["anthony.cody@digital.justice.gov.uk"].pagerduty_user.this
-  id = "PIUFXQZ"
+  to = module.users_de_g7["philip.sinfield@justice.gov.uk"].pagerduty_user.this
+  id = "P94ZLYO"
 }
 
 import {
-  to = module.users_de_seo["thomas.hirsch@justice.gov.uk"].pagerduty_user.this
-  id = "PWPVBYR"
-}
-
-import {
-  to = module.users_de_seo["william.orr@digital.justice.gov.uk"].pagerduty_user.this
-  id = "P5XVEI1"
-}
-
-import {
-  to = module.users_de_g7["andrew.craik@justice.gov.uk"].pagerduty_user.this
-  id = "PBLDKJP"
+  to = module.users_de_g7["stuart.james1@justice.gov.uk"].pagerduty_user.this
+  id = "PPIALTZ"
 }
 
 import {
@@ -349,28 +337,13 @@ import {
 }
 
 import {
-  to = module.users_de_g7["laurence.droy@justice.gov.uk"].pagerduty_user.this
-  id = "P2SZG76"
+  to = module.users_de_seo["andrew.cook@digital.justice.gov.uk"].pagerduty_user.this
+  id = "PZDNZKP"
 }
 
 import {
-  to = module.users_de_g7["philip.sinfield@justice.gov.uk"].pagerduty_user.this
-  id = "P94ZLYO"
-}
-
-import {
-  to = module.users_de_seo["khristiania.raihan@justice.gov.uk"].pagerduty_user.this
-  id = "P0O354I"
-}
-
-import {
-  to = module.users_de_seo["mohammed.ahad1@justice.gov.uk"].pagerduty_user.this
-  id = "PJ6XUZ1"
-}
-
-import {
-  to = module.users_de_seo["damilola.oyebade@justice.gov.uk"].pagerduty_user.this
-  id = "PA22HVA"
+  to = module.users_de_seo["anthony.cody@digital.justice.gov.uk"].pagerduty_user.this
+  id = "PIUFXQZ"
 }
 
 import {
@@ -379,18 +352,13 @@ import {
 }
 
 import {
-  to = module.users_de_g7["jovita.brundziene@justice.gov.uk"].pagerduty_user.this
-  id = "PKJMJZD"
+  to = module.users_de_seo["damilola.oyebade@justice.gov.uk"].pagerduty_user.this
+  id = "PA22HVA"
 }
 
 import {
-  to = module.users_de_seo["lucy.astleyjones@justice.gov.uk"].pagerduty_user.this
-  id = "PLV2QS6"
-}
-
-import {
-  to = module.users_de_g7["stuart.james1@justice.gov.uk"].pagerduty_user.this
-  id = "PPIALTZ"
+  to = module.users_de_seo["daniel.johnstone@justice.gov.uk"].pagerduty_user.this
+  id = "PPO08VA"
 }
 
 import {
@@ -399,6 +367,26 @@ import {
 }
 
 import {
-  to = module.users_de_seo["daniel.johnstone@justice.gov.uk"].pagerduty_user.this
-  id = "PPO08VA"
+  to = module.users_de_seo["khristiania.raihan@justice.gov.uk"].pagerduty_user.this
+  id = "P0O354I"
+}
+
+import {
+  to = module.users_de_seo["lucy.astleyjones@justice.gov.uk"].pagerduty_user.this
+  id = "PLV2QS6"
+}
+
+import {
+  to = module.users_de_seo["mohammed.ahad1@justice.gov.uk"].pagerduty_user.this
+  id = "PJ6XUZ1"
+}
+
+import {
+  to = module.users_de_seo["siva.bathina@digital.justice.gov.uk"].pagerduty_user.this
+  id = "POQ8MD1"
+}
+
+import {
+  to = module.users_de_seo["thomas.hirsch@justice.gov.uk"].pagerduty_user.this
+  id = "PWPVBYR"
 }
