@@ -2,9 +2,12 @@
 # Lake Formation - admin permissions
 # https://user-guide.modernisation-platform.service.justice.gov.uk/runbooks/adding-admin-data-lake-formation-permissions.html
 # ------------------------------------------------------------------------
-
 data "aws_iam_role" "github_actions" {
   name = "GlobalGitHubActionAdmin"
+}
+
+data "aws_iam_roles" "probation_cadet" {
+  name_regex = "probation-cadet-*"
 }
 
 resource "aws_lakeformation_data_lake_settings" "settings" {
@@ -12,6 +15,7 @@ resource "aws_lakeformation_data_lake_settings" "settings" {
     [
       "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/aws-reserved/sso.amazonaws.com/eu-west-2/${data.aws_iam_role.aws_sso_modernisation_platform_data_eng.name}",
       data.aws_iam_role.github_actions.arn,
+      data.aws_iam_roles.probation_cadet.arns
     ]
   )
 
@@ -100,39 +104,43 @@ module "lakeformation_registration_iam_role" {
 # ------------------------------------------------------------------------
 # Lake Formation - register S3 resource
 # ------------------------------------------------------------------------
+locals {
+  probation_data_bucket_arns = {
+    dev      = module.datalake_dev.bucket.arn
+    preprod  = module.datalake_preprod.bucket.arn
+    prod     = module.datalake_prod.bucket.arn
+    prod_dev = module.datalake_prod_dev.bucket.arn
+  }
 
-resource "aws_lakeformation_resource" "probation_dev" {
-  arn                   = module.datalake_dev.bucket.arn
+  curated_databases = ["ppud_dev_dbt", "ppud_preprod_dbt", "ppud"]
+
+  derived_databases = ["public_protection_int_prod_dev_dbt", "stg_ppud_prod_dev_dbt"]
+}
+
+resource "aws_lakeformation_resource" "probation_data_buckets" {
+  for_each = local.probation_data_bucket_arns
+
+  arn                   = each.value
   role_arn              = module.lakeformation_registration_iam_role.arn
   hybrid_access_enabled = true
 }
 
-resource "aws_lakeformation_resource" "probation_preprod" {
-  arn                   = module.datalake_preprod.bucket.arn
-  role_arn              = module.lakeformation_registration_iam_role.arn
-  hybrid_access_enabled = true
-}
+resource "aws_lakeformation_permissions" "probation_datalake_data_location" {
+  for_each = local.probation_data_bucket_arns
 
-resource "aws_lakeformation_resource" "probation_prod" {
-  arn                   = module.datalake_prod.bucket.arn
-  role_arn              = module.lakeformation_registration_iam_role.arn
-  hybrid_access_enabled = true
-}
+  permissions = [
+    "DATA_LOCATION_ACCESS"
+  ]
+  principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
 
-resource "aws_lakeformation_resource" "probation_prod_dev" {
-  arn                   = module.datalake_prod_dev.bucket.arn
-  role_arn              = module.lakeformation_registration_iam_role.arn
-  hybrid_access_enabled = true
+  data_location {
+    arn = each.value
+  }
 }
 
 # ------------------------------------------------------------------------
 # Lake Formation - grant permissions
 # ------------------------------------------------------------------------
-locals {
-  curated_databases = ["ppud_dev_dbt", "ppud_preprod_dbt", "ppud"]
-
-  derived_databases = ["public_protection_int_prod_dev_dbt", "stg_ppud_prod_dev_dbt"]
-}
 
 resource "aws_lakeformation_opt_in" "probation_datalake_curated" {
   for_each = toset(local.curated_databases)
@@ -193,7 +201,7 @@ resource "aws_lakeformation_permissions" "probation_datalake_derived" {
   for_each = toset(local.derived_databases)
 
   permissions = [
-    "ALL",
+    "SELECT", "INSERT", "DELETE", "DESCRIBE", "ALTER", "DROP"
   ]
   principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
 
@@ -201,57 +209,5 @@ resource "aws_lakeformation_permissions" "probation_datalake_derived" {
     database_name = each.value
     wildcard      = true
     catalog_id    = "189157455002"
-  }
-}
-
-resource "aws_lakeformation_permissions" "probation_datalake_dev" {
-  for_each = toset(local.derived_databases)
-
-  permissions = [
-    "DATA_LOCATION_ACCESS",
-  ]
-  principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
-
-  data_location {
-    arn = module.datalake_dev.bucket.arn
-  }
-}
-
-resource "aws_lakeformation_permissions" "probation_datalake_preprod" {
-  for_each = toset(local.derived_databases)
-
-  permissions = [
-    "DATA_LOCATION_ACCESS",
-  ]
-  principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
-
-  data_location {
-    arn = module.datalake_preprod.bucket.arn
-  }
-}
-
-resource "aws_lakeformation_permissions" "probation_datalake_prod" {
-  for_each = toset(local.derived_databases)
-
-  permissions = [
-    "DATA_LOCATION_ACCESS",
-  ]
-  principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
-
-  data_location {
-    arn = module.datalake_prod.bucket.arn
-  }
-}
-
-resource "aws_lakeformation_permissions" "probation_datalake_prod_dev" {
-  for_each = toset(local.derived_databases)
-
-  permissions = [
-    "DATA_LOCATION_ACCESS",
-  ]
-  principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
-
-  data_location {
-    arn = module.datalake_prod_dev.bucket.arn
   }
 }

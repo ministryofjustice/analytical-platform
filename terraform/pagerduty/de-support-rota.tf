@@ -294,7 +294,6 @@ import {
 import {
   to = module.users_de_g7["guy.wheeler@justice.gov.uk"].pagerduty_user.this
   id = "PXJRQIA"
-}
 
 import {
   to = module.users_de_g7["jovita.brundziene@justice.gov.uk"].pagerduty_user.this
