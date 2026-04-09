@@ -6,7 +6,7 @@ data "aws_iam_role" "github_actions" {
   name = "GlobalGitHubActionAdmin"
 }
 
-data "aws_iam_roles" "probation-cadet" {
+data "aws_iam_roles" "probation_cadet" {
   name_regex = "probation-cadet-*"
 }
 
@@ -129,7 +129,7 @@ resource "aws_lakeformation_permissions" "probation_datalake_data_location" {
   for_each = local.probation_data_bucket_arns
 
   permissions = [
-    "DATA_LOCATION_ACCESS",
+    "DATA_LOCATION_ACCESS"
   ]
   principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
 
@@ -201,7 +201,7 @@ resource "aws_lakeformation_permissions" "probation_datalake_derived" {
   for_each = toset(local.derived_databases)
 
   permissions = [
-    "ALL",
+    "SELECT", "INSERT", "DELETE", "DESCRIBE", "ALTER", "DROP"
   ]
   principal = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
 
