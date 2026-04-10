@@ -51,7 +51,7 @@ locals {
           ]
         },
         {
-          name                         = "DE Daily Support Rota HEO_SEO Mon Thur"
+          name                         = "DE Daily Support Rota HEO_SEO Mon_Thur"
           start                        = "2023-03-27T09:00:00Z"
           rotation_virtual_start       = "2025-07-05T00:00:00+01:00"
           rotation_turn_length_seconds = 86400
