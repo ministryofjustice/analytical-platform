@@ -51,7 +51,7 @@ locals {
           ]
         },
         {
-          name                         = "DE Daily Support Rota HEO_SEO Mon Thur"
+          name                         = "DE Daily Support Rota HEO_SEO Mon_Thur"
           start                        = "2023-03-27T09:00:00Z"
           rotation_virtual_start       = "2025-07-05T00:00:00+01:00"
           rotation_turn_length_seconds = 86400
@@ -299,11 +299,6 @@ module "users_de_g7_dev" {
 }
 
 import {
-  to = module.users_de_seo_dev["guy.wheeler@justice.gov.uk"].pagerduty_user.this
-  id = "PWL9H7T"
-}
-
-import {
   to = module.users_de_g7_dev["matt.heery@justice.gov.uk"].pagerduty_user.this
   id = "PKCT98I"
 }
@@ -311,11 +306,6 @@ import {
 import {
   to = module.users_de_g7_dev["lalitha.nagarur3@justice.gov.uk"].pagerduty_user.this
   id = "PKIIO6K"
-}
-
-import {
-  to = module.users_de_g7_dev["matthew.price2@justice.gov.uk"].pagerduty_user.this
-  id = "PW0GM04"
 }
 
 import {
@@ -339,18 +329,8 @@ import {
 }
 
 import {
-  to = module.users_de_seo_dev["william.orr@digital.justice.gov.uk"].pagerduty_user.this
-  id = "P5XVEI1"
-}
-
-import {
   to = module.users_de_g7_dev["andrew.craik@justice.gov.uk"].pagerduty_user.this
   id = "PBLDKJP"
-}
-
-import {
-  to = module.users_de_g7_dev["supratik.chowdhury@digital.justice.gov.uk"].pagerduty_user.this
-  id = "PUZN13S"
 }
 
 import {
