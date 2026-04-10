@@ -76,7 +76,7 @@ locals {
             module.users_de_g7["andrew.craik@justice.gov.uk"].id,
             module.users_de_g7["supratik.chowdhury@justice.gov.uk"].id,
             module.users_de_g7["guy.wheeler@justice.gov.uk"].id,
-            module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].id,
+            module.users_de_g7["tapan.perkins@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -244,7 +244,7 @@ locals {
     },
     {
       name  = "Tapan Perkins"
-      email = "tapan.perkins@digital.justice.gov.uk"
+      email = "tapan.perkins@justice.gov.uk"
       role  = "responder"
     },
   ]
@@ -288,7 +288,7 @@ module "users_de_g7" {
 
 import {
   to = module.users_de_g7["andrew.craik@justice.gov.uk"].pagerduty_user.this
-  id = "PBLDKJP"
+  id = "PKS67GQ"
 }
 
 import {
@@ -303,22 +303,22 @@ import {
 
 import {
   to = module.users_de_g7["lalitha.nagarur3@justice.gov.uk"].pagerduty_user.this
-  id = "PKIIO6K"
+  id = "PGFI740"
 }
 
 import {
   to = module.users_de_g7["laurence.droy@justice.gov.uk"].pagerduty_user.this
-  id = "P2SZG76"
+  id = "PD6X6RA"
 }
 
 import {
   to = module.users_de_g7["matt.heery@justice.gov.uk"].pagerduty_user.this
-  id = "PKCT98I"
+  id = "PEYIF4Q"
 }
 
 import {
   to = module.users_de_g7["philip.sinfield@justice.gov.uk"].pagerduty_user.this
-  id = "P94ZLYO"
+  id = "PVKL4MK"
 }
 
 import {
@@ -332,18 +332,18 @@ import {
 }
 
 import {
-  to = module.users_de_g7["tapan.perkins@digital.justice.gov.uk"].pagerduty_user.this
-  id = "PXAKE4K"
+  to = module.users_de_g7["tapan.perkins@justice.gov.uk"].pagerduty_user.this
+  id = "PVWWRLX"
 }
 
 import {
   to = module.users_de_seo["andrew.cook@digital.justice.gov.uk"].pagerduty_user.this
-  id = "PZDNZKP"
+  id = "PHUQQ62"
 }
 
 import {
   to = module.users_de_seo["anthony.cody@digital.justice.gov.uk"].pagerduty_user.this
-  id = "PIUFXQZ"
+  id = "PDI2PTC"
 }
 
 import {
@@ -368,7 +368,7 @@ import {
 
 import {
   to = module.users_de_seo["khristiania.raihan@justice.gov.uk"].pagerduty_user.this
-  id = "P0O354I"
+  id = "PSYDXO9"
 }
 
 import {
@@ -378,15 +378,15 @@ import {
 
 import {
   to = module.users_de_seo["mohammed.ahad1@justice.gov.uk"].pagerduty_user.this
-  id = "PJ6XUZ1"
+  id = "PWZTO1M"
 }
 
 import {
   to = module.users_de_seo["siva.bathina@digital.justice.gov.uk"].pagerduty_user.this
-  id = "POQ8MD1"
+  id = "PT05NPZ"
 }
 
 import {
   to = module.users_de_seo["thomas.hirsch@justice.gov.uk"].pagerduty_user.this
-  id = "PWPVBYR"
+  id = "P1VK7W6"
 }
