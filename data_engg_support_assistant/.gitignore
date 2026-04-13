@@ -82,6 +82,7 @@ data/images/
 data/text_chunks/
 data/processed/
 data/kb_catalog.json
+data/coverage_results.json
 reports/validation.md
 
 # Keep final JSON outputs
@@ -102,3 +103,18 @@ yarn-error.log*
 cdk.out/
 package/resources-*.json
 notebooks/package/resources-*.json
+
+# -------------------------
+# Terraform
+# -------------------------
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+*.tfstate.backup
