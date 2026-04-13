@@ -118,3 +118,4 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 *.tfstate.backup
+.DS_Store
