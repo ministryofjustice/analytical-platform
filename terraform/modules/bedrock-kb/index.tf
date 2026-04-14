@@ -16,6 +16,8 @@ resource "null_resource" "create_index" {
   triggers = {
     collection_endpoint = aws_opensearchserverless_collection.vector.collection_endpoint
     index_name          = var.index_name
+    dimensions          = var.vector_dimensions
+    vector_field        = var.vector_field
   }
 
   provisioner "local-exec" {

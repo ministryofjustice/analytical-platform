@@ -1,3 +1,9 @@
+# Wait for IAM role replication before Bedrock tries to assume it
+resource "time_sleep" "wait_for_iam_replication" {
+  depends_on = [aws_iam_role.bedrock_kb_role]
+  create_duration = "30s"
+}
+
 resource "awscc_bedrock_knowledge_base" "kb" {
   count = var.skip_kb_creation ? 0 : 1
 
