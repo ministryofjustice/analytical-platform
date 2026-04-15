@@ -219,3 +219,28 @@ module "datalake_prod" {
     }
   )
 }
+
+resource "aws_s3_bucket_lifecycle_configuration" "aws_athena_results_eu_west_2" {
+  bucket = "aws-athena-query-results-189157455002-eu-west-2"
+
+  rule {
+    id     = "expiry"
+    status = "Enabled"
+    expiration {
+      days = 1
+    }
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "aws_athena_results_eu_west_1" {
+  bucket = "aws-athena-query-results-189157455002-eu-west-1"
+  region = "eu-west-1"
+
+  rule {
+    id     = "expiry"
+    status = "Enabled"
+    expiration {
+      days = 1
+    }
+  }
+}
