@@ -29,7 +29,9 @@ resource "aws_lambda_function" "smart_rag" {
       MODEL_ID            = var.model_id
       MAX_CONTEXT_TOKENS  = tostring(var.max_context_tokens)
       AOSS_ENDPOINT       = var.aoss_collection_endpoint
-      DYNAMODB_TABLE_NAME = "RAG-ConversationLogs"
+      DYNAMODB_TABLE_NAME = var.dynamodb_table_name
+      GUARDRAIL_ID        = var.guardrail_id        
+      GUARDRAIL_VERSION   = var.guardrail_version   
     }
   }
 

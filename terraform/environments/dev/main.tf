@@ -31,23 +31,61 @@ provider "awscc" {
   region = var.region
 }
 
+# ==================== Local Values ====================
+
+locals {
+  common_tags = {
+    Owner       = "data-engineering"
+    CostCenter  = "de-genai"
+    Environment = var.environment
+    ManagedBy   = "terraform"
+  }
+}
+
+# ==================== Database Module (DynamoDB) ====================
+
+module "database" {
+  source = "../../modules/database"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  # Optional overrides
+  table_name             = var.dynamodb_table_name
+  point_in_time_recovery = var.dynamodb_pitr_enabled
+  stream_enabled         = var.dynamodb_stream_enabled
+
+  tags = local.common_tags
+}
+
+# ==================== Security Module (Guardrails) ====================
+
+module "security" {
+  source = "../../modules/security"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  # Optional overrides
+  content_filter_strength = var.guardrail_filter_strength
+
+  tags = local.common_tags
+}
+
 # ==================== Bedrock Knowledge Base Module ====================
 
 module "bedrock_kb" {
   source = "../../modules/bedrock-kb"
 
-  region               = var.region
-  project_name         = var.project_name
-  environment          = var.environment
-  s3_bucket_name       = var.s3_bucket_name
-  skip_index_creation  = var.skip_index_creation
-  skip_kb_creation     = var.skip_kb_creation
-  create_s3_bucket     = var.create_s3_bucket
-  
-  tags = {
-    Owner      = "data-engineering"
-    CostCenter = "de-genai"
-  }
+  region              = var.region
+  project_name        = var.project_name
+  environment         = var.environment
+  s3_bucket_name      = var.s3_bucket_name
+  skip_index_creation = var.skip_index_creation
+  skip_kb_creation    = var.skip_kb_creation
+  create_s3_bucket    = var.create_s3_bucket
+
+  tags = local.common_tags
 }
 
 # ==================== Lambda Module ====================
@@ -72,15 +110,23 @@ module "lambda" {
   max_context_tokens       = var.max_context_tokens
   aoss_collection_endpoint = module.bedrock_kb.collection_endpoint
 
+  # DynamoDB
+  dynamodb_table_name = module.database.table_name
+
+  # Guardrails
+  guardrail_id      = module.security.guardrail_id
+  guardrail_version = module.security.guardrail_version
+
   # Authentication
   auth_token = var.auth_token
 
-  tags = {
-    Owner      = "data-engineering"
-    CostCenter = "de-genai"
-  }
+  tags = local.common_tags
 
-  depends_on = [module.bedrock_kb]
+  depends_on = [
+    module.bedrock_kb,
+    module.database,
+    module.security
+  ]
 }
 
 # ==================== API Gateway Module ====================
@@ -104,10 +150,7 @@ module "api_gateway" {
   # Stage Configuration
   stage_name = var.api_stage_name
 
-  tags = {
-    Owner      = "data-engineering"
-    CostCenter = "de-genai"
-  }
+  tags = local.common_tags
 
   depends_on = [module.lambda]
 }

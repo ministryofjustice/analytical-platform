@@ -1,5 +1,34 @@
 # terraform/environments/dev/outputs.tf
 
+# ==================== Database (DynamoDB) ====================
+
+output "dynamodb_table_name" {
+  description = "DynamoDB table name"
+  value       = module.database.table_name
+}
+
+output "dynamodb_table_arn" {
+  description = "DynamoDB table ARN"
+  value       = module.database.table_arn
+}
+
+output "dynamodb_stream_arn" {
+  description = "DynamoDB stream ARN"
+  value       = module.database.stream_arn
+}
+
+# ==================== Security (Guardrails) ====================
+
+output "guardrail_id" {
+  description = "Bedrock Guardrail ID"
+  value       = module.security.guardrail_id
+}
+
+output "guardrail_version" {
+  description = "Bedrock Guardrail Version"
+  value       = module.security.guardrail_version
+}
+
 # ==================== Bedrock Knowledge Base ====================
 
 output "knowledge_base_id" {
@@ -15,21 +44,6 @@ output "knowledge_base_arn" {
 output "collection_endpoint" {
   description = "OpenSearch Serverless collection endpoint"
   value       = module.bedrock_kb.collection_endpoint
-}
-
-output "debug_caller_arn" {
-  description = "Debug: Caller ARN"
-  value       = module.bedrock_kb.debug_caller_arn
-}
-
-output "debug_assumed_role_name" {
-  description = "Debug: Assumed role name"
-  value       = module.bedrock_kb.debug_assumed_role_name
-}
-
-output "debug_caller_role_arn" {
-  description = "Debug: Caller role ARN"
-  value       = module.bedrock_kb.debug_caller_role_arn
 }
 
 # ==================== Lambda ====================
@@ -81,28 +95,24 @@ output "feedback_endpoint" {
   value       = module.api_gateway.feedback_endpoint
 }
 
-output "auth_enabled" {
-  description = "Whether API authentication is enabled"
-  value       = module.api_gateway.auth_enabled
-}
-
-# ==================== Testing ====================
-
-output "curl_test_command" {
-  description = "Sample curl command to test the API"
-  value       = module.api_gateway.curl_test_command
-  sensitive   = true  # Hides from logs
-}
-
-# ==================== Summary ====================
+# ==================== Deployment Summary ====================
 
 output "deployment_summary" {
   description = "Complete deployment summary"
-  value = <<-EOT
+  value       = <<-EOT
     
     ========================================
     MOJ GenAI App - Deployment Summary
     ========================================
+    
+    Database:
+       Table:        ${module.database.table_name}
+       Streams:      ✅ Enabled
+       PITR:         ✅ Enabled
+    
+    Security:
+       Guardrail:    ${module.security.guardrail_id}
+       Version:      ${module.security.guardrail_version}
     
     Knowledge Base:
        KB ID:        ${module.bedrock_kb.knowledge_base_id}
@@ -112,14 +122,9 @@ output "deployment_summary" {
     Lambda Functions:
        Main:         ${module.lambda.smart_rag_function_name}
        Authorizer:   ${module.lambda.authorizer_function_name}
-       Layer:        ${module.lambda.layer_arn}
     
     API Gateway:
-       API ID:       ${module.api_gateway.api_id}
        Endpoint:     ${module.api_gateway.api_endpoint}
-       Auth:         ✅ Enabled
-    
-    Endpoints:
        /ask:         ${module.api_gateway.ask_endpoint}
        /feedback:    ${module.api_gateway.feedback_endpoint}
     

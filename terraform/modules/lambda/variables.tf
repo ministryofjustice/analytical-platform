@@ -91,3 +91,24 @@ variable "tags" {
   default     = {}
   description = "Tags to apply to all resources"
 }
+
+# ==================== Guardrails ====================
+variable "guardrail_id" {
+  type        = string
+  description = "Bedrock Guardrail ID"
+  default     = ""
+}
+
+variable "guardrail_version" {
+  type        = string
+  description = "Bedrock Guardrail Version"
+  default     = ""
+}
+
+# ==================== DynamoDB ====================
+
+variable "dynamodb_table_name" {
+  type        = string
+  description = "DynamoDB table name for conversation logs"
+  default     = "RAG-ConversationLogs"
+}

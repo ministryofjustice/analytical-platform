@@ -1,16 +1,14 @@
-# Referencing existing role
+# Reference existing Lambda execution role and attach required policies
 
-# modules/lambda/iam.tf
-# Reference existing Lambda execution role (created by deploy_lambda.py)
-
-# ==================== Data Source for Existing Role ====================
+# ==================== Data Sources ====================
 
 data "aws_iam_role" "lambda_execution_role" {
   name = var.lambda_role_name
 }
 
+data "aws_caller_identity" "current" {}
+
 # ==================== Bedrock Policy Attachment ====================
-# Ensures Bedrock permissions are attached (matches deploy_lambda.py behavior)
 
 resource "aws_iam_role_policy_attachment" "bedrock_full_access" {
   role       = data.aws_iam_role.lambda_execution_role.name
@@ -18,7 +16,6 @@ resource "aws_iam_role_policy_attachment" "bedrock_full_access" {
 }
 
 # ==================== AOSS Access Policy ====================
-# Allows Lambda to query OpenSearch Serverless
 
 resource "aws_iam_role_policy" "aoss_access" {
   name = "${var.project_name}-${var.environment}-lambda-aoss-access"
@@ -39,7 +36,6 @@ resource "aws_iam_role_policy" "aoss_access" {
 }
 
 # ==================== CloudWatch Logs Policy ====================
-# Basic execution role for logging
 
 resource "aws_iam_role_policy" "cloudwatch_logs" {
   name = "${var.project_name}-${var.environment}-lambda-logs"
@@ -50,18 +46,47 @@ resource "aws_iam_role_policy" "cloudwatch_logs" {
     Statement = [
       {
         Effect = "Allow"
+        Action = "logs:CreateLogGroup"
+        Resource = "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:*"
+      },
+      {
+        Effect = "Allow"
         Action = [
-          "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ]
-        Resource = "arn:aws:logs:${var.region}:*:*"
+        Resource = [
+          "${aws_cloudwatch_log_group.smart_rag.arn}:*",
+          "${aws_cloudwatch_log_group.authorizer.arn}:*"
+        ]
       }
     ]
   })
 }
 
-#data.aws_iam_role	References existing role (no import needed)
-# bedrock_full_access	Matches Python script behavior
-# aoss_access	Query OpenSearch Serverless
-# cloudwatch_logs	Lambda logging
+# ==================== DynamoDB Policy ====================
+# For conversation logging (DynamoDBBackend)
+
+resource "aws_iam_role_policy" "dynamodb_access" {
+  name = "${var.project_name}-${var.environment}-lambda-dynamodb"
+  role = data.aws_iam_role.lambda_execution_role.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:PutItem",
+          "dynamodb:GetItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:Query"
+        ]
+        Resource = [
+          "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${var.dynamodb_table_name}",
+          "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${var.dynamodb_table_name}/index/*"
+        ]
+      }
+    ]
+  })
+}

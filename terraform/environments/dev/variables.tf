@@ -94,9 +94,38 @@ variable "api_stage_name" {
   description = "API Gateway stage name"
 }
 
+# ==================== Database (DynamoDB) ====================
+
+variable "dynamodb_table_name" {
+  type        = string
+  default     = "RAG-ConversationLogs"
+  description = "DynamoDB table name for conversation logs"
+}
+
+variable "dynamodb_pitr_enabled" {
+  type        = bool
+  default     = true
+  description = "Enable Point-in-Time Recovery for DynamoDB"
+}
+
+variable "dynamodb_stream_enabled" {
+  type        = bool
+  default     = true
+  description = "Enable DynamoDB Streams"
+}
+
+# ==================== Security (Guardrails) ====================
+
+variable "guardrail_filter_strength" {
+  type        = string
+  default     = "MEDIUM"
+  description = "Content filter strength (NONE, LOW, MEDIUM, HIGH)"
+}
+
 # ==================== GitHub OIDC ====================
 
 variable "github_role_arn" {
   type        = string
   description = "GitHub Actions OIDC role ARN for AOSS access"
+  default     = ""
 }
