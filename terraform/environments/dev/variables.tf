@@ -63,11 +63,6 @@ variable "lambda_layer_name" {
   description = "Name of existing Lambda layer"
 }
 
-variable "lambda_role_name" {
-  type        = string
-  description = "Name of existing Lambda execution role"
-}
-
 variable "bedrock_model_id" {
   type        = string
   default     = "anthropic.claude-3-sonnet-20240229-v1:0"
@@ -90,7 +85,7 @@ variable "auth_token" {
 
 variable "api_stage_name" {
   type        = string
-  default     = "prod"
+  default     = "dev"
   description = "API Gateway stage name"
 }
 
@@ -124,8 +119,18 @@ variable "guardrail_filter_strength" {
 
 # ==================== GitHub OIDC ====================
 
-variable "github_role_arn" {
+variable "github_org" {
   type        = string
-  description = "GitHub Actions OIDC role ARN for AOSS access"
-  default     = ""
+  description = "GitHub organization or username"
+}
+
+variable "github_repo" {
+  type        = string
+  description = "GitHub repository name"
+}
+
+variable "use_existing_layer" {
+  type        = bool
+  default     = false
+  description = "Whether Lambda layer already exists"
 }

@@ -69,6 +69,13 @@ module "security" {
   # Optional overrides
   content_filter_strength = var.guardrail_filter_strength
 
+  # Missing OIDC variables
+  create_oidc_provider   = false  # provider already exists
+  github_org             = var.github_org
+  github_repo            = var.github_repo
+  terraform_state_bucket = "moj-de-genai-terraform-state"
+  terraform_lock_table   = "moj-de-genai-terraform-state"
+
   tags = local.common_tags
 }
 
@@ -95,20 +102,21 @@ module "lambda" {
 
   region       = var.region
   project_name = var.project_name
-  environment  = var.environment
+  environment  = "dev"
 
   # Lambda Configuration
   lambda_timeout    = var.lambda_timeout
   lambda_memory     = var.lambda_memory
   lambda_runtime    = var.lambda_runtime
   lambda_layer_name = var.lambda_layer_name
-  lambda_role_name  = var.lambda_role_name
+  use_existing_layer = var.use_existing_layer
 
   # Bedrock Knowledge Base
   kb_id                    = module.bedrock_kb.knowledge_base_id
   model_id                 = var.bedrock_model_id
   max_context_tokens       = var.max_context_tokens
   aoss_collection_endpoint = module.bedrock_kb.collection_endpoint
+  aoss_collection_arn      = module.bedrock_kb.collection_arn
 
   # DynamoDB
   dynamodb_table_name = module.database.table_name
@@ -116,6 +124,7 @@ module "lambda" {
   # Guardrails
   guardrail_id      = module.security.guardrail_id
   guardrail_version = module.security.guardrail_version
+  enable_guardrails = true    
 
   # Authentication
   auth_token = var.auth_token

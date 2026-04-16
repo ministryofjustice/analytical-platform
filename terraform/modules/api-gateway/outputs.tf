@@ -17,28 +17,33 @@ output "api_arn" {
   value       = aws_api_gateway_rest_api.chatbot.arn
 }
 
+output "execution_arn" {
+  description = "API Gateway execution ARN (for Lambda permissions)"
+  value       = aws_api_gateway_rest_api.chatbot.execution_arn
+}
+
 # ==================== Endpoints ====================
 
 output "api_endpoint" {
   description = "Base API endpoint URL"
-  value       = aws_api_gateway_stage.prod.invoke_url
+  value       = aws_api_gateway_stage.this.invoke_url
 }
 
 output "ask_endpoint" {
   description = "Full /ask endpoint URL"
-  value       = "${aws_api_gateway_stage.prod.invoke_url}/ask"
+  value       = "${aws_api_gateway_stage.this.invoke_url}/ask"
 }
 
 output "feedback_endpoint" {
   description = "Full /feedback endpoint URL"
-  value       = "${aws_api_gateway_stage.prod.invoke_url}/feedback"
+  value       = "${aws_api_gateway_stage.this.invoke_url}/feedback"
 }
 
 # ==================== Stage ====================
 
 output "stage_name" {
   description = "Deployed stage name"
-  value       = aws_api_gateway_stage.prod.stage_name
+  value       = aws_api_gateway_stage.this.stage_name
 }
 
 # ==================== Auth Status ====================
@@ -57,15 +62,10 @@ output "authorizer_id" {
 
 output "curl_test_command" {
   description = "Sample curl command to test the API"
-  value = local.enable_auth ? <<-EOT
-    curl -X POST ${aws_api_gateway_stage.prod.invoke_url}/ask \
+  value = <<-EOT
+    curl -X POST ${aws_api_gateway_stage.this.invoke_url}/ask \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_TOKEN" \
-      -d '{"text": "What is R-studio?"}'
-  EOT
-  : <<-EOT
-    curl -X POST ${aws_api_gateway_stage.prod.invoke_url}/ask \
-      -H "Content-Type: application/json" \
       -d '{"text": "What is R-studio?"}'
   EOT
 }

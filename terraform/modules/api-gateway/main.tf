@@ -3,8 +3,9 @@
 
 locals {
   api_name        = "${var.project_name}-${var.environment}-api"
+  stage_name      = var.stage_name != "" ? var.stage_name : var.environment
   enable_auth     = var.auth_token != ""
-  account_id      = data.aws_caller_identity.current.account_id
+  #account_id      = data.aws_caller_identity.current.account_id
 }
 
 # ==================== Data Sources ====================
@@ -44,7 +45,7 @@ resource "aws_api_gateway_resource" "feedback" {
 
 # ==================== Deployment ====================
 
-resource "aws_api_gateway_deployment" "prod" {
+resource "aws_api_gateway_deployment" "this" {
   rest_api_id = aws_api_gateway_rest_api.chatbot.id
 
   # Force redeployment when methods change
@@ -71,8 +72,8 @@ resource "aws_api_gateway_deployment" "prod" {
 
 # ==================== Stage ====================
 
-resource "aws_api_gateway_stage" "prod" {
-  deployment_id = aws_api_gateway_deployment.prod.id
+resource "aws_api_gateway_stage" "this" {
+  deployment_id = aws_api_gateway_deployment.this.id
   rest_api_id   = aws_api_gateway_rest_api.chatbot.id
   stage_name    = var.stage_name
 

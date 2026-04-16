@@ -141,6 +141,14 @@ def lambda_handler(event, context):
     Validates Bearer token and returns IAM Policy response.
 
     REST API format: {'principalId': str, 'policyDocument': {...}, 'context': {...}}
+    Args:
+        event: API Gateway authorizer event
+            - methodArn: ARN of the API method being called
+            - headers: HTTP headers including Authorization
+        context: Lambda context object
+    
+    Returns:
+        IAM Policy document allowing or denying the request
     """
     request_id = context.aws_request_id if context else 'unknown'
     

@@ -46,12 +46,18 @@ variable "auth_token" {
   sensitive   = true
 }
 
+variable "authorizer_cache_ttl" {
+  type        = number
+  default     = 0
+  description = "Authorizer result cache TTL in seconds (0 = no caching)"
+}
+
 # ==================== Stage Config ====================
 
 variable "stage_name" {
   type        = string
-  default     = "prod"
-  description = "API Gateway stage name"
+  default     = ""
+  description = "API Gateway stage name (defaults to environment if empty)"
 }
 
 # ==================== Tags ====================

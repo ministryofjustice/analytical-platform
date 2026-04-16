@@ -33,12 +33,12 @@ output "guardrail_version" {
 
 output "knowledge_base_id" {
   description = "Bedrock Knowledge Base ID"
-  value       = module.bedrock_kb.knowledge_base_id
+  value       = try(module.bedrock_kb.knowledge_base_id, "KB creation skipped")
 }
 
 output "knowledge_base_arn" {
   description = "Bedrock Knowledge Base ARN"
-  value       = module.bedrock_kb.knowledge_base_arn
+  value       = try(module.bedrock_kb.knowledge_base_arn, "KB creation skipped")
 }
 
 output "collection_endpoint" {
@@ -95,7 +95,18 @@ output "feedback_endpoint" {
   value       = module.api_gateway.feedback_endpoint
 }
 
+# ==================== GitHub Actions role ====================
+
+output "github_actions_role_arn" {
+  description = "GitHub Actions IAM role ARN"
+  value       = module.security.github_actions_role_arn
+}
+
 # ==================== Deployment Summary ====================
+
+locals {
+  kb_id_display = module.bedrock_kb.knowledge_base_id != null ? module.bedrock_kb.knowledge_base_id : "SKIPPED"
+}
 
 output "deployment_summary" {
   description = "Complete deployment summary"
@@ -107,15 +118,15 @@ output "deployment_summary" {
     
     Database:
        Table:        ${module.database.table_name}
-       Streams:      ✅ Enabled
-       PITR:         ✅ Enabled
+       Streams:      Enabled
+       PITR:         Enabled
     
     Security:
        Guardrail:    ${module.security.guardrail_id}
        Version:      ${module.security.guardrail_version}
     
     Knowledge Base:
-       KB ID:        ${module.bedrock_kb.knowledge_base_id}
+       KB ID:        ${local.kb_id_display}
        S3 Bucket:    ${var.s3_bucket_name}
        AOSS:         ${module.bedrock_kb.collection_endpoint}
     

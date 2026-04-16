@@ -35,7 +35,8 @@ resource "awscc_bedrock_knowledge_base" "kb" {
   depends_on = [
     aws_opensearchserverless_collection.vector,
     aws_opensearchserverless_access_policy.data,
-    null_resource.create_index
+    null_resource.create_index,
+    time_sleep.wait_for_iam_replication
   ]
 }
 
