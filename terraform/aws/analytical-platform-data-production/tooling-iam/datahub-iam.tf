@@ -165,24 +165,32 @@ resource "aws_iam_policy" "datahub_ingest_glue_jobs" {
 
 module "datahub_ingestion_roles" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
   version = "~> 6.4"
 
   for_each = local.datahub_cp_irsa_role_arns
 
-  create_role = true
+  create = true
 
-  role_name = "datahub-ingestion-${each.key}"
+  name            = "datahub-ingestion-${each.key}"
+  use_name_prefix = false
 
-  role_requires_mfa = false
+  trust_policy_permissions = {
+    datahubIngestionTrustedRole = {
+      effect  = "Allow"
+      actions = ["sts:AssumeRole"]
+      principals = [{
+        type        = "AWS"
+        identifiers = [each.value]
+      }]
+    }
+  }
 
-  trusted_role_arns = [each.value]
-
-  custom_role_policy_arns = [
-    aws_iam_policy.datahub_read_cadet_bucket.arn,
-    aws_iam_policy.datahub_ingest_athena_datasets.arn,
-    aws_iam_policy.datahub_ingest_athena_query_results.arn,
-    aws_iam_policy.datahub_ingest_glue_datasets.arn,
-    aws_iam_policy.datahub_ingest_glue_jobs.arn
-  ]
+  policies = {
+    datahubReadCadetBucket          = aws_iam_policy.datahub_read_cadet_bucket.arn
+    datahubIngestAthenaDatasets     = aws_iam_policy.datahub_ingest_athena_datasets.arn
+    datahubIngestAthenaQueryResults = aws_iam_policy.datahub_ingest_athena_query_results.arn
+    datahubIngestGlueDatasets       = aws_iam_policy.datahub_ingest_glue_datasets.arn
+    datahubIngestGlueJobs           = aws_iam_policy.datahub_ingest_glue_jobs.arn
+  }
 }
