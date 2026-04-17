@@ -1,16 +1,23 @@
-data "aws_caller_identity" "current" {}
+provider "aws" {
+  alias  = "lakeformation_eu_west_1"
+  region = "eu-west-1"
+}
+
+data "aws_caller_identity" "current" {
+  provider = aws.lakeformation_eu_west_1
+}
 
 locals {
-  expected_account_id = "593291632749"
+  expected_account_id = "189157455002"
   expected_region     = "eu-west-1"
 
   catalog_id = data.aws_caller_identity.current.account_id
   region     = data.aws_region.current.id
 
   database_name = "mock_ppud_dev_dbt"
-  table_name    = "table_1"
+  table_name    = "offenders_main"
 
-  athena_principal_arn = "arn:aws:iam::593291632749:role/AWSReservedSSO_modernisation-platform-data-eng_499410b42334a7d7"
+  athena_principal_arn = "arn:aws:iam::189157455002:role/AWSReservedSSO_modernisation-platform-data-eng_89c7a4cbe024b69a"
 
   visible_columns = [
     "last",
@@ -35,22 +42,26 @@ resource "terraform_data" "assert_expected_context" {
   }
 }
 
-# This data source is supported and will fail early if the table is absent.
-data "aws_glue_catalog_table" "table_1" {
+data "aws_glue_catalog_table" "offenders_main" {
+  provider = aws.lakeformation_eu_west_1
+
   database_name = local.database_name
   name          = local.table_name
 
   depends_on = [terraform_data.assert_expected_context]
 }
 
-# Register the S3 location that backs the table.
-resource "aws_lakeformation_resource" "table_1_data_location" {
-  arn = "arn:aws:s3:::mojap-derived-tables/mock_ppud_dev_dbt/table_1"
+resource "aws_lakeformation_resource" "offenders_main_data_location" {
+  provider = aws.lakeformation_eu_west_1
 
-  depends_on = [data.aws_glue_catalog_table.table_1]
+  arn = "arn:aws:s3:::probation-datalake-dev-20251218164046759500000001/data/dev/models/domain_name=antony_test/database_name=mock_ppud_dev_dbt/table_name=offenders_main"
+
+  depends_on = [data.aws_glue_catalog_table.offenders_main]
 }
 
-resource "aws_lakeformation_permissions" "table_1_database_describe" {
+resource "aws_lakeformation_permissions" "offenders_main_database_describe" {
+  provider = aws.lakeformation_eu_west_1
+
   principal   = local.athena_principal_arn
   permissions = ["DESCRIBE"]
 
@@ -60,12 +71,14 @@ resource "aws_lakeformation_permissions" "table_1_database_describe" {
   }
 
   depends_on = [
-    aws_lakeformation_resource.table_1_data_location,
-    data.aws_glue_catalog_table.table_1,
+    aws_lakeformation_resource.offenders_main_data_location,
+    data.aws_glue_catalog_table.offenders_main,
   ]
 }
 
-resource "aws_lakeformation_permissions" "table_1_first_five_columns" {
+resource "aws_lakeformation_permissions" "offenders_main_first_five_columns" {
+  provider = aws.lakeformation_eu_west_1
+
   principal   = local.athena_principal_arn
   permissions = ["SELECT"]
 
@@ -77,8 +90,8 @@ resource "aws_lakeformation_permissions" "table_1_first_five_columns" {
   }
 
   depends_on = [
-    aws_lakeformation_resource.table_1_data_location,
-    data.aws_glue_catalog_table.table_1,
+    aws_lakeformation_resource.offenders_main_data_location,
+    data.aws_glue_catalog_table.offenders_main,
   ]
 }
 
@@ -87,6 +100,7 @@ output "lakeformation_apply_context" {
     account_id = local.catalog_id
     region     = local.region
     database   = local.database_name
-    table      = data.aws_glue_catalog_table.table_1.name
+    table      = data.aws_glue_catalog_table.offenders_main.name
+    principal  = local.athena_principal_arn
   }
 }
