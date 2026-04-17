@@ -7,10 +7,6 @@ data "aws_caller_identity" "current" {
   provider = aws.lakeformation_eu_west_1
 }
 
-data "aws_region" "current" {
-  provider = aws.lakeformation_eu_west_1
-}
-
 locals {
   catalog_id = data.aws_caller_identity.current.account_id
   region     = data.aws_region.current.id
