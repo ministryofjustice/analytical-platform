@@ -37,3 +37,42 @@ resource "aws_s3_bucket_public_access_block" "knowledge_base" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+# Bucket policy 
+resource "aws_s3_bucket_policy" "kb_access" {
+  bucket = local.s3_bucket_id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowBedrockKBAccess"
+        Effect = "Allow"
+        Principal = {
+          Service = "bedrock.amazonaws.com"
+        }
+        Action = [
+          "s3:GetObject",
+          "s3:ListBucket"
+        ]
+        Resource = [
+          local.s3_bucket_arn,
+          "${local.s3_bucket_arn}/*"
+        ]
+        Condition = {
+          StringEquals = {
+            "aws:SourceAccount" = data.aws_caller_identity.current.account_id
+          }
+          ArnLike = {
+            "aws:SourceArn" = "arn:aws:bedrock:${var.region}:${data.aws_caller_identity.current.account_id}:knowledge-base/*"
+          }
+        }
+      }
+    ]
+  })
+
+  depends_on = [
+    aws_s3_bucket.knowledge_base,
+    data.aws_s3_bucket.existing
+  ]
+}

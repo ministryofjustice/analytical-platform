@@ -31,6 +31,8 @@ from pathlib import Path
 # Environment Detection
 # ============================================================================
 IS_LAMBDA = os.environ.get('AWS_EXECUTION_ENV') is not None
+PROJECT_NAME = os.getenv('PROJECT_NAME', 'moj-de-user-guidance') 
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
 
 # ============================================================================
 # AWS Configuration
@@ -41,20 +43,13 @@ REGION = os.getenv("AWS_REGION", "eu-west-2")
 # Secret Management: Load from Secrets Manager in Lambda, .env locally
 # ============================================================================
 if IS_LAMBDA:
-  
-    secrets_client = boto3.client('secretsmanager', region_name=REGION)
-    response = secrets_client.get_secret_value(
-        SecretId='genai-data-eng-assistant-dev/lambda-config'
-    )
-    secrets = json.loads(response['SecretString'])
-    
-    KB_ID = secrets['KB_ID']
-    MODEL_ID = secrets['MODEL_ID']
-    GUARDRAIL_ID = secrets.get('GUARDRAIL_ID')
-    GUARDRAIL_VERSION = secrets.get('GUARDRAIL_VERSION', '1')
+    # Lambda: Use environment variables (set by Terraform)
+    KB_ID = os.environ.get('KB_ID')
+    MODEL_ID = os.environ.get('MODEL_ID')
+    GUARDRAIL_ID = os.environ.get('GUARDRAIL_ID')
+    GUARDRAIL_VERSION = os.environ.get('GUARDRAIL_VERSION', '1')
 else:
     # Local: read from .env
-    
     load_dotenv()
     
     KB_ID = os.getenv("KB_ID")
@@ -93,7 +88,7 @@ USE_GUARDRAILS = os.getenv('USE_GUARDRAILS', 'true').lower() == 'true'
 # ============================================================================
 # Lambda Configuration
 # ============================================================================
-FUNCTION_NAME = os.getenv("FUNCTION_NAME", "lambda_smart_rag")
+FUNCTION_NAME = os.getenv("FUNCTION_NAME", "moj-de-user-guidance-dev-smart-rag")
 LAYER_NAME = os.getenv('LAYER_NAME', 'smart-rag-dependencies')
 LAYER_ARN = os.getenv('LAYER_ARN')  # Optional: pin specific version
 

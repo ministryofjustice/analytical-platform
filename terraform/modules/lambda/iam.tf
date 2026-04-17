@@ -211,3 +211,23 @@ resource "aws_iam_role_policy" "guardrails_access" {
     }]
   })
 }
+
+# ==================== Secrets Manager Policy ====================
+resource "aws_iam_role_policy" "secrets_manager_access" {
+  name = "${var.project_name}-${var.environment}-lambda-secrets"
+  role = aws_iam_role.lambda_execution.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Sid    = "SecretsManagerAccess"
+      Effect = "Allow"
+      Action = [
+        "secretsmanager:GetSecretValue"
+      ]
+      Resource = [
+        "arn:aws:secretsmanager:${var.region}:${data.aws_caller_identity.current.account_id}:secret:genai-data-eng-assistant-dev/*"
+      ]
+    }]
+  })
+}

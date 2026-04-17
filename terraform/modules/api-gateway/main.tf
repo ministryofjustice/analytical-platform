@@ -84,3 +84,23 @@ resource "aws_api_gateway_stage" "this" {
     Name = "${local.api_name}-${var.stage_name}"
   })
 }
+
+# ==================== Lambda Permissions ====================
+
+# Permission for API Gateway to invoke RAG Lambda
+resource "aws_lambda_permission" "api_gateway_rag" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = var.smart_rag_function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.chatbot.execution_arn}/*/*"
+}
+
+# Permission for API Gateway to invoke Authorizer Lambda
+resource "aws_lambda_permission" "api_gateway_authorizer" {
+  statement_id  = "AllowAPIGatewayAuthorizer"
+  action        = "lambda:InvokeFunction"
+  function_name = var.authorizer_function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.chatbot.execution_arn}/authorizers/*"
+}
