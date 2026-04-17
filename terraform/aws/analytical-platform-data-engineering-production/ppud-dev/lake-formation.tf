@@ -1,15 +1,26 @@
 provider "aws" {
   alias  = "lakeformation_eu_west_1"
   region = "eu-west-1"
+
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/GlobalGitHubActionAdmin"
+  }
 }
 
-data "aws_caller_identity" "current" {
+data "aws_caller_identity" "lakeformation_current" {
+  provider = aws.lakeformation_eu_west_1
+}
+
+data "aws_region" "lakeformation_current" {
   provider = aws.lakeformation_eu_west_1
 }
 
 locals {
-  catalog_id = data.aws_caller_identity.current.account_id
-  region     = data.aws_region.current.id
+  expected_account_id = var.account_ids["analytical-platform-data-engineering-production"]
+  expected_region     = "eu-west-1"
+
+  catalog_id = data.aws_caller_identity.lakeformation_current.account_id
+  region     = data.aws_region.lakeformation_current.id
 
   database_name = "mock_ppud_dev_dbt"
   table_name    = "offenders_main"
@@ -25,11 +36,27 @@ locals {
   ]
 }
 
+resource "terraform_data" "assert_expected_context" {
+  lifecycle {
+    precondition {
+      condition     = local.catalog_id == local.expected_account_id
+      error_message = "Lake Formation apply is running in AWS account ${local.catalog_id}, but ${local.database_name}.${local.table_name} exists in account ${local.expected_account_id}."
+    }
+
+    precondition {
+      condition     = local.region == local.expected_region
+      error_message = "Lake Formation apply is running in region ${local.region}, but ${local.database_name}.${local.table_name} exists in region ${local.expected_region}."
+    }
+  }
+}
+
 data "aws_glue_catalog_table" "offenders_main" {
   provider = aws.lakeformation_eu_west_1
 
   database_name = local.database_name
   name          = local.table_name
+
+  depends_on = [terraform_data.assert_expected_context]
 }
 
 resource "aws_lakeformation_resource" "offenders_main_data_location" {
