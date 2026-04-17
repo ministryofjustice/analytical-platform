@@ -15,6 +15,19 @@ data "aws_region" "lakeformation_current" {
   provider = aws.lakeformation_eu_west_1
 }
 
+data "aws_iam_roles" "modernisation_platform_data_eng" {
+  provider = aws.lakeformation_eu_west_1
+
+  name_regex  = "AWSReservedSSO_modernisation-platform-data-eng_.*"
+  path_prefix = "/aws-reserved/sso.amazonaws.com/"
+}
+
+data "aws_iam_role" "modernisation_platform_data_eng_role" {
+  provider = aws.lakeformation_eu_west_1
+
+  name = one(data.aws_iam_roles.modernisation_platform_data_eng.names)
+}
+
 locals {
   expected_account_id = var.account_ids["analytical-platform-data-engineering-production"]
   expected_region     = "eu-west-1"
@@ -24,8 +37,6 @@ locals {
 
   database_name = "mock_ppud_dev_dbt"
   table_name    = "offenders_main"
-
-  athena_principal_arn = "arn:aws:iam::189157455002:role/AWSReservedSSO_modernisation-platform-data-eng_89c7a4cbe024b69a"
 
   visible_columns = [
     "last",
@@ -70,7 +81,7 @@ resource "aws_lakeformation_resource" "offenders_main_data_location" {
 resource "aws_lakeformation_permissions" "offenders_main_database_describe" {
   provider = aws.lakeformation_eu_west_1
 
-  principal   = local.athena_principal_arn
+  principal   = data.aws_iam_role.modernisation_platform_data_eng_role.arn
   permissions = ["DESCRIBE"]
 
   database {
@@ -87,7 +98,7 @@ resource "aws_lakeformation_permissions" "offenders_main_database_describe" {
 resource "aws_lakeformation_permissions" "offenders_main_first_five_columns" {
   provider = aws.lakeformation_eu_west_1
 
-  principal   = local.athena_principal_arn
+  principal   = data.aws_iam_role.modernisation_platform_data_eng_role.arn
   permissions = ["SELECT"]
 
   table_with_columns {
@@ -109,6 +120,6 @@ output "lakeformation_apply_context" {
     region     = local.region
     database   = local.database_name
     table      = data.aws_glue_catalog_table.offenders_main.name
-    principal  = local.athena_principal_arn
+    principal  = data.aws_iam_role.modernisation_platform_data_eng_role.arn
   }
 }
