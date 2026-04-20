@@ -7,6 +7,15 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias  = "consumer_593291632749"
+  region = "eu-west-1"
+
+  assume_role {
+    role_arn = "arn:aws:iam::593291632749:role/GlobalGitHubActionAdmin"
+  }
+}
+
 data "aws_caller_identity" "lakeformation_current" {
   provider = aws.lakeformation_eu_west_1
 }
@@ -15,17 +24,17 @@ data "aws_region" "lakeformation_current" {
   provider = aws.lakeformation_eu_west_1
 }
 
-data "aws_iam_roles" "modernisation_platform_data_eng" {
-  provider = aws.lakeformation_eu_west_1
+data "aws_iam_roles" "modernisation_platform_mwaa_user" {
+  provider = aws.consumer_593291632749
 
-  name_regex  = "AWSReservedSSO_modernisation-platform-data-eng_.*"
+  name_regex  = "AWSReservedSSO_modernisation-platform-mwaa-user_.*"
   path_prefix = "/aws-reserved/sso.amazonaws.com/"
 }
 
-data "aws_iam_role" "modernisation_platform_data_eng_role" {
-  provider = aws.lakeformation_eu_west_1
+data "aws_iam_role" "modernisation_platform_mwaa_user_role" {
+  provider = aws.consumer_593291632749
 
-  name = one(data.aws_iam_roles.modernisation_platform_data_eng.names)
+  name = one(data.aws_iam_roles.modernisation_platform_mwaa_user.names)
 }
 
 locals {
@@ -38,7 +47,7 @@ locals {
   database_name = "mock_ppud_dev_dbt"
   table_name    = "offenders_main"
 
-  visible_columns = [
+  restricted_columns = [
     "last",
     "first",
     "block",
@@ -78,10 +87,10 @@ resource "aws_lakeformation_resource" "offenders_main_data_location" {
   depends_on = [data.aws_glue_catalog_table.offenders_main]
 }
 
-resource "aws_lakeformation_permissions" "offenders_main_database_describe" {
+resource "aws_lakeformation_permissions" "mwaa_user_database_describe" {
   provider = aws.lakeformation_eu_west_1
 
-  principal   = data.aws_iam_role.modernisation_platform_data_eng_role.arn
+  principal   = data.aws_iam_role.modernisation_platform_mwaa_user_role.arn
   permissions = ["DESCRIBE"]
 
   database {
@@ -95,17 +104,17 @@ resource "aws_lakeformation_permissions" "offenders_main_database_describe" {
   ]
 }
 
-resource "aws_lakeformation_permissions" "offenders_main_first_five_columns" {
+resource "aws_lakeformation_permissions" "mwaa_user_first_five_columns" {
   provider = aws.lakeformation_eu_west_1
 
-  principal   = data.aws_iam_role.modernisation_platform_data_eng_role.arn
+  principal   = data.aws_iam_role.modernisation_platform_mwaa_user_role.arn
   permissions = ["SELECT"]
 
   table_with_columns {
     catalog_id    = local.catalog_id
     database_name = local.database_name
     name          = local.table_name
-    column_names  = local.visible_columns
+    column_names  = local.restricted_columns
   }
 
   depends_on = [
@@ -116,10 +125,10 @@ resource "aws_lakeformation_permissions" "offenders_main_first_five_columns" {
 
 output "lakeformation_apply_context" {
   value = {
-    account_id = local.catalog_id
-    region     = local.region
-    database   = local.database_name
-    table      = data.aws_glue_catalog_table.offenders_main.name
-    principal  = data.aws_iam_role.modernisation_platform_data_eng_role.arn
+    producer_account = local.catalog_id
+    producer_region  = local.region
+    database         = local.database_name
+    table            = data.aws_glue_catalog_table.offenders_main.name
+    external_role    = data.aws_iam_role.modernisation_platform_mwaa_user_role.arn
   }
 }
