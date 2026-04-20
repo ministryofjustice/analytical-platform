@@ -10,6 +10,15 @@ terraform {
 }
 
 provider "aws" {
+  alias  = "lakeformation_eu_west_1"
+  region = "eu-west-1"
+
+  assume_role {
+    role_arn = "arn:aws:iam::189157455002:role/GlobalGitHubActionAdmin"
+  }
+}
+
+provider "aws" {
   alias  = "consumer_593291632749"
   region = "eu-west-1"
 
