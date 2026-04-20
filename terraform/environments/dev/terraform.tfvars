@@ -9,7 +9,7 @@ environment  = "dev"
 s3_bucket_name      = "moj-de-user-guidance-kb-dev"
 skip_kb_creation    = true
 skip_index_creation = true
-create_s3_bucket    = true
+create_s3_bucket    = false
 
 # ==================== Lambda ====================
 lambda_timeout    = 30
@@ -39,3 +39,4 @@ auth_token = "abc123XYZ_generated_token_here_456def"
 github_org  = "ministryofjustice"
 github_repo = "MOJ-genai-app"
 
+kb_id = "QA1AIJHQIJ"

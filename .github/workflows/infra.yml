@@ -1,0 +1,144 @@
+# .github/workflows/infra.yml
+# Purpose: Rebuild infrastructure after sandbox nuke
+# Trigger: Manual (workflow_dispatch)
+
+name: Infrastructure (Terraform)
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Terraform action'
+        required: true
+        default: 'plan'
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+
+env:
+  AWS_REGION: eu-west-2
+  TF_WORKING_DIR: terraform/environments/dev
+
+# Required for OIDC
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    name: Terraform ${{ github.event.inputs.action }}
+    runs-on: ubuntu-latest
+
+    steps:
+      # ==================== Checkout ====================
+      - name:  Checkout code
+        uses: actions/checkout@v4
+
+      # ==================== AWS Auth (OIDC) ====================
+      - name:  Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: github-actions-terraform
+          aws-region: ${{ env.AWS_REGION }}
+
+      # ==================== Terraform Setup ====================
+      - name:  Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.0
+
+      # ==================== Terraform Init ====================
+      - name:  Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init -reconfigure
+
+      # ==================== Terraform Validate ====================
+      - name:  Terraform Validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform validate
+
+      # ==================== Terraform Plan ====================
+      - name:  Terraform Plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          terraform plan \
+            -var="auth_token=${{ secrets.BEARER_TOKEN }}" \
+            -out=tfplan
+        env:
+          TF_VAR_auth_token: ${{ secrets.BEARER_TOKEN }}
+
+      # ==================== Terraform Apply ====================
+      - name:  Terraform Apply
+        if: github.event.inputs.action == 'apply'
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform apply -auto-approve tfplan
+
+      # ==================== Terraform Destroy ====================
+      - name:  Terraform Destroy
+        if: github.event.inputs.action == 'destroy'
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          terraform destroy \
+            -var="auth_token=${{ secrets.BEARER_TOKEN }}" \
+            -auto-approve
+
+      # ==================== Outputs ====================
+      - name:  Show Outputs
+        if: github.event.inputs.action == 'apply'
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          echo "============================================"
+          echo " TERRAFORM OUTPUTS"
+          echo "============================================"
+          terraform output
+          echo ""
+          echo "============================================"
+          echo " COLLECTION ARN (needed for KB creation)"
+          echo "============================================"
+          terraform output -raw collection_arn || echo "Not available"
+          echo ""
+          echo ""
+          echo "============================================"
+          echo " API ENDPOINT"
+          echo "============================================"
+          terraform output -raw api_endpoint || echo "Not available"
+          echo ""
+
+      # ==================== Next Steps Reminder ====================
+      - name:  Next Steps
+        if: github.event.inputs.action == 'apply'
+        run: |
+          echo ""
+          echo "┌─────────────────────────────────────────────────────────────────────┐"
+          echo "│    MANUAL STEPS REQUIRED                                           │"
+          echo "├─────────────────────────────────────────────────────────────────────┤"
+          echo "│                                                                     │"
+          echo "│ 1️⃣  Create Vector Index (AOSS Console)                              │"
+          echo "│     → OpenSearch Service → Serverless → Collections                 │"
+          echo "│     → Click collection → OpenSearch Dashboards → Dev Tools          │"
+          echo "│     → Run the PUT command from deployment guide                     │"
+          echo "│                                                                     │"
+          echo "│ 2️⃣  Create Knowledge Base (Bedrock Console)                         │"
+          echo "│     → Amazon Bedrock → Knowledge bases → Create                     │"
+          echo "│     → Use Collection ARN from outputs above                         │"
+          echo "│                                                                     │"
+          echo "│ 3️⃣  Sync Data Source                                                │"
+          echo "│     → Open KB → Data sources → Select → Sync                        │"
+          echo "│                                                                     │"
+          echo "│ 4️⃣  Update KB_ID                                                    │"
+          echo "│     → Get KB ID from console                                        │"
+          echo "│     → Update Lambda env var: KB_ID                                  │"
+          echo "│     → Update terraform.tfvars: kb_id = "..."                      │"
+          echo "│                                                                     │"
+          echo "│ 5️⃣  Deploy Lambda Code                                              │"
+          echo "│     → cd data_engg_support_assistant/deployment                     │"
+          echo "│     → python create_lambda_layer.py                                 │"
+          echo "│     → Deploy authorizer + main Lambda (see deployment guide)        │"
+          echo "│                                                                     │"
+          echo "│ 6️⃣  Test API                                                        │"
+          echo "│     → curl -X POST /ask ...                           │"
+          echo "│                                                                     │"
+          echo "└─────────────────────────────────────────────────────────────────────┘"

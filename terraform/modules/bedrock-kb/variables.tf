@@ -72,3 +72,9 @@ variable "create_s3_bucket" {
   default     = true
   description = "Set to false if S3 bucket already exists"
 }
+
+variable "lambda_role_arn" {
+  type        = string
+  default     = null
+  description = "Lambda execution role ARN to grant AOSS access"
+}

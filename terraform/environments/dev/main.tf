@@ -31,6 +31,10 @@ provider "awscc" {
   region = var.region
 }
 
+# ==================== Data Sources ====================
+
+data "aws_caller_identity" "current" {}
+
 # ==================== Local Values ====================
 
 locals {
@@ -91,6 +95,9 @@ module "bedrock_kb" {
   skip_index_creation = var.skip_index_creation
   skip_kb_creation    = var.skip_kb_creation
   create_s3_bucket    = var.create_s3_bucket
+
+  # Add Lambda role to AOSS data access policy
+  lambda_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.project_name}-${var.environment}-lambda-execution-role"
 
   tags = local.common_tags
 }

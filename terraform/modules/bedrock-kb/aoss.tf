@@ -52,11 +52,12 @@ resource "aws_opensearchserverless_access_policy" "data" {
         Permission   = ["aoss:*"]
       }
     ]
-    Principal = distinct([
+    Principal = distinct(compact([
       aws_iam_role.bedrock_kb_role.arn,
       local.caller_role_arn,
-      data.aws_caller_identity.current.arn
-    ])
+      data.aws_caller_identity.current.arn,
+      var.lambda_role_arn
+    ]))
   }])
 
   depends_on = [aws_opensearchserverless_collection.vector]
