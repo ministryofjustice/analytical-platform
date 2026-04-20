@@ -10,12 +10,11 @@ terraform {
 }
 
 provider "aws" {
-  alias  = "lakeformation_eu_west_1"
+  alias  = "consumer_593291632749"
   region = "eu-west-1"
 
-  # IMPORTANT: this must match how it was originally created
   assume_role {
-    role_arn = "arn:aws:iam::189157455002:role/GlobalGitHubActionAdmin"
+    role_arn = "arn:aws:iam::593291632749:role/GlobalGitHubActionAdmin"
   }
 }
 
