@@ -75,6 +75,18 @@ module "data_engineering_reset_access_role" {
   name            = "data-engineering-hmt-reset"
   use_name_prefix = false
 
+  trust_policy_permissions = {
+    TrustRoleToAssume = {
+      actions = [
+        "sts:AssumeRole",
+      ]
+      principals = [{
+        type        = "AWS"
+        identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/alpha_user_gwionap"]
+      }]
+    }
+  }
+
   create_inline_policy = true
   inline_policy_permissions = {
     s3_read_access = {
