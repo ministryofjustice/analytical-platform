@@ -1,7 +1,3 @@
-locals {
-  home_office_assume_role_principals = length(var.home_office_trusted_role_arns) > 0 ? var.home_office_trusted_role_arns : ["arn:aws:iam::${var.home_office_account_id}:root"]
-}
-
 data "aws_iam_policy_document" "home_office_source_s3_read" {
   count = var.home_office_copy_role_enabled ? 1 : 0
 
@@ -53,7 +49,7 @@ module "home_office_source_s3_read_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
   version = "6.1.0"
 
-  name            = var.home_office_copy_role_name
+  name            = "mojap-production-ho-copy-role"
   use_name_prefix = false
 
   trust_policy_permissions = {
@@ -63,9 +59,9 @@ module "home_office_source_s3_read_role" {
         "sts:TagSession"
       ]
       principals = [
-        for arn in local.home_office_assume_role_principals : {
+        {
           type        = "AWS"
-          identifiers = [arn]
+          identifiers = ["example-role-arn-placeholder"]
         }
       ]
     }
