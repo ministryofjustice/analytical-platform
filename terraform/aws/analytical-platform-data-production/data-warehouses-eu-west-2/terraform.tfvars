@@ -13,3 +13,4 @@ tags = {
   infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
   source-code            = "github.com/ministryofjustice/analytical-platform/terraform/aws/analytical-platform-data-production/data-warehouses-eu-west-2"
 }
+
