@@ -1,0 +1,19 @@
+##################################################
+# General
+##################################################
+
+account_ids = {
+  analytical-platform-data-engineering-production = "189157455002"
+  analytical-platform-management-production       = "042130406152"
+}
+
+tags = {
+  business-unit = "HMPPS"
+  application   = "Data Engineering"
+  component     = "Data Engineering PPUD"
+  environment   = "dev"
+  is-production = "false"
+  owner         = "Data Engineering:dataengineering@digital.justice.gov.uk"
+  source-code   = "https://github.com/ministryofjustice/analytical-platform/tree/main/terraform/aws/analytical-platform-data-engineering-production/ppud-dev"
+
+}
