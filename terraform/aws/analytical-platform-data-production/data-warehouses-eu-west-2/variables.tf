@@ -8,14 +8,8 @@ variable "tags" {
   description = "Map of tags to apply to resources"
 }
 
-variable "home_office_copy_role_enabled" {
+variable "alpha_mojap_ho_data_transfer_replication_enabled" {
   type        = bool
-  description = "Create a role that Home Office can assume to read data from source buckets"
+  description = "Enable cross-account replication from alpha-mojap-ho-data-transfer-test"
   default     = true
-}
-
-variable "home_office_source_bucket_names" {
-  type        = list(string)
-  description = "Names of source buckets the Home Office copy role can read"
-  default     = ["bucket-name-placeholder"]
 }

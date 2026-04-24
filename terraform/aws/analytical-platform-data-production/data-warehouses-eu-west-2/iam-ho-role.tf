@@ -1,73 +1,71 @@
-data "aws_iam_policy_document" "home_office_source_s3_read" {
-  count = var.home_office_copy_role_enabled ? 1 : 0
-
+data "aws_iam_policy_document" "alpha_mojap_ho_data_transfer_replication" {
   statement {
-    sid    = "ListAndLocation"
+    sid    = "DestinationBucketPermissions"
     effect = "Allow"
     actions = [
-      "s3:GetBucketLocation",
+      "s3:ReplicateObject",
+      "s3:ObjectOwnerOverrideToBucketOwner",
+      "s3:GetObjectVersionTagging",
+      "s3:ReplicateTags",
+      "s3:ReplicateDelete"
+    ]
+    resources = ["arn:aws:s3:::destination-bucket/*"]
+  }
+
+  statement {
+    sid    = "SourceBucketPermissions"
+    effect = "Allow"
+    actions = [
+      "s3:GetReplicationConfiguration",
       "s3:ListBucket"
     ]
-    resources = [
-      for bucket_name in var.home_office_source_bucket_names : "arn:aws:s3:::${bucket_name}"
-    ]
+    resources = [module.alpha-mojap-ho-data-transfer-test.s3_bucket_arn]
   }
 
   statement {
-    sid    = "GetObjects"
+    sid    = "SourceBucketObjectPermissions"
     effect = "Allow"
     actions = [
-      "s3:GetObject",
-      "s3:GetObjectVersion"
+      "s3:GetObjectVersionForReplication",
+      "s3:GetObjectVersionAcl",
+      "s3:GetObjectVersionTagging",
+      "s3:ObjectOwnerOverrideToBucketOwner"
     ]
-    resources = [
-      for bucket_name in var.home_office_source_bucket_names : "arn:aws:s3:::${bucket_name}/*"
-    ]
+    resources = ["${module.alpha-mojap-ho-data-transfer-test.s3_bucket_arn}/*"]
   }
 }
 
-module "home_office_source_s3_read" {
-  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
-  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+resource "aws_iam_policy" "alpha_mojap_ho_data_transfer_replication" {
+  count = var.alpha_mojap_ho_data_transfer_replication_enabled ? 1 : 0
 
-  count = var.home_office_copy_role_enabled ? 1 : 0
-
-  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.1.0"
-
-  name_prefix = "home-office-source-s3-read"
-  description = "Read-only access to nominated source buckets for Home Office copy workloads"
-  policy      = data.aws_iam_policy_document.home_office_source_s3_read[0].json
+  name   = "alpha-mojap-ho-data-transfer-test-replication"
+  policy = data.aws_iam_policy_document.alpha_mojap_ho_data_transfer_replication.json
 }
 
-module "home_office_source_s3_read_role" {
-  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
-  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+data "aws_iam_policy_document" "alpha_mojap_ho_data_transfer_replication_trust" {
+  statement {
+    sid     = "TrustS3"
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
 
-  count = var.home_office_copy_role_enabled ? 1 : 0
-
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version = "6.1.0"
-
-  name            = "mojap-production-ho-copy-role"
-  use_name_prefix = false
-
-  trust_policy_permissions = {
-    TrustHomeOfficeToAssumeRole = {
-      actions = [
-        "sts:AssumeRole",
-        "sts:TagSession"
-      ]
-      principals = [
-        {
-          type        = "AWS"
-          identifiers = ["example-role-arn-placeholder"]
-        }
-      ]
+    principals {
+      type        = "Service"
+      identifiers = ["s3.amazonaws.com"]
     }
   }
-
-  policies = {
-    home_office_source_s3_read = module.home_office_source_s3_read[0].arn
-  }
 }
+
+resource "aws_iam_role" "alpha_mojap_ho_data_transfer_replication" {
+  count = var.alpha_mojap_ho_data_transfer_replication_enabled ? 1 : 0
+
+  name               = "alpha-mojap-ho-data-transfer-test-replication"
+  assume_role_policy = data.aws_iam_policy_document.alpha_mojap_ho_data_transfer_replication_trust.json
+}
+
+resource "aws_iam_role_policy_attachment" "alpha_mojap_ho_data_transfer_replication" {
+  count = var.alpha_mojap_ho_data_transfer_replication_enabled ? 1 : 0
+
+  role       = aws_iam_role.alpha_mojap_ho_data_transfer_replication[0].name
+  policy_arn = aws_iam_policy.alpha_mojap_ho_data_transfer_replication[0].arn
+}
+
