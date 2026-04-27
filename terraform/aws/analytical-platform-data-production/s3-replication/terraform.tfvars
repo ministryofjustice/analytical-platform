@@ -13,4 +13,5 @@ tags = {
   infrastructure-support = "analytical-platform:analytical-platform@digital.justice.gov.uk"
   source-code            = "github.com/ministryofjustice/analytical-platform/terraform/aws/analytical-platform-data-production/s3-replication"
   buckettype             = "datawarehouse"
+  remove-after           = "2025-01-01"
 }
