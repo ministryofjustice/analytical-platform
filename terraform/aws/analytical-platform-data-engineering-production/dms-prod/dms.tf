@@ -1,6 +1,3 @@
-#comment to trigger tf apply
-# Retrigger apply
-
 module "prod_dms_oasys" {
   source      = "github.com/ministryofjustice/terraform-dms-module?ref=5ae53ee6ed0ada0cf63613050b79c1468d565638"
   vpc_id      = module.vpc.vpc_id
@@ -52,6 +49,7 @@ module "prod_dms_oasys" {
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
 }
 
+# trigger tf
 module "prod_dms_delius" {
   source      = "github.com/ministryofjustice/terraform-dms-module?ref=5ae53ee6ed0ada0cf63613050b79c1468d565638"
   vpc_id      = module.vpc.vpc_id
