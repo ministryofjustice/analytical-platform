@@ -4,7 +4,7 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:": {},
     "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/ministryofjustice/devcontainer-feature/aws:1": {},
+    "ghcr.io/ministryofjustice/devcontainer-feature/aws:": {},
     "ghcr.io/ministryofjustice/devcontainer-feature/kubernetes:1": {
       "installVeleroCli": true
     },
