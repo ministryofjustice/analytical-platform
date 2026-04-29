@@ -17,7 +17,8 @@ data "aws_iam_policy_document" "alpha_mojap_ho_data_transfer_replication" {
     effect = "Allow"
     actions = [
       "s3:GetReplicationConfiguration",
-      "s3:ListBucket"
+      "s3:ListBucket",
+      "s3:PutInventoryConfiguration"
     ]
     resources = [module.alpha_mojap_ho_data_transfer_test.s3_bucket_arn]
   }
@@ -30,9 +31,23 @@ data "aws_iam_policy_document" "alpha_mojap_ho_data_transfer_replication" {
       "s3:GetObjectVersionForReplication",
       "s3:GetObjectVersionAcl",
       "s3:GetObjectVersionTagging",
-      "s3:ObjectOwnerOverrideToBucketOwner"
+      "s3:ObjectOwnerOverrideToBucketOwner",
     ]
     resources = ["${module.alpha_mojap_ho_data_transfer_test.s3_bucket_arn}/*"]
+  }
+
+  statement {
+    sid    = "BatchReplicationManifestAndReportPermissions"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:PutObject"
+    ]
+    resources = [
+      "${module.alpha_mojap_ho_data_transfer_test.s3_bucket_arn}/*",
+      "arn:aws:s3:::dsa-cdl-police-s3-deposit-cjs-npa/*"
+    ]
   }
 }
 
@@ -48,8 +63,11 @@ data "aws_iam_policy_document" "alpha_mojap_ho_data_transfer_replication_trust" 
     actions = ["sts:AssumeRole"]
 
     principals {
-      type        = "Service"
-      identifiers = ["s3.amazonaws.com"]
+      type = "Service"
+      identifiers = [
+        "s3.amazonaws.com",
+        "batchoperations.s3.amazonaws.com"
+      ]
     }
   }
 }
