@@ -4,7 +4,7 @@ module "opg_fabric_store" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source        = "terraform-aws-modules/s3-bucket/aws"
-  version       = "5.8.2"
+  version       = "5.12.0"
   bucket        = "alpha-opg-fabric-sandbox"
   force_destroy = false
   versioning = {
