@@ -63,3 +63,60 @@ module "data_engineering_probation_glue_access_iam_role" {
     }
   }
 }
+
+# Adding role linked to de exports
+module "data_engineering_reset_access_role" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "6.4.0"
+
+  name            = "data-engineering-hmt-reset"
+  use_name_prefix = false
+
+  trust_policy_permissions = {
+    TrustRoleToAssume = {
+      actions = [
+        "sts:AssumeRole",
+      ]
+      principals = [{
+        type        = "AWS"
+        identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/alpha_user_gwionap"]
+      }]
+    }
+  }
+
+  create_inline_policy = true
+  inline_policy_permissions = {
+    s3_read_access = {
+      sid    = "S3ReadAccess"
+      effect = "Allow"
+      actions = [
+        "s3:GetObject",
+        "s3:GetObjectVersion"
+      ]
+      resources = [
+        "arn:aws:s3:::mojap-hmt-performance/reset/*",
+      ]
+    },
+    s3_list_access = {
+      sid    = "S3ListAccess"
+      effect = "Allow"
+      actions = [
+        "s3:ListBucket",
+        "s3:GetBucketLocation"
+      ]
+      resources = [
+        "arn:aws:s3:::mojap-hmt-performance",
+      ]
+      condition = [
+        {
+          test     = "StringLike"
+          variable = "s3:prefix"
+          values   = ["reset/*"]
+        }
+      ]
+    }
+  }
+}
