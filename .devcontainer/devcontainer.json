@@ -8,7 +8,7 @@
     "ghcr.io/ministryofjustice/devcontainer-feature/kubernetes:": {
       "installVeleroCli": true
     },
-    "ghcr.io/ministryofjustice/devcontainer-feature/static-analysis:1": {},
+    "ghcr.io/ministryofjustice/devcontainer-feature/static-analysis:2": {},
     "ghcr.io/ministryofjustice/devcontainer-feature/terraform:": {}
   },
   "postCreateCommand": "bash .devcontainer/post-create.sh",
