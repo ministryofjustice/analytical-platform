@@ -82,8 +82,15 @@ module "data_engineering_reset_access_role" {
       ]
       principals = [{
         type        = "AWS"
-        identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/alpha_user_gwionap"]
+        identifiers = ["arn:aws:iam::727529935573:user/67nd1000-s"]
       }]
+      condition = [
+        {
+          test     = "StringEquals"
+          variable = "sts:ExternalId"
+          values   = ["NW19986_SFCRole=4_rXof2jgPv9HotvAKm2DJJr08LeQ="]
+        }
+      ]
     }
   }
 
