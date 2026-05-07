@@ -82,7 +82,7 @@ module "data_engineering_reset_access_role" {
       ]
       principals = [{
         type        = "AWS"
-        identifiers = ["arn:aws:iam::727529935573:user/67nd1000-s"]
+        identifiers = ["arn:aws:iam::727529935573:user/67nd1000-s"] # reset snowflake user
       }]
       condition = [
         {
