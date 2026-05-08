@@ -93,7 +93,7 @@ locals {
             "                - evaluator:",
             "                    type: ${contains(["lt", "baseline_lt"], combo.rule.type) ? "lt" : "gt"}",
             "                    params:",
-            "                      - ${local.thresholds[env][severity == "warning" ? combo.rule.warning_key : combo.rule.critical]}",
+            "                      - ${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}",
           ],
 
           # ── BASE / BASE_R / D: only for baseline alert types ───────────────
@@ -139,7 +139,7 @@ locals {
             "            model:",
             "              type: math",
             "              refId: D",
-            "              expression: ${combo.rule.type == "baseline_lt" ? "($B - $BASE_R) / $BASE_R * 100 < -${local.thresholds[env][severity == "warning" ? combo.rule.warning_key : combo.rule.critical]}" : "($B - $BASE_R) / $BASE_R * 100 > ${local.thresholds[env][severity == "warning" ? combo.rule.warning_key : combo.rule.critical]}"}",
+            "              expression: ${combo.rule.type == "baseline_lt" ? "($B - $BASE_R) / $BASE_R * 100 < -${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}" : "($B - $BASE_R) / $BASE_R * 100 > ${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}"}",
 
           ] : [],
 
