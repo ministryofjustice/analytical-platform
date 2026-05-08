@@ -372,3 +372,15 @@ alerting:
                   - =
                   - analytical-platform-alerts
 
+extraVolumes:
+  - name: alert-rules
+    configMap:
+      name: ${alert_rules_configmap}
+
+extraVolumeMounts:
+  - name: alert-rules
+    mountPath: /etc/grafana/provisioning/alerting
+    readOnly: true
+
+podAnnotations:
+  checksum/alert-rules: "${alert_rules_checksum}"
