@@ -177,9 +177,4 @@ locals {
       ])
     ]
   }
-
-  alert_rules_yaml_by_env = {
-    for env, cfg in local.environment_configurations :
-    env => "groups:\n${join("\n", local.group_blocks_by_env[env])}\n"
-  }
 }
