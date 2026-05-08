@@ -5,6 +5,7 @@ resource "helm_release" "grafana" {
   chart      = "grafana"
   version    = "10.5.15"
   namespace  = var.namespace
+  depends_on = [kubernetes_config_map_v1.grafana_alert_rules]
   values = [
     templatefile(
       "${path.module}/src/helm/values/grafana/values.yml.tftpl",
@@ -19,6 +20,8 @@ resource "helm_release" "grafana" {
           data.github_team.probation_data_science.id,
           data.github_team.probation_integration.id
         ])
+        alert_rules_configmap = kubernetes_config_map_v1.grafana_alert_rules.metadata[0].name
+        alert_rules_checksum  = sha256(local.alert_rules_yaml)
       }
     )
   ]
