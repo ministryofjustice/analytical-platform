@@ -1,7 +1,5 @@
-# Apply trigger comment
-
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=fbb5d24e076dd7a5c315650f98ba34219e51e471"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=bea6fa8a0f431b616895423e515f5929c022b013"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -52,7 +50,7 @@ module "dev_dms_oasys" {
 }
 
 module "dev_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=fbb5d24e076dd7a5c315650f98ba34219e51e471"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=bea6fa8a0f431b616895423e515f5929c022b013"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
