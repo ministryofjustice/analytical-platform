@@ -1,5 +1,5 @@
 data "aws_iam_policy_document" "replication" {
-  for_each = local.enabled_replication_configurations
+  for_each = local.replication_configurations
 
   statement {
     sid    = "DestinationBucketPermissions"
@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "replication" {
 }
 
 resource "aws_iam_policy" "replication" {
-  for_each = local.enabled_replication_configurations
+  for_each = local.replication_configurations
 
   name   = "${each.value.source_bucket_name}-replication"
   policy = data.aws_iam_policy_document.replication[each.key].json

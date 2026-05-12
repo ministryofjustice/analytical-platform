@@ -19,4 +19,29 @@ locals {
   enabled_replication_configurations = {
     for k, v in local.replication_configurations : k => v if v.enabled
   }
+
+  # Replication configs for the S3 module - only includes enabled configurations
+  # Dynamic map avoids the Terraform conditional type issue where the replication configuration must be defined even if replication is not enabled
+  replication_configs = {
+    for k, v in local.replication_configurations : k => {
+      role = aws_iam_role.replication[k].arn
+      rules = [
+        {
+          id                        = "${v.source_bucket_name}-replication"
+          status                    = "Enabled"
+          delete_marker_replication = true
+
+          destination = {
+            account_id    = v.destination_account_id
+            bucket        = v.destination_bucket_arn
+            storage_class = "STANDARD"
+
+            access_control_translation = {
+              owner = "Destination"
+            }
+          }
+        }
+      ]
+    } if v.enabled
+  }
 }

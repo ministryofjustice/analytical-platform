@@ -20,26 +20,7 @@ module "alpha_mojap_ho_data_transfer_test" {
     }
   }
 
-  replication_configuration = {
-    role = aws_iam_role.replication["test"].arn
-    rules = [
-      {
-        id                        = "${local.replication_configurations["test"].source_bucket_name}-replication"
-        status                    = "Enabled"
-        delete_marker_replication = true
-
-        destination = {
-          account_id    = local.replication_configurations["test"].destination_account_id
-          bucket        = local.replication_configurations["test"].destination_bucket_arn
-          storage_class = "STANDARD"
-
-          access_control_translation = {
-            owner = "Destination"
-          }
-        }
-      }
-    ]
-  }
+  replication_configuration = lookup(local.replication_configs, "test", {})
 
   logging = {
     target_bucket = "moj-analytics-s3-logs"
@@ -86,26 +67,7 @@ module "alpha_mojap_ho_data_transfer" {
     }
   }
 
-  replication_configuration = {
-    role = aws_iam_role.replication["production"].arn
-    rules = [
-      {
-        id                        = "${local.replication_configurations["production"].source_bucket_name}-replication"
-        status                    = "Enabled"
-        delete_marker_replication = true
-
-        destination = {
-          account_id    = local.replication_configurations["production"].destination_account_id
-          bucket        = local.replication_configurations["production"].destination_bucket_arn
-          storage_class = "STANDARD"
-
-          access_control_translation = {
-            owner = "Destination"
-          }
-        }
-      }
-    ]
-  }
+  replication_configuration = lookup(local.replication_configs, "production", {})
 
   logging = {
     target_bucket = "moj-analytics-s3-logs"
