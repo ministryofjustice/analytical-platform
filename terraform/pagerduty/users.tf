@@ -1,11 +1,6 @@
 locals {
   users = [
     {
-      name  = "Anthony Fitzroy"
-      email = "anthony.fitzroy@digital.justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Brian Ellwood"
       email = "brian.ellwood@digital.justice.gov.uk"
       role  = "responder"
