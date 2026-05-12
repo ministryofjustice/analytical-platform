@@ -60,6 +60,11 @@ resource "aws_iam_policy" "replication" {
   policy = data.aws_iam_policy_document.replication[each.key].json
 }
 
+moved {
+  from = data.aws_iam_policy_document.alpha_mojap_ho_data_transfer_replication
+  to   = data.aws_iam_policy_document.replication["test"]
+}
+
 data "aws_iam_policy_document" "replication_trust" {
   statement {
     sid     = "TrustS3"
