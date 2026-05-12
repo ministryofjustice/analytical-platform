@@ -16,10 +16,6 @@ locals {
     }
   }
 
-  enabled_replication_configurations = {
-    for k, v in local.replication_configurations : k => v if v.enabled
-  }
-
   # Replication configs for the S3 module
   # Dynamic map avoids the Terraform conditional type issue where the replication configuration must be defined even if replication is not enabled
   replication_configs = {
