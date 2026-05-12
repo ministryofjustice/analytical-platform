@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "replication" {
       "s3:ListBucket",
       "s3:PutInventoryConfiguration"
     ]
-    resources = ["${each.value.source_bucket_arn}"]
+    resources = [each.value.source_bucket_arn]
   }
 
   statement {
