@@ -5,13 +5,13 @@ locals {
       for combo in flatten([
         for rule_key, rule in local.golden_signals : [
           for dim_value in(
-            rule.dim_key == "BucketName"           ? try(cfg.s3_buckets, []) :
+            rule.dim_key == "BucketName" ? try(cfg.s3_buckets, []) :
             rule.dim_key == "DBInstanceIdentifier" ? try(cfg.rds_instances, []) :
-            rule.dim_key == "Namespace"            ? ["cpanel"] :
-            rule.dim_key == "ClusterName"          ? ["*"] :
-            rule.dim_key == "NodeName"             ? ["*"] :
+            rule.dim_key == "Namespace" ? ["cpanel"] :
+            rule.dim_key == "ClusterName" ? ["*"] :
+            rule.dim_key == "NodeName" ? ["*"] :
             [""]
-          ) : {
+            ) : {
             rule_key  = rule_key
             rule      = rule
             dim_value = dim_value
