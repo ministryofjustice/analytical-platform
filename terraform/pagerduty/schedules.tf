@@ -10,6 +10,7 @@ locals {
           rotation_virtual_start       = "2024-09-20T09:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
+            module.users["anthony.fitzroy@digital.justice.gov.uk"].id,
             module.users["brian.ellwood@digital.justice.gov.uk"].id,
             module.users["gary.henderson@digital.justice.gov.uk"].id,
             module.users["james.stott@digital.justice.gov.uk"].id,
