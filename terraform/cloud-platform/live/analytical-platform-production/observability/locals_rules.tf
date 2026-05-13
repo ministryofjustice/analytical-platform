@@ -8,6 +8,8 @@ locals {
             rule.dim_key == "BucketName" ? try(cfg.s3_buckets, []) :
             rule.dim_key == "DBInstanceIdentifier" ? try(cfg.rds_instances, []) :
             rule.dim_key == "Namespace" ? ["cpanel"] :
+            rule.dim_key == "ClusterName" ? [*] :
+            rule.dim_key == "NodeName" ? [*] :
             [""]
             ) : {
             rule_key  = rule_key
@@ -59,7 +61,7 @@ locals {
             "              statistic: ${combo.rule.statistic}",
             "              period: '60'",
             "              dimensions: ${combo.dim_value != "" ? "{\"${combo.rule.dim_key}\": [\"${combo.dim_value}\"]}" : "{}"}",
-            "              matchExact: false",
+            "              matchExact: ${try(combo.rule.match_exact,false)}",
           ],
 
           # ── B: reduce A to a single scalar ─────────────────────────────────
@@ -114,7 +116,7 @@ locals {
             "              statistic: Average",
             "              period: '3600'",
             "              dimensions: ${combo.dim_value != "" ? "{\"${combo.rule.dim_key}\": [\"${combo.dim_value}\"]}" : "{}"}",
-            "              matchExact: false",
+            "              matchExact: ${try(combo.rule.match_exact,false)}",
 
             # BASE_R: reduce the baseline series to its last value
             "          - refId: BASE_R",

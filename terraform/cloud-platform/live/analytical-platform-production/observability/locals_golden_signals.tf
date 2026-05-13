@@ -15,20 +15,26 @@ locals {
 
   # ---------------------------------------------------------------------------
   # golden_signals — one entry per CloudWatch metric to alert on.
-  #
   # Fields:
-  #   group     = alert group name (must match a key in group_folders above)
-  #   namespace = CloudWatch namespace
-  #   metric    = CloudWatch metric name
-  #   statistic = CloudWatch statistic (Sum, Average, Maximum, Minimum, p99 …)
-  #   type      = alert logic:
-  #                 gt          → fire when value > threshold         (condition C)
-  #                 lt          → fire when value < threshold         (condition C)
-  #                 baseline_gt → fire when % above hourly baseline   (condition D)
-  #                 baseline_lt → fire when % below hourly baseline   (condition D)
-  #   dim_key   = CloudWatch dimension key ("" = no dimension filter)
-  #   warning  = key in locals.defaults (or threshold_overrides) for warning level
-  #   critical  = key in locals.defaults (or threshold_overrides) for critical level
+  #   group       = alert group name (must match a key in group_folders above)
+  #   namespace   = CloudWatch namespace
+  #   metric      = CloudWatch metric name
+  #   statistic   = CloudWatch statistic (Sum, Average, Maximum, Minimum, p99 …)
+  #   type        = alert logic:
+  #                   gt          → fire when value > threshold         (condition C)
+  #                   lt          → fire when value < threshold         (condition C)
+  #                   baseline_gt → fire when % above hourly baseline   (condition D)
+  #                   baseline_lt → fire when % below hourly baseline   (condition D)
+  #   dim_key     = CloudWatch dimension key ("" = no dimension filter)
+  #                   ""                  → no dimension filter (broad match)
+  #                   "BucketName"        → expands to one rule per entry in cfg.s3_buckets
+  #                   "DBInstanceIdentifier" → expands to one rule per entry in cfg.rds_instances
+  #                   "Namespace"         → fixed to ["cpanel"]
+  #                   "ClusterName"       → wildcard "*" (all clusters)
+  #                   "NodeName"          → wildcard "*" (all nodes)
+  #   match_exact = (optional) if true, sets matchExact: true on the CloudWatch query;
+  #   warning     = key in locals.defaults (or threshold_overrides) for warning level
+  #   critical    = key in locals.defaults (or threshold_overrides) for critical level
   # ---------------------------------------------------------------------------
   golden_signals = {
 
@@ -65,7 +71,7 @@ locals {
     eks_node_network_tx    = { group = "EKS", namespace = "ContainerInsights", metric = "node_network_tx_bytes", statistic = "Sum", type = "baseline_gt", dim_key = "", warning = "eks_node_net_baseline_warn", critical = "eks_node_net_baseline_crit" }
     eks_unhealthy_hosts    = { group = "EKS", namespace = "AWS/NetworkELB", metric = "UnHealthyHostCount", statistic = "Maximum", type = "gt", dim_key = "", warning = "eks_unhealthy_host_warn", critical = "eks_unhealthy_host_crit" }
     eks_tcp_reset          = { group = "EKS", namespace = "AWS/NetworkELB", metric = "TCP_Target_Reset_Count", statistic = "Sum", type = "gt", dim_key = "", warning = "eks_tcp_reset_warn", critical = "eks_tcp_reset_crit" }
-    eks_container_restarts = { group = "EKS", namespace = "ContainerInsights", metric = "pod_number_of_container_restarts", statistic = "Sum", type = "gt", dim_key = "", warning = "eks_container_restart_warn", critical = "eks_container_restart_crit" }
+    eks_container_restarts = { group = "EKS", namespace = "ContainerInsights", metric = "pod_number_of_container_restarts", statistic = "Sum", type = "gt", dim_key = "ClusterName", match_exact = true, warning = "eks_container_restart_warn", critical = "eks_container_restart_crit" }
     eks_failed_nodes       = { group = "EKS", namespace = "ContainerInsights", metric = "cluster_failed_node_count", statistic = "Maximum", type = "gt", dim_key = "", warning = "eks_failed_node_warn", critical = "eks_failed_node_crit" }
     eks_pending_pods       = { group = "EKS", namespace = "AWS/EKS", metric = "scheduler_pending_pods_UNSCHEDULABLE", statistic = "Maximum", type = "gt", dim_key = "", warning = "eks_pending_pod_warn", critical = "eks_pending_pod_crit" }
     eks_node_cpu           = { group = "EKS", namespace = "ContainerInsights", metric = "node_cpu_utilization", statistic = "Average", type = "gt", dim_key = "", warning = "eks_node_cpu_warn", critical = "eks_node_cpu_crit" }
