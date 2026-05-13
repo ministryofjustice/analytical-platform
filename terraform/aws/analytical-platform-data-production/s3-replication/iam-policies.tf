@@ -1,4 +1,6 @@
-data "aws_iam_policy_document" "alpha_mojap_ho_data_transfer_replication" {
+data "aws_iam_policy_document" "replication" {
+  for_each = local.replication_configurations
+
   statement {
     sid    = "DestinationBucketPermissions"
     effect = "Allow"
@@ -9,7 +11,7 @@ data "aws_iam_policy_document" "alpha_mojap_ho_data_transfer_replication" {
       "s3:ReplicateTags",
       "s3:ReplicateDelete"
     ]
-    resources = ["arn:aws:s3:::dsa-cdl-police-s3-deposit-cjs-npa/*"]
+    resources = ["${each.value.destination_bucket_arn}/*"]
   }
 
   statement {
@@ -20,7 +22,7 @@ data "aws_iam_policy_document" "alpha_mojap_ho_data_transfer_replication" {
       "s3:ListBucket",
       "s3:PutInventoryConfiguration"
     ]
-    resources = [module.alpha_mojap_ho_data_transfer_test.s3_bucket_arn]
+    resources = [each.value.source_bucket_arn]
   }
 
   statement {
@@ -33,7 +35,7 @@ data "aws_iam_policy_document" "alpha_mojap_ho_data_transfer_replication" {
       "s3:GetObjectVersionTagging",
       "s3:ObjectOwnerOverrideToBucketOwner",
     ]
-    resources = ["${module.alpha_mojap_ho_data_transfer_test.s3_bucket_arn}/*"]
+    resources = ["${each.value.source_bucket_arn}/*"]
   }
 
   statement {
@@ -45,18 +47,25 @@ data "aws_iam_policy_document" "alpha_mojap_ho_data_transfer_replication" {
       "s3:PutObject"
     ]
     resources = [
-      "${module.alpha_mojap_ho_data_transfer_test.s3_bucket_arn}/*",
-      "arn:aws:s3:::dsa-cdl-police-s3-deposit-cjs-npa/*"
+      "${each.value.source_bucket_arn}/*",
+      "${each.value.destination_bucket_arn}/*"
     ]
   }
 }
 
-resource "aws_iam_policy" "alpha_mojap_ho_data_transfer_replication" {
-  name   = "alpha-mojap-ho-data-transfer-test-replication"
-  policy = data.aws_iam_policy_document.alpha_mojap_ho_data_transfer_replication.json
+resource "aws_iam_policy" "replication" {
+  for_each = local.replication_configurations
+
+  name   = "${each.value.source_bucket_name}-replication"
+  policy = data.aws_iam_policy_document.replication[each.key].json
 }
 
-data "aws_iam_policy_document" "alpha_mojap_ho_data_transfer_replication_trust" {
+moved {
+  from = data.aws_iam_policy_document.alpha_mojap_ho_data_transfer_replication
+  to   = data.aws_iam_policy_document.replication["test"]
+}
+
+data "aws_iam_policy_document" "replication_trust" {
   statement {
     sid     = "TrustS3"
     effect  = "Allow"
@@ -70,14 +79,4 @@ data "aws_iam_policy_document" "alpha_mojap_ho_data_transfer_replication_trust" 
       ]
     }
   }
-}
-
-resource "aws_iam_role" "alpha_mojap_ho_data_transfer_replication" {
-  name               = "alpha-mojap-ho-data-transfer-test-replication"
-  assume_role_policy = data.aws_iam_policy_document.alpha_mojap_ho_data_transfer_replication_trust.json
-}
-
-resource "aws_iam_role_policy_attachment" "alpha_mojap_ho_data_transfer_replication" {
-  role       = aws_iam_role.alpha_mojap_ho_data_transfer_replication.name
-  policy_arn = aws_iam_policy.alpha_mojap_ho_data_transfer_replication.arn
 }
