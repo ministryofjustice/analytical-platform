@@ -124,7 +124,7 @@ locals {
     cp_pod_memory        = { group = "Control Panel", namespace = "ContainerInsights", metric = "pod_memory_utilization", statistic = "Average", type = "gt", dim_key = "Namespace", warning = "cp_pod_mem_warn", critical = "cp_pod_mem_crit" }
     cp_pod_cpu           = { group = "Control Panel", namespace = "ContainerInsights", metric = "pod_cpu_utilization", statistic = "Average", type = "gt", dim_key = "Namespace", warning = "cp_pod_cpu_warn", critical = "cp_pod_cpu_crit" }
     cp_pod_mem_reserved  = { group = "Control Panel", namespace = "ContainerInsights", metric = "pod_memory_reserved_capacity", statistic = "Average", type = "gt", dim_key = "Namespace", warning = "cp_pod_mem_reserved_warn", critical = "cp_pod_mem_reserved_crit" }
-    cp_node_cpu_reserved = { group = "Control Panel", namespace = "ContainerInsights", metric = "node_cpu_reserved_capacity", statistic = "Average", type = "gt", dim_key = "Namespace", warning = "cp_node_cpu_reserved_warn", critical = "cp_node_cpu_reserved_crit" }
+    cp_node_cpu_reserved = { group = "Control Panel", namespace = "ContainerInsights", metric = "node_cpu_reserved_capacity", statistic = "Average", type = "gt", dim_key = "NodeName", warning = "cp_node_cpu_reserved_warn", critical = "cp_node_cpu_reserved_crit" }
 
     # ── Redis ─────────────────────────────────────────────────────────────────
     redis_read_latency      = { group = "Control Panel", namespace = "AWS/ElastiCache", metric = "SuccessfulReadRequestLatency", statistic = "Average", type = "gt", dim_key = "", warning = "redis_read_latency_warn", critical = "redis_read_latency_crit" }
