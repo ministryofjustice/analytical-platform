@@ -21,6 +21,7 @@ locals {
             module.users_de_seo["khristiania.raihan@justice.gov.uk"].id,
             module.users_de_seo["mohammed.ahad1@justice.gov.uk"].id,
             module.users_de_seo["damilola.oyebade@justice.gov.uk"].id,
+            module.users_de_seo["anthony.fitzroy@digital.justice.gov.uk"].id
           ]
           restrictions = [
             {
@@ -147,6 +148,11 @@ locals {
     {
       name  = "Anthony Cody"
       email = "anthony.cody@digital.justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Anthony Fitzroy"
+      email = "anthony.fitzroy@digital.justice.gov.uk"
       role  = "responder"
     },
     {
