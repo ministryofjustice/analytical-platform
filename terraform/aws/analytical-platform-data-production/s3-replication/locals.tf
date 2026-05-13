@@ -8,7 +8,7 @@ locals {
       destination_bucket_arn = "arn:aws:s3:::dsa-cdl-police-s3-deposit-cjs-npa"
     }
     production = {
-      enabled                = true
+      enabled                = false
       source_bucket_name     = "alpha-mojap-ho-data-transfer"
       source_bucket_arn      = "arn:aws:s3:::alpha-mojap-ho-data-transfer"
       destination_account_id = "314425585946"
