@@ -80,9 +80,9 @@ locals {
     eks_webhook_latency_warn = 1
     eks_webhook_latency_crit = 5
 
-    # Traffic: Data in/out of nodes — Warning Baseline +50%, Critical Baseline +100%
-    eks_node_net_baseline_warn = 50
-    eks_node_net_baseline_crit = 100
+    # Traffic: Total network bytes in/out of nodes — Warning > 500 MB/min, Critical > 1 GB/min
+    eks_node_net_warn = 500000000
+    eks_node_net_crit = 1000000000
 
     # Errors: Pods are not reachable (unhealthy NLB hosts) — Warning >= 1, Critical > 20% of targets
     eks_unhealthy_host_warn = 1
