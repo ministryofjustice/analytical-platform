@@ -123,6 +123,11 @@ resource "aws_iam_role_policy_attachment" "datahub_ingestion_github_actions" {
   role       = aws_iam_role.datahub_ingestion_github_actions.name
 }
 
+resource "aws_iam_role_policy_attachment" "datahub_ingestion_github_actions_athena_datasets" {
+  policy_arn = aws_iam_policy.datahub_ingest_athena_datasets.arn
+  role       = aws_iam_role.datahub_ingestion_github_actions.name
+}
+
 #trivy:ignore:avd-aws-0057:sensitive action 'glue:GetDatabases' on wildcarded resource
 data "aws_iam_policy_document" "datahub_ingest_glue_datasets" {
   statement {
