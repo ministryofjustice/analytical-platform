@@ -1,10 +1,11 @@
 #trivy:ignore:avd-aws-0090:Bucket versioning is not preferred for query bucket
+#tfsec:ignore:AVD-AWS-0088:Bucket is encrypted, but not detected by Trivy
 module "data_engineering_pipeline_buckets" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 
   for_each = local.data_engineering_buckets
   source   = "terraform-aws-modules/s3-bucket/aws"
-  version  = "5.8.2"
+  version  = "5.12.0"
 
   bucket                               = each.key
   force_destroy                        = each.value.force_destroy

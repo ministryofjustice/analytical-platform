@@ -3,7 +3,7 @@ module "rds_export_secret" {
   #checkov:skip=CKV_TF_2: Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/secrets-manager/aws"
-  version = "2.0.1"
+  version = "2.1.0"
 
   name_prefix = "rds_export_${local.name}_${local.env}_"
   kms_key_id  = module.rds_export_kms.key_arn
@@ -19,7 +19,7 @@ module "slack_webhook_secret" {
   # checkov:skip=CKV_TF_2: Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/secrets-manager/aws"
-  version = "2.0.1"
+  version = "2.1.0"
 
   name_prefix = "slack_webhook_${local.name}_${local.env}_"
   kms_key_id  = module.rds_export_kms.key_arn

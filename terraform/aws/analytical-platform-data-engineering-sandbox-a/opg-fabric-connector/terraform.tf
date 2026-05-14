@@ -10,14 +10,17 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.11.0"
+      version = "6.21.0"
     }
   }
   required_version = "~> 1.5"
 }
 
 provider "aws" {
-  region = "eu-west-2"
+  region = "eu-west-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
+  }
 
   default_tags {
     tags = {

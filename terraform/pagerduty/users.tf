@@ -1,18 +1,8 @@
 locals {
   users = [
     {
-      name  = "Anthony Fitzroy"
-      email = "anthony.fitzroy@digital.justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Brian Ellwood"
       email = "brian.ellwood@digital.justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "David Sibley"
-      email = "david.sibley@digital.justice.gov.uk"
       role  = "responder"
     },
     {
@@ -34,11 +24,6 @@ locals {
       name  = "James Stott"
       email = "james.stott@digital.justice.gov.uk"
       role  = "responder"
-    },
-    {
-      name  = "Julia Lawrence"
-      email = "julia.lawrence@digital.justice.gov.uk"
-      role  = "manager"
     },
     {
       name  = "Michael Collins"

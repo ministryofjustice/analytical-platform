@@ -19,6 +19,14 @@ ingress:
     - secretName: observability-tls
       hosts:
         - observability.analytical-platform.service.justice.gov.uk
+  extraPaths:
+    - path: /metrics
+      pathType: Exact
+      backend:
+        service:
+          name: blackhole
+          port:
+            number: 80
 
 serviceMonitor:
   enabled: true
