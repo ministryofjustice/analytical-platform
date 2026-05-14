@@ -21,9 +21,6 @@ locals {
       ]) : "${combo.rule_key}${combo.suffix}" => combo
     }
   }
-  
-
-
   # ---------------------------------------------------------------------------
   # np_resolved — pre-computes the effective notification_policy per rule per
   # severity so the rule_yaml block stays readable.
