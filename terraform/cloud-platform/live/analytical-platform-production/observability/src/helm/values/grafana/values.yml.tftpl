@@ -379,7 +379,8 @@ extraVolumes:
 
 extraVolumeMounts:
   - name: alert-rules
-    mountPath: /etc/grafana/provisioning/alerting
+    mountPath: /etc/grafana/provisioning/alerting/rules.yaml
+    subPath: rules.yaml
     readOnly: true
 
 podAnnotations:

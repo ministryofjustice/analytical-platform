@@ -21,9 +21,13 @@ resource "helm_release" "grafana" {
           data.github_team.probation_integration.id
         ])
         alert_rules_configmap = kubernetes_config_map_v1.grafana_alert_rules.metadata[0].name
-        alert_rules_checksum  = sha256(local.alert_rules_yaml)
+        alert_rules_checksum  = local.metrics_checksum
+    }),
+    yamlencode({
+      podAnnotations = {
+        "checksum/alert-rules" = local.metrics_checksum
       }
-    )
+    })
   ]
 
   set_sensitive = [

@@ -23,6 +23,39 @@ locals {
   }
 
 
+  # ---------------------------------------------------------------------------
+  # np_resolved — pre-computes the effective notification_policy per rule per
+  # severity so the rule_yaml block stays readable.
+  #
+  # notification_policy on a golden_signal can be:
+  #   string  → same policy for warning and critical
+  #   object  → { warning = "...", critical = "..." } for per-severity routing
+  #             (omit a key to fall through to the env default)
+  #
+  # Resolution per severity:
+  #   1. metric per-severity key  e.g. combo.rule.notification_policy.critical
+  #   2. metric string            combo.rule.notification_policy (when it's a string)
+  #   3. env default              cfg.notification_policy
+  #   4. null                     label omitted → Grafana root policy handles it
+  # ---------------------------------------------------------------------------
+  np_resolved = {
+    for env, cfg in local.environment_configurations :
+    env => {
+      for combo_key, combo in local.rule_combos_by_env[env] :
+      combo_key => {
+        for severity in ["warning", "critical"] :
+        severity => (
+          try(combo.rule.notification_policy[severity], null) != null
+          ? combo.rule.notification_policy[severity]
+          : try(tostring(combo.rule.notification_policy), null) != null && try(tostring(combo.rule.notification_policy), null) != "null"
+          ? tostring(combo.rule.notification_policy)
+          : try(cfg.notification_policy, null)
+        )
+      }
+    }
+  }
+
+
   rule_yaml = {
     for env, cfg in local.environment_configurations :
     env => {
@@ -43,6 +76,11 @@ locals {
             "          environment: ${env}",
             "          service: ${lower(replace(combo.rule.group, " ", "_"))}",
             "          metric: ${combo.rule.metric}",
+            (
+              local.np_resolved[env][combo_key][severity] != null
+              ? "          notification_policy: ${local.np_resolved[env][combo_key][severity]}"
+              : null
+            ),
             "        data:",
           ],
 
@@ -82,8 +120,6 @@ locals {
           ],
 
           # ── C: threshold check ───────────────────────────────────────────────
-          # Always present. For baseline_* types D is the firing condition but
-          # C must still be present as Grafana requires it in the pipeline.
           [
             "          - refId: C",
             "            datasourceUid: __expr__",

@@ -17,26 +17,44 @@ locals {
   # golden_signals — one entry per CloudWatch metric to alert on.
   #
   # Fields:
-  #   group          = alert group name (must match a key in group_folders above)
-  #   namespace      = CloudWatch namespace
-  #   metric         = CloudWatch metric name
-  #   statistic      = CloudWatch statistic (Sum, Average, Maximum, Minimum, p99 …)
-  #   type           = alert logic:
-  #                      gt          → fire when value > threshold         (condition C)
-  #                      lt          → fire when value < threshold         (condition C)
-  #                      baseline_gt → fire when % above hourly baseline   (condition D)
-  #                      baseline_lt → fire when % below hourly baseline   (condition D)
-  #   dim_key        = primary CloudWatch dimension key ("" = no dimension filter)
-  #   dim_key2       = optional second dimension key; always matched with value "*"
-  #                    used for ContainerInsights metrics that need e.g.
-  #                    {Namespace=cpanel, ClusterName=*} to return the
-  #                    namespace-level aggregate instead of per-pod series
-  #   match_exact    = if true, CloudWatch returns only series whose dimension
-  #                    set exactly matches the supplied keys (no extra dimensions)
-  #   ok_when_nodata = if true, sets noDataState: OK so rules resolve to Normal
-  #                    when CloudWatch emits nothing (e.g. zero failed nodes)
-  #   warning        = key in locals.defaults (or threshold_overrides) for warning level
-  #   critical       = key in locals.defaults (or threshold_overrides) for critical level
+  #   group                = alert group name (must match a key in group_folders above)
+  #   namespace            = CloudWatch namespace
+  #   metric               = CloudWatch metric name
+  #   statistic            = CloudWatch statistic (Sum, Average, Maximum, Minimum, p99 …)
+  #   type                 = alert logic:
+  #                            gt          → fire when value > threshold         (condition C)
+  #                            lt          → fire when value < threshold         (condition C)
+  #                            baseline_gt → fire when % above hourly baseline   (condition D)
+  #                            baseline_lt → fire when % below hourly baseline   (condition D)
+  #   dim_key              = primary CloudWatch dimension key ("" = no dimension filter)
+  #   dim_key2             = optional second dimension key; always matched with value "*"
+  #                          used for ContainerInsights metrics that need e.g.
+  #                          {Namespace=cpanel, ClusterName=*} to return the
+  #                          namespace-level aggregate instead of per-pod series
+  #   match_exact          = (optional, default: false)
+  #                          if true, CloudWatch returns only series whose dimension set
+  #                          exactly matches the supplied keys (no extra dimensions).
+  #                          Required for ContainerInsights cluster-level aggregates to
+  #                          exclude per-pod series that carry extra dimensions (PodName etc)
+  #   ok_when_nodata       = (optional, default: false)
+  #                          if true, sets noDataState: OK so rules resolve to Normal
+  #                          when CloudWatch emits nothing (e.g. zero failed nodes)
+  #   notification_policy  = (optional) Grafana contact point / notification policy name
+  #                          to route this specific metric's alerts.
+  #                          Two forms accepted:
+  #                            a) string — same policy for both severities
+  #                               notification_policy = "slack"
+  #                            b) object — different policy per severity;
+  #                               omit a key to fall back to the env default
+  #                               notification_policy = { warning = "slack", critical = "pagerduty" }
+  #                          Resolution order per severity (first set value wins):
+  #                            1. per-severity key on this field  (e.g. .critical)
+  #                            2. string value on this field
+  #                            3. notification_policy in environment_configurations (env default)
+  #                          If none of the above is set the label is omitted entirely
+  #                          and Grafana's root / catch-all policy handles the alert.
+  #   warning              = key in locals.defaults (or threshold_overrides) for warning level
+  #   critical             = key in locals.defaults (or threshold_overrides) for critical level
   # ---------------------------------------------------------------------------
   golden_signals = {
 
@@ -68,9 +86,6 @@ locals {
     tgw_BytesDropCountBlackhole   = { group = "Transit Gateway", namespace = "AWS/TransitGateway", metric = "BytesDropCountBlackhole", statistic = "Sum", type = "gt", dim_key = "", warning = "tgw_bytes_drop_blackhole_warn", critical = "tgw_bytes_drop_blackhole_crit" }
 
     # ── EKS ───────────────────────────────────────────────────────────────────
-    # ContainerInsights metrics use dim_key = "ClusterName" + match_exact = true
-    # to return only the cluster-level aggregate (single series).
-    # ok_when_nodata = true for metrics CloudWatch omits when value is zero.
     eks_webhook_latency    = { group = "EKS", namespace = "AWS/EKS", metric = "apiserver_admission_webhook_admission_duration_seconds", statistic = "p99", type = "gt", dim_key = "", warning = "eks_webhook_latency_warn", critical = "eks_webhook_latency_crit" }
     eks_node_network       = { group = "EKS", namespace = "ContainerInsights", metric = "node_network_total_bytes", statistic = "Sum", type = "gt", dim_key = "ClusterName", match_exact = true, ok_when_nodata = true, warning = "eks_node_net_warn", critical = "eks_node_net_crit" }
     eks_unhealthy_hosts    = { group = "EKS", namespace = "AWS/NetworkELB", metric = "UnHealthyHostCount", statistic = "Maximum", type = "gt", dim_key = "", warning = "eks_unhealthy_host_warn", critical = "eks_unhealthy_host_crit" }
@@ -128,17 +143,13 @@ locals {
     mwaa_freeable_mem         = { group = "MWAA", namespace = "AWS/MWAA", metric = "FreeableMemory", statistic = "Minimum", type = "lt", dim_key = "", warning = "mwaa_freeable_mem_warn", critical = "mwaa_freeable_mem_crit" }
 
     # ── Control Panel ─────────────────────────────────────────────────────────
-    # ContainerInsights pod metrics require dim_key2 = "ClusterName" so the
-    # query filters on both {Namespace=cpanel, ClusterName=*} with match_exact
-    # = true — returning only the 2-dimension namespace-level aggregate series
-    # rather than per-pod series that also carry PodName and FullPodName.
     cp_pod_cpu_throttle  = { group = "Control Panel", namespace = "ContainerInsights", metric = "pod_cpu_utilization_over_pod_limit", statistic = "Average", type = "gt", dim_key = "Namespace", dim_key2 = "ClusterName", match_exact = true, warning = "cp_pod_cpu_throttle_warn", critical = "cp_pod_cpu_throttle_crit" }
     cp_pod_net_rx        = { group = "Control Panel", namespace = "ContainerInsights", metric = "pod_network_rx_bytes", statistic = "Sum", type = "baseline_gt", dim_key = "Namespace", dim_key2 = "ClusterName", match_exact = true, warning = "cp_pod_net_baseline_warn", critical = "cp_pod_net_baseline_crit" }
     cp_pod_net_tx        = { group = "Control Panel", namespace = "ContainerInsights", metric = "pod_network_tx_bytes", statistic = "Sum", type = "baseline_gt", dim_key = "Namespace", dim_key2 = "ClusterName", match_exact = true, warning = "cp_pod_net_baseline_warn", critical = "cp_pod_net_baseline_crit" }
     cp_pod_memory        = { group = "Control Panel", namespace = "ContainerInsights", metric = "pod_memory_utilization", statistic = "Average", type = "gt", dim_key = "Namespace", dim_key2 = "ClusterName", match_exact = true, warning = "cp_pod_mem_warn", critical = "cp_pod_mem_crit" }
     cp_pod_cpu           = { group = "Control Panel", namespace = "ContainerInsights", metric = "pod_cpu_utilization", statistic = "Average", type = "gt", dim_key = "Namespace", dim_key2 = "ClusterName", match_exact = true, warning = "cp_pod_cpu_warn", critical = "cp_pod_cpu_crit" }
-    cp_pod_mem_reserved  = { group = "Control Panel", namespace = "ContainerInsights", metric = "pod_memory_reserved_capacity", statistic = "Average", type = "gt", dim_key = "Namespace", dim_key2 = "ClusterName", match_exact = true, warning = "cp_pod_mem_reserved_warn", critical = "cp_pod_mem_reserved_crit" }
-    cp_node_cpu_reserved = { group = "Control Panel", namespace = "ContainerInsights", metric = "node_cpu_reserved_capacity", statistic = "Average", type = "gt", dim_key = "NodeName", match_exact = true, warning = "cp_node_cpu_reserved_warn", critical = "cp_node_cpu_reserved_crit" }
+    cp_pod_mem_reserved  = { group = "Control Panel", namespace = "ContainerInsights", metric = "pod_memory_reserved_capacity", statistic = "Average", type = "gt", dim_key = "Namespace", dim_key2 = "ClusterName", warning = "cp_pod_mem_reserved_warn", critical = "cp_pod_mem_reserved_crit" }
+    cp_node_cpu_reserved = { group = "Control Panel", namespace = "ContainerInsights", metric = "node_cpu_reserved_capacity", statistic = "Average", type = "gt", dim_key = "NodeName", warning = "cp_node_cpu_reserved_warn", critical = "cp_node_cpu_reserved_crit" }
 
     # ── Redis ─────────────────────────────────────────────────────────────────
     redis_read_latency      = { group = "Control Panel", namespace = "AWS/ElastiCache", metric = "SuccessfulReadRequestLatency", statistic = "Average", type = "gt", dim_key = "", warning = "redis_read_latency_warn", critical = "redis_read_latency_crit" }
