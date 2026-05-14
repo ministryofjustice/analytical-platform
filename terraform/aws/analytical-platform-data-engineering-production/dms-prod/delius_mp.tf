@@ -1,4 +1,4 @@
-# Creating to test new mp endpoint 
+# Creating to test new mp endpoint
 # To delete resources after testing connection
 
 locals {
