@@ -1,7 +1,7 @@
 locals {
   environment_configurations = {
     analytical-platform-compute-development = {
-      #  notification_policy = "analytical-platform-alerts-slack"
+      #  slack_channel = "analytical-platform-alerts-slack"
       datasource_name = "mojap-compute-development-cloudwatch"
       s3_buckets      = ["mojap-compute-development-mwaa", "mojap-compute-development-velero"]
       enabled_groups = [
@@ -16,11 +16,11 @@ locals {
       enabled_groups  = ["Control Panel", "EFS", "EKS"]
       aws_region      = "eu-west-1"
       datasource_name = "mojap-development-cloudwatch"
-      #  notification_policy = "analytical-platform-alerts-slack"
+      #  slack_channel = "analytical-platform-alerts-slack"
     }
 
     # analytical-platform-compute-production = {
-    #  notification_policy = "prod-pagerduty"
+    #  slack_channel = "prod-pagerduty"
     # evaluation_interval = "1m"
     #datasource_name     = "mojap-compute-production-cloudwatch"
     #aws_region          = "eu-west-1"

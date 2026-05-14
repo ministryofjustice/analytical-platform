@@ -17,44 +17,43 @@ locals {
   # golden_signals — one entry per CloudWatch metric to alert on.
   #
   # Fields:
-  #   group                = alert group name (must match a key in group_folders above)
-  #   namespace            = CloudWatch namespace
-  #   metric               = CloudWatch metric name
-  #   statistic            = CloudWatch statistic (Sum, Average, Maximum, Minimum, p99 …)
-  #   type                 = alert logic:
-  #                            gt          → fire when value > threshold         (condition C)
-  #                            lt          → fire when value < threshold         (condition C)
-  #                            baseline_gt → fire when % above hourly baseline   (condition D)
-  #                            baseline_lt → fire when % below hourly baseline   (condition D)
-  #   dim_key              = primary CloudWatch dimension key ("" = no dimension filter)
-  #   dim_key2             = optional second dimension key; always matched with value "*"
-  #                          used for ContainerInsights metrics that need e.g.
-  #                          {Namespace=cpanel, ClusterName=*} to return the
-  #                          namespace-level aggregate instead of per-pod series
-  #   match_exact          = (optional, default: false)
-  #                          if true, CloudWatch returns only series whose dimension set
-  #                          exactly matches the supplied keys (no extra dimensions).
-  #                          Required for ContainerInsights cluster-level aggregates to
-  #                          exclude per-pod series that carry extra dimensions (PodName etc)
-  #   ok_when_nodata       = (optional, default: false)
-  #                          if true, sets noDataState: OK so rules resolve to Normal
-  #                          when CloudWatch emits nothing (e.g. zero failed nodes)
-  #   notification_policy  = (optional) Grafana contact point / notification policy name
-  #                          to route this specific metric's alerts.
-  #                          Two forms accepted:
-  #                            a) string — same policy for both severities
-  #                               notification_policy = "slack"
-  #                            b) object — different policy per severity;
-  #                               omit a key to fall back to the env default
-  #                               notification_policy = { warning = "slack", critical = "pagerduty" }
-  #                          Resolution order per severity (first set value wins):
-  #                            1. per-severity key on this field  (e.g. .critical)
-  #                            2. string value on this field
-  #                            3. notification_policy in environment_configurations (env default)
-  #                          If none of the above is set the label is omitted entirely
-  #                          and Grafana's root / catch-all policy handles the alert.
-  #   warning              = key in locals.defaults (or threshold_overrides) for warning level
-  #   critical             = key in locals.defaults (or threshold_overrides) for critical level
+  #   group          = alert group name (must match a key in group_folders above)
+  #   namespace      = CloudWatch namespace
+  #   metric         = CloudWatch metric name
+  #   statistic      = CloudWatch statistic (Sum, Average, Maximum, Minimum, p99 …)
+  #   type           = alert logic:
+  #                      gt          → fire when value > threshold         (condition C)
+  #                      lt          → fire when value < threshold         (condition C)
+  #                      baseline_gt → fire when % above hourly baseline   (condition D)
+  #                      baseline_lt → fire when % below hourly baseline   (condition D)
+  #   dim_key        = primary CloudWatch dimension key ("" = no dimension filter)
+  #   dim_key2       = optional second dimension key; always matched with value "*"
+  #                    used for ContainerInsights metrics that need e.g.
+  #                    {Namespace=cpanel, ClusterName=*} to return the
+  #                    namespace-level aggregate instead of per-pod series
+  #   match_exact    = (optional, default: false)
+  #                    if true, CloudWatch returns only series whose dimension set
+  #                    exactly matches the supplied keys (no extra dimensions).
+  #                    Required for ContainerInsights cluster-level aggregates to
+  #                    exclude per-pod series that carry extra dimensions (PodName etc)
+  #   ok_when_nodata = (optional, default: false)
+  #                    if true, sets noDataState: OK so rules resolve to Normal
+  #                    when CloudWatch emits nothing (e.g. zero failed nodes)
+  #   slack_channel  = (optional) Slack channel to route this signal's alerts.
+  #                    Two forms accepted:
+  #                      a) string — same channel for both severities
+  #                         slack_channel = "dev-slack"
+  #                      b) object — different channel per severity;
+  #                         omit a key to emit no label for that severity
+  #                         slack_channel = { warning = "dev-slack", critical = "dev-slack-critical" }
+  #                    Resolution order per severity (first non-null wins):
+  #                      1. per-severity key on this field  (e.g. .critical)
+  #                      2. string value on this field
+  #                      3. slack_channel in environment_configurations  (env default)
+  #                    If none of the above is set the label is omitted entirely
+  #                    and Grafana's root / catch-all policy handles the alert.
+  #   warning        = key in locals.defaults (or threshold_overrides) for warning level
+  #   critical       = key in locals.defaults (or threshold_overrides) for critical level
   # ---------------------------------------------------------------------------
   golden_signals = {
 

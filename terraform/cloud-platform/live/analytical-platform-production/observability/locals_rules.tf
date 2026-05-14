@@ -21,38 +21,22 @@ locals {
       ]) : "${combo.rule_key}${combo.suffix}" => combo
     }
   }
-  # ---------------------------------------------------------------------------
-  # np_resolved — pre-computes the effective notification_policy per rule per
-  # severity so the rule_yaml block stays readable.
-  #
-  # notification_policy on a golden_signal can be:
-  #   string  → same policy for warning and critical
-  #   object  → { warning = "...", critical = "..." } for per-severity routing
-  #             (omit a key to fall through to the env default)
-  #
-  # Resolution per severity:
-  #   1. metric per-severity key  e.g. combo.rule.notification_policy.critical
-  #   2. metric string            combo.rule.notification_policy (when it's a string)
-  #   3. env default              cfg.notification_policy
-  #   4. null                     label omitted → Grafana root policy handles it
-  # ---------------------------------------------------------------------------
-  np_resolved = {
+  sc_resolved = {
     for env, cfg in local.environment_configurations :
     env => {
       for combo_key, combo in local.rule_combos_by_env[env] :
       combo_key => {
         for severity in ["warning", "critical"] :
         severity => (
-          try(combo.rule.notification_policy[severity], null) != null
-          ? combo.rule.notification_policy[severity]
-          : try(tostring(combo.rule.notification_policy), null) != null && try(tostring(combo.rule.notification_policy), null) != "null"
-          ? tostring(combo.rule.notification_policy)
-          : try(cfg.notification_policy, null)
+          try(combo.rule.slack_channel[severity], null) != null
+          ? combo.rule.slack_channel[severity]
+          : try(tostring(combo.rule.slack_channel), null) != null && try(tostring(combo.rule.slack_channel), null) != "null"
+          ? tostring(combo.rule.slack_channel)
+          : try(cfg.slack_channel, null)
         )
       }
     }
   }
-
 
   rule_yaml = {
     for env, cfg in local.environment_configurations :
@@ -68,15 +52,15 @@ locals {
             "        uid: ${substr(md5("${env}-${combo_key}-${severity}"), 0, 8)}",
             "        condition: ${contains(["baseline_gt", "baseline_lt"], combo.rule.type) ? "D" : "C"}",
             "        for: ${try(combo.rule.for_duration, "5m")}",
-            "        noDataState: ${try(combo.rule.ok_when_nodata, false) ? "OK" : "NoData"}",
+            "        noDataState: OK",
             "        labels:",
             "          severity: ${severity}",
             "          environment: ${env}",
             "          service: ${lower(replace(combo.rule.group, " ", "_"))}",
             "          metric: ${combo.rule.metric}",
             (
-              local.np_resolved[env][combo_key][severity] != null
-              ? "          notification_policy: ${local.np_resolved[env][combo_key][severity]}"
+              local.sc_resolved[env][combo_key][severity] != null
+              ? "          slack-channel: ${local.sc_resolved[env][combo_key][severity]}"
               : null
             ),
             "        data:",
@@ -138,7 +122,6 @@ locals {
           # ── BASE / BASE_R / D: only for baseline alert types ─────────────────
           contains(["baseline_gt", "baseline_lt"], combo.rule.type) ? [
 
-            # BASE: hourly CloudWatch query for rolling baseline
             "          - refId: BASE",
             "            relativeTimeRange:",
             "              from: 3600",
@@ -155,7 +138,6 @@ locals {
             "              dimensions: ${try(combo.rule.dim_key2, "") != "" ? "{\"${combo.rule.dim_key}\": [\"${combo.dim_value}\"], \"${combo.rule.dim_key2}\": [\"*\"]}" : combo.dim_value != "" ? "{\"${combo.rule.dim_key}\": [\"${combo.dim_value}\"]}" : "{}"}",
             "              matchExact: ${try(combo.rule.dim_key2, "") != "" ? true : try(combo.rule.match_exact, false)}",
 
-            # BASE_R: reduce baseline series to its last value
             "          - refId: BASE_R",
             "            datasourceUid: __expr__",
             "            relativeTimeRange:",
@@ -169,7 +151,6 @@ locals {
             "              settings:",
             "                mode: dropNN",
 
-            # D: percentage-deviation → (current - baseline) / baseline * 100
             "          - refId: D",
             "            datasourceUid: __expr__",
             "            relativeTimeRange:",
@@ -178,8 +159,7 @@ locals {
             "            model:",
             "              type: math",
             "              refId: D",
-            "              expression: ${combo.rule.type == "baseline_lt" ? "($B - $BASE_R) / $BASE_R * 100 < -${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}" : "($B - $BASE_R) / $BASE_R * 100 > ${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}"}",
-
+            "              expression: ${combo.rule.type == "baseline_lt" ? "$BASE_R > 0 && ($B - $BASE_R) / $BASE_R * 100 < -${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}" : "$BASE_R > 0 && ($B - $BASE_R) / $BASE_R * 100 > ${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}"}",
           ] : [],
 
           [""],
@@ -187,7 +167,6 @@ locals {
       }
     }
   }
-
 
   group_blocks_by_env = {
     for env, cfg in local.environment_configurations :
