@@ -5,7 +5,6 @@ locals {
   database_credentials    = jsondecode(data.aws_secretsmanager_secret_version.database_credentials.secret_string)
   engine_name             = "oracle"
   secrets_manager_arn     = aws_secretsmanager_secret.delius_prod_secret.arn
-  secrets_manager_kms_arn = module.dms_prod_kms.key_arn
   sid                     = "prdndas2"
 
   extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=3;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=delius-core-prod-db-1.delius-core.hmpps-production.modernisation-platform.service.justice.gov.uk/+ASM;asm_user=delius_analytics_platform;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N;"
