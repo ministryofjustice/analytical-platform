@@ -138,9 +138,9 @@ data "aws_iam_policy_document" "datahub_ingest_glue_datasets" {
       "glue:GetTables"
     ]
     resources = [
-      "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:catalog",
-      "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:database/*",
-      "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:table/*"
+      "arn:aws:glue:${data.aws_region.current.region}:${var.account_ids["analytical-platform-data-production"]}:catalog",
+      "arn:aws:glue:${data.aws_region.current.region}:${var.account_ids["analytical-platform-data-production"]}:database/*",
+      "arn:aws:glue:${data.aws_region.current.region}:${var.account_ids["analytical-platform-data-production"]}:table/*/*"
     ]
   }
 }
