@@ -116,7 +116,7 @@ locals {
 
   curated_databases = ["ppud_dev_dbt", "ppud_preprod_dbt", "ppud"]
 
-  derived_databases = ["stg_ppud_prod_dev_dbt"]
+  derived_databases = ["stg_ppud_prod_dev_dbt", "public_protection_int_prod_dev_dbt"]
 
   derived_databases_prod = ["stg_ppud"]
 }
