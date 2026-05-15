@@ -1,4 +1,29 @@
 locals {
+  namespaces_regex_by_env = {
+    for env, cfg in local.environment_configurations :
+    env => join("|", [
+      for ns in try(cfg.namespaces, ["cpanel"]) :
+      ns if length(regexall("^[a-z0-9-]+$", ns)) > 0
+    ])
+  }
+
+  dims_by_combo = {
+    for env, cfg in local.environment_configurations :
+    env => {
+      for combo_key, combo in local.rule_combos_by_env[env] :
+      combo_key => (
+        try(combo.rule.dim_key2, "") != "" ? {
+          "${combo.rule.dim_key}"  = [combo.dim_value]
+          "${combo.rule.dim_key2}" = ["*"]
+        } :
+        combo.dim_value != "" ? {
+          "${combo.rule.dim_key}" = [combo.dim_value]
+        } :
+        {}
+      )
+    }
+  }
+
   rule_combos_by_env = {
     for env, cfg in local.environment_configurations :
     env => {
@@ -21,6 +46,7 @@ locals {
       ]) : "${combo.rule_key}${combo.suffix}" => combo
     }
   }
+
   sc_resolved = {
     for env, cfg in local.environment_configurations :
     env => {
@@ -45,7 +71,6 @@ locals {
       combo_key => {
         for severity in ["warning", "critical"] :
         severity => join("\n", compact(flatten([
-
           # ── rule header ──────────────────────────────────────────────────────
           [
             "      - title: ${combo_key}_${severity}",
@@ -76,16 +101,15 @@ locals {
             "            model:",
             "              type: instant",
             "              refId: A",
-            "              expr: '${replace(combo.rule.expr, "__NAMESPACES__", join("|", try(cfg.namespaces, ["cpanel"])))}'",
+            "              expr: '${replace(combo.rule.expr, "__NAMESPACES__", local.namespaces_regex_by_env[env])}'",
             "              instant: true",
             "              range: false",
             ] : [
-            # CloudWatch: time-series query (original behaviour)
             "          - refId: A",
             "            relativeTimeRange:",
             "              from: 300",
             "              to: 0",
-            "            datasourceUid: ${try(cfg.datasource_uid, substr(cfg.cloudwatch_datasource_name, 0, 40))}",
+            "            datasourceUid: ${substr(cfg.cloudwatchdatasource_name, 0, 40)}",
             "            model:",
             "              type: timeSeriesQuery",
             "              refId: A",
@@ -94,7 +118,7 @@ locals {
             "              metricName: ${combo.rule.metric}",
             "              statistic: ${combo.rule.statistic}",
             "              period: '60'",
-            "              dimensions: ${try(combo.rule.dim_key2, "") != "" ? "{\"${combo.rule.dim_key}\": [\"${combo.dim_value}\"], \"${combo.rule.dim_key2}\": [\"*\"]}" : combo.dim_value != "" ? "{\"${combo.rule.dim_key}\": [\"${combo.dim_value}\"]}" : "{}"}",
+            "              dimensions: ${jsonencode(local.dims_by_combo[env][combo_key])}",
             "              matchExact: ${try(combo.rule.dim_key2, "") != "" ? true : try(combo.rule.match_exact, false)}",
           ],
 
@@ -131,7 +155,6 @@ locals {
             "                    params:",
             "                      - ${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}",
           ],
-
           # ── BASE / BASE_R / D: only for baseline CloudWatch alert types ────────
           contains(["baseline_gt", "baseline_lt"], combo.rule.type) && try(combo.rule.datasource_type, "cloudwatch") != "prometheus" ? [
 
@@ -139,7 +162,7 @@ locals {
             "            relativeTimeRange:",
             "              from: 3600",
             "              to: 0",
-            "            datasourceUid: ${try(cfg.datasource_uid, substr(cfg.cloudwatch_datasource_name, 0, 40))}",
+            "            datasourceUid: ${substr(cfg.cloudwatch_datasource_name, 0, 40)}",
             "            model:",
             "              type: timeSeriesQuery",
             "              refId: BASE",
@@ -148,7 +171,7 @@ locals {
             "              metricName: ${combo.rule.metric}",
             "              statistic: Average",
             "              period: '3600'",
-            "              dimensions: ${try(combo.rule.dim_key2, "") != "" ? "{\"${combo.rule.dim_key}\": [\"${combo.dim_value}\"], \"${combo.rule.dim_key2}\": [\"*\"]}" : combo.dim_value != "" ? "{\"${combo.rule.dim_key}\": [\"${combo.dim_value}\"]}" : "{}"}",
+            "              dimensions: ${jsonencode(local.dims_by_combo[env][combo_key])}",
             "              matchExact: ${try(combo.rule.dim_key2, "") != "" ? true : try(combo.rule.match_exact, false)}",
 
             "          - refId: BASE_R",
