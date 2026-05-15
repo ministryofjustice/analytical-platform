@@ -7,7 +7,7 @@ locals {
           for dim_value in(
             rule.dim_key == "BucketName" ? try(cfg.s3_buckets, []) :
             rule.dim_key == "DBInstanceIdentifier" ? try(cfg.rds_instances, []) :
-            rule.dim_key == "Namespace" ? ["cpanel"] :
+            rule.dim_key == "Namespace" ? try(cfg.namespaces, ["cpanel"]) :
             rule.dim_key == "ClusterName" ? ["*"] :
             rule.dim_key == "NodeName" ? ["*"] :
             [""]
@@ -52,7 +52,7 @@ locals {
             "        uid: ${substr(md5("${env}-${combo_key}-${severity}"), 0, 8)}",
             "        condition: ${contains(["baseline_gt", "baseline_lt"], combo.rule.type) ? "D" : "C"}",
             "        for: ${try(combo.rule.for_duration, "5m")}",
-            "        noDataState: OK",
+            "        noDataState: ${try(combo.rule.ok_when_nodata, false) ? "OK" : "NoData"}",
             "        labels:",
             "          severity: ${severity}",
             "          environment: ${env}",
@@ -66,13 +66,26 @@ locals {
             "        data:",
           ],
 
-          # ── A: raw CloudWatch time-series ────────────────────────────────────
-          [
+          # ── A: data query — CloudWatch time-series OR Prometheus instant ─────
+          try(combo.rule.datasource_type, "cloudwatch") == "prometheus" ? [
             "          - refId: A",
             "            relativeTimeRange:",
             "              from: 300",
             "              to: 0",
-            "            datasourceUid: ${try(cfg.datasource_uid, substr(cfg.datasource_name, 0, 40))}",
+            "            datasourceUid: ${try(cfg.prometheus_datasource_uid, try(cfg.prometheus_datasource_name, "prometheus"))}",
+            "            model:",
+            "              type: instant",
+            "              refId: A",
+            "              expr: '${replace(combo.rule.expr, "__NAMESPACES__", join("|", try(cfg.namespaces, ["cpanel"])))}'",
+            "              instant: true",
+            "              range: false",
+            ] : [
+            # CloudWatch: time-series query (original behaviour)
+            "          - refId: A",
+            "            relativeTimeRange:",
+            "              from: 300",
+            "              to: 0",
+            "            datasourceUid: ${try(cfg.datasource_uid, substr(cfg.cloudwatch_datasource_name, 0, 40))}",
             "            model:",
             "              type: timeSeriesQuery",
             "              refId: A",
@@ -119,14 +132,14 @@ locals {
             "                      - ${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}",
           ],
 
-          # ── BASE / BASE_R / D: only for baseline alert types ─────────────────
-          contains(["baseline_gt", "baseline_lt"], combo.rule.type) ? [
+          # ── BASE / BASE_R / D: only for baseline CloudWatch alert types ────────
+          contains(["baseline_gt", "baseline_lt"], combo.rule.type) && try(combo.rule.datasource_type, "cloudwatch") != "prometheus" ? [
 
             "          - refId: BASE",
             "            relativeTimeRange:",
             "              from: 3600",
             "              to: 0",
-            "            datasourceUid: ${try(cfg.datasource_uid, substr(cfg.datasource_name, 0, 40))}",
+            "            datasourceUid: ${try(cfg.datasource_uid, substr(cfg.cloudwatch_datasource_name, 0, 40))}",
             "            model:",
             "              type: timeSeriesQuery",
             "              refId: BASE",

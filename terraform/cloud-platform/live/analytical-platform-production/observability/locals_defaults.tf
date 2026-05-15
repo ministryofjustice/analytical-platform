@@ -128,6 +128,42 @@ locals {
     eks_etcd_size_warn = 1610612736
     eks_etcd_size_crit = 2040109465
 
+    # Latency: API server request duration p99 — Warning > 1s, Critical > 3s
+    eks_apiserver_latency_warn = 1
+    eks_apiserver_latency_crit = 3
+
+    # Errors: API server 5xx error rate (%) — Warning > 1%, Critical > 5%
+    eks_apiserver_errors_warn = 1
+    eks_apiserver_errors_crit = 5
+
+    # Saturation: Node CPU utilisation (%) — Warning > 70%, Critical > 90%
+    eks_prom_node_cpu_warn = 70
+    eks_prom_node_cpu_crit = 90
+
+    # Saturation: Node memory utilisation (%) — Warning > 75%, Critical > 90%
+    eks_prom_node_mem_warn = 75
+    eks_prom_node_mem_crit = 90
+
+    # Saturation: Node disk utilisation (%) — Warning > 75%, Critical > 90%
+    eks_prom_node_disk_warn = 75
+    eks_prom_node_disk_crit = 90
+
+    # Traffic: Node network bytes/s — Warning > 500 MB/s, Critical > 1 GB/s
+    eks_prom_node_net_warn = 500000000
+    eks_prom_node_net_crit = 1000000000
+
+    # Errors: Unschedulable pods — Warning >= 1, Critical >= 5
+    eks_prom_unschedulable_warn = 0
+    eks_prom_unschedulable_crit = 4
+
+    # Errors: Node not ready — Warning >= 1, Critical >= 2
+    eks_prom_node_not_ready_warn = 0
+    eks_prom_node_not_ready_crit = 1
+
+    # Saturation: etcd DB size — Warning > 1.5 GB, Critical > 1.9 GB
+    eks_prom_etcd_size_warn = 1610612736
+    eks_prom_etcd_size_crit = 2040109465
+
     # -------------------------------------------------------------------------
     # EFS
     # -------------------------------------------------------------------------
@@ -307,6 +343,46 @@ locals {
     # Saturation: No CPU left for new pods (node reserved capacity) — Warning > 70%, Critical > 90%
     cp_node_cpu_reserved_warn = 70
     cp_node_cpu_reserved_crit = 90
+
+    # Errors: Pods in CrashLoopBackOff — Warning >= 1 pod, Critical >= 5 pods
+    cp_crashloop_warn = 0
+    cp_crashloop_crit = 4
+
+    # Errors: Pods stuck on ImagePullBackOff/ErrImagePull — Warning >= 1 pod, Critical >= 5 pods
+    cp_image_pull_warn = 0
+    cp_image_pull_crit = 4
+
+    # Errors: Unavailable replicas — Warning >= 1, Critical >= 3
+    cp_deploy_unavailable_warn = 0
+    cp_deploy_unavailable_crit = 2
+
+    # Errors: Deployment not progressing — Warning >= 1, Critical >= 2
+    cp_deploy_not_progressing_warn = 0
+    cp_deploy_not_progressing_crit = 1
+
+    # Errors: Desired vs ready replicas mismatch — Warning >= 1 deployment, Critical >= 3
+    cp_deploy_replicas_mismatch_warn = 0
+    cp_deploy_replicas_mismatch_crit = 2
+
+    # Saturation: Pod CPU over limit (%) — Warning > 80%, Critical > 95%
+    cp_deploy_cpu_throttle_warn = 80
+    cp_deploy_cpu_throttle_crit = 95
+
+    # Saturation: Pod memory over limit (%) — Warning > 80%, Critical > 95%
+    cp_deploy_mem_limit_warn = 80
+    cp_deploy_mem_limit_crit = 95
+
+    # Errors: Container restarts per hour — Warning > 5, Critical > 20
+    cp_deploy_restarts_warn = 5
+    cp_deploy_restarts_crit = 20
+
+    # Errors: Pods not ready in namespace — Warning >= 1, Critical >= 5
+    cp_deploy_pods_not_ready_warn = 0
+    cp_deploy_pods_not_ready_crit = 4
+
+    # Saturation: PVC disk usage (%) — Warning > 80%, Critical > 95%
+    cp_deploy_pvc_warn = 80
+    cp_deploy_pvc_crit = 95
 
     # -------------------------------------------------------------------------
     # Redis (ElastiCache)
