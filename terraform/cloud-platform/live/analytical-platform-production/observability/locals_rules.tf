@@ -109,7 +109,7 @@ locals {
             "            relativeTimeRange:",
             "              from: 300",
             "              to: 0",
-            "            datasourceUid: ${substr(cfg.cloudwatchdatasource_name, 0, 40)}",
+            "            datasourceUid: ${substr(cfg.cloudwatch_datasource_name, 0, 40)}",
             "            model:",
             "              type: timeSeriesQuery",
             "              refId: A",
