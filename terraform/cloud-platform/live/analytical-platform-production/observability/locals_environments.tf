@@ -105,7 +105,7 @@ locals {
 
     # environnment added for testing controlpanel alerts purposes, to be removed after testing is complete
     analytical-platform-development = {
-      enabled_groups             = ["Control Panel", "EFS", "EKS"]
+      enabled_groups             = ["Control Panel", "EFS"]
       aws_region                 = "eu-west-1"
       cloudwatch_datasource_name = "mojap-development-cloudwatch"
       prometheus_datasource_name = "mojap-development-prometheus"
