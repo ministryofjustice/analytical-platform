@@ -376,10 +376,6 @@ locals {
     cp_deploy_restarts_warn = 5
     cp_deploy_restarts_crit = 20
 
-    # Errors: Pods not ready in namespace — Warning >= 1, Critical >= 5
-    cp_deploy_pods_not_ready_warn = 0
-    cp_deploy_pods_not_ready_crit = 4
-
     # Saturation: PVC disk usage (%) — Warning > 80%, Critical > 95%
     cp_deploy_pvc_warn = 80
     cp_deploy_pvc_crit = 95
@@ -387,18 +383,6 @@ locals {
     # -------------------------------------------------------------------------
     # Redis (ElastiCache)
     # -------------------------------------------------------------------------
-
-    # Latency: Reads are slow — Warning > 1ms, Critical > 5ms
-    redis_read_latency_warn = 1
-    redis_read_latency_crit = 5
-
-    # Latency: Writes are slow — Warning > 2ms, Critical > 10ms
-    redis_write_latency_warn = 2
-    redis_write_latency_crit = 10
-
-    # Latency: Specific GET command slow — Warning > 1ms, Critical > 5ms
-    redis_get_latency_warn = 1
-    redis_get_latency_crit = 5
 
     # Traffic: Network data in/out — Warning Baseline +50%, Critical Baseline +100%
     redis_net_baseline_warn = 50
@@ -427,6 +411,38 @@ locals {
     # Saturation: High replication load — Warning Baseline +50%, Critical Baseline +100%
     redis_replication_bytes_warn = 50
     redis_replication_bytes_crit = 100
+
+    # Saturation: Host-level CPU (OS + Redis + snapshots) — Warning > 70%, Critical > 90%
+    redis_host_cpu_warn = 70
+    redis_host_cpu_crit = 90
+
+    # Saturation: Memory used as % of maxmemory — Warning > 80%, Critical > 90%
+    redis_db_memory_pct_warn = 80
+    redis_db_memory_pct_crit = 90
+
+    # Saturation: Raw bytes used for cache — Warning Baseline +50%, Critical Baseline +100%
+    redis_bytes_used_baseline_warn = 50
+    redis_bytes_used_baseline_crit = 100
+
+    # Saturation: OS freeable memory — Warning < 200 MB, Critical < 100 MB
+    redis_freeable_mem_warn = 209715200
+    redis_freeable_mem_crit = 104857600
+
+    # Traffic: New connections per period — Warning Baseline +100%, Critical Baseline +200%
+    redis_new_conn_baseline_warn = 100
+    redis_new_conn_baseline_crit = 200
+
+    # Errors: Keys expired and reclaimed by Redis — Warning > 1000/min, Critical > 10000/min
+    redis_reclaimed_warn = 1000
+    redis_reclaimed_crit = 10000
+
+    # Errors/Saturation: Snapshot/backup in progress on primary — Warning >= 1, Critical >= 1
+    redis_save_in_progress_warn = 0
+    redis_save_in_progress_crit = 0
+
+    # Traffic: Network packets in/out — Warning Baseline +50%, Critical Baseline +100%
+    redis_net_packets_baseline_warn = 50
+    redis_net_packets_baseline_crit = 100
 
     # -------------------------------------------------------------------------
     # RDS

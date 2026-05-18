@@ -13,11 +13,11 @@ locals {
       for combo_key, combo in local.rule_combos_by_env[env] :
       combo_key => (
         try(combo.rule.dim_key2, "") != "" ? {
-          "${combo.rule.dim_key}"  = [combo.dim_value]
-          "${combo.rule.dim_key2}" = ["*"]
+          (combo.rule.dim_key)  = [combo.dim_value]
+          (combo.rule.dim_key2) = ["*"]
         } :
         combo.dim_value != "" ? {
-          "${combo.rule.dim_key}" = [combo.dim_value]
+          (combo.rule.dim_key) = [combo.dim_value]
         } :
         {}
       )
@@ -30,6 +30,7 @@ locals {
       for combo in flatten([
         for rule_key, rule in local.golden_signals : [
           for dim_value in(
+            rule.dim_key == "CacheClusterId" ? try(cfg.cache_clusters, []) :
             rule.dim_key == "BucketName" ? try(cfg.s3_buckets, []) :
             rule.dim_key == "DBInstanceIdentifier" ? try(cfg.rds_instances, []) :
             rule.dim_key == "Namespace" ? try(cfg.namespaces, ["cpanel"]) :
@@ -90,7 +91,6 @@ locals {
             ),
             "        data:",
           ],
-
           # ── A: data query — CloudWatch time-series OR Prometheus instant ─────
           try(combo.rule.datasource_type, "cloudwatch") == "prometheus" ? [
             "          - refId: A",
