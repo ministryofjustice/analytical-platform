@@ -77,6 +77,13 @@ locals {
     #   threshold_overrides = {
     #     cp_pod_net_baseline_warn = 5
     #   }
+    #   # ── Slack channel overrides ───────────────────────────────────────────
+    #   # Per-signal Slack overrides for this environment.
+    #   # Use "disabled" to suppress Slack routing for a specific signal
+    #   # without affecting other environments (e.g. silence noisy dev alerts).
+    #   slack_channel_overrides = {
+    #     cp_crashloop_backoff = { warning = "disabled", critical = "disabled" }
+    #   }
     # }
     # ---------------------------------------------------------------------------
 

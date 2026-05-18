@@ -56,6 +56,9 @@ locals {
       combo_key => {
         for severity in ["warning", "critical"] :
         severity => (
+          try(cfg.slack_channel_overrides[combo_key][severity], null) == "disabled" ? null :
+          try(cfg.slack_channel_overrides[combo_key][severity], null) != null
+          ? cfg.slack_channel_overrides[combo_key][severity] :
           try(combo.rule.slack_channel[severity], null) != null
           ? combo.rule.slack_channel[severity]
           : try(tostring(combo.rule.slack_channel), null) != null && try(tostring(combo.rule.slack_channel), null) != "null"
