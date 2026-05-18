@@ -64,142 +64,179 @@ locals {
       }
     }
   }
-
-  rule_yaml = {
+  baseline_math_expr = {
     for env, cfg in local.environment_configurations :
     env => {
       for combo_key, combo in local.rule_combos_by_env[env] :
       combo_key => {
         for severity in ["warning", "critical"] :
-        severity => join("\n", compact(flatten([
-          # ── rule header ──────────────────────────────────────────────────────
-          [
-            "      - title: ${combo_key}_${severity}",
-            "        uid: ${substr(md5("${env}-${combo_key}-${severity}"), 0, 8)}",
-            "        condition: ${contains(["baseline_gt", "baseline_lt"], combo.rule.type) ? "D" : "C"}",
-            "        for: ${try(combo.rule.for_duration, "5m")}",
-            "        noDataState: ${try(combo.rule.ok_when_nodata, false) ? "OK" : "NoData"}",
-            "        labels:",
-            "          severity: ${severity}",
-            "          environment: ${env}",
-            "          service: ${lower(replace(combo.rule.group, " ", "_"))}",
-            "          metric: ${combo.rule.metric}",
-            (
-              local.sc_resolved[env][combo_key][severity] != null
-              ? "          slack-channel: ${local.sc_resolved[env][combo_key][severity]}"
-              : null
-            ),
-            "        data:",
-          ],
-          # ── A: data query — CloudWatch time-series OR Prometheus instant ─────
-          try(combo.rule.datasource_type, "cloudwatch") == "prometheus" ? [
-            "          - refId: A",
-            "            relativeTimeRange:",
-            "              from: 300",
-            "              to: 0",
-            "            datasourceUid: ${try(cfg.prometheus_datasource_uid, try(cfg.prometheus_datasource_name, "prometheus"))}",
-            "            model:",
-            "              type: instant",
-            "              refId: A",
-            "              expr: '${replace(combo.rule.expr, "__NAMESPACES__", local.namespaces_regex_by_env[env])}'",
-            "              instant: true",
-            "              range: false",
-            ] : [
-            "          - refId: A",
-            "            relativeTimeRange:",
-            "              from: 300",
-            "              to: 0",
-            "            datasourceUid: ${substr(cfg.cloudwatch_datasource_name, 0, 40)}",
-            "            model:",
-            "              type: timeSeriesQuery",
-            "              refId: A",
-            "              region: ${try(cfg.aws_region, var.aws_region)}",
-            "              namespace: ${combo.rule.namespace}",
-            "              metricName: ${combo.rule.metric}",
-            "              statistic: ${combo.rule.statistic}",
-            "              period: '60'",
-            "              dimensions: ${jsonencode(local.dims_by_combo[env][combo_key])}",
-            "              matchExact: ${try(combo.rule.dim_key2, "") != "" ? true : try(combo.rule.match_exact, false)}",
-          ],
+        severity => (
+          combo.rule.type == "baseline_lt"
+          ? "$BASE_R > 0 && ($B - $BASE_R) / $BASE_R * 100 < -${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}"
+          : "$BASE_R > 0 && ($B - $BASE_R) / $BASE_R * 100 > ${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}"
+        )
+      }
+    }
+  }
 
-          # ── B: reduce A to a single scalar ───────────────────────────────────
-          [
-            "          - refId: B",
-            "            datasourceUid: __expr__",
-            "            relativeTimeRange:",
-            "              from: 300",
-            "              to: 0",
-            "            model:",
-            "              type: reduce",
-            "              refId: B",
-            "              expression: A",
-            "              reducer: last",
-            "              settings:",
-            "                mode: dropNN",
-          ],
+  # ---------------------------------------------------------------------------
+  # rule_data
+  # ---------------------------------------------------------------------------
+  rule_data = {
+    for env, cfg in local.environment_configurations :
+    env => {
+      for combo_key, combo in local.rule_combos_by_env[env] :
+      combo_key => {
+        for severity in ["warning", "critical"] :
+        severity => concat(
 
-          # ── C: threshold check ───────────────────────────────────────────────
-          [
-            "          - refId: C",
-            "            datasourceUid: __expr__",
-            "            relativeTimeRange:",
-            "              from: 300",
-            "              to: 0",
-            "            model:",
-            "              type: threshold",
-            "              refId: C",
-            "              expression: B",
-            "              conditions:",
-            "                - evaluator:",
-            "                    type: ${contains(["lt", "baseline_lt"], combo.rule.type) ? "lt" : "gt"}",
-            "                    params:",
-            "                      - ${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}",
-          ],
-          # ── BASE / BASE_R / D: only for baseline CloudWatch alert types ────────
-          contains(["baseline_gt", "baseline_lt"], combo.rule.type) && try(combo.rule.datasource_type, "cloudwatch") != "prometheus" ? [
+          # ── A: datasource query ─────────────────────────────────────────
+          flatten([
+            for _once in(
+              try(combo.rule.datasource_type, "cloudwatch") == "prometheus"
+              ? [true] : []
+              ) : [{
+                refId             = "A"
+                relativeTimeRange = { from = 300, to = 0 }
+                datasourceUid     = try(cfg.prometheus_datasource_uid, try(cfg.prometheus_datasource_name, "prometheus"))
+                model = {
+                  type    = "instant"
+                  refId   = "A"
+                  expr    = replace(combo.rule.expr, "__NAMESPACES__", local.namespaces_regex_by_env[env])
+                  instant = true
+                  range   = false
+                }
+            }]
+          ]),
+          flatten([
+            for _once in(
+              try(combo.rule.datasource_type, "cloudwatch") != "prometheus"
+              ? [true] : []
+              ) : [{
+                refId             = "A"
+                relativeTimeRange = { from = 300, to = 0 }
+                datasourceUid     = substr(cfg.cloudwatch_datasource_name, 0, 40)
+                model = {
+                  type       = "timeSeriesQuery"
+                  refId      = "A"
+                  region     = try(cfg.aws_region, var.aws_region)
+                  namespace  = combo.rule.namespace
+                  metricName = combo.rule.metric
+                  statistic  = combo.rule.statistic
+                  period     = "60"
+                  dimensions = local.dims_by_combo[env][combo_key]
+                  matchExact = try(combo.rule.dim_key2, "") != "" ? true : try(combo.rule.match_exact, false)
+                }
+            }]
+          ]),
 
-            "          - refId: BASE",
-            "            relativeTimeRange:",
-            "              from: 3600",
-            "              to: 0",
-            "            datasourceUid: ${substr(cfg.cloudwatch_datasource_name, 0, 40)}",
-            "            model:",
-            "              type: timeSeriesQuery",
-            "              refId: BASE",
-            "              region: ${try(cfg.aws_region, var.aws_region)}",
-            "              namespace: ${combo.rule.namespace}",
-            "              metricName: ${combo.rule.metric}",
-            "              statistic: Average",
-            "              period: '3600'",
-            "              dimensions: ${jsonencode(local.dims_by_combo[env][combo_key])}",
-            "              matchExact: ${try(combo.rule.dim_key2, "") != "" ? true : try(combo.rule.match_exact, false)}",
+          # ── B: reduce ───────────────────────────────────────────────────
+          [{
+            refId             = "B"
+            datasourceUid     = "__expr__"
+            relativeTimeRange = { from = 300, to = 0 }
+            model = {
+              type       = "reduce"
+              refId      = "B"
+              expression = "A"
+              reducer    = "last"
+              settings   = { mode = "dropNN" }
+            }
+          }],
 
-            "          - refId: BASE_R",
-            "            datasourceUid: __expr__",
-            "            relativeTimeRange:",
-            "              from: 3600",
-            "              to: 0",
-            "            model:",
-            "              type: reduce",
-            "              refId: BASE_R",
-            "              expression: BASE",
-            "              reducer: last",
-            "              settings:",
-            "                mode: dropNN",
+          # ── C: threshold ────────────────────────────────────────────────
+          [{
+            refId             = "C"
+            datasourceUid     = "__expr__"
+            relativeTimeRange = { from = 300, to = 0 }
+            model = {
+              type       = "threshold"
+              refId      = "C"
+              expression = "B"
+              conditions = [{
+                evaluator = {
+                  type   = contains(["lt", "baseline_lt"], combo.rule.type) ? "lt" : "gt"
+                  params = [local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]]
+                }
+              }]
+            }
+          }],
+          flatten([
+            for _once in(
+              contains(["baseline_gt", "baseline_lt"], combo.rule.type) &&
+              try(combo.rule.datasource_type, "cloudwatch") != "prometheus"
+              ? [true] : []
+              ) : [
+              {
+                refId             = "BASE"
+                relativeTimeRange = { from = 3600, to = 0 }
+                datasourceUid     = substr(cfg.cloudwatch_datasource_name, 0, 40)
+                model = {
+                  type       = "timeSeriesQuery"
+                  refId      = "BASE"
+                  region     = try(cfg.aws_region, var.aws_region)
+                  namespace  = combo.rule.namespace
+                  metricName = combo.rule.metric
+                  statistic  = "Average"
+                  period     = "3600"
+                  dimensions = local.dims_by_combo[env][combo_key]
+                  matchExact = try(combo.rule.dim_key2, "") != "" ? true : try(combo.rule.match_exact, false)
+                }
+              },
+              {
+                refId             = "BASE_R"
+                datasourceUid     = "__expr__"
+                relativeTimeRange = { from = 3600, to = 0 }
+                model = {
+                  type       = "reduce"
+                  refId      = "BASE_R"
+                  expression = "BASE"
+                  reducer    = "last"
+                  settings   = { mode = "dropNN" }
+                }
+              },
+              {
+                refId             = "D"
+                datasourceUid     = "__expr__"
+                relativeTimeRange = { from = 3600, to = 0 }
+                model = {
+                  type       = "math"
+                  refId      = "D"
+                  expression = local.baseline_math_expr[env][combo_key][severity]
+                }
+              }
+            ]
+          ])
+        )
+      }
+    }
+  }
 
-            "          - refId: D",
-            "            datasourceUid: __expr__",
-            "            relativeTimeRange:",
-            "              from: 3600",
-            "              to: 0",
-            "            model:",
-            "              type: math",
-            "              refId: D",
-            "              expression: ${combo.rule.type == "baseline_lt" ? "$BASE_R > 0 && ($B - $BASE_R) / $BASE_R * 100 < -${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}" : "$BASE_R > 0 && ($B - $BASE_R) / $BASE_R * 100 > ${local.thresholds[env][severity == "warning" ? combo.rule.warning : combo.rule.critical]}"}",
-          ] : [],
-
-          [""],
-        ])))
+  rule_objects = {
+    for env, cfg in local.environment_configurations :
+    env => {
+      for combo_key, combo in local.rule_combos_by_env[env] :
+      combo_key => {
+        for severity in ["warning", "critical"] :
+        severity => {
+          title       = "${combo_key}_${severity}"
+          uid         = substr(md5("${env}-${combo_key}-${severity}"), 0, 8)
+          condition   = contains(["baseline_gt", "baseline_lt"], combo.rule.type) ? "D" : "C"
+          for         = try(combo.rule.for_duration, "5m")
+          noDataState = try(combo.rule.ok_when_nodata, false) ? "OK" : "NoData"
+          labels = merge(
+            {
+              severity    = severity
+              environment = env
+              service     = lower(replace(combo.rule.group, " ", "_"))
+              metric      = combo.rule.metric
+            },
+            local.sc_resolved[env][combo_key][severity] != null
+            ? { "slack-channel" = local.sc_resolved[env][combo_key][severity] }
+            : {}
+          )
+          data = local.rule_data[env][combo_key][severity]
+        }
       }
     }
   }
@@ -207,23 +244,19 @@ locals {
   group_blocks_by_env = {
     for env, cfg in local.environment_configurations :
     env => [
-      for group in cfg.enabled_groups :
-      join("\n", concat(
-        [
-          "  - name: ${env}-${local.group_folders[group].name_suffix}",
-          "    folder: ${local.group_folders[group].folder}",
-          "    interval: ${try(cfg.evaluation_interval, var.evaluation_interval)}",
-          "    editable: true",
-          "    rules:",
-        ],
-        flatten([
+      for group in cfg.enabled_groups : {
+        name     = "${env}-${local.group_folders[group].name_suffix}"
+        folder   = local.group_folders[group].folder
+        interval = try(cfg.evaluation_interval, var.evaluation_interval)
+        editable = true
+        rules = flatten([
           for combo_key, combo in local.rule_combos_by_env[env] :
           combo.rule.group == group ? [
-            local.rule_yaml[env][combo_key]["warning"],
-            local.rule_yaml[env][combo_key]["critical"],
+            local.rule_objects[env][combo_key]["warning"],
+            local.rule_objects[env][combo_key]["critical"],
           ] : []
         ])
-      ))
+      }
       if anytrue([
         for combo_key, combo in local.rule_combos_by_env[env] : combo.rule.group == group
       ])

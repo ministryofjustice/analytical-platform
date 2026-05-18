@@ -1,9 +1,10 @@
 locals {
-  # Merge all environments into a single rules.yaml
-  alert_rules_yaml = "groups:\n${join("\n", flatten([
-    for env in keys(local.environment_configurations) :
-    local.group_blocks_by_env[env]
-  ]))}\n"
+  alert_rules_yaml = yamlencode({
+    groups = flatten([
+      for env in keys(local.environment_configurations) :
+      local.group_blocks_by_env[env]
+    ])
+  })
 }
 
 locals {
