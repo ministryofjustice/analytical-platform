@@ -39,11 +39,17 @@ locals {
     #     "NAT Gateway",
     #     "Transit Gateway",
     #     "EKS",
-    #     "EFS",
+    #     "EFS",             # ← see dependencies below
     #     "S3",
     #     "MWAA",
     #     "Control Panel",   # ← see dependencies below
     #   ]
+    #
+    #   # ── EFS dependencies ──────────────────────────────────────────────────
+    #   # Required when "EFS" is in enabled_groups and any efs_* signal uses
+    #   # dim_key = "FileSystemId" (e.g. efs_throughput).
+    #   # One alert rule is generated per file system ID.
+    #   efs_file_systems = ["fs-abc1234567890", "fs-def0987654321"]
     #
     #   # ── Control Panel dependencies ─────────────────────────────────────────
     #   # Required when "Control Panel" is in enabled_groups.
@@ -97,6 +103,9 @@ locals {
       cloudwatch_datasource_name = "mojap-development-cloudwatch"
       prometheus_datasource_name = "mojap-development-prometheus"
       #  slack_channel = "analytical-platform-alerts-slack"
+
+      efs_file_systems = ["fs-0dbd6739"] #eks-development-user-homes
+
 
       # Control Panel dependencies
       namespaces     = ["cpanel"]
