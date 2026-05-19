@@ -387,3 +387,59 @@ extraVolumeMounts:
 
 podAnnotations:
   checksum/alert-rules: "${alert_rules_checksum}"
+
+env:
+  GF_PROVISIONING_ALERTING_FORCE_UPDATE: "true"
+  GF_ALERTING_PROVISIONING_PURGE_NOT_IN_FILES: "true"
+
+
+extraInitContainers:
+  - name: purge-stale-alert-rules
+    image: postgres:15-alpine
+    env:
+      - name: PGPASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: grafana-rds
+            key: database_password
+      - name: DB_HOST
+        valueFrom:
+          secretKeyRef:
+            name: grafana-rds
+            key: rds_instance_endpoint
+      - name: DB_USER
+        valueFrom:
+          secretKeyRef:
+            name: grafana-rds
+            key: database_username
+      - name: DB_NAME
+        valueFrom:
+          secretKeyRef:
+            name: grafana-rds
+            key: database_name
+    command:
+      - sh
+      - -c
+      - |
+        echo "Fetching UIDs from provisioning file..."
+        PROVISIONED_UIDS=$(grep -E '^\s+"uid":' /etc/grafana/provisioning/alerting/rules.yaml \
+          | awk -F'"' '{print $4}' \
+          | sed "s/.*/'&'/" \
+          | tr '\n' ',' | sed 's/,$//')
+        echo "Provisioned UIDs: $PROVISIONED_UIDS"
+        if [ -z "$PROVISIONED_UIDS" ]; then
+          echo "No UIDs found in provisioning file, skipping purge"
+          exit 0
+        fi
+        psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "
+          DELETE FROM alert_instance WHERE rule_uid NOT IN ($PROVISIONED_UIDS);
+          DELETE FROM alert_rule_state WHERE rule_uid NOT IN ($PROVISIONED_UIDS);
+          DELETE FROM alert_rule_version WHERE rule_uid NOT IN ($PROVISIONED_UIDS);
+          DELETE FROM alert_rule WHERE uid NOT IN ($PROVISIONED_UIDS);
+        "
+        echo "Purge complete"
+    volumeMounts:
+      - name: alert-rules
+        mountPath: /etc/grafana/provisioning/alerting/rules.yaml
+        subPath: rules.yaml
+        readOnly: true
