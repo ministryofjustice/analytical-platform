@@ -28,7 +28,8 @@ locals {
     for env, cfg in local.environment_configurations :
     env => {
       for combo in flatten([
-        for rule_key, rule in local.golden_signals : [
+        for rule_key, rule in local.golden_signals :
+        contains(try(cfg.disabled_rules, []), rule_key) ? [] : [
           for dim_value in(
             rule.dim_key == "CacheClusterId" ? try(cfg.cache_clusters, []) :
             rule.dim_key == "BucketName" ? try(cfg.s3_buckets, []) :

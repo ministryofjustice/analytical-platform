@@ -44,7 +44,16 @@ locals {
     #     "MWAA",
     #     "Control Panel",   # ← see dependencies below
     #   ]
-    #
+    #   # ── Disabled rules ────────────────────────────────────────────────────
+    #   # List of individual signal keys to completely exclude from rule creation
+    #   # for this environment. The rule will not be created at all (unlike
+    #   # slack_channel_overrides = "disabled" which only suppresses Slack routing).
+    #   # Keys must exactly match entries in local.golden_signals in local_signals.tf.
+    #   # Omit this field (or leave empty) to create all rules in the enabled groups.
+    #   disabled_rules = [
+    #     "cp_crashloop_backoff",   # ← silences a noisy dev-only alert entirely
+    #     "rds_cpu",
+    #   ]
     #   # ── EFS dependencies ──────────────────────────────────────────────────
     #   # Required when "EFS" is in enabled_groups and any efs_* signal uses
     #   # dim_key = "FileSystemId" (e.g. efs_throughput).
