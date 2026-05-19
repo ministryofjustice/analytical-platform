@@ -34,14 +34,15 @@ locals {
   #   dim_key        = primary CloudWatch dimension key ("" = no dimension filter)
   #                    Supported keys and the environment_configurations field they
   #                    resolve against at render time:
-  #                      ""                   → no dimension filter (global aggregate)
-  #                      "BucketName"         → cfg.s3_buckets        (list of bucket names)
-  #                      "DBInstanceIdentifier" → cfg.rds_instances   (list of RDS instance IDs)
-  #                      "CacheClusterId"     → cfg.cache_clusters    (list of ElastiCache
-  #                                             cluster IDs, e.g. ["dev", "prod"])
-  #                      "Namespace"          → cfg.namespaces        (list of k8s namespaces)
-  #                      "ClusterName"        → ["*"]                 (wildcard — all clusters)
-  #                      "NodeName"           → ["*"]                 (wildcard — all nodes)
+  #                      ""                     → no dimension filter (global aggregate)
+  #                      "BucketName"           → cfg.s3_buckets        (list of bucket names)
+  #                      "DBInstanceIdentifier" → cfg.rds_instances     (list of RDS instance IDs)
+  #                      "CacheClusterId"       → cfg.cache_clusters    (list of ElastiCache
+  #                                               cluster IDs, e.g. ["dev", "prod"])
+  #                      "Namespace"            → cfg.namespaces        (list of k8s namespaces)
+  #                      "ClusterName"          → ["*"]                 (wildcard — all clusters)
+  #                      "NodeName"             → ["*"]                 (wildcard — all nodes)
+  #                      "FileSystemId"         → cfg.efs_file_systems  (list of EFS file system IDs)
   #                    One alert rule is generated per value in the resolved list;
   #                    the value is appended as a suffix to the rule name.
   #   dim_key2       = optional second dimension key; always matched with value "*"
@@ -53,6 +54,20 @@ locals {
   #                    exactly matches the supplied keys (no extra dimensions).
   #                    Required for ContainerInsights cluster-level aggregates to
   #                    exclude per-pod series that carry extra dimensions (PodName etc)
+  #   use_metric_math = (optional, default: false)
+  #                    if true, emits a second CloudWatch query (refId "A2") for a
+  #                    capacity/limit metric and computes "$A / $A2 * 100" via a math
+  #                    expression (refId "EXPR"). The reduce step (B) then operates on
+  #                    EXPR rather than A, so the threshold is evaluated against a
+  #                    utilisation percentage rather than a raw value.
+  #                    Requires capacity_metric (and optionally capacity_statistic).
+  #   capacity_metric = CloudWatch metric name for the capacity/limit series used as
+  #                    the denominator in the metric math expression (A2).
+  #                    Only used when use_metric_math = true.
+  #                    Example: "PermittedThroughput"
+  #   capacity_statistic = CloudWatch statistic to apply to the capacity metric.
+  #                    Defaults to "Minimum" when omitted.
+  #                    Only used when use_metric_math = true.
   #   ok_when_nodata = (optional, default: false)
   #                    if true, sets noDataState: OK so rules resolve to Normal
   #                    when CloudWatch emits nothing (e.g. zero failed nodes)
@@ -129,8 +144,8 @@ locals {
     # ── EFS ───────────────────────────────────────────────────────────────────
     efs_io_limit           = { group = "EFS", namespace = "AWS/EFS", metric = "PercentIOLimit", statistic = "Average", type = "gt", dim_key = "", warning = "efs_io_limit_warn", critical = "efs_io_limit_crit" }
     efs_metered_io         = { group = "EFS", namespace = "AWS/EFS", metric = "MeteredIOBytes", statistic = "Sum", type = "baseline_gt", dim_key = "", warning = "efs_metered_io_baseline_warn", critical = "efs_metered_io_baseline_crit" }
-    efs_throughput         = { group = "EFS", namespace = "AWS/EFS", metric = "PermittedThroughput", statistic = "Average", type = "gt", dim_key = "", warning = "efs_throughput_warn", critical = "efs_throughput_crit" }
-    efs_client_connections = { group = "EFS", namespace = "AWS/EFS", metric = "ClientConnections", statistic = "Sum", type = "baseline_gt", dim_key = "", warning = "efs_client_conn_baseline_warn", critical = "efs_client_conn_baseline_crit" }
+    efs_throughput         = { group = "EFS", namespace = "AWS/EFS", metric = "MeteredIOBytes", statistic = "Sum", type = "gt", dim_key = "FileSystemId", use_metric_math = true, capacity_metric = "PermittedThroughput", capacity_statistic = "Minimum", warning = "efs_throughput_warn", critical = "efs_throughput_crit" }
+    efs_client_connections = { group = "EFS", namespace = "AWS/EFS", metric = "ClientConnections", statistic = "Average", type = "baseline_gt", dim_key = "FileSystemId", warning = "efs_client_conn_baseline_warn", critical = "efs_client_conn_baseline_crit" }
     efs_burst_credit       = { group = "EFS", namespace = "AWS/EFS", metric = "BurstCreditBalance", statistic = "Minimum", type = "lt", dim_key = "", warning = "efs_burst_credit_warn", critical = "efs_burst_credit_crit" }
 
     # ── S3 ────────────────────────────────────────────────────────────────────

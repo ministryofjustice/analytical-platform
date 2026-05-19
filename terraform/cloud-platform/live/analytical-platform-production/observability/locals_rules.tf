@@ -28,12 +28,14 @@ locals {
     for env, cfg in local.environment_configurations :
     env => {
       for combo in flatten([
-        for rule_key, rule in local.golden_signals : [
+        for rule_key, rule in local.golden_signals :
+        contains(try(cfg.disabled_rules, []), rule_key) ? [] : [
           for dim_value in(
             rule.dim_key == "CacheClusterId" ? try(cfg.cache_clusters, []) :
             rule.dim_key == "BucketName" ? try(cfg.s3_buckets, []) :
             rule.dim_key == "DBInstanceIdentifier" ? try(cfg.rds_instances, []) :
             rule.dim_key == "Namespace" ? try(cfg.namespaces, ["cpanel"]) :
+            rule.dim_key == "FileSystemId" ? try(cfg.efs_file_systems, []) :
             rule.dim_key == "ClusterName" ? ["*"] :
             rule.dim_key == "NodeName" ? ["*"] :
             [""]
@@ -55,6 +57,9 @@ locals {
       combo_key => {
         for severity in ["warning", "critical"] :
         severity => (
+          try(cfg.slack_channel_overrides[combo_key][severity], null) == "disabled" ? null :
+          try(cfg.slack_channel_overrides[combo_key][severity], null) != null
+          ? cfg.slack_channel_overrides[combo_key][severity] :
           try(combo.rule.slack_channel[severity], null) != null
           ? combo.rule.slack_channel[severity]
           : try(tostring(combo.rule.slack_channel), null) != null && try(tostring(combo.rule.slack_channel), null) != "null"
@@ -130,6 +135,29 @@ locals {
             }]
           ]),
 
+          # ── A2: Optional Capacity Limit Query (e.g., PermittedThroughput) ──
+          flatten([
+            for _once in(
+              try(combo.rule.datasource_type, "cloudwatch") != "prometheus" && try(combo.rule.use_metric_math, false) == true
+              ? [true] : []
+              ) : [{
+                refId             = "A2"
+                relativeTimeRange = { from = 300, to = 0 }
+                datasourceUid     = substr(cfg.cloudwatch_datasource_name, 0, 40)
+                model = {
+                  type       = "timeSeriesQuery"
+                  refId      = "A2"
+                  region     = try(cfg.aws_region, var.aws_region)
+                  namespace  = combo.rule.namespace
+                  metricName = try(combo.rule.capacity_metric, "PermittedThroughput")
+                  statistic  = try(combo.rule.capacity_statistic, "Minimum")
+                  period     = "60"
+                  dimensions = local.dims_by_combo[env][combo_key]
+                  matchExact = try(combo.rule.dim_key2, "") != "" ? true : try(combo.rule.match_exact, false)
+                }
+            }]
+          ]),
+
           # ── B: reduce ───────────────────────────────────────────────────
           [{
             refId             = "B"
@@ -138,7 +166,7 @@ locals {
             model = {
               type       = "reduce"
               refId      = "B"
-              expression = "A"
+              expression = try(combo.rule.use_metric_math, false) == true ? "EXPR" : "A"
               reducer    = "last"
               settings   = { mode = "dropNN" }
             }
@@ -161,6 +189,25 @@ locals {
               }]
             }
           }],
+
+          # ── EXPR: Compute Utilization Math ──────────────────────────────
+          flatten([
+            for _once in(
+              try(combo.rule.use_metric_math, false) == true
+              ? [true] : []
+              ) : [{
+                refId             = "EXPR"
+                datasourceUid     = "__expr__"
+                relativeTimeRange = { from = 300, to = 0 }
+                model = {
+                  type       = "math"
+                  refId      = "EXPR"
+                  expression = "$A / $A2 * 100"
+                }
+            }]
+          ]),
+
+          # ── BASELINE Math (remains untouched) ───────────────────────────
           flatten([
             for _once in(
               contains(["baseline_gt", "baseline_lt"], combo.rule.type) &&
@@ -177,7 +224,7 @@ locals {
                   region     = try(cfg.aws_region, var.aws_region)
                   namespace  = combo.rule.namespace
                   metricName = combo.rule.metric
-                  statistic  = "Average"
+                  statistic  = combo.rule.statistic
                   period     = "3600"
                   dimensions = local.dims_by_combo[env][combo_key]
                   matchExact = try(combo.rule.dim_key2, "") != "" ? true : try(combo.rule.match_exact, false)

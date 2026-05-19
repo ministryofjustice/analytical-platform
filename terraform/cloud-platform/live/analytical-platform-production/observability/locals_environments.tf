@@ -39,11 +39,26 @@ locals {
     #     "NAT Gateway",
     #     "Transit Gateway",
     #     "EKS",
-    #     "EFS",
+    #     "EFS",             # ← see dependencies below
     #     "S3",
     #     "MWAA",
     #     "Control Panel",   # ← see dependencies below
     #   ]
+    #   # ── Disabled rules ────────────────────────────────────────────────────
+    #   # List of individual signal keys to completely exclude from rule creation
+    #   # for this environment. The rule will not be created at all (unlike
+    #   # slack_channel_overrides = "disabled" which only suppresses Slack routing).
+    #   # Keys must exactly match entries in local.golden_signals in local_signals.tf.
+    #   # Omit this field (or leave empty) to create all rules in the enabled groups.
+    #   disabled_rules = [
+    #     "cp_crashloop_backoff",   # ← silences a noisy dev-only alert entirely
+    #     "rds_cpu",
+    #   ]
+    #   # ── EFS dependencies ──────────────────────────────────────────────────
+    #   # Required when "EFS" is in enabled_groups and any efs_* signal uses
+    #   # dim_key = "FileSystemId" (e.g. efs_throughput).
+    #   # One alert rule is generated per file system ID.
+    #   efs_file_systems = ["fs-abc1234567890", "fs-def0987654321"]
     #
     #   # ── Control Panel dependencies ─────────────────────────────────────────
     #   # Required when "Control Panel" is in enabled_groups.
@@ -71,6 +86,13 @@ locals {
     #   threshold_overrides = {
     #     cp_pod_net_baseline_warn = 5
     #   }
+    #   # ── Slack channel overrides ───────────────────────────────────────────
+    #   # Per-signal Slack overrides for this environment.
+    #   # Use "disabled" to suppress Slack routing for a specific signal
+    #   # without affecting other environments (e.g. silence noisy dev alerts).
+    #   slack_channel_overrides = {
+    #     cp_crashloop_backoff = { warning = "disabled", critical = "disabled" }
+    #   }
     # }
     # ---------------------------------------------------------------------------
 
@@ -92,12 +114,26 @@ locals {
 
     # environnment added for testing controlpanel alerts purposes, to be removed after testing is complete
     analytical-platform-development = {
-      enabled_groups             = ["Control Panel", "EFS", "EKS"]
+      enabled_groups             = ["Control Panel", "EFS"]
       aws_region                 = "eu-west-1"
       cloudwatch_datasource_name = "mojap-development-cloudwatch"
       prometheus_datasource_name = "mojap-development-prometheus"
       #  slack_channel = "analytical-platform-alerts-slack"
 
+      efs_file_systems = ["fs-0dbd6739"] #eks-development-user-homes
+
+      # no prometheus configured on this environment
+      disabled_rules = [
+        "cp_crashloop_backoff",
+        "cp_image_pull_backoff",
+        "cp_deploy_unavailable",
+        "cp_deploy_not_progressing",
+        "cp_deploy_replicas_mismatch",
+        "cp_deploy_pod_cpu_throttle",
+        "cp_deploy_pod_memory_limit",
+        "cp_deploy_container_restarts",
+        "cp_deploy_pvc_usage"
+      ]
       # Control Panel dependencies
       namespaces     = ["cpanel"]
       rds_instances  = ["eks-development-control-panel-psg-db-encrypted"]
