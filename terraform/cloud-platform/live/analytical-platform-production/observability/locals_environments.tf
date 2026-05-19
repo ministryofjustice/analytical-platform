@@ -122,7 +122,18 @@ locals {
 
       efs_file_systems = ["fs-0dbd6739"] #eks-development-user-homes
 
-
+      # no prometheus configured on this environment
+      disabled_rules = [
+        "cp_crashloop_backoff",
+        "cp_image_pull_backoff",
+        "cp_deploy_unavailable",
+        "cp_deploy_not_progressing",
+        "cp_deploy_replicas_mismatch",
+        "cp_deploy_pod_cpu_throttle",
+        "cp_deploy_pod_memory_limit",
+        "cp_deploy_container_restarts",
+        "cp_deploy_pvc_usage"
+      ]
       # Control Panel dependencies
       namespaces     = ["cpanel"]
       rds_instances  = ["eks-development-control-panel-psg-db-encrypted"]
