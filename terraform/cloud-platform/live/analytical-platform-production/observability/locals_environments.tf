@@ -125,7 +125,8 @@ locals {
         "NAT Gateway",
         "EKS",
         "MWAA",
-        "S3"
+        "S3",
+        "Network Monitor"
       ]
     }
 
@@ -140,7 +141,8 @@ locals {
         "NAT Gateway",
         "EKS",
         "MWAA",
-        "S3"
+        "S3",
+        "Network Monitor"
       ]
     }
 
@@ -169,20 +171,6 @@ locals {
       namespaces     = ["cpanel"]
       rds_instances  = ["eks-development-control-panel-psg-db-encrypted"]
       cache_clusters = ["development-control-panel-redis-001", "development-control-panel-redis-002", "development-control-panel-redis-003"]
-    }
-
-    analytical-platform-compute-test = {
-      cloudwatch_datasource_name = "mojap-compute-test-cloudwatch"
-      enabled_groups = [
-        "Network Monitor"
-      ]
-    }
-
-    analytical-platform-compute-production = {
-      cloudwatch_datasource_name = "mojap-compute-production-cloudwatch"
-      enabled_groups = [
-        "Network Monitor"
-      ]
     }
   }
 }
