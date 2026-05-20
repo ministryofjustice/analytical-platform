@@ -114,6 +114,36 @@ locals {
       ]
     }
 
+    analytical-platform-compute-test = {
+      #slack_channel = "analytical-platform-alerts-slack"
+      cloudwatch_datasource_name = "mojap-compute-test-cloudwatch"
+      prometheus_datasource_name = "mojap-compute-test-prometheus"
+
+      # S3 dependencies
+      s3_buckets = ["mojap-compute-test-mwaa", "mojap-compute-test-velero"]
+      enabled_groups = [
+        "NAT Gateway",
+        "EKS",
+        "MWAA",
+        "S3"
+      ]
+    }
+
+    analytical-platform-compute-production = {
+      #slack_channel = "analytical-platform-alerts-slack"
+      cloudwatch_datasource_name = "mojap-compute-production-cloudwatch"
+      prometheus_datasource_name = "mojap-compute-production-prometheus"
+
+      # S3 dependencies
+      s3_buckets = ["mojap-compute-production-mwaa", "mojap-compute-production-velero"]
+      enabled_groups = [
+        "NAT Gateway",
+        "EKS",
+        "MWAA",
+        "S3"
+      ]
+    }
+
     # environnment added for testing controlpanel alerts purposes, to be removed after testing is complete
     analytical-platform-development = {
       enabled_groups             = ["Control Panel", "EFS"]
