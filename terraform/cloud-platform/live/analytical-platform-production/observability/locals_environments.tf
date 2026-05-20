@@ -117,7 +117,6 @@ locals {
       enabled_groups             = ["Control Panel", "EFS"]
       aws_region                 = "eu-west-1"
       cloudwatch_datasource_name = "mojap-development-cloudwatch"
-      prometheus_datasource_name = "mojap-development-prometheus"
       #  slack_channel = "analytical-platform-alerts-slack"
 
       efs_file_systems = ["fs-0dbd6739"] #eks-development-user-homes
