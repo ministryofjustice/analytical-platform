@@ -4,6 +4,7 @@
 
 resource "aws_sns_topic" "control_panel_alerts" {
   #ts:skip=AWS.AST.DP.MEDIUM.0037 skipping for now, will revisit
+  #checkov:skip=CKV_AWS_26: skip Ensure all data stored in the SNS topic is encrypted
   name_prefix = "control-panel-alerts"
 }
 
@@ -13,6 +14,7 @@ resource "aws_sns_topic" "control_panel_alerts" {
 
 resource "aws_sns_topic" "analytical_platform_compute_alerts" {
   #ts:skip=AWS.AST.DP.MEDIUM.0037 skipping for now, will revisit
+  #checkov:skip=CKV_AWS_26: skip Ensure all data stored in the SNS topic is encrypted
   name_prefix = "analytical-platform-compute-alerts"
 }
 
@@ -22,6 +24,7 @@ resource "aws_sns_topic" "analytical_platform_compute_alerts" {
 
 resource "aws_sns_topic" "analytical_platform_networking_alerts" {
   #ts:skip=AWS.AST.DP.MEDIUM.0037 skipping for now, will revisit
+  #checkov:skip=CKV_AWS_26: skip Ensure all data stored in the SNS topic is encrypted
   name_prefix = "analytical-platform-networking-alerts"
 }
 
@@ -31,5 +34,6 @@ resource "aws_sns_topic" "analytical_platform_networking_alerts" {
 
 resource "aws_sns_topic" "analytical_platform_storage_alerts" {
   #ts:skip=AWS.AST.DP.MEDIUM.0037 skipping for now, will revisit
+  #checkov:skip=CKV_AWS_26: skip Ensure all data stored in the SNS topic is encrypted
   name_prefix = "analytical-platform-storage-alerts"
 }

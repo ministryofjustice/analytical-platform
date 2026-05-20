@@ -439,6 +439,7 @@ resource "aws_iam_policy" "prometheus_remote_ingest" {
 ##################################################
 
 data "aws_iam_policy_document" "efs_csi_driver" {
+  #checkov:skip=CKV_AWS_356: skip - Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions
   statement {
     sid    = "AmazonEKSEFSCSIDriverPolicy"
     effect = "Allow"

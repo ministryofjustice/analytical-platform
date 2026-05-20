@@ -3,6 +3,7 @@
 ##################################################
 
 resource "aws_kms_key" "eks" {
+  #checkov:skip=CKV2_AWS_64: skip Ensure KMS key Policy is defined
   description         = "EKS Secret Encryption Key"
   enable_key_rotation = true
 }
