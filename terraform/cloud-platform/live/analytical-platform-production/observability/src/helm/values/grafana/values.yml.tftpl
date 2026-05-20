@@ -402,7 +402,7 @@ extraInitContainers:
           secretKeyRef:
             name: grafana-rds
             key: database_password
-      - name: DB_HOST
+      - name: DB_HOST_FULL
         valueFrom:
           secretKeyRef:
             name: grafana-rds
@@ -425,6 +425,9 @@ extraInitContainers:
 
         RULES_FILE=/etc/grafana/provisioning/alerting/rules.yaml
 
+        DB_HOST=$(echo "$DB_HOST_FULL" | cut -d':' -f1)
+        DB_PORT=$(echo "$DB_HOST_FULL" | cut -d':' -f2)
+
         echo "Checking provisioning file..."
         if [ ! -f "$RULES_FILE" ]; then
           echo "ERROR: rules file not found — aborting to protect existing rules"
@@ -445,7 +448,7 @@ extraInitContainers:
         echo "Found $UID_COUNT provisioned rule(s) in file"
 
         echo "Checking for stale rules in DB..."
-        STALE_COUNT=$(psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" \
+        STALE_COUNT=$(psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" \
           --set ON_ERROR_STOP=1 -t -A \
           -c "SELECT COUNT(*) FROM alert_rule WHERE uid NOT IN ($PROVISIONED_UIDS);") \
           || { echo "ERROR: failed to query DB — check DB_HOST, DB_USER, DB_NAME and PGPASSWORD"; exit 1; }
@@ -458,13 +461,13 @@ extraInitContainers:
         fi
 
         echo "Stale rule details:"
-        psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" \
+        psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" \
           --set ON_ERROR_STOP=1 \
           -c "SELECT uid, title, rule_group FROM alert_rule WHERE uid NOT IN ($PROVISIONED_UIDS);" \
           || { echo "ERROR: failed to list stale rules"; exit 1; }
 
         echo "Running purge transaction..."
-        psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" --set ON_ERROR_STOP=1 \
+        psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" --set ON_ERROR_STOP=1 \
           -c "BEGIN; DELETE FROM alert_instance WHERE rule_uid NOT IN ($PROVISIONED_UIDS); DELETE FROM alert_rule_state WHERE rule_uid NOT IN ($PROVISIONED_UIDS); DELETE FROM alert_rule_version WHERE rule_uid NOT IN ($PROVISIONED_UIDS); DELETE FROM alert_rule WHERE uid NOT IN ($PROVISIONED_UIDS); COMMIT;"
         PURGE_EXIT=$?
         if [ "$PURGE_EXIT" -ne 0 ]; then
@@ -473,7 +476,7 @@ extraInitContainers:
         fi
 
         echo "Verifying purge..."
-        REMAINING=$(psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" \
+        REMAINING=$(psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" \
           --set ON_ERROR_STOP=1 -t -A \
           -c "SELECT COUNT(*) FROM alert_rule WHERE uid NOT IN ($PROVISIONED_UIDS);") \
           || { echo "ERROR: failed to verify purge — unable to query DB after transaction"; exit 1; }
