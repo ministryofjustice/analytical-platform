@@ -6,6 +6,7 @@ locals {
   group_folders = {
     "NAT Gateway"     = { folder = "internal/compute/networking", name_suffix = "natgateway" }
     "Transit Gateway" = { folder = "internal/compute/networking", name_suffix = "transitgateway" }
+    "Network Monitor" = { folder = "internal/compute/networking", name_suffix = "networkmonitor" }
     "EKS"             = { folder = "internal/compute/cluster", name_suffix = "eks" }
     "EFS"             = { folder = "internal/compute/storage", name_suffix = "efs" }
     "S3"              = { folder = "internal/compute/storage", name_suffix = "s3" }
@@ -115,6 +116,10 @@ locals {
     tgw_PacketDropCountTTLExpired = { group = "Transit Gateway", namespace = "AWS/TransitGateway", metric = "PacketDropCountTTLExpired", statistic = "Sum", type = "gt", dim_key = "", warning = "tgw_pkt_drop_ttl_warn", critical = "tgw_pkt_drop_ttl_crit" }
     tgw_BytesDropCountNoRoute     = { group = "Transit Gateway", namespace = "AWS/TransitGateway", metric = "BytesDropCountNoRoute", statistic = "Sum", type = "gt", dim_key = "", warning = "tgw_bytes_drop_no_route_warn", critical = "tgw_bytes_drop_no_route_crit" }
     tgw_BytesDropCountBlackhole   = { group = "Transit Gateway", namespace = "AWS/TransitGateway", metric = "BytesDropCountBlackhole", statistic = "Sum", type = "gt", dim_key = "", warning = "tgw_bytes_drop_blackhole_warn", critical = "tgw_bytes_drop_blackhole_crit" }
+
+    # ── Network Monitor ───────────────────────────────────────────────────────
+    packet_loss                   = { group = "Network Monitor", namespace = "AWS/NetworkMonitor", metric = "PacketLoss", statistic = "Average", type = "gt", dim_key = "", warning = "packet_loss_warn", critical = "packet_loss_crit" }
+
 
     # ── EKS ───────────────────────────────────────────────────────────────────
     eks_webhook_latency     = { group = "EKS", namespace = "AWS/EKS", metric = "apiserver_admission_webhook_admission_duration_seconds", statistic = "p99", type = "gt", dim_key = "", warning = "eks_webhook_latency_warn", critical = "eks_webhook_latency_crit" }

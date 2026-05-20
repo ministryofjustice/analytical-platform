@@ -29,6 +29,7 @@ locals {
     #   # Must match keys defined in local.group_folders in local_signals.tf:
     #   #   "NAT Gateway"     → internal/compute/networking
     #   #   "Transit Gateway" → internal/compute/networking
+    #   #   "Network Monitor" → internal/compute/networking
     #   #   "EKS"             → internal/compute/cluster
     #   #   "EFS"             → internal/compute/storage
     #   #   "S3"              → internal/compute/storage
@@ -38,6 +39,7 @@ locals {
     #   enabled_groups = [
     #     "NAT Gateway",
     #     "Transit Gateway",
+    #     "Network Monitor",
     #     "EKS",
     #     "EFS",             # ← see dependencies below
     #     "S3",
@@ -138,5 +140,20 @@ locals {
       rds_instances  = ["eks-development-control-panel-psg-db-encrypted"]
       cache_clusters = ["development-control-panel-redis-001", "development-control-panel-redis-002", "development-control-panel-redis-003"]
     }
+
+    analytical-platform-compute-test = {
+      cloudwatch_datasource_name = "mojap-compute-test-cloudwatch"
+      enabled_groups = [
+        "Network Monitor"
+      ]
+    }
+    
+    analytical-platform-compute-production = {
+      cloudwatch_datasource_name = "mojap-compute-production-cloudwatch"
+      enabled_groups = [
+        "Network Monitor"
+      ]
+    }
   }
 }
+
