@@ -236,17 +236,17 @@ metadata:
 spec:
   ingressClassName: default
   tls:
-  - hosts:
-    - "*.apps.alpha.mojanalytics.xyz"
-    secretName: apps-alpha-certificate
+    - hosts:
+        - "*.apps.alpha.mojanalytics.xyz"
+      secretName: apps-alpha-certificate
   rules:
-  - host: "*.apps.alpha.mojanalytics.xyz"
-    http:
-      paths:
-      - path: /
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: shutdown-service
-            port:
-              number: 80
+    - host: "*.apps.alpha.mojanalytics.xyz"
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: shutdown-service
+                port:
+                  number: 80
