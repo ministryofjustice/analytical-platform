@@ -51,7 +51,6 @@ updates:
       - "terraform/auth0/ministryofjustice-data-platform"
       - "terraform/auth0/ministryofjustice-data-platform-development"
       - "terraform/aws/analytical-platform-data-engineering-production/data-engineering-pipelines"
-      - "terraform/aws/analytical-platform-data-engineering-production/dms-dev"
       - "terraform/aws/analytical-platform-data-engineering-production/dms-preprod"
       - "terraform/aws/analytical-platform-data-engineering-production/dms-prod"
       - "terraform/aws/analytical-platform-data-engineering-production/github-actions-roles"
