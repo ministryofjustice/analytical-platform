@@ -102,10 +102,10 @@ module "dev_dms_delius" {
   independent_full_loads = {
     oasys_dev_set_table = {
       full_load_name = "oasys-set-full-load"
+
       path = {
-        
-      bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-      key    = "dev/oasys/oasys_dev_set_table_mapping.json"
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/oasys/oasys_dev_set_table_mapping.json"
         }
       }
     }
