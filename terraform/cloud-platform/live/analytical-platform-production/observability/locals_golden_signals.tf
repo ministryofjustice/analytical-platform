@@ -118,8 +118,7 @@ locals {
     tgw_BytesDropCountBlackhole   = { group = "Transit Gateway", namespace = "AWS/TransitGateway", metric = "BytesDropCountBlackhole", statistic = "Sum", type = "gt", dim_key = "", warning = "tgw_bytes_drop_blackhole_warn", critical = "tgw_bytes_drop_blackhole_crit" }
 
     # ── Network Monitor ───────────────────────────────────────────────────────
-    packet_loss                   = { group = "Network Monitor", namespace = "AWS/NetworkMonitor", metric = "PacketLoss", statistic = "Average", type = "gt", dim_key = "", warning = "packet_loss_warn", critical = "packet_loss_crit" }
-
+    packet_loss = { group = "Network Monitor", namespace = "AWS/NetworkMonitor", metric = "PacketLoss", statistic = "Average", type = "gt", dim_key = "", warning = "packet_loss_warn", critical = "packet_loss_crit" }
 
     # ── EKS ───────────────────────────────────────────────────────────────────
     eks_webhook_latency     = { group = "EKS", namespace = "AWS/EKS", metric = "apiserver_admission_webhook_admission_duration_seconds", statistic = "p99", type = "gt", dim_key = "", warning = "eks_webhook_latency_warn", critical = "eks_webhook_latency_crit" }

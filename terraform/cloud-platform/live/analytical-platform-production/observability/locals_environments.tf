@@ -147,7 +147,7 @@ locals {
         "Network Monitor"
       ]
     }
-    
+
     analytical-platform-compute-production = {
       cloudwatch_datasource_name = "mojap-compute-production-cloudwatch"
       enabled_groups = [
@@ -156,4 +156,3 @@ locals {
     }
   }
 }
-
