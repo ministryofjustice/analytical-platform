@@ -106,7 +106,7 @@ module "dev_dms_delius" {
       path = {
         bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
         key    = "dev/oasys/oasys_dev_set_table_mapping.json"
-        }
       }
     }
+  }
 }
