@@ -76,4 +76,3 @@ contexts:
     context:
       cluster: analytical-platform-compute-test
       user: analytical-platform-compute-test
-

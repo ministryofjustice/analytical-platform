@@ -53,4 +53,3 @@ contexts:
     context:
       cluster: analytical-platform-compute-production
       user: analytical-platform-compute-production
-

@@ -65,7 +65,7 @@ done
 shift $((OPTIND -1))
 
 # check variables are defined
-if [[ -z $source ]] || [[ -z $destination ]] || [[ -z $user ]] || [[ -z $password ]] 
+if [[ -z $source ]] || [[ -z $destination ]] || [[ -z $user ]] || [[ -z $password ]]
 then
   usage
   exit

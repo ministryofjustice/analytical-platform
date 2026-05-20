@@ -93,4 +93,3 @@ resource "kubectl_manifest" "kyverno_policy_run_as_non_root_user_prod" {
 
   depends_on = [helm_release.kyverno_prod]
 }
-

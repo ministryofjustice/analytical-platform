@@ -21,4 +21,3 @@ data "aws_secretsmanager_secret_version" "pagerduty_token" {
 data "pagerduty_user" "lauren_taylor_brown" {
   email = "lauren.taylor-brown@justice.gov.uk"
 }
-

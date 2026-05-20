@@ -23,7 +23,7 @@ function usage {
 # Parse command line options
 while getopts ":a:r:c:" opt
 do
-    case $opt in 
+    case $opt in
         a)
             ACCOUNT_ID=$OPTARG
             ;;

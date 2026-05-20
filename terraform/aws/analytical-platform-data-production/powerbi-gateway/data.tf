@@ -19,4 +19,3 @@ data "aws_iam_roles" "analytical_platform_data_production_sso_administrator_acce
 }
 
 data "aws_availability_zones" "available" {}
-

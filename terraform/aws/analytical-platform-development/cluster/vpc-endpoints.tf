@@ -10,4 +10,3 @@ resource "aws_vpc_endpoint" "aps" {
   subnet_ids          = module.vpc.private_subnets
   security_group_ids  = [aws_security_group.aps.id]
 }
-

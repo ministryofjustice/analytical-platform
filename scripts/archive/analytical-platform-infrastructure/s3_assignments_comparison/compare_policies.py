@@ -20,12 +20,12 @@ def get_policies_for_roles(role_names: List[str]) -> Dict[str, List[Dict[str, st
     from csv import reader
     with open('./s3bucket.csv', 'r') as read_obj:
         csv_reader = reader(read_obj)
-        for row in csv_reader:        
+        for row in csv_reader:
             buckets[row[0]+","+row[1]] = row[2]
-     
+
     print('IAM Policies with No Bucket Assignment in ControlPanel database\n')
     policy_paginator = client.get_paginator('list_role_policies')
-    for name in role_names:        
+    for name in role_names:
         if name.startswith('alpha_user_'):
             username = name[11:]
             role_policies = []
@@ -49,20 +49,20 @@ def get_policies_for_roles(role_names: List[str]) -> Dict[str, List[Dict[str, st
                                 resource = resource.split("/")[0]
                                 #print(resource)
                             if resource!="*" and sid!='list' and policy!="database-access":
-                                found="false"                                
+                                found="false"
                                 sid_value = buckets.get(username+","+resource,"")
                                 if sid_value==sid:
                                     found="true"
                                     buckets_found[username+","+resource] = "true"
-                                else:  
+                                else:
                                     print(username+","+resource+","+sid+","+policy+","+found)
                             if resource!="*" and sid=='list':
-                                found="false"                                
+                                found="false"
                                 sid_value = buckets.get(username+","+resource,"")
                                 if sid_value=="readwrite" or sid_value=="readonly":
                                     found="true"
                                     buckets_found[username+","+resource] = "true"
-                        else:                            
+                        else:
                             for resource in statement['Resource']:
                                 if resource.startswith('arn:aws:s3:::'):
                                     resource = resource[13:]
@@ -78,20 +78,20 @@ def get_policies_for_roles(role_names: List[str]) -> Dict[str, List[Dict[str, st
                                     if sid_value==sid:
                                         found="true"
                                         buckets_found[username+","+resource] = "true"
-                                    else: 
+                                    else:
                                         print(username+","+resource+","+sid+","+policy+","+found)
                                 if resource!="*" and sid=='list':
-                                    found="false"                                
+                                    found="false"
                                     sid_value = buckets.get(username+","+resource,"")
                                     if sid_value=="readwrite" or sid_value=="readonly":
                                         found="true"
-                                        buckets_found[username+","+resource] = "true"                       
+                                        buckets_found[username+","+resource] = "true"
     print('\nBuckets Assignments in ControlPanel database with No IAM Policy\n')
-    for bucket in buckets: 
+    for bucket in buckets:
         found = buckets_found.get(bucket)
         if found!="true":
            print(bucket)
-    return 
+    return
 
 role_names = get_role_names()
 role_policies = get_policies_for_roles(role_names)

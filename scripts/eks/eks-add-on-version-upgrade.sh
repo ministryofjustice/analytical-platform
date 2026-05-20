@@ -92,5 +92,3 @@ if [[ "$EKS_NODE_VERSION" == "$LATEST_NODE_RELEASE" ]]; then
 else
   echo "⚠️  Newer Bottlerocket node version available: $LATEST_NODE_RELEASE"
 fi
-
-

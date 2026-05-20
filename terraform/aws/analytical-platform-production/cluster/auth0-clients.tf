@@ -71,4 +71,3 @@ resource "auth0_client" "controlpanel" {
     alg = "RS256"
   }
 }
-

@@ -207,4 +207,3 @@ eks_node_group_capacities_gpu_node = {
 control_panel_kubernetes_service_account             = "cpanel:cpanel-frontend"
 control_panel_celery_kubernetes_service_account      = "cpanel:cpanel-celery-worker"
 control_panel_celery_beat_kubernetes_service_account = "cpanel:cpanel-celery-beat"
-

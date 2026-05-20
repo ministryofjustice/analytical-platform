@@ -1,6 +1,6 @@
 # Managed Elastic Search Operations
 
-This part of the repo deals with managed elastic search. 
+This part of the repo deals with managed elastic search.
 
 Our existing cluster (and also our monitoring cluster) can be accessed at:
 
@@ -26,7 +26,7 @@ In order to clear old data from the cluster, a few scripts were put together.
             "Resource": [
             	"arn:aws:s3:::<bucketname>",
             	"arn:aws:s3:::<bucketname>/*"
-            	]	
+            	]
         }
     ]
 }

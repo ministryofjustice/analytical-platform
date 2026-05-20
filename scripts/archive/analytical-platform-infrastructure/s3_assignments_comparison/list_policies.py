@@ -14,8 +14,8 @@ def get_role_names() -> List[str]:
     return roles
 
 def get_attached_policies_for_roles(role_names: List[str]) -> Dict[str, List[Dict[str, str]]]:
-    """ Create a mapping of role names and any policies they have attached to them by 
-        paginating over list_attached_role_policies() calls for each role name. 
+    """ Create a mapping of role names and any policies they have attached to them by
+        paginating over list_attached_role_policies() calls for each role name.
         Attached policies will include policy name and ARN.
     """
     policy_map = {}
@@ -31,13 +31,13 @@ def get_attached_policies_for_roles(role_names: List[str]) -> Dict[str, List[Dic
     return policy_map
 
 def get_policies_for_roles(role_names: List[str]) -> Dict[str, List[Dict[str, str]]]:
-    """ Create a mapping of role names and any policies they have attached to them by 
-        paginating over list_attached_role_policies() calls for each role name. 
+    """ Create a mapping of role names and any policies they have attached to them by
+        paginating over list_attached_role_policies() calls for each role name.
         Attached policies will include policy name and ARN.
     """
     policy_map = {}
     policy_paginator = client.get_paginator('list_role_policies')
-    for name in role_names:        
+    for name in role_names:
         if name.startswith('alpha_user'):
             role_policies = []
             for response in policy_paginator.paginate(RoleName=name):
@@ -58,7 +58,7 @@ def get_policies_for_roles(role_names: List[str]) -> Dict[str, List[Dict[str, st
                                     username = name[11:]
                             if resource!="*" and sid!='list' and policy!="database-access":
                                 print(username+","+resource+","+sid+","+policy)
-                        else:                            
+                        else:
                             for resource in statement['Resource']:
                                 if resource.startswith('arn:aws:s3:::'):
                                     resource = resource[13:]
@@ -66,10 +66,9 @@ def get_policies_for_roles(role_names: List[str]) -> Dict[str, List[Dict[str, st
                                 if name.startswith('alpha_user_'):
                                     username = name[11:]
                                 if resource!="*" and sid!='list' and policy!="database-access":
-                                    print(username+","+resource+","+sid+","+policy)               
+                                    print(username+","+resource+","+sid+","+policy)
             policy_map.update({name: role_policies})
     return policy_map
 
 role_names = get_role_names()
 role_policies = get_policies_for_roles(role_names)
-
