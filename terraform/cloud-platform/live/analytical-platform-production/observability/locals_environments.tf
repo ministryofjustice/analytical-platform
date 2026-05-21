@@ -108,6 +108,7 @@ locals {
       s3_buckets = ["mojap-compute-development-mwaa", "mojap-compute-development-velero"]
       enabled_groups = [
         "NAT Gateway",
+        "Transit Gateway",
         "EKS",
         "MWAA",
         "S3"
@@ -123,6 +124,7 @@ locals {
       s3_buckets = ["mojap-compute-test-mwaa", "mojap-compute-test-velero"]
       enabled_groups = [
         "NAT Gateway",
+        "Transit Gateway",
         "EKS",
         "MWAA",
         "S3",
@@ -139,6 +141,7 @@ locals {
       s3_buckets = ["mojap-compute-production-mwaa", "mojap-compute-production-velero"]
       enabled_groups = [
         "NAT Gateway",
+        "Transit Gateway",
         "EKS",
         "MWAA",
         "S3",
