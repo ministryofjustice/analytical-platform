@@ -78,6 +78,8 @@ grafana.ini:
     disable_initial_admin_creation: true
   server:
     root_url: https://observability.analytical-platform.service.justice.gov.uk
+  unified_alerting:
+    enabled: true
 
 datasources:
   datasources.yaml:
@@ -372,3 +374,121 @@ alerting:
                   - =
                   - analytical-platform-alerts
 
+extraVolumes:
+  - name: alert-rules
+    configMap:
+      name: ${alert_rules_configmap}
+
+extraVolumeMounts:
+  - name: alert-rules
+    mountPath: /etc/grafana/provisioning/alerting/rules.yaml
+    subPath: rules.yaml
+    readOnly: true
+
+podAnnotations:
+  checksum/alert-rules: "${alert_rules_checksum}"
+
+env:
+  GF_PROVISIONING_ALERTING_FORCE_UPDATE: "true"
+  GF_ALERTING_PROVISIONING_PURGE_NOT_IN_FILES: "true"
+
+
+extraInitContainers:
+  - name: purge-stale-alert-rules
+    image: postgres:15-alpine
+    env:
+      - name: PGPASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: grafana-rds
+            key: database_password
+      - name: DB_HOST_FULL
+        valueFrom:
+          secretKeyRef:
+            name: grafana-rds
+            key: rds_instance_endpoint
+      - name: DB_USER
+        valueFrom:
+          secretKeyRef:
+            name: grafana-rds
+            key: database_username
+      - name: DB_NAME
+        valueFrom:
+          secretKeyRef:
+            name: grafana-rds
+            key: database_name
+    command:
+      - sh
+      - -c
+      - |
+        set -eu
+
+        RULES_FILE=/etc/grafana/provisioning/alerting/rules.yaml
+
+        DB_HOST=$(echo "$DB_HOST_FULL" | cut -d':' -f1)
+        DB_PORT=$(echo "$DB_HOST_FULL" | cut -d':' -f2)
+
+        echo "Checking provisioning file..."
+        if [ ! -f "$RULES_FILE" ]; then
+          echo "ERROR: rules file not found — aborting to protect existing rules"
+          exit 1
+        fi
+
+        PROVISIONED_UIDS=$(grep -E '^\s+"uid":' "$RULES_FILE" \
+          | awk -F'"' '{print $4}' \
+          | sed "s/.*/'&'/" \
+          | tr '\n' ',' | sed 's/,$//')
+
+        if [ -z "$PROVISIONED_UIDS" ]; then
+          echo "WARNING: no UIDs found in provisioning file — skipping purge"
+          exit 0
+        fi
+
+        UID_COUNT=$(echo "$PROVISIONED_UIDS" | tr ',' '\n' | wc -l | tr -d ' ')
+        echo "Found $UID_COUNT provisioned rule(s) in file"
+
+        echo "Checking for stale rules in DB..."
+        STALE_COUNT=$(psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" \
+          --set ON_ERROR_STOP=1 -t -A \
+          -c "SELECT COUNT(*) FROM alert_rule WHERE uid NOT IN ($PROVISIONED_UIDS);") \
+          || { echo "ERROR: failed to query DB — check DB_HOST, DB_USER, DB_NAME and PGPASSWORD"; exit 1; }
+
+        echo "Stale rules found: $STALE_COUNT"
+
+        if [ "$STALE_COUNT" -eq 0 ]; then
+          echo "Nothing to purge — DB is already in sync with provisioning file"
+          exit 0
+        fi
+
+        echo "Stale rule details:"
+        psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" \
+          --set ON_ERROR_STOP=1 \
+          -c "SELECT uid, title, rule_group FROM alert_rule WHERE uid NOT IN ($PROVISIONED_UIDS);" \
+          || { echo "ERROR: failed to list stale rules"; exit 1; }
+
+        echo "Running purge transaction..."
+        psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" --set ON_ERROR_STOP=1 \
+          -c "BEGIN; DELETE FROM alert_instance WHERE rule_uid NOT IN ($PROVISIONED_UIDS); DELETE FROM alert_rule_state WHERE rule_uid NOT IN ($PROVISIONED_UIDS); DELETE FROM alert_rule_version WHERE rule_uid NOT IN ($PROVISIONED_UIDS); DELETE FROM alert_rule WHERE uid NOT IN ($PROVISIONED_UIDS); COMMIT;"
+        PURGE_EXIT=$?
+        if [ "$PURGE_EXIT" -ne 0 ]; then
+          echo "ERROR: purge transaction failed (exit code $PURGE_EXIT) — DB has been rolled back, no rules were deleted"
+          exit 1
+        fi
+
+        echo "Verifying purge..."
+        REMAINING=$(psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" \
+          --set ON_ERROR_STOP=1 -t -A \
+          -c "SELECT COUNT(*) FROM alert_rule WHERE uid NOT IN ($PROVISIONED_UIDS);") \
+          || { echo "ERROR: failed to verify purge — unable to query DB after transaction"; exit 1; }
+
+        if [ "$REMAINING" -eq 0 ]; then
+          echo "Purge complete — $STALE_COUNT stale rule(s) deleted, 0 remaining"
+        else
+          echo "ERROR: Purge incomplete — $REMAINING stale rule(s) still remain in DB after purge"
+          exit 1
+        fi
+    volumeMounts:
+      - name: alert-rules
+        mountPath: /etc/grafana/provisioning/alerting/rules.yaml
+        subPath: rules.yaml
+        readOnly: true

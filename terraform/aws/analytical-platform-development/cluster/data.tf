@@ -64,6 +64,10 @@ data "aws_secretsmanager_secret_version" "chainguard_image_pull_token" {
   secret_id = "chainguard-image-pull-token"
 }
 
+data "aws_secretsmanager_secret_version" "route53_resolver_firewall_blocked_domains_current" {
+  secret_id = aws_secretsmanager_secret.route53_resolver_firewall_blocked_domains.id
+}
+
 data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_id
 }

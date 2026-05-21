@@ -47,7 +47,5 @@ jobs:
             - [ ] Deploy development.
             - [ ] Deploy production.
 
-            📝 Documentation [here](https://docs.analytical-platform.service.justice.gov.uk/documentation/runbooks/001-ingestion-maintenance.html#ingestion-maintenance)
-
           PINNED: false
           CLOSE_PREVIOUS: false

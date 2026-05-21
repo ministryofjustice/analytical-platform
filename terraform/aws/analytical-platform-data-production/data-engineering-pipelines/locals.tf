@@ -47,7 +47,8 @@ locals {
         "github-actions-infrastructure",
         "restricted-admin",
         "data-engineering-probation-glue",
-        "airflow-production-analytical-platform-cadet-curated-daily"
+        "airflow-production-analytical-platform-cadet-curated-daily",
+        "airflow-production-analytical-platform-cadet-curated-rerun"
       ]
     },
     {
@@ -61,7 +62,9 @@ locals {
         "restricted-admin",
         "data-engineering-probation-glue",
         "airflow-production-analytical-platform-cadet-curated-daily",
-        "airflow-production-analytical-platform-cadet-oasys-question"
+        "airflow-production-analytical-platform-cadet-oasys-question",
+        "airflow-production-analytical-platform-cadet-curated-rerun",
+        "airflow-development-analytical-platform-cadet-oasys-question"
       ]
     },
     {
@@ -322,6 +325,7 @@ locals {
                 AWS = [
                   "arn:aws:iam::649098267436:role/glue-crawler-production",
                   "arn:aws:iam::649098267436:role/glue-job-production",
+                  "arn:aws:iam::649098267436:role/dms-datasync-s3-role-production",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land/opg/sirius/*"
@@ -339,6 +343,7 @@ locals {
                 AWS = [
                   "arn:aws:iam::649098267436:role/glue-crawler-production",
                   "arn:aws:iam::649098267436:role/glue-job-production",
+                  "arn:aws:iam::649098267436:role/dms-datasync-s3-role-production",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land/opg/sirius/*"
@@ -356,6 +361,7 @@ locals {
                 AWS = [
                   "arn:aws:iam::649098267436:role/glue-crawler-production",
                   "arn:aws:iam::649098267436:role/glue-job-production",
+                  "arn:aws:iam::649098267436:role/dms-datasync-s3-role-production",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land/opg/sirius/*"
@@ -373,6 +379,7 @@ locals {
                 AWS = [
                   "arn:aws:iam::649098267436:role/glue-crawler-production",
                   "arn:aws:iam::649098267436:role/glue-job-production",
+                  "arn:aws:iam::649098267436:role/dms-datasync-s3-role-production",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land/opg/sirius/*"
@@ -675,6 +682,7 @@ locals {
                 AWS = [
                   "arn:aws:iam::288342028542:role/glue-job-integration",
                   "arn:aws:iam::288342028542:role/glue-job-dev",
+                  "arn:aws:iam::288342028542:role/dms-datasync-s3-role-dev",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
@@ -692,6 +700,7 @@ locals {
                 AWS = [
                   "arn:aws:iam::288342028542:role/glue-job-integration",
                   "arn:aws:iam::288342028542:role/glue-job-dev",
+                  "arn:aws:iam::288342028542:role/dms-datasync-s3-role-dev",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
@@ -709,6 +718,7 @@ locals {
                 AWS = [
                   "arn:aws:iam::288342028542:role/glue-job-integration",
                   "arn:aws:iam::288342028542:role/glue-job-dev",
+                  "arn:aws:iam::288342028542:role/dms-datasync-s3-role-dev",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
@@ -726,6 +736,7 @@ locals {
                 AWS = [
                   "arn:aws:iam::288342028542:role/glue-job-integration",
                   "arn:aws:iam::288342028542:role/glue-job-dev",
+                  "arn:aws:iam::288342028542:role/dms-datasync-s3-role-dev",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
@@ -996,6 +1007,7 @@ locals {
               Principal = {
                 AWS = [
                   "arn:aws:iam::492687888235:role/glue-job-preproduction",
+                  "arn:aws:iam::492687888235:role/dms-datasync-s3-role-preproduction",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"
@@ -1012,6 +1024,7 @@ locals {
               Principal = {
                 AWS = [
                   "arn:aws:iam::492687888235:role/glue-job-preproduction",
+                  "arn:aws:iam::492687888235:role/dms-datasync-s3-role-preproduction",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"
@@ -1028,6 +1041,7 @@ locals {
               Principal = {
                 AWS = [
                   "arn:aws:iam::492687888235:role/glue-job-preproduction",
+                  "arn:aws:iam::492687888235:role/dms-datasync-s3-role-preproduction",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"
@@ -1044,6 +1058,7 @@ locals {
               Principal = {
                 AWS = [
                   "arn:aws:iam::492687888235:role/glue-job-preproduction",
+                  "arn:aws:iam::492687888235:role/dms-datasync-s3-role-preproduction",
                 ]
               }
               Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"

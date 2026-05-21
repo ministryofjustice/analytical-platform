@@ -3,8 +3,9 @@ resource "helm_release" "grafana" {
   name       = "grafana"
   repository = "https://grafana.github.io/helm-charts"
   chart      = "grafana"
-  version    = "10.5.13"
+  version    = "10.5.15"
   namespace  = var.namespace
+  depends_on = [kubernetes_config_map_v1.grafana_alert_rules]
   values = [
     templatefile(
       "${path.module}/src/helm/values/grafana/values.yml.tftpl",
@@ -19,8 +20,14 @@ resource "helm_release" "grafana" {
           data.github_team.probation_data_science.id,
           data.github_team.probation_integration.id
         ])
+        alert_rules_configmap = kubernetes_config_map_v1.grafana_alert_rules.metadata[0].name
+        alert_rules_checksum  = local.metrics_checksum
+    }),
+    yamlencode({
+      podAnnotations = {
+        "checksum/alert-rules" = local.metrics_checksum
       }
-    )
+    })
   ]
 
   set_sensitive = [
