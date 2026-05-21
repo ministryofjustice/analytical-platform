@@ -375,15 +375,19 @@ alerting:
                   - analytical-platform-alerts
 
 extraVolumes:
-  - name: alert-rules
+%{~ for env, cm_name in alert_rules_configmaps }
+  - name: alert-rules-${env}
     configMap:
-      name: ${alert_rules_configmap}
+      name: ${cm_name}
+%{~ endfor }
 
 extraVolumeMounts:
-  - name: alert-rules
-    mountPath: /etc/grafana/provisioning/alerting/rules.yaml
+%{~ for env, cm_name in alert_rules_configmaps }
+  - name: alert-rules-${env}
+    mountPath: /etc/grafana/provisioning/alerting/rules-${env}.yaml
     subPath: rules.yaml
     readOnly: true
+%{~ endfor }
 
 podAnnotations:
   checksum/alert-rules: "${alert_rules_checksum}"
@@ -423,29 +427,42 @@ extraInitContainers:
       - |
         set -eu
 
-        RULES_FILE=/etc/grafana/provisioning/alerting/rules.yaml
+        RULES_FILES="${join(" ", alert_rules_files)}"
 
         DB_HOST=$(echo "$DB_HOST_FULL" | cut -d':' -f1)
         DB_PORT=$(echo "$DB_HOST_FULL" | cut -d':' -f2)
 
-        echo "Checking provisioning file..."
-        if [ ! -f "$RULES_FILE" ]; then
-          echo "ERROR: rules file not found — aborting to protect existing rules"
-          exit 1
-        fi
+        echo "Checking provisioning files..."
+        for f in $RULES_FILES; do
+          if [ ! -f "$f" ]; then
+            echo "ERROR: expected rules file not found: $f — aborting to protect existing rules"
+            exit 1
+          fi
+        done
 
-        PROVISIONED_UIDS=$(grep -E '^\s+"uid":' "$RULES_FILE" \
+        PROVISIONED_UIDS=$(grep -E '^\s+"uid":' $RULES_FILES \
           | awk -F'"' '{print $4}' \
           | sed "s/.*/'&'/" \
           | tr '\n' ',' | sed 's/,$//')
 
         if [ -z "$PROVISIONED_UIDS" ]; then
-          echo "WARNING: no UIDs found in provisioning file — skipping purge"
+          echo "WARNING: no UIDs found in provisioning files — skipping purge"
           exit 0
         fi
 
         UID_COUNT=$(echo "$PROVISIONED_UIDS" | tr ',' '\n' | wc -l | tr -d ' ')
-        echo "Found $UID_COUNT provisioned rule(s) in file"
+        echo "Found $UID_COUNT provisioned rule(s) across all environments"
+
+        echo "Checking if alert_rule table exists..."
+        TABLE_EXISTS=$(psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" \
+          -t -A \
+          -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'alert_rule';") \
+          || { echo "ERROR: failed to connect to DB — check DB_HOST, DB_USER, DB_NAME and PGPASSWORD"; exit 1; }
+
+        if [ "$TABLE_EXISTS" -eq 0 ]; then
+          echo "alert_rule table not found — Grafana has not run migrations yet, skipping purge"
+          exit 0
+        fi
 
         echo "Checking for stale rules in DB..."
         STALE_COUNT=$(psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" \
@@ -456,7 +473,7 @@ extraInitContainers:
         echo "Stale rules found: $STALE_COUNT"
 
         if [ "$STALE_COUNT" -eq 0 ]; then
-          echo "Nothing to purge — DB is already in sync with provisioning file"
+          echo "Nothing to purge — DB is already in sync with provisioning files"
           exit 0
         fi
 
@@ -488,7 +505,10 @@ extraInitContainers:
           exit 1
         fi
     volumeMounts:
-      - name: alert-rules
-        mountPath: /etc/grafana/provisioning/alerting/rules.yaml
+%{~ for env, cm_name in alert_rules_configmaps }
+      - name: alert-rules-${env}
+        mountPath: /etc/grafana/provisioning/alerting/rules-${env}.yaml
         subPath: rules.yaml
         readOnly: true
+%{~ endfor }
+

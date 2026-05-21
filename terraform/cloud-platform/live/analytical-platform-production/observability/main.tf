@@ -1,10 +1,10 @@
 locals {
-  alert_rules_yaml = yamlencode({
-    groups = flatten([
-      for env in keys(local.environment_configurations) :
-      local.group_blocks_by_env[env]
-    ])
-  })
+  alert_rules_yaml_by_env = {
+    for env in keys(local.environment_configurations) :
+    env => yamlencode({
+      groups = local.group_blocks_by_env[env]
+    })
+  }
 }
 
 locals {
@@ -12,21 +12,23 @@ locals {
     golden_signals             = local.golden_signals
     defaults                   = local.defaults
     environment_configurations = local.environment_configurations
-    alert_rules_yaml           = local.alert_rules_yaml
+    alert_rules_yaml_by_env    = local.alert_rules_yaml_by_env
   }))
 }
 
 resource "kubernetes_config_map_v1" "grafana_alert_rules" {
+  for_each = local.environment_configurations
+
   metadata {
-    name      = "grafana-alert-rules"
+    name      = "grafana-alert-rules-${each.key}"
     namespace = var.namespace
 
     annotations = {
-      "checksum/rules" = local.metrics_checksum
+      "checksum/rules" = sha256(local.alert_rules_yaml_by_env[each.key])
     }
   }
 
   data = {
-    "rules.yaml" = local.alert_rules_yaml
+    "rules.yaml" = local.alert_rules_yaml_by_env[each.key]
   }
 }
