@@ -427,18 +427,20 @@ extraInitContainers:
       - |
         set -eu
 
-        RULES_DIR=/etc/grafana/provisioning/alerting
+        RULES_FILES="${join(" ", alert_rules_files)}"
 
         DB_HOST=$(echo "$DB_HOST_FULL" | cut -d':' -f1)
         DB_PORT=$(echo "$DB_HOST_FULL" | cut -d':' -f2)
 
         echo "Checking provisioning files..."
-        if ! ls "$RULES_DIR"/rules-*.yaml > /dev/null 2>&1; then
-          echo "ERROR: no rules files found in $RULES_DIR — aborting to protect existing rules"
-          exit 1
-        fi
+        for f in $RULES_FILES; do
+          if [ ! -f "$f" ]; then
+            echo "ERROR: expected rules file not found: $f — aborting to protect existing rules"
+            exit 1
+          fi
+        done
 
-        PROVISIONED_UIDS=$(grep -E '^\s+"uid":' "$RULES_DIR"/rules-*.yaml \
+        PROVISIONED_UIDS=$(grep -E '^\s+"uid":' $RULES_FILES \
           | awk -F'"' '{print $4}' \
           | sed "s/.*/'&'/" \
           | tr '\n' ',' | sed 's/,$//')
@@ -509,3 +511,4 @@ extraInitContainers:
         subPath: rules.yaml
         readOnly: true
 %{~ endfor }
+

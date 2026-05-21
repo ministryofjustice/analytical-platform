@@ -24,6 +24,10 @@ resource "helm_release" "grafana" {
           for env, cm in kubernetes_config_map_v1.grafana_alert_rules :
           env => cm.metadata[0].name
         }
+        alert_rules_files = [
+          for env, cm in kubernetes_config_map_v1.grafana_alert_rules :
+          "/etc/grafana/provisioning/alerting/rules-${env}.yaml"
+        ]
         alert_rules_checksum = local.metrics_checksum
     }),
     yamlencode({
