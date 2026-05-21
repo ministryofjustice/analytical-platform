@@ -64,7 +64,8 @@ locals {
         "airflow-production-analytical-platform-cadet-curated-daily",
         "airflow-production-analytical-platform-cadet-oasys-question",
         "airflow-production-analytical-platform-cadet-curated-rerun",
-        "airflow-development-analytical-platform-cadet-oasys-question"
+        "airflow-development-analytical-platform-cadet-oasys-question",
+        "AWSReservedSSO_AdministratorAccess_48361bdb022cb721"
       ]
     },
     {
