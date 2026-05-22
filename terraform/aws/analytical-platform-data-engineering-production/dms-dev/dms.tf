@@ -47,17 +47,6 @@ module "dev_dms_oasys" {
 
   glue_catalog_arn      = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
-
-  independent_full_loads = {
-    oasys_dev_set_table = {
-      full_load_name = "oasys-set-table"
-
-      path = {
-        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-        key    = "dev/oasys/oasys_dev_set_table_mapping.json"
-      }
-    }
-  }
 }
 
 module "dev_dms_delius" {
