@@ -49,7 +49,7 @@ module "preprod_dms_oasys" {
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
 
   independent_full_loads = {
-    oasys_dev_set_table = {
+    oasys_preprod_set_table = {
       full_load_name = "oasys-set-table"
 
       path = {
