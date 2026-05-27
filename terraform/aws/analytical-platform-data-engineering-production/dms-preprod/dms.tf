@@ -1,5 +1,5 @@
 module "preprod_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=5ae53ee6ed0ada0cf63613050b79c1468d565638"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=bea6fa8a0f431b616895423e515f5929c022b013"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -18,7 +18,7 @@ module "preprod_dms_oasys" {
     engine_version             = "3.5.4"
     kms_key_arn                = module.dms_preprod_kms.key_arn
     multi_az                   = false
-    replication_instance_class = "dms.t3.medium"
+    replication_instance_class = "dms.r6i.2xlarge"
     inbound_cidr               = "192.0.2.0/32" # test unassigned
     apply_immediately          = true
   }
@@ -47,11 +47,21 @@ module "preprod_dms_oasys" {
 
   glue_catalog_arn      = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
+
+  independent_full_loads = {
+    oasys_preprod_set_table = {
+      full_load_name = "oasys-set-table"
+
+      path = {
+        bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
+        key    = "preprod/oasys/oasys_preprod_set_table_mapping.json"
+      }
+    }
+  }
 }
 
-# retrigger
 module "preprod_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=5ae53ee6ed0ada0cf63613050b79c1468d565638"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=bea6fa8a0f431b616895423e515f5929c022b013"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
