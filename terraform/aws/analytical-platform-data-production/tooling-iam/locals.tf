@@ -7,10 +7,10 @@ locals {
   ingest_athena_nons3 = [
     "arn:aws:athena::${var.account_ids["analytical-platform-data-production"]}:datacatalog/*",
     "arn:aws:athena::${var.account_ids["analytical-platform-data-production"]}:workgroup/*",
-    "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:tableVersion/*/*/*",
-    "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:table/*/*",
-    "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:catalog",
-    "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:database/*"
+    "arn:aws:glue:${data.aws_region.current.region}:${var.account_ids["analytical-platform-data-production"]}:tableVersion/*/*/*",
+    "arn:aws:glue:${data.aws_region.current.region}:${var.account_ids["analytical-platform-data-production"]}:table/*/*",
+    "arn:aws:glue:${data.aws_region.current.region}:${var.account_ids["analytical-platform-data-production"]}:catalog",
+    "arn:aws:glue:${data.aws_region.current.region}:${var.account_ids["analytical-platform-data-production"]}:database/*"
   ]
 
   ingest_athena_s3 = concat(
