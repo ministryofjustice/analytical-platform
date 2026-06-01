@@ -4,7 +4,7 @@
 
 module "network_acl" {
   source  = "terraform-aws-modules/network-acls/aws"
-  version = "2.0.0"
+  version = "1.0.0"
 
   name   = "${var.environment}-vpc-nacl"
   vpc_id = module.vpc.vpc_id
