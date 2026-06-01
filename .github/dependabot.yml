@@ -34,8 +34,6 @@ updates:
       prefix: ":dependabot: pip"
       include: "scope"
     directories:
-      - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
-      - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
   - package-ecosystem: "terraform"
     schedule:
       interval: "daily"
