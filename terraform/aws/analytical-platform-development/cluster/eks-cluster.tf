@@ -100,7 +100,7 @@ module "eks" {
 }
 
 resource "aws_security_group" "allow_karpenter_communication" {
-  #checkov:skip=CKV2_AWS_5: skip not atttached to ec2
+  #checkov:skip=CKV2_AWS_5: skip not attached to ec2
   description = " allows karpenter nodes  to communicate with infrastructure"
   vpc_id      = module.vpc.vpc_id
 }

@@ -45,7 +45,7 @@ resource "aws_security_group" "aps" {
 ##################################################
 
 resource "aws_security_group" "controlplane" {
-  #checkov:skip=CKV2_AWS_5: skip not atttached to ec2
+  #checkov:skip=CKV2_AWS_5: skip not attached to ec2
   name        = "cluster_security_group"
   description = "control plane ingress"
   vpc_id      = module.vpc.vpc_id
