@@ -14,8 +14,10 @@ module "eks" {
   vpc_id  = module.vpc.vpc_id
   subnets = module.vpc.private_subnets
 
-  cluster_endpoint_private_access = true
-  cluster_enabled_log_types       = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  cluster_endpoint_private_access      = true
+  cluster_endpoint_public_access       = true
+  cluster_endpoint_public_access_cidrs = var.moj_vpn_cidrs
+  cluster_enabled_log_types            = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   cluster_encryption_config = [
     {
       provider_key_arn = aws_kms_key.eks.arn
