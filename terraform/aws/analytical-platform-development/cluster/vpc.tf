@@ -26,6 +26,43 @@ module "vpc" {
   create_flow_log_cloudwatch_log_group            = true
   flow_log_cloudwatch_log_group_retention_in_days = 400
 
+  # Manage default NACL and apply VPN restrictions
+  manage_default_network_acl = true
+
+  default_network_acl_ingress = concat(
+    [
+      {
+        rule_no    = 100
+        action     = "allow"
+        from_port  = 0
+        to_port    = 0
+        protocol   = "-1"
+        cidr_block = var.vpc_cidr
+      }
+    ],
+    [
+      for index, cidr in var.moj_vpn_cidrs : {
+        rule_no    = 200 + index
+        action     = "allow"
+        from_port  = 0
+        to_port    = 0
+        protocol   = "-1"
+        cidr_block = cidr
+      }
+    ]
+  )
+
+  default_network_acl_egress = [
+    {
+      rule_no    = 100
+      action     = "allow"
+      from_port  = 0
+      to_port    = 0
+      protocol   = "-1"
+      cidr_block = "0.0.0.0/0"
+    }
+  ]
+
   public_subnet_tags = {
     "kubernetes.io/cluster/${local.eks_cluster_name}" = "shared"
     "kubernetes.io/role/elb"                          = "1"
