@@ -29,31 +29,28 @@ updates:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
-    cooldown:
-      default-days: 7
     commit-message:
       prefix: ":dependabot: devcontainers"
       include: "scope"
 
+  - package-ecosystem: "terraform"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 15
+    commit-message:
+      prefix: ":dependabot: terraform"
+      include: "scope"
+    directories:
 EOL
 
 echo "=== Ecosystem: terraform ==="
 
 SEARCH_PATTERN=".terraform.lock.hcl"
 SKIP_FILE=".dependabot-terraform-ignore"
-
-printf "  - package-ecosystem: \"terraform\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-printf "    schedule:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-printf "      interval: \"daily\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-printf "      time: \"09:00\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-printf "      timezone: \"Europe/London\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-printf "    cooldown:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-printf "      default-days: 7\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-printf "    open-pull-requests-limit: 15\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-printf "    commit-message:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-printf "      prefix: \":dependabot: terraform\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-printf "      include: \"scope\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-printf "    directories:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
 
 folders=$(find . -type f -name "${SEARCH_PATTERN}" -exec dirname {} \; | LC_ALL=C sort | uniq | cut -c 3-)
 export folders
