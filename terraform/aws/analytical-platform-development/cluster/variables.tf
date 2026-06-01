@@ -57,7 +57,7 @@ variable "vpc_database_subnets" {
 
 variable "moj_vpn_cidrs" {
   type        = list(string)
-  description = "List of MoJ VPN CIDR blocks allowed to access all subnets via Network ACL"
+  description = "List of MoJ VPN CIDR blocks allowed to access the EKS cluster public endpoint"
   default     = []
 }
 
