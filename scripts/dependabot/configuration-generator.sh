@@ -55,7 +55,7 @@ for package_ecosystem in terraform; do
   printf "    directories:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
 
 
-  folders=$(find . -type f -name "${SEARCH_PATTERN}" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
+  folders=$(find . -type f -name "${SEARCH_PATTERN}" -exec dirname {} \; | LC_ALL=C sort | uniq | cut -c 3-)
   export folders
 
   echo "=== Folders ==="
