@@ -34,8 +34,6 @@ updates:
       prefix: ":dependabot: pip"
       include: "scope"
     directories:
-      - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
-      - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
   - package-ecosystem: "terraform"
     schedule:
       interval: "daily"
@@ -50,6 +48,7 @@ updates:
       - "terraform/auth0/dev-analytics-moj"
       - "terraform/auth0/ministryofjustice-data-platform"
       - "terraform/auth0/ministryofjustice-data-platform-development"
+      - "terraform/aws/analytical-platform/baseline"
       - "terraform/aws/analytical-platform-data-engineering-production/data-engineering-pipelines"
       - "terraform/aws/analytical-platform-data-engineering-production/dms-dev"
       - "terraform/aws/analytical-platform-data-engineering-production/dms-preprod"
@@ -90,9 +89,8 @@ updates:
       - "terraform/aws/analytical-platform-development/tooling-iam"
       - "terraform/aws/analytical-platform-management-production/aws-secrets-manager"
       - "terraform/aws/analytical-platform-management-production/terraform-state"
-      - "terraform/aws/analytical-platform-production/route53"
-      - "terraform/aws/analytical-platform/baseline"
       - "terraform/aws/analytical-platform/oidc"
+      - "terraform/aws/analytical-platform-production/route53"
       - "terraform/cloud-platform/live/analytical-platform-development/grafana"
       - "terraform/cloud-platform/live/analytical-platform-production/observability"
       - "terraform/pagerduty"
