@@ -29,6 +29,8 @@ updates:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
+    cooldown:
+      default-days: 7
     commit-message:
       prefix: ":dependabot: devcontainers"
       include: "scope"
