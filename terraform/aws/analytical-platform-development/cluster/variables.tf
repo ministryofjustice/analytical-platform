@@ -55,6 +55,12 @@ variable "vpc_database_subnets" {
   description = "List of database subnets"
 }
 
+variable "moj_vpn_cidrs" {
+  type        = list(string)
+  description = "List of MoJ VPN CIDR blocks allowed to access private subnets via NACL"
+  default     = []
+}
+
 variable "nat_gateway_bandwidth_alarm_threshold" {
   type        = number
   description = "Threshold value of how much bandwidth should trigger alert"

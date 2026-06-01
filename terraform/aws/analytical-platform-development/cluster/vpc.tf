@@ -26,6 +26,38 @@ module "vpc" {
   create_flow_log_cloudwatch_log_group            = true
   flow_log_cloudwatch_log_group_retention_in_days = 400
 
+  private_dedicated_network_acl = true
+  private_inbound_acl_rules = concat(
+    [
+      {
+        rule_number = 100
+        rule_action = "allow"
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_block  = var.vpc_cidr
+      }
+    ],
+    [for index, cidr in var.moj_vpn_cidrs : {
+      rule_number = 200 + index
+      rule_action = "allow"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_block  = cidr
+    }]
+  )
+  private_outbound_acl_rules = [
+    {
+      rule_number = 100
+      rule_action = "allow"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_block  = "0.0.0.0/0"
+    }
+  ]
+
   public_subnet_tags = {
     "kubernetes.io/cluster/${local.eks_cluster_name}" = "shared"
     "kubernetes.io/role/elb"                          = "1"
