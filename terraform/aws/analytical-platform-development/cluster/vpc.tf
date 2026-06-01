@@ -42,7 +42,7 @@ module "vpc" {
     ],
     [
       for index, cidr in var.moj_vpn_cidrs : {
-        rule_no    = 200 + index
+        rule_no    = 101 + index
         action     = "allow"
         from_port  = 0
         to_port    = 0
