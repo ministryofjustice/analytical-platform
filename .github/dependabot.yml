@@ -24,16 +24,6 @@ updates:
     commit-message:
       prefix: ":dependabot: devcontainers"
       include: "scope"
-  - package-ecosystem: "pip"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    open-pull-requests-limit: 15
-    commit-message:
-      prefix: ":dependabot: pip"
-      include: "scope"
-    directories:
   - package-ecosystem: "terraform"
     schedule:
       interval: "daily"

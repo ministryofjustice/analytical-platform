@@ -32,15 +32,11 @@ updates:
       include: "scope"
 EOL
 
-for package_ecosystem in pip terraform; do
+for package_ecosystem in terraform; do
 
   echo "=== Ecosystem: ${package_ecosystem} ==="
 
   case ${package_ecosystem} in
-    pip)
-      SEARCH_PATTERN="*requirements*.txt"
-      SKIP_FILE=".dependabot-pip-ignore"
-    ;;
     terraform)
       SEARCH_PATTERN=".terraform.lock.hcl"
       SKIP_FILE=".dependabot-terraform-ignore"
