@@ -20,7 +20,7 @@ permissions: read-all
 jobs:
   detect-changes:
     name: Detect Changes
-    runs-on: ubuntu-latest
+    runs-on: octo-production
     permissions:
       contents: read
       pull-requests: read
