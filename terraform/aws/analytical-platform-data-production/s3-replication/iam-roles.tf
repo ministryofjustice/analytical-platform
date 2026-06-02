@@ -11,19 +11,3 @@ resource "aws_iam_role_policy_attachment" "replication" {
   role       = aws_iam_role.replication[each.key].name
   policy_arn = aws_iam_policy.replication[each.key].arn
 }
-
-
-moved {
-  from = aws_iam_role.alpha_mojap_ho_data_transfer_replication
-  to   = aws_iam_role.replication["test"]
-}
-
-moved {
-  from = aws_iam_policy.alpha_mojap_ho_data_transfer_replication
-  to   = aws_iam_policy.replication["test"]
-}
-
-moved {
-  from = aws_iam_role_policy_attachment.alpha_mojap_ho_data_transfer_replication
-  to   = aws_iam_role_policy_attachment.replication["test"]
-}

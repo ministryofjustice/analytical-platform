@@ -44,38 +44,3 @@ module "replication_buckets" {
     }
   ]
 }
-
-moved {
-  from = module.alpha_mojap_ho_data_transfer_test
-  to   = module.replication_buckets["test"]
-}
-
-moved {
-  from = module.alpha_mojap_ho_data_transfer.aws_s3_bucket.this[0]
-  to   = module.replication_buckets["production"].aws_s3_bucket.this[0]
-}
-
-import {
-  to = module.replication_buckets["production"].aws_s3_bucket_lifecycle_configuration.this[0]
-  id = "alpha-mojap-ho-data-transfer"
-}
-
-import {
-  to = module.replication_buckets["production"].aws_s3_bucket_server_side_encryption_configuration.this[0]
-  id = "alpha-mojap-ho-data-transfer"
-}
-
-import {
-  to = module.replication_buckets["production"].aws_s3_bucket_versioning.this[0]
-  id = "alpha-mojap-ho-data-transfer"
-}
-
-import {
-  to = module.replication_buckets["production"].aws_s3_bucket_logging.this[0]
-  id = "alpha-mojap-ho-data-transfer"
-}
-
-import {
-  to = module.replication_buckets["production"].aws_s3_bucket_public_access_block.this[0]
-  id = "alpha-mojap-ho-data-transfer"
-}
