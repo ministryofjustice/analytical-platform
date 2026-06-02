@@ -42,7 +42,7 @@ vpc_database_subnets = ["10.69.0.0/28", "10.69.0.16/28", "10.69.0.32/28"]
 moj_vpn_cidrs = [
   "128.77.75.64/26",  # Prisma Corporate
   "35.176.93.186/32", # GlobalProtect (Alpha)
-  "20.58.27.30/32",   # Github Runner
+  "20.58.27.30/32",   # GitHub Runner (octo-production)
   # Sites
   "213.121.161.112/28", # 102PF
   "51.149.2.0/24"       # 10SC
