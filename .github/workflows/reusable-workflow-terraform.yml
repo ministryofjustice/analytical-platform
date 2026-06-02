@@ -256,7 +256,7 @@ jobs:
           terraform validate -no-color
 
       - name: Grant Runner Access to EKS Endpoint
-        if: github.ref == 'refs/heads/main' && endsWith(inputs.component, '-cluster')
+        if: endsWith(inputs.component, '-cluster')
         id: grant_runner_eks_access
         shell: bash
         run: |
@@ -424,7 +424,7 @@ jobs:
           terraform apply -input=false -auto-approve -no-color plan.tfplan
 
       - name: Revoke Runner Access to EKS Endpoint
-        if: always() && github.ref == 'refs/heads/main' && endsWith(inputs.component, '-cluster') && steps.grant_runner_eks_access.outcome == 'success'
+        if: always() && endsWith(inputs.component, '-cluster') && steps.grant_runner_eks_access.outcome == 'success'
         id: revoke_runner_eks_access
         shell: bash
         run: |
