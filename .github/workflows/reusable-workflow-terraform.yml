@@ -255,6 +255,13 @@ jobs:
         run: |
           terraform validate -no-color
 
+      - name: Grant Runner Access to EKS Endpoint
+        if: github.ref == 'refs/heads/main' && endsWith(inputs.component, '-cluster')
+        id: grant_runner_eks_access
+        shell: bash
+        run: |
+          bash "${GITHUB_WORKSPACE}/scripts/eks/runner-endpoint-access.sh" allow "${{ env.working-directory }}"
+
       - name: Plan Terraform
         id: terraform_plan
         working-directory: ${{ env.working-directory }}
@@ -415,6 +422,13 @@ jobs:
         shell: bash
         run: |
           terraform apply -input=false -auto-approve -no-color plan.tfplan
+
+      - name: Revoke Runner Access to EKS Endpoint
+        if: always() && github.ref == 'refs/heads/main' && endsWith(inputs.component, '-cluster') && steps.grant_runner_eks_access.outcome == 'success'
+        id: revoke_runner_eks_access
+        shell: bash
+        run: |
+          bash "${GITHUB_WORKSPACE}/scripts/eks/runner-endpoint-access.sh" revoke "${{ env.working-directory }}"
 
       - name: Extract PR number from commit message
         if: failure() && steps.terraform_apply.outcome == 'failure'
