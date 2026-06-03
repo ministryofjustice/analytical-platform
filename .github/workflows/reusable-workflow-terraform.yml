@@ -400,13 +400,46 @@ jobs:
         with:
           github-token: ${{ env.GITHUB_ROBOT_TOKEN }}
           script: |
-            github.rest.pulls.createReview({
+            await github.rest.pulls.createReview({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
-              body: 'Automatically approving as no changes were detected in the Terraform plan, and the pull request was raised by Dependabot.\n\n@dependabot merge 🤖 🤝 🤖',
+              body: 'Automatically approving as no changes were detected in the Terraform plan, and the pull request was raised by Dependabot.',
               event: 'APPROVE'
             })
+
+      - name: Enable Auto-merge for Dependabot
+        if: (github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]' && (contains(steps.terraform_plan.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.terraform_plan.outputs.stdout, 'No changes. Infrastructure is up-to-date.')))
+        id: enable_auto_merge
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          github-token: ${{ env.GITHUB_ROBOT_TOKEN }}
+          script: |
+            const { data: pullRequest } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            })
+
+            if (pullRequest.auto_merge) {
+              console.log('Auto-merge is already enabled for this pull request')
+              return
+            }
+
+            await github.graphql(
+              `mutation EnablePullRequestAutoMerge($pullRequestId: ID!) {
+                enablePullRequestAutoMerge(input: {pullRequestId: $pullRequestId, mergeMethod: SQUASH}) {
+                  pullRequest {
+                    number
+                  }
+                }
+              }`,
+              {
+                pullRequestId: context.payload.pull_request.node_id,
+              }
+            )
+
+            console.log('Enabled GitHub native auto-merge for Dependabot pull request')
 
       - name: Apply Terraform
         if: github.ref == 'refs/heads/main'
