@@ -11,6 +11,8 @@ updates:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
+    cooldown:
+      default-days: 7
     commit-message:
       prefix: ":dependabot: github-actions"
       include: "scope"
@@ -21,26 +23,19 @@ updates:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
+    cooldown:
+      default-days: 7
     commit-message:
       prefix: ":dependabot: devcontainers"
       include: "scope"
-  - package-ecosystem: "pip"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    open-pull-requests-limit: 15
-    commit-message:
-      prefix: ":dependabot: pip"
-      include: "scope"
-    directories:
-      - "terraform/aws/analytical-platform-data-production/airflow/files/dev"
-      - "terraform/aws/analytical-platform-data-production/airflow/files/prod"
+
   - package-ecosystem: "terraform"
     schedule:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 15
     commit-message:
       prefix: ":dependabot: terraform"
