@@ -16,7 +16,7 @@ module "eks" {
 
   cluster_endpoint_private_access      = true
   cluster_endpoint_public_access       = true
-  cluster_endpoint_public_access_cidrs = var.moj_vpn_cidrs
+  cluster_endpoint_public_access_cidrs = var.moj_cidrs
   cluster_enabled_log_types            = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   cluster_encryption_config = [
     {
