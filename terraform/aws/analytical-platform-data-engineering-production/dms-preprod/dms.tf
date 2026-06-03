@@ -18,7 +18,7 @@ module "preprod_dms_oasys" {
     engine_version             = "3.5.4"
     kms_key_arn                = module.dms_preprod_kms.key_arn
     multi_az                   = false
-    replication_instance_class = "dms.t3.medium"
+    replication_instance_class = "dms.r6i.2xlarge"
     inbound_cidr               = "192.0.2.0/32" # test unassigned
     apply_immediately          = true
   }
@@ -47,6 +47,17 @@ module "preprod_dms_oasys" {
 
   glue_catalog_arn      = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
+
+  independent_full_loads = {
+    oasys_preprod_set_table = {
+      full_load_name = "oasys-set-table"
+
+      path = {
+        bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
+        key    = "preprod/oasys/oasys_preprod_set_table_mapping.json"
+      }
+    }
+  }
 }
 
 module "preprod_dms_delius" {
