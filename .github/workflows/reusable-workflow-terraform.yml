@@ -255,6 +255,15 @@ jobs:
         run: |
           terraform validate -no-color
 
+      - name: Check Runner Egress IP
+        id: check_runner_egress_ip
+        shell: bash
+        run: |
+          echo "Runner egress IP as seen by AWS:"
+          for i in {1..10}; do
+            curl --silent --fail https://checkip.amazonaws.com
+          done | sort --unique
+
       - name: Plan Terraform
         id: terraform_plan
         working-directory: ${{ env.working-directory }}
