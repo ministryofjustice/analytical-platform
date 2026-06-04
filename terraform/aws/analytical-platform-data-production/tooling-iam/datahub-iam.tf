@@ -136,8 +136,7 @@ data "aws_iam_policy_document" "datahub_ingestion_github_actions_s3_read_all_buc
     effect = "Allow"
     actions = [
       "s3:ListBucket",
-      "s3:GetBucketLocation",
-      "s3:GetObject"
+      "s3:GetBucketLocation"
     ]
     resources = [
       "arn:aws:s3:::*",
