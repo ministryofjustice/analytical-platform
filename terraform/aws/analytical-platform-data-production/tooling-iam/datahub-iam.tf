@@ -129,10 +129,10 @@ resource "aws_iam_role_policy_attachment" "datahub_ingestion_github_actions_athe
 }
 
 #trivy:ignore:aws-iam-no-policy-wildcards
-# Reading all Glue buckets for finding the latest file timestamp so that analysts can see the correct timestamp.
-data "aws_iam_policy_document" "datahub_ingestion_github_actions_s3_read_all_buckets" {
+# Listing all Glue buckets for finding the latest file timestamp so that analysts can see the correct timestamp.
+data "aws_iam_policy_document" "datahub_ingestion_github_actions_s3_list_all_buckets" {
   statement {
-    sid    = "datahubIngestionGithubActionsS3ReadAllBuckets"
+    sid    = "datahubIngestionGithubActionsS3ListAllBuckets"
     effect = "Allow"
     actions = [
       "s3:ListBucket",
@@ -145,13 +145,13 @@ data "aws_iam_policy_document" "datahub_ingestion_github_actions_s3_read_all_buc
   }
 }
 
-resource "aws_iam_policy" "datahub_ingestion_github_actions_s3_read_all_buckets" {
-  name   = "datahub_ingestion_github_actions_s3_read_all_buckets"
-  policy = data.aws_iam_policy_document.datahub_ingestion_github_actions_s3_read_all_buckets.json
+resource "aws_iam_policy" "datahub_ingestion_github_actions_s3_list_all_buckets" {
+  name   = "datahub_ingestion_github_actions_s3_list_all_buckets"
+  policy = data.aws_iam_policy_document.datahub_ingestion_github_actions_s3_list_all_buckets.json
 }
 
-resource "aws_iam_role_policy_attachment" "datahub_ingestion_github_actions_s3_read_all_buckets" {
-  policy_arn = aws_iam_policy.datahub_ingestion_github_actions_s3_read_all_buckets.arn
+resource "aws_iam_role_policy_attachment" "datahub_ingestion_github_actions_s3_list_all_buckets" {
+  policy_arn = aws_iam_policy.datahub_ingestion_github_actions_s3_list_all_buckets.arn
   role       = aws_iam_role.datahub_ingestion_github_actions.name
 }
 
