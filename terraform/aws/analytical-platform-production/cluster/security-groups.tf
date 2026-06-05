@@ -11,6 +11,7 @@ resource "aws_security_group" "efs" {
     to_port     = 2049
     protocol    = "tcp"
     cidr_blocks = var.vpc_private_subnets
+    description = "EFS security group to allow access to home directories"
   }
 }
 
