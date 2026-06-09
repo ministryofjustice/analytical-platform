@@ -7,7 +7,9 @@ on: # yamllint disable-line rule:truthy
       - reopened
       - synchronize
       - labeled
-  check_suite:
+  workflow_run:
+    workflows:
+      - Terraform
     types:
       - completed
 
@@ -36,10 +38,25 @@ jobs:
               pullRequestNumbers.push(context.payload.pull_request.number)
             }
 
-            if (context.eventName === 'check_suite') {
-              for (const pullRequest of context.payload.check_suite.pull_requests || []) {
-                pullRequestNumbers.push(pullRequest.number)
+            if (context.eventName === 'workflow_run') {
+              if (context.payload.workflow_run.event !== 'pull_request') {
+                console.log('Skipping workflow_run event because it was not triggered by a pull request')
+                return
               }
+
+              if (context.payload.workflow_run.conclusion !== 'success') {
+                console.log('Skipping workflow_run event because the Terraform workflow did not succeed')
+                return
+              }
+
+              const workflowRunPullRequest = context.payload.workflow_run.pull_requests?.[0]
+
+              if (!workflowRunPullRequest) {
+                console.log('No pull request linked to this Terraform workflow run')
+                return
+              }
+
+              pullRequestNumbers.push(workflowRunPullRequest.number)
             }
 
             const uniquePullRequestNumbers = [...new Set(pullRequestNumbers)]
