@@ -2,18 +2,13 @@ name: Dependabot Auto-merge
 
 on: # yamllint disable-line rule:truthy
   pull_request_target:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - labeled
   workflow_run:
     workflows:
       - Terraform
     types:
       - completed
 
-permissions: read-all
+permissions: {}
 
 jobs:
   dependabot-auto-merge:
