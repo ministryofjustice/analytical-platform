@@ -168,7 +168,7 @@ jobs:
   terraform:
     needs: [determine-workflow-mode]
     name: ${{ needs.determine-workflow-mode.outputs.mode }}
-    runs-on: ubuntu-latest
+    runs-on: octo-production
     steps:
       - name: Checkout
         id: checkout
