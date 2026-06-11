@@ -11,6 +11,7 @@ resource "aws_security_group" "efs" {
     to_port     = 2049
     protocol    = "tcp"
     cidr_blocks = var.vpc_private_subnets
+    description = "EFS security group to allow access to home directories"
   }
 }
 
@@ -27,12 +28,14 @@ resource "aws_security_group" "aps" {
     to_port         = 443
     protocol        = "tcp"
     security_groups = [module.eks.worker_security_group_id]
+    description     = "allow EKS cluster to access VPC endpoint for managed prometheus"
   }
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.vpc_cidr]
+    description = "allow EKS cluster to access VPC endpoint for managed prometheus"
   }
 }
 
