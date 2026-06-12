@@ -70,7 +70,7 @@ module "datasync_laa_kms" {
           identifiers = ["s3.amazonaws.com"]
         }
       ]
-      conditions = [{
+      condition = [{
         test     = "StringEquals"
         variable = "aws:SourceAccount"
         values   = [var.account_ids["analytical-platform-data-production"]]

@@ -112,9 +112,13 @@ locals {
     prod_dev = module.datalake_prod_dev.bucket.arn
   }
 
+  raw_databases = ["ppud_dev", "ppud_preprod", "ppud_prod"]
+
   curated_databases = ["ppud_dev_dbt", "ppud_preprod_dbt", "ppud"]
 
-  derived_databases = ["public_protection_int_prod_dev_dbt", "stg_ppud_prod_dev_dbt"]
+  derived_databases = ["stg_ppud_prod_dev_dbt"]
+
+  derived_databases_prod = ["stg_ppud"]
 }
 
 resource "aws_lakeformation_resource" "probation_data_buckets" {
@@ -141,9 +145,35 @@ resource "aws_lakeformation_permissions" "probation_datalake_data_location" {
 # ------------------------------------------------------------------------
 # Lake Formation - grant permissions
 # ------------------------------------------------------------------------
+resource "aws_lakeformation_opt_in" "probation_datalake_view_databases" {
+  for_each = toset(concat(local.curated_databases, local.raw_databases, local.derived_databases_prod))
+
+  principal {
+    data_lake_principal_identifier = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+  }
+
+  resource_data {
+    database {
+      name       = each.value
+      catalog_id = "189157455002"
+    }
+  }
+}
+
+resource "aws_lakeformation_permissions" "probation_datalake_view_databases" {
+  for_each = toset(concat(local.curated_databases, local.raw_databases, local.derived_databases_prod))
+
+  permissions = ["DESCRIBE"]
+  principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+
+  database {
+    name       = each.value
+    catalog_id = "189157455002"
+  }
+}
 
 resource "aws_lakeformation_opt_in" "probation_datalake_curated" {
-  for_each = toset(local.curated_databases)
+  for_each = toset(concat(local.curated_databases, local.derived_databases_prod))
 
   principal {
     data_lake_principal_identifier = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
@@ -158,7 +188,7 @@ resource "aws_lakeformation_opt_in" "probation_datalake_curated" {
 }
 
 resource "aws_lakeformation_permissions" "probation_datalake_curated" {
-  for_each = toset(local.curated_databases)
+  for_each = toset(concat(local.curated_databases, local.derived_databases_prod))
 
   permissions = ["SELECT", "DESCRIBE"]
   principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
@@ -167,6 +197,33 @@ resource "aws_lakeformation_permissions" "probation_datalake_curated" {
     database_name = each.value
     wildcard      = true
     catalog_id    = "189157455002"
+  }
+}
+
+resource "aws_lakeformation_opt_in" "probation_datalake_databases_derived" {
+  for_each = toset(local.derived_databases)
+
+  principal {
+    data_lake_principal_identifier = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+  }
+
+  resource_data {
+    database {
+      name       = each.value
+      catalog_id = "189157455002"
+    }
+  }
+}
+
+resource "aws_lakeformation_permissions" "probation_datalake_databases_derived" {
+  for_each = toset(local.derived_databases)
+
+  permissions = ["CREATE_TABLE", "DESCRIBE"]
+  principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
+
+  database {
+    name       = each.value
+    catalog_id = "189157455002"
   }
 }
 
@@ -182,18 +239,6 @@ resource "aws_lakeformation_opt_in" "probation_datalake_derived" {
       wildcard      = true
       catalog_id    = "189157455002"
     }
-  }
-}
-
-resource "aws_lakeformation_permissions" "probation_datalake_databases_derived" {
-  for_each = toset(local.derived_databases)
-
-  permissions = ["CREATE_TABLE", "DESCRIBE"]
-  principal   = data.aws_iam_role.aws_sso_mp_analytics_eng.arn
-
-  database {
-    name       = each.value
-    catalog_id = "189157455002"
   }
 }
 
