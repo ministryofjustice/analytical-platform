@@ -400,12 +400,19 @@ jobs:
         with:
           github-token: ${{ env.GITHUB_ROBOT_TOKEN }}
           script: |
-            github.rest.pulls.createReview({
+            await github.rest.pulls.createReview({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
-              body: 'Automatically approving as no changes were detected in the Terraform plan, and the pull request was raised by Dependabot.\n\n@dependabot merge 🤖 🤝 🤖',
+              body: 'Automatically approving as no changes were detected in the Terraform plan, and the pull request was raised by Dependabot.',
               event: 'APPROVE'
+            })
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: ['auto-merge-dependabot'],
             })
 
       - name: Apply Terraform
