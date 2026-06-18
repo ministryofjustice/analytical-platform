@@ -22,7 +22,7 @@ jobs:
         id: merge_eligible_dependabot_pull_requests
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
-          github-token: ${{ secrets.GITHUB_ROBOT_TOKEN }}
+          github-token: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
           script: |
             const owner = context.repo.owner
             const repo = context.repo.repo
