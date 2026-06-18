@@ -1,8 +1,8 @@
 name: Dependabot Auto-merge
-
+# zizmor: ignore[dangerous-triggers] -- This workflow never checks out or executes pull request code; it only performs guarded GitHub API merges for Dependabot-authored PRs.
 on: # yamllint disable-line rule:truthy
-  pull_request_target:
-  workflow_run:
+  pull_request_target: #zizmor: ignore[dangerous-triggers]
+  workflow_run: # zizmor: ignore[dangerous-triggers]
     workflows:
       - Terraform
     types:
@@ -22,7 +22,7 @@ jobs:
         id: merge_eligible_dependabot_pull_requests
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
-          github-token: ${{ secrets.GITHUB_ROBOT_TOKEN }}
+          github-token: ${{ env.GH_TOKEN }}
           script: |
             const owner = context.repo.owner
             const repo = context.repo.repo
@@ -115,3 +115,5 @@ jobs:
                 throw error
               }
             }
+        env:
+          GH_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }} # zizmor: ignore[secrets-outside-env] -- Dedicated Dependabot bot token is required for authenticated merge API calls.
