@@ -20,6 +20,7 @@ jobs:
       contents: read
       packages: read
       statuses: write
+      pull-requests: write
     uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-super-linter.yml@f3b2ed398ec5c17e2f59d983bc01c79c73632246 # v7.3.0
     with:
       # VALIDATE_KUBERNETES_KUBECONFORM is set to false as it cannot process Helm charts
