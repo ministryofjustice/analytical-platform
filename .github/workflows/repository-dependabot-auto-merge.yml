@@ -1,0 +1,117 @@
+name: Dependabot Auto-merge
+
+on: # yamllint disable-line rule:truthy
+  pull_request_target:
+  workflow_run:
+    workflows:
+      - Terraform
+    types:
+      - completed
+
+permissions: {}
+
+jobs:
+  dependabot-auto-merge:
+    name: Dependabot Auto-merge
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Merge eligible Dependabot pull requests
+        id: merge_eligible_dependabot_pull_requests
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_ROBOT_TOKEN }}
+          script: |
+            const owner = context.repo.owner
+            const repo = context.repo.repo
+
+            const pullRequestNumbers = []
+
+            if (context.eventName === 'pull_request_target') {
+              pullRequestNumbers.push(context.payload.pull_request.number)
+            }
+
+            if (context.eventName === 'workflow_run') {
+              if (context.payload.workflow_run.event !== 'pull_request') {
+                console.log('Skipping workflow_run event because it was not triggered by a pull request')
+                return
+              }
+
+              if (context.payload.workflow_run.conclusion !== 'success') {
+                console.log('Skipping workflow_run event because the Terraform workflow did not succeed')
+                return
+              }
+
+              const workflowRunPullRequest = context.payload.workflow_run.pull_requests?.[0]
+
+              if (!workflowRunPullRequest) {
+                console.log('No pull request linked to this Terraform workflow run')
+                return
+              }
+
+              pullRequestNumbers.push(workflowRunPullRequest.number)
+            }
+
+            const uniquePullRequestNumbers = [...new Set(pullRequestNumbers)]
+
+            if (uniquePullRequestNumbers.length === 0) {
+              console.log('No pull requests linked to this event')
+              return
+            }
+
+            for (const pullNumber of uniquePullRequestNumbers) {
+              const { data: pullRequest } = await github.rest.pulls.get({
+                owner,
+                repo,
+                pull_number: pullNumber,
+              })
+
+              if (pullRequest.state !== 'open') {
+                console.log(`Skipping #${pullNumber}: pull request is not open`)
+                continue
+              }
+
+              if (pullRequest.user?.login !== 'dependabot[bot]') {
+                console.log(`Skipping #${pullNumber}: pull request is not opened by Dependabot`)
+                continue
+              }
+
+              const { data: labels } = await github.rest.issues.listLabelsOnIssue({
+                owner,
+                repo,
+                issue_number: pullNumber,
+              })
+
+              const hasAutoMergeLabel = labels.some(label => label.name === 'auto-merge-dependabot')
+
+              if (!hasAutoMergeLabel) {
+                console.log(`Skipping #${pullNumber}: missing auto-merge-dependabot label`)
+                continue
+              }
+
+              try {
+                const { data: mergeResult } = await github.rest.pulls.merge({
+                  owner,
+                  repo,
+                  pull_number: pullNumber,
+                  merge_method: 'squash',
+                  sha: pullRequest.head.sha,
+                })
+
+                if (mergeResult.merged) {
+                  console.log(`Merged #${pullNumber}: ${mergeResult.message}`)
+                } else {
+                  console.log(`Did not merge #${pullNumber}: ${mergeResult.message}`)
+                }
+              } catch (error) {
+                const status = error.status || error.response?.status
+                if (status === 405 || status === 409 || status === 422) {
+                  console.log(`Merge not ready for #${pullNumber}. The workflow will retry on a later event.`)
+                  continue
+                }
+
+                throw error
+              }
+            }
