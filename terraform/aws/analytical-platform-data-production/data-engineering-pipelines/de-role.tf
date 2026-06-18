@@ -82,8 +82,15 @@ module "data_engineering_reset_access_role" {
       ]
       principals = [{
         type        = "AWS"
-        identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/alpha_user_gwionap"]
+        identifiers = ["arn:aws:iam::281525601122:user/xf1r1000-s"] # reset snowflake user
       }]
+      condition = [
+        {
+          test     = "StringEquals"
+          variable = "sts:ExternalId"
+          values   = ["XT78565_SFCRole=153_t57DnWacgW6/QLEOSfMVFF1TKBQ="]
+        }
+      ]
     }
   }
 

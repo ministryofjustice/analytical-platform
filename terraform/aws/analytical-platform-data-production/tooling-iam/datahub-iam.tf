@@ -123,6 +123,38 @@ resource "aws_iam_role_policy_attachment" "datahub_ingestion_github_actions" {
   role       = aws_iam_role.datahub_ingestion_github_actions.name
 }
 
+resource "aws_iam_role_policy_attachment" "datahub_ingestion_github_actions_athena_datasets" {
+  policy_arn = aws_iam_policy.datahub_ingest_athena_datasets.arn
+  role       = aws_iam_role.datahub_ingestion_github_actions.name
+}
+
+#trivy:ignore:aws-iam-no-policy-wildcards
+# Listing all Glue buckets for finding the latest file timestamp so that analysts can see the correct timestamp.
+data "aws_iam_policy_document" "datahub_ingestion_github_actions_s3_list_all_buckets" {
+  statement {
+    sid    = "datahubIngestionGithubActionsS3ListAllBuckets"
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket",
+      "s3:GetBucketLocation"
+    ]
+    resources = [
+      "arn:aws:s3:::*",
+      "arn:aws:s3:::*/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "datahub_ingestion_github_actions_s3_list_all_buckets" {
+  name   = "datahub_ingestion_github_actions_s3_list_all_buckets"
+  policy = data.aws_iam_policy_document.datahub_ingestion_github_actions_s3_list_all_buckets.json
+}
+
+resource "aws_iam_role_policy_attachment" "datahub_ingestion_github_actions_s3_list_all_buckets" {
+  policy_arn = aws_iam_policy.datahub_ingestion_github_actions_s3_list_all_buckets.arn
+  role       = aws_iam_role.datahub_ingestion_github_actions.name
+}
+
 #trivy:ignore:avd-aws-0057:sensitive action 'glue:GetDatabases' on wildcarded resource
 data "aws_iam_policy_document" "datahub_ingest_glue_datasets" {
   statement {
@@ -133,9 +165,9 @@ data "aws_iam_policy_document" "datahub_ingest_glue_datasets" {
       "glue:GetTables"
     ]
     resources = [
-      "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:catalog",
-      "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:database/*",
-      "arn:aws:glue::${var.account_ids["analytical-platform-data-production"]}:table/*"
+      "arn:aws:glue:${data.aws_region.current.region}:${var.account_ids["analytical-platform-data-production"]}:catalog",
+      "arn:aws:glue:${data.aws_region.current.region}:${var.account_ids["analytical-platform-data-production"]}:database/*",
+      "arn:aws:glue:${data.aws_region.current.region}:${var.account_ids["analytical-platform-data-production"]}:table/*/*"
     ]
   }
 }

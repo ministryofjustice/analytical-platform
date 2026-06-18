@@ -7,7 +7,7 @@ locals {
         {
           name                         = "DE Daily Support Rota HEO_SEO"
           start                        = "2023-03-27T09:00:00Z"
-          rotation_virtual_start       = "2026-04-09T00:00:00+01:00"
+          rotation_virtual_start       = "2026-05-11T00:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
             module.users_de_seo["antony.scott@justice.gov.uk"].id,
@@ -21,6 +21,7 @@ locals {
             module.users_de_seo["khristiania.raihan@justice.gov.uk"].id,
             module.users_de_seo["mohammed.ahad1@justice.gov.uk"].id,
             module.users_de_seo["damilola.oyebade@justice.gov.uk"].id,
+            module.users_de_seo["anthony.fitzroy@justice.gov.uk"].id
           ]
           restrictions = [
             {
@@ -147,6 +148,11 @@ locals {
     {
       name  = "Anthony Cody"
       email = "anthony.cody@digital.justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Anthony Fitzroy"
+      email = "anthony.fitzroy@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -389,4 +395,9 @@ import {
 import {
   to = module.users_de_seo["thomas.hirsch@justice.gov.uk"].pagerduty_user.this
   id = "P1VK7W6"
+}
+
+import {
+  to = module.users_de_seo["anthony.fitzroy@justice.gov.uk"].pagerduty_user.this
+  id = "PEVNM41"
 }
