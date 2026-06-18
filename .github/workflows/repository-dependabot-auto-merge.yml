@@ -1,8 +1,8 @@
 name: Dependabot Auto-merge
-
+# zizmor: ignore[dangerous-triggers] -- This workflow never checks out or executes pull request code; it only performs guarded GitHub API merges for Dependabot-authored PRs.
 on: # yamllint disable-line rule:truthy
-  pull_request_target:
-  workflow_run:
+  pull_request_target: #zizmor: ignore[dangerous-triggers]
+  workflow_run: # zizmor: ignore[dangerous-triggers]
     workflows:
       - Terraform
     types:
