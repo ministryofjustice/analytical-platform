@@ -116,4 +116,4 @@ jobs:
               }
             }
         env:
-          GH_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }}
+          GH_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }} # zizmor: ignore[secrets-outside-env] -- Dedicated Dependabot bot token is required for authenticated merge API calls.
