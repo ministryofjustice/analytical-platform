@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+.Python
+venv/
+env/
+
+# Local dev
+.env
+.venv
+*.local
+
+# Flask (not needed in container)
+app.py
+
+# Lambda files (not needed)
+lambda_handler.py
+rest_handler.py
+deployment/
+
+# Tests & docs
+tests/
+notebooks/
+work_for_future/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Large files
+*.zip
+layer/
+package/
+
+data/
+.github/
+*.log

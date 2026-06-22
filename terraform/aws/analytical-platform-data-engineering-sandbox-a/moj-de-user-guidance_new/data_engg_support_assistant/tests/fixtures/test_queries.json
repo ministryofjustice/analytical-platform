@@ -1,0 +1,131 @@
+{
+  "test_scenarios": [
+    {
+      "id": "Q1_data_uploader",
+      "category": "how_to_multi_part",
+      "query": "On the topic of the data uploader. Is there a process to request the removal of an existing table? I have 2 tables that got data ingested and are now in Athena. But those tables changed during the latest designs review and now they are obsolete. How can I get those deleted? What is the process to request such action? Worth to highlight that the data stored in those tables is replaceable and there is no need to keep an archive of it",
+      "expected_behavior": {
+        "should_find_results": true,
+        "min_sources": 2,
+        "min_confidence": 0.75,
+        "must_contain_keywords": ["delete", "table", "athena", "process"],
+        "expected_filters_contain": ["Data Uploader", "Athena"],
+        "expected_strategy": "hybrid",
+        "expected_intent": "how_to"
+      },
+      "notes": "Complex multi-part question about table deletion process"
+    },
+    {
+      "id": "Q2_rstudio_error",
+      "category": "troubleshooting_error",
+      "query": "Good morning, all - I am unable to log into R Studio today (v4.5.1-1). I keep getting an error message that says 502 Bad Gateway or sometimes 504 Gateway Time-out. Nothing i try is resolving this problem: restarting the laptop; refreshing the webpage; clearing the browser cache. Some helpful advice would be much appreciated!",
+      "expected_behavior": {
+        "should_find_results": true,
+        "min_sources": 1,
+        "min_confidence": 0.50,
+        "must_contain_keywords": ["502", "504", "gateway", "rstudio"],
+        "expected_filters_contain": ["RStudio", "Troubleshooting"],
+        "expected_strategy": "filtered",
+        "expected_intent": "troubleshooting"
+      },
+      "notes": "Error-based troubleshooting with specific error codes"
+    },
+    {
+      "id": "Q3_quicksight_schema",
+      "category": "feature_question",
+      "query": "QuickSight question: I have changed the schema of my data in Athena. This doesn't automatically propagate to QuickSight. Is there a way of updating the schema of QS datasets, without having to delete and readd datasets? We do not use SPICE yet. My understanding is that a view is taken of the data, so perhaps the data source configuration can be kicked for our views to reload the schema?",
+      "expected_behavior": {
+        "should_find_results": true,
+        "min_sources": 1,
+        "min_confidence": 0.50,
+        "must_contain_keywords": ["quicksight", "athena", "schema", "refresh"],
+        "expected_filters_contain": ["quicksight", "Athena"],
+        "expected_strategy": "filtered",
+        "expected_intent": "how_to"
+      },
+      "notes": "Feature question about schema propagation across tools"
+    },
+    {
+      "id": "Q4_ambiguous",
+      "category": "edge_case_ambiguous",
+      "query": "It's not working, help!",
+      "expected_behavior": {
+        "should_find_results": false,
+        "min_confidence": 0.0,
+        "max_confidence": 0.60,
+        "expected_strategy": "broad",
+        "expected_intent": "unclear"
+      },
+      "notes": "Ambiguous query - should trigger broad strategy"
+    },
+    {
+      "id": "Q5_empty",
+      "category": "edge_case_empty",
+      "query": "",
+      "expected_behavior": {
+        "should_find_results": false,
+        "should_handle_gracefully": true,
+        "validation_issues_expected": true,
+        "max_confidence": 0.0,
+        "expected_strategy": "broad",
+        "expected_intent": "unclear"
+      },
+      "notes": "Empty query - should handle gracefully"
+    },
+    {
+      "id": "Q6_gibberish",
+      "category": "edge_case_gibberish",
+      "query": "asdfghjkl qwerty zxcvbnm 12345 lkjhgfdsa",
+      "expected_behavior": {
+        "should_find_results": false,
+        "max_confidence": 0.30,
+        "expected_strategy": "broad"
+      },
+      "notes": "Nonsensical input - should handle gracefully"
+    },
+    {
+      "id": "Q7_policy",
+      "category": "documentation",
+      "query": "Hi team, I am looking to create a new S3 bucket for a new data pipeline I am building. Do we have a dos/ don'ts list somewhere on which options to select or ok to just follow the default AWS options recommends. E.g.: Object ownership should be ACLS disabled or acls enabled?",
+      "expected_behavior": {
+        "should_find_results": true,
+        "min_sources": 1,
+        "min_confidence": 0.50,
+        "must_contain_keywords": ["s3", "bucket", "policy", "configuration"],
+        "expected_filters_contain": ["Infrastructure", "Best Practices"],
+        "expected_strategy": "filtered"
+      },
+      "notes": "Policy/documentation question about S3 bucket configuration"
+    },
+    {
+      "id": "Q8_airflow",
+      "category": "troubleshooting_complex",
+      "query": "Hello, I am looking for some airflow help! We have a DAG in the DE Prod airflow which has been failing the last couple of days but when I try to make a release of the fix using the existing DE github workflow the github action just sits in a queue for ages so the image is not building. I thought the turn off was not until next month, has something else changed where we can not make new releases to the old airflow?",
+      "expected_behavior": {
+        "should_find_results": true,
+        "min_sources": 2,
+        "min_confidence": 0.60,
+        "must_contain_keywords": ["airflow", "deployment", "github", "ci/cd"],
+        "expected_filters_contain": ["Airflow", "Deployment"],
+        "expected_strategy": "hybrid",
+        "expected_intent": "troubleshooting"
+      },
+      "notes": "Complex troubleshooting spanning multiple systems"
+    }
+  ],
+  "metadata": {
+    "total_queries": 8,
+    "categories": {
+      "how_to_multi_part": 1,
+      "troubleshooting_error": 1,
+      "feature_question": 1,
+      "documentation": 1,
+      "troubleshooting_complex": 1,
+      "edge_case_ambiguous": 1,
+      "edge_case_empty": 1,
+      "edge_case_gibberish": 1
+    },
+    "version": "1.0",
+    "last_updated": "2026-01-22"
+  }
+}
