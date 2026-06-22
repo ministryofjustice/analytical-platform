@@ -39,4 +39,4 @@ auth_token = "abc123XYZ_generated_token_here_456def"
 github_org  = "ministryofjustice"
 github_repo = "MOJ-genai-app"
 
-kb_id = "QA1AIJHQIJ"
+kb_id = ""

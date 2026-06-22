@@ -134,3 +134,8 @@ variable "use_existing_layer" {
   default     = false
   description = "Whether Lambda layer already exists"
 }
+variable "kb_id" {
+  type        = string
+  default     = ""
+  description = "Bedrock Knowledge Base ID - manually created due to SCP restrictions"
+}

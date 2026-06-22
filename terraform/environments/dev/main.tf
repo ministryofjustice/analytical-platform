@@ -119,7 +119,7 @@ module "lambda" {
   use_existing_layer = var.use_existing_layer
 
   # Bedrock Knowledge Base
-  kb_id                    = module.bedrock_kb.knowledge_base_id
+  kb_id = var.kb_id
   model_id                 = var.bedrock_model_id
   max_context_tokens       = var.max_context_tokens
   aoss_collection_endpoint = module.bedrock_kb.collection_endpoint
