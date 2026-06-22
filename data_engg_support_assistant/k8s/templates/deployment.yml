@@ -27,7 +27,7 @@ spec:
           env:
             # Changed: RAG_API_URL (what streamlit_app.py expects)
             - name: RAG_API_URL
-              value: https://1htmja2up6.execute-api.eu-west-2.amazonaws.com/dev/ask
+              value: https://1htmja2up6.execute-api.eu-west-2.amazonaws.com/dev
 
             # Changed: AUTH_TOKEN (what streamlit_app.py expects)
             - name: AUTH_TOKEN
