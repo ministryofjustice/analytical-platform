@@ -138,4 +138,9 @@ variable "kb_id" {
   type        = string
   default     = ""
   description = "Bedrock Knowledge Base ID - manually created due to SCP restrictions"
+
+  validation {
+    condition     = length(var.kb_id) > 0
+    error_message = "kb_id must be set! Run: aws bedrock-agent list-knowledge-bases --query 'knowledgeBaseSummaries[?name==`moj-de-user-guidance-dev-kb`].knowledgeBaseId' --output text --region eu-west-2"
+  }
 }
