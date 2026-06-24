@@ -15,7 +15,7 @@ resource "aws_kms_alias" "eks" {
 data "aws_iam_policy_document" "eks" {
   # checkov:skip=CKV_AWS_356: "policy is directly related to the resource"
   # checkov:skip=CKV_AWS_111: "policy is directly related to the resource"
-  # checkov:skip=CKV_AWS_109: "role is resticted by limited actions in member account"
+  # checkov:skip=CKV_AWS_109: "role is restricted by limited actions in member account"
 
   statement {
     sid    = "Allow management access of the key by this account"
