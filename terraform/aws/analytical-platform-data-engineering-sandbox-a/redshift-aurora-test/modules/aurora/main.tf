@@ -65,6 +65,7 @@ module "aurora" {
 # Security Group for Aurora
 # -----------------------------------------------------------------------------
 resource "aws_security_group" "aurora" {
+  # checkov:skip=CKV2_AWS_5:Attached to the Aurora cluster via module.aurora vpc_security_group_ids.
   name_prefix = "${var.cluster_name}-aurora-"
   description = "Security group for Aurora PostgreSQL cluster"
   vpc_id      = var.vpc_id

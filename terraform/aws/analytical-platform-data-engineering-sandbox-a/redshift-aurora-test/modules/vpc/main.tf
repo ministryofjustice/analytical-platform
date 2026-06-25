@@ -76,6 +76,7 @@ module "vpc_endpoints" {
 }
 
 resource "aws_security_group" "vpc_endpoints" {
+  # checkov:skip=CKV2_AWS_5:Attached to interface VPC endpoints via module.vpc_endpoints endpoint security_group_ids.
   name_prefix = "${var.project_name}-vpc-endpoints-"
   description = "Security group for VPC endpoints"
   vpc_id      = module.vpc.vpc_id
@@ -89,11 +90,11 @@ resource "aws_security_group" "vpc_endpoints" {
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow all outbound"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
+    description = "HTTPS to VPC resources"
   }
 
   tags = merge(var.tags, {
