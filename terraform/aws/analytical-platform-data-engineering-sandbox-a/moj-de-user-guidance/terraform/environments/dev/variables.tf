@@ -130,3 +130,10 @@ variable "kb_id" {
   default     = ""
   description = "Bedrock Knowledge Base ID - manually created due to SCP restrictions"
 }
+
+# ==================== Lambda Artifacts ====================
+
+variable "artifacts_bucket" {
+  type        = string
+  description = "Bootstrap-owned, nuke-protected bucket holding pre-built Lambda zips"
+}

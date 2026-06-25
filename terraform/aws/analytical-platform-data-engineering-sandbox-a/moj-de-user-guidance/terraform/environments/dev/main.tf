@@ -12,10 +12,6 @@ terraform {
       source  = "hashicorp/awscc"
       version = ">= 1.0"
     }
-    null = {
-      source  = "hashicorp/null"
-      version = ">= 3.2"
-    }
     time = {
       source  = "hashicorp/time"
       version = ">= 0.9"
@@ -116,9 +112,10 @@ module "lambda" {
   lambda_memory  = var.lambda_memory
   lambda_runtime = var.lambda_runtime
 
-  # NEW — build wiring (single-apply packaging; replaces manual Phase 5)
-  source_dir               = "${path.root}/../../../data_engg_support_assistant"
-  requirements_lambda_path = "${path.root}/../../../data_engg_support_assistant/requirements-lambda.txt"
+  # Artifacts (pre-staged in bootstrap-owned, nuke-protected bucket)
+  artifacts_bucket = var.artifacts_bucket
+  # layer_s3_key / function_s3_key / authorizer_s3_key use module defaults
+  # (layers/dependencies.zip, functions/smart-rag.zip, functions/authorizer.zip)
 
   # Bedrock Knowledge Base
   kb_id                    = var.kb_id

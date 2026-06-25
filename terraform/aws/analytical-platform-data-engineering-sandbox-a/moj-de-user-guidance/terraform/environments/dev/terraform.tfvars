@@ -32,7 +32,10 @@ guardrail_filter_strength = "MEDIUM"
 
 # ==================== GitHub OIDC ====================
 github_org  = "ministryofjustice"
-github_repo = "MOJ-genai-app"
+github_repo = "analytical-platform"
+
+# ==================== Lambda Artifacts ====================
+artifacts_bucket = "moj-de-genai-dev-lambda-artifacts"
 
 # ==================== Knowledge Base ====================
 kb_id = "DEN18H5Z6F"

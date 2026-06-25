@@ -91,19 +91,6 @@ variable "lambda_memory" {
   description = "Lambda memory in MB"
 }
 
-# ==================== Build / Packaging ====================
-# NEW: used by build.tf to compile the layer and stage function code
-
-variable "source_dir" {
-  type        = string
-  description = "Path to data_engg_support_assistant (Lambda source root)"
-}
-
-variable "requirements_lambda_path" {
-  type        = string
-  description = "Path to requirements-lambda.txt for the dependency layer"
-}
-
 # ==================== Authorizer Configuration ====================
 
 variable "auth_token" {
@@ -150,4 +137,30 @@ variable "enable_guardrails" {
   type        = bool
   default     = true
   description = "Enable guardrails IAM policy for Lambda"
+}
+
+# ==================== Artifacts (pre-staged in S3) ====================
+# Bucket is bootstrap-owned + nuke-protected. Zips uploaded by source-repo script.
+
+variable "artifacts_bucket" {
+  type        = string
+  description = "Name of the bootstrap-owned Lambda artifacts bucket"
+}
+
+variable "layer_s3_key" {
+  type        = string
+  description = "S3 key of the pre-built dependency layer zip"
+  default     = "layers/dependencies.zip"
+}
+
+variable "function_s3_key" {
+  type        = string
+  description = "S3 key of the function zip"
+  default     = "functions/smart-rag.zip"
+}
+
+variable "authorizer_s3_key" {
+  type        = string
+  description = "S3 key of the authorizer zip"
+  default     = "functions/authorizer.zip"
 }
