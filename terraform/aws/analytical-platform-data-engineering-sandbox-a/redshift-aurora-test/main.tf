@@ -87,8 +87,6 @@ module "kms" {
 module "aurora" {
   source = "./modules/aurora"
 
-  project_name = local.project_name
-  environment  = local.environment
   tags         = local.tags
 
   vpc_id              = module.vpc.vpc_id
