@@ -32,7 +32,7 @@ module "copy_object" {
 
   function_name   = "${local.name}-${local.env}-copy"
   description     = "Lambda to copy a file from the land bucket to bak upload bucket"
-  handler         = "main.handler"
+  handler         = "copy_file.handler"
   runtime         = "python3.12"
   memory_size     = 1024
   timeout         = 900
@@ -49,7 +49,7 @@ module "copy_object" {
   }
 
   source_path = [{
-    path = "${path.module}/lambda_functions/main.py"
+    path = "${path.module}/lambda_functions/copy_file.py"
   }]
 
   tags = var.tags
@@ -139,8 +139,8 @@ resource "aws_lambda_permission" "allow_eventbridge_check_recent_file" {
 
 resource "aws_cloudwatch_event_rule" "check_recent_file_daily" {
   name                = "${local.name}-${local.env}-check-recent-file-daily"
-  description         = "Invoke recent-file checker daily at 16:10 UTC"
-  schedule_expression = "cron(10 16 * * ? *)"
+  description         = "Invoke recent-file checker daily at 16:30 UTC"
+  schedule_expression = "cron(30 16 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "check_recent_file_daily" {
