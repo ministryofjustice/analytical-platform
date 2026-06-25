@@ -36,4 +36,3 @@ def handler(event, context):  # pylint: disable=unused-argument
     except Exception as e:
         logger.error(f"Error copying file to bucket: {str(e)}")
         raise
-
