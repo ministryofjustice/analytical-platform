@@ -139,8 +139,8 @@ resource "aws_lambda_permission" "allow_eventbridge_check_recent_file" {
 
 resource "aws_cloudwatch_event_rule" "check_recent_file_daily" {
   name                = "${local.name}-${local.env}-check-recent-file-daily"
-  description         = "Invoke recent-file checker daily at 09:30 UTC"
-  schedule_expression = "cron(30 09 * * ? *)"
+  description         = "Invoke recent-file checker daily at 07:30 UTC"
+  schedule_expression = "cron(30 07 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "check_recent_file_daily" {
