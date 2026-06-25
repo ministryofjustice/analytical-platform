@@ -33,7 +33,7 @@ locals {
     {
       name  = "Tamsin Forbes"
       email = "tamsin.forbes@justice.gov.uk"
-      role  = "responder"
+      role  = "manager"
     }
   ]
 }
