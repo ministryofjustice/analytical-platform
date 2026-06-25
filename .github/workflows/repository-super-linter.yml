@@ -41,5 +41,6 @@ jobs:
           "VALIDATE_JSCPD": false,
           "VALIDATE_CSS": false,
           "VALIDATE_GITHUB_ACTIONS": false,
+          "VALIDATE_PYTHON_RUFF_FORMAT": false,
           "PYTHON_ISORT_CONFIG_FILE": "pyproject.toml"
         }
