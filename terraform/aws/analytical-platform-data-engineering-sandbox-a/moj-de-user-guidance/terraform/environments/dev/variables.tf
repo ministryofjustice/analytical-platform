@@ -57,12 +57,6 @@ variable "lambda_runtime" {
   description = "Lambda runtime"
 }
 
-variable "lambda_layer_name" {
-  type        = string
-  default     = "smart-rag-dependencies"
-  description = "Name of existing Lambda layer"
-}
-
 variable "bedrock_model_id" {
   type        = string
   default     = "anthropic.claude-3-sonnet-20240229-v1:0"
@@ -129,18 +123,10 @@ variable "github_repo" {
   description = "GitHub repository name"
 }
 
-variable "use_existing_layer" {
-  type        = bool
-  default     = false
-  description = "Whether Lambda layer already exists"
-}
+# ==================== Bedrock Knowledge Base ID ====================
+
 variable "kb_id" {
   type        = string
   default     = ""
   description = "Bedrock Knowledge Base ID - manually created due to SCP restrictions"
-
-  validation {
-    condition     = length(var.kb_id) > 0
-    error_message = "kb_id must be set! Run: aws bedrock-agent list-knowledge-bases --query 'knowledgeBaseSummaries[?name==`moj-de-user-guidance-dev-kb`].knowledgeBaseId' --output text --region eu-west-2"
-  }
 }

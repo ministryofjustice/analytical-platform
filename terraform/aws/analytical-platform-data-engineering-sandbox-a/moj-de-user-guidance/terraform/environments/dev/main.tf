@@ -109,17 +109,19 @@ module "lambda" {
 
   region       = var.region
   project_name = var.project_name
-  environment  = "dev"
+  environment  = var.environment
 
   # Lambda Configuration
-  lambda_timeout    = var.lambda_timeout
-  lambda_memory     = var.lambda_memory
-  lambda_runtime    = var.lambda_runtime
-  lambda_layer_name = var.lambda_layer_name
-  use_existing_layer = var.use_existing_layer
+  lambda_timeout = var.lambda_timeout
+  lambda_memory  = var.lambda_memory
+  lambda_runtime = var.lambda_runtime
+
+  # NEW — build wiring (single-apply packaging; replaces manual Phase 5)
+  source_dir               = "${path.root}/../../../data_engg_support_assistant"
+  requirements_lambda_path = "${path.root}/../../../data_engg_support_assistant/requirements-lambda.txt"
 
   # Bedrock Knowledge Base
-  kb_id = var.kb_id
+  kb_id                    = var.kb_id
   model_id                 = var.bedrock_model_id
   max_context_tokens       = var.max_context_tokens
   aoss_collection_endpoint = module.bedrock_kb.collection_endpoint
@@ -131,7 +133,7 @@ module "lambda" {
   # Guardrails
   guardrail_id      = module.security.guardrail_id
   guardrail_version = module.security.guardrail_version
-  enable_guardrails = true    
+  enable_guardrails = true
 
   # Authentication
   auth_token = var.auth_token

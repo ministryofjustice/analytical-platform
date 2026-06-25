@@ -54,21 +54,28 @@ output "lambda_role_id" {
   value       = aws_iam_role.lambda_execution.id
 }
 
-# ==================== Lambda Layer ====================
+# ==================== Lambda Layer (Terraform-built) ====================
 
 output "layer_arn" {
   description = "ARN of the Lambda dependencies layer"
-  value       = var.use_existing_layer ? data.aws_lambda_layer_version.dependencies[0].arn : null
+  value       = aws_lambda_layer_version.dependencies.arn
 }
 
 output "layer_version" {
   description = "Version of the Lambda dependencies layer"
-  value       = var.use_existing_layer ? data.aws_lambda_layer_version.dependencies[0].version : null
+  value       = aws_lambda_layer_version.dependencies.version
 }
 
-output "layer_attached" {
-  description = "Whether the dependencies layer is attached to Lambda"
-  value       = var.use_existing_layer
+# ==================== Artifacts Bucket (bucket #3) ====================
+
+output "artifacts_bucket_name" {
+  description = "Name of the Lambda artifacts bucket"
+  value       = aws_s3_bucket.artifacts.id
+}
+
+output "artifacts_bucket_arn" {
+  description = "ARN of the Lambda artifacts bucket"
+  value       = aws_s3_bucket.artifacts.arn
 }
 
 # ==================== CloudWatch Log Groups ====================

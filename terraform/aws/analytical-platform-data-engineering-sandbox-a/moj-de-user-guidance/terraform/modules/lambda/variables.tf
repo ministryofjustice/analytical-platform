@@ -69,7 +69,6 @@ variable "aoss_collection_arn" {
 variable "dynamodb_table_name" {
   type        = string
   description = "DynamoDB table name for conversation logs"
-  #default     = "RAG-ConversationLogs"
 }
 
 # ==================== Lambda Runtime Configuration ====================
@@ -92,18 +91,17 @@ variable "lambda_memory" {
   description = "Lambda memory in MB"
 }
 
-# ==================== Lambda Layer ====================
+# ==================== Build / Packaging ====================
+# NEW: used by build.tf to compile the layer and stage function code
 
-variable "lambda_layer_name" {
+variable "source_dir" {
   type        = string
-  default     = "smart-rag-dependencies"
-  description = "Name of the Lambda layer containing Python dependencies"
+  description = "Path to data_engg_support_assistant (Lambda source root)"
 }
 
-variable "use_existing_layer" {
-  type        = bool
-  default     = true
-  description = "Set to false for initial apply before layer exists. Lambda will deploy without dependencies (placeholder only)"
+variable "requirements_lambda_path" {
+  type        = string
+  description = "Path to requirements-lambda.txt for the dependency layer"
 }
 
 # ==================== Authorizer Configuration ====================
@@ -114,26 +112,13 @@ variable "auth_token" {
   sensitive   = true
 }
 
-# OIDC Configuration (uncomment if using OIDC/JWT)
-# variable "oidc_issuer" {
-#   type        = string
-#   description = "OIDC issuer URL"
-#   default     = ""
-# }
-#
-# variable "oidc_audience" {
-#   type        = string
-#   description = "OIDC audience (client ID)"
-#   default     = ""
-# }
-
 # ==================== Logging ====================
 
 variable "log_level" {
   type        = string
   default     = "INFO"
   description = "Log level for Lambda functions (DEBUG, INFO, WARNING, ERROR)"
-  
+
   validation {
     condition     = contains(["DEBUG", "INFO", "WARNING", "ERROR"], var.log_level)
     error_message = "log_level must be one of: DEBUG, INFO, WARNING, ERROR"
@@ -144,7 +129,7 @@ variable "log_retention_days" {
   type        = number
   default     = 30
   description = "CloudWatch log retention period in days"
-  
+
   validation {
     condition = contains([
       1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653
@@ -160,24 +145,6 @@ variable "tags" {
   default     = {}
   description = "Tags to apply to all resources"
 }
-
-# ==================== Optional: S3 Access ====================
-# Uncomment if Lambda needs direct S3 access
-
-# variable "s3_bucket_name" {
-#   type        = string
-#   description = "S3 bucket name if Lambda needs direct access"
-#   default     = ""
-# }
-
-# ==================== Optional: Terraform-Managed Layer ====================
-# Uncomment if you want Terraform to manage the layer
-
-# variable "layer_zip_path" {
-#   type        = string
-#   description = "Path to Lambda layer ZIP file"
-#   default     = ""
-# }
 
 variable "enable_guardrails" {
   type        = bool
