@@ -49,7 +49,7 @@ module "copy_object" {
   }
 
   source_path = [{
-    path = "${path.module}/lambda-functions/copy_file.py"
+    path = "${path.module}/lambda_functions/copy_file.py"
   }]
 
   tags = var.tags
@@ -123,7 +123,7 @@ module "check_recent_file" {
   }
 
   source_path = [{
-    path = "${path.module}/lambda-functions/check_recent_file.py"
+    path = "${path.module}/lambda_functions/check_recent_file.py"
   }]
 
   tags = var.tags
@@ -139,8 +139,8 @@ resource "aws_lambda_permission" "allow_eventbridge_check_recent_file" {
 
 resource "aws_cloudwatch_event_rule" "check_recent_file_daily" {
   name                = "${local.name}-${local.env}-check-recent-file-daily"
-  description         = "Invoke recent-file checker daily at 11:00 UTC"
-  schedule_expression = "cron(0 11 * * ? *)"
+  description         = "Invoke recent-file checker daily at 11:15 UTC"
+  schedule_expression = "cron(15 11 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "check_recent_file_daily" {
