@@ -1,9 +1,5 @@
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
-locals {
-  azs = slice(data.aws_availability_zones.available.names, 0, 2)
+terraform {
+  required_version = "~> 1.5"
 }
 
 # -----------------------------------------------------------------------------

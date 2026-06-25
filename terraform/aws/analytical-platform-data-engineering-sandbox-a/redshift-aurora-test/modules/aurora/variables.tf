@@ -1,13 +1,3 @@
-variable "project_name" {
-  type        = string
-  description = "Name of the project"
-}
-
-variable "environment" {
-  type        = string
-  description = "Environment name"
-}
-
 variable "tags" {
   type        = map(string)
   description = "Tags to apply to resources"
@@ -61,11 +51,6 @@ variable "database_name" {
 variable "kms_key_arn" {
   type        = string
   description = "ARN of the KMS key for encryption"
-}
-
-variable "kms_key_id" {
-  type        = string
-  description = "ID of the KMS key for encryption"
 }
 
 variable "backup_retention_period" {

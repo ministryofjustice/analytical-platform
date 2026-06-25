@@ -100,5 +100,4 @@ module "aurora" {
   instance_class = var.aurora_instance_class
 
   kms_key_arn = module.kms.key_arn
-  kms_key_id  = module.kms.key_id
 }
