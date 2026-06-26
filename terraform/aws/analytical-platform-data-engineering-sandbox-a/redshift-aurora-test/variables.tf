@@ -38,3 +38,9 @@ variable "aurora_engine_version" {
   description = "Aurora PostgreSQL engine version"
   default     = "17.9"
 }
+
+variable "bastion_instance_type" {
+  type        = string
+  description = "Instance type for the bastion host"
+  default     = "t4g.micro"
+}
