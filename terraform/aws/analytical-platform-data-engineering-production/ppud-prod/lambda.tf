@@ -49,7 +49,7 @@ module "copy_object" {
   }
 
   source_path = [{
-    path = "${path.module}/lambda-functions/copy_file.py"
+    path = "${path.module}/lambda_functions/copy_file.py"
   }]
 
   tags = var.tags
