@@ -10,7 +10,7 @@ module "coat_kms_keys" {
   for_each = local.buckets
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "4.0.0"
+  version = "4.2.0"
 
   aliases               = ["s3/${each.value.bucket_name}"]
   enable_default_policy = true
