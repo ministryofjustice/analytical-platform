@@ -148,11 +148,12 @@ resource "aws_security_group" "bastion" {
 resource "aws_instance" "bastion" {
   # checkov:skip=CKV_AWS_126: Detailed monitoring is not required for this test bastion.
   ami                         = data.aws_ssm_parameter.al2023_arm64.value
+  ebs_optimized               = true
   instance_type               = var.bastion_instance_type
   iam_instance_profile        = aws_iam_instance_profile.bastion.name
-  subnet_id                   = module.vpc.public_subnet_ids[0]
+  subnet_id                   = module.vpc.private_subnet_ids[0]
   vpc_security_group_ids      = [aws_security_group.bastion.id]
-  associate_public_ip_address = true
+  associate_public_ip_address = false
 
   root_block_device {
     encrypted = true
