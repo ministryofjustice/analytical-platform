@@ -36,5 +36,5 @@ variable "aurora_instance_class" {
 variable "aurora_engine_version" {
   type        = string
   description = "Aurora PostgreSQL engine version"
-  default     = "16.1"
+  default     = "17.9"
 }
