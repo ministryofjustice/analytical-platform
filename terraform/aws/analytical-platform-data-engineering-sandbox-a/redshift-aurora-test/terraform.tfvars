@@ -6,6 +6,7 @@ tags = {
   business-unit          = "Platforms"
   application            = "Analytical Platform"
   component              = "redshift-aurora-test"
+  de-sandbox-nuke-keep   = "true"
   environment            = "sandbox"
   is-production          = "false"
   owner                  = "analytical-platform:analytical-platform@digital.justice.gov.uk"
