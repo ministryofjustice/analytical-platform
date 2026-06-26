@@ -38,4 +38,4 @@ github_repo = "analytical-platform"
 artifacts_bucket = "moj-de-genai-dev-lambda-artifacts"
 
 # ==================== Knowledge Base ====================
-kb_id = "DEN18H5Z6F"
+kb_id = "5ZPAUF2C5A"

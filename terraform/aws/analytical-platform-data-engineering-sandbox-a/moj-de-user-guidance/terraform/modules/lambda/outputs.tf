@@ -66,17 +66,6 @@ output "layer_version" {
   value       = aws_lambda_layer_version.dependencies.version
 }
 
-# ==================== Artifacts Bucket (bucket #3) ====================
-
-output "artifacts_bucket_name" {
-  description = "Name of the Lambda artifacts bucket"
-  value       = aws_s3_bucket.artifacts.id
-}
-
-output "artifacts_bucket_arn" {
-  description = "ARN of the Lambda artifacts bucket"
-  value       = aws_s3_bucket.artifacts.arn
-}
 
 # ==================== CloudWatch Log Groups ====================
 
