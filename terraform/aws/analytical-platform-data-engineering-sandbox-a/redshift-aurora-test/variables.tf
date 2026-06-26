@@ -38,3 +38,9 @@ variable "aurora_engine_version" {
   description = "Aurora PostgreSQL engine version"
   default     = "17.9"
 }
+
+variable "redshift_price_performance_level" {
+  type        = number
+  description = "Price-performance target level for Redshift Serverless (1=LOW_COST, 25=ECONOMICAL, 50=BALANCED, 75=RESOURCEFUL, 100=HIGH_PERFORMANCE)"
+  default     = 50
+}
