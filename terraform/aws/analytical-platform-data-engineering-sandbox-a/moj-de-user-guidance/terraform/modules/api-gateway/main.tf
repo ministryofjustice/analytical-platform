@@ -1,16 +1,14 @@
 # modules/api-gateway/main.tf
 # REST API Gateway setup
 
-locals {
-  api_name    = "${var.project_name}-${var.environment}-api"
-  stage_name  = var.stage_name != "" ? var.stage_name : var.environment
-  enable_auth = var.auth_token != ""
-  #account_id      = data.aws_caller_identity.current.account_id
+terraform {
+  required_version = ">= 1.5.0"
 }
 
-# ==================== Data Sources ====================
-
-data "aws_caller_identity" "current" {}
+locals {
+  api_name    = "${var.project_name}-${var.environment}-api"
+  enable_auth = var.auth_token != ""
+}
 
 # ==================== REST API ====================
 

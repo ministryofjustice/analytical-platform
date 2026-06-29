@@ -65,7 +65,7 @@ output "curl_test_command" {
   value       = <<-EOT
     curl -X POST ${aws_api_gateway_stage.this.invoke_url}/ask \
       -H "Content-Type: application/json" \
-      -H "Authorization: Bearer YOUR_TOKEN" \
+      -H "Authorization: Bearer $AUTH_TOKEN" \
       -d '{"text": "What is R-studio?"}'
   EOT
 }
