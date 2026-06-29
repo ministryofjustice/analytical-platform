@@ -62,7 +62,7 @@ output "authorizer_id" {
 
 output "curl_test_command" {
   description = "Sample curl command to test the API"
-  value = <<-EOT
+  value       = <<-EOT
     curl -X POST ${aws_api_gateway_stage.this.invoke_url}/ask \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer YOUR_TOKEN" \

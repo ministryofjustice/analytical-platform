@@ -12,9 +12,9 @@ skip_index_creation = true
 create_s3_bucket    = false
 
 # ==================== Lambda ====================
-lambda_timeout    = 30
-lambda_memory     = 512
-lambda_runtime    = "python3.12"
+lambda_timeout = 30
+lambda_memory  = 512
+lambda_runtime = "python3.12"
 
 bedrock_model_id   = "anthropic.claude-3-sonnet-20240229-v1:0"
 max_context_tokens = 4096

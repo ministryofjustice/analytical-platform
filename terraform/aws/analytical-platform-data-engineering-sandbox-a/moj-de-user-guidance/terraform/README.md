@@ -15,7 +15,7 @@ It is infra-only:
 
 This repo operates alongside the SOurce/Application repo:
 
-**Source Repo**: Builds Lambda code and uplaods zip artifacts to S3
+**Source Repo**: Builds Lambda code and uploads zip artifacts to S3
 **Infra Repo**: Deploys infrastucutre and references those artifacts
 
 ### KEY Constraint

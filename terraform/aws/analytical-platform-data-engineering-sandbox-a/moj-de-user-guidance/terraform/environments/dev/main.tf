@@ -70,7 +70,7 @@ module "security" {
   content_filter_strength = var.guardrail_filter_strength
 
   # Missing OIDC variables
-  create_oidc_provider   = false  # provider already exists
+  create_oidc_provider   = false # provider already exists
   github_org             = var.github_org
   github_repo            = var.github_repo
   terraform_state_bucket = "moj-de-genai-terraform-state"

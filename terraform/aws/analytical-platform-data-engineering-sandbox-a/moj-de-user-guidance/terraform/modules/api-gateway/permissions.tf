@@ -10,6 +10,6 @@ resource "aws_lambda_permission" "smart_rag_invoke" {
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.chatbot.execution_arn}/*/*" # stage/method/resource
 
-  depends_on = [aws_api_gateway_stage.this] 
+  depends_on = [aws_api_gateway_stage.this]
 
 }

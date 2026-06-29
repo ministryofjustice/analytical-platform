@@ -71,7 +71,7 @@ resource "aws_bedrock_guardrail" "this" {
     topics_config {
       name       = "Off-Topic"
       definition = "Questions not related to data engineering, analytics, databases, SQL, Python, R, data tools, or technical documentation"
-      examples   = [
+      examples = [
         "What is the weather today?",
         "Tell me a joke",
         "Who won the game?"

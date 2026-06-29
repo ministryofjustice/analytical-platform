@@ -1,7 +1,8 @@
 import argparse
 import json
-import time
 import sys
+import time
+
 import requests
 from botocore.auth import SigV4Auth
 from botocore.awsrequest import AWSRequest
@@ -33,12 +34,12 @@ body = {
             args.vector_field: {
                 "type": "knn_vector",
                 "dimension": args.dimensions,
-                "method": {"engine": "faiss"}
+                "method": {"engine": "faiss"},
             },
             args.text_field: {"type": "text"},
-            args.metadata_field: {"type": "text"}
+            args.metadata_field: {"type": "text"},
         }
-    }
+    },
 }
 
 max_retries = 5
@@ -52,7 +53,7 @@ for attempt in range(1, max_retries + 1):
         method="PUT",
         url=url,
         data=json.dumps(body),
-        headers={"Content-Type": "application/json"}
+        headers={"Content-Type": "application/json"},
     )
     SigV4Auth(creds, "aoss", args.region).add_auth(req)
 
@@ -70,14 +71,16 @@ for attempt in range(1, max_retries + 1):
             sys.exit(0)
 
         if resp.status_code == 403 and attempt < max_retries:
-            print(f"Got 403. Data access policy may still be propagating.")
+            print("Got 403. Data access policy may still be propagating.")
             print(f"Waiting {retry_delay}s before retry...")
             time.sleep(retry_delay)
             continue
 
         if resp.status_code == 403 and attempt == max_retries:
             print("ERROR: Still getting 403 after all retries.")
-            print("Check that the following principal is in the AOSS data access policy:")
+            print(
+                "Check that the following principal is in the AOSS data access policy:"
+            )
             print(f"  {identity['Arn']}")
             sys.exit(1)
 

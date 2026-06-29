@@ -12,7 +12,7 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "lambda_execution" {
   name = "${var.project_name}-${var.environment}-lambda-execution-role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -24,7 +24,7 @@ resource "aws_iam_role" "lambda_execution" {
       }
     }]
   })
-  
+
   tags = merge(var.tags, {
     Name = "${var.project_name}-${var.environment}-lambda-execution-role"
   })
@@ -195,7 +195,7 @@ resource "aws_iam_role_policy" "aoss_access" {
 
 resource "aws_iam_role_policy" "guardrails_access" {
   count = var.enable_guardrails ? 1 : 0
-  
+
   name = "${var.project_name}-${var.environment}-lambda-guardrails"
   role = aws_iam_role.lambda_execution.name
 

@@ -7,11 +7,11 @@
 
 resource "aws_dynamodb_table" "conversation_logs" {
   name         = "${var.project_name}-${var.environment}-${var.table_name}"
-  billing_mode = "PAY_PER_REQUEST"  # On-demand pricing for POC
+  billing_mode = "PAY_PER_REQUEST" # On-demand pricing for POC
 
   # Primary Key
-  hash_key  = "request_id"   # Partition key
-  range_key = "timestamp"    # Sort key
+  hash_key  = "request_id" # Partition key
+  range_key = "timestamp"  # Sort key
 
   # Attribute Definitions (only for keys and GSI)
   attribute {

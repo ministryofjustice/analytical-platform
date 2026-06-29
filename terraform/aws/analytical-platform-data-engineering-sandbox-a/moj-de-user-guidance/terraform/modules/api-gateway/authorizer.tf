@@ -24,10 +24,10 @@ resource "aws_api_gateway_authorizer" "lambda" {
 resource "aws_lambda_permission" "authorizer_invoke" {
   count = local.enable_auth ? 1 : 0
 
-  statement_id  = "apigateway-authorizer-invoke-${var.environment}"  # Add environment
+  statement_id  = "apigateway-authorizer-invoke-${var.environment}" # Add environment
   action        = "lambda:InvokeFunction"
   function_name = var.authorizer_function_name
   principal     = "apigateway.amazonaws.com"
   # restricted for specific lambda authorizer can invoke the Lambda instead of using any api gateway. 
-  source_arn    = "${aws_api_gateway_rest_api.chatbot.execution_arn}/authorizers/${aws_api_gateway_authorizer.lambda[0].id}" 
+  source_arn = "${aws_api_gateway_rest_api.chatbot.execution_arn}/authorizers/${aws_api_gateway_authorizer.lambda[0].id}"
 }
