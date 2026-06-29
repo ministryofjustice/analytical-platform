@@ -3,12 +3,21 @@ resource "aws_athena_workgroup" "create_a_derived_table_dev" {
 
   configuration {
     bytes_scanned_cutoff_per_query  = 1099511627776000
-    enforce_workgroup_configuration = false
+    enforce_workgroup_configuration = true
     engine_version {
       selected_engine_version = "Athena engine version 3"
     }
     result_configuration {
       output_location = "s3://${module.query_results_dev.bucket.id}/"
+
+      encryption_configuration {
+        encryption_option = "SSE_S3"
+      }
+
+      acl_configuration {
+        s3_acl_option = "BUCKET_OWNER_FULL_CONTROL"
+      }
+
     }
   }
 
