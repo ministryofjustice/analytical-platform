@@ -35,10 +35,18 @@ route53_zone = "dev.analytical-platform.service.justice.gov.uk"
 # VPC
 ##################################################
 
-vpc_cidr                              = "10.69.0.0/16"
-vpc_private_subnets                   = ["10.69.96.0/20", "10.69.112.0/20", "10.69.128.0/20"]
-vpc_public_subnets                    = ["10.69.144.0/20", "10.69.160.0/20", "10.69.176.0/20"]
-vpc_database_subnets                  = ["10.69.0.0/28", "10.69.0.16/28", "10.69.0.32/28"]
+vpc_cidr             = "10.69.0.0/16"
+vpc_private_subnets  = ["10.69.96.0/20", "10.69.112.0/20", "10.69.128.0/20"]
+vpc_public_subnets   = ["10.69.144.0/20", "10.69.160.0/20", "10.69.176.0/20"]
+vpc_database_subnets = ["10.69.0.0/28", "10.69.0.16/28", "10.69.0.32/28"]
+moj_cidrs = [
+  "128.77.75.64/26",  # Prisma Corporate
+  "35.176.93.186/32", # GlobalProtect (Alpha)
+  "20.58.27.30/32",   # GitHub Runner (octo-production)
+  # Sites
+  "213.121.161.112/28", # 102PF
+  "51.149.2.0/24"       # 10SC
+]
 nat_gateway_bandwidth_alarm_threshold = 90
 
 ##################################################
@@ -56,7 +64,7 @@ efs_low_credit_burst_balance_alarm_threshold = 50000
 rds_instance_class       = "db.t3.small"
 rds_engine               = "postgres"
 rds_family               = "postgres17"
-rds_engine_version       = "17.4"
+rds_engine_version       = "17.9"
 rds_allocated_storage    = 5
 rds_deletion_protection  = true
 rds_multi_az             = true
@@ -128,14 +136,14 @@ redis_alarm_memory_threshold_bytes = 100000
 ##################################################
 
 eks_versions = {
-  cluster    = "1.32"
-  node-group = "1.32"
+  cluster    = "1.35"
+  node-group = "1.35"
 }
 eks_addon_versions = {
-  coredns        = "v1.11.4-eksbuild.32"
-  ebs-csi-driver = "v1.56.0-eksbuild.1"
-  kube-proxy     = "v1.32.13-eksbuild.2"
-  vpc-cni        = "v1.21.1-eksbuild.5"
+  coredns        = "v1.14.2-eksbuild.4"
+  ebs-csi-driver = "v1.59.0-eksbuild.1"
+  kube-proxy     = "v1.35.3-eksbuild.5"
+  vpc-cni        = "v1.21.1-eksbuild.8"
 }
 eks_node_group_name_prefix = "dev"
 eks_node_group_capacities = {
