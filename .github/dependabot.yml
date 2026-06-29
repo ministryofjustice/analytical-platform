@@ -56,7 +56,6 @@ updates:
       - "terraform/aws/analytical-platform-data-engineering-production/terraform-state"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/airflow-create-a-pipeline"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/github-actions-roles"
-      - "terraform/aws/analytical-platform-data-engineering-sandbox-a/moj-de-user-guidance/terraform/environments/dev"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/opg-fabric-connector"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/ppud-sandbox"
       - "terraform/aws/analytical-platform-data-engineering-sandbox-a/redshift-aurora-test"
