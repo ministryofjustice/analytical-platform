@@ -1,6 +1,6 @@
 # terraform/modules/lambda/iam.tf
 # IAM Role and Policies for Lambda functions
-# 
+#
 # This replaces:
 # - ensure_bedrock_permissions() from deploy_lambda.py
 # - ensure_dynamodb_permissions() from deploy_lambda.py
@@ -169,7 +169,7 @@ resource "aws_iam_role_policy" "aoss_access" {
 
 # resource "aws_iam_role_policy" "s3_access" {
 #   count = var.s3_bucket_name != "" ? 1 : 0
-#   
+#
 #   name = "${var.project_name}-${var.environment}-lambda-s3"
 #   role = aws_iam_role.lambda_execution.name
 #

@@ -111,34 +111,34 @@ locals {
 output "deployment_summary" {
   description = "Complete deployment summary"
   value       = <<-EOT
-    
+
     ========================================
     MOJ GenAI App - Deployment Summary
     ========================================
-    
+
     Database:
        Table:        ${module.database.table_name}
        Streams:      Enabled
        PITR:         Enabled
-    
+
     Security:
        Guardrail:    ${module.security.guardrail_id}
        Version:      ${module.security.guardrail_version}
-    
+
     Knowledge Base:
        KB ID:        ${local.kb_id_display}
        S3 Bucket:    ${var.s3_bucket_name}
        AOSS:         ${module.bedrock_kb.collection_endpoint}
-    
+
     Lambda Functions:
        Main:         ${module.lambda.smart_rag_function_name}
        Authorizer:   ${module.lambda.authorizer_function_name}
-    
+
     API Gateway:
        Endpoint:     ${module.api_gateway.api_endpoint}
        /ask:         ${module.api_gateway.ask_endpoint}
        /feedback:    ${module.api_gateway.feedback_endpoint}
-    
+
     ========================================
   EOT
 }

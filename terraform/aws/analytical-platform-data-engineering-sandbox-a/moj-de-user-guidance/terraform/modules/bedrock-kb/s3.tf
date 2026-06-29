@@ -38,7 +38,7 @@ resource "aws_s3_bucket_public_access_block" "knowledge_base" {
   restrict_public_buckets = true
 }
 
-# Bucket policy 
+# Bucket policy
 resource "aws_s3_bucket_policy" "kb_access" {
   bucket = local.s3_bucket_id
 
