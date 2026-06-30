@@ -14,11 +14,6 @@ variable "s3_bucket_name" {
   type = string
 }
 
-variable "s3_inclusion_prefixes" {
-  type    = list(string)
-  default = []
-}
-
 variable "embedding_model_id" {
   type    = string
   default = "amazon.titan-embed-text-v2:0"
