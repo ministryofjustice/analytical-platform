@@ -1,4 +1,10 @@
 # modules/database/main.tf
+
+
+terraform {
+  required_version = ">= 1.5.0"
+}
+
 # DynamoDB table for RAG conversation logging
 
 ################################################################################

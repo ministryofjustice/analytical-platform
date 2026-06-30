@@ -2,6 +2,12 @@
 # Bedrock Guardrail
 ################################################################################
 
+
+terraform {
+  required_version = ">= 1.5.0"
+}
+
+
 resource "aws_bedrock_guardrail" "this" {
   name                      = "${var.project_name}-${var.environment}-content-filter"
   description               = "Content filtering for Smart RAG chatbot - ${var.environment}"

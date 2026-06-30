@@ -1,4 +1,9 @@
 # terraform/modules/lambda/main.tf
+
+terraform {
+  required_version = ">= 1.5.0"
+}
+
 # Lambda functions for SmartRAG
 #
 # Code packaging is NOT done by Terraform. Artifacts are pre-built + uploaded
