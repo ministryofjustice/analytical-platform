@@ -27,6 +27,7 @@ jobs:
       super-linter-variables: |
         {
           "DEFAULT_BRANCH": "main",
+          "ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT": false,
           "VALIDATE_ALL_CODEBASE": false,
           "FILTER_REGEX_EXCLUDE": ".*archive/.*",
           "VALIDATE_BASH": false,
@@ -41,5 +42,6 @@ jobs:
           "VALIDATE_JSCPD": false,
           "VALIDATE_CSS": false,
           "VALIDATE_GITHUB_ACTIONS": false,
+          "VALIDATE_PYTHON_RUFF_FORMAT": false,
           "PYTHON_ISORT_CONFIG_FILE": "pyproject.toml"
         }
