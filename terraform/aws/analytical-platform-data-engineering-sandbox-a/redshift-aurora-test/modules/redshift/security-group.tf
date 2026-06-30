@@ -50,3 +50,15 @@ resource "aws_vpc_security_group_egress_rule" "redshift_to_s3" {
   prefix_list_id    = data.aws_prefix_list.s3.id
   description       = "Redshift to S3"
 }
+
+# Allow outbound to Aurora for federated queries
+resource "aws_vpc_security_group_egress_rule" "redshift_to_aurora" {
+  count = var.aurora_security_group_id != null ? 1 : 0
+
+  security_group_id            = module.redshift_sg.security_group_id
+  to_port                      = 5432
+  from_port                    = 5432
+  ip_protocol                  = "tcp"
+  referenced_security_group_id = var.aurora_security_group_id
+  description                  = "Redshift to Aurora for federated queries"
+}

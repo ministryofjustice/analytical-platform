@@ -37,3 +37,8 @@ output "database_name" {
   description = "The name of the default database"
   value       = var.database_name
 }
+
+output "federated_query_secret_arn" {
+  description = "The ARN of the secret for Redshift federated queries"
+  value       = aws_secretsmanager_secret.redshift_federated.arn
+}

@@ -188,6 +188,9 @@ module "aurora" {
   instance_class = var.aurora_instance_class
 
   kms_key_arn = module.kms.key_arn
+
+  # Federated query connectivity
+  redshift_security_group_id = module.redshift.security_group_id
 }
 
 # -----------------------------------------------------------------------------
@@ -207,4 +210,8 @@ module "redshift" {
   kms_key_arn = module.kms.key_arn
 
   price_performance_level = var.redshift_price_performance_level
+
+  # Federated query configuration
+  aurora_federated_secret_arn = module.aurora.federated_query_secret_arn
+  aurora_security_group_id    = module.aurora.security_group_id
 }

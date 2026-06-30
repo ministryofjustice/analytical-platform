@@ -55,3 +55,8 @@ output "redshift_admin_secret_arn" {
   description = "The ARN of the Redshift admin user secret (retrieve from Secrets Manager)"
   value       = module.redshift.admin_secret_arn
 }
+
+output "aurora_federated_query_secret_arn" {
+  description = "The ARN of the Aurora secret for Redshift federated queries"
+  value       = module.aurora.federated_query_secret_arn
+}

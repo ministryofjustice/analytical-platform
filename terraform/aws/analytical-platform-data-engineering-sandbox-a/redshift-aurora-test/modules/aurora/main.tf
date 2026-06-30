@@ -104,3 +104,51 @@ resource "aws_security_group_rule" "aurora_egress_s3" {
   security_group_id = aws_security_group.aurora.id
   description       = "HTTPS to S3"
 }
+
+# Allow Redshift federated query access
+resource "aws_security_group_rule" "aurora_ingress_redshift" {
+  count = var.redshift_security_group_id != null ? 1 : 0
+
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = var.redshift_security_group_id
+  security_group_id        = aws_security_group.aurora.id
+  description              = "PostgreSQL access from Redshift for federated queries"
+}
+
+# -----------------------------------------------------------------------------
+# Federated Query Secret for Redshift
+# -----------------------------------------------------------------------------
+resource "random_password" "redshift_user" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
+resource "aws_secretsmanager_secret" "redshift_federated" {
+  # checkov:skip=CKV2_AWS_57:Secret rotation not required for test environment
+  name        = "${var.cluster_name}-redshift-federated"
+  description = "Aurora credentials for Redshift federated queries"
+  kms_key_id  = var.kms_key_arn
+
+  tags = var.tags
+}
+
+resource "aws_secretsmanager_secret_version" "redshift_federated" {
+  secret_id = aws_secretsmanager_secret.redshift_federated.id
+  secret_string = jsonencode({
+    username            = "redshift_readonly"
+    password            = random_password.redshift_user.result
+    engine              = "postgres"
+    host                = module.aurora.cluster_endpoint
+    port                = 5432
+    dbname              = var.database_name
+    dbClusterIdentifier = module.aurora.cluster_id
+  })
+
+  lifecycle {
+    ignore_changes = [secret_string]
+  }
+}

@@ -70,3 +70,9 @@ variable "skip_final_snapshot" {
   description = "Skip final snapshot when destroying"
   default     = true # Set to true for test environment
 }
+
+variable "redshift_security_group_id" {
+  type        = string
+  description = "Security group ID of Redshift for federated query access"
+  default     = null
+}
