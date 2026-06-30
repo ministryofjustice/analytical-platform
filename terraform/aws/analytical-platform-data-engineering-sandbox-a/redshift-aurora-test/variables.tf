@@ -42,7 +42,7 @@ variable "aurora_engine_version" {
 variable "bastion_instance_type" {
   type        = string
   description = "Instance type for the bastion host"
-  default     = "t4g.small"
+  default     = "t4g.micro"
 }
 
 variable "redshift_price_performance_level" {
