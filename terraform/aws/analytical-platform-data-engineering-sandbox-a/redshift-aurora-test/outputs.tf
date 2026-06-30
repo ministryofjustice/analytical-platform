@@ -23,6 +23,21 @@ output "aurora_master_secret_arn" {
   value       = module.aurora.master_user_secret_arn
 }
 
+output "bastion_instance_id" {
+  description = "The ID of the bastion EC2 instance"
+  value       = aws_instance.bastion.id
+}
+
+output "bastion_private_ip" {
+  description = "The private IP address of the bastion EC2 instance"
+  value       = aws_instance.bastion.private_ip
+}
+
+output "bastion_ssm_start_session_command" {
+  description = "Command to start an SSM session to the bastion instance"
+  value       = "aws ssm start-session --target ${aws_instance.bastion.id} --region ${data.aws_region.current.name}"
+}
+
 # -----------------------------------------------------------------------------
 # Redshift Outputs
 # -----------------------------------------------------------------------------
