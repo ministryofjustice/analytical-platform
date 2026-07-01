@@ -1,89 +1,91 @@
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
-# TEMPORARILY COMMENTED OUT - used by bastion which is disabled for VPC reconfiguration
+# TEMPORARILY COMMENTED OUT - destroying all infrastructure for VPC reconfiguration
+# data "aws_caller_identity" "current" {}
+# data "aws_region" "current" {}
 # data "aws_ssm_parameter" "al2023_arm64" {
 #   name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64"
 # }
 
 # -----------------------------------------------------------------------------
 # VPC
+# TEMPORARILY COMMENTED OUT - destroying all infrastructure for clean rebuild
 # -----------------------------------------------------------------------------
-module "vpc" {
-  source = "./modules/vpc"
-
-  project_name = local.project_name
-  environment  = local.environment
-  vpc_cidr     = var.vpc_cidr
-  tags         = local.tags
-}
+# module "vpc" {
+#   source = "./modules/vpc"
+#
+#   project_name = local.project_name
+#   environment  = local.environment
+#   vpc_cidr     = var.vpc_cidr
+#   tags         = local.tags
+# }
 
 # -----------------------------------------------------------------------------
 # KMS Key for encryption
+# TEMPORARILY COMMENTED OUT - destroying all infrastructure for clean rebuild
 # -----------------------------------------------------------------------------
-module "kms" {
-  # checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
-  source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
-
-  deletion_window_in_days = 7
-  description             = "KMS key for ${local.project_name}"
-  enable_key_rotation     = true
-  is_enabled              = true
-  key_usage               = "ENCRYPT_DECRYPT"
-
-  aliases = [local.project_name]
-
-  key_statements = [
-    {
-      sid = "CloudWatchLogs"
-      actions = [
-        "kms:Encrypt*",
-        "kms:Decrypt*",
-        "kms:ReEncrypt*",
-        "kms:GenerateDataKey*",
-        "kms:Describe*"
-      ]
-      resources = ["*"]
-
-      principals = [
-        {
-          type        = "Service"
-          identifiers = ["logs.${data.aws_region.current.name}.amazonaws.com"]
-        }
-      ]
-
-      conditions = [
-        {
-          test     = "ArnLike"
-          variable = "kms:EncryptionContext:aws:logs:arn"
-          values = [
-            "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*"
-          ]
-        }
-      ]
-    },
-    {
-      sid = "SecretsManager"
-      actions = [
-        "kms:Encrypt*",
-        "kms:Decrypt*",
-        "kms:ReEncrypt*",
-        "kms:GenerateDataKey*",
-        "kms:Describe*"
-      ]
-      resources = ["*"]
-
-      principals = [
-        {
-          type        = "Service"
-          identifiers = ["secretsmanager.${data.aws_region.current.name}.amazonaws.com"]
-        }
-      ]
-    }
-  ]
-
-  tags = local.tags
-}
+# module "kms" {
+#   # checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+#   source  = "terraform-aws-modules/kms/aws"
+#   version = "3.1.1"
+#
+#   deletion_window_in_days = 7
+#   description             = "KMS key for ${local.project_name}"
+#   enable_key_rotation     = true
+#   is_enabled              = true
+#   key_usage               = "ENCRYPT_DECRYPT"
+#
+#   aliases = [local.project_name]
+#
+#   key_statements = [
+#     {
+#       sid = "CloudWatchLogs"
+#       actions = [
+#         "kms:Encrypt*",
+#         "kms:Decrypt*",
+#         "kms:ReEncrypt*",
+#         "kms:GenerateDataKey*",
+#         "kms:Describe*"
+#       ]
+#       resources = ["*"]
+#
+#       principals = [
+#         {
+#           type        = "Service"
+#           identifiers = ["logs.${data.aws_region.current.name}.amazonaws.com"]
+#         }
+#       ]
+#
+#       conditions = [
+#         {
+#           test     = "ArnLike"
+#           variable = "kms:EncryptionContext:aws:logs:arn"
+#           values = [
+#             "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*"
+#           ]
+#         }
+#       ]
+#     },
+#     {
+#       sid = "SecretsManager"
+#       actions = [
+#         "kms:Encrypt*",
+#         "kms:Decrypt*",
+#         "kms:ReEncrypt*",
+#         "kms:GenerateDataKey*",
+#         "kms:Describe*"
+#       ]
+#       resources = ["*"]
+#
+#       principals = [
+#         {
+#           type        = "Service"
+#           identifiers = ["secretsmanager.${data.aws_region.current.name}.amazonaws.com"]
+#         }
+#       ]
+#     }
+#   ]
+#
+#   tags = local.tags
+# }
 
 # -----------------------------------------------------------------------------
 # Bastion host for Aurora access via SSM
