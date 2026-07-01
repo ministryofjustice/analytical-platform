@@ -60,3 +60,26 @@ output "aurora_federated_query_secret_arn" {
   description = "The ARN of the Aurora secret for Redshift federated queries"
   value       = module.aurora.federated_query_secret_arn
 }
+
+# -----------------------------------------------------------------------------
+# Aurora Export Outputs
+# -----------------------------------------------------------------------------
+output "aurora_export_bucket_name" {
+  description = "The name of the S3 bucket for Aurora cluster data exports"
+  value       = module.aurora_export_bucket.s3_bucket_id
+}
+
+output "aurora_export_bucket_arn" {
+  description = "The ARN of the S3 bucket for Aurora cluster data exports"
+  value       = module.aurora_export_bucket.s3_bucket_arn
+}
+
+output "aurora_export_iam_role_arn" {
+  description = "The ARN of the IAM role used for Aurora export tasks"
+  value       = aws_iam_role.aurora_export.arn
+}
+
+output "aurora_cluster_arn" {
+  description = "The ARN of the Aurora cluster (needed for export command)"
+  value       = module.aurora.cluster_arn
+}

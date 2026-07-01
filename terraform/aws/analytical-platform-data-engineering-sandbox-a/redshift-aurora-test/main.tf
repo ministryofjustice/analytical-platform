@@ -78,6 +78,25 @@ module "kms" {
           identifiers = ["secretsmanager.${data.aws_region.current.name}.amazonaws.com"]
         }
       ]
+    },
+    {
+      sid = "RDSExportService"
+      actions = [
+        "kms:Encrypt",
+        "kms:Decrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*",
+        "kms:CreateGrant",
+        "kms:DescribeKey"
+      ]
+      resources = ["*"]
+
+      principals = [
+        {
+          type        = "Service"
+          identifiers = ["export.rds.amazonaws.com"]
+        }
+      ]
     }
   ]
 
@@ -214,4 +233,125 @@ module "redshift" {
   # Federated query configuration
   aurora_federated_secret_arn = module.aurora.federated_query_secret_arn
   aurora_security_group_id    = module.aurora.security_group_id
+}
+
+# -----------------------------------------------------------------------------
+# S3 Bucket for Aurora Cluster Data Export
+# -----------------------------------------------------------------------------
+module "aurora_export_bucket" {
+  # checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "4.1.2"
+
+  bucket = "${local.project_name}-aurora-export"
+
+  # Block all public access
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+
+  # Enable versioning for data protection
+  versioning = {
+    enabled = true
+  }
+
+  # Server-side encryption with KMS
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = module.kms.key_id
+        sse_algorithm     = "aws:kms"
+      }
+      bucket_key_enabled = true
+    }
+  }
+
+  # Lifecycle rules for cost management
+  lifecycle_rule = [
+    {
+      id      = "expire-old-exports"
+      enabled = true
+
+      expiration = {
+        days = 90
+      }
+
+      noncurrent_version_expiration = {
+        days = 30
+      }
+    }
+  ]
+
+  tags = local.tags
+}
+
+# -----------------------------------------------------------------------------
+# IAM Role for Aurora Export Task
+# -----------------------------------------------------------------------------
+resource "aws_iam_role" "aurora_export" {
+  name = "${local.project_name}-aurora-export"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "export.rds.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = local.tags
+}
+
+resource "aws_iam_role_policy" "aurora_export_s3" {
+  name = "s3-access"
+  role = aws_iam_role.aurora_export.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject*",
+          "s3:GetObject*",
+          "s3:ListBucket",
+          "s3:DeleteObject*",
+          "s3:GetBucketLocation"
+        ]
+        Resource = [
+          module.aurora_export_bucket.s3_bucket_arn,
+          "${module.aurora_export_bucket.s3_bucket_arn}/*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "aurora_export_kms" {
+  name = "kms-access"
+  role = aws_iam_role.aurora_export.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:CreateGrant",
+          "kms:DescribeKey"
+        ]
+        Resource = module.kms.key_arn
+      }
+    ]
+  })
 }
