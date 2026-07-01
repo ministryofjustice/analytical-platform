@@ -7,7 +7,8 @@ data "aws_availability_zones" "available" {
 }
 
 locals {
-  azs = slice(data.aws_availability_zones.available.names, 0, 2)
+  # Redshift Serverless requires at least 3 subnets in different AZs
+  azs = slice(data.aws_availability_zones.available.names, 0, 3)
 }
 
 module "vpc" {
@@ -20,8 +21,8 @@ module "vpc" {
 
   azs              = local.azs
   private_subnets  = [for i, az in local.azs : cidrsubnet(var.vpc_cidr, 4, i)]
-  database_subnets = [for i, az in local.azs : cidrsubnet(var.vpc_cidr, 4, i + 2)]
-  public_subnets   = [for i, az in local.azs : cidrsubnet(var.vpc_cidr, 4, i + 4)]
+  database_subnets = [for i, az in local.azs : cidrsubnet(var.vpc_cidr, 4, i + 3)]
+  public_subnets   = [for i, az in local.azs : cidrsubnet(var.vpc_cidr, 4, i + 6)]
 
   create_database_subnet_group = true
   database_subnet_group_name   = "${var.project_name}-${var.environment}-db"
