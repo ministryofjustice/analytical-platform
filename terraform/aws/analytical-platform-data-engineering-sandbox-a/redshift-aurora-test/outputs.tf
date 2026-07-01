@@ -1,15 +1,14 @@
 # -----------------------------------------------------------------------------
 # VPC Outputs
-# TEMPORARILY COMMENTED OUT - destroying all infrastructure for clean rebuild
 # -----------------------------------------------------------------------------
-# output "vpc_id" {
-#   description = "The ID of the VPC"
-#   value       = module.vpc.vpc_id
-# }
+output "vpc_id" {
+  description = "The ID of the VPC"
+  value       = module.vpc.vpc_id
+}
 
 # -----------------------------------------------------------------------------
 # Aurora Outputs
-# TEMPORARILY COMMENTED OUT for VPC subnet reconfiguration (2→3 AZs)
+# TEMPORARILY COMMENTED OUT - to be restored in later PR
 # -----------------------------------------------------------------------------
 # output "aurora_cluster_endpoint" {
 #   description = "The endpoint of the Aurora PostgreSQL cluster"
