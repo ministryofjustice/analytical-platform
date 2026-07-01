@@ -197,21 +197,19 @@ module "kms" {
 
 # -----------------------------------------------------------------------------
 # Redshift Serverless
-# TEMPORARILY COMMENTED OUT for VPC subnet reconfiguration (2→3 AZs)
-# Restore after VPC changes have applied successfully
 # -----------------------------------------------------------------------------
-# module "redshift" {
-#   source = "./modules/redshift"
-#
-#   project_name = local.project_name
-#   environment  = local.environment
-#   tags         = local.tags
-#
-#   vpc_id           = module.vpc.vpc_id
-#   database_subnets = module.vpc.database_subnet_ids
-#   vpc_cidr         = var.vpc_cidr
-#
-#   kms_key_arn = module.kms.key_arn
-#
-#   price_performance_level = var.redshift_price_performance_level
-# }
+module "redshift" {
+  source = "./modules/redshift"
+
+  project_name = local.project_name
+  environment  = local.environment
+  tags         = local.tags
+
+  vpc_id           = module.vpc.vpc_id
+  database_subnets = module.vpc.database_subnet_ids
+  vpc_cidr         = var.vpc_cidr
+
+  kms_key_arn = module.kms.key_arn
+
+  price_performance_level = var.redshift_price_performance_level
+}
