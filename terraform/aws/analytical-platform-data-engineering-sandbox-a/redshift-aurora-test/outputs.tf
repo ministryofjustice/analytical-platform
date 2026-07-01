@@ -1,7 +1,11 @@
-output "vpc_id" {
-  description = "The ID of the VPC"
-  value       = module.vpc.vpc_id
-}
+# -----------------------------------------------------------------------------
+# VPC Outputs
+# TEMPORARILY COMMENTED OUT - destroying all infrastructure for clean rebuild
+# -----------------------------------------------------------------------------
+# output "vpc_id" {
+#   description = "The ID of the VPC"
+#   value       = module.vpc.vpc_id
+# }
 
 # -----------------------------------------------------------------------------
 # Aurora Outputs
