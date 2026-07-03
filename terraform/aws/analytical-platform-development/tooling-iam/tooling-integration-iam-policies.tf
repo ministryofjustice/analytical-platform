@@ -1,4 +1,3 @@
-#trivy:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "quicksight_author" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
@@ -47,7 +46,6 @@ resource "aws_iam_policy" "quicksight_author" {
   policy = data.aws_iam_policy_document.quicksight_author.json
 }
 
-#trivy:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "lake_formation_data_access" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources

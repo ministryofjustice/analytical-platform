@@ -1,5 +1,4 @@
-#trivy:ignore:avd-aws-0090:Bucket versioning is not preferred for query bucket
-#tfsec:ignore:AVD-AWS-0088:Bucket is encrypted, but not detected by Trivy
+#tfsec:ignore:AVD-AWS-0088:Bucket is encrypted.
 module "data_engineering_pipeline_buckets" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
 

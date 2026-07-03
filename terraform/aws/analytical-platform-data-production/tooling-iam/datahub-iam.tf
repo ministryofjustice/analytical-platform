@@ -64,7 +64,6 @@ resource "aws_iam_policy" "datahub_ingest_athena_query_results" {
   policy = data.aws_iam_policy_document.datahub_ingest_athena_query_results.json
 }
 
-#trivy:ignore:avd-aws-0057:sensitive action 's3:*' on wildcarded resource
 data "aws_iam_policy_document" "datahub_read_cadet_bucket" {
   statement {
     sid    = "datahubReadCaDeTBucket"
@@ -128,7 +127,6 @@ resource "aws_iam_role_policy_attachment" "datahub_ingestion_github_actions_athe
   role       = aws_iam_role.datahub_ingestion_github_actions.name
 }
 
-#trivy:ignore:aws-iam-no-policy-wildcards
 # Listing all Glue buckets for finding the latest file timestamp so that analysts can see the correct timestamp.
 data "aws_iam_policy_document" "datahub_ingestion_github_actions_s3_list_all_buckets" {
   statement {
@@ -155,7 +153,6 @@ resource "aws_iam_role_policy_attachment" "datahub_ingestion_github_actions_s3_l
   role       = aws_iam_role.datahub_ingestion_github_actions.name
 }
 
-#trivy:ignore:avd-aws-0057:sensitive action 'glue:GetDatabases' on wildcarded resource
 data "aws_iam_policy_document" "datahub_ingest_glue_datasets" {
   statement {
     sid    = "datahubIngestGlueDatasets"
@@ -177,7 +174,6 @@ resource "aws_iam_policy" "datahub_ingest_glue_datasets" {
   policy = data.aws_iam_policy_document.datahub_ingest_glue_datasets.json
 }
 
-#trivy:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "datahub_ingest_glue_jobs" {
   statement {
     sid    = "datahubIngestGlueJobs"

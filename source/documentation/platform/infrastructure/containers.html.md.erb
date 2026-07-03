@@ -9,7 +9,7 @@ review_in: 6 months
 
 The Analytical Platform team offers a managed pipeline for building, scanning and pushing containers to a registry. This is done via GitHub Actions and is available to all teams. This is managed in Terraform.
 
-Images are scanned for vulnerabilities using [Trivy](https://github.com/aquasecurity/trivy), currently with a default severity of `CRITICAL`
+Images are scanned for vulnerabilities using [Grype](https://anchore.com/grype/), currently with a default severity of `CRITICAL`
 
 Dockerfiles are linted by the Super Linter with [Hadolint](https://github.com/hadolint/hadolint)
 

@@ -1,5 +1,3 @@
-#trivy:ignore:aws-iam-no-policy-wildcards
-#trivy:ignore:AVD-AWS-0342 passing of role is needed for batch processing
 data "aws_iam_policy_document" "bedrock_integration" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
@@ -223,7 +221,6 @@ resource "aws_iam_policy" "textract_integration" {
   policy      = data.aws_iam_policy_document.textract_integration.json
 }
 
-#trivy:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "quicksight_author" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
@@ -272,7 +269,6 @@ resource "aws_iam_policy" "quicksight_author" {
   policy = data.aws_iam_policy_document.quicksight_author.json
 }
 
-#trivy:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "lake_formation_data_access" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
@@ -291,8 +287,6 @@ resource "aws_iam_policy" "lake_formation_data_access" {
   policy = data.aws_iam_policy_document.lake_formation_data_access.json
 }
 
-#trivy:ignore:aws-iam-no-policy-wildcards
-#trivy:ignore:AVD-AWS-0342
 data "aws_iam_policy_document" "comprehend_integration" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
@@ -368,7 +362,6 @@ resource "aws_iam_policy" "comprehend_integration" {
 # Comprehend Batch Processing Role
 ##################################################
 
-#trivy:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "comprehend_batch_processing_assume_role" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources
@@ -401,7 +394,6 @@ resource "aws_iam_role" "comprehend_batch_processing" {
   assume_role_policy = data.aws_iam_policy_document.comprehend_batch_processing_assume_role.json
 }
 
-#trivy:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "comprehend_batch_processing_s3_access" {
   #checkov:skip=CKV_AWS_111: This is a service policy
   #checkov:skip=CKV_AWS_356: Needs to access multiple resources

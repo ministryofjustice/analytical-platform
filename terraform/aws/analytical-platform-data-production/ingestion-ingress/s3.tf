@@ -17,9 +17,9 @@ data "aws_iam_policy_document" "cica_dms_ingress_bucket_policy" {
   }
 }
 
-#tfsec:ignore:AVD-AWS-0088:Bucket is encrypted with CMK KMS, but not detected by Trivy
+#tfsec:ignore:AVD-AWS-0088:Bucket is encrypted with CMK KMS.
 #tfsec:ignore:AVD-AWS-0089:Bucket logging not enabled currently
-#tfsec:ignore:AVD-AWS-0132:Bucket is encrypted with CMK KMS, but not detected by Trivy
+#tfsec:ignore:AVD-AWS-0132:Bucket is encrypted with CMK KMS.
 module "cica_dms_ingress_s3" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
