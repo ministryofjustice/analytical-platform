@@ -88,7 +88,7 @@ module "s3-bucket-splink" {
   ]
 
   tags = merge(local.tags,
-    { Name = lower(format("s3-%s-%s-splink-inbound-mp", local.application_name)) }
+    { Name = lower(format("s3-%s-splink-inbound-ap", local.application_name)) }
   )
 }
 
