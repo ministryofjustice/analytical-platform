@@ -68,3 +68,81 @@ resource "aws_kms_key" "s3_kms_key" {
   enable_key_rotation = true
   policy              = data.aws_iam_policy_document.s3_kms_policy.json
 }
+
+data "aws_iam_policy_document" "cloudwatch_sns_kms_policy" {
+
+  statement {
+    sid = "AllowRootAccountAdmin"
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      ]
+    }
+
+    actions = [
+      "kms:*"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "AllowSNSUseOfKey"
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "sns.amazonaws.com"
+      ]
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey",
+      "kms:GenerateDataKeyWithoutPlaintext",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:CallerAccount"
+
+      values = [
+        data.aws_caller_identity.current.account_id
+      ]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+
+      values = [
+        "sns.${data.aws_region.current.region}.amazonaws.com"
+      ]
+    }
+  }
+}
+
+resource "aws_kms_key" "cloudwatch_sns_alerts_key" {
+  description             = "KMS Key for CloudWatch SNS Alerts Encryption"
+  deletion_window_in_days = 30
+  enable_key_rotation     = true
+
+  policy = data.aws_iam_policy_document.cloudwatch_sns_kms_policy.json
+
+  tags = merge(local.tags,
+    {
+      Name = lower(format("%s-%s-cloudwatch-sns-alerts-kms-key", local.application_name, local.environment))
+    }
+  )
+}
+
+resource "aws_kms_alias" "cloudwatch_sns_alerts_key_alias" {
+  name          = "alias/cloudwatch-sns-alerts-key"
+  target_key_id = aws_kms_key.cloudwatch_sns_alerts_key.id
+}

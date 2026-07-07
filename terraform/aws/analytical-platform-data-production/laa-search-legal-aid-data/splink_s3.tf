@@ -115,5 +115,5 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 resource "aws_cloudwatch_event_target" "bucket_event_target" {
   rule      = aws_cloudwatch_event_rule.bucket_event_rule.name
   target_id = "s3-event-target"
-  arn       = data.aws_sns_topic.s3_topic.arn
+  arn       = aws_sns_topic.s3_topic.arn
 }
