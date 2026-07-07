@@ -1,0 +1,5 @@
+{
+    "splink_bucket_name": "laa-splink-search-s3",
+    "logging_bucket_name": "laa-splink-search-s3-logging",
+    "application_name": "laa-search-legal-aid-data"
+}
