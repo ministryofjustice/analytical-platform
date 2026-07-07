@@ -5,10 +5,6 @@
 module "s3-bucket-splink" {
   source                  = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=9facf9fc8f8b8e3f93ffbda822028534b9a75399"
   bucket_name             = local.splink_bucket_name
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
   versioning_enabled      = true
   bucket_policy = [jsonencode({
     Version = "2012-10-17",
@@ -65,7 +61,6 @@ module "s3-bucket-splink" {
   log_bucket         = local.logging_bucket_name
   log_prefix         = "s3access/${local.splink_bucket_name}"
   custom_kms_key     = aws_kms_key.s3_kms_key.arn
-  bucket_key_enabled = true
   sse_algorithm      = "aws:kms"
 
   # Refer to the below section "Replication" before enabling replication
