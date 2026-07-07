@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "s3_topic_policy" {
     ]
 
     resources = [
-      aws_sns_topic.s3_topic.arn
+      "arn:aws:sns:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:s3-event-notification-topic"
     ]
 
     condition {
