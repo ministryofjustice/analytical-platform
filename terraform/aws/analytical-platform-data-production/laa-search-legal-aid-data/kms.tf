@@ -1,3 +1,6 @@
+#checkov:skip=CKV_AWS_111 KMS key administration permissions are required for the account root principal.
+#checkov:skip=CKV_AWS_109 KMS key policies require key administration actions.
+#checkov:skip=CKV_AWS_356 AWS KMS key policies require Resource="*" and cannot reference the key ARN.
 data "aws_iam_policy_document" "s3_kms_policy" {
   statement {
     sid = "AllowAccountRootAdmin"
