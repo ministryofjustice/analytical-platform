@@ -3,69 +3,70 @@
 # ---------------------------------------------
 
 module "s3-bucket-splink" {
-  source  = "terraform-aws-modules/s3-bucket/aws"
-  bucket_name        = local.splink_bucket_name
+  source                  = "github.com/terraform-aws-modules/terraform-aws-s3-bucket?ref=97bb13eff35489bd38993487c3d04c5b6d024cb6"
+  bucket_name             = local.splink_bucket_name
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
-  versioning_enabled = true
+  versioning_enabled      = true
   bucket_policy = [jsonencode({
     Version = "2012-10-17",
     Statement = [
-    {
-        Sid = "RequireSSLRequests"
-        Effect = "Deny"
+      {
+        Sid       = "RequireSSLRequests"
+        Effect    = "Deny"
         Principal = "*"
-        Action = "s3:*"
+        Action    = "s3:*"
         Resource = [
-        module.s3-bucket-splink.bucket.arn,
-        "${module.s3-bucket-splink.bucket.arn}/*"
+          module.s3-bucket-splink.bucket.arn,
+          "${module.s3-bucket-splink.bucket.arn}/*"
         ]
         Condition = {
-        Bool = {
+          Bool = {
             "aws:SecureTransport" = "false"
+          }
         }
-        }
-    },
-    {
-        Sid = "RestrictToTLSRequestsOnly"
-        Effect = "Deny"
+      },
+      {
+        Sid       = "RestrictToTLSRequestsOnly"
+        Effect    = "Deny"
         Principal = "*"
-        Action = "s3:*"
+        Action    = "s3:*"
         Resource = [
-        module.s3-bucket-splink.bucket.arn,
-        "${module.s3-bucket-splink.bucket.arn}/*"
+          module.s3-bucket-splink.bucket.arn,
+          "${module.s3-bucket-splink.bucket.arn}/*"
         ]
         Condition = {
-        NumericLessThan = {
+          NumericLessThan = {
             "aws:TLSVersion" = "1.2"
+          }
         }
-        }
-    },
-    {
-        Sid = "DenyObjectWrites"
-        Effect = "Deny"
+      },
+      {
+        Sid       = "DenyObjectWrites"
+        Effect    = "Deny"
         Principal = "*"
         Action = [
-        "s3:PutObject",
-        "s3:DeleteObject",
-        "s3:AbortMultipartUpload",
-        "s3:PutObjectAcl",
-        "s3:PutObjectTagging"
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:AbortMultipartUpload",
+          "s3:PutObjectAcl",
+          "s3:PutObjectTagging"
         ]
         Resource = [
-        module.s3-bucket-splink.bucket.arn,
-        "${module.s3-bucket-splink.bucket.arn}/*"
+          module.s3-bucket-splink.bucket.arn,
+          "${module.s3-bucket-splink.bucket.arn}/*"
         ]
-    }
+      }
     ]
   })]
 
-  log_bucket     = local.logging_bucket_name
-  log_prefix     = "s3access/${local.splink_bucket_name}"
-  custom_kms_key = aws_kms_key.s3_kms_key.arn
-  sse_algorithm  = "aws:kms"
+  log_bucket         = local.logging_bucket_name
+  log_prefix         = "s3access/${local.splink_bucket_name}"
+  custom_kms_key     = aws_kms_key.s3_kms_key.arn
+  bucket_key_enabled = true
+  sse_algorithm      = "aws:kms"
 
   # Refer to the below section "Replication" before enabling replication
   replication_enabled = false
@@ -112,8 +113,8 @@ resource "aws_cloudwatch_event_rule" "bucket_event_rule" {
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
-    bucket      = module.s3-bucket-splink.bucket.id
-    eventbridge = true
+  bucket      = module.s3-bucket-splink.bucket.id
+  eventbridge = true
 }
 
 resource "aws_cloudwatch_event_target" "bucket_event_target" {
