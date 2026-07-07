@@ -3,7 +3,7 @@
 # ---------------------------------------------
 
 module "s3-bucket-splink" {
-  source                  = "github.com/terraform-aws-modules/terraform-aws-s3-bucket?ref=97bb13eff35489bd38993487c3d04c5b6d024cb6"
+  source                  = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=9facf9fc8f8b8e3f93ffbda822028534b9a75399"
   bucket_name             = local.splink_bucket_name
   block_public_acls       = true
   block_public_policy     = true
