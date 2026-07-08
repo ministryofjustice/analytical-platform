@@ -116,9 +116,7 @@ data "aws_iam_policy_document" "cloudwatch_sns_kms_policy" {
       "kms:DescribeKey"
     ]
 
-    resources = [
-      aws_kms_key.cloudwatch_sns_alerts_key.arn
-    ]
+    resources = ["*"]
 
     condition {
       test     = "StringEquals"
