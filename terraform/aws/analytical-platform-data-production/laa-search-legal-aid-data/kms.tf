@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "s3_kms_policy" {
     sid = "AllowS3UseOfKey"
 
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["s3.amazonaws.com"]
     }
 
@@ -77,7 +77,7 @@ data "aws_iam_policy_document" "cloudwatch_sns_kms_policy" {
     sid = "AllowRootAccountAdmin"
 
     principals {
-      type        = "AWS"
+      type = "AWS"
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
       ]

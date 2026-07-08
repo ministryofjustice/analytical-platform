@@ -2,10 +2,10 @@
 # S3 Bucket - Splink Output
 # ---------------------------------------------
 
-module "s3-bucket-splink" {
-  source                  = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=9facf9fc8f8b8e3f93ffbda822028534b9a75399"
-  bucket_name             = local.splink_bucket_name
-  versioning_enabled      = true
+module "s3_bucket_splink" {
+  source             = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=9facf9fc8f8b8e3f93ffbda822028534b9a75399"
+  bucket_name        = local.splink_bucket_name
+  versioning_enabled = true
   bucket_policy = [jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -15,8 +15,8 @@ module "s3-bucket-splink" {
         Principal = "*"
         Action    = "s3:*"
         Resource = [
-          module.s3-bucket-splink.bucket.arn,
-          "${module.s3-bucket-splink.bucket.arn}/*"
+          module.s3_bucket_splink.bucket.arn,
+          "${module.s3_bucket_splink.bucket.arn}/*"
         ]
         Condition = {
           Bool = {
@@ -30,8 +30,8 @@ module "s3-bucket-splink" {
         Principal = "*"
         Action    = "s3:*"
         Resource = [
-          module.s3-bucket-splink.bucket.arn,
-          "${module.s3-bucket-splink.bucket.arn}/*"
+          module.s3_bucket_splink.bucket.arn,
+          "${module.s3_bucket_splink.bucket.arn}/*"
         ]
         Condition = {
           NumericLessThan = {
@@ -51,17 +51,17 @@ module "s3-bucket-splink" {
           "s3:PutObjectTagging"
         ]
         Resource = [
-          module.s3-bucket-splink.bucket.arn,
-          "${module.s3-bucket-splink.bucket.arn}/*"
+          module.s3_bucket_splink.bucket.arn,
+          "${module.s3_bucket_splink.bucket.arn}/*"
         ]
       }
     ]
   })]
 
-  log_bucket         = local.logging_bucket_name
-  log_prefix         = "s3access/${local.splink_bucket_name}"
-  custom_kms_key     = aws_kms_key.s3_kms_key.arn
-  sse_algorithm      = "aws:kms"
+  log_bucket     = local.logging_bucket_name
+  log_prefix     = "s3access/${local.splink_bucket_name}"
+  custom_kms_key = aws_kms_key.s3_kms_key.arn
+  sse_algorithm  = "aws:kms"
 
   # Refer to the below section "Replication" before enabling replication
   replication_enabled = false
@@ -100,7 +100,7 @@ resource "aws_cloudwatch_event_rule" "bucket_event_rule" {
     detail-type = ["Object Created"]
     detail = {
       bucket = {
-        name = ["${module.s3-bucket-splink.bucket.id}"]
+        name = ["${module.s3_bucket_splink.bucket.id}"]
       }
     }
   })
@@ -108,7 +108,7 @@ resource "aws_cloudwatch_event_rule" "bucket_event_rule" {
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
-  bucket      = module.s3-bucket-splink.bucket.id
+  bucket      = module.s3_bucket_splink.bucket.id
   eventbridge = true
 }
 
