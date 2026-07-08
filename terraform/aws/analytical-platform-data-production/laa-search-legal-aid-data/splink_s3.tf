@@ -125,26 +125,6 @@ module "s3_bucket_splink" {
             "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_kms_key.arn
           }
         }
-      },
-
-      {
-        Sid    = "AllowSplinkWriterOnly"
-        Effect = "Deny"
-
-        NotPrincipal = {
-          AWS = [
-            aws_iam_role.splink_writer.arn
-          ]
-        }
-
-        Action = [
-          "s3:PutObject",
-          "s3:DeleteObject"
-        ]
-
-        Resource = [
-          "${module.s3_bucket_splink.s3_bucket_arn}/*"
-        ]
       }
     ]
   })
