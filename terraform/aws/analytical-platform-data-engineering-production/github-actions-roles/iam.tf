@@ -89,6 +89,16 @@ data "aws_iam_policy_document" "create_a_derived_table_dev" {
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-production"]}:catalog"
     ]
   }
+  statement {
+    sid    = "AirflowBucketAccess"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject*"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-reg-dev/landing/cadet-pb-hearing-audit/*"
+    ]
+  }
 }
 
 module "create_a_derived_table_dev_iam_policy" {
