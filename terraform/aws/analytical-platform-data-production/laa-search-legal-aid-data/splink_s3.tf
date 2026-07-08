@@ -100,7 +100,7 @@ resource "aws_cloudwatch_event_rule" "bucket_event_rule" {
     detail-type = ["Object Created"]
     detail = {
       bucket = {
-        name = ["${module.s3_bucket_splink.bucket.id}"]
+        name = [module.s3_bucket_splink.bucket.id]
       }
     }
   })
