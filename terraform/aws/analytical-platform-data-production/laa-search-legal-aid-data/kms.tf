@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "s3_kms_policy" {
       variable = "kms:EncryptionContext:aws:s3:arn"
 
       values = [
-        module.s3_bucket_splink.bucket.arn
+        "arn:aws:s3:::${local.splink_bucket_name}"
       ]
     }
 
@@ -161,7 +161,7 @@ data "aws_iam_policy_document" "cloudwatch_sns_kms_policy" {
       variable = "kms:EncryptionContext:aws:sns:topicArn"
 
       values = [
-        aws_sns_topic.s3_topic.arn
+        "arn:aws:sns:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:splink-*"
       ]
     }
 

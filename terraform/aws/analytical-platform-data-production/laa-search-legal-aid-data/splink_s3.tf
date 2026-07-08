@@ -5,7 +5,7 @@
 module "s3_bucket_splink" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=97bb13eff35489bd38993487c3d04c5b6d024cb6" # v5.14.1
 
-  bucket = local.splink_bucket_name
+  bucket              = local.splink_bucket_name
   object_lock_enabled = true
   versioning = {
     enabled = true
