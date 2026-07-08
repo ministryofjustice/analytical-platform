@@ -6,7 +6,7 @@ module "s3_bucket_splink" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=97bb13eff35489bd38993487c3d04c5b6d024cb6" # v5.14.1
 
   bucket = local.splink_bucket_name
-
+  object_lock_enabled = true
   versioning = {
     enabled = true
   }
@@ -15,12 +15,6 @@ module "s3_bucket_splink" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
-
-  ownership_controls = {
-    rule = {
-      object_ownership = "BucketOwnerEnforced"
-    }
-  }
 
   server_side_encryption_configuration = {
     rule = {
@@ -166,7 +160,7 @@ module "s3_bucket_splink" {
       enabled = true
 
       noncurrent_version_expiration = {
-        noncurrent_days = 3
+        days = 3
       }
     }
   ]
@@ -179,6 +173,13 @@ module "s3_bucket_splink" {
   )
 }
 
+resource "aws_s3_bucket_ownership_controls" "splink" {
+  bucket = module.s3_bucket_splink.s3_bucket_id
+
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
 
 resource "aws_cloudwatch_event_rule" "bucket_event_rule" {
   name        = "splink-bucket-event-rule"
