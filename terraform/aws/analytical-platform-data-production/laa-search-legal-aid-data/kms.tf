@@ -51,8 +51,11 @@ data "aws_iam_policy_document" "s3_kms_policy" {
 
     condition {
       test     = "StringEquals"
-      variable = "kms:CallerAccount"
-      values   = [data.aws_caller_identity.current.account_id]
+      variable = "kms:EncryptionContext:aws:s3:arn"
+
+      values = [
+        module.s3_bucket_splink.bucket.arn
+      ]
     }
 
     condition {
@@ -64,9 +67,10 @@ data "aws_iam_policy_document" "s3_kms_policy" {
 }
 
 resource "aws_kms_key" "s3_kms_key" {
-  description         = "S3 bucket encryption key"
-  enable_key_rotation = true
-  policy              = data.aws_iam_policy_document.s3_kms_policy.json
+  description             = "S3 bucket encryption key"
+  enable_key_rotation     = true
+  deletion_window_in_days = 30
+  policy                  = data.aws_iam_policy_document.s3_kms_policy.json
 }
 
 data "aws_iam_policy_document" "cloudwatch_sns_kms_policy" {
@@ -104,6 +108,38 @@ data "aws_iam_policy_document" "cloudwatch_sns_kms_policy" {
   }
 
   statement {
+    sid = "AllowEventBridgeUseOfKey"
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "events.amazonaws.com"
+      ]
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+      "kms:ReEncryptFrom",
+      "kms:ReEncryptTo"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test = "StringEquals"
+
+      variable = "kms:CallerAccount"
+
+      values = [
+        data.aws_caller_identity.current.account_id
+      ]
+    }
+  }
+
+  statement {
     sid = "AllowSNSUseOfKey"
 
     principals {
@@ -122,8 +158,11 @@ data "aws_iam_policy_document" "cloudwatch_sns_kms_policy" {
 
     condition {
       test     = "StringEquals"
-      variable = "kms:CallerAccount"
-      values   = [data.aws_caller_identity.current.account_id]
+      variable = "kms:EncryptionContext:aws:sns:topicArn"
+
+      values = [
+        aws_sns_topic.s3_topic.arn
+      ]
     }
 
     condition {

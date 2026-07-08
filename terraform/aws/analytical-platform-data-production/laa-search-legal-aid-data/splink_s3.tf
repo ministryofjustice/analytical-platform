@@ -6,6 +6,12 @@ module "s3_bucket_splink" {
   source             = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=9facf9fc8f8b8e3f93ffbda822028534b9a75399"
   bucket_name        = local.splink_bucket_name
   versioning_enabled = true
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+
   bucket_policy = [jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -40,28 +46,103 @@ module "s3_bucket_splink" {
         }
       },
       {
-        Sid       = "DenyObjectWrites"
-        Effect    = "Deny"
+        Sid    = "DenyBucketDeletion"
+        Effect = "Deny"
+
         Principal = "*"
+
+        Action = [
+          "s3:DeleteBucket",
+          "s3:PutBucketPolicy",
+          "s3:PutBucketAcl",
+          "s3:PutEncryptionConfiguration",
+          "s3:PutBucketVersioning"
+        ]
+
+        Resource = [
+          module.s3_bucket_splink.bucket.arn
+        ]
+      },
+      {
+        Sid = "DenyUnencryptedObjectUploads"
+
+        Effect = "Deny"
+
+        Principal = "*"
+
+        Action = [
+          "s3:PutObject"
+        ]
+
+        Resource = [
+          "${module.s3_bucket_splink.bucket.arn}/*"
+        ]
+
+        Condition = {
+          StringNotEquals = {
+            "s3:x-amz-server-side-encryption" = "aws:kms"
+          }
+        }
+      },
+      {
+        Sid = "DenyWrongKMSKey"
+
+        Effect = "Deny"
+
+        Principal = "*"
+
+        Action = [
+          "s3:PutObject"
+        ]
+
+        Resource = [
+          "${module.s3_bucket_splink.bucket.arn}/*"
+        ]
+
+        Condition = {
+          StringNotEquals = {
+            "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_kms_key.arn
+          }
+        }
+      },
+      {
+        Sid = "DenyObjectWritesExceptSplink"
+
+        Effect = "Deny"
+
+        Principal = "*"
+
+        NotPrincipal = {
+          AWS = [
+            aws_iam_role.splink_writer.arn
+          ]
+        }
+
         Action = [
           "s3:PutObject",
-          "s3:DeleteObject",
-          "s3:AbortMultipartUpload",
-          "s3:PutObjectAcl",
-          "s3:PutObjectTagging"
+          "s3:DeleteObject"
         ]
+
         Resource = [
-          module.s3_bucket_splink.bucket.arn,
           "${module.s3_bucket_splink.bucket.arn}/*"
         ]
       }
     ]
   })]
 
-  log_bucket     = local.logging_bucket_name
-  log_prefix     = "s3access/${local.splink_bucket_name}"
-  custom_kms_key = aws_kms_key.s3_kms_key.arn
-  sse_algorithm  = "aws:kms"
+  log_bucket = local.logging_bucket_name
+  log_prefix = "s3access/${local.splink_bucket_name}"
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = aws_kms_key.s3_kms_key.arn
+        sse_algorithm     = "aws:kms"
+      }
+
+      bucket_key_enabled = true
+    }
+  }
 
   # Refer to the below section "Replication" before enabling replication
   replication_enabled = false
@@ -90,6 +171,14 @@ module "s3_bucket_splink" {
   tags = merge(local.tags,
     { Name = lower(format("s3-%s-splink-inbound-ap", local.application_name)) }
   )
+}
+
+resource "aws_s3_bucket_ownership_controls" "splink" {
+  bucket = module.s3_bucket_splink.bucket.id
+
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
 }
 
 resource "aws_cloudwatch_event_rule" "bucket_event_rule" {
