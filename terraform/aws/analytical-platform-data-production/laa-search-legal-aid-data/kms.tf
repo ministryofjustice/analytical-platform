@@ -82,10 +82,20 @@ data "aws_iam_policy_document" "cloudwatch_sns_kms_policy" {
     }
 
     actions = [
-      "kms:*"
+      "kms:DescribeKey",
+      "kms:GetKeyPolicy",
+      "kms:GetKeyRotationStatus",
+      "kms:ListResourceTags",
+      "kms:PutKeyPolicy",
+      "kms:EnableKeyRotation",
+      "kms:DisableKeyRotation",
+      "kms:ScheduleKeyDeletion",
+      "kms:CancelKeyDeletion"
     ]
 
-    resources = ["*"]
+    resources = [
+      aws_kms_key.cloudwatch_sns_alerts_key.arn
+    ]
   }
 
   statement {
@@ -106,7 +116,9 @@ data "aws_iam_policy_document" "cloudwatch_sns_kms_policy" {
       "kms:DescribeKey"
     ]
 
-    resources = ["*"]
+    resources = [
+      aws_kms_key.cloudwatch_sns_alerts_key.arn
+    ]
 
     condition {
       test     = "StringEquals"
