@@ -89,6 +89,16 @@ data "aws_iam_policy_document" "create_a_derived_table_dev" {
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-production"]}:catalog"
     ]
   }
+  statement {
+    sid    = "AirflowBucketAccess"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject*"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-reg-dev/landing/cadet-pb-hearing-audit/*"
+    ]
+  }
 }
 
 module "create_a_derived_table_dev_iam_policy" {
@@ -137,7 +147,7 @@ module "create_a_derived_table_dev_iam_role" {
         "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:oidc-provider/%s",
         trimprefix(jsondecode(data.aws_secretsmanager_secret_version.analytical_platform_compute_cluster_data.secret_string)["analytical-platform-compute-development-oidc-endpoint"], "https://")
       )
-      namespace_service_accounts = ["mwaa:probation-cadet"]
+      namespace_service_accounts = ["mwaa:probation-cadet", "mwaa:probation-pb-hearings"]
     }
   }
 
