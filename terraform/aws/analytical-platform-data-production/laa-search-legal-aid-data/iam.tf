@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "s3_topic_policy" {
+data "aws_iam_policy_document" "s3_sns_alerting_topic_policy" {
   statement {
     effect = "Allow"
 
