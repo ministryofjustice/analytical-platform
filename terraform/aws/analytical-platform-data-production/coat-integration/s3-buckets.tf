@@ -32,7 +32,7 @@ module "coat_s3_buckets" {
   for_each = local.buckets
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.14.0"
+  version = "5.14.1"
 
   bucket = each.value.bucket_name
 
