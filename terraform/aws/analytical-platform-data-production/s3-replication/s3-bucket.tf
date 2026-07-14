@@ -6,7 +6,7 @@ module "replication_buckets" {
   for_each = local.replication_configurations
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.14.0"
+  version = "5.14.1"
 
   bucket = each.value.source_bucket_name
 
