@@ -245,6 +245,7 @@ module "redshift" {
 resource "aws_s3_bucket" "aurora_export" {
   # checkov:skip=CKV_AWS_144:Cross-region replication not required for test environment
   # checkov:skip=CKV2_AWS_62:Event notifications not required for snapshot exports
+  # checkov:skip=CKV_AWS_18:Access logging not required for test environment
   bucket = "${local.project_name}-aurora-export"
 
   tags = local.tags
@@ -292,6 +293,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "aurora_export" {
 
     noncurrent_version_expiration {
       noncurrent_days = 30
+    }
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 7
     }
   }
 }
