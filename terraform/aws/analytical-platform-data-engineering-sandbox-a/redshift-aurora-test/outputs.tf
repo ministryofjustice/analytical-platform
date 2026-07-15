@@ -64,3 +64,39 @@ output "redshift_admin_secret_arn" {
   description = "The ARN of the Redshift admin user secret (retrieve from Secrets Manager)"
   value       = module.redshift.admin_secret_arn
 }
+
+# -----------------------------------------------------------------------------
+# Aurora Export to S3 Outputs
+# -----------------------------------------------------------------------------
+output "aurora_export_bucket_name" {
+  description = "The name of the S3 bucket for Aurora snapshot exports"
+  value       = aws_s3_bucket.aurora_export.id
+}
+
+output "aurora_export_bucket_arn" {
+  description = "The ARN of the S3 bucket for Aurora snapshot exports"
+  value       = aws_s3_bucket.aurora_export.arn
+}
+
+output "aurora_export_role_arn" {
+  description = "The ARN of the IAM role for RDS export tasks"
+  value       = aws_iam_role.rds_export.arn
+}
+
+output "kms_key_arn" {
+  description = "The ARN of the KMS key used for encryption"
+  value       = module.kms.key_arn
+}
+
+output "aurora_export_command" {
+  description = "Example AWS CLI command to export an Aurora snapshot to S3"
+  value       = <<-EOT
+    aws rds start-export-task \
+      --export-task-identifier my-export-$(date +%Y%m%d) \
+      --source-arn <snapshot-arn> \
+      --s3-bucket-name ${aws_s3_bucket.aurora_export.id} \
+      --iam-role-arn ${aws_iam_role.rds_export.arn} \
+      --kms-key-id ${module.kms.key_arn} \
+      --region ${data.aws_region.current.name}
+  EOT
+}

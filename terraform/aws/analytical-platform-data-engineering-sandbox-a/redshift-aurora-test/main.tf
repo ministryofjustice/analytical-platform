@@ -78,6 +78,25 @@ module "kms" {
           identifiers = ["secretsmanager.${data.aws_region.current.name}.amazonaws.com"]
         }
       ]
+    },
+    {
+      sid = "RDSExportService"
+      actions = [
+        "kms:Encrypt",
+        "kms:Decrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*",
+        "kms:CreateGrant",
+        "kms:DescribeKey"
+      ]
+      resources = ["*"]
+
+      principals = [
+        {
+          type        = "AWS"
+          identifiers = [aws_iam_role.rds_export.arn]
+        }
+      ]
     }
   ]
 
@@ -207,4 +226,122 @@ module "redshift" {
   kms_key_arn = module.kms.key_arn
 
   price_performance_level = var.redshift_price_performance_level
+}
+
+# -----------------------------------------------------------------------------
+# Aurora Snapshot Export to S3
+#
+# Export Aurora snapshots to S3 as Parquet files.
+# See: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-export-snapshot.html
+#
+# Usage (AWS CLI):
+#   aws rds start-export-task \
+#     --export-task-identifier my-export \
+#     --source-arn <snapshot-arn> \
+#     --s3-bucket-name <bucket-name> \
+#     --iam-role-arn <role-arn> \
+#     --kms-key-id <kms-key-arn>
+# -----------------------------------------------------------------------------
+resource "aws_s3_bucket" "aurora_export" {
+  # checkov:skip=CKV_AWS_144:Cross-region replication not required for test environment
+  # checkov:skip=CKV2_AWS_62:Event notifications not required for snapshot exports
+  # checkov:skip=CKV_AWS_18:Access logging not required for test environment
+  bucket = "${local.project_name}-aurora-export"
+
+  tags = local.tags
+}
+
+resource "aws_s3_bucket_versioning" "aurora_export" {
+  bucket = aws_s3_bucket.aurora_export.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "aurora_export" {
+  bucket = aws_s3_bucket.aurora_export.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = module.kms.key_arn
+      sse_algorithm     = "aws:kms"
+    }
+    bucket_key_enabled = true
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "aurora_export" {
+  bucket = aws_s3_bucket.aurora_export.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "aurora_export" {
+  bucket = aws_s3_bucket.aurora_export.id
+
+  rule {
+    id     = "expire-old-exports"
+    status = "Enabled"
+
+    expiration {
+      days = 90
+    }
+
+    noncurrent_version_expiration {
+      noncurrent_days = 30
+    }
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 7
+    }
+  }
+}
+
+resource "aws_iam_role" "rds_export" {
+  name = "${local.project_name}-rds-export"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "export.rds.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = local.tags
+}
+
+resource "aws_iam_role_policy" "rds_export_s3" {
+  name = "s3-export-access"
+  role = aws_iam_role.rds_export.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "ExportToS3"
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject*",
+          "s3:ListBucket",
+          "s3:GetObject*",
+          "s3:DeleteObject*",
+          "s3:GetBucketLocation"
+        ]
+        Resource = [
+          aws_s3_bucket.aurora_export.arn,
+          "${aws_s3_bucket.aurora_export.arn}/*"
+        ]
+      }
+    ]
+  })
 }
