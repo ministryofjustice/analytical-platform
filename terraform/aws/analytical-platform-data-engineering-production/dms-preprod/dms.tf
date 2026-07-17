@@ -69,7 +69,7 @@ module "preprod_dms_delius" {
     engine_version             = "3.5.4"
     kms_key_arn                = module.dms_preprod_kms.key_arn
     multi_az                   = false
-    replication_instance_class = "dms.r6i.4xlarge"
+    replication_instance_class = "dms.t3.medium"
     inbound_cidr               = "192.0.2.0/32" # test unassigned
     apply_immediately          = true
   }
@@ -98,14 +98,4 @@ module "preprod_dms_delius" {
 
   glue_catalog_arn      = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
-
-  independent_full_loads = {
-    delius_preprod_upw_appoint_mv_table = {
-      full_load_name = "delius-preprod-upw-appoint-mv"
-      path = {
-        bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
-        key    = "preprod/delius/upw_appoint_mv_table_mappings.json"
-      }
-    }
-  }
 }
