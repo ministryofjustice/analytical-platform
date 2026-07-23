@@ -1,0 +1,9 @@
+{
+  "application_name": "laa-search-legal-aid-data",
+  "logging_bucket_name": "moj-analytics-s3-logs",
+  "splink_bucket_name": "laa-splink-search-s3",
+  "tags": {
+    "Owner": "LAA Search",
+    "Environment": "production"
+  }
+}

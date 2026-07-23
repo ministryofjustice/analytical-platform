@@ -1,0 +1,179 @@
+data "aws_iam_policy_document" "s3_kms_policy" {
+  #checkov:skip=CKV_AWS_111 KMS key administration permissions are required for the account root principal.
+  #checkov:skip=CKV_AWS_109 KMS key policies require key administration actions.
+  #checkov:skip=CKV_AWS_356 AWS KMS key policies require Resource="*" and cannot reference the key ARN.
+  statement {
+    sid = "AllowAccountRootAdmin"
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      ]
+    }
+
+    actions = [
+      "kms:Create*",
+      "kms:Describe*",
+      "kms:Enable*",
+      "kms:List*",
+      "kms:Put*",
+      "kms:Update*",
+      "kms:Revoke*",
+      "kms:Disable*",
+      "kms:Get*",
+      "kms:Delete*",
+      "kms:TagResource",
+      "kms:UntagResource",
+      "kms:ScheduleKeyDeletion",
+      "kms:CancelKeyDeletion"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "AllowS3UseOfKey"
+
+    principals {
+      type        = "Service"
+      identifiers = ["s3.amazonaws.com"]
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:EncryptionContext:aws:s3:arn"
+
+      values = [
+        "arn:aws:s3:::${local.splink_bucket_name}"
+      ]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_kms_key" "s3_kms_key" {
+  description             = "S3 bucket encryption key"
+  enable_key_rotation     = true
+  deletion_window_in_days = 30
+  policy                  = data.aws_iam_policy_document.s3_kms_policy.json
+}
+
+data "aws_iam_policy_document" "cloudwatch_sns_kms_policy" {
+  #checkov:skip=CKV_AWS_111 KMS key administration permissions are required for the account root principal.
+  #checkov:skip=CKV_AWS_109 KMS key policies require key administration actions.
+  #checkov:skip=CKV_AWS_356 AWS KMS key policies require Resource="*" and cannot reference the key ARN.
+  statement {
+    sid = "AllowRootAccountAdmin"
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      ]
+    }
+
+    actions = [
+      "kms:Create*",
+      "kms:Describe*",
+      "kms:Enable*",
+      "kms:List*",
+      "kms:Put*",
+      "kms:Update*",
+      "kms:Revoke*",
+      "kms:Disable*",
+      "kms:Get*",
+      "kms:Delete*",
+      "kms:TagResource",
+      "kms:UntagResource",
+      "kms:ScheduleKeyDeletion",
+      "kms:CancelKeyDeletion"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "AllowEventBridgeUseOfKey"
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "events.amazonaws.com"
+      ]
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+      "kms:ReEncryptFrom",
+      "kms:ReEncryptTo"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test = "StringEquals"
+
+      variable = "kms:CallerAccount"
+
+      values = [
+        data.aws_caller_identity.current.account_id
+      ]
+    }
+  }
+
+  statement {
+    sid = "AllowSNSUseOfKey"
+
+    principals {
+      type        = "Service"
+      identifiers = ["sns.amazonaws.com"]
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:EncryptionContext:aws:sns:topicArn"
+
+      values = [
+        "arn:aws:sns:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:splink-*"
+      ]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["sns.${data.aws_region.current.region}.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_kms_key" "cloudwatch_sns_alerts_key" {
+  enable_key_rotation = true
+  policy              = data.aws_iam_policy_document.cloudwatch_sns_kms_policy.json
+}
