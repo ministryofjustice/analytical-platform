@@ -31,6 +31,16 @@ locals {
       role  = "responder"
     },
     {
+      name  = "Muhammad Ahmad"
+      email = "muhammad.ahmad@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Raghavendra Kamath Kantavar"
+      email = "raghavendrakamath.kantavar@justice.gov.uk"
+      role  = "responder"
+    },
+    {
       name  = "Tamsin Forbes"
       email = "tamsin.forbes@justice.gov.uk"
       role  = "responder"
