@@ -49,7 +49,7 @@ module "prod_dms_oasys" {
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
 }
 
-# trigger tf
+# trigger tf sr32b
 module "prod_dms_delius" {
   source      = "github.com/ministryofjustice/terraform-dms-module?ref=bea6fa8a0f431b616895423e515f5929c022b013"
   vpc_id      = module.vpc.vpc_id
@@ -70,7 +70,7 @@ module "prod_dms_delius" {
     engine_version             = "3.5.4"
     kms_key_arn                = module.dms_prod_kms.key_arn
     multi_az                   = false
-    replication_instance_class = "dms.r6i.2xlarge"
+    replication_instance_class = "dms.r6i.4xlarge"
     inbound_cidr               = "192.0.2.0/32" # test unassigned
     apply_immediately          = true
   }
