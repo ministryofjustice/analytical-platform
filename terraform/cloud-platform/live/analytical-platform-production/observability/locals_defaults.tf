@@ -303,7 +303,7 @@ locals {
     mwaa_mem_crit = 90
 
     # Saturation: Tasks stuck in pools — Warning > 50, Critical > 200
-    mwaa_pool_queued_warn = 50
+    mwaa_pool_queued_warn = 150
     mwaa_pool_queued_crit = 200
 
     # Saturation: Scheduler contention — Warning > 50% busy, Critical > 80% busy
