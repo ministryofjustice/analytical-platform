@@ -90,9 +90,9 @@ locals {
     eks_node_net_warn = 500000000
     eks_node_net_crit = 1000000000
 
-    # Errors: Pods are not reachable (unhealthy NLB hosts) — Warning >= 1, Critical > 20% of targets
-    eks_unhealthy_host_warn = 1
-    eks_unhealthy_host_crit = 20
+    # Errors: Pods are not reachable (healthy NLB hosts) — Warning < 4, Critical < 3 of targets
+    eks_healthy_host_warn = 3
+    eks_healthy_host_crit = 2
 
     # Errors: App is dropping connections (TCP resets) — Warning > 10/min, Critical > 100/min
     eks_tcp_reset_warn = 10
@@ -290,9 +290,9 @@ locals {
     mwaa_processor_timeouts_warn = 1
     mwaa_processor_timeouts_crit = 3
 
-    # Saturation: Too many DB connections — Warning > 80% of max, Critical > 95% of max
-    mwaa_db_conn_warn = 80
-    mwaa_db_conn_crit = 95
+    # Saturation: Too many DB connections in count — Warning > 200, Critical > 300
+    mwaa_db_conn_warn = 200
+    mwaa_db_conn_crit = 300
 
     # Saturation: Workers overloaded (CPU) — Warning > 70%, Critical > 90%
     mwaa_cpu_warn = 70

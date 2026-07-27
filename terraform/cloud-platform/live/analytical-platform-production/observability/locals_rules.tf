@@ -38,6 +38,8 @@ locals {
             rule.dim_key == "FileSystemId" ? try(cfg.efs_file_systems, []) :
             rule.dim_key == "ClusterName" ? ["*"] :
             rule.dim_key == "NodeName" ? ["*"] :
+            rule.dim_key == "TargetGroup" ? ["*"] :
+            rule.dim_key == "LoadBalancer" ? ["*"] :
             [""]
             ) : {
             rule_key  = rule_key
