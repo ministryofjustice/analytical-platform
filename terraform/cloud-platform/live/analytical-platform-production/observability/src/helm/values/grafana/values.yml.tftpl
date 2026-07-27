@@ -354,7 +354,7 @@ alerting:
       # ── Silent sink for muted signals ───────────────────────────────────────
       # A webhook pointed at a local address nothing listens on. Grafana's
       # file provisioning validator won't register a contact point with an
-      # empty receivers list as referenceable. so this needs one real,
+      # empty receivers list as referenceable, so this needs one real,
       # harmless receiver. Delivery attempts just fail quietly in the
       # background — logged, not fatal, never reaches Slack.
       - name: silent

@@ -128,8 +128,8 @@ locals {
       combo_key => {
         for severity in ["warning", "critical"] :
         severity => {
-          firing   = "${local.slack_urgency_emoji[local.urgency_resolved[env][combo_key][severity]]}${local.urgency_resolved[env][combo_key][severity] == "high" ? " <!here>" : ""} [${upper(local.urgency_resolved[env][combo_key][severity])} | ${upper(severity)} | ${env}] ${combo.rule_key}"
-          resolved = "🟢 [RESOLVED | ${env}] ${combo.rule_key}"
+          firing   = "${local.slack_urgency_emoji[local.urgency_resolved[env][combo_key][severity]]}${local.urgency_resolved[env][combo_key][severity] == "high" ? " <!here>" : ""} [${upper(local.urgency_resolved[env][combo_key][severity])} | ${upper(severity)} | ${env}] ${combo_key}"
+          resolved = "🟢 [RESOLVED | ${env}] ${combo_key}"
         }
       }
     }

@@ -90,7 +90,7 @@ locals {
     eks_node_net_warn = 500000000
     eks_node_net_crit = 1000000000
 
-    # Errors: Pods are not reachable (healthy NLB hosts) — Warning < 4, Critical < 3 of targets
+    # Errors: Pods are not reachable (healthy NLB hosts) — Warning < 3, Critical < 2 of targets
     eks_healthy_host_warn = 3
     eks_healthy_host_crit = 2
 

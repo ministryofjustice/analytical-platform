@@ -16,7 +16,7 @@ locals {
 
   # ---------------------------------------------------------------------------
   # golden_signals — one entry per metric to alert on: CloudWatch by default,
-  # or Prometheus when source = "prometheus" is set (see below).
+  # or Prometheus when datasource_type = "prometheus" is set (see below).
   #
   # Fields:
   #   group                = alert group name (must match a key in group_folders above)
