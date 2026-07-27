@@ -15,78 +15,92 @@ locals {
   }
 
   # ---------------------------------------------------------------------------
-  # golden_signals — one entry per metric to alert on.
+  # golden_signals — one entry per metric to alert on: CloudWatch by default,
+  # or Prometheus when source = "prometheus" is set (see below).
   #
   # Fields:
-  #   group          = alert group name (must match a key in group_folders above)
-  #   namespace      = CloudWatch namespace (omit for Prometheus signals)
-  #   metric         = CloudWatch metric name / short label for Prometheus signals
-  #   statistic      = CloudWatch statistic (Sum, Average, Maximum, Minimum, p99 …)
-  #   datasource_type = (optional) "prometheus" to use PromQL instead of CloudWatch.
-  #                     When set, supply `expr` instead of namespace/metric/statistic.
-  #   expr           = PromQL expression (datasource_type = "prometheus" only).
-  #                    Use __NAMESPACES__ as a token where a namespace regex is needed;
-  #                    it is replaced at render time with cfg.namespaces joined by "|".
-  #   type           = alert logic:
-  #                      gt          → fire when value > threshold         (condition C)
-  #                      lt          → fire when value < threshold         (condition C)
-  #                      baseline_gt → fire when % above hourly baseline   (condition D)
-  #                      baseline_lt → fire when % below hourly baseline   (condition D)
-  #   dim_key        = primary CloudWatch dimension key ("" = no dimension filter)
-  #                    Supported keys and the environment_configurations field they
-  #                    resolve against at render time:
-  #                      ""                     → no dimension filter (global aggregate)
-  #                      "BucketName"           → cfg.s3_buckets        (list of bucket names)
-  #                      "DBInstanceIdentifier" → cfg.rds_instances     (list of RDS instance IDs)
-  #                      "CacheClusterId"       → cfg.cache_clusters    (list of ElastiCache
-  #                                               cluster IDs, e.g. ["dev", "prod"])
-  #                      "Namespace"            → cfg.namespaces        (list of k8s namespaces)
-  #                      "ClusterName"          → ["*"]                 (wildcard — all clusters)
-  #                      "NodeName"             → ["*"]                 (wildcard — all nodes)
-  #                      "FileSystemId"         → cfg.efs_file_systems  (list of EFS file system IDs)
-  #                    One alert rule is generated per value in the resolved list;
-  #                    the value is appended as a suffix to the rule name.
-  #   dim_key2       = optional second dimension key; always matched with value "*"
-  #                    used for ContainerInsights metrics that need e.g.
-  #                    {Namespace=cpanel, ClusterName=*} to return the
-  #                    namespace-level aggregate instead of per-pod series
-  #   match_exact    = (optional, default: false)
-  #                    if true, CloudWatch returns only series whose dimension set
-  #                    exactly matches the supplied keys (no extra dimensions).
-  #                    Required for ContainerInsights cluster-level aggregates to
-  #                    exclude per-pod series that carry extra dimensions (PodName etc)
-  #   use_metric_math = (optional, default: false)
-  #                    if true, emits a second CloudWatch query (refId "A2") for a
-  #                    capacity/limit metric and computes "$A / $A2 * 100" via a math
-  #                    expression (refId "EXPR"). The reduce step (B) then operates on
-  #                    EXPR rather than A, so the threshold is evaluated against a
-  #                    utilisation percentage rather than a raw value.
-  #                    Requires capacity_metric (and optionally capacity_statistic).
-  #   capacity_metric = CloudWatch metric name for the capacity/limit series used as
-  #                    the denominator in the metric math expression (A2).
-  #                    Only used when use_metric_math = true.
-  #                    Example: "PermittedThroughput"
-  #   capacity_statistic = CloudWatch statistic to apply to the capacity metric.
-  #                    Defaults to "Minimum" when omitted.
-  #                    Only used when use_metric_math = true.
-  #   ok_when_nodata = (optional, default: false)
-  #                    if true, sets noDataState: OK so rules resolve to Normal
-  #                    when CloudWatch emits nothing (e.g. zero failed nodes)
-  #   slack_channel  = (optional) Slack channel to route this signal's alerts.
-  #                    Two forms accepted:
-  #                      a) string — same channel for both severities
-  #                         slack_channel = "dev-slack"
-  #                      b) object — different channel per severity;
-  #                         omit a key to emit no label for that severity
-  #                         slack_channel = { warning = "dev-slack", critical = "dev-slack-critical" }
-  #                    Resolution order per severity (first non-null wins):
-  #                      1. per-severity key on this field  (e.g. .critical)
-  #                      2. string value on this field
-  #                      3. slack_channel in environment_configurations  (env default)
-  #                    If none of the above is set the label is omitted entirely
-  #                    and Grafana's root / catch-all policy handles the alert.
-  #   warning        = key in locals.defaults (or threshold_overrides) for warning level
-  #   critical       = key in locals.defaults (or threshold_overrides) for critical level
+  #   group                = alert group name (must match a key in group_folders above)
+  #   namespace            = CloudWatch namespace (omit for Prometheus signals)
+  #   metric               = CloudWatch metric name. Still required for Prometheus
+  #                          signals too — it isn't used to build the query there
+  #                          (expr handles that), but is used as this signal's
+  #                          display/label name (see the "metric" label in rule_yaml).
+  #   statistic            = CloudWatch statistic (Sum, Average, Maximum, Minimum, p99 …)
+  #                          (omit for Prometheus signals — not used there)
+  #   source               = (optional, default: "cloudwatch") set to "prometheus" to
+  #                          route this signal through the Prometheus query branch in
+  #                          locals_rules.tf's rule_yaml instead of the CloudWatch one.
+  #                          Requires expr; namespace/statistic are ignored/should be
+  #                          omitted (dim_key still required — pass "" as a placeholder,
+  #                          it plays no dimensional-filtering role for Prometheus).
+  #   expr                 = PromQL expression (source = "prometheus" only). Prefer
+  #                          `or vector(0)` at the end for presence/absence-style
+  #                          metrics (e.g. kube-state-metrics conditions that are only
+  #                          emitted while true) — without it, "healthy" means zero
+  #                          rows rather than a real value, which gives Grafana no
+  #                          instance to cleanly resolve against and resolved Slack
+  #                          notifications won't fire even though the rule correctly
+  #                          shows Normal.
+  #   for_duration         = (optional, default: "5m") Grafana's rule `for:` duration —
+  #                          how long the condition must hold before firing.
+  #   type                 = alert logic:
+  #                            gt          → fire when value > threshold         (condition C)
+  #                            lt          → fire when value < threshold         (condition C)
+  #                            baseline_gt → fire when % above hourly baseline   (condition D)
+  #                            baseline_lt → fire when % below hourly baseline   (condition D)
+  #   dim_key              = primary CloudWatch dimension key ("" = no dimension filter;
+  #                          also "" — as a required placeholder — for Prometheus signals)
+  #   dim_key2             = optional second dimension key; always matched with value "*"
+  #                          used for ContainerInsights metrics that need e.g.
+  #                          {Namespace=cpanel, ClusterName=*} to return the
+  #                          namespace-level aggregate instead of per-pod series
+  #   match_exact          = (optional, default: false)
+  #                          if true, CloudWatch returns only series whose dimension set
+  #                          exactly matches the supplied keys (no extra dimensions).
+  #                          Required for ContainerInsights cluster-level aggregates to
+  #                          exclude per-pod series that carry extra dimensions (PodName etc)
+  #   ok_when_nodata       = (optional, default: true)
+  #                          Default is true: no data resolves to Normal (noDataState: OK)
+  #                          and never notifies Slack — most CloudWatch/Prometheus queries
+  #                          here legitimately return nothing when things are healthy
+  #                          (zero failed nodes, zero restarts, etc), and NoData would
+  #                          otherwise create Grafana's own DatasourceNoData pseudo-alert,
+  #                          which still inherits this rule's labels and pages Slack.
+  #                          Set to false only when the absence of data IS itself the
+  #                          problem worth paging on (e.g. a datasource/exporter that
+  #                          should always be returning something going silent).
+  #   warning              = key in locals.defaults (or threshold_overrides) for warning level
+  #   critical             = key in locals.defaults (or threshold_overrides) for critical level
+  #   Two forms accepted:
+  #     a) object — different urgency per severity (recommended):
+  #          urgency = { warning = "low", critical = "high" }
+  #     b) string — same urgency for both severities:
+  #          urgency = "low"
+  #
+  #   Valid values: "high" | "medium" | "low"
+  #
+  #   Resolution order per severity (first non-null wins):
+  #     1. urgency[severity]                                  — per-severity object form
+  #     2. urgency (string form)                              — both severities
+  #     3. Derived default from routing matrix:
+  #          production  + critical → "high"
+  #          production  + warning  → "medium"
+  #          non-prod    + critical → "high"
+  #          non-prod    + warning  → "low"    ← overridden per signal below
+  #
+  #   Urgency meanings:
+  #     high   🔴  Act now — user impact likely or confirmed  (@here fired)
+  #     medium 🟠  Investigate soon — degraded but not broken
+  #     low    🔵  Awareness — trending badly, no active impact
+  #
+  #   slack_notify         = (optional, default: true)
+  #                          Set to false to mute Slack for this signal while
+  #                          still evaluating it and keeping it in Grafana's
+  #                          Alert Rules list/history. Routed to the "silent"
+  #                          contact point (zero receivers) instead of Slack.
+  #                          Two forms accepted, same shape as urgency:
+  #                            a) bool   — same for both severities: slack_notify = false
+  #                            b) object — per severity: slack_notify = { warning = false, critical = true }
   # ---------------------------------------------------------------------------
   golden_signals = {
 
@@ -181,7 +195,6 @@ locals {
     mwaa_db_connections       = { group = "MWAA", namespace = "AWS/MWAA", metric = "DatabaseConnections", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_db_conn_warn", critical = "mwaa_db_conn_crit" }
     mwaa_cpu                  = { group = "MWAA", namespace = "AWS/MWAA", metric = "CPUUtilization", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_cpu_warn", critical = "mwaa_cpu_crit" }
     mwaa_memory               = { group = "MWAA", namespace = "AWS/MWAA", metric = "MemoryUtilization", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_mem_warn", critical = "mwaa_mem_crit" }
-    mwaa_oldest_task          = { group = "MWAA", namespace = "AWS/MWAA", metric = "ApproximateAgeOfOldestTask", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_oldest_task_warn", critical = "mwaa_oldest_task_crit" }
     mwaa_pool_queued          = { group = "MWAA", namespace = "AmazonMWAA", metric = "PoolQueuedSlots", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_pool_queued_warn", critical = "mwaa_pool_queued_crit" }
     mwaa_critical_section     = { group = "MWAA", namespace = "AmazonMWAA", metric = "CriticalSectionBusy", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_critical_section_warn", critical = "mwaa_critical_section_crit" }
     mwaa_disk_queue           = { group = "MWAA", namespace = "AWS/MWAA", metric = "DiskQueueDepth", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_disk_queue_warn", critical = "mwaa_disk_queue_crit" }

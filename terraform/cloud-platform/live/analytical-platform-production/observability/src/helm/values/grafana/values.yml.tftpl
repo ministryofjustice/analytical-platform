@@ -351,14 +351,69 @@ alerting:
   contactpoints.yaml:
     apiVersion: 1
     contactPoints:
-      - name: analytical-platform-alerts-slack
+      # ── Silent sink for muted signals ───────────────────────────────────────
+      # A webhook pointed at a local address nothing listens on. Grafana's
+      # file provisioning validator won't register a contact point with an
+      # empty receivers list as referenceable. so this needs one real,
+      # harmless receiver. Delivery attempts just fail quietly in the
+      # background — logged, not fatal, never reaches Slack.
+      - name: silent
         receivers:
-          - uid: analytical-platform-alerts-slack
+          - uid: silent-webhook
+            type: webhook
+            settings:
+              url: http://localhost:9999/silent
+      # ── Slack contact points ──────────────────────────────────────────────
+      - name: ap-high-priority-high
+        receivers:
+          - uid: ap-high-priority-high-slack
             type: slack
             settings:
-              recipient: analytical-platform-alerts
               token: $${ANALYTICAL_PLATFORM_SLACK_TOKEN}
-
+              recipient: analytical-platform-high-priority-notifications
+              text: |
+                {{ `{{ if eq .Status "firing" }}{{ .CommonAnnotations.slack_title_firing }}{{ else }}{{ .CommonAnnotations.slack_title_resolved }}{{ end }}
+                {{ template "default.message" . }}` }}
+      - name: ap-high-priority-medium
+        receivers:
+          - uid: ap-high-priority-medium-slack
+            type: slack
+            settings:
+              token: $${ANALYTICAL_PLATFORM_SLACK_TOKEN}
+              recipient: analytical-platform-high-priority-notifications
+              text: |
+                {{ `{{ if eq .Status "firing" }}{{ .CommonAnnotations.slack_title_firing }}{{ else }}{{ .CommonAnnotations.slack_title_resolved }}{{ end }}
+                {{ template "default.message" . }}` }}
+      - name: ap-low-priority-high
+        receivers:
+          - uid: ap-low-priority-high-slack
+            type: slack
+            settings:
+              token: $${ANALYTICAL_PLATFORM_SLACK_TOKEN}
+              recipient: analytical-platform-low-priority-notifications
+              text: |
+                {{ `{{ if eq .Status "firing" }}{{ .CommonAnnotations.slack_title_firing }}{{ else }}{{ .CommonAnnotations.slack_title_resolved }}{{ end }}
+                {{ template "default.message" . }}` }}
+      - name: ap-low-priority-medium
+        receivers:
+          - uid: ap-low-priority-medium-slack
+            type: slack
+            settings:
+              token: $${ANALYTICAL_PLATFORM_SLACK_TOKEN}
+              recipient: analytical-platform-low-priority-notifications
+              text: |
+                {{ `{{ if eq .Status "firing" }}{{ .CommonAnnotations.slack_title_firing }}{{ else }}{{ .CommonAnnotations.slack_title_resolved }}{{ end }}
+                {{ template "default.message" . }}` }}
+      - name: ap-low-priority-low
+        receivers:
+          - uid: ap-low-priority-low-slack
+            type: slack
+            settings:
+              token: $${ANALYTICAL_PLATFORM_SLACK_TOKEN}
+              recipient: analytical-platform-low-priority-notifications
+              text: |
+                {{ `{{ if eq .Status "firing" }}{{ .CommonAnnotations.slack_title_firing }}{{ else }}{{ .CommonAnnotations.slack_title_resolved }}{{ end }}
+                {{ template "default.message" . }}` }}
   policies.yaml:
     apiVersion: 1
     policies:
@@ -367,12 +422,48 @@ alerting:
           group_by:
             - grafana_folder
             - alertname
+            - environment
           routes:
-            - receiver: analytical-platform-alerts-slack
+            - receiver: ap-high-priority-high
               object_matchers:
                 - - slack-channel
                   - =
-                  - analytical-platform-alerts
+                  - analytical-platform-high-priority-notifications
+                - - slack-urgency
+                  - =
+                  - high
+            - receiver: ap-high-priority-medium
+              object_matchers:
+                - - slack-channel
+                  - =
+                  - analytical-platform-high-priority-notifications
+                - - slack-urgency
+                  - =
+                  - medium
+            - receiver: ap-low-priority-high
+              object_matchers:
+                - - slack-channel
+                  - =
+                  - analytical-platform-low-priority-notifications
+                - - slack-urgency
+                  - =
+                  - high
+            - receiver: ap-low-priority-medium
+              object_matchers:
+                - - slack-channel
+                  - =
+                  - analytical-platform-low-priority-notifications
+                - - slack-urgency
+                  - =
+                  - medium
+            - receiver: ap-low-priority-low
+              object_matchers:
+                - - slack-channel
+                  - =
+                  - analytical-platform-low-priority-notifications
+                - - slack-urgency
+                  - =
+                  - low
 
 extraVolumes:
 %{~ for env, cm_name in alert_rules_configmaps }

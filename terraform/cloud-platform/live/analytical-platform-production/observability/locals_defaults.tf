@@ -302,10 +302,6 @@ locals {
     mwaa_mem_warn = 75
     mwaa_mem_crit = 90
 
-    # Saturation: Tasks waiting too long — Warning > 10 min, Critical > 30 min
-    mwaa_oldest_task_warn = 600
-    mwaa_oldest_task_crit = 1800
-
     # Saturation: Tasks stuck in pools — Warning > 50, Critical > 200
     mwaa_pool_queued_warn = 50
     mwaa_pool_queued_crit = 200
