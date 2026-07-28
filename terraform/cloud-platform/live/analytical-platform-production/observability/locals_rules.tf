@@ -194,7 +194,7 @@ locals {
               ? [true] : []
               ) : [{
                 refId             = "A"
-                relativeTimeRange = { from = 300, to = 0 }
+                relativeTimeRange = { from = try(combo.rule.query_window_seconds, 300), to = 0 }
                 datasourceUid     = try(cfg.prometheus_datasource_uid, try(cfg.prometheus_datasource_name, "prometheus"))
                 model = {
                   type    = "prometheus"
@@ -211,7 +211,7 @@ locals {
               ? [true] : []
               ) : [{
                 refId             = "A"
-                relativeTimeRange = { from = 300, to = 0 }
+                relativeTimeRange = { from = try(combo.rule.query_window_seconds, 300), to = 0 }
                 datasourceUid     = substr(cfg.cloudwatch_datasource_name, 0, 40)
                 model = {
                   type       = "timeSeriesQuery"
@@ -234,7 +234,7 @@ locals {
               ? [true] : []
               ) : [{
                 refId             = "A2"
-                relativeTimeRange = { from = 300, to = 0 }
+                relativeTimeRange = { from = try(combo.rule.query_window_seconds, 300), to = 0 }
                 datasourceUid     = substr(cfg.cloudwatch_datasource_name, 0, 40)
                 model = {
                   type       = "timeSeriesQuery"
@@ -254,7 +254,7 @@ locals {
           [{
             refId             = "B"
             datasourceUid     = "__expr__"
-            relativeTimeRange = { from = 300, to = 0 }
+            relativeTimeRange = { from = try(combo.rule.query_window_seconds, 300), to = 0 }
             model = {
               type       = "reduce"
               refId      = "B"
@@ -268,7 +268,7 @@ locals {
           [{
             refId             = "C"
             datasourceUid     = "__expr__"
-            relativeTimeRange = { from = 300, to = 0 }
+            relativeTimeRange = { from = try(combo.rule.query_window_seconds, 300), to = 0 }
             model = {
               type       = "threshold"
               refId      = "C"
@@ -290,7 +290,7 @@ locals {
               ) : [{
                 refId             = "EXPR"
                 datasourceUid     = "__expr__"
-                relativeTimeRange = { from = 300, to = 0 }
+                relativeTimeRange = { from = try(combo.rule.query_window_seconds, 300), to = 0 }
                 model = {
                   type       = "math"
                   refId      = "EXPR"
@@ -308,7 +308,7 @@ locals {
               ) : [
               {
                 refId             = "BASE"
-                relativeTimeRange = { from = 3600, to = 0 }
+                relativeTimeRange = { from = try(combo.rule.baseline_window_seconds, 3600), to = 0 }
                 datasourceUid     = substr(cfg.cloudwatch_datasource_name, 0, 40)
                 model = {
                   type       = "timeSeriesQuery"
@@ -317,7 +317,7 @@ locals {
                   namespace  = combo.rule.namespace
                   metricName = combo.rule.metric
                   statistic  = combo.rule.statistic
-                  period     = "3600"
+                  period     = try(combo.rule.baseline_window_seconds, 3600)
                   dimensions = local.dims_by_combo[env][combo_key]
                   matchExact = try(combo.rule.dim_key2, "") != "" ? true : try(combo.rule.match_exact, false)
                 }
@@ -325,7 +325,7 @@ locals {
               {
                 refId             = "BASE_R"
                 datasourceUid     = "__expr__"
-                relativeTimeRange = { from = 3600, to = 0 }
+                relativeTimeRange = { from = try(combo.rule.baseline_window_seconds, 3600), to = 0 }
                 model = {
                   type       = "reduce"
                   refId      = "BASE_R"
@@ -337,7 +337,7 @@ locals {
               {
                 refId             = "D"
                 datasourceUid     = "__expr__"
-                relativeTimeRange = { from = 3600, to = 0 }
+                relativeTimeRange = { from = try(combo.rule.baseline_window_seconds, 3600), to = 0 }
                 model = {
                   type       = "math"
                   refId      = "D"

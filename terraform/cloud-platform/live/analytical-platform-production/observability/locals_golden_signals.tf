@@ -59,6 +59,11 @@ locals {
   #                          exactly matches the supplied keys (no extra dimensions).
   #                          Required for ContainerInsights cluster-level aggregates to
   #                          exclude per-pod series that carry extra dimensions (PodName etc)
+  #   query_window_seconds    = (optional, default: 300) lookback window for the
+  #                              current-value queries (Refs A, A2, B, C)
+  #   baseline_window_seconds = (optional, default: 3600) lookback window and
+  #                              CloudWatch period for the baseline pipeline
+  #                              (Refs BASE, BASE_R, D)
   #   ok_when_nodata       = (optional, default: true)
   #                          Default is true: no data resolves to Normal (noDataState: OK)
   #                          and never notifies Slack — most CloudWatch/Prometheus queries
@@ -132,7 +137,7 @@ locals {
     tgw_BytesDropCountBlackhole   = { group = "Transit Gateway", namespace = "AWS/TransitGateway", metric = "BytesDropCountBlackhole", statistic = "Sum", type = "gt", dim_key = "", warning = "tgw_bytes_drop_blackhole_warn", critical = "tgw_bytes_drop_blackhole_crit" }
 
     # ── Network Monitor ───────────────────────────────────────────────────────
-    packet_loss = { group = "Network Monitor", namespace = "AWS/NetworkMonitor", metric = "PacketLoss", statistic = "Average", for_duration = "10m", type = "gt", dim_key = "", warning = "packet_loss_warn", critical = "packet_loss_crit" }
+    packet_loss = { group = "Network Monitor", namespace = "AWS/NetworkMonitor", metric = "PacketLoss", statistic = "Average", for_duration = "10m", query_window_seconds = 3600, type = "gt", dim_key = "", warning = "packet_loss_warn", critical = "packet_loss_crit" }
 
     # ── EKS ───────────────────────────────────────────────────────────────────
     eks_webhook_latency     = { group = "EKS", namespace = "AWS/EKS", metric = "apiserver_admission_webhook_admission_duration_seconds", statistic = "p99", type = "gt", dim_key = "", warning = "eks_webhook_latency_warn", critical = "eks_webhook_latency_crit" }
