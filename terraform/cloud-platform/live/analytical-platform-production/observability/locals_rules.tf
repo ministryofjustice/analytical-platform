@@ -317,7 +317,7 @@ locals {
                   namespace  = combo.rule.namespace
                   metricName = combo.rule.metric
                   statistic  = combo.rule.statistic
-                  period     = try(combo.rule.baseline_window_seconds, 3600)
+                  period     = tostring(try(combo.rule.baseline_window_seconds, 3600))
                   dimensions = local.dims_by_combo[env][combo_key]
                   matchExact = try(combo.rule.dim_key2, "") != "" ? true : try(combo.rule.match_exact, false)
                 }
