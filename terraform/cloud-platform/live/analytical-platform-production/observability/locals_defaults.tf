@@ -246,9 +246,9 @@ locals {
     mwaa_task_duration_baseline_warn = 50
     mwaa_task_duration_baseline_crit = 100
 
-    # Latency: Pipeline runtime increased — Warning Baseline +50%, Critical Baseline +100%
-    mwaa_dag_duration_baseline_warn = 50
-    mwaa_dag_duration_baseline_crit = 100
+    # Latency: Pipeline runtime increased — Warning 45min, Critical 60min
+    mwaa_dag_duration_baseline_warn = 2700000
+    mwaa_dag_duration_baseline_crit = 3600000
 
     # Latency: Database writes are slow — Warning > 20ms, Critical > 100ms
     mwaa_write_latency_warn = 20
