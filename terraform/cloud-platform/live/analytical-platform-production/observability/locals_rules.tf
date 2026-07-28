@@ -39,6 +39,7 @@ locals {
             rule.dim_key == "ClusterName" ? ["*"] :
             rule.dim_key == "NodeName" ? ["*"] :
             rule.dim_key == "TargetGroup" ? ["*"] :
+            rule.dim_key == "DAG" ? ["*"] :
             rule.dim_key == "LoadBalancer" ? ["*"] :
             [""]
             ) : {
