@@ -310,6 +310,8 @@ data "aws_iam_policy_document" "create_a_derived_table_prod" {
       "arn:aws:s3:::probation-datalake-prod*",
       "arn:aws:s3:::probation-query-results-prod*/*",
       "arn:aws:s3:::probation-query-results-prod*",
+      "arn:aws:s3:::mojap-derived-tables/*",
+      "arn:aws:s3:::mojap-derived-tables"
     ]
   }
   statement {
