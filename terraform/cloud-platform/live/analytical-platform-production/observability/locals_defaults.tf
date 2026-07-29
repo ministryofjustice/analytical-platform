@@ -246,9 +246,9 @@ locals {
     mwaa_task_duration_baseline_warn = 50
     mwaa_task_duration_baseline_crit = 100
 
-    # Latency: Pipeline runtime increased — Warning Baseline +50%, Critical Baseline +100%
-    mwaa_dag_duration_baseline_warn = 50
-    mwaa_dag_duration_baseline_crit = 100
+    # Latency: Pipeline runtime increased — Warning 45min, Critical 60min
+    mwaa_dag_duration_baseline_warn = 2700000
+    mwaa_dag_duration_baseline_crit = 3600000
 
     # Latency: Database writes are slow — Warning > 20ms, Critical > 100ms
     mwaa_write_latency_warn = 20
@@ -262,13 +262,13 @@ locals {
     mwaa_tasks_pending_warn = 50
     mwaa_tasks_pending_crit = 200
 
-    # Traffic: Tasks currently running — Warning > 80% of max workers, Critical > 95% of max workers
-    mwaa_running_tasks_warn = 80
-    mwaa_running_tasks_crit = 95
+    # Traffic: Tasks currently running — Warning > 200, Critical > 250
+    mwaa_running_tasks_warn = 200
+    mwaa_running_tasks_crit = 250
 
-    # Traffic: Tasks waiting for workers — Warning > 50, Critical > 200
-    mwaa_queued_tasks_warn = 50
-    mwaa_queued_tasks_crit = 200
+    # Traffic: Tasks waiting for workers — Warning > 200, Critical > 250
+    mwaa_queued_tasks_warn = 200
+    mwaa_queued_tasks_crit = 250
 
     # Errors: DAGs failing to load — Warning >= 1, Critical > 5
     mwaa_import_errors_warn = 1

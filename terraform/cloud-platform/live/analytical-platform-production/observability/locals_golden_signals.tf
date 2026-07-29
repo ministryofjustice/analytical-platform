@@ -59,6 +59,11 @@ locals {
   #                          exactly matches the supplied keys (no extra dimensions).
   #                          Required for ContainerInsights cluster-level aggregates to
   #                          exclude per-pod series that carry extra dimensions (PodName etc)
+  #   query_window_seconds    = (optional, default: 300) lookback window for the
+  #                              current-value queries (Refs A, A2, B, C)
+  #   baseline_window_seconds = (optional, default: 3600) lookback window and
+  #                              CloudWatch period for the baseline pipeline
+  #                              (Refs BASE, BASE_R, D)
   #   ok_when_nodata       = (optional, default: true)
   #                          Default is true: no data resolves to Normal (noDataState: OK)
   #                          and never notifies Slack — most CloudWatch/Prometheus queries
@@ -132,7 +137,7 @@ locals {
     tgw_BytesDropCountBlackhole   = { group = "Transit Gateway", namespace = "AWS/TransitGateway", metric = "BytesDropCountBlackhole", statistic = "Sum", type = "gt", dim_key = "", warning = "tgw_bytes_drop_blackhole_warn", critical = "tgw_bytes_drop_blackhole_crit" }
 
     # ── Network Monitor ───────────────────────────────────────────────────────
-    packet_loss = { group = "Network Monitor", namespace = "AWS/NetworkMonitor", metric = "PacketLoss", statistic = "Average", type = "gt", dim_key = "", warning = "packet_loss_warn", critical = "packet_loss_crit" }
+    packet_loss = { group = "Network Monitor", namespace = "AWS/NetworkMonitor", metric = "PacketLoss", statistic = "Average", for_duration = "10m", query_window_seconds = 3600, type = "gt", dim_key = "", warning = "packet_loss_warn", critical = "packet_loss_crit" }
 
     # ── EKS ───────────────────────────────────────────────────────────────────
     eks_webhook_latency     = { group = "EKS", namespace = "AWS/EKS", metric = "apiserver_admission_webhook_admission_duration_seconds", statistic = "p99", type = "gt", dim_key = "", warning = "eks_webhook_latency_warn", critical = "eks_webhook_latency_crit" }
@@ -155,8 +160,8 @@ locals {
     eks_prom_node_disk      = { group = "EKS", datasource_type = "prometheus", expr = "(1 - (node_filesystem_avail_bytes{mountpoint=\"/\",fstype!=\"tmpfs\"} / node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"tmpfs\"})) * 100", type = "gt", dim_key = "", metric = "prom_node_disk_utilisation", warning = "eks_prom_node_disk_warn", critical = "eks_prom_node_disk_crit" }
     eks_prom_node_net_rx    = { group = "EKS", datasource_type = "prometheus", expr = "sum by (node) (rate(node_network_receive_bytes_total{device!~\"lo|veth.*\"}[5m]))", type = "gt", dim_key = "", metric = "prom_node_network_rx_bytes", warning = "eks_prom_node_net_warn", critical = "eks_prom_node_net_crit" }
     eks_prom_node_net_tx    = { group = "EKS", datasource_type = "prometheus", expr = "sum by (node) (rate(node_network_transmit_bytes_total{device!~\"lo|veth.*\"}[5m]))", type = "gt", dim_key = "", metric = "prom_node_network_tx_bytes", warning = "eks_prom_node_net_warn", critical = "eks_prom_node_net_crit" }
-    eks_prom_unschedulable  = { group = "EKS", datasource_type = "prometheus", expr = "count(kube_pod_status_unschedulable == 1)", type = "gt", dim_key = "", metric = "prom_unschedulable_pods", ok_when_nodata = true, warning = "eks_prom_unschedulable_warn", critical = "eks_prom_unschedulable_crit" }
-    eks_prom_node_not_ready = { group = "EKS", datasource_type = "prometheus", expr = "count(kube_node_status_condition{condition=\"Ready\",status=\"true\"} == 0)", type = "gt", dim_key = "", metric = "prom_node_not_ready", ok_when_nodata = true, warning = "eks_prom_node_not_ready_warn", critical = "eks_prom_node_not_ready_crit" }
+    eks_prom_unschedulable  = { group = "EKS", datasource_type = "prometheus", expr = "count(kube_pod_status_unschedulable == 1)", for_duration = "10m", type = "gt", dim_key = "", metric = "prom_unschedulable_pods", ok_when_nodata = true, warning = "eks_prom_unschedulable_warn", critical = "eks_prom_unschedulable_crit" }
+    eks_prom_node_not_ready = { group = "EKS", datasource_type = "prometheus", expr = "count(kube_node_status_condition{condition=\"Ready\",status=\"true\"} == 0)", for_duration = "10m", type = "gt", dim_key = "", metric = "prom_node_not_ready", ok_when_nodata = true, warning = "eks_prom_node_not_ready_warn", critical = "eks_prom_node_not_ready_crit" }
     eks_prom_etcd_db_size   = { group = "EKS", datasource_type = "prometheus", expr = "etcd_mvcc_db_total_size_in_bytes", type = "gt", dim_key = "", metric = "prom_etcd_db_size_bytes", warning = "eks_prom_etcd_size_warn", critical = "eks_prom_etcd_size_crit" }
 
     # ── EFS ───────────────────────────────────────────────────────────────────
@@ -181,24 +186,24 @@ locals {
     mwaa_parse_time           = { group = "MWAA", namespace = "AmazonMWAA", metric = "TotalParseTime", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_parse_time_warn", critical = "mwaa_parse_time_crit" }
     mwaa_dag_processing_age   = { group = "MWAA", namespace = "AmazonMWAA", metric = "DAGFileProcessingLastRunSecondsAgo", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_dag_processing_age_warn", critical = "mwaa_dag_processing_age_crit" }
     mwaa_task_duration        = { group = "MWAA", namespace = "AmazonMWAA", metric = "TaskInstanceDuration", statistic = "Average", type = "baseline_gt", dim_key = "", warning = "mwaa_task_duration_baseline_warn", critical = "mwaa_task_duration_baseline_crit" }
-    mwaa_dag_duration_success = { group = "MWAA", namespace = "AmazonMWAA", metric = "DAGDurationSuccess", statistic = "Average", type = "baseline_gt", dim_key = "", warning = "mwaa_dag_duration_baseline_warn", critical = "mwaa_dag_duration_baseline_crit" }
+    mwaa_dag_duration_success = { group = "MWAA", namespace = "AmazonMWAA", metric = "DAGDurationSuccess", statistic = "Average", type = "gt", dim_key = "DAG", warning = "mwaa_dag_duration_baseline_warn", critical = "mwaa_dag_duration_baseline_crit" }
     mwaa_write_latency        = { group = "MWAA", namespace = "AWS/MWAA", metric = "WriteLatency", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_write_latency_warn", critical = "mwaa_write_latency_crit" }
     mwaa_scheduler_heartbeat  = { group = "MWAA", namespace = "AmazonMWAA", metric = "SchedulerHeartbeat", statistic = "Sum", type = "lt", dim_key = "", warning = "mwaa_scheduler_heartbeat_warn", critical = "mwaa_scheduler_heartbeat_crit" }
     mwaa_tasks_pending        = { group = "MWAA", namespace = "AmazonMWAA", metric = "TasksPending", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_tasks_pending_warn", critical = "mwaa_tasks_pending_crit" }
     mwaa_running_tasks        = { group = "MWAA", namespace = "AWS/MWAA", metric = "RunningTasks", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_running_tasks_warn", critical = "mwaa_running_tasks_crit" }
     mwaa_queued_tasks         = { group = "MWAA", namespace = "AWS/MWAA", metric = "QueuedTasks", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_queued_tasks_warn", critical = "mwaa_queued_tasks_crit" }
     mwaa_import_errors        = { group = "MWAA", namespace = "AmazonMWAA", metric = "ImportErrors", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_import_errors_warn", critical = "mwaa_import_errors_crit" }
-    mwaa_task_failures        = { group = "MWAA", namespace = "AmazonMWAA", metric = "TaskInstanceFailures", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_task_failures_warn", critical = "mwaa_task_failures_crit" }
-    mwaa_zombies              = { group = "MWAA", namespace = "AmazonMWAA", metric = "ZombiesKilled", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_zombies_warn", critical = "mwaa_zombies_crit" }
-    mwaa_sla_missed           = { group = "MWAA", namespace = "AmazonMWAA", metric = "SLAMissed", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_sla_missed_warn", critical = "mwaa_sla_missed_crit" }
-    mwaa_processor_timeouts   = { group = "MWAA", namespace = "AmazonMWAA", metric = "ProcessorTimeouts", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_processor_timeouts_warn", critical = "mwaa_processor_timeouts_crit" }
-    mwaa_db_connections       = { group = "MWAA", namespace = "AWS/MWAA", metric = "DatabaseConnections", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_db_conn_warn", critical = "mwaa_db_conn_crit" }
-    mwaa_cpu                  = { group = "MWAA", namespace = "AWS/MWAA", metric = "CPUUtilization", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_cpu_warn", critical = "mwaa_cpu_crit" }
-    mwaa_memory               = { group = "MWAA", namespace = "AWS/MWAA", metric = "MemoryUtilization", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_mem_warn", critical = "mwaa_mem_crit" }
-    mwaa_pool_queued          = { group = "MWAA", namespace = "AmazonMWAA", metric = "PoolQueuedSlots", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_pool_queued_warn", critical = "mwaa_pool_queued_crit" }
-    mwaa_critical_section     = { group = "MWAA", namespace = "AmazonMWAA", metric = "CriticalSectionBusy", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_critical_section_warn", critical = "mwaa_critical_section_crit" }
-    mwaa_disk_queue           = { group = "MWAA", namespace = "AWS/MWAA", metric = "DiskQueueDepth", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_disk_queue_warn", critical = "mwaa_disk_queue_crit" }
-    mwaa_freeable_mem         = { group = "MWAA", namespace = "AWS/MWAA", metric = "FreeableMemory", statistic = "Minimum", type = "lt", dim_key = "", warning = "mwaa_freeable_mem_warn", critical = "mwaa_freeable_mem_crit" }
+    #  mwaa_task_failures        = { group = "MWAA", namespace = "AmazonMWAA", metric = "TaskInstanceFailures", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_task_failures_warn", critical = "mwaa_task_failures_crit" }
+    mwaa_zombies            = { group = "MWAA", namespace = "AmazonMWAA", metric = "ZombiesKilled", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_zombies_warn", critical = "mwaa_zombies_crit" }
+    mwaa_sla_missed         = { group = "MWAA", namespace = "AmazonMWAA", metric = "SLAMissed", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_sla_missed_warn", critical = "mwaa_sla_missed_crit" }
+    mwaa_processor_timeouts = { group = "MWAA", namespace = "AmazonMWAA", metric = "ProcessorTimeouts", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_processor_timeouts_warn", critical = "mwaa_processor_timeouts_crit" }
+    mwaa_db_connections     = { group = "MWAA", namespace = "AWS/MWAA", metric = "DatabaseConnections", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_db_conn_warn", critical = "mwaa_db_conn_crit" }
+    mwaa_cpu                = { group = "MWAA", namespace = "AWS/MWAA", metric = "CPUUtilization", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_cpu_warn", critical = "mwaa_cpu_crit" }
+    mwaa_memory             = { group = "MWAA", namespace = "AWS/MWAA", metric = "MemoryUtilization", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_mem_warn", critical = "mwaa_mem_crit" }
+    mwaa_pool_queued        = { group = "MWAA", namespace = "AmazonMWAA", metric = "PoolQueuedSlots", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_pool_queued_warn", critical = "mwaa_pool_queued_crit" }
+    mwaa_critical_section   = { group = "MWAA", namespace = "AmazonMWAA", metric = "CriticalSectionBusy", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_critical_section_warn", critical = "mwaa_critical_section_crit" }
+    mwaa_disk_queue         = { group = "MWAA", namespace = "AWS/MWAA", metric = "DiskQueueDepth", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_disk_queue_warn", critical = "mwaa_disk_queue_crit" }
+    mwaa_freeable_mem       = { group = "MWAA", namespace = "AWS/MWAA", metric = "FreeableMemory", statistic = "Minimum", type = "lt", dim_key = "", warning = "mwaa_freeable_mem_warn", critical = "mwaa_freeable_mem_crit" }
 
     # ── Control Panel ─────────────────────────────────────────────────────────
     cp_pod_cpu_throttle          = { group = "Control Panel", namespace = "ContainerInsights", metric = "pod_cpu_utilization_over_pod_limit", statistic = "Average", type = "gt", dim_key = "Namespace", dim_key2 = "ClusterName", match_exact = true, warning = "cp_pod_cpu_throttle_warn", critical = "cp_pod_cpu_throttle_crit" }
