@@ -446,7 +446,7 @@ data "aws_iam_policy_document" "efs_csi_driver" {
       "elasticfilesystem:DescribeAccessPoints",
       "elasticfilesystem:DescribeFileSystems"
     ]
-    resources = ["*"]
+    resources = [aws_efs_file_system.eks_user_homes.arn]
   }
   statement {
     effect    = "Allow"

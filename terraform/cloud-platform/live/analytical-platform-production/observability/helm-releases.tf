@@ -1,9 +1,9 @@
 resource "helm_release" "grafana" {
   /* https://artifacthub.io/packages/helm/grafana/grafana */
   name       = "grafana"
-  repository = "https://grafana.github.io/helm-charts"
+  repository = "https://grafana-community.github.io/helm-charts"
   chart      = "grafana"
-  version    = "10.5.15"
+  version    = "12.4.7"
   namespace  = var.namespace
   depends_on = [kubernetes_config_map_v1.grafana_alert_rules]
   values = [

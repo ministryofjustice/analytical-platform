@@ -82,13 +82,13 @@ module "data_engineering_reset_access_role" {
       ]
       principals = [{
         type        = "AWS"
-        identifiers = ["arn:aws:iam::727529935573:user/67nd1000-s"] # reset snowflake user
+        identifiers = ["arn:aws:iam::281525601122:user/xf1r1000-s"] # reset snowflake user
       }]
       condition = [
         {
           test     = "StringEquals"
           variable = "sts:ExternalId"
-          values   = ["NW19986_SFCRole=4_rXof2jgPv9HotvAKm2DJJr08LeQ="]
+          values   = ["XT78565_SFCRole=153_t57DnWacgW6/QLEOSfMVFF1TKBQ="]
         }
       ]
     }
