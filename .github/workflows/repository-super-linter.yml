@@ -27,6 +27,7 @@ jobs:
       super-linter-variables: |
         {
           "DEFAULT_BRANCH": "main",
+          "ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT": false,
           "VALIDATE_ALL_CODEBASE": false,
           "FILTER_REGEX_EXCLUDE": ".*archive/.*",
           "VALIDATE_BASH": false,

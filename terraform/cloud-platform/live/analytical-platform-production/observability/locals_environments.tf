@@ -88,19 +88,11 @@ locals {
     #   threshold_overrides = {
     #     cp_pod_net_baseline_warn = 5
     #   }
-    #   # ── Slack channel overrides ───────────────────────────────────────────
-    #   # Per-signal Slack overrides for this environment.
-    #   # Use "disabled" to suppress Slack routing for a specific signal
-    #   # without affecting other environments (e.g. silence noisy dev alerts).
-    #   slack_channel_overrides = {
-    #     cp_crashloop_backoff = { warning = "disabled", critical = "disabled" }
-    #   }
     # }
     # ---------------------------------------------------------------------------
 
 
     analytical-platform-compute-development = {
-      #slack_channel = "analytical-platform-alerts-slack"
       cloudwatch_datasource_name = "mojap-compute-development-cloudwatch"
       prometheus_datasource_name = "mojap-compute-development-prometheus"
 
@@ -116,7 +108,6 @@ locals {
     }
 
     analytical-platform-compute-test = {
-      #slack_channel = "analytical-platform-alerts-slack"
       cloudwatch_datasource_name = "mojap-compute-test-cloudwatch"
       prometheus_datasource_name = "mojap-compute-test-prometheus"
 
@@ -133,7 +124,6 @@ locals {
     }
 
     analytical-platform-compute-production = {
-      #slack_channel = "analytical-platform-alerts-slack"
       cloudwatch_datasource_name = "mojap-compute-production-cloudwatch"
       prometheus_datasource_name = "mojap-compute-production-prometheus"
 
@@ -154,7 +144,6 @@ locals {
       enabled_groups             = ["Control Panel", "EFS"]
       aws_region                 = "eu-west-1"
       cloudwatch_datasource_name = "mojap-development-cloudwatch"
-      #  slack_channel = "analytical-platform-alerts-slack"
 
       efs_file_systems = ["fs-0dbd6739"] #eks-development-user-homes
 

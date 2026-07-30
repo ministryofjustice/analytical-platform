@@ -29,6 +29,6 @@ resource "kubernetes_config_map_v1" "grafana_alert_rules" {
   }
 
   data = {
-    "rules.yaml" = local.alert_rules_yaml_by_env[each.key]
+    "rules.yaml" = sensitive(local.alert_rules_yaml_by_env[each.key])
   }
 }
