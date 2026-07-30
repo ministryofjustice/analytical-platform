@@ -31,6 +31,7 @@ provider "aws" {
   }
 }
 
+# tflint-ignore: terraform_unused_declarations
 provider "aws" {
   alias  = "analytical-platform-management-production"
   region = "eu-west-1"
