@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "s3_sns_alerting_topic_policy" {
+data "aws_iam_policy_document" "splink_bucket_alerting_topic_policy" {
   statement {
     effect = "Allow"
 
@@ -8,18 +8,18 @@ data "aws_iam_policy_document" "s3_sns_alerting_topic_policy" {
     }
 
     actions = [
-      "SNS:Publish"
+      "sns:Publish"
     ]
 
     resources = [
-      "arn:aws:sns:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:s3-event-notification-topic"
+      aws_sns_topic.splink_bucket_alerting_topic.arn
     ]
 
     condition {
       test     = "ArnEquals"
       variable = "aws:SourceArn"
       values = [
-        aws_cloudwatch_event_rule.bucket_event_rule.arn
+        aws_cloudwatch_event_rule.s3_bucket_splink_event_rule.arn
       ]
     }
   }
