@@ -198,5 +198,5 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 resource "aws_cloudwatch_event_target" "bucket_event_target" {
   rule      = aws_cloudwatch_event_rule.s3_bucket_splink_event_rule.name
   target_id = "s3-event-target"
-  arn       = aws_sns_topic.splink_bucket_alerting.arn
+  arn       = aws_sns_topic.splink_bucket_alerting_topic.arn
 }
