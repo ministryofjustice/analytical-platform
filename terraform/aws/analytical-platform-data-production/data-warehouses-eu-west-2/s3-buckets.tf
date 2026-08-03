@@ -75,7 +75,7 @@ module "moj_analytics_logs_bucket_eu_west_2" {
   }
 
   tags = merge(
-    local.tags,
+    var.tags,
     { "backup" = "false" }
   )
 }
