@@ -6,8 +6,8 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Matthew Rixson"
-      email = "matthew.rixson@justice.gov.uk"
+      name  = "Khristiania Raihan"
+      email = "khristiania.raihan@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -16,11 +16,10 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Khristiania Raihan"
-      email = "khristiania.raihan@justice.gov.uk"
+      name  = "Matthew Rixson"
+      email = "matthew.rixson@justice.gov.uk"
       role  = "responder"
     },
-
   ]
 
   teams_em = {
@@ -43,15 +42,15 @@ locals {
 
       layers = [
         {
-          name = "EM Daily Support Rota"
+          name = "Layer 1"
 
-          start = "EXISTING_LAYER_START"
+          start = "2026-06-15T10:38:54+01:00"
 
           rotation_virtual_start = (
-            "EXISTING_ROTATION_VIRTUAL_START"
+            "2026-06-15T09:00:00+01:00"
           )
 
-          rotation_turn_length_seconds = 86400
+          rotation_turn_length_seconds = 28800
 
           users = [
             for user in local.users_em :
@@ -62,32 +61,32 @@ locals {
             {
               type              = "weekly_restriction"
               start_day_of_week = 1
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 2
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 3
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 4
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
             {
               type              = "weekly_restriction"
               start_day_of_week = 5
-              start_time_of_day = "00:00:00"
-              duration_seconds  = 86400
+              start_time_of_day = "09:00:00"
+              duration_seconds  = 28800
             },
           ]
         },
@@ -147,10 +146,10 @@ import {
 
 import {
   to = module.users_em[
-    "matthew.rixson@justice.gov.uk"
+    "khristiania.raihan@justice.gov.uk"
   ].pagerduty_user.this
 
-  id = "PREPU2L"
+  id = "PSYDXO9"
 }
 
 import {
@@ -163,10 +162,10 @@ import {
 
 import {
   to = module.users_em[
-    "khristiania.raihan@justice.gov.uk"
+    "matthew.rixson@justice.gov.uk"
   ].pagerduty_user.this
 
-  id = "PSYDXO9"
+  id = "PREPU2L"
 }
 
 import {
