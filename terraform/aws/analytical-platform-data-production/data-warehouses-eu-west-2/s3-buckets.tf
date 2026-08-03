@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "s3_server_access_logs_eu_west_2_policy" {
     sid       = "S3ServerAccessLogsPolicy"
     effect    = "Allow"
     actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::moj-analytics-s3-logs/*"]
+    resources = ["arn:aws:s3:::moj-analytics-s3-logs-eu-west-2/*"]
     principals {
       type        = "Service"
       identifiers = ["logging.s3.amazonaws.com"]
@@ -51,7 +51,7 @@ module "moj_analytics_logs_bucket_eu_west_2" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "5.13.0"
 
-  bucket = "moj-analytics-s3-logs"
+  bucket = "moj-analytics-s3-logs-eu-west-2"
 
   force_destroy = false
 
@@ -68,7 +68,7 @@ module "moj_analytics_logs_bucket_eu_west_2" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = module.mojap_national_security_data_kms.key_arn
+        kms_master_key_id = module.s3_server_access_logs_eu_west_2_kms.key_arn
         sse_algorithm     = "aws:kms"
       }
     }
