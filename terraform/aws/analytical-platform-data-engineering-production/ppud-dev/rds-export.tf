@@ -21,7 +21,7 @@ resource "aws_security_group_rule" "db_ingress" {
 
 module "rds_export" {
   # using source ref whilst testing
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=update-rds-tf-module"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=0fad76ae28ca5059b4b98597084e023af6052d55"
 
   providers = {
     aws = aws
