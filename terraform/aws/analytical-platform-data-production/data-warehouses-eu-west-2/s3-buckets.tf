@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "s3_server_access_logs_eu_west_2_policy" {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = [data.aws_caller_identity.current.account_id]
+      values   = [data.aws_caller_identity.session.account_id]
     }
   }
 }
