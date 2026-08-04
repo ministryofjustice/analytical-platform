@@ -31,6 +31,10 @@ locals {
       name      = "dbt-corporate",
       component = "dbt-corporate",
     },
+    "dbt-data-first" = {
+      name      = "dbt-data-first",
+      component = "dbt-data-first",
+    },
     "dbt-xcjs" = {
       name      = "dbt-xcjs",
       component = "dbt-xcjs"
