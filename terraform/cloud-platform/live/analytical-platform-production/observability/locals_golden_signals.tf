@@ -7,6 +7,7 @@ locals {
     "NAT Gateway"     = { folder = "internal/compute/networking", name_suffix = "natgateway" }
     "Transit Gateway" = { folder = "internal/compute/networking", name_suffix = "transitgateway" }
     "Network Monitor" = { folder = "internal/compute/networking", name_suffix = "networkmonitor" }
+    "Bedrock"         = { folder = "data/bedrock", name_suffix = "bedrock" }
     "EKS"             = { folder = "internal/compute/cluster", name_suffix = "eks" }
     "EFS"             = { folder = "internal/compute/storage", name_suffix = "efs" }
     "S3"              = { folder = "internal/compute/storage", name_suffix = "s3" }
@@ -260,5 +261,11 @@ locals {
     rds_burst_balance        = { group = "Control Panel", namespace = "AWS/RDS", metric = "BurstBalance", statistic = "Minimum", type = "lt", dim_key = "DBInstanceIdentifier", warning = "rds_burst_balance_warn", critical = "rds_burst_balance_crit" }
     rds_ebs_io_balance       = { group = "Control Panel", namespace = "AWS/RDS", metric = "EBSIOBalance%", statistic = "Minimum", type = "lt", dim_key = "DBInstanceIdentifier", warning = "rds_ebs_io_balance_warn", critical = "rds_ebs_io_balance_crit" }
     rds_swap                 = { group = "Control Panel", namespace = "AWS/RDS", metric = "SwapUsage", statistic = "Maximum", type = "gt", dim_key = "DBInstanceIdentifier", warning = "rds_swap_warn", critical = "rds_swap_crit" }
+
+    # ── Bedrock ───────────────────────────────────────────────────────────────
+    bedrock_client_errors = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "InvocationClientErrors", statistic = "Sum", type = "gt", dim_key = "ModelId", warning = "bedrock_client_errors_warn", critical = "bedrock_client_errors_crit" }
+    bedrock_server_errors = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "InvocationServerErrors", statistic = "Sum", type = "gt", dim_key = "ModelId", warning = "bedrock_server_errors_warn", critical = "bedrock_server_errors_crit" }
+    bedrock_legacy_model  = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "LegacyModelInvocations", statistic = "Sum", type = "gt", dim_key = "ModelId", warning = "bedrock_legacy_model_warn", critical = "bedrock_legacy_model_crit" }
+    bedrock_invocations   = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "Invocations", statistic = "Sum", type = "baseline_gt", dim_key = "ModelId", warning = "bedrock_invocations_baseline_warn", critical = "bedrock_invocations_baseline_crit" }
   }
 }

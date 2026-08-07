@@ -139,6 +139,15 @@ locals {
       ]
     }
 
+    analytical-platform-data-production = {
+      cloudwatch_datasource_name = "mojap-data-production-cloudwatch"
+      prometheus_datasource_name = "mojap-data-production-prometheus"
+
+      enabled_groups = [
+        "Bedrock"
+      ]
+    }
+
     # environnment added for testing controlpanel alerts purposes, to be removed after testing is complete
     analytical-platform-development = {
       enabled_groups             = ["Control Panel", "EFS"]
