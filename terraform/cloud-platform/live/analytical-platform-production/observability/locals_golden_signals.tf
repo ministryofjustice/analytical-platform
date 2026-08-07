@@ -7,7 +7,7 @@ locals {
     "NAT Gateway"     = { folder = "internal/compute/networking", name_suffix = "natgateway" }
     "Transit Gateway" = { folder = "internal/compute/networking", name_suffix = "transitgateway" }
     "Network Monitor" = { folder = "internal/compute/networking", name_suffix = "networkmonitor" }
-    "Bedrock"         = { folder = "data/bedrock", name_suffix = "bedrock" }
+    "Bedrock"         = { folder = "internal/data/bedrock", name_suffix = "bedrock" }
     "EKS"             = { folder = "internal/compute/cluster", name_suffix = "eks" }
     "EFS"             = { folder = "internal/compute/storage", name_suffix = "efs" }
     "S3"              = { folder = "internal/compute/storage", name_suffix = "s3" }
