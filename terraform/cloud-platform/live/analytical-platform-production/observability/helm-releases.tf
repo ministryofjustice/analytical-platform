@@ -34,6 +34,10 @@ resource "helm_release" "grafana" {
       podAnnotations = {
         "checksum/alert-rules" = local.metrics_checksum
       }
+    }),
+    yamlencode({
+      dashboardProviders = local.dashboard_providers_yaml
+      dashboards         = local.dashboards_by_provider
     })
   ]
 

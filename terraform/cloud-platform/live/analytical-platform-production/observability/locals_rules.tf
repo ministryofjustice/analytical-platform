@@ -41,6 +41,7 @@ locals {
             rule.dim_key == "TargetGroup" ? ["*"] :
             rule.dim_key == "DAG" ? ["*"] :
             rule.dim_key == "LoadBalancer" ? ["*"] :
+            rule.dim_key == "ModelId" ? ["*"] :
             [""]
             ) : {
             rule_key  = rule_key

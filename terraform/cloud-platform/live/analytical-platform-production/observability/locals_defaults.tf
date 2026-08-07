@@ -509,6 +509,30 @@ locals {
     # Saturation: Using swap — very slow — Warning > 256 MB, Critical > 1 GB
     rds_swap_warn = 268435456
     rds_swap_crit = 1073741824
+
+    # -------------------------------------------------------------------------
+    # Bedrock
+    # ------------------------------------------------------------------------- 
+    # Errors: Bad requests from callers (client-side)
+    bedrock_client_errors_warn = 5
+    bedrock_client_errors_crit = 20
+
+    # Errors: Failures on AWS/Bedrock's side
+    bedrock_server_errors_warn = 5
+    bedrock_server_errors_crit = 20
+
+    # Saturation: Tokens-per-minute quota usage (%)
+    bedrock_tpm_quota_warn = 70
+    bedrock_tpm_quota_crit = 90
+
+    # Errors: Calls to deprecated models
+    bedrock_legacy_model_warn = 1
+    bedrock_legacy_model_crit = 10
+
+    # Traffic: Invocation volume vs hourly baseline — Warning Baseline +100%,
+    # Critical Baseline +300%
+    bedrock_invocations_baseline_warn = 100
+    bedrock_invocations_baseline_crit = 300
   }
 
   thresholds = {
