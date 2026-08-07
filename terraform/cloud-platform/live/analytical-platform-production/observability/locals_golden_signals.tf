@@ -265,7 +265,6 @@ locals {
     # ── Bedrock ───────────────────────────────────────────────────────────────
     bedrock_client_errors = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "InvocationClientErrors", statistic = "Sum", type = "gt", dim_key = "ModelId", warning = "bedrock_client_errors_warn", critical = "bedrock_client_errors_crit" }
     bedrock_server_errors = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "InvocationServerErrors", statistic = "Sum", type = "gt", dim_key = "ModelId", warning = "bedrock_server_errors_warn", critical = "bedrock_server_errors_crit" }
-    bedrock_tpm_quota     = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "EstimatedTPMQuotaUsage", statistic = "Maximum", type = "gt", dim_key = "ModelId", warning = "bedrock_tpm_quota_warn", critical = "bedrock_tpm_quota_crit" }
     bedrock_legacy_model  = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "LegacyModelInvocations", statistic = "Sum", type = "gt", dim_key = "ModelId", warning = "bedrock_legacy_model_warn", critical = "bedrock_legacy_model_crit" }
     bedrock_invocations   = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "Invocations", statistic = "Sum", type = "baseline_gt", dim_key = "ModelId", warning = "bedrock_invocations_baseline_warn", critical = "bedrock_invocations_baseline_crit" }
   }
