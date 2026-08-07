@@ -10,7 +10,7 @@ One Grafana instance monitors all AP AWS accounts, each via its own CloudWatch/P
 
 ## List of files
 
-```
+```text
 terraform.tf                 Backend config and provider blocks (aws, github,
                               kubernetes, helm).
 
@@ -72,7 +72,7 @@ src/helm/values/grafana/
 ## Module inputs (`variables.tf`)
 
 | Variable | Type | Default | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `account_ids` | `map(string)` | — (required) | Account name → account ID. |
 | `tags` | `map(string)` | — (required) | Tags applied to resources. |
 | `namespace` | `string` | — (required) | Kubernetes namespace Grafana is deployed into. |
@@ -80,7 +80,6 @@ src/helm/values/grafana/
 | `evaluation_interval` | `string` | `"1m"` | Rule-evaluation interval used when an account doesn't set its own `evaluation_interval`. |
 
 Set in `terraform.tfvars`.
-
 
 ### Alert rules
 
@@ -163,13 +162,13 @@ analytical-platform-compute-production = {
 Every key inside `golden_signals` (in `locals_golden_signals.tf`) is one of the fields below, with why it exists.
 
 | Field | Required | Description |
-|---|---|---|
+| --- | --- | --- |
 | `group` | yes | Must match a key in `group_folders`. |
 | `namespace` | CloudWatch only | CloudWatch namespace, e.g. `AWS/RDS`. |
 | `metric` | yes | CloudWatch metric name, or the label used for Prometheus signals. |
 | `statistic` | CloudWatch only | `Sum`, `Average`, `Maximum`, `Minimum`, `p99`, etc. |
 | `datasource_type` | no | Set to `"prometheus"` to query Prometheus via `expr` instead of CloudWatch. |
-| `expr` | Prometheus only | PromQL query. `__NAMESPACES__` is replaced with the account's `namespaces`, joined by `\|`. |
+| `expr` | Prometheus only | PromQL query. `__NAMESPACES__` is replaced with the account's `namespaces`, joined by `\ | `. |
 | `type` | yes | `gt` fires above threshold, `lt` fires below, `baseline_gt`/`baseline_lt` fire on % deviation from an hourly baseline. |
 | `dim_key` | yes | Dimension to fan the rule out over — one rule per value. `""` = single global rule. |
 | `dim_key2` | no | Second dimension, always matched to `"*"`. |
@@ -189,7 +188,7 @@ Every key inside `golden_signals` (in `locals_golden_signals.tf`) is one of the 
 ### Supported `dim_key` values
 
 | `dim_key` | Resolves against (per account, in `locals_environments.tf`) |
-|---|---|
+| --- | --- |
 | `""` | No dimension filter — a single global aggregate rule. |
 | `BucketName` | `s3_buckets` |
 | `DBInstanceIdentifier` | `rds_instances` |
@@ -205,7 +204,7 @@ Any other `dim_key` value resolves to `[""]` (no rule generated) — extend the 
 Each key in `environment_configurations` (in `locals_environments.tf`) is one AWS account's alerting configuration.
 
 | Field | Required | Default | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `cloudwatch_datasource_name` | for any CloudWatch-sourced rule | — | Grafana datasource used for this account's CloudWatch rules. |
 | `prometheus_datasource_name` | for any Prometheus-sourced rule | — | Grafana datasource used for this account's Prometheus rules. |
 | `aws_region` | no | `var.aws_region` | AWS region CloudWatch queries run against. |
@@ -245,10 +244,9 @@ evaluation_interval = "5m"
 
 Drop a dashboard JSON into a subfolder of `src/helm/values/grafana/dashboards/`:
 
-```
+```text
 src/helm/values/grafana/dashboards/<folder>/<dashboard-name>.json
 ```
 
 - `<folder>` becomes the Grafana UI folder name (used as-is — no title-casing) and its own provisioning provider.
 - `<dashboard-name>` becomes the dashboard's key within that folder (the `.json` extension is stripped).
-

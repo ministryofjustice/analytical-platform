@@ -32,7 +32,11 @@
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 1 },
       "id": 101,
       "options": {
-        "code": { "language": "plaintext", "showLineNumbers": false, "showMiniMap": false },
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "# Amazon Bedrock\n\nThis dashboard monitors **Amazon Bedrock** invocation traffic across every model in use, broken out per model via CloudWatch.\n\n**What to look at first:**\n- **Invocation Count / Invocation Latency** — request volume and average latency, per model.\n- **Token Counts by Model / Daily Total Tokens by ModelId** — input and output token usage, per model and rolled up daily, for cost attribution.\n- **InputTokenCount, OutputTokenCount** — total token usage across all models combined.\n- **Requests, grouped by input tokens** — request volume bucketed by input size.\n- **Invocation Throttles / Invocation Error Count** — throttling and client/server error rates across all models.",
         "mode": "markdown"
       },
@@ -47,38 +51,73 @@
       "title": "Invocation Count",
       "description": "Number of Bedrock invocations, broken out per model via a CloudWatch metric-math SEARCH() expression — new models appear automatically, nothing to update here when Bedrock adds one.",
       "type": "timeseries",
-      "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "mojap-data-production-cloudwatch"
+      },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 9 },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "insertNulls": false, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5,
-            "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false,
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
           "unit": "none"
         },
         "overrides": []
       },
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "targets": [
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SEARCH('{AWS/Bedrock,ModelId} MetricName=\"Invocations\"', 'Sum', 300)",
-          "id": "a", "label": "", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "A",
-          "region": "$region", "hide": false
+          "id": "a",
+          "label": "",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "$region",
+          "hide": false
         }
       ]
     },
@@ -87,38 +126,73 @@
       "title": "Invocation Latency",
       "description": "Average invocation latency per model.",
       "type": "timeseries",
-      "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "mojap-data-production-cloudwatch"
+      },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 17 },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "insertNulls": false, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5,
-            "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false,
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
           "unit": "ms"
         },
         "overrides": []
       },
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "targets": [
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SEARCH('{AWS/Bedrock,ModelId} MetricName=\"InvocationLatency\"', 'p99', 300)",
-          "id": "a", "label": "", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "A",
-          "region": "$region", "hide": false
+          "id": "a",
+          "label": "",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "$region",
+          "hide": false
         }
       ]
     },
@@ -127,45 +201,91 @@
       "title": "Token Counts by Model",
       "description": "Total input and output token counts per model, per period (Sum).",
       "type": "timeseries",
-      "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "mojap-data-production-cloudwatch"
+      },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 25 },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "insertNulls": false, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5,
-            "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false,
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
           "unit": "none"
         },
         "overrides": []
       },
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "targets": [
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SEARCH('{AWS/Bedrock,ModelId} MetricName=\"InputTokenCount\"', 'Sum', 300)",
-          "id": "a", "label": "", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "A",
-          "region": "$region", "hide": false
+          "id": "a",
+          "label": "",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "$region",
+          "hide": false
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SEARCH('{AWS/Bedrock,ModelId} MetricName=\"OutputTokenCount\"', 'Sum', 300)",
-          "id": "b", "label": "", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "B",
-          "region": "$region", "hide": false
+          "id": "b",
+          "label": "",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "$region",
+          "hide": false
         }
       ]
     },
@@ -174,45 +294,91 @@
       "title": "Token Counts by Model (Largest Single Request/Response)",
       "description": "Largest single request's input tokens and largest single response's output tokens, per model, per period (Maximum) — flags unusually large individual calls.",
       "type": "timeseries",
-      "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "mojap-data-production-cloudwatch"
+      },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 33 },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "insertNulls": false, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5,
-            "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false,
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
           "unit": "none"
         },
         "overrides": []
       },
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "targets": [
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SEARCH('{AWS/Bedrock,ModelId} MetricName=\"InputTokenCount\"', 'Maximum', 300)",
-          "id": "a", "label": "", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "A",
-          "region": "$region", "hide": false
+          "id": "a",
+          "label": "",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "$region",
+          "hide": false
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SEARCH('{AWS/Bedrock,ModelId} MetricName=\"OutputTokenCount\"', 'Maximum', 300)",
-          "id": "b", "label": "", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "B",
-          "region": "$region", "hide": false
+          "id": "b",
+          "label": "",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "$region",
+          "hide": false
         }
       ]
     },
@@ -221,43 +387,87 @@
       "title": "Daily Total Tokens by ModelId",
       "description": "Input and output tokens per model, per day, stacked — the bar height is the combined total. Shown as two stacked series rather than a summed one because CloudWatch Metric Math cannot add two multi-series (per-model) arrays together.",
       "type": "barchart",
-      "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "mojap-data-production-cloudwatch"
+      },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 41 },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisPlacement": "auto", "fillOpacity": 80, "gradientMode": "none",
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "lineWidth": 1, "scaleDistribution": { "type": "linear" }
+            "lineWidth": 1,
+            "scaleDistribution": { "type": "linear" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
           "unit": "none"
         },
         "overrides": []
       },
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
-        "orientation": "auto", "showValue": "never", "stacking": "normal",
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "normal",
         "tooltip": { "mode": "multi", "sort": "desc" },
-        "xTickLabelRotation": 0, "xTickLabelSpacing": 0
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
       },
       "targets": [
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SEARCH('{AWS/Bedrock,ModelId} MetricName=\"InputTokenCount\"', 'Sum', 86400)",
-          "id": "a", "label": "", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "86400", "queryMode": "Metrics", "refId": "A",
-          "region": "$region", "hide": false
+          "id": "a",
+          "label": "",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "86400",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "$region",
+          "hide": false
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SEARCH('{AWS/Bedrock,ModelId} MetricName=\"OutputTokenCount\"', 'Sum', 86400)",
-          "id": "b", "label": "", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "86400", "queryMode": "Metrics", "refId": "B",
-          "region": "$region", "hide": false
+          "id": "b",
+          "label": "",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "86400",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "$region",
+          "hide": false
         }
       ]
     },
@@ -266,45 +476,91 @@
       "title": "InputTokenCount, OutputTokenCount",
       "description": "Total input and output tokens across all models.",
       "type": "timeseries",
-      "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "mojap-data-production-cloudwatch"
+      },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 49 },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "insertNulls": false, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5,
-            "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false,
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
           "unit": "none"
         },
         "overrides": []
       },
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "targets": [
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SUM(SEARCH('{AWS/Bedrock,ModelId} MetricName=\"InputTokenCount\"', 'Sum', 300))",
-          "id": "a", "label": "InputTokenCount", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "A",
-          "region": "$region", "hide": false
+          "id": "a",
+          "label": "InputTokenCount",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "$region",
+          "hide": false
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SUM(SEARCH('{AWS/Bedrock,ModelId} MetricName=\"OutputTokenCount\"', 'Sum', 300))",
-          "id": "b", "label": "OutputTokenCount", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "B",
-          "region": "$region", "hide": false
+          "id": "b",
+          "label": "OutputTokenCount",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "$region",
+          "hide": false
         }
       ]
     },
@@ -313,122 +569,303 @@
       "title": "Requests, grouped by input tokens",
       "description": "AWS's native metric-based bucketing: PR(lo:hi) (percentile rank) on InputTokenCount gives the share of calls in each range; multiplying by SampleCount converts that share into an actual call count. Works off standard AWS/Bedrock metrics — no invocation logging required.",
       "type": "timeseries",
-      "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "mojap-data-production-cloudwatch"
+      },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 57 },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "insertNulls": false, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5,
-            "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false,
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
           "unit": "none"
         },
         "overrides": []
       },
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "targets": [
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "m1*m7/100",
-          "id": "e1", "label": "Calls with input tokens under or at 8,800", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "E1",
-          "region": "$region", "hide": false
+          "id": "e1",
+          "label": "Calls with input tokens under or at 8,800",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "E1",
+          "region": "$region",
+          "hide": false
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "m2*m7/100",
-          "id": "e2", "label": "Calls with input tokens between 8,801-17,600", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "E2",
-          "region": "$region", "hide": false
+          "id": "e2",
+          "label": "Calls with input tokens between 8,801-17,600",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "E2",
+          "region": "$region",
+          "hide": false
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "m3*m7/100",
-          "id": "e3", "label": "Calls with input tokens between 17,601-44,000", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "E3",
-          "region": "$region", "hide": false
+          "id": "e3",
+          "label": "Calls with input tokens between 17,601-44,000",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "E3",
+          "region": "$region",
+          "hide": false
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "m4*m7/100",
-          "id": "e4", "label": "Calls with input tokens between 44,001-88,000", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "E4",
-          "region": "$region", "hide": false
+          "id": "e4",
+          "label": "Calls with input tokens between 44,001-88,000",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "E4",
+          "region": "$region",
+          "hide": false
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "m5*m7/100",
-          "id": "e5", "label": "Calls with input tokens between 88,001-300,000", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "E5",
-          "region": "$region", "hide": false
+          "id": "e5",
+          "label": "Calls with input tokens between 88,001-300,000",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "E5",
+          "region": "$region",
+          "hide": false
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "m6*m7/100",
-          "id": "e6", "label": "Calls with input tokens above 300,000", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "E6",
-          "region": "$region", "hide": false
+          "id": "e6",
+          "label": "Calls with input tokens above 300,000",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "E6",
+          "region": "$region",
+          "hide": false
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
-          "dimensions": {}, "expression": "", "id": "m1", "matchExact": true, "metricEditorMode": 0,
-          "metricName": "InputTokenCount", "metricQueryType": 0, "namespace": "AWS/Bedrock",
-          "period": "300", "queryMode": "Metrics", "refId": "M1", "region": "$region",
-          "statistic": "PR(:8800)", "hide": true
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "",
+          "id": "m1",
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "M1",
+          "region": "$region",
+          "statistic": "PR(:8800)",
+          "hide": true
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
-          "dimensions": {}, "expression": "", "id": "m2", "matchExact": true, "metricEditorMode": 0,
-          "metricName": "InputTokenCount", "metricQueryType": 0, "namespace": "AWS/Bedrock",
-          "period": "300", "queryMode": "Metrics", "refId": "M2", "region": "$region",
-          "statistic": "PR(8800:17600)", "hide": true
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "",
+          "id": "m2",
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "M2",
+          "region": "$region",
+          "statistic": "PR(8800:17600)",
+          "hide": true
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
-          "dimensions": {}, "expression": "", "id": "m3", "matchExact": true, "metricEditorMode": 0,
-          "metricName": "InputTokenCount", "metricQueryType": 0, "namespace": "AWS/Bedrock",
-          "period": "300", "queryMode": "Metrics", "refId": "M3", "region": "$region",
-          "statistic": "PR(17600:44000)", "hide": true
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "",
+          "id": "m3",
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "M3",
+          "region": "$region",
+          "statistic": "PR(17600:44000)",
+          "hide": true
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
-          "dimensions": {}, "expression": "", "id": "m4", "matchExact": true, "metricEditorMode": 0,
-          "metricName": "InputTokenCount", "metricQueryType": 0, "namespace": "AWS/Bedrock",
-          "period": "300", "queryMode": "Metrics", "refId": "M4", "region": "$region",
-          "statistic": "PR(44000:88000)", "hide": true
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "",
+          "id": "m4",
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "M4",
+          "region": "$region",
+          "statistic": "PR(44000:88000)",
+          "hide": true
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
-          "dimensions": {}, "expression": "", "id": "m5", "matchExact": true, "metricEditorMode": 0,
-          "metricName": "InputTokenCount", "metricQueryType": 0, "namespace": "AWS/Bedrock",
-          "period": "300", "queryMode": "Metrics", "refId": "M5", "region": "$region",
-          "statistic": "PR(88000:300000)", "hide": true
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "",
+          "id": "m5",
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "M5",
+          "region": "$region",
+          "statistic": "PR(88000:300000)",
+          "hide": true
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
-          "dimensions": {}, "expression": "", "id": "m6", "matchExact": true, "metricEditorMode": 0,
-          "metricName": "InputTokenCount", "metricQueryType": 0, "namespace": "AWS/Bedrock",
-          "period": "300", "queryMode": "Metrics", "refId": "M6", "region": "$region",
-          "statistic": "PR(300000:)", "hide": true
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "",
+          "id": "m6",
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "M6",
+          "region": "$region",
+          "statistic": "PR(300000:)",
+          "hide": true
         },
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
-          "dimensions": {}, "expression": "", "id": "m7", "matchExact": true, "metricEditorMode": 0,
-          "metricName": "InputTokenCount", "metricQueryType": 0, "namespace": "AWS/Bedrock",
-          "period": "300", "queryMode": "Metrics", "refId": "M7", "region": "$region",
-          "statistic": "SampleCount", "hide": true
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "",
+          "id": "m7",
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "M7",
+          "region": "$region",
+          "statistic": "SampleCount",
+          "hide": true
         }
       ]
     },
@@ -437,38 +874,73 @@
       "title": "Invocation Throttles",
       "description": "",
       "type": "timeseries",
-      "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "mojap-data-production-cloudwatch"
+      },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 65 },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "insertNulls": false, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5,
-            "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false,
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
           "unit": "none"
         },
         "overrides": []
       },
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "targets": [
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SUM(SEARCH('{AWS/Bedrock,ModelId} MetricName=\"InvocationThrottles\"', 'Sum', 300))",
-          "id": "a", "label": "InvocationThrottles", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "A",
-          "region": "$region", "hide": false
+          "id": "a",
+          "label": "InvocationThrottles",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "$region",
+          "hide": false
         }
       ]
     },
@@ -477,38 +949,73 @@
       "title": "Invocation Client Errors",
       "description": "Client-side invocation errors (bad requests, invalid input, auth issues etc.). Replaces the broken CloudTrail-based Throttling (WIP) panel, which queried a CloudTrail log group in eu-west-2 that never captured Bedrock activity (Bedrock is in eu-west-1).",
       "type": "timeseries",
-      "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "mojap-data-production-cloudwatch"
+      },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 73 },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "insertNulls": false, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5,
-            "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false,
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
           "unit": "none"
         },
         "overrides": []
       },
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "targets": [
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SUM(SEARCH('{AWS/Bedrock,ModelId} MetricName=\"InvocationClientErrors\"', 'Sum', 300))",
-          "id": "a", "label": "InvocationClientErrors", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "A",
-          "region": "$region", "hide": false
+          "id": "a",
+          "label": "InvocationClientErrors",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "$region",
+          "hide": false
         }
       ]
     },
@@ -517,38 +1024,73 @@
       "title": "Invocation Server Errors",
       "description": "Server-side invocation errors (failures on AWS/Bedrock's side).",
       "type": "timeseries",
-      "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "mojap-data-production-cloudwatch"
+      },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 81 },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "insertNulls": false, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5,
-            "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false,
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
           "unit": "none"
         },
         "overrides": []
       },
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "targets": [
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SUM(SEARCH('{AWS/Bedrock,ModelId} MetricName=\"InvocationServerErrors\"', 'Sum', 300))",
-          "id": "a", "label": "InvocationServerErrors", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "A",
-          "region": "$region", "hide": false
+          "id": "a",
+          "label": "InvocationServerErrors",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "$region",
+          "hide": false
         }
       ]
     },
@@ -557,38 +1099,73 @@
       "title": "Estimated TPM Quota Usage",
       "description": "Estimated tokens-per-minute quota usage per model — the early warning signal for throttling before InvocationServerErrors start climbing.",
       "type": "timeseries",
-      "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "mojap-data-production-cloudwatch"
+      },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 89 },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "insertNulls": false, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5,
-            "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false,
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
           "unit": "percent"
         },
         "overrides": []
       },
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "targets": [
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SEARCH('{AWS/Bedrock,ModelId} MetricName=\"EstimatedTPMQuotaUsage\"', 'Maximum', 300)",
-          "id": "a", "label": "", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "A",
-          "region": "$region", "hide": false
+          "id": "a",
+          "label": "",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "$region",
+          "hide": false
         }
       ]
     },
@@ -597,38 +1174,73 @@
       "title": "Legacy Model Invocations",
       "description": "Invocations of models AWS has marked as legacy/deprecated, per model. Any non-zero value here means someone is still calling a model due for retirement.",
       "type": "timeseries",
-      "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "mojap-data-production-cloudwatch"
+      },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 97 },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "insertNulls": false, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5,
-            "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false,
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
           "unit": "none"
         },
         "overrides": []
       },
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "targets": [
         {
-          "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "mojap-data-production-cloudwatch"
+          },
           "expression": "SEARCH('{AWS/Bedrock,ModelId} MetricName=\"LegacyModelInvocations\"', 'Sum', 300)",
-          "id": "a", "label": "", "matchExact": true, "metricEditorMode": 1, "metricQueryType": 0,
-          "namespace": "AWS/Bedrock", "period": "300", "queryMode": "Metrics", "refId": "A",
-          "region": "$region", "hide": false
+          "id": "a",
+          "label": "",
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "$region",
+          "hide": false
         }
       ]
     }
@@ -639,18 +1251,49 @@
   "templating": {
     "list": [
       {
-        "current": { "selected": true, "text": "eu-west-1", "value": "eu-west-1" },
-        "datasource": { "type": "cloudwatch", "uid": "mojap-data-production-cloudwatch" },
-        "definition": "", "hide": 0, "includeAll": false, "label": "Region", "multi": false,
-        "name": "region", "options": [],
-        "query": { "queryType": "regions", "refId": "CloudWatchVariableQueryEditor-VariableQuery", "region": "default" },
-        "refresh": 1, "regex": "", "skipUrlSync": false, "sort": 0, "type": "query"
+        "current": {
+          "selected": true,
+          "text": "eu-west-1",
+          "value": "eu-west-1"
+        },
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "mojap-data-production-cloudwatch"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Region",
+        "multi": false,
+        "name": "region",
+        "options": [],
+        "query": {
+          "queryType": "regions",
+          "refId": "CloudWatchVariableQueryEditor-VariableQuery",
+          "region": "default"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
   "time": { "from": "now-3h", "to": "now" },
   "timepicker": {
-    "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"],
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
     "time_options": ["1h", "3h", "12h", "1d", "1w"]
   },
   "timezone": "utc",
