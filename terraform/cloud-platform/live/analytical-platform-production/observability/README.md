@@ -168,7 +168,7 @@ Every key inside `golden_signals` (in `locals_golden_signals.tf`) is one of the 
 | `metric` | yes | CloudWatch metric name, or the label used for Prometheus signals. |
 | `statistic` | CloudWatch only | `Sum`, `Average`, `Maximum`, `Minimum`, `p99`, etc. |
 | `datasource_type` | no | Set to `"prometheus"` to query Prometheus via `expr` instead of CloudWatch. |
-| `expr` | Prometheus only | PromQL query. `__NAMESPACES__` is replaced with the account's `namespaces`, joined by `\ | `. |
+| `expr` | Prometheus only | PromQL query. `__NAMESPACES__` is replaced with the account's `namespaces`, joined by `&#124;`. |
 | `type` | yes | `gt` fires above threshold, `lt` fires below, `baseline_gt`/`baseline_lt` fire on % deviation from an hourly baseline. |
 | `dim_key` | yes | Dimension to fan the rule out over — one rule per value. `""` = single global rule. |
 | `dim_key2` | no | Second dimension, always matched to `"*"`. |
