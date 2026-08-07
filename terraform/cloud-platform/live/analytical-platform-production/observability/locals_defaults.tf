@@ -521,10 +521,6 @@ locals {
     bedrock_server_errors_warn = 5
     bedrock_server_errors_crit = 20
 
-    # Saturation: Tokens-per-minute quota usage (%)
-    bedrock_tpm_quota_warn = 70
-    bedrock_tpm_quota_crit = 90
-
     # Errors: Calls to deprecated models
     bedrock_legacy_model_warn = 1
     bedrock_legacy_model_crit = 10

@@ -35,7 +35,7 @@ locals_defaults.tf           defaults — threshold values (warning/critical)
                               merges defaults with each account's
                               threshold_overrides.
 
-locals_rules.tf               Its the main golden_signals alerts creation,
+locals_rules.tf               It's the main golden_signals alerts creation,
                               environment_configurations into one Grafana
                               alert rule per resource/account/severity —
                               CloudWatch/Prometheus query pipeline, Slack
@@ -83,7 +83,7 @@ Set in `terraform.tfvars`.
 
 ### Alert rules
 
-Alert rules are created with file-provisioned:
+Alert rules are created with file provisioning:
 
 1. `locals_rules.tf` renders `golden_signals` × `environment_configurations` into Grafana's native alert-provisioning YAML shape.
 2. `main.tf` YAML-encodes that per account and puts it in a `kubernetes_config_map_v1.grafana_alert_rules` ConfigMap (one per account, keyed `rules.yaml`), with a `checksum/rules` annotation.
@@ -195,7 +195,7 @@ Every key inside `golden_signals` (in `locals_golden_signals.tf`) is one of the 
 | `CacheClusterId` | `cache_clusters` |
 | `Namespace` | `namespaces` (defaults to `["cpanel"]` if unset) |
 | `FileSystemId` | `efs_file_systems` |
-| `ClusterName`, `NodeName`, `TargetGroup`, `DAG`, `LoadBalancer` | `["*"]` — wildcard, not resolved from account config |
+| `ClusterName`, `NodeName`, `TargetGroup`, `DAG`, `LoadBalancer`,`ModelId` | `["*"]` — wildcard, not resolved from account config |
 
 Any other `dim_key` value resolves to `[""]` (no rule generated) — extend the `dim_value` conditional in `locals_rules.tf`'s `rule_combos_by_env` to add a new dimension type.
 
