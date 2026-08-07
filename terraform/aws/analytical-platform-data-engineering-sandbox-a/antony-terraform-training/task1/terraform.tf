@@ -17,25 +17,9 @@ terraform {
 }
 
 provider "aws" {
-  alias  = "session"
-  region = "eu-west-2"
-}
-
-provider "aws" {
   region = "eu-west-1"
   assume_role {
     role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-sandbox-a"]}:role/GlobalGitHubActionAdmin"
-  }
-  default_tags {
-    tags = var.tags
-  }
-}
-
-provider "aws" {
-  alias  = "analytical-platform-management-production"
-  region = "eu-west-2"
-  assume_role {
-    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags
