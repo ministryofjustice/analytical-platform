@@ -15,7 +15,7 @@ locals {
   # ---------------------------------------------------------------------------
   dashboards_root = "${path.module}/src/helm/values/grafana/dashboards"
 
-  # every dashboard JSON file on disk, one level of subfolders deep
+  # every dashboard JSON file on disk, at any folder depth
   dashboard_file_paths = fileset(local.dashboards_root, "**/*.json")
 
   # distinct subfolder names -> one Grafana folder + provider per subfolder

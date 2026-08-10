@@ -197,8 +197,7 @@ Every key inside `golden_signals` (in `locals_golden_signals.tf`) is one of the 
 | `CacheClusterId` | `cache_clusters` |
 | `Namespace` | `namespaces` (defaults to `["cpanel"]` if unset) |
 | `FileSystemId` | `efs_file_systems` |
-| `ModelId` | `bedrock_models` — hand-maintained, no AWS API lists "models in use" for an account; a model invoked but missing from this list gets zero alert coverage, silently |
-| `ClusterName`, `NodeName`, `TargetGroup`, `DAG`, `LoadBalancer` | `["*"]` — wildcard, not resolved from account config |
+| `ClusterName`, `NodeName`, `TargetGroup`, `DAG`, `LoadBalancer`, `ModelId` | `["*"]` — wildcard, not resolved from account config |
 
 Any other `dim_key` value resolves to `[""]` (no rule generated) — extend the `dim_value` conditional in `locals_rules.tf`'s `rule_combos_by_env` to add a new dimension type.
 
