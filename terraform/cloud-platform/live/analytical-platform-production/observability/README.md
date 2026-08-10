@@ -43,9 +43,10 @@ locals_rules.tf               It's the main golden_signals alerts creation,
                               needs editing to add a new alert.
 
 locals_dashboards.tf          Every dashboard JSON file under
-                              src/helm/values/grafana/dashboards/<folder>/ and
-                              builds the dashboardProviders/dashboards values
-                              passed into the Helm release. Nothing here needs
+                              src/helm/values/grafana/dashboards/<folder>/,
+                              at any folder depth, and builds the
+                              dashboardProviders/dashboards values passed
+                              into the Helm release. Nothing here needs
                               editing to add a new dashboard.
 
 main.tf                      Renders golden_signals + environment_configurations
@@ -66,7 +67,8 @@ src/helm/values/grafana/
                                the extraVolumes/extraVolumeMounts that mount
                                the alert-rule ConfigMaps into the pod.
   dashboards/<folder>/*.json  Dashboard JSON files, one subfolder per Grafana
-                               folder (see "Dashboards" below).
+                               folder — folders can be nested (see
+                               "Dashboards" below).
 ```
 
 ## Module inputs (`variables.tf`)
@@ -94,7 +96,7 @@ Nothing in `locals_rules.tf` or `main.tf` needs to change to add a new alert or 
 
 ### Dashboards
 
-Any `.json` file dropped under `dashboards/<folder>/` is picked up automatically — `locals_dashboards.tf` discovers the files at plan time and builds the `dashboardProviders`/`dashboards` Helm values from them.
+Any `.json` file dropped under `dashboards/<folder>/` — at any folder depth — is picked up automatically. `locals_dashboards.tf` discovers the files at plan time and builds the `dashboardProviders`/`dashboards` Helm values from them.
 
 ## Adding a new alert or group
 
@@ -195,7 +197,7 @@ Every key inside `golden_signals` (in `locals_golden_signals.tf`) is one of the 
 | `CacheClusterId` | `cache_clusters` |
 | `Namespace` | `namespaces` (defaults to `["cpanel"]` if unset) |
 | `FileSystemId` | `efs_file_systems` |
-| `ClusterName`, `NodeName`, `TargetGroup`, `DAG`, `LoadBalancer`,`ModelId` | `["*"]` — wildcard, not resolved from account config |
+| `ClusterName`, `NodeName`, `TargetGroup`, `DAG`, `LoadBalancer`, `ModelId` | `["*"]` — wildcard, not resolved from account config |
 
 Any other `dim_key` value resolves to `[""]` (no rule generated) — extend the `dim_value` conditional in `locals_rules.tf`'s `rule_combos_by_env` to add a new dimension type.
 
@@ -215,8 +217,10 @@ Each key in `environment_configurations` (in `locals_environments.tf`) is one AW
 | `cache_clusters` | with `CacheClusterId`-dimensioned rules | `[]` | Cache cluster IDs to fan `CacheClusterId` rules out over. |
 | `namespaces` | with `Namespace`-dimensioned rules, and any Prometheus signal using `__NAMESPACES__` | `["cpanel"]` | K8s namespaces — used both for `Namespace` fan-out and substituted into Prometheus `expr`. |
 | `efs_file_systems` | with `FileSystemId`-dimensioned rules | `[]` | Filesystem IDs to fan `FileSystemId` rules out over. |
+| `bedrock_models` | with `ModelId`-dimensioned rules | `[]` | Bedrock model IDs to fan `ModelId` rules out over. Hand-maintained — see the `dim_key` table above. |
 | `threshold_overrides` | no | `{}` | Threshold keys to override for this account only. |
 | `evaluation_interval` | no | `var.evaluation_interval` | How often this account's rules are evaluated. |
+| `slack_channel` | no | tier default (`analytical-platform-high-priority-notifications` for production, `-low-priority-notifications` otherwise) | Overrides which Slack channel every alert for this account routes to. A custom channel needs matching contact points + policy routes added in `values.yml.tftpl` first. |
 
 ### Examples
 
@@ -242,11 +246,12 @@ evaluation_interval = "5m"
 
 ## Adding a dashboard
 
-Drop a dashboard JSON into a subfolder of `src/helm/values/grafana/dashboards/`:
+Drop a dashboard JSON into a subfolder of `src/helm/values/grafana/dashboards/`, at any depth:
 
 ```text
 src/helm/values/grafana/dashboards/<folder>/<dashboard-name>.json
+src/helm/values/grafana/dashboards/<folder>/<subfolder>/<dashboard-name>.json
 ```
 
-- `<folder>` becomes the Grafana UI folder name (used as-is — no title-casing) and its own provisioning provider.
+- `<folder path>` becomes the Grafana UI folder name, exactly as nested on disk (e.g. `internal/data/bedrock` stays `internal/data/bedrock`).
 - `<dashboard-name>` becomes the dashboard's key within that folder (the `.json` extension is stripped).
