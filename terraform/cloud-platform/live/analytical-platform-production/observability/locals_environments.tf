@@ -142,7 +142,7 @@ locals {
     analytical-platform-data-production = {
       cloudwatch_datasource_name = "mojap-data-production-cloudwatch"
       prometheus_datasource_name = "mojap-data-production-prometheus"
-
+      aws_region                 = "eu-west-1"
       enabled_groups = [
         "Bedrock"
       ]
