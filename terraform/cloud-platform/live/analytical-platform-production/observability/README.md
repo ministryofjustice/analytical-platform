@@ -98,7 +98,6 @@ Nothing in `locals_rules.tf` or `main.tf` needs to change to add a new alert or 
 
 Any `.json` file dropped under `dashboards/<folder>/` — at any folder depth — is picked up automatically. `locals_dashboards.tf` discovers the files at plan time and builds the `dashboardProviders`/`dashboards` Helm values from them.
 
-
 ## Adding a new alert or group
 
 ### 1. Add a new group (only if the alert doesn't fit an existing one)
