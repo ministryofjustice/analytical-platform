@@ -583,7 +583,8 @@ locals {
                 "arn:aws:s3:::mojap-land/property/planetfm/backupfiles/*",
                 "arn:aws:s3:::mojap-land/opg/prod/ocr/*",
                 "arn:aws:s3:::mojap-land/corporate/epm/*",
-                "arn:aws:s3:::mojap-land/hmpps/prison-curious/*"
+                "arn:aws:s3:::mojap-land/hmpps/prison-curious/*",
+                "arn:aws:s3:::mojap-land/hmpps/prisons-bt-pin/*"
               ]
             },
             {
