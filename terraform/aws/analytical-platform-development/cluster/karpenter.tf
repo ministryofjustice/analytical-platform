@@ -10,7 +10,7 @@ module "karpenter" {
 }
 
 resource "aws_security_group" "karpenter" {
-  #checkov:skip=CKV2_AWS_5: skip not atttached to ec2
+  #checkov:skip=CKV2_AWS_5: skip not attached to ec2
 
   description = "Provides karpenter with a map of subnets to deploy nodes"
   vpc_id      = module.vpc.vpc_id

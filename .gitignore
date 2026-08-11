@@ -5,6 +5,7 @@ venv/
 env/
 .DS_STORE
 .vscode
+!.vscode/mcp.json
 *.code-workspace
 *.sha256
 **/terraform.tfstate

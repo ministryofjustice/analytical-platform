@@ -59,6 +59,15 @@ data "aws_secretsmanager_secret_version" "pagerduty_analytical_platform_storage_
   secret_id = "pagerduty/analytical-platform-storage/integration-keys/cloudwatch"
 }
 
+data "aws_secretsmanager_secret_version" "chainguard_image_pull_token" {
+  provider  = aws.analytical-platform-management-production
+  secret_id = "chainguard-image-pull-token"
+}
+
+data "aws_secretsmanager_secret_version" "route53_resolver_firewall_blocked_domains_current" {
+  secret_id = aws_secretsmanager_secret.route53_resolver_firewall_blocked_domains.id
+}
+
 data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_id
 }

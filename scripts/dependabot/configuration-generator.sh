@@ -17,6 +17,8 @@ updates:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
+    cooldown:
+      default-days: 7
     commit-message:
       prefix: ":dependabot: github-actions"
       include: "scope"
@@ -27,51 +29,41 @@ updates:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
+    cooldown:
+      default-days: 7
     commit-message:
       prefix: ":dependabot: devcontainers"
       include: "scope"
+
+  - package-ecosystem: "terraform"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 15
+    commit-message:
+      prefix: ":dependabot: terraform"
+      include: "scope"
+    directories:
 EOL
 
-for package_ecosystem in pip terraform; do
+echo "=== Ecosystem: terraform ==="
 
-  echo "=== Ecosystem: ${package_ecosystem} ==="
+SEARCH_PATTERN=".terraform.lock.hcl"
+SKIP_FILE=".dependabot-terraform-ignore"
 
-  case ${package_ecosystem} in
-    pip)
-      SEARCH_PATTERN="*requirements*.txt"
-      SKIP_FILE=".dependabot-pip-ignore"
-    ;;
-    terraform)
-      SEARCH_PATTERN=".terraform.lock.hcl"
-      SKIP_FILE=".dependabot-terraform-ignore"
-    ;;
-  esac
+folders=$(find . -type f -name "${SEARCH_PATTERN}" -exec dirname {} \; | LC_ALL=C sort | uniq | cut -c 3-)
+export folders
 
-  printf "  - package-ecosystem: \"%s\"\n" "${package_ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-  printf "    schedule:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-  printf "      interval: \"daily\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-  printf "      time: \"09:00\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-  printf "      timezone: \"Europe/London\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-  printf "    open-pull-requests-limit: 15\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-  printf "    commit-message:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-  printf "      prefix: \":dependabot: %s\"\n" "${package_ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-  printf "      include: \"scope\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-  printf "    directories:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+echo "=== Folders ==="
+echo "${folders}"
 
-
-  folders=$(find . -type f -name "${SEARCH_PATTERN}" -exec dirname {} \; | sort -h | uniq | cut -c 3-)
-  export folders
-
-  echo "=== Folders ==="
-  echo "${folders}"
-
-  for folder in ${folders}; do
-
+for folder in ${folders}; do
   if [[ -f "${folder}/${SKIP_FILE}" ]]; then
     echo "Ignoring ${folder}"
     continue
   fi
-    printf "      - \"${folder}\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-  done
-
+  printf "      - \"${folder}\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
 done

@@ -7,13 +7,15 @@ locals {
         {
           name                         = "AE Daily Support Rota SEO_HEO"
           start                        = "2023-03-27T09:00:00Z"
-          rotation_virtual_start       = "2025-09-30T00:00:00+01:00"
+          rotation_virtual_start       = "2026-04-14T00:00:00+00:00"
           rotation_turn_length_seconds = 86400
           users = [
             module.users_ae_seo["owen.buckley@justice.gov.uk"].id,
-            module.users_ae_seo["matthew.rixson@justice.gov.uk"].id,
+            module.users_ae_seo["brian.seery@justice.gov.uk"].id,
             module.users_ae_seo["vijay.solanki@justice.gov.uk"].id,
-            module.users_ae_seo["billy.pawsey@justice.gov.uk"].id
+            module.users_ae_seo["billy.pawsey@justice.gov.uk"].id,
+            module.users_ae_seo["clare.plater@justice.gov.uk"].id,
+            module.users_ae_seo["rebeccaanne.ratcliffe@justice.gov.uk"].id
           ]
           restrictions = [
             {
@@ -57,16 +59,19 @@ locals {
         {
           name                         = "AE Daily Support Rota G7"
           start                        = "2023-03-27T09:00:00Z"
-          rotation_virtual_start       = "2025-09-30T00:00:00+01:00"
+          rotation_virtual_start       = "2026-04-14T00:00:00+00:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users_ae_g7["alex.pavlopoulos@justice.gov.uk"].id,
             module.users_ae_g7["holly.furniss@justice.gov.uk"].id,
+            module.users_ae_g7["matthew.rixson@justice.gov.uk"].id,
             module.users_ae_g7["ivy.lau1@justice.gov.uk"].id,
             module.users_ae_g7["ian.rickard@justice.gov.uk"].id,
             module.users_ae_g7["ben.waterfield1@justice.gov.uk"].id,
             module.users_ae_g7["quinta.davies@justice.gov.uk"].id,
-            module.users_ae_g7["danielle.kelly1@justice.gov.uk"].id
+            module.users_ae_g7["danielle.kelly1@justice.gov.uk"].id,
+            module.users_ae_g7["alex.pavlopoulos@justice.gov.uk"].id,
+            module.users_ae_g7["neil.wilkins@justice.gov.uk"].id,
+            module.users_ae_g7["keeleyann.kerr@justice.gov.uk"].id
           ]
           restrictions = [
             {
@@ -135,11 +140,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Matthew Rixson"
-      email = "matthew.rixson@justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Billy Pawsey"
       email = "billy.pawsey@justice.gov.uk"
       role  = "responder"
@@ -147,6 +147,21 @@ locals {
     {
       name  = "Vijay Solanki"
       email = "vijay.solanki@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Brian Seery"
+      email = "brian.seery@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Clare Plater"
+      email = "clare.plater@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Rebecca Anne Ratcliffe"
+      email = "rebeccaanne.ratcliffe@justice.gov.uk"
       role  = "responder"
     }
   ]
@@ -185,6 +200,21 @@ locals {
     {
       name  = "Danielle Kelly"
       email = "danielle.kelly1@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Matthew Rixson"
+      email = "matthew.rixson@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Neil Wilkins"
+      email = "neil.wilkins@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Keeley Ann Kerr"
+      email = "keeleyann.kerr@justice.gov.uk"
       role  = "responder"
     }
   ]
@@ -226,14 +256,11 @@ module "users_ae_g7" {
   email  = each.key
 }
 
+// SEO_HEO
+
 import {
   to = module.users_ae_seo["owen.buckley@justice.gov.uk"].pagerduty_user.this
   id = "PRTC0Q5"
-}
-
-import {
-  to = module.users_ae_seo["matthew.rixson@justice.gov.uk"].pagerduty_user.this
-  id = "PTAERP7"
 }
 
 import {
@@ -245,6 +272,23 @@ import {
   to = module.users_ae_seo["billy.pawsey@justice.gov.uk"].pagerduty_user.this
   id = "P5Q9MQL"
 }
+
+import {
+  to = module.users_ae_seo["brian.seery@justice.gov.uk"].pagerduty_user.this
+  id = "P32SEQW"
+}
+
+import {
+  to = module.users_ae_seo["rebeccaanne.ratcliffe@justice.gov.uk"].pagerduty_user.this
+  id = "P4ZYZ3K"
+}
+
+import {
+  to = module.users_ae_seo["clare.plater@justice.gov.uk"].pagerduty_user.this
+  id = "P10NYRX"
+}
+
+// G7
 
 import {
   to = module.users_ae_g7["alex.pavlopoulos@justice.gov.uk"].pagerduty_user.this
@@ -279,4 +323,19 @@ import {
 import {
   to = module.users_ae_g7["danielle.kelly1@justice.gov.uk"].pagerduty_user.this
   id = "PYZL4R9"
+}
+
+import {
+  to = module.users_ae_g7["matthew.rixson@justice.gov.uk"].pagerduty_user.this
+  id = "PREPU2L"
+}
+
+import {
+  to = module.users_ae_g7["neil.wilkins@justice.gov.uk"].pagerduty_user.this
+  id = "PEASOWW"
+}
+
+import {
+  to = module.users_ae_g7["keeleyann.kerr@justice.gov.uk"].pagerduty_user.this
+  id = "PKY1EDG"
 }

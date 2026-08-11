@@ -66,6 +66,17 @@ data "aws_iam_policy_document" "bedrock_integration" {
       ]
     }
   }
+  statement {
+    sid       = "BedrockPassBatchInferenceRole"
+    effect    = "Allow"
+    actions   = ["iam:PassRole"]
+    resources = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/bedrock-batch-inference-role"]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["bedrock.amazonaws.com"]
+    }
+  }
 }
 
 #tfsec:ignore:aws-iam-no-policy-wildcards

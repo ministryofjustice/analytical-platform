@@ -39,7 +39,7 @@ module "rds" {
   create_monitoring_role      = true
   manage_master_user_password = false
   allow_major_version_upgrade = true
-  apply_immediately           = true
+  apply_immediately           = false
 
   parameters = var.rds_paramaters
 

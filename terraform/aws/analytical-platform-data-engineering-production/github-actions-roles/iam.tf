@@ -1,3 +1,21 @@
+resource "aws_iam_openid_connect_provider" "analytical_platform_compute_dev_cluster_oidc_provider" {
+  url = jsondecode(data.aws_secretsmanager_secret_version.analytical_platform_compute_cluster_data.secret_string)["analytical-platform-compute-development-oidc-endpoint"]
+
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
+
+}
+
+resource "aws_iam_openid_connect_provider" "analytical_platform_compute_cluster_oidc_provider" {
+  url = jsondecode(data.aws_secretsmanager_secret_version.analytical_platform_compute_cluster_data.secret_string)["analytical-platform-compute-production-oidc-endpoint"]
+
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
+
+}
+
 data "aws_iam_policy_document" "create_a_derived_table_dev" {
   statement {
     sid    = "BucketAccess"
@@ -71,6 +89,16 @@ data "aws_iam_policy_document" "create_a_derived_table_dev" {
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-production"]}:catalog"
     ]
   }
+  statement {
+    sid    = "AirflowBucketAccess"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject*"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-reg-dev/landing/cadet-pb-hearing-audit/*"
+    ]
+  }
 }
 
 module "create_a_derived_table_dev_iam_policy" {
@@ -114,6 +142,13 @@ module "create_a_derived_table_dev_iam_role" {
       )
       namespace_service_accounts = ["actions-runners:actions-runner-mojas-cadt-probation-dev"]
     }
+    analytical-platform-compute-development = {
+      provider_arn = format(
+        "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:oidc-provider/%s",
+        trimprefix(jsondecode(data.aws_secretsmanager_secret_version.analytical_platform_compute_cluster_data.secret_string)["analytical-platform-compute-development-oidc-endpoint"], "https://")
+      )
+      namespace_service_accounts = ["mwaa:probation-cadet", "mwaa:probation-pb-hearings"]
+    }
   }
 
   tags = merge(var.tags,
@@ -122,16 +157,6 @@ module "create_a_derived_table_dev_iam_role" {
       "is_production" = "false"
     }
   )
-}
-
-# unsure if the below is required as not being used anywhere
-resource "aws_iam_openid_connect_provider" "analytical_platform_compute_cluster_oidc_provider" {
-  url = jsondecode(data.aws_secretsmanager_secret_version.analytical_platform_compute_cluster_data.secret_string)["analytical-platform-compute-production-oidc-endpoint"]
-
-  client_id_list = [
-    "sts.amazonaws.com",
-  ]
-
 }
 
 data "aws_iam_policy_document" "create_a_derived_table_preprod" {
@@ -205,6 +230,16 @@ data "aws_iam_policy_document" "create_a_derived_table_preprod" {
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-production"]}:database/*",
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-production"]}:table/*/*",
       "arn:aws:glue:*:${var.account_ids["analytical-platform-data-engineering-production"]}:catalog"
+    ]
+  }
+  statement {
+    sid    = "AirflowBucketAccess"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject*"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-reg-prod/landing/cadet-pb-hearing-audit-prod/*"
     ]
   }
 }
@@ -301,7 +336,8 @@ data "aws_iam_policy_document" "create_a_derived_table_prod" {
     ]
     resources = [
       "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:datacatalog/*",
-      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:workgroup/dbt-probation-prod"
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:workgroup/dbt-probation-prod",
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-engineering-production"]}:workgroup/dbt-probation-prod-dev"
     ]
   }
   statement {
@@ -389,7 +425,7 @@ module "create_a_derived_table_prod_iam_role" {
         "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:oidc-provider/%s",
         trimprefix(jsondecode(data.aws_secretsmanager_secret_version.analytical_platform_compute_cluster_data.secret_string)["analytical-platform-compute-production-oidc-endpoint"], "https://")
       )
-      namespace_service_accounts = ["actions-runners:actions-runner-mojas-cadt-probation-prod"]
+      namespace_service_accounts = ["actions-runners:actions-runner-mojas-cadt-probation-prod", "mwaa:probation-cadet", "mwaa:probation-pb-hearings"]
     }
   }
 

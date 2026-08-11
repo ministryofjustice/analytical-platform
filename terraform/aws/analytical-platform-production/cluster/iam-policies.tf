@@ -16,6 +16,7 @@ data "aws_iam_policy_document" "ebs_csi_driver" {
       "ec2:DeleteSnapshot",
       "ec2:DeleteTags",
       "ec2:DeleteVolume",
+      "ec2:DescribeAvailabilityZones",
       "ec2:DescribeInstances",
       "ec2:DescribeSnapshots",
       "ec2:DescribeTags",
@@ -445,7 +446,7 @@ data "aws_iam_policy_document" "efs_csi_driver" {
       "elasticfilesystem:DescribeAccessPoints",
       "elasticfilesystem:DescribeFileSystems"
     ]
-    resources = ["*"]
+    resources = [aws_efs_file_system.eks_user_homes.arn]
   }
   statement {
     effect    = "Allow"

@@ -10,7 +10,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.27.0"
+      version = "~> 6.0, != 6.57.0"
     }
   }
   required_version = "~> 1.5"
@@ -31,6 +31,7 @@ provider "aws" {
   }
 }
 
+# tflint-ignore: terraform_unused_declarations
 provider "aws" {
   alias  = "analytical-platform-management-production"
   region = "eu-west-1"

@@ -10,11 +10,11 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.9.0"
+      version = "6.46.0"
     }
     dns = {
       source  = "hashicorp/dns"
-      version = "3.4.3"
+      version = "3.6.1"
 
     }
   }

@@ -36,10 +36,18 @@ route53_zone = "analytical-platform.service.justice.gov.uk"
 # VPC
 ##################################################
 
-vpc_cidr                              = "10.69.0.0/16"
-vpc_private_subnets                   = ["10.69.0.0/20", "10.69.16.0/20", "10.69.32.0/20"]
-vpc_public_subnets                    = ["10.69.48.0/20", "10.69.64.0/20", "10.69.80.0/20"]
-vpc_database_subnets                  = ["10.69.96.0/28", "10.69.96.16/28", "10.69.96.32/28"]
+vpc_cidr             = "10.69.0.0/16"
+vpc_private_subnets  = ["10.69.0.0/20", "10.69.16.0/20", "10.69.32.0/20"]
+vpc_public_subnets   = ["10.69.48.0/20", "10.69.64.0/20", "10.69.80.0/20"]
+vpc_database_subnets = ["10.69.96.0/28", "10.69.96.16/28", "10.69.96.32/28"]
+moj_cidrs = [
+  "128.77.75.64/26",  # Prisma Corporate
+  "35.176.93.186/32", # GlobalProtect (Alpha)
+  "20.58.27.30/32",   # GitHub Runner (octo-production)
+  # Sites
+  "213.121.161.112/28", # 102PF
+  "51.149.2.0/24"       # 10SC
+]
 nat_gateway_bandwidth_alarm_threshold = 90
 
 ##################################################
@@ -54,10 +62,10 @@ efs_low_credit_burst_balance_alarm_threshold = 50000
 # RDS
 ##################################################
 
-rds_instance_class        = "db.t3.micro"
+rds_instance_class        = "db.t3.small"
 rds_engine                = "postgres"
 rds_family                = "postgres17"
-rds_engine_version        = "17.4"
+rds_engine_version        = "17.9"
 rds_allocated_storage     = 10
 rds_max_allocated_storage = 100
 rds_deletion_protection   = true
@@ -65,7 +73,7 @@ rds_multi_az              = true
 rds_storage_encrypted     = true
 rds_db_name               = "controlpanel"
 rds_snapshot_identifier   = "eks-production-control-panelspsg-db-newly-encrypted"
-rds_maintenance_window    = "Mon:00:00-Mon:03:00"
+rds_maintenance_window    = "Wed:00:00-Wed:03:00"
 rds_backup_window         = "03:00-06:00"
 rds_ca_cert_identifier    = "rds-ca-rsa2048-g1"
 rds_monitoring_interval   = 30
@@ -130,14 +138,14 @@ redis_alarm_memory_threshold_bytes = 100000
 # EKS
 ##################################################
 eks_versions = {
-  cluster    = "1.29"
-  node-group = "1.29"
+  cluster    = "1.35"
+  node-group = "1.35"
 }
 eks_addon_versions = {
-  coredns        = "v1.11.3-eksbuild.1"
-  ebs-csi-driver = "v1.35.0-eksbuild.1"
-  kube-proxy     = "v1.29.7-eksbuild.9"
-  vpc-cni        = "v1.18.5-eksbuild.1"
+  coredns        = "v1.14.2-eksbuild.4"
+  ebs-csi-driver = "v1.60.0-eksbuild.1"
+  kube-proxy     = "v1.35.3-eksbuild.5"
+  vpc-cni        = "v1.21.1-eksbuild.8"
 }
 eks_node_group_name_prefix = "prod"
 eks_node_group_capacities = {

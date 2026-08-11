@@ -1,13 +1,15 @@
+# retrigger terraform
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b190c92217786c0454b756996cdb2fcb190256db"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=update-dms-module"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
-  db                      = "oasys-dev"
-  slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
-  output_key_prefix       = "hmpps/oasys"
-  output_key_suffix       = "-tf"
-  output_bucket           = "mojap-raw-hist-dev"
+  db                         = "oasys-dev"
+  slack_webhook_secret_id    = aws_secretsmanager_secret.slack_webhook.id
+  output_key_prefix          = "hmpps/oasys"
+  output_key_suffix          = "-tf"
+  output_bucket              = "mojap-raw-hist-dev"
+  validation_sqs_kms_key_arn = module.dms_dev_kms.key_arn
 
   dms_replication_instance = {
     replication_instance_id    = "oasys-dev"
@@ -50,7 +52,7 @@ module "dev_dms_oasys" {
 }
 
 module "dev_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=b190c92217786c0454b756996cdb2fcb190256db"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=bea6fa8a0f431b616895423e515f5929c022b013"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
