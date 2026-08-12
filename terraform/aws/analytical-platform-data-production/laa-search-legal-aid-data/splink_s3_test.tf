@@ -68,6 +68,33 @@ data "aws_iam_policy_document" "s3_test_kms_policy" {
       values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
     }
   }
+
+  statement {
+    sid = "AllowKeyUseViaS3"
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      ]
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
+    }
+  }
 }
 
 resource "aws_kms_key" "s3_test_kms_key" {
