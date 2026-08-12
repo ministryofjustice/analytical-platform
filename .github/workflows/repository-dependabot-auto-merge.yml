@@ -107,7 +107,23 @@ jobs:
                 }
               } catch (error) {
                 const status = error.status || error.response?.status
-                if (status === 405 || status === 409 || status === 422) {
+                if (status === 405) {
+                  // Branch may be behind main; update it to trigger a fresh CI run and retry via workflow_run.
+                  try {
+                    await github.rest.pulls.updateBranch({ owner, repo, pull_number: pullNumber })
+                    console.log(`Updated branch for #${pullNumber} — merge will be retried after CI re-runs`)
+                  } catch (updateError) {
+                    const updateStatus = updateError.status || updateError.response?.status
+                    if (updateStatus === 422) {
+                      console.log(`Branch for #${pullNumber} is already up to date — merge blocked by pending checks`)
+                    } else {
+                      console.log(`Could not update branch for #${pullNumber}: ${updateError.message}`)
+                    }
+                  }
+                  continue
+                }
+
+                if (status === 409 || status === 422) {
                   console.log(`Merge not ready for #${pullNumber}. The workflow will retry on a later event.`)
                   continue
                 }
