@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "s3_test_kms_policy" {
   }
 
   statement {
-    sid = "AllowKeyUseViaS3"
+    sid = "AllowKeyUseViaIAM"
 
     principals {
       type = "AWS"
@@ -88,12 +88,6 @@ data "aws_iam_policy_document" "s3_test_kms_policy" {
     ]
 
     resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "kms:ViaService"
-      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
-    }
   }
 }
 
