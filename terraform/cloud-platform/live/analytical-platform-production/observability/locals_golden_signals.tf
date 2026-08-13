@@ -7,6 +7,7 @@ locals {
     "NAT Gateway"     = { folder = "internal/compute/networking", name_suffix = "natgateway" }
     "Transit Gateway" = { folder = "internal/compute/networking", name_suffix = "transitgateway" }
     "Network Monitor" = { folder = "internal/compute/networking", name_suffix = "networkmonitor" }
+    "Bedrock"         = { folder = "internal/data/bedrock", name_suffix = "bedrock" }
     "EKS"             = { folder = "internal/compute/cluster", name_suffix = "eks" }
     "EFS"             = { folder = "internal/compute/storage", name_suffix = "efs" }
     "S3"              = { folder = "internal/compute/storage", name_suffix = "s3" }
@@ -15,78 +16,97 @@ locals {
   }
 
   # ---------------------------------------------------------------------------
-  # golden_signals — one entry per metric to alert on.
+  # golden_signals — one entry per metric to alert on: CloudWatch by default,
+  # or Prometheus when datasource_type = "prometheus" is set (see below).
   #
   # Fields:
-  #   group          = alert group name (must match a key in group_folders above)
-  #   namespace      = CloudWatch namespace (omit for Prometheus signals)
-  #   metric         = CloudWatch metric name / short label for Prometheus signals
-  #   statistic      = CloudWatch statistic (Sum, Average, Maximum, Minimum, p99 …)
-  #   datasource_type = (optional) "prometheus" to use PromQL instead of CloudWatch.
-  #                     When set, supply `expr` instead of namespace/metric/statistic.
-  #   expr           = PromQL expression (datasource_type = "prometheus" only).
-  #                    Use __NAMESPACES__ as a token where a namespace regex is needed;
-  #                    it is replaced at render time with cfg.namespaces joined by "|".
-  #   type           = alert logic:
-  #                      gt          → fire when value > threshold         (condition C)
-  #                      lt          → fire when value < threshold         (condition C)
-  #                      baseline_gt → fire when % above hourly baseline   (condition D)
-  #                      baseline_lt → fire when % below hourly baseline   (condition D)
-  #   dim_key        = primary CloudWatch dimension key ("" = no dimension filter)
-  #                    Supported keys and the environment_configurations field they
-  #                    resolve against at render time:
-  #                      ""                     → no dimension filter (global aggregate)
-  #                      "BucketName"           → cfg.s3_buckets        (list of bucket names)
-  #                      "DBInstanceIdentifier" → cfg.rds_instances     (list of RDS instance IDs)
-  #                      "CacheClusterId"       → cfg.cache_clusters    (list of ElastiCache
-  #                                               cluster IDs, e.g. ["dev", "prod"])
-  #                      "Namespace"            → cfg.namespaces        (list of k8s namespaces)
-  #                      "ClusterName"          → ["*"]                 (wildcard — all clusters)
-  #                      "NodeName"             → ["*"]                 (wildcard — all nodes)
-  #                      "FileSystemId"         → cfg.efs_file_systems  (list of EFS file system IDs)
-  #                    One alert rule is generated per value in the resolved list;
-  #                    the value is appended as a suffix to the rule name.
-  #   dim_key2       = optional second dimension key; always matched with value "*"
-  #                    used for ContainerInsights metrics that need e.g.
-  #                    {Namespace=cpanel, ClusterName=*} to return the
-  #                    namespace-level aggregate instead of per-pod series
-  #   match_exact    = (optional, default: false)
-  #                    if true, CloudWatch returns only series whose dimension set
-  #                    exactly matches the supplied keys (no extra dimensions).
-  #                    Required for ContainerInsights cluster-level aggregates to
-  #                    exclude per-pod series that carry extra dimensions (PodName etc)
-  #   use_metric_math = (optional, default: false)
-  #                    if true, emits a second CloudWatch query (refId "A2") for a
-  #                    capacity/limit metric and computes "$A / $A2 * 100" via a math
-  #                    expression (refId "EXPR"). The reduce step (B) then operates on
-  #                    EXPR rather than A, so the threshold is evaluated against a
-  #                    utilisation percentage rather than a raw value.
-  #                    Requires capacity_metric (and optionally capacity_statistic).
-  #   capacity_metric = CloudWatch metric name for the capacity/limit series used as
-  #                    the denominator in the metric math expression (A2).
-  #                    Only used when use_metric_math = true.
-  #                    Example: "PermittedThroughput"
-  #   capacity_statistic = CloudWatch statistic to apply to the capacity metric.
-  #                    Defaults to "Minimum" when omitted.
-  #                    Only used when use_metric_math = true.
-  #   ok_when_nodata = (optional, default: false)
-  #                    if true, sets noDataState: OK so rules resolve to Normal
-  #                    when CloudWatch emits nothing (e.g. zero failed nodes)
-  #   slack_channel  = (optional) Slack channel to route this signal's alerts.
-  #                    Two forms accepted:
-  #                      a) string — same channel for both severities
-  #                         slack_channel = "dev-slack"
-  #                      b) object — different channel per severity;
-  #                         omit a key to emit no label for that severity
-  #                         slack_channel = { warning = "dev-slack", critical = "dev-slack-critical" }
-  #                    Resolution order per severity (first non-null wins):
-  #                      1. per-severity key on this field  (e.g. .critical)
-  #                      2. string value on this field
-  #                      3. slack_channel in environment_configurations  (env default)
-  #                    If none of the above is set the label is omitted entirely
-  #                    and Grafana's root / catch-all policy handles the alert.
-  #   warning        = key in locals.defaults (or threshold_overrides) for warning level
-  #   critical       = key in locals.defaults (or threshold_overrides) for critical level
+  #   group                = alert group name (must match a key in group_folders above)
+  #   namespace            = CloudWatch namespace (omit for Prometheus signals)
+  #   metric               = CloudWatch metric name. Still required for Prometheus
+  #                          signals too — it isn't used to build the query there
+  #                          (expr handles that), but is used as this signal's
+  #                          display/label name (see the "metric" label in rule_yaml).
+  #   statistic            = CloudWatch statistic (Sum, Average, Maximum, Minimum, p99 …)
+  #                          (omit for Prometheus signals — not used there)
+  #   source               = (optional, default: "cloudwatch") set to "prometheus" to
+  #                          route this signal through the Prometheus query branch in
+  #                          locals_rules.tf's rule_yaml instead of the CloudWatch one.
+  #                          Requires expr; namespace/statistic are ignored/should be
+  #                          omitted (dim_key still required — pass "" as a placeholder,
+  #                          it plays no dimensional-filtering role for Prometheus).
+  #   expr                 = PromQL expression (source = "prometheus" only). Prefer
+  #                          `or vector(0)` at the end for presence/absence-style
+  #                          metrics (e.g. kube-state-metrics conditions that are only
+  #                          emitted while true) — without it, "healthy" means zero
+  #                          rows rather than a real value, which gives Grafana no
+  #                          instance to cleanly resolve against and resolved Slack
+  #                          notifications won't fire even though the rule correctly
+  #                          shows Normal.
+  #   for_duration         = (optional, default: "5m") Grafana's rule `for:` duration —
+  #                          how long the condition must hold before firing.
+  #   type                 = alert logic:
+  #                            gt          → fire when value > threshold         (condition C)
+  #                            lt          → fire when value < threshold         (condition C)
+  #                            baseline_gt → fire when % above hourly baseline   (condition D)
+  #                            baseline_lt → fire when % below hourly baseline   (condition D)
+  #   dim_key              = primary CloudWatch dimension key ("" = no dimension filter;
+  #                          also "" — as a required placeholder — for Prometheus signals)
+  #   dim_key2             = optional second dimension key; always matched with value "*"
+  #                          used for ContainerInsights metrics that need e.g.
+  #                          {Namespace=cpanel, ClusterName=*} to return the
+  #                          namespace-level aggregate instead of per-pod series
+  #   match_exact          = (optional, default: false)
+  #                          if true, CloudWatch returns only series whose dimension set
+  #                          exactly matches the supplied keys (no extra dimensions).
+  #                          Required for ContainerInsights cluster-level aggregates to
+  #                          exclude per-pod series that carry extra dimensions (PodName etc)
+  #   query_window_seconds    = (optional, default: 300) lookback window for the
+  #                              current-value queries (Refs A, A2, B, C)
+  #   baseline_window_seconds = (optional, default: 3600) lookback window and
+  #                              CloudWatch period for the baseline pipeline
+  #                              (Refs BASE, BASE_R, D)
+  #   ok_when_nodata       = (optional, default: true)
+  #                          Default is true: no data resolves to Normal (noDataState: OK)
+  #                          and never notifies Slack — most CloudWatch/Prometheus queries
+  #                          here legitimately return nothing when things are healthy
+  #                          (zero failed nodes, zero restarts, etc), and NoData would
+  #                          otherwise create Grafana's own DatasourceNoData pseudo-alert,
+  #                          which still inherits this rule's labels and pages Slack.
+  #                          Set to false only when the absence of data IS itself the
+  #                          problem worth paging on (e.g. a datasource/exporter that
+  #                          should always be returning something going silent).
+  #   warning              = key in locals.defaults (or threshold_overrides) for warning level
+  #   critical             = key in locals.defaults (or threshold_overrides) for critical level
+  #   Two forms accepted:
+  #     a) object — different urgency per severity (recommended):
+  #          urgency = { warning = "low", critical = "high" }
+  #     b) string — same urgency for both severities:
+  #          urgency = "low"
+  #
+  #   Valid values: "high" | "medium" | "low"
+  #
+  #   Resolution order per severity (first non-null wins):
+  #     1. urgency[severity]                                  — per-severity object form
+  #     2. urgency (string form)                              — both severities
+  #     3. Derived default from routing matrix:
+  #          production  + critical → "high"
+  #          production  + warning  → "medium"
+  #          non-prod    + critical → "high"
+  #          non-prod    + warning  → "low"    ← overridden per signal below
+  #
+  #   Urgency meanings:
+  #     high   🔴  Act now — user impact likely or confirmed  (@here fired)
+  #     medium 🟠  Investigate soon — degraded but not broken
+  #     low    🔵  Awareness — trending badly, no active impact
+  #
+  #   slack_notify         = (optional, default: true)
+  #                          Set to false to mute Slack for this signal while
+  #                          still evaluating it and keeping it in Grafana's
+  #                          Alert Rules list/history. Routed to the "silent"
+  #                          contact point (zero receivers) instead of Slack.
+  #                          Two forms accepted, same shape as urgency:
+  #                            a) bool   — same for both severities: slack_notify = false
+  #                            b) object — per severity: slack_notify = { warning = false, critical = true }
   # ---------------------------------------------------------------------------
   golden_signals = {
 
@@ -118,16 +138,16 @@ locals {
     tgw_BytesDropCountBlackhole   = { group = "Transit Gateway", namespace = "AWS/TransitGateway", metric = "BytesDropCountBlackhole", statistic = "Sum", type = "gt", dim_key = "", warning = "tgw_bytes_drop_blackhole_warn", critical = "tgw_bytes_drop_blackhole_crit" }
 
     # ── Network Monitor ───────────────────────────────────────────────────────
-    packet_loss = { group = "Network Monitor", namespace = "AWS/NetworkMonitor", metric = "PacketLoss", statistic = "Average", type = "gt", dim_key = "", warning = "packet_loss_warn", critical = "packet_loss_crit" }
+    packet_loss = { group = "Network Monitor", namespace = "AWS/NetworkMonitor", metric = "PacketLoss", statistic = "Average", for_duration = "10m", query_window_seconds = 3600, type = "gt", dim_key = "", warning = "packet_loss_warn", critical = "packet_loss_crit" }
 
     # ── EKS ───────────────────────────────────────────────────────────────────
     eks_webhook_latency     = { group = "EKS", namespace = "AWS/EKS", metric = "apiserver_admission_webhook_admission_duration_seconds", statistic = "p99", type = "gt", dim_key = "", warning = "eks_webhook_latency_warn", critical = "eks_webhook_latency_crit" }
     eks_node_network        = { group = "EKS", namespace = "ContainerInsights", metric = "node_network_total_bytes", statistic = "Sum", type = "gt", dim_key = "ClusterName", match_exact = true, ok_when_nodata = true, warning = "eks_node_net_warn", critical = "eks_node_net_crit" }
-    eks_unhealthy_hosts     = { group = "EKS", namespace = "AWS/NetworkELB", metric = "UnHealthyHostCount", statistic = "Maximum", type = "gt", dim_key = "", warning = "eks_unhealthy_host_warn", critical = "eks_unhealthy_host_crit" }
+    eks_healthy_hosts       = { group = "EKS", namespace = "AWS/NetworkELB", metric = "HealthyHostCount", statistic = "Minimum", type = "lt", match_exact = true, dim_key = "TargetGroup", dim_key2 = "LoadBalancer", warning = "eks_healthy_host_warn", critical = "eks_healthy_host_crit" }
     eks_tcp_reset           = { group = "EKS", namespace = "AWS/NetworkELB", metric = "TCP_Target_Reset_Count", statistic = "Sum", type = "gt", dim_key = "", warning = "eks_tcp_reset_warn", critical = "eks_tcp_reset_crit" }
     eks_container_restarts  = { group = "EKS", namespace = "ContainerInsights", metric = "pod_number_of_container_restarts", statistic = "Sum", type = "gt", dim_key = "ClusterName", match_exact = true, ok_when_nodata = true, warning = "eks_container_restart_warn", critical = "eks_container_restart_crit" }
     eks_failed_nodes        = { group = "EKS", namespace = "ContainerInsights", metric = "cluster_failed_node_count", statistic = "Maximum", type = "gt", dim_key = "ClusterName", match_exact = true, ok_when_nodata = true, warning = "eks_failed_node_warn", critical = "eks_failed_node_crit" }
-    eks_pending_pods        = { group = "EKS", namespace = "AWS/EKS", metric = "scheduler_pending_pods_UNSCHEDULABLE", statistic = "Maximum", type = "gt", dim_key = "", ok_when_nodata = true, warning = "eks_pending_pod_warn", critical = "eks_pending_pod_crit" }
+    eks_pending_pods        = { group = "EKS", namespace = "AWS/EKS", metric = "scheduler_pending_pods_UNSCHEDULABLE", statistic = "Maximum", for_duration = "20m", type = "gt", dim_key = "", ok_when_nodata = true, warning = "eks_pending_pod_warn", critical = "eks_pending_pod_crit" }
     eks_node_cpu            = { group = "EKS", namespace = "ContainerInsights", metric = "node_cpu_utilization", statistic = "Average", type = "gt", dim_key = "ClusterName", match_exact = true, warning = "eks_node_cpu_warn", critical = "eks_node_cpu_crit" }
     eks_node_memory         = { group = "EKS", namespace = "ContainerInsights", metric = "node_memory_utilization", statistic = "Average", type = "gt", dim_key = "ClusterName", match_exact = true, warning = "eks_node_mem_warn", critical = "eks_node_mem_crit" }
     eks_node_disk           = { group = "EKS", namespace = "ContainerInsights", metric = "node_filesystem_utilization", statistic = "Average", type = "gt", dim_key = "ClusterName", match_exact = true, warning = "eks_node_disk_warn", critical = "eks_node_disk_crit" }
@@ -141,8 +161,8 @@ locals {
     eks_prom_node_disk      = { group = "EKS", datasource_type = "prometheus", expr = "(1 - (node_filesystem_avail_bytes{mountpoint=\"/\",fstype!=\"tmpfs\"} / node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"tmpfs\"})) * 100", type = "gt", dim_key = "", metric = "prom_node_disk_utilisation", warning = "eks_prom_node_disk_warn", critical = "eks_prom_node_disk_crit" }
     eks_prom_node_net_rx    = { group = "EKS", datasource_type = "prometheus", expr = "sum by (node) (rate(node_network_receive_bytes_total{device!~\"lo|veth.*\"}[5m]))", type = "gt", dim_key = "", metric = "prom_node_network_rx_bytes", warning = "eks_prom_node_net_warn", critical = "eks_prom_node_net_crit" }
     eks_prom_node_net_tx    = { group = "EKS", datasource_type = "prometheus", expr = "sum by (node) (rate(node_network_transmit_bytes_total{device!~\"lo|veth.*\"}[5m]))", type = "gt", dim_key = "", metric = "prom_node_network_tx_bytes", warning = "eks_prom_node_net_warn", critical = "eks_prom_node_net_crit" }
-    eks_prom_unschedulable  = { group = "EKS", datasource_type = "prometheus", expr = "count(kube_pod_status_unschedulable == 1)", type = "gt", dim_key = "", metric = "prom_unschedulable_pods", ok_when_nodata = true, warning = "eks_prom_unschedulable_warn", critical = "eks_prom_unschedulable_crit" }
-    eks_prom_node_not_ready = { group = "EKS", datasource_type = "prometheus", expr = "count(kube_node_status_condition{condition=\"Ready\",status=\"true\"} == 0)", type = "gt", dim_key = "", metric = "prom_node_not_ready", ok_when_nodata = true, warning = "eks_prom_node_not_ready_warn", critical = "eks_prom_node_not_ready_crit" }
+    eks_prom_unschedulable  = { group = "EKS", datasource_type = "prometheus", expr = "count(kube_pod_status_unschedulable == 1)", for_duration = "20m", type = "gt", dim_key = "", metric = "prom_unschedulable_pods", ok_when_nodata = true, warning = "eks_prom_unschedulable_warn", critical = "eks_prom_unschedulable_crit" }
+    eks_prom_node_not_ready = { group = "EKS", datasource_type = "prometheus", expr = "count(kube_node_status_condition{condition=\"Ready\",status=\"true\"} == 0)", for_duration = "10m", type = "gt", dim_key = "", metric = "prom_node_not_ready", ok_when_nodata = true, warning = "eks_prom_node_not_ready_warn", critical = "eks_prom_node_not_ready_crit" }
     eks_prom_etcd_db_size   = { group = "EKS", datasource_type = "prometheus", expr = "etcd_mvcc_db_total_size_in_bytes", type = "gt", dim_key = "", metric = "prom_etcd_db_size_bytes", warning = "eks_prom_etcd_size_warn", critical = "eks_prom_etcd_size_crit" }
 
     # ── EFS ───────────────────────────────────────────────────────────────────
@@ -167,25 +187,24 @@ locals {
     mwaa_parse_time           = { group = "MWAA", namespace = "AmazonMWAA", metric = "TotalParseTime", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_parse_time_warn", critical = "mwaa_parse_time_crit" }
     mwaa_dag_processing_age   = { group = "MWAA", namespace = "AmazonMWAA", metric = "DAGFileProcessingLastRunSecondsAgo", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_dag_processing_age_warn", critical = "mwaa_dag_processing_age_crit" }
     mwaa_task_duration        = { group = "MWAA", namespace = "AmazonMWAA", metric = "TaskInstanceDuration", statistic = "Average", type = "baseline_gt", dim_key = "", warning = "mwaa_task_duration_baseline_warn", critical = "mwaa_task_duration_baseline_crit" }
-    mwaa_dag_duration_success = { group = "MWAA", namespace = "AmazonMWAA", metric = "DAGDurationSuccess", statistic = "Average", type = "baseline_gt", dim_key = "", warning = "mwaa_dag_duration_baseline_warn", critical = "mwaa_dag_duration_baseline_crit" }
+    mwaa_dag_duration_success = { group = "MWAA", namespace = "AmazonMWAA", metric = "DAGDurationSuccess", statistic = "Average", type = "gt", dim_key = "DAG", warning = "mwaa_dag_duration_baseline_warn", critical = "mwaa_dag_duration_baseline_crit" }
     mwaa_write_latency        = { group = "MWAA", namespace = "AWS/MWAA", metric = "WriteLatency", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_write_latency_warn", critical = "mwaa_write_latency_crit" }
     mwaa_scheduler_heartbeat  = { group = "MWAA", namespace = "AmazonMWAA", metric = "SchedulerHeartbeat", statistic = "Sum", type = "lt", dim_key = "", warning = "mwaa_scheduler_heartbeat_warn", critical = "mwaa_scheduler_heartbeat_crit" }
     mwaa_tasks_pending        = { group = "MWAA", namespace = "AmazonMWAA", metric = "TasksPending", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_tasks_pending_warn", critical = "mwaa_tasks_pending_crit" }
     mwaa_running_tasks        = { group = "MWAA", namespace = "AWS/MWAA", metric = "RunningTasks", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_running_tasks_warn", critical = "mwaa_running_tasks_crit" }
     mwaa_queued_tasks         = { group = "MWAA", namespace = "AWS/MWAA", metric = "QueuedTasks", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_queued_tasks_warn", critical = "mwaa_queued_tasks_crit" }
     mwaa_import_errors        = { group = "MWAA", namespace = "AmazonMWAA", metric = "ImportErrors", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_import_errors_warn", critical = "mwaa_import_errors_crit" }
-    mwaa_task_failures        = { group = "MWAA", namespace = "AmazonMWAA", metric = "TaskInstanceFailures", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_task_failures_warn", critical = "mwaa_task_failures_crit" }
-    mwaa_zombies              = { group = "MWAA", namespace = "AmazonMWAA", metric = "ZombiesKilled", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_zombies_warn", critical = "mwaa_zombies_crit" }
-    mwaa_sla_missed           = { group = "MWAA", namespace = "AmazonMWAA", metric = "SLAMissed", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_sla_missed_warn", critical = "mwaa_sla_missed_crit" }
-    mwaa_processor_timeouts   = { group = "MWAA", namespace = "AmazonMWAA", metric = "ProcessorTimeouts", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_processor_timeouts_warn", critical = "mwaa_processor_timeouts_crit" }
-    mwaa_db_connections       = { group = "MWAA", namespace = "AWS/MWAA", metric = "DatabaseConnections", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_db_conn_warn", critical = "mwaa_db_conn_crit" }
-    mwaa_cpu                  = { group = "MWAA", namespace = "AWS/MWAA", metric = "CPUUtilization", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_cpu_warn", critical = "mwaa_cpu_crit" }
-    mwaa_memory               = { group = "MWAA", namespace = "AWS/MWAA", metric = "MemoryUtilization", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_mem_warn", critical = "mwaa_mem_crit" }
-    mwaa_oldest_task          = { group = "MWAA", namespace = "AWS/MWAA", metric = "ApproximateAgeOfOldestTask", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_oldest_task_warn", critical = "mwaa_oldest_task_crit" }
-    mwaa_pool_queued          = { group = "MWAA", namespace = "AmazonMWAA", metric = "PoolQueuedSlots", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_pool_queued_warn", critical = "mwaa_pool_queued_crit" }
-    mwaa_critical_section     = { group = "MWAA", namespace = "AmazonMWAA", metric = "CriticalSectionBusy", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_critical_section_warn", critical = "mwaa_critical_section_crit" }
-    mwaa_disk_queue           = { group = "MWAA", namespace = "AWS/MWAA", metric = "DiskQueueDepth", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_disk_queue_warn", critical = "mwaa_disk_queue_crit" }
-    mwaa_freeable_mem         = { group = "MWAA", namespace = "AWS/MWAA", metric = "FreeableMemory", statistic = "Minimum", type = "lt", dim_key = "", warning = "mwaa_freeable_mem_warn", critical = "mwaa_freeable_mem_crit" }
+    #  mwaa_task_failures        = { group = "MWAA", namespace = "AmazonMWAA", metric = "TaskInstanceFailures", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_task_failures_warn", critical = "mwaa_task_failures_crit" }
+    mwaa_zombies            = { group = "MWAA", namespace = "AmazonMWAA", metric = "ZombiesKilled", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_zombies_warn", critical = "mwaa_zombies_crit" }
+    mwaa_sla_missed         = { group = "MWAA", namespace = "AmazonMWAA", metric = "SLAMissed", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_sla_missed_warn", critical = "mwaa_sla_missed_crit" }
+    mwaa_processor_timeouts = { group = "MWAA", namespace = "AmazonMWAA", metric = "ProcessorTimeouts", statistic = "Sum", type = "gt", dim_key = "", warning = "mwaa_processor_timeouts_warn", critical = "mwaa_processor_timeouts_crit" }
+    mwaa_db_connections     = { group = "MWAA", namespace = "AWS/MWAA", metric = "DatabaseConnections", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_db_conn_warn", critical = "mwaa_db_conn_crit" }
+    mwaa_cpu                = { group = "MWAA", namespace = "AWS/MWAA", metric = "CPUUtilization", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_cpu_warn", critical = "mwaa_cpu_crit" }
+    mwaa_memory             = { group = "MWAA", namespace = "AWS/MWAA", metric = "MemoryUtilization", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_mem_warn", critical = "mwaa_mem_crit" }
+    mwaa_pool_queued        = { group = "MWAA", namespace = "AmazonMWAA", metric = "PoolQueuedSlots", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_pool_queued_warn", critical = "mwaa_pool_queued_crit" }
+    mwaa_critical_section   = { group = "MWAA", namespace = "AmazonMWAA", metric = "CriticalSectionBusy", statistic = "Average", type = "gt", dim_key = "", warning = "mwaa_critical_section_warn", critical = "mwaa_critical_section_crit" }
+    mwaa_disk_queue         = { group = "MWAA", namespace = "AWS/MWAA", metric = "DiskQueueDepth", statistic = "Maximum", type = "gt", dim_key = "", warning = "mwaa_disk_queue_warn", critical = "mwaa_disk_queue_crit" }
+    mwaa_freeable_mem       = { group = "MWAA", namespace = "AWS/MWAA", metric = "FreeableMemory", statistic = "Minimum", type = "lt", dim_key = "", warning = "mwaa_freeable_mem_warn", critical = "mwaa_freeable_mem_crit" }
 
     # ── Control Panel ─────────────────────────────────────────────────────────
     cp_pod_cpu_throttle          = { group = "Control Panel", namespace = "ContainerInsights", metric = "pod_cpu_utilization_over_pod_limit", statistic = "Average", type = "gt", dim_key = "Namespace", dim_key2 = "ClusterName", match_exact = true, warning = "cp_pod_cpu_throttle_warn", critical = "cp_pod_cpu_throttle_crit" }
@@ -242,5 +261,11 @@ locals {
     rds_burst_balance        = { group = "Control Panel", namespace = "AWS/RDS", metric = "BurstBalance", statistic = "Minimum", type = "lt", dim_key = "DBInstanceIdentifier", warning = "rds_burst_balance_warn", critical = "rds_burst_balance_crit" }
     rds_ebs_io_balance       = { group = "Control Panel", namespace = "AWS/RDS", metric = "EBSIOBalance%", statistic = "Minimum", type = "lt", dim_key = "DBInstanceIdentifier", warning = "rds_ebs_io_balance_warn", critical = "rds_ebs_io_balance_crit" }
     rds_swap                 = { group = "Control Panel", namespace = "AWS/RDS", metric = "SwapUsage", statistic = "Maximum", type = "gt", dim_key = "DBInstanceIdentifier", warning = "rds_swap_warn", critical = "rds_swap_crit" }
+
+    # ── Bedrock ───────────────────────────────────────────────────────────────
+    bedrock_client_errors = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "InvocationClientErrors", statistic = "Sum", type = "gt", dim_key = "ModelId", warning = "bedrock_client_errors_warn", critical = "bedrock_client_errors_crit" }
+    bedrock_server_errors = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "InvocationServerErrors", statistic = "Sum", type = "gt", dim_key = "ModelId", warning = "bedrock_server_errors_warn", critical = "bedrock_server_errors_crit" }
+    bedrock_legacy_model  = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "LegacyModelInvocations", statistic = "Sum", type = "gt", dim_key = "ModelId", warning = "bedrock_legacy_model_warn", critical = "bedrock_legacy_model_crit" }
+    bedrock_invocations   = { group = "Bedrock", namespace = "AWS/Bedrock", metric = "Invocations", statistic = "Sum", type = "baseline_gt", dim_key = "ModelId", warning = "bedrock_invocations_baseline_warn", critical = "bedrock_invocations_baseline_crit" }
   }
 }

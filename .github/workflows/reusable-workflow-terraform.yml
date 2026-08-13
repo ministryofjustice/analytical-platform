@@ -36,7 +36,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
 
@@ -58,7 +58,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@4048c972aae68d0b983a48bb3479aab2d877b898 # v12.3102.0
+        uses: bridgecrewio/checkov-action@7b972723c44fb3d256283fac96fae5d7c1894bb7 # v12.3114.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -172,7 +172,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
 
@@ -193,14 +193,14 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@d979d5b3a71173a29b74b5b88418bfda9437d885 # v6.1.1
+        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
 
       - name: Assume GlobalGitHubActionAdmin Role
         id: assume_global_github_action_admin_role
-        uses: aws-actions/configure-aws-credentials@d979d5b3a71173a29b74b5b88418bfda9437d885 # v6.1.1
+        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAdmin
@@ -219,7 +219,7 @@ jobs:
 
       - name: Assume GlobalGitHubActionAccess Role
         id: assume_global_github_action_access_role
-        uses: aws-actions/configure-aws-credentials@d979d5b3a71173a29b74b5b88418bfda9437d885 # v6.1.1
+        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
@@ -400,12 +400,19 @@ jobs:
         with:
           github-token: ${{ env.GITHUB_ROBOT_TOKEN }}
           script: |
-            github.rest.pulls.createReview({
+            await github.rest.pulls.createReview({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
-              body: 'Automatically approving as no changes were detected in the Terraform plan, and the pull request was raised by Dependabot.\n\n@dependabot merge 🤖 🤝 🤖',
+              body: 'Automatically approving as no changes were detected in the Terraform plan, and the pull request was raised by Dependabot.',
               event: 'APPROVE'
+            })
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: ['auto-merge-dependabot'],
             })
 
       - name: Apply Terraform
@@ -427,7 +434,7 @@ jobs:
       - name: Notify Slack on Failure
         if: failure() && steps.terraform_apply.outcome == 'failure'
         id: slack_notification
-        uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 # v3.0.1
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
         with:
           webhook: ${{ env.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
