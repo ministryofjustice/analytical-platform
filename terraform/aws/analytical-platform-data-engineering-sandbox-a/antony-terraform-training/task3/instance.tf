@@ -18,7 +18,7 @@ resource "aws_instance" "ec2_instance" {
 }
 
 resource "aws_ebs_volume" "ebs_volume" {
-  availability_zone = "us-east-1a"
+  availability_zone = "eu-west-2a"
   size              = 10
   tags              = var.tags
 }
