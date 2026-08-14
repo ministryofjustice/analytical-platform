@@ -70,12 +70,13 @@ data "aws_iam_policy_document" "s3_test_kms_policy" {
   }
 
   statement {
-    sid = "AllowKeyUseViaIAM"
+    sid = "AllowAirflowKeyUse"
 
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        "arn:aws:iam::593291632749:role/airflow-development-laa-si-access-test",
+        "arn:aws:iam::593291632749:role/airflow-development-laa-s3-ops"
       ]
     }
 
