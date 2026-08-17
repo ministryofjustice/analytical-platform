@@ -1,0 +1,16 @@
+{
+  "splink_s3_bucket": {
+    "key_users": [
+      "airflow-production-laa-si-access",
+      "airflow-production-laa-s3-ops"
+    ]
+  },
+  "splink_s3_test_bucket": {
+    "key_users": [
+      "airflow-development-laa-si-access-test",
+      "airflow-development-laa-s3-ops",
+      "alpha_user_jamess-moj",
+      "alpha_user_dami-moj"
+    ]
+  }
+}
