@@ -107,7 +107,7 @@ module "dev_dms_delius" {
 
       path = {
         bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-        key    = "dev/delius/delius_dev_full_load_mapping.json"
+        key    = "dev/delius/delius_full_load_mapping.json"
       }
     }
   }
