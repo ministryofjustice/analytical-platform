@@ -100,4 +100,15 @@ module "dev_dms_delius" {
 
   glue_catalog_arn      = "arn:aws:glue:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:catalog"
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
+
+  independent_full_loads = {
+    delius_dev_tables = {
+      full_load_name = "delius-two-table-load"
+
+      path = {
+        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
+        key    = "dev/delius/delius_full_load_mapping.json"
+      }
+    }
+  }
 }
