@@ -64,6 +64,25 @@ data "aws_iam_policy_document" "s3_kms_policy" {
       values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
     }
   }
+
+  statement {
+    sid = "AllowAirflowKeyUse"
+
+    principals {
+      type        = "AWS"
+      identifiers = local.splink_s3_key_user_arns
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+  }
 }
 
 resource "aws_kms_key" "s3_kms_key" {
