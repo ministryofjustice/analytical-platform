@@ -80,6 +80,29 @@ data "aws_iam_policy_document" "datasync_laa_ingress_bucket_policy" {
     ]
     resources = ["arn:aws:s3:::mojap-data-production-datasync-laa-ingress-production/*"]
   }
+
+  # The DE modernisation-platform-data-eng role has elevated permissions in the
+  # data-production account that would otherwise grant broad S3 read access to
+  # this sensitive LAA ingress bucket. This deny statement explicitly blocks
+  # data-plane access for that role regardless of any IAM grants.
+  statement {
+    sid    = "DenyDataEngineeringRoleAccess"
+    effect = "Deny"
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/modernisation-platform-data-eng"]
+    }
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:ListBucket",
+      "s3:ListBucketVersions"
+    ]
+    resources = [
+      "arn:aws:s3:::mojap-data-production-datasync-laa-ingress-production",
+      "arn:aws:s3:::mojap-data-production-datasync-laa-ingress-production/*"
+    ]
+  }
 }
 
 # Policy for LAA logging bucket
