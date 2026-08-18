@@ -1,8 +1,6 @@
 {
   "splink_s3_bucket": {
-    "key_users": [
-      "alpha_user_jamess-moj"
-    ]
+    "key_users": ["alpha_user_jamess-moj"]
   },
   "splink_s3_test_bucket": {
     "key_users": [
