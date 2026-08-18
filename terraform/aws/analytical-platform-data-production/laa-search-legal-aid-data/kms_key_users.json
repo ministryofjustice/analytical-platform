@@ -7,6 +7,7 @@
   },
   "splink_s3_test_bucket": {
     "key_users": [
+      "airflow-development-laa-search-index-source",
       "airflow-development-laa-si-access-test",
       "airflow-development-laa-s3-ops",
       "alpha_user_jamess-moj",
