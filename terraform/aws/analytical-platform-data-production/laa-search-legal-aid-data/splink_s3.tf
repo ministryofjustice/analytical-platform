@@ -29,105 +29,7 @@ module "s3_bucket_splink" {
 
   attach_policy = true
 
-  policy = jsonencode({
-    Version = "2012-10-17"
-
-    Statement = [
-      {
-        Sid       = "RequireSSLRequests"
-        Effect    = "Deny"
-        Principal = "*"
-        Action    = "s3:*"
-
-        Resource = [
-          module.s3_bucket_splink.s3_bucket_arn,
-          "${module.s3_bucket_splink.s3_bucket_arn}/*"
-        ]
-
-        Condition = {
-          Bool = {
-            "aws:SecureTransport" = "false"
-          }
-        }
-      },
-
-      {
-        Sid       = "RestrictToTLSRequestsOnly"
-        Effect    = "Deny"
-        Principal = "*"
-        Action    = "s3:*"
-
-        Resource = [
-          module.s3_bucket_splink.s3_bucket_arn,
-          "${module.s3_bucket_splink.s3_bucket_arn}/*"
-        ]
-
-        Condition = {
-          NumericLessThan = {
-            "aws:TLSVersion" = "1.2"
-          }
-        }
-      },
-
-      {
-        Sid       = "DenyBucketDeletion"
-        Effect    = "Deny"
-        Principal = "*"
-
-        Action = [
-          "s3:DeleteBucket",
-          "s3:PutBucketAcl",
-          "s3:PutBucketPolicy",
-          "s3:PutEncryptionConfiguration",
-          "s3:PutBucketVersioning"
-        ]
-
-        Resource = [
-          module.s3_bucket_splink.s3_bucket_arn
-        ]
-      },
-
-      {
-        Sid       = "DenyUnencryptedObjectUploads"
-        Effect    = "Deny"
-        Principal = "*"
-
-        Action = [
-          "s3:PutObject"
-        ]
-
-        Resource = [
-          "${module.s3_bucket_splink.s3_bucket_arn}/*"
-        ]
-
-        Condition = {
-          StringNotEquals = {
-            "s3:x-amz-server-side-encryption" = "aws:kms"
-          }
-        }
-      },
-
-      {
-        Sid       = "DenyWrongKMSKey"
-        Effect    = "Deny"
-        Principal = "*"
-
-        Action = [
-          "s3:PutObject"
-        ]
-
-        Resource = [
-          "${module.s3_bucket_splink.s3_bucket_arn}/*"
-        ]
-
-        Condition = {
-          StringNotEquals = {
-            "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_kms_key.arn
-          }
-        }
-      }
-    ]
-  })
+  policy = data.aws_iam_policy_document.splink_bucket_policy.json
 
   logging = {
     target_bucket = local.logging_bucket_name
@@ -136,8 +38,9 @@ module "s3_bucket_splink" {
 
   lifecycle_rule = [
     {
-      id      = "delete-noncurrent-versions-asap"
-      enabled = true
+      id                                     = "delete-noncurrent-versions-asap"
+      enabled                                = true
+      abort_incomplete_multipart_upload_days = 7
 
       noncurrent_version_expiration = {
         days = 3
@@ -158,6 +61,49 @@ resource "aws_s3_bucket_ownership_controls" "splink" {
 
   rule {
     object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_s3_bucket_metric" "splink_entire_bucket" {
+  bucket = module.s3_bucket_splink.s3_bucket_id
+  name   = "EntireBucket"
+}
+
+resource "aws_cloudwatch_metric_alarm" "s3_bucket_size_alarm" {
+  alarm_name          = "splink-s3-bucket-size-alarm"
+  alarm_description   = "Alert when S3 bucket exceeds 100GB"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "BucketSizeBytes"
+  namespace           = "AWS/S3"
+  period              = "86400"
+  statistic           = "Average"
+  threshold           = 107374182400 # 100GB in bytes
+  alarm_actions       = [aws_sns_topic.splink_bucket_alerting_topic.arn]
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    BucketName  = module.s3_bucket_splink.s3_bucket_id
+    StorageType = "StandardStorage"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "s3_object_count_alarm" {
+  alarm_name          = "splink-s3-object-count-alarm"
+  alarm_description   = "Alert when S3 object count exceeds 1 million"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "NumberOfObjects"
+  namespace           = "AWS/S3"
+  period              = "86400"
+  statistic           = "Average"
+  threshold           = 1000000
+  alarm_actions       = [aws_sns_topic.splink_bucket_alerting_topic.arn]
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    BucketName  = module.s3_bucket_splink.s3_bucket_id
+    StorageType = "AllStorageTypes"
   }
 }
 

@@ -2,6 +2,10 @@
 # S3 Bucket - Splink Test Output
 # ---------------------------------------------
 
+locals {
+  splink_test_bucket_arn = "arn:aws:s3:::${local.splink_test_bucket_name}"
+}
+
 data "aws_iam_policy_document" "s3_test_kms_policy" {
   #checkov:skip=CKV_AWS_111 KMS key administration permissions are required for the account root principal.
   #checkov:skip=CKV_AWS_109 KMS key policies require key administration actions.
@@ -91,6 +95,18 @@ data "aws_iam_policy_document" "s3_test_kms_policy" {
     ]
 
     resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:EncryptionContext:aws:s3:arn"
+      values   = ["arn:aws:s3:::${local.splink_test_bucket_name}"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
+    }
   }
 }
 
@@ -289,7 +305,7 @@ module "s3_bucket_splink_test" {
 
         Resource = [
           module.s3_bucket_splink_test.s3_bucket_arn,
-          "${module.s3_bucket_splink_test.s3_bucket_arn}/*"
+          "${local.splink_test_bucket_arn}/*"
         ]
 
         Condition = {
@@ -307,7 +323,7 @@ module "s3_bucket_splink_test" {
 
         Resource = [
           module.s3_bucket_splink_test.s3_bucket_arn,
-          "${module.s3_bucket_splink_test.s3_bucket_arn}/*"
+          "${local.splink_test_bucket_arn}/*"
         ]
 
         Condition = {
@@ -327,7 +343,7 @@ module "s3_bucket_splink_test" {
         ]
 
         Resource = [
-          "${module.s3_bucket_splink_test.s3_bucket_arn}/*"
+          "${local.splink_test_bucket_arn}/*"
         ]
 
         Condition = {
@@ -347,7 +363,7 @@ module "s3_bucket_splink_test" {
         ]
 
         Resource = [
-          "${module.s3_bucket_splink_test.s3_bucket_arn}/*"
+          "${local.splink_test_bucket_arn}/*"
         ]
 
         Condition = {
@@ -366,11 +382,21 @@ module "s3_bucket_splink_test" {
 
   lifecycle_rule = [
     {
-      id      = "delete-noncurrent-versions-asap"
-      enabled = true
+      id                                     = "delete-noncurrent-versions-asap"
+      enabled                                = true
+      abort_incomplete_multipart_upload_days = 7
 
       noncurrent_version_expiration = {
         days = 3
+      }
+    },
+    {
+      id      = "expire-current-test-objects"
+      enabled = true
+
+      expiration = {
+        expired_object_delete_marker = true
+        days                         = 14
       }
     }
   ]
@@ -388,6 +414,49 @@ resource "aws_s3_bucket_ownership_controls" "splink_test" {
 
   rule {
     object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_s3_bucket_metric" "splink_test_entire_bucket" {
+  bucket = module.s3_bucket_splink_test.s3_bucket_id
+  name   = "EntireBucket"
+}
+
+resource "aws_cloudwatch_metric_alarm" "s3_test_bucket_size_alarm" {
+  alarm_name          = "splink-test-s3-bucket-size-alarm"
+  alarm_description   = "Alert when test bucket exceeds 50GB"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "BucketSizeBytes"
+  namespace           = "AWS/S3"
+  period              = "86400"
+  statistic           = "Average"
+  threshold           = 53687091200 # 50GB
+  alarm_actions       = [aws_sns_topic.splink_test_bucket_alerting_topic.arn]
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    BucketName  = module.s3_bucket_splink_test.s3_bucket_id
+    StorageType = "StandardStorage"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "s3_test_object_count_alarm" {
+  alarm_name          = "splink-test-s3-object-count-alarm"
+  alarm_description   = "Alert when test bucket object count exceeds 100000"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "NumberOfObjects"
+  namespace           = "AWS/S3"
+  period              = "86400"
+  statistic           = "Average"
+  threshold           = 100000
+  alarm_actions       = [aws_sns_topic.splink_test_bucket_alerting_topic.arn]
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    BucketName  = module.s3_bucket_splink_test.s3_bucket_id
+    StorageType = "AllStorageTypes"
   }
 }
 
