@@ -4,6 +4,7 @@
 
 #checkov:skip=CKV_AWS_144:Cross-region replication is not required for this regional test data platform.
 resource "aws_s3_bucket" "cloudtrail_logs_bucket" {
+  #checkov:skip=CKV_AWS_144:Cross-region replication is not required as it should be in eu-west-2 only
   bucket = "${local.splink_bucket_name}-cloudtrail-logs"
 
   tags = merge(
@@ -117,8 +118,8 @@ resource "aws_s3_bucket_policy" "cloudtrail_logs" {
 }
 
 # CloudTrail trail for S3 data events
-#checkov:skip=CKV_AWS_67:This trail is intentionally scoped to eu-west-2 for the regional platform.
 resource "aws_cloudtrail" "splink_s3_trail" {
+  #checkov:skip=CKV_AWS_67:This trail is intentionally scoped to eu-west-2 for the regional platform.
   name                          = "splink-s3-data-events-trail"
   s3_bucket_name                = aws_s3_bucket.cloudtrail_logs_bucket.id
   include_global_service_events = false
