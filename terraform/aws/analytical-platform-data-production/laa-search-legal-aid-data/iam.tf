@@ -35,7 +35,7 @@ resource "aws_iam_policy" "airflow_splink_test_s3_access" {
   })
 }
 
-#IAM policy attachement for Airflow to access the Splink S3 bucket
+#IAM policy attachment for Airflow to access the Splink S3 bucket
 resource "aws_iam_role_policy_attachment" "airflow_splink_test_s3_access" {
   role       = aws_iam_role.airflow_splink_test.name
   policy_arn = aws_iam_policy.airflow_splink_test_s3_access.arn
