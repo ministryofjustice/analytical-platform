@@ -67,6 +67,30 @@ data "aws_iam_policy_document" "splink_bucket_alerting_topic_policy" {
       ]
     }
   }
+
+  statement {
+    sid    = "AllowCloudTrailPublish"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudtrail.amazonaws.com"]
+    }
+
+    actions = ["sns:Publish"]
+
+    resources = [
+      aws_sns_topic.splink_bucket_alerting_topic.arn
+    ]
+
+    condition {
+      test     = "ArnEquals"
+      variable = "aws:SourceArn"
+      values = [
+        aws_cloudtrail.splink_s3_trail.arn
+      ]
+    }
+  }
 }
 
 # Add policy for Airflow python script to access the bucket

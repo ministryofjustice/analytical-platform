@@ -12,4 +12,5 @@ variable "splink_alert_email" {
   type        = string
   description = "Email address for S3 and security alerts (requires manual confirmation)"
   sensitive   = false
+  default     = "arunnirmal.chinnadurai@justice.gov.uk"
 }

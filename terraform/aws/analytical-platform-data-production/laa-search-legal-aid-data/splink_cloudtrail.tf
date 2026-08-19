@@ -2,6 +2,7 @@
 # CloudTrail Configuration - S3 Data Events Logging
 # =====================================================
 
+#checkov:skip=CKV_AWS_144:Cross-region replication is not required for this regional test data platform.
 resource "aws_s3_bucket" "cloudtrail_logs_bucket" {
   bucket = "${local.splink_bucket_name}-cloudtrail-logs"
 
@@ -35,9 +36,38 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_logs" 
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+      kms_master_key_id = aws_kms_key.cloudtrail_key.arn
+      sse_algorithm     = "aws:kms"
+    }
+
+    bucket_key_enabled = true
+  }
+}
+
+resource "aws_s3_bucket_logging" "cloudtrail_logs" {
+  bucket        = aws_s3_bucket.cloudtrail_logs_bucket.id
+  target_bucket = local.logging_bucket_name
+  target_prefix = "s3access/${aws_s3_bucket.cloudtrail_logs_bucket.id}/"
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "cloudtrail_logs" {
+  bucket = aws_s3_bucket.cloudtrail_logs_bucket.id
+
+  rule {
+    id     = "expire-cloudtrail-logs"
+    status = "Enabled"
+
+    filter {}
+
+    noncurrent_version_expiration {
+      noncurrent_days = 90
     }
   }
+}
+
+resource "aws_s3_bucket_notification" "cloudtrail_logs" {
+  bucket      = aws_s3_bucket.cloudtrail_logs_bucket.id
+  eventbridge = true
 }
 
 # CloudTrail bucket policy
@@ -83,6 +113,7 @@ resource "aws_s3_bucket_policy" "cloudtrail_logs" {
 }
 
 # CloudTrail trail for S3 data events
+#checkov:skip=CKV_AWS_67:This trail is intentionally scoped to eu-west-2 for the regional platform.
 resource "aws_cloudtrail" "splink_s3_trail" {
   name                          = "splink-s3-data-events-trail"
   s3_bucket_name                = aws_s3_bucket.cloudtrail_logs_bucket.id
@@ -90,6 +121,7 @@ resource "aws_cloudtrail" "splink_s3_trail" {
   is_multi_region_trail         = false
   enable_log_file_validation    = true
   kms_key_id                    = aws_kms_key.cloudtrail_key.arn
+  sns_topic_name                = aws_sns_topic.splink_bucket_alerting_topic.name
   cloud_watch_logs_group_arn    = "${aws_cloudwatch_log_group.cloudtrail_logs.arn}:*"
   cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail_cloudwatch_role.arn
   depends_on                    = [aws_s3_bucket_policy.cloudtrail_logs]
@@ -120,6 +152,9 @@ resource "aws_cloudtrail" "splink_s3_trail" {
 # KMS key for CloudTrail logs encryption
 data "aws_iam_policy_document" "cloudtrail_kms_policy" {
   statement {
+    #checkov:skip=CKV_AWS_109:KMS key administration requires account-root permissions.
+    #checkov:skip=CKV_AWS_111:KMS key administration requires account-root permissions.
+    #checkov:skip=CKV_AWS_356:KMS key policies require Resource="*".
     sid = "AllowRootAccountAdmin"
 
     principals {
@@ -148,6 +183,7 @@ data "aws_iam_policy_document" "cloudtrail_kms_policy" {
   }
 
   statement {
+    #checkov:skip=CKV_AWS_356:KMS key policies require Resource="*".
     sid = "AllowCloudTrailUseOfKey"
 
     principals {
@@ -168,6 +204,69 @@ data "aws_iam_policy_document" "cloudtrail_kms_policy" {
       values = [
         "arn:aws:s3:::${aws_s3_bucket.cloudtrail_logs_bucket.id}/cloudtrail-logs/*"
       ]
+    }
+  }
+
+  statement {
+    #checkov:skip=CKV_AWS_356:KMS key policies require Resource="*".
+    sid = "AllowS3UseOfKey"
+
+    principals {
+      type        = "Service"
+      identifiers = ["s3.amazonaws.com"]
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:EncryptionContext:aws:s3:arn"
+      values   = ["arn:aws:s3:::${local.splink_bucket_name}-cloudtrail-logs"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
+    }
+  }
+
+  statement {
+    #checkov:skip=CKV_AWS_356:KMS key policies require Resource="*".
+    sid = "AllowCloudWatchLogsUseOfKey"
+
+    principals {
+      type        = "Service"
+      identifiers = ["logs.${data.aws_region.current.region}.amazonaws.com"]
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "ArnEquals"
+      variable = "kms:EncryptionContext:aws:logs:arn"
+      values   = ["arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/cloudtrail/splink-s3-events"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["logs.${data.aws_region.current.region}.amazonaws.com"]
     }
   }
 }
@@ -194,7 +293,8 @@ resource "aws_kms_alias" "cloudtrail_key_alias" {
 # CloudWatch Log Group for CloudTrail
 resource "aws_cloudwatch_log_group" "cloudtrail_logs" {
   name              = "/aws/cloudtrail/splink-s3-events"
-  retention_in_days = 30
+  retention_in_days = 365
+  kms_key_id        = aws_kms_key.cloudtrail_key.arn
 
   tags = merge(
     local.tags,
