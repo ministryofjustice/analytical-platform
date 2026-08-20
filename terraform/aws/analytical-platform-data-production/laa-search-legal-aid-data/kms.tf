@@ -53,9 +53,16 @@ data "aws_iam_policy_document" "s3_kms_policy" {
       test     = "StringEquals"
       variable = "kms:EncryptionContext:aws:s3:arn"
 
-      values = [
-        "arn:aws:s3:::${local.splink_bucket_name}"
-      ]
+      values = concat(
+        ["arn:aws:s3:::${local.splink_bucket_name}"],
+        [
+          "arn:aws:s3:::${local.splink_search_input_bucket_name}",
+          "arn:aws:s3:::${local.splink_search_output_bucket_name}",
+          "arn:aws:s3:::${local.splink_source_input_bucket_name}",
+          "arn:aws:s3:::${local.splink_source_output_bucket_name}",
+          "arn:aws:s3:::${local.splink_audit_bucket_name}"
+        ]
+      )
     }
 
     condition {
