@@ -3,6 +3,11 @@
   "logging_bucket_name": "moj-analytics-s3-logs",
   "splink_bucket_name": "laa-splink-search-s3",
   "splink_test_bucket_name": "laa-splink-search-s3-test",
+  "splink_search_input_bucket_name": "laa-splink-search-input",
+  "splink_search_output_bucket_name": "laa-splink-search-output",
+  "splink_source_input_bucket_name": "laa-splink-source-file-input",
+  "splink_source_output_bucket_name": "laa-splink-source-file-output",
+  "splink_audit_bucket_name": "laa-search-audit",
   "tags": {
     "Owner": "LAA Search",
     "Environment": "production"
