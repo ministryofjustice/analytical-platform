@@ -18,11 +18,11 @@ locals {
   splink_source_input_bucket_name  = local.app.splink_source_input_bucket_name
   splink_source_output_bucket_name = local.app.splink_source_output_bucket_name
   splink_audit_bucket_name         = local.app.splink_audit_bucket_name
-  logging_bucket_name         = local.app.logging_bucket_name
-  splink_bucket_name          = local.app.splink_bucket_name
-  splink_test_bucket_name     = local.app.splink_test_bucket_name
-  splink_test_sns_topic_name  = "splink-s3-event-notification-topic-test"
-  splink_test_event_rule_name = "splink-bucket-event-rule-test"
+  logging_bucket_name              = local.app.logging_bucket_name
+  splink_bucket_name               = local.app.splink_bucket_name
+  splink_test_bucket_name          = local.app.splink_test_bucket_name
+  splink_test_sns_topic_name       = "splink-s3-event-notification-topic-test"
+  splink_test_event_rule_name      = "splink-bucket-event-rule-test"
   bucket_access_policy_statements = {
     (local.splink_search_input_bucket_name) = [
       {
@@ -82,7 +82,7 @@ locals {
       }
     ]
   }
-  tags                        = local.app.tags
+  tags = local.app.tags
   test_tags = merge(
     local.tags,
     {
