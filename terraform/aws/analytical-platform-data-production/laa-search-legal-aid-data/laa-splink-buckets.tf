@@ -26,92 +26,65 @@ module "s3_buckets" {
 
   policy = jsonencode({
     Version = "2012-10-17"
-    Statement = concat([
-      {
-        Sid       = "RequireSSLRequests"
-        Effect    = "Deny"
-        Principal = "*"
-        Action    = "s3:*"
-        Resource = [
-          "arn:aws:s3:::${each.value}",
-          "arn:aws:s3:::${each.value}/*"
-        ]
-        Condition = {
-          Bool = {
-            "aws:SecureTransport" = "false"
+    Statement = concat(
+      [
+        {
+          Sid       = "RequireSSLRequests"
+          Effect    = "Deny"
+          Principal = "*"
+          Action    = "s3:*"
+          Resource = [
+            "arn:aws:s3:::${each.value}",
+            "arn:aws:s3:::${each.value}/*"
+          ]
+          Condition = {
+            Bool = {
+              "aws:SecureTransport" = "false"
+            }
+          }
+        },
+        {
+          Sid       = "RestrictToTLSRequestsOnly"
+          Effect    = "Deny"
+          Principal = "*"
+          Action    = "s3:*"
+          Resource = [
+            "arn:aws:s3:::${each.value}",
+            "arn:aws:s3:::${each.value}/*"
+          ]
+          Condition = {
+            NumericLessThan = {
+              "aws:TLSVersion" = "1.2"
+            }
+          }
+        },
+        {
+          Sid       = "DenyUnencryptedObjectUploads"
+          Effect    = "Deny"
+          Principal = "*"
+          Action    = "s3:PutObject"
+          Resource  = "arn:aws:s3:::${each.value}/*"
+          Condition = {
+            StringNotEquals = {
+              "s3:x-amz-server-side-encryption" = "aws:kms"
+            }
+          }
+        },
+        {
+          Sid       = "DenyWrongKMSKey"
+          Effect    = "Deny"
+          Principal = "*"
+          Action    = "s3:PutObject"
+          Resource  = "arn:aws:s3:::${each.value}/*"
+          Condition = {
+            StringNotEquals = {
+              "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_kms_key.arn
+            }
           }
         }
-      },
-      {
-        Sid       = "RestrictToTLSRequestsOnly"
-        Effect    = "Deny"
-        Principal = "*"
-        Action    = "s3:*"
-        Resource = [
-          "arn:aws:s3:::${each.value}",
-          "arn:aws:s3:::${each.value}/*"
-        ]
-        Condition = {
-          NumericLessThan = {
-            "aws:TLSVersion" = "1.2"
-          }
-        }
-      },
-      {
-        Sid       = "DenyUnencryptedObjectUploads"
-        Effect    = "Deny"
-        Principal = "*"
-        Action    = "s3:PutObject"
-        Resource  = "arn:aws:s3:::${each.value}/*"
-        Condition = {
-          StringNotEquals = {
-            "s3:x-amz-server-side-encryption" = "aws:kms"
-          }
-        }
-      },
-      {
-        Sid       = "DenyWrongKMSKey"
-        Effect    = "Deny"
-        Principal = "*"
-        Action    = "s3:PutObject"
-        Resource  = "arn:aws:s3:::${each.value}/*"
-        Condition = {
-          StringNotEquals = {
-            "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_kms_key.arn
-          }
-        }
-      }
-      ], each.value == local.splink_search_input_bucket_name ? [
-      {
-        Sid       = "ReadOnlyBucket"
-        Effect    = "Deny"
-        Principal = "*"
-        Action = [
-          "s3:PutObject",
-          "s3:DeleteObject",
-          "s3:DeleteObjectVersion"
-        ]
-        Resource = "arn:aws:s3:::${each.value}/*"
-      }
-      ] : each.value == local.splink_search_output_bucket_name || each.value == local.splink_source_output_bucket_name || each.value == local.splink_audit_bucket_name ? [
-      {
-        Sid       = "WriteOnlyBucketObjects"
-        Effect    = "Deny"
-        Principal = "*"
-        Action = [
-          "s3:GetObject",
-          "s3:GetObjectVersion"
-        ]
-        Resource = "arn:aws:s3:::${each.value}/*"
-      },
-      {
-        Sid       = "WriteOnlyBucketListing"
-        Effect    = "Deny"
-        Principal = "*"
-        Action    = "s3:ListBucket"
-        Resource  = "arn:aws:s3:::${each.value}"
-      }
-    ] : [])
+      ],
+      lookup(local.bucket_access_policy_statements, each.value, [])
+    )
   })
 
   server_side_encryption_configuration = {
