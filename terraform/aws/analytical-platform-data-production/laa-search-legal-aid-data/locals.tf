@@ -33,6 +33,15 @@ locals {
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_name}/*"
       }
     ]
+    (local.splink_source_input_bucket_name) = [
+      {
+        Sid       = "ReadOnlyBucket"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion"]
+        Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_name}/*"
+      }
+    ]
     (local.splink_search_output_bucket_name) = [
       {
         Sid       = "WriteOnlyBucketObjects"

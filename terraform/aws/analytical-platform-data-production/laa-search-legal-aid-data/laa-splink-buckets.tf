@@ -13,6 +13,9 @@ module "s3_buckets" {
   bucket        = each.value
   force_destroy = false
 
+  # Object Lock can be enabled later; S3 versioning is already enabled.
+  # object_lock_enabled = true
+
   versioning = {
     enabled = true
   }
