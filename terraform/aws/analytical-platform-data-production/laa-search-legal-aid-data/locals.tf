@@ -31,6 +31,11 @@ locals {
         Principal = "*"
         Action    = ["s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion"]
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_name}/*"
+        Condition = {
+          ArnNotEquals = {
+            "aws:PrincipalArn" = local.splink_s3_key_user_arns
+          }
+        }
       }
     ]
     (local.splink_source_input_bucket_name) = [
@@ -40,6 +45,11 @@ locals {
         Principal = "*"
         Action    = ["s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion"]
         Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_name}/*"
+        Condition = {
+          ArnNotEquals = {
+            "aws:PrincipalArn" = local.splink_s3_key_user_arns
+          }
+        }
       }
     ]
     (local.splink_search_output_bucket_name) = [
