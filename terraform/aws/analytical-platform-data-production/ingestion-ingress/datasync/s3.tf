@@ -80,6 +80,35 @@ data "aws_iam_policy_document" "datasync_laa_ingress_bucket_policy" {
     ]
     resources = ["arn:aws:s3:::mojap-data-production-datasync-laa-ingress-production/*"]
   }
+
+  # The DE modernisation-platform-data-eng SSO role has elevated permissions in the
+  # data-production account that would otherwise grant broad S3 read access to
+  # this sensitive LAA ingress bucket. SSO roles cannot be referenced directly as
+  # principals in bucket policies; a wildcard principal with an ArnLike condition
+  # on aws:PrincipalArn is required to match the assumed-role session ARN.
+  statement {
+    sid    = "DenyDataEngineeringRoleAccess"
+    effect = "Deny"
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:ListBucket",
+      "s3:ListBucketVersions"
+    ]
+    resources = [
+      "arn:aws:s3:::mojap-data-production-datasync-laa-ingress-production",
+      "arn:aws:s3:::mojap-data-production-datasync-laa-ingress-production/*"
+    ]
+    condition {
+      test     = "ArnLike"
+      variable = "aws:PrincipalArn"
+      values   = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/aws-reserved/sso.amazonaws.com/*AWSReservedSSO_modernisation-platform-data-eng*"]
+    }
+  }
 }
 
 # Policy for LAA logging bucket
