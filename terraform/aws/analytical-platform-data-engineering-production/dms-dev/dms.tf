@@ -103,11 +103,11 @@ module "dev_dms_delius" {
 
   independent_full_loads = {
     delius_dev_tables = {
-      full_load_name = "delius-two-table-load"
+      full_load_name = "delius-equality-full-load"
 
       path = {
         bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-        key    = "dev/delius/delius_full_load_mapping.json"
+        key    = "dev/delius/delius_dev_full_load_equality.json"
       }
     }
   }
