@@ -166,18 +166,6 @@ data "aws_iam_policy_document" "create_a_derived_table_dev" {
       "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=prison/database_name=calculate_release_dates_api"
     ]
   }
-
-  statement {
-    sid    = "AirflowAccess"
-    effect = "Allow"
-    actions = [
-      "airflow:CreateCliToken"
-    ]
-    resources = [
-      "arn:aws:airflow:*:${var.account_ids["analytical-platform-data-production"]}:environment/dev",
-      "arn:aws:airflow:*:${var.account_ids["analytical-platform-data-production"]}:environment/prod"
-    ]
-  }
   statement {
     sid       = "AllowAssumeAPComputeMetadataTransferRole"
     effect    = "Allow"
