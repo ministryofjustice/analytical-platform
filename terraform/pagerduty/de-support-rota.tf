@@ -75,7 +75,7 @@ locals {
             module.users_de_g7["matt.heery@justice.gov.uk"].id,
             module.users_de_g7["lalitha.nagarur3@justice.gov.uk"].id,
             module.users_de_g7["andrew.craik@justice.gov.uk"].id,
-            module.users_de_seo["antony.scott@justice.gov.uk"].id,
+            module.users_de_g7["antony.scott@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -154,11 +154,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Antony Scott"
-      email = "antony.scott@justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Damilola Oyebade"
       email = "damilola.oyebade@justice.gov.uk"
       role  = "responder"
@@ -196,6 +191,11 @@ locals {
   ]
 
   users_de_g7 = [
+    {
+      name  = "Antony Scott"
+      email = "antony.scott@justice.gov.uk"
+      role  = "responder"
+    },
     {
       name  = "Andrew Craik"
       email = "andrew.craik@justice.gov.uk"
@@ -346,7 +346,7 @@ import {
 }
 
 import {
-  to = module.users_de_seo["antony.scott@justice.gov.uk"].pagerduty_user.this
+  to = module.users_de_g7["antony.scott@justice.gov.uk"].pagerduty_user.this
   id = "PWSEGGN"
 }
 
