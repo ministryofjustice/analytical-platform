@@ -14,7 +14,14 @@
       "alpha_user_dami-moj"
     ]
   },
-  "splink_s3_phase1_buckets": {
+  "splink_s3_phase1_input_readers": {
+    "key_users": [
+      "airflow-development-laa-search-index-source",
+      "airflow-development-laa-si-access-test",
+      "airflow-development-laa-s3-ops"
+    ]
+  },
+  "splink_s3_phase1_output_writers": {
     "key_users": [
       "airflow-development-laa-search-index-source",
       "airflow-development-laa-si-access-test",

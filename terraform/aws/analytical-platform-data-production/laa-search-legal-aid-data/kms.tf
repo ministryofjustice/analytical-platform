@@ -90,11 +90,30 @@ data "aws_iam_policy_document" "s3_kms_policy" {
   }
 
   statement {
-    sid = "AllowPhase1BucketKeyUse"
+    sid = "AllowPhase1InputReaderKeyUse"
 
     principals {
       type        = "AWS"
-      identifiers = local.splink_s3_phase1_key_user_arns
+      identifiers = local.splink_s3_phase1_input_reader_arns
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "AllowPhase1OutputWriterKeyUse"
+
+    principals {
+      type        = "AWS"
+      identifiers = local.splink_s3_phase1_output_writer_arns
     }
 
     actions = [

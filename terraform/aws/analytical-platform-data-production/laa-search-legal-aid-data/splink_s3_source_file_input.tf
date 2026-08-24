@@ -106,7 +106,7 @@ module "s3_bucket_splink_source_file_input" {
         Action    = ["s3:GetObject", "s3:GetObjectVersion"]
         Resource  = "${module.s3_bucket_splink_source_file_input.s3_bucket_arn}/*"
         Condition = {
-          ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_phase1_key_user_arns }
+          ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_phase1_input_reader_arns }
         }
       },
       {
@@ -116,7 +116,7 @@ module "s3_bucket_splink_source_file_input" {
         Action    = "s3:ListBucket"
         Resource  = module.s3_bucket_splink_source_file_input.s3_bucket_arn
         Condition = {
-          ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_phase1_key_user_arns }
+          ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_phase1_input_reader_arns }
         }
       }
     ]

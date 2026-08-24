@@ -117,7 +117,7 @@ module "s3_bucket_splink_audit" {
         Action    = ["s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion"]
         Resource  = "${module.s3_bucket_splink_audit.s3_bucket_arn}/*"
         Condition = {
-          ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_phase1_key_user_arns }
+          ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_phase1_output_writer_arns }
         }
       }
     ]

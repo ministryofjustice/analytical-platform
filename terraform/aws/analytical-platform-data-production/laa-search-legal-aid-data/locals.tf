@@ -12,8 +12,13 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
-  splink_s3_phase1_key_user_arns = [
-    for role in local.kms_key_users.splink_s3_phase1_buckets.key_users :
+  splink_s3_phase1_input_reader_arns = [
+    for role in local.kms_key_users.splink_s3_phase1_input_readers.key_users :
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+  ]
+
+  splink_s3_phase1_output_writer_arns = [
+    for role in local.kms_key_users.splink_s3_phase1_output_writers.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
