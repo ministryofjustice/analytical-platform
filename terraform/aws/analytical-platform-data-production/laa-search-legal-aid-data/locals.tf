@@ -12,6 +12,12 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
+  splink_s3_input_bucket_key_user_arns = [
+    for role in local.kms_key_users.splink_s3_input_bucket.key_users :
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+  ]
+
+
   application_name                 = local.app.application_name
   splink_search_input_bucket_name  = local.app.splink_search_input_bucket_name
   splink_search_output_bucket_name = local.app.splink_search_output_bucket_name
@@ -33,7 +39,7 @@ locals {
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_name}/*"
         Condition = {
           ArnNotEquals = {
-            "aws:PrincipalArn" = local.splink_s3_key_user_arns
+            "aws:PrincipalArn" = local.splink_s3_input_bucket_key_user_arns
           }
         }
       }
@@ -47,7 +53,7 @@ locals {
         Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_name}/*"
         Condition = {
           ArnNotEquals = {
-            "aws:PrincipalArn" = local.splink_s3_key_user_arns
+            "aws:PrincipalArn" = local.splink_s3_input_bucket_key_user_arns
           }
         }
       }

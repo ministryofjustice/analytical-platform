@@ -10,5 +10,12 @@
       "alpha_user_jamess-moj",
       "alpha_user_dami-moj"
     ]
+  },
+  "splink_s3_input_bucket": {
+    "key_users": [
+      "airflow-development-laa-search-index-source",
+      "airflow-development-laa-si-access-test",
+      "airflow-development-laa-s3-ops"
+    ]
   }
 }
