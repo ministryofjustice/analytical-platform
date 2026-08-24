@@ -35,18 +35,12 @@
     ]
   },
   "splink_s3_output_read_bucket": {
-    "key_users": [
-      "alpha_user_jamess-moj"
-    ]
+    "key_users": ["alpha_user_jamess-moj"]
   },
   "splink_s3_audit_write_bucket": {
-    "key_users": [
-      "alpha_user_jamess-moj"
-    ]
+    "key_users": ["alpha_user_jamess-moj"]
   },
   "splink_s3_audit_read_bucket": {
-    "key_users": [
-      "alpha_user_jamess-moj"
-    ]
+    "key_users": ["alpha_user_jamess-moj"]
   }
 }
