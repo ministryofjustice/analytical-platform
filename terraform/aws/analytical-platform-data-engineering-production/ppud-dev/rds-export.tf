@@ -21,7 +21,7 @@ resource "aws_security_group_rule" "db_ingress" {
 
 module "rds_export" {
   # using source ref whilst testing
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=26c16ad6944e91a147280d4bff088929d17f6b21"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=add-batch-replication-option-for-parquet-bucket"
 
   providers = {
     aws = aws
@@ -37,6 +37,10 @@ module "rds_export" {
   output_parquet_file_size = 50
   db_name                  = "ppud_dev"
   get_views                = true
+  migration_replication_enabled = true
+  migration_replication_destination_arn = "arn:aws:s3:::ppud-parquet-exports-dev-20251002161459329900000002"
+  migration_replication_cutoff_date= "2026-08-20T00:00:00Z"
+  migration_replication_rule_enabled= true
 
   tags = var.tags
 }
