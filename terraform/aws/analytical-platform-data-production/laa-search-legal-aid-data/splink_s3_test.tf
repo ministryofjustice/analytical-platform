@@ -70,13 +70,11 @@ data "aws_iam_policy_document" "s3_test_kms_policy" {
   }
 
   statement {
-    sid = "AllowKeyUseViaIAM"
+    sid = "AllowAirflowAndNamedUserKeyUse"
 
     principals {
-      type = "AWS"
-      identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-      ]
+      type        = "AWS"
+      identifiers = local.splink_s3_test_key_user_arns
     }
 
     actions = [

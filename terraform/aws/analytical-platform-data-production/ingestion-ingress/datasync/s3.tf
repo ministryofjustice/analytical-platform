@@ -40,7 +40,7 @@ module "datasync_opg_ingress_s3" {
   for_each = local.analytical_platform_ingestion_environments
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.15.3"
+  version = "5.15.4"
 
   bucket = "mojap-data-production-datasync-opg-ingress-${each.key}"
 
@@ -79,6 +79,35 @@ data "aws_iam_policy_document" "datasync_laa_ingress_bucket_policy" {
       "s3:ReplicateDelete"
     ]
     resources = ["arn:aws:s3:::mojap-data-production-datasync-laa-ingress-production/*"]
+  }
+
+  # The DE modernisation-platform-data-eng SSO role has elevated permissions in the
+  # data-production account that would otherwise grant broad S3 read access to
+  # this sensitive LAA ingress bucket. SSO roles cannot be referenced directly as
+  # principals in bucket policies; a wildcard principal with an ArnLike condition
+  # on aws:PrincipalArn is required to match the assumed-role session ARN.
+  statement {
+    sid    = "DenyDataEngineeringRoleAccess"
+    effect = "Deny"
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:ListBucket",
+      "s3:ListBucketVersions"
+    ]
+    resources = [
+      "arn:aws:s3:::mojap-data-production-datasync-laa-ingress-production",
+      "arn:aws:s3:::mojap-data-production-datasync-laa-ingress-production/*"
+    ]
+    condition {
+      test     = "ArnLike"
+      variable = "aws:PrincipalArn"
+      values   = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/aws-reserved/sso.amazonaws.com/*AWSReservedSSO_modernisation-platform-data-eng*"]
+    }
   }
 }
 
@@ -141,7 +170,7 @@ module "datasync_laa_ingress_s3" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.15.3"
+  version = "5.15.4"
 
   bucket = "mojap-data-production-datasync-laa-ingress-production"
 
@@ -254,7 +283,7 @@ module "mojap_access_logging_eu_west_2_s3" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.15.3"
+  version = "5.15.4"
 
   bucket = "mojap-s3-bucket-access-logs-eu-west-2"
 
