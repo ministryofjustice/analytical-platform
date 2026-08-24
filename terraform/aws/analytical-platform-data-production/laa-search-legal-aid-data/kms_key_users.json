@@ -27,5 +27,20 @@
       "airflow-development-laa-si-access-test",
       "airflow-development-laa-s3-ops"
     ]
+  },
+  "splink_s3_output_read_bucket": {
+    "key_users": [
+      "alpha_user_jamess-moj"
+    ]
+  },
+  "splink_s3_audit_write_bucket": {
+    "key_users": [
+      "alpha_user_jamess-moj"
+    ]
+  },
+  "splink_s3_audit_read_bucket": {
+    "key_users": [
+      "alpha_user_jamess-moj"
+    ]
   }
 }
