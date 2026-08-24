@@ -21,7 +21,7 @@ resource "aws_security_group_rule" "db_ingress" {
 
 module "rds_export" {
   # using source ref whilst testing
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=add-batch-replication-option-for-parquet-bucket"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=c507c8681def46f8026e23f5ac2ac88c8f04dbb6"
 
   providers = {
     aws = aws
