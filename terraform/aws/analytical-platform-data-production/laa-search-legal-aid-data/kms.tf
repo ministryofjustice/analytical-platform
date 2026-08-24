@@ -54,7 +54,12 @@ data "aws_iam_policy_document" "s3_kms_policy" {
       variable = "kms:EncryptionContext:aws:s3:arn"
 
       values = [
-        "arn:aws:s3:::${local.splink_bucket_name}"
+        "arn:aws:s3:::${local.splink_bucket_name}",
+        "arn:aws:s3:::${local.splink_search_input_bucket_name}",
+        "arn:aws:s3:::${local.splink_search_output_bucket_name}",
+        "arn:aws:s3:::${local.splink_source_input_bucket_name}",
+        "arn:aws:s3:::${local.splink_source_output_bucket_name}",
+        "arn:aws:s3:::${local.splink_audit_bucket_name}"
       ]
     }
 
@@ -71,6 +76,25 @@ data "aws_iam_policy_document" "s3_kms_policy" {
     principals {
       type        = "AWS"
       identifiers = local.splink_s3_key_user_arns
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "AllowPhase1BucketKeyUse"
+
+    principals {
+      type        = "AWS"
+      identifiers = local.splink_s3_phase1_key_user_arns
     }
 
     actions = [
