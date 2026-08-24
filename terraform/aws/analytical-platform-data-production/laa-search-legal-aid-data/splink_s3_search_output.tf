@@ -97,6 +97,19 @@ module "s3_bucket_splink_search_output" {
         }
       },
       {
+        Sid       = "DenyBucketDeletion"
+        Effect    = "Deny"
+        Principal = "*"
+        Action = [
+          "s3:DeleteBucket",
+          "s3:PutBucketAcl",
+          "s3:PutBucketPolicy",
+          "s3:PutEncryptionConfiguration",
+          "s3:PutBucketVersioning"
+        ]
+        Resource = module.s3_bucket_splink_search_output.s3_bucket_arn
+      },
+      {
         Sid       = "DenyNonAirflowWrites"
         Effect    = "Deny"
         Principal = "*"
