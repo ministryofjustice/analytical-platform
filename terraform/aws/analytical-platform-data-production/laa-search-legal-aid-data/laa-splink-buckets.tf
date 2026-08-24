@@ -112,7 +112,7 @@ module "s3_buckets" {
       enabled = true
 
       noncurrent_version_expiration = {
-        days = 90
+        days = 5110
       }
       abort_incomplete_multipart_upload_days = 7
     }
