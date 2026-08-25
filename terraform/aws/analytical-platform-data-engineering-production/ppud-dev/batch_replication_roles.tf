@@ -71,7 +71,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "batch_manifest" {
 
 resource "aws_iam_policy" "migration_replication" {
 
-  name = "${local.name}-parquet-exports-replication-IAM-${var.tags["environment"]}-policy"
+  name = "${local.name}-parquet-exports-replication-${var.tags["environment"]}"
 
   policy = jsonencode({
     Version = "2012-10-17"
