@@ -24,7 +24,7 @@ def _manifest_filter():
     return manifest_filter
 
 
-def handler(event=None, context=None):
+def handler(_event=None, _context=None):
 
     account_id = os.environ["ACCOUNT_ID"]
     replication_role_arn = os.environ["REPLICATION_ROLE_ARN"]
