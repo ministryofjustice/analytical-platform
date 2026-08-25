@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "migration_replication_trigger_lambda_function" {
       "s3:ListJobs"
     ]
 
-    resources = ["arn:aws:s3:*:${local.account_ids.current.account_id}:job/*"
+    resources = ["arn:aws:s3:*:${data.aws_caller_identity.current.account_id}:job/*"
     ]
   }
 
@@ -97,7 +97,7 @@ module "migration_replication_trigger" {
   policy_json        = data.aws_iam_policy_document.migration_replication_trigger_lambda_function.json
 
   environment_variables = {
-    ACCOUNT_ID             = local.account_ids.current.account_id
+    ACCOUNT_ID             = data.aws_caller_identity.current.account_id
     REPLICATION_ROLE_ARN   = aws_iam_role.migration_replication.arn
     SOURCE_BUCKET_ARN      = module.rds_export.parquet_exports_bucket_arn
     DESTINATION_BUCKET_ARN = local.batch_destination_bucket_arn
