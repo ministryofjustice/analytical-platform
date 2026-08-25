@@ -1,6 +1,6 @@
 resource "aws_s3_bucket_replication_configuration" "migration_replication" {
 
-  bucket = module.rds_export.parquet_exports_bucket_arn
+  bucket = module.rds_export.parquet_exports_bucket_id
   role   = aws_iam_role.migration_replication.arn
 
   rule {
