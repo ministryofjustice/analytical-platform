@@ -34,7 +34,8 @@ data "aws_iam_policy_document" "migration_replication_trigger_lambda_function" {
       "s3:ListJobs"
     ]
 
-    resources = ["*"]
+    resources = ["arn:aws:s3:*:${local.account_ids.current.account_id}:job/*"
+    ]
   }
 
   statement {
