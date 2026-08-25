@@ -64,7 +64,7 @@ module "s3_bucket_source_input" {
         Sid       = "DenyWritesForUnauthorisedPrincipals"
         Effect    = "Deny"
         Principal = "*"
-        Action    = ["s3:DenyBucketDeletion", "s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion"]
+        Action    = ["s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion"]
         Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_name}/*"
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_input_write_bucket_key_user_arns } }
       }
