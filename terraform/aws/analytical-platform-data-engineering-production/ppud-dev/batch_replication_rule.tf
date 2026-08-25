@@ -25,6 +25,8 @@ resource "aws_s3_bucket_replication_configuration" "migration_replication" {
 
 
 data "aws_iam_policy_document" "migration_replication_trigger_lambda_function" {
+  # checkov:skip=CKV_AWS_356: S3 Batch Operations job ARNs require wildcard job ids (job/*) for create and status APIs.
+  # checkov:skip=CKV_AWS_111: Required write actions are constrained to this account's S3 Batch job ARNs and pass-role restriction.
 
   statement {
     actions = [
