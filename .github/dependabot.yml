@@ -41,9 +41,6 @@ updates:
       prefix: ":dependabot: terraform"
       include: "scope"
     directories:
-      - "analytical-platform-airflow/terraform"
-      - "data-engineering-datalake-access/terraform"
-      - "data-platform-github-access"
       - "terraform/auth0/alpha-analytics-moj"
       - "terraform/auth0/dev-analytics-moj"
       - "terraform/auth0/ministryofjustice-data-platform"
