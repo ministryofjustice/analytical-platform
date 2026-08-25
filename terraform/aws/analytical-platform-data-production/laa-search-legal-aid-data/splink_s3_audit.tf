@@ -1,31 +1,3 @@
-locals {
-  audit_access_policy_statements = [
-    {
-      Sid       = "DenyWritesForUnauthorisedPrincipals"
-      Effect    = "Deny"
-      Principal = "*"
-      Action    = ["s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion"]
-      Resource  = "arn:aws:s3:::${local.splink_audit_bucket_name}/*"
-      Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_audit_write_bucket_key_user_arns } }
-    },
-    {
-      Sid       = "DenyReadsForUnauthorisedPrincipals"
-      Effect    = "Deny"
-      Principal = "*"
-      Action    = ["s3:GetObject", "s3:GetObjectVersion"]
-      Resource  = "arn:aws:s3:::${local.splink_audit_bucket_name}/*"
-      Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_audit_read_bucket_key_user_arns } }
-    },
-    {
-      Sid       = "DenyListingForUnauthorisedPrincipals"
-      Effect    = "Deny"
-      Principal = "*"
-      Action    = ["s3:ListBucket"]
-      Resource  = "arn:aws:s3:::${local.splink_audit_bucket_name}"
-      Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_audit_read_bucket_key_user_arns } }
-    }
-  ]
-}
 
 module "s3_bucket_audit" {
   source                  = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=97bb13eff35489bd38993487c3d04c5b6d024cb6"
@@ -72,7 +44,32 @@ module "s3_bucket_audit" {
         Resource  = "arn:aws:s3:::${local.splink_audit_bucket_name}/*"
         Condition = { StringNotEquals = { "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_kms_key.arn } }
       }
-    ], local.audit_access_policy_statements)
+      ], [
+      {
+        Sid       = "DenyWritesForUnauthorisedPrincipals"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:DenyBucketDeletion", "s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion"]
+        Resource  = "arn:aws:s3:::${local.splink_audit_bucket_name}/*"
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_audit_write_bucket_key_user_arns } }
+      },
+      {
+        Sid       = "DenyReadsForUnauthorisedPrincipals"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:GetObject", "s3:GetObjectVersion"]
+        Resource  = "arn:aws:s3:::${local.splink_audit_bucket_name}/*"
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_audit_read_bucket_key_user_arns } }
+      },
+      {
+        Sid       = "DenyListingForUnauthorisedPrincipals"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:ListBucket"]
+        Resource  = "arn:aws:s3:::${local.splink_audit_bucket_name}"
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_audit_read_bucket_key_user_arns } }
+      }
+    ])
   })
   server_side_encryption_configuration = {
     rule = {
