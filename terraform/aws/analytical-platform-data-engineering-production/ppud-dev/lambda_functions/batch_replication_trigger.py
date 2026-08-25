@@ -80,4 +80,3 @@ def handler():
 if __name__ == "__main__":
     logger.info("Let the Batch process Begin...")
     handler()
-    
