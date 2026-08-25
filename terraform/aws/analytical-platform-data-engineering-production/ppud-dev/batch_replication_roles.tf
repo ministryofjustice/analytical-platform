@@ -24,7 +24,6 @@ resource "aws_iam_role" "migration_replication" {
 }
 
 resource "aws_s3_bucket" "batch_manifest" {
-  count = local.migration_replication_create ? 1 : 0
 
   bucket_prefix = "${local.name}-batch-manifest-${var.tags["environment"]}"
 
