@@ -63,7 +63,7 @@ locals {
         {
           name                         = "DE Daily Support Rota G7"
           start                        = "2023-03-27T09:00:00Z"
-          rotation_virtual_start       = "2026-08-24T00:00:00+01:00"
+          rotation_virtual_start       = "2026-08-25T00:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
             module.users_de_g7["guy.wheeler@justice.gov.uk"].id,
@@ -344,10 +344,10 @@ import {
   to = module.users_de_seo["anthony.cody@digital.justice.gov.uk"].pagerduty_user.this
   id = "PDI2PTC"
 }
-# update id to reflect new id
+
 import {
   to = module.users_de_g7["antony.scott@justice.gov.uk"].pagerduty_user.this
-  id = "PWSEGGN"
+  id = "PF7977M"
 }
 
 import {
