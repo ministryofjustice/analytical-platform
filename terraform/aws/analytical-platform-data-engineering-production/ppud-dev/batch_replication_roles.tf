@@ -25,6 +25,8 @@ resource "aws_iam_role" "migration_replication" {
 
 resource "aws_s3_bucket" "batch_manifest" {
   # checkov:skip=CKV_AWS_144: Batch Operations manifest bucket does not require cross-region replication
+  # checkov:skip=CKV2_AWS_62: Batch Operations manifest bucket does not require event notifications
+  # checkov:skip=CKV_AWS_18: Access logging is not required for the temporary Batch Operations manifest bucket
 
   bucket_prefix = "${local.name}-batch-manifest-${var.tags["environment"]}"
 

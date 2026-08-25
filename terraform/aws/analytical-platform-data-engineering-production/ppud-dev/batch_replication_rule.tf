@@ -86,7 +86,7 @@ module "migration_replication_trigger" {
 
   function_name   = "${local.name}-${var.tags["environment"]}-migration-replication-trigger"
   description     = "Lambda to trigger S3 Batch Replication"
-  handler         = "main.handler"
+  handler         = "batch_replication_trigger.handler"
   runtime         = "python3.12"
   memory_size     = 512
   timeout         = 300
@@ -97,7 +97,7 @@ module "migration_replication_trigger" {
   policy_json        = data.aws_iam_policy_document.migration_replication_trigger_lambda_function.json
 
   environment_variables = {
-    ACCOUNT_ID             = local.account_ids
+    ACCOUNT_ID             = local.account_ids.current.account_id
     REPLICATION_ROLE_ARN   = aws_iam_role.migration_replication.arn
     SOURCE_BUCKET_ARN      = module.rds_export.parquet_exports_bucket_arn
     DESTINATION_BUCKET_ARN = local.batch_destination_bucket_arn
@@ -106,7 +106,7 @@ module "migration_replication_trigger" {
   }
 
   source_path = [{
-    path = "${path.module}/lambda_functions/migration_replication_trigger/batch_replication_trigger.py"
+    path = "${path.module}/lambda_functions/batch_replication_trigger.py"
   }]
 
   tags = var.tags
