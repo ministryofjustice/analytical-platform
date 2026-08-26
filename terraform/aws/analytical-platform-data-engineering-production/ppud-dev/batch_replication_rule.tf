@@ -74,7 +74,7 @@ module "migration_replication_trigger" {
 
   environment_variables = {
     ACCOUNT_ID             = data.aws_caller_identity.current.account_id
-    BATCH_COPY_ROLE_ARN   = aws_iam_role.migration_replication.arn
+    BATCH_COPY_ROLE_ARN    = aws_iam_role.migration_replication.arn
     SOURCE_BUCKET_ARN      = module.rds_export.parquet_exports_bucket_arn
     DESTINATION_BUCKET_ARN = local.batch_destination_bucket_arn
     MANIFEST_BUCKET_ARN    = aws_s3_bucket.batch_manifest.arn

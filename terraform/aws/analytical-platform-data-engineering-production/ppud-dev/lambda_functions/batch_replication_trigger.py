@@ -12,7 +12,7 @@ s3control = boto3.client("s3control")
 
 def _manifest_filter():
     manifest_filter = {}
-    
+
     cutoff_date = os.getenv("CUTOFF_DATE")
     if cutoff_date:
         # Optional filter for migration windows. Must be ISO8601 if set.
