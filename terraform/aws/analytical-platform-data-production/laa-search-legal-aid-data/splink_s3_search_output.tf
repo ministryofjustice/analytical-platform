@@ -83,7 +83,7 @@ module "s3_bucket_search_output" {
   object_lock_configuration = {
     rule = {
       default_retention = {
-        mode = "COMPLIANCE"
+        mode = "GOVERNANCE"
         days = 5110
       }
     }
