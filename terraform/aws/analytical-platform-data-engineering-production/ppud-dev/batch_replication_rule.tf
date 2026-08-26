@@ -38,7 +38,7 @@ data "aws_iam_policy_document" "migration_replication_trigger_lambda_function" {
 
     resources = [
       module.rds_export.parquet_exports_bucket_arn,
-      aws_s3_bucket.batch_manifest.arn
+      module.batch_manifest_bucket.bucket.arn
     ]
   }
 
@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "migration_replication_trigger_lambda_function" {
 
     resources = [
       "${module.rds_export.parquet_exports_bucket_arn}/*",
-      "${aws_s3_bucket.batch_manifest.arn}/*"
+      "${module.batch_manifest_bucket.bucket.arn}/*"
     ]
   }
 }
@@ -77,7 +77,7 @@ module "migration_replication_trigger" {
     BATCH_COPY_ROLE_ARN    = aws_iam_role.migration_replication.arn
     SOURCE_BUCKET_ARN      = module.rds_export.parquet_exports_bucket_arn
     DESTINATION_BUCKET_ARN = local.batch_destination_bucket_arn
-    MANIFEST_BUCKET_ARN    = aws_s3_bucket.batch_manifest.arn
+    MANIFEST_BUCKET_ARN    = module.batch_manifest_bucket.bucket.arn
     CUTOFF_DATE            = coalesce(local.migration_replication_cutoff_date, "")
   }
 
