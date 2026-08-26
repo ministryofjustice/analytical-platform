@@ -11,7 +11,13 @@ s3control = boto3.client("s3control")
 
 
 def _manifest_filter():
-    manifest_filter = {}
+
+    env = os.environ["ENVIRONMENT"]
+    manifest_filter = {
+        "KeyNameConstraint": {
+            "MatchAnyPrefix": [f"ppud_{env}/"],
+        }
+    }
 
     cutoff_date = os.getenv("CUTOFF_DATE")
     if cutoff_date:
@@ -59,7 +65,7 @@ def handler(_event=None, _context=None):
         RoleArn=batch_copy_role_arn,
         ClientRequestToken=str(uuid.uuid4()),
         Description=(
-            "Batch copy from "f"{source_bucket_arn} to {destination_bucket_arn}"
+            "Batch copy from " f"{source_bucket_arn} to {destination_bucket_arn}"
         ),
     )
 
