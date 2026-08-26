@@ -52,7 +52,6 @@ module "s3_bucket_audit" {
         Action = [
           "s3:DeleteBucket",
           "s3:PutBucketAcl",
-          "s3:PutBucketPolicy",
           "s3:PutEncryptionConfiguration",
           "s3:PutBucketVersioning"
         ]
