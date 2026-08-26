@@ -44,6 +44,19 @@ module "s3_bucket_audit" {
         Action    = "s3:PutObject"
         Resource  = "arn:aws:s3:::${local.splink_audit_bucket_name}/*"
         Condition = { StringNotEquals = { "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_kms_key.arn } }
+      },
+      {
+        Sid       = "DenyBucketDeletion"
+        Effect    = "Deny"
+        Principal = "*"
+        Action = [
+          "s3:DeleteBucket",
+          "s3:PutBucketAcl",
+          "s3:PutBucketPolicy",
+          "s3:PutEncryptionConfiguration",
+          "s3:PutBucketVersioning"
+        ]
+        Resource = "arn:aws:s3:::${local.splink_audit_bucket_name}"
       }
       ], [
       {
