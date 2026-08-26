@@ -23,9 +23,7 @@
     ]
   },
   "splink_s3_input_write_bucket": {
-    "key_users": [
-      "alpha_user_jamess-moj"
-    ]
+    "key_users": ["alpha_user_jamess-moj"]
   },
   "splink_s3_output_write_bucket": {
     "key_users": [
