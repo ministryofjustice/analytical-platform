@@ -76,6 +76,9 @@ def handler(_event=None, _context=None):
         "job_id": job_id,
         "source_bucket_arn": source_bucket_arn,
         "destination_bucket_arn": destination_bucket_arn,
+        "manifest_bucket_arn": manifest_bucket_arn,
+        "manifest_prefix": "batch-copy/manifests",
+        "report_prefix": "batch-copy/reports",
     }
 
 

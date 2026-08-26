@@ -60,7 +60,7 @@ module "migration_replication_trigger" {
   # Commit hash for v8.1.2
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-lambda?ref=a7db1252f2c2048ab9a61254869eea061eae1318"
 
-  function_name   = "${local.name}-${var.tags["environment"]}-migration-replication-trigger"
+  function_name   = "${local.name}-${local.env}-migration-replication-trigger"
   description     = "Lambda to trigger S3 Batch Replication"
   handler         = "batch_replication_trigger.handler"
   runtime         = "python3.12"

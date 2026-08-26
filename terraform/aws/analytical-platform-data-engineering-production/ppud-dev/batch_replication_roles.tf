@@ -1,6 +1,6 @@
 resource "aws_iam_role" "migration_replication" {
 
-  name = "${local.name}-parquet-exports-replication-${var.tags["environment"]}-role"
+  name = "${local.name}-parquet-exports-replication-${local.env}-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -25,7 +25,7 @@ resource "aws_iam_role" "migration_replication" {
 module "batch_manifest_bucket" {
   source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=66bd5c6aa0d0396442f0d4a63642029ff38d2a8a"
 
-  bucket_prefix = "${local.name}-batch-manifest-${var.tags["environment"]}"
+  bucket_prefix = "${local.name}-batch-manifest-${local.env}"
 
   ownership_controls = "BucketOwnerEnforced"
 
@@ -61,7 +61,7 @@ module "batch_manifest_bucket" {
 
 resource "aws_iam_policy" "migration_replication" {
 
-  name = "${local.name}-parquet-exports-batch-copy-${var.tags["environment"]}"
+  name = "${local.name}-parquet-exports-batch-copy-${local.env}"
 
   policy = jsonencode({
     Version = "2012-10-17"
