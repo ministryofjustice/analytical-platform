@@ -11,11 +11,8 @@ s3control = boto3.client("s3control")
 
 
 def _manifest_filter():
-    manifest_filter = {
-        "EligibleForReplication": True,
-        "ObjectReplicationStatuses": ["NONE", "FAILED"],
-    }
-
+    manifest_filter = {}
+    
     cutoff_date = os.getenv("CUTOFF_DATE")
     if cutoff_date:
         # Optional filter for migration windows. Must be ISO8601 if set.
@@ -27,7 +24,7 @@ def _manifest_filter():
 def handler(_event=None, _context=None):
 
     account_id = os.environ["ACCOUNT_ID"]
-    replication_role_arn = os.environ["REPLICATION_ROLE_ARN"]
+    batch_copy_role_arn = os.environ["BATCH_COPY_ROLE_ARN"]
     source_bucket_arn = os.environ["SOURCE_BUCKET_ARN"]
     destination_bucket_arn = os.environ["DESTINATION_BUCKET_ARN"]
     manifest_bucket_arn = os.environ["MANIFEST_BUCKET_ARN"]
@@ -35,10 +32,13 @@ def handler(_event=None, _context=None):
     response = s3control.create_job(
         AccountId=account_id,
         ConfirmationRequired=False,
-        Operation={"S3ReplicateObject": {}},
+        Operation={"S3PutObjectCopy": {
+            "TargetResource": destination_bucket_arn
+            }
+            },
         Report={
             "Bucket": manifest_bucket_arn,
-            "Prefix": "batch-replication/reports",
+            "Prefix": "batch-copy/reports",
             "Format": "Report_CSV_20180820",
             "Enabled": True,
             "ReportScope": "AllTasks",
@@ -51,7 +51,7 @@ def handler(_event=None, _context=None):
                 "ManifestOutputLocation": {
                     "ExpectedManifestBucketOwner": account_id,
                     "Bucket": manifest_bucket_arn,
-                    "ManifestPrefix": "batch-replication/manifests",
+                    "ManifestPrefix": "batch-copy/manifests",
                     "ManifestFormat": "S3InventoryReport_CSV_20211130",
                     "ManifestEncryption": {"SSES3": {}},
                 },
@@ -59,16 +59,16 @@ def handler(_event=None, _context=None):
             }
         },
         Priority=10,
-        RoleArn=replication_role_arn,
+        RoleArn=batch_copy_role_arn,
         ClientRequestToken=str(uuid.uuid4()),
         Description=(
-            "Batch replication trigger from "
+            "Batch copy from "
             f"{source_bucket_arn} to {destination_bucket_arn}"
         ),
     )
 
     job_id = response["JobId"]
-    logger.info("Started S3 Batch Replication job: %s", job_id)
+    logger.info("Started S3 Batch Copy job: %s", job_id)
 
     return {
         "job_id": job_id,

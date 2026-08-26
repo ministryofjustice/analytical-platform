@@ -11,7 +11,6 @@ resource "aws_iam_role" "migration_replication" {
 
         Principal = {
           Service = [
-            "s3.amazonaws.com",
             "batchoperations.s3.amazonaws.com"
           ]
         }
@@ -71,7 +70,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "batch_manifest" {
 
 resource "aws_iam_policy" "migration_replication" {
 
-  name = "${local.name}-parquet-exports-replication-${var.tags["environment"]}"
+  name = "${local.name}-parquet-exports-batch-copy-${var.tags["environment"]}"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -82,7 +81,6 @@ resource "aws_iam_policy" "migration_replication" {
         Effect = "Allow"
 
         Action = [
-          "s3:GetReplicationConfiguration",
           "s3:ListBucket",
           "s3:PutInventoryConfiguration"
         ]
@@ -96,10 +94,8 @@ resource "aws_iam_policy" "migration_replication" {
         Effect = "Allow"
 
         Action = [
-          "s3:GetObjectVersionForReplication",
-          "s3:GetObjectVersionAcl",
-          "s3:GetObjectVersionTagging",
-          "s3:InitiateReplication"
+          "s3:GetObject",
+          "s3:GetObjectTagging"
         ]
 
         Resource = [
@@ -107,13 +103,12 @@ resource "aws_iam_policy" "migration_replication" {
         ]
       },
       {
-        Sid    = "DestinationPermissions"
+        Sid    = "DestinationObjectPermissions"
         Effect = "Allow"
 
         Action = [
-          "s3:ReplicateObject",
-          "s3:ReplicateDelete",
-          "s3:ReplicateTags"
+          "s3:PutObject",
+          "s3:PutObjectTagging"
         ]
 
         Resource = [

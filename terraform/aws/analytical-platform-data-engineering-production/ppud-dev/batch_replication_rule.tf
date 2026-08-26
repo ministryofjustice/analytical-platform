@@ -1,29 +1,3 @@
-resource "aws_s3_bucket_replication_configuration" "migration_replication" {
-
-  bucket = module.rds_export.parquet_exports_bucket_id
-  role   = aws_iam_role.migration_replication.arn
-
-  rule {
-    id     = "migration-replication"
-    status = "Disabled"
-
-    filter {
-      prefix = ""
-    }
-
-    destination {
-      bucket = local.batch_destination_bucket_arn
-    }
-
-    delete_marker_replication {
-      status = "Disabled"
-    }
-  }
-
-  depends_on = [aws_iam_role_policy_attachment.migration_replication]
-}
-
-
 data "aws_iam_policy_document" "migration_replication_trigger_lambda_function" {
   # checkov:skip=CKV_AWS_356: S3 Batch Operations job ARNs require wildcard job ids (job/*) for create and status APIs.
   # checkov:skip=CKV_AWS_111: Required write actions are constrained to this account's S3 Batch job ARNs and pass-role restriction.
@@ -100,7 +74,7 @@ module "migration_replication_trigger" {
 
   environment_variables = {
     ACCOUNT_ID             = data.aws_caller_identity.current.account_id
-    REPLICATION_ROLE_ARN   = aws_iam_role.migration_replication.arn
+    BATCH_COPY_ROLE_ARN   = aws_iam_role.migration_replication.arn
     SOURCE_BUCKET_ARN      = module.rds_export.parquet_exports_bucket_arn
     DESTINATION_BUCKET_ARN = local.batch_destination_bucket_arn
     MANIFEST_BUCKET_ARN    = aws_s3_bucket.batch_manifest.arn
