@@ -32,10 +32,7 @@ def handler(_event=None, _context=None):
     response = s3control.create_job(
         AccountId=account_id,
         ConfirmationRequired=False,
-        Operation={"S3PutObjectCopy": {
-            "TargetResource": destination_bucket_arn
-            }
-            },
+        Operation={"S3PutObjectCopy": {"TargetResource": destination_bucket_arn}},
         Report={
             "Bucket": manifest_bucket_arn,
             "Prefix": "batch-copy/reports",
@@ -62,8 +59,7 @@ def handler(_event=None, _context=None):
         RoleArn=batch_copy_role_arn,
         ClientRequestToken=str(uuid.uuid4()),
         Description=(
-            "Batch copy from "
-            f"{source_bucket_arn} to {destination_bucket_arn}"
+            "Batch copy from "f"{source_bucket_arn} to {destination_bucket_arn}"
         ),
     )
 
