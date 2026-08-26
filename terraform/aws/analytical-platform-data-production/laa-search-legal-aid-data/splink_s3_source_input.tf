@@ -73,6 +73,8 @@ module "s3_bucket_source_input" {
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_input_read_bucket_key_user_arns } }
       },
       {
+        # PutObject is restricted to a placeholder until the LAA user role is created —
+        # replace alpha_user_jamess-moj with the LAA user role ARN when available
         Sid       = "DenyWritesForUnauthorisedPrincipals"
         Effect    = "Deny"
         Principal = "*"

@@ -76,12 +76,14 @@ module "s3_bucket_search_input" {
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_input_read_bucket_key_user_arns } }
       },
       {
-        Sid       = "DenyWritesToReadOnlyBucket"
+        # PutObject is restricted to a placeholder until the LAA user role is created —
+        # replace alpha_user_jamess-moj with the LAA user role ARN when available
+        Sid       = "DenyWritesForUnauthorisedPrincipals"
         Effect    = "Deny"
         Principal = "*"
         Action    = ["s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion"]
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_name}/*"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_input_read_bucket_key_user_arns } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_input_write_bucket_key_user_arns } }
       }
     ])
   })
