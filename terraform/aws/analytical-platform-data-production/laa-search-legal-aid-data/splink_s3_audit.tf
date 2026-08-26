@@ -84,7 +84,7 @@ module "s3_bucket_audit" {
   object_lock_configuration = {
     rule = {
       default_retention = {
-        mode = "COMPLIANCE"
+        mode = "GOVERNANCE"
         days = 5110
       }
     }
