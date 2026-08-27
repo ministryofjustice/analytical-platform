@@ -12,6 +12,16 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
+  splink_s3_source_read_bucket_key_user_arns = [
+    for role in local.kms_key_users.splink_s3_source_read_bucket.key_users :
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+  ]
+
+  splink_s3_source_write_bucket_key_user_arns = [
+    for role in local.kms_key_users.splink_s3_source_write_bucket.key_users :
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+  ]
+
   splink_s3_input_write_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_input_write_bucket.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
@@ -43,6 +53,7 @@ locals {
   ]
 
   application_name                 = local.app.application_name
+  splink_source_bucket_name        = local.app.splink_source_bucket_name
   splink_search_input_bucket_name  = local.app.splink_search_input_bucket_name
   splink_search_output_bucket_name = local.app.splink_search_output_bucket_name
   splink_source_input_bucket_name  = local.app.splink_source_input_bucket_name

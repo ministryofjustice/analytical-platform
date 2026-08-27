@@ -14,6 +14,22 @@
       "alpha_user_dami-moj"
     ]
   },
+  "splink_s3_source_read_bucket": {
+    "key_users": [
+      "airflow-development-laa-search-index-source",
+      "airflow-development-laa-si-access-test",
+      "airflow-development-laa-search-index-search",
+      "alpha_user_jamess-moj"
+    ]
+  },
+  "splink_s3_source_write_bucket": {
+    "key_users": [
+      "airflow-development-laa-search-index-source",
+      "airflow-development-laa-si-access-test",
+      "airflow-development-laa-search-index-search",
+      "alpha_user_jamess-moj"
+    ]
+  },
   "splink_s3_input_read_bucket": {
     "key_users": [
       "airflow-development-laa-search-index-source",
