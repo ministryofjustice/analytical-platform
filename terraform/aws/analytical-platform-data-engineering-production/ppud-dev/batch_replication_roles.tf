@@ -85,7 +85,9 @@ resource "aws_iam_policy" "migration_replication" {
 
         Action = [
           "s3:GetObject",
-          "s3:GetObjectTagging"
+          "s3:GetObjectTagging",
+          "s3:GetObjectVersion",
+          "s3:GetObjectVersionTagging"
         ]
 
         Resource = [
