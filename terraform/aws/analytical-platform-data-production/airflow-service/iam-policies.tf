@@ -152,6 +152,7 @@ data "aws_iam_policy_document" "bedrock" {
     effect = "Allow"
     actions = [
       "bedrock:CreateModelCustomizationJob",
+      "bedrock:CreateModelInvocationJob",
       "bedrock:DeleteCustomModel",
       "bedrock:GetCustomModel",
       "bedrock:GetFoundationModel",
