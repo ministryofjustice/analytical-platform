@@ -27,6 +27,7 @@
       "airflow-development-laa-search-index-source",
       "airflow-development-laa-si-access-test",
       "airflow-development-laa-search-index-search",
+      "airflow-development-laa-s3-ops",
       "alpha_user_jamess-moj"
     ]
   },
@@ -35,6 +36,7 @@
       "airflow-development-laa-search-index-source",
       "airflow-development-laa-si-access-test",
       "airflow-development-laa-search-index-search",
+      "airflow-development-laa-s3-ops",
       "alpha_user_jamess-moj"
     ]
   },
@@ -45,7 +47,8 @@
     "key_users": [
       "airflow-development-laa-search-index-source",
       "airflow-development-laa-si-access-test",
-      "airflow-development-laa-search-index-search"
+      "airflow-development-laa-search-index-search",
+      "airflow-development-laa-s3-ops"
     ]
   },
   "splink_s3_output_read_bucket": {
@@ -56,6 +59,7 @@
       "airflow-development-laa-search-index-source",
       "airflow-development-laa-si-access-test",
       "airflow-development-laa-search-index-search",
+      "airflow-development-laa-s3-ops",
       "alpha_user_jamess-moj"
     ]
   },
