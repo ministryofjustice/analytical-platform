@@ -49,8 +49,7 @@ module "batch_manifest_bucket" {
     }
   ]
 
-  sse_algorithm  = "aws:kms"
-  custom_kms_key = module.rds_export_kms_dev.key_arn
+  sse_algorithm  = "AES256"
 
   tags = var.tags
 
@@ -118,19 +117,6 @@ resource "aws_iam_policy" "migration_replication" {
 
         Resource = [
           "${module.batch_manifest_bucket.bucket.arn}/*"
-        ]
-      },
-      {
-        Sid    = "ManifestKMSPermissions"
-        Effect = "Allow"
-
-        Action = [
-          "kms:Decrypt",
-          "kms:GenerateDataKey"
-        ]
-
-        Resource = [
-          module.rds_export_kms_dev.key_arn
         ]
       }
     ]
