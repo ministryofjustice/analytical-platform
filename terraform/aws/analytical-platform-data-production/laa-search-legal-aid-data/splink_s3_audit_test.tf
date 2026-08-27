@@ -93,7 +93,6 @@ module "s3_bucket_audit" {
       bucket_key_enabled = true
     }
   }
-  object_lock_configuration = {}
   logging = {
     target_bucket = local.logging_bucket_name
     target_prefix = "s3access/${local.splink_audit_bucket_name}/"
