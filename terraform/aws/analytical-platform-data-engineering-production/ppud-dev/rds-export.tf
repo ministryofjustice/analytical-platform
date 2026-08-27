@@ -21,22 +21,26 @@ resource "aws_security_group_rule" "db_ingress" {
 
 module "rds_export" {
   # using source ref whilst testing
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=26c16ad6944e91a147280d4bff088929d17f6b21"
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=1ca12870a131af42c85cee570fcb4873519ec4e2"
 
   providers = {
     aws = aws
   }
 
-  name                     = local.name
-  database_refresh_mode    = "incremental"
-  vpc_id                   = module.vpc_dev.vpc_id
-  database_subnet_ids      = module.vpc_dev.private_subnets
-  kms_key_arn              = module.rds_export_kms_dev.key_arn
-  master_user_secret_id    = module.rds_export_secret.secret_arn
-  environment              = var.tags["environment"]
-  output_parquet_file_size = 50
-  db_name                  = "ppud_dev"
-  get_views                = true
+  name                                  = local.name
+  database_refresh_mode                 = "incremental"
+  vpc_id                                = module.vpc_dev.vpc_id
+  database_subnet_ids                   = module.vpc_dev.private_subnets
+  kms_key_arn                           = module.rds_export_kms_dev.key_arn
+  master_user_secret_id                 = module.rds_export_secret.secret_arn
+  environment                           = var.tags["environment"]
+  output_parquet_file_size              = 50
+  db_name                               = "ppud_dev"
+  get_views                             = true
+  migration_replication_enabled         = true
+  migration_replication_destination_arn = "arn:aws:s3:::ppud-parquet-exports-dev-20251002161459329900000002"
+  migration_replication_cutoff_date     = "2026-08-20T00:00:00Z"
+  migration_replication_rule_enabled    = true
 
   tags = var.tags
 }
