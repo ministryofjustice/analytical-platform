@@ -29,6 +29,7 @@ def _manifest_filter():
 
 def handler(_event=None, _context=None):
 
+    manifest_kms_key_arn = os.environ["MANIFEST_KMS_KEY_ARN"]
     account_id = os.environ["ACCOUNT_ID"]
     batch_copy_role_arn = os.environ["BATCH_COPY_ROLE_ARN"]
     source_bucket_arn = os.environ["SOURCE_BUCKET_ARN"]
@@ -56,7 +57,7 @@ def handler(_event=None, _context=None):
                     "Bucket": manifest_bucket_arn,
                     "ManifestPrefix": "batch-copy/manifests",
                     "ManifestFormat": "S3InventoryReport_CSV_20211130",
-                    "ManifestEncryption": {"SSES3": {}},
+                    "ManifestEncryption": {"SSEKMS": {"KeyId": manifest_kms_key_arn}},
                 },
                 "Filter": _manifest_filter(),
             }
