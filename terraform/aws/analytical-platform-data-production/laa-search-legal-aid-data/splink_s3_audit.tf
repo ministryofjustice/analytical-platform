@@ -111,5 +111,5 @@ module "s3_bucket_audit" {
     noncurrent_version_expiration          = { days = 5110 }
     abort_incomplete_multipart_upload_days = 7
   }]
-  tags = merge(local.tags, { Name = local.splink_audit_bucket_name })
+  tags = merge(local.test_tags, { Name = local.splink_audit_bucket_name })
 }
