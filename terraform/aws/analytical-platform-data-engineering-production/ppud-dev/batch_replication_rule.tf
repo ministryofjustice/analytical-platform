@@ -73,7 +73,7 @@ module "migration_replication_trigger" {
   policy_json        = data.aws_iam_policy_document.migration_replication_trigger_lambda_function.json
 
   environment_variables = {
-    MANIFEST_KMS_KEY_ARN   = module.rds_export_kms_dev.key_arn
+
     ENVIRONMENT            = local.env
     ACCOUNT_ID             = data.aws_caller_identity.current.account_id
     BATCH_COPY_ROLE_ARN    = aws_iam_role.migration_replication.arn
