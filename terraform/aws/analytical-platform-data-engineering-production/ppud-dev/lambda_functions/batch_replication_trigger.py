@@ -22,7 +22,7 @@ def _manifest_filter():
     cutoff_date = os.getenv("CUTOFF_DATE")
     if cutoff_date:
         # Optional filter for migration windows. Must be ISO8601 if set.
-        manifest_filter["CreatedAfter"] = cutoff_date
+        manifest_filter["CreatedBefore"] = cutoff_date
 
     return manifest_filter
 
