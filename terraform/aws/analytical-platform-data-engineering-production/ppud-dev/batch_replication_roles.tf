@@ -49,7 +49,7 @@ module "batch_manifest_bucket" {
     }
   ]
 
-  sse_algorithm  = "AES256"
+  sse_algorithm = "AES256"
 
   tags = var.tags
 
