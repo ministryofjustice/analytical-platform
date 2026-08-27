@@ -100,7 +100,7 @@ module "preprod_dms_delius" {
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
 
   independent_full_loads = {
-    delius_dev_tables = {
+    delius_preprod_tables = {
       full_load_name = "delius-equality-full-load"
 
       path = {
