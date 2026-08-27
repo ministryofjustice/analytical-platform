@@ -1,13 +1,13 @@
 module "s3_bucket_source_output" {
   source                  = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=97bb13eff35489bd38993487c3d04c5b6d024cb6"
   bucket                  = local.splink_source_output_bucket_name
-  force_destroy           = false
+  force_destroy           = true
   versioning              = { enabled = true }
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
-  object_lock_enabled     = true
+  object_lock_enabled     = false
   attach_policy           = true
   policy = jsonencode({
     Version = "2012-10-17"
@@ -92,14 +92,7 @@ module "s3_bucket_source_output" {
       bucket_key_enabled = true
     }
   }
-  object_lock_configuration = {
-    rule = {
-      default_retention = {
-        mode = "GOVERNANCE"
-        days = 5110
-      }
-    }
-  }
+  object_lock_configuration = {}
   logging = {
     target_bucket = local.logging_bucket_name
     target_prefix = "s3access/${local.splink_source_output_bucket_name}/"
@@ -107,7 +100,7 @@ module "s3_bucket_source_output" {
   lifecycle_rule = [{
     id                                     = "expire-noncurrent-versions"
     enabled                                = true
-    noncurrent_version_expiration          = { days = 5110 }
+    noncurrent_version_expiration          = { days = 90 }
     abort_incomplete_multipart_upload_days = 7
   }]
   tags = merge(local.test_tags, { Name = local.splink_source_output_bucket_name })
