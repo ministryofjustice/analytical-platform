@@ -83,5 +83,5 @@ def handler(_event=None, _context=None):
 
 
 if __name__ == "__main__":
-    logger.info("Let the Batch process Begin...")
+    logger.info("Let the Batch process Begin....")
     handler()
