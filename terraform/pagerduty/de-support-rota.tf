@@ -7,13 +7,9 @@ locals {
         {
           name                         = "DE Daily Support Rota HEO_SEO"
           start                        = "2023-03-27T09:00:00Z"
-          rotation_virtual_start       = "2026-05-11T00:00:00+01:00"
+          rotation_virtual_start       = "2026-08-25T00:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
-            module.users_de_seo["antony.scott@justice.gov.uk"].id,
-            module.users_de_seo["lucy.astleyjones@justice.gov.uk"].id,
-            module.users_de_seo["kashif.malik@justice.gov.uk"].id,
-            module.users_de_seo["daniel.johnstone@justice.gov.uk"].id,
             module.users_de_seo["siva.bathina@digital.justice.gov.uk"].id,
             module.users_de_seo["andrew.cook@digital.justice.gov.uk"].id,
             module.users_de_seo["anthony.cody@digital.justice.gov.uk"].id,
@@ -21,7 +17,9 @@ locals {
             module.users_de_seo["khristiania.raihan@justice.gov.uk"].id,
             module.users_de_seo["mohammed.ahad1@justice.gov.uk"].id,
             module.users_de_seo["damilola.oyebade@justice.gov.uk"].id,
-            module.users_de_seo["anthony.fitzroy@justice.gov.uk"].id
+            module.users_de_seo["anthony.fitzroy@justice.gov.uk"].id,
+            module.users_de_seo["lucy.astleyjones@justice.gov.uk"].id,
+            module.users_de_seo["daniel.johnstone@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -65,9 +63,11 @@ locals {
         {
           name                         = "DE Daily Support Rota G7"
           start                        = "2023-03-27T09:00:00Z"
-          rotation_virtual_start       = "2026-04-09T00:00:00+01:00"
+          rotation_virtual_start       = "2026-08-25T00:00:00+01:00"
           rotation_turn_length_seconds = 86400
           users = [
+            module.users_de_g7["guy.wheeler@justice.gov.uk"].id,
+            module.users_de_g7["tapan.perkins@justice.gov.uk"].id,
             module.users_de_g7["philip.sinfield@justice.gov.uk"].id,
             module.users_de_g7["laurence.droy@justice.gov.uk"].id,
             module.users_de_g7["jovita.brundziene@justice.gov.uk"].id,
@@ -75,9 +75,7 @@ locals {
             module.users_de_g7["matt.heery@justice.gov.uk"].id,
             module.users_de_g7["lalitha.nagarur3@justice.gov.uk"].id,
             module.users_de_g7["andrew.craik@justice.gov.uk"].id,
-            module.users_de_g7["supratik.chowdhury@justice.gov.uk"].id,
-            module.users_de_g7["guy.wheeler@justice.gov.uk"].id,
-            module.users_de_g7["tapan.perkins@justice.gov.uk"].id,
+            module.users_de_g7["antony.scott@justice.gov.uk"].id,
           ]
           restrictions = [
             {
@@ -156,11 +154,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Antony Scott"
-      email = "antony.scott@justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Damilola Oyebade"
       email = "damilola.oyebade@justice.gov.uk"
       role  = "responder"
@@ -168,11 +161,6 @@ locals {
     {
       name  = "Daniel Johnstone"
       email = "daniel.johnstone@justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Kashif Malik"
-      email = "kashif.malik@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -203,6 +191,11 @@ locals {
   ]
 
   users_de_g7 = [
+    {
+      name  = "Antony Scott"
+      email = "antony.scott@justice.gov.uk"
+      role  = "responder"
+    },
     {
       name  = "Andrew Craik"
       email = "andrew.craik@justice.gov.uk"
@@ -353,8 +346,8 @@ import {
 }
 
 import {
-  to = module.users_de_seo["antony.scott@justice.gov.uk"].pagerduty_user.this
-  id = "PWSEGGN"
+  to = module.users_de_g7["antony.scott@justice.gov.uk"].pagerduty_user.this
+  id = "PF7977M"
 }
 
 import {
@@ -365,11 +358,6 @@ import {
 import {
   to = module.users_de_seo["daniel.johnstone@justice.gov.uk"].pagerduty_user.this
   id = "PPO08VA"
-}
-
-import {
-  to = module.users_de_seo["kashif.malik@justice.gov.uk"].pagerduty_user.this
-  id = "P5A1K1J"
 }
 
 import {

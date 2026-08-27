@@ -20,8 +20,8 @@ resource "aws_security_group_rule" "db_ingress" {
 }
 
 module "rds_export" {
-  # using source ref whilst testing
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=26c16ad6944e91a147280d4bff088929d17f6b21"
+  # checkov:skip=CKV_TF_2: Module source is pinned to an immutable commit hash.
+  source = "github.com/ministryofjustice/terraform-rds-export?ref=f689103b221b04aa2143198d6ffac4d8a971de7b"
 
   providers = {
     aws = aws

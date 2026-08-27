@@ -1,0 +1,264 @@
+data "aws_iam_policy_document" "create_a_derived_table_dev" {
+  # Explicit write deny for general domain in dev area
+  statement {
+    sid    = "DenyGeneralDomainWrite"
+    effect = "Deny"
+    actions = [
+      "s3:DeleteObject*",
+      "s3:PutObject*"
+    ]
+    resources = [
+      "arn:aws:s3:::mojap-derived-tables/dev/models/domain=general/*"
+    ]
+  }
+  statement {
+    sid    = "WriteBucketAccess"
+    effect = "Allow"
+    actions = [
+      "s3:List*",
+      "s3:GetObject*",
+      "s3:GetBucket*",
+      "s3:DeleteObject*",
+      "s3:PutObject*"
+    ]
+    resources = [
+      "arn:aws:s3:::mojap-derived-tables/dev/*",
+      "arn:aws:s3:::mojap-derived-tables/dev",
+    ]
+  }
+  statement {
+    sid    = "ReadOnlyBucketAccess"
+    effect = "Allow"
+    actions = [
+      "s3:List*",
+      "s3:GetObject*",
+      "s3:GetBucket*"
+    ]
+    resources = [
+      "arn:aws:s3:::mojap-derived-tables/*",
+      "arn:aws:s3:::mojap-derived-tables",
+      "arn:aws:s3:::dbt-query-dump/*",
+      "arn:aws:s3:::dbt-query-dump",
+      "arn:aws:s3:::mojap-manage-offences/ho-offence-codes/*",
+      "arn:aws:s3:::mojap-manage-offences",
+      "arn:aws:s3:::mojap-hub-exports/probation_referrals_dump/*",
+      "arn:aws:s3:::mojap-hub-exports",
+      "arn:aws:s3:::alpha-app-opg-lpa-dashboard",
+      "arn:aws:s3:::alpha-app-opg-lpa-dashboard/dev/models/domain_name=opg/*",
+      "arn:aws:s3:::alpha-app-opg-lpa-dashboard/prod/models/domain_name=opg/*",
+      "arn:aws:s3:::alpha-bold-data-shares",
+      "arn:aws:s3:::alpha-bold-data-shares/reducing-reoffending/*"
+    ]
+  }
+  statement {
+    sid    = "DataAccess"
+    effect = "Allow"
+    actions = [
+      "s3:List*",
+      "s3:GetObject*",
+      "s3:GetBucket*"
+    ]
+    resources = [
+      "arn:aws:s3:::*",
+      "arn:aws:s3:::*/*"
+    ]
+  }
+  statement {
+    sid    = "AthenaAccess"
+    effect = "Allow"
+    actions = [
+      "athena:List*",
+      "athena:Get*",
+      "athena:StartQueryExecution",
+      "athena:StopQueryExecution"
+    ]
+    resources = [
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-production"]}:datacatalog/*",
+      "arn:aws:athena:*:${var.account_ids["analytical-platform-data-production"]}:workgroup/*"
+    ]
+  }
+  statement {
+    sid    = "GlueAccess"
+    effect = "Allow"
+    actions = [
+      "glue:Get*",
+      "glue:DeleteTable",
+      "glue:DeleteTableVersion",
+      "glue:DeleteSchema",
+      "glue:DeletePartition",
+      "glue:DeleteDatabase",
+      "glue:UpdateTable",
+      "glue:UpdateSchema",
+      "glue:UpdatePartition",
+      "glue:UpdateDatabase",
+      "glue:CreateTable",
+      "glue:CreateSchema",
+      "glue:CreatePartition",
+      "glue:CreatePartitionIndex",
+      "glue:BatchCreatePartition",
+      "glue:CreateDatabase"
+    ]
+    resources = [
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:schema/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:database/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:table/*/*",
+      "arn:aws:glue:*:${var.account_ids["analytical-platform-data-production"]}:catalog"
+
+    ]
+  }
+  # Lake formation shares - glue catalog access
+  statement {
+    sid    = "DPRGlueAccessLFShares"
+    effect = "Allow"
+    actions = [
+      "glue:GetDatabase",
+      "glue:GetDatabases",
+      "glue:GetTable",
+      "glue:GetTables",
+      "glue:GetPartitions"
+    ]
+
+    resources = [
+      "arn:aws:glue:*:${var.account_ids["digital-prison-reporting-production"]}:schema/*",
+      "arn:aws:glue:*:${var.account_ids["digital-prison-reporting-production"]}:database/*",
+      "arn:aws:glue:*:${var.account_ids["digital-prison-reporting-production"]}:table/*/*",
+      "arn:aws:glue:*:${var.account_ids["digital-prison-reporting-production"]}:catalog"
+    ]
+  }
+  # Lake formation shares - glue catalog access
+  statement {
+    sid    = "EMGlueAccessLFShares"
+    effect = "Allow"
+    actions = [
+      "glue:GetDatabase",
+      "glue:GetDatabases",
+      "glue:GetTable",
+      "glue:GetTables",
+      "glue:GetPartitions"
+    ]
+
+    resources = [
+      "arn:aws:glue:*:${var.account_ids["electronic-monitoring-data-production"]}:schema/*",
+      "arn:aws:glue:*:${var.account_ids["electronic-monitoring-data-production"]}:database/*",
+      "arn:aws:glue:*:${var.account_ids["electronic-monitoring-data-production"]}:table/*/*",
+      "arn:aws:glue:*:${var.account_ids["electronic-monitoring-data-production"]}:catalog"
+    ]
+  }
+  statement {
+    sid    = "LakeFormationGetDataAccess"
+    effect = "Allow"
+    actions = [
+      "lakeformation:GetDataAccess"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid    = "LakeFormationDataLocationAccess"
+    effect = "Allow"
+    actions = [
+      "lakeformation:GrantPermissions"
+    ]
+    resources = [
+      "arn:aws:s3:::alpha-app-opg-lpa-dashboard/prod/models/domain_name=opg/database_name=sirius_derived",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=guardianship_derived",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived/table_name=opg_annual_report",
+      "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=prison/database_name=calculate_release_dates_api"
+    ]
+  }
+  statement {
+    sid    = "KMSDecryptActions"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt"
+    ]
+    resources = [
+      "arn:aws:kms:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:key/0409ddbc-b6a2-46c4-a613-6145f6a16215",
+      "arn:aws:kms:eu-west-1:${var.account_ids["analytical-platform-data-production"]}:key/0d21d1cf-b9da-43f3-999b-da7f0d376bfd"
+    ]
+  }
+}
+
+module "create_a_derived_table_dev_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "6.1.0"
+
+  name_prefix = "create-a-derived-table-dev"
+  description = "IAM Policy"
+
+  policy = data.aws_iam_policy_document.create_a_derived_table_dev.json
+}
+
+module "create_a_derived_table_dev_iam_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "6.1.0"
+
+  name            = "create-a-derived-table-dev"
+  use_name_prefix = false
+
+  max_session_duration = 10800
+
+  policies = {
+    policy = module.create_a_derived_table_dev_iam_policy.arn
+  }
+
+  oidc_providers = {
+    analytical-platform-compute-production = {
+      provider_arn = "arn:aws:iam::593291632749:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/801920EDEF91E3CAB03E04C03A2DE2BB"
+      namespace_service_accounts = [
+        "actions-runners:actions-runner-mojas-cadet-dev",
+        "actions-runners:actions-runner-mojas-cadet-dev-non-spot"
+      ]
+    }
+    cloud-platform = {
+      provider_arn               = "arn:aws:iam::593291632749:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/DF366E49809688A3B16EEC29707D8C09"
+      namespace_service_accounts = ["data-platform-production:actions-runner-mojas-cadet-dev"]
+    }
+    data-platform-production = {
+      provider_arn               = "arn:aws:iam::593291632749:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/F147414004D7C4CF820F21F453AF80F1"
+      namespace_service_accounts = ["actions-runners:actions-runner-mojas-cadet-dev"]
+    }
+  }
+}
+
+# Lake formation hybrid locations
+locals {
+  create_a_derived_table_dev_data_locations = [
+    "arn:aws:s3:::alpha-app-opg-lpa-dashboard/prod/models/domain_name=opg/database_name=sirius_derived",
+    "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=guardianship_derived",
+    "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived",
+    "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=opg/database_name=sirius_derived/table_name=opg_annual_report",
+    "arn:aws:s3:::mojap-derived-tables/prod/models/domain_name=prison/database_name=calculate_release_dates_api"
+  ]
+
+  lf_data_location_dev_roles = [
+    "arn:aws:iam::593291632749:role/airflow_prod_cadet_deploy_nomis_daily",
+    "arn:aws:iam::593291632749:role/create-a-derived-table-dev"
+  ]
+}
+# Combinations of paths and roles
+locals {
+  lf_data_location_dev_pairs = merge([
+    for role in local.lf_data_location_dev_roles : {
+      for location in local.create_a_derived_table_dev_data_locations :
+      "${role}|${location}" => {
+        principal = role
+        location  = location
+      }
+    }
+  ]...)
+}
+resource "aws_lakeformation_permissions" "create_a_derived_table_dev_data_locations" {
+  for_each = local.lf_data_location_dev_pairs
+
+  principal   = each.value.principal
+  permissions = ["DATA_LOCATION_ACCESS"]
+
+  data_location {
+    arn = each.value.location
+  }
+}
