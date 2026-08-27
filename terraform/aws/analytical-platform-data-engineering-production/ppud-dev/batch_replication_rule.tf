@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "migration_replication_trigger_lambda_function" {
     condition {
       test     = "StringEquals"
       variable = "iam:PassedToService"
-      values   = ["batchoperations.s3.amazonaws.com"]
+      values   = ["s3.amazonaws.com"]
     }
   }
 
