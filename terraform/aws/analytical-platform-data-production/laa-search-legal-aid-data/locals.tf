@@ -104,7 +104,7 @@ locals {
   splink_test_bucket_name               = local.app.splink_test_bucket_name
   splink_test_sns_topic_name            = "splink-s3-event-notification-topic-test"
   splink_test_event_rule_name           = "splink-bucket-event-rule-test"
-  tags                             = local.app.tags
+  tags                                  = local.app.tags
   test_tags = merge(local.tags, {
     Environment = "test"
   })
