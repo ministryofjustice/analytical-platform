@@ -17,7 +17,7 @@ module "s3_bucket_source_test" {
         Effect    = "Deny"
         Principal = "*"
         Action    = "s3:*"
-        Resource  = ["arn:aws:s3:::${local.splink_source_bucket_test_name }", "arn:aws:s3:::${local.splink_source_bucket_test_name}/*"]
+        Resource  = ["arn:aws:s3:::${local.splink_source_bucket_test_name}", "arn:aws:s3:::${local.splink_source_bucket_test_name}/*"]
         Condition = { Bool = { "aws:SecureTransport" = "false" } }
       },
       {
