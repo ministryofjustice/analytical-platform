@@ -8,6 +8,11 @@
   "splink_search_output_bucket_name": "laa-splink-search-output",
   "splink_source_input_bucket_name": "laa-splink-source-file-input",
   "splink_source_output_bucket_name": "laa-splink-source-file-output",
+  "splink_search_input_test_bucket_name": "laa-splink-search-input-test",
+  "splink_search_output_test_bucket_name": "laa-splink-search-output-test",
+  "splink_source_input_test_bucket_name": "laa-splink-source-file-input-test",
+  "splink_source_output_test_bucket_name": "laa-splink-source-file-output-test",
+  "splink_source_test_bucket_name": "laa-splink-source-s3-test",
   "splink_audit_bucket_name": "laa-search-audit",
   "tags": {
     "Owner": "LAA Search",
