@@ -3,6 +3,7 @@ data "aws_iam_policy_document" "migration_batch_copy_trigger_lambda_function" {
   # checkov:skip=CKV_AWS_111: Required write actions are constrained to this account's S3 Batch job ARNs and pass-role restriction.
 
   statement {
+    // Allows lambda to create and monitor batch job
     actions = [
       "s3:CreateJob",
       "s3:DescribeJob",
@@ -15,6 +16,7 @@ data "aws_iam_policy_document" "migration_batch_copy_trigger_lambda_function" {
   }
 
   statement {
+    // Gives the lambda permission to pass the role to S3 batch operation
     actions = [
       "iam:PassRole"
     ]
@@ -31,6 +33,7 @@ data "aws_iam_policy_document" "migration_batch_copy_trigger_lambda_function" {
   }
 
   statement {
+    // Bucket level access for lambda to discover region and objects/contents
     actions = [
       "s3:GetBucketLocation",
       "s3:ListBucket"
@@ -43,6 +46,7 @@ data "aws_iam_policy_document" "migration_batch_copy_trigger_lambda_function" {
   }
 
   statement {
+    // Read source data and write manifest/report files
     actions = [
       "s3:GetObject",
       "s3:PutObject"
@@ -55,6 +59,7 @@ data "aws_iam_policy_document" "migration_batch_copy_trigger_lambda_function" {
   }
 }
 
+# Lambda to create S3 batch copy operation
 module "migration_batch_copy_trigger" {
 
   # Commit hash for v8.1.2
