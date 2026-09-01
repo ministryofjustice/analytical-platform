@@ -772,7 +772,7 @@ resource "aws_kms_key" "s3_kms_key_test" {
   policy                  = data.aws_iam_policy_document.s3_kms_policy_test.json
 }
 
-resource "aws_kms_key" "cloudwatch_sns_alerts_key" {
+resource "aws_kms_key" "cloudwatch_sns_alerts_key_test" {
   enable_key_rotation = true
   policy              = data.aws_iam_policy_document.cloudwatch_sns_kms_policy_test.json
 }
