@@ -1,27 +1,4 @@
-resource "aws_iam_role" "migration_replication" {
-
-  name = "${local.name}-parquet-exports-replication-${local.env}-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-
-    Statement = [
-      {
-        Effect = "Allow"
-
-        Principal = {
-          Service = [
-            "batchoperations.s3.amazonaws.com"
-          ]
-        }
-
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
-  tags = var.tags
-}
-
+# Bucket to store S3 generated manifest and completion report
 module "batch_manifest_bucket" {
   source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=66bd5c6aa0d0396442f0d4a63642029ff38d2a8a"
 
@@ -33,7 +10,7 @@ module "batch_manifest_bucket" {
 
   lifecycle_rule = [
     {
-      id      = "delete-old-manifests"
+      id      = "delete-old-manifests-and-reports"
       enabled = "Enabled"
       prefix  = ""
 
@@ -58,7 +35,33 @@ module "batch_manifest_bucket" {
   }
 }
 
-resource "aws_iam_policy" "migration_replication" {
+# Role S3 Batch Operations assumes to perform the copy
+resource "aws_iam_role" "migration_batch_copy" {
+
+  name = "${local.name}-parquet-exports-batch-copy-${local.env}-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Principal = {
+          Service = [
+            "batchoperations.s3.amazonaws.com"
+          ]
+        }
+
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+  tags = var.tags
+}
+
+# Permissions for assumed role
+resource "aws_iam_policy" "migration_batch_copy" {
 
   name = "${local.name}-parquet-exports-batch-copy-${local.env}"
 
@@ -67,6 +70,8 @@ resource "aws_iam_policy" "migration_replication" {
 
     Statement = [
       {
+        // List or inspect source bucket
+        // Create S3 Inventory report to generate batch manifest
         Sid    = "SourceBucketPermissions"
         Effect = "Allow"
 
@@ -80,6 +85,7 @@ resource "aws_iam_policy" "migration_replication" {
         ]
       },
       {
+        // Read source objects
         Sid    = "SourceObjectPermissions"
         Effect = "Allow"
 
@@ -95,6 +101,7 @@ resource "aws_iam_policy" "migration_replication" {
         ]
       },
       {
+        // Write copied objects to destination bucket
         Sid    = "DestinationObjectPermissions"
         Effect = "Allow"
 
@@ -108,6 +115,7 @@ resource "aws_iam_policy" "migration_replication" {
         ]
       },
       {
+        // Read and write manifest and report to manifest bucket
         Sid    = "ManifestAndReportPermissions"
         Effect = "Allow"
 
@@ -127,8 +135,8 @@ resource "aws_iam_policy" "migration_replication" {
   tags = var.tags
 }
 
-resource "aws_iam_role_policy_attachment" "migration_replication" {
+resource "aws_iam_role_policy_attachment" "migration_batch_copy" {
 
-  role       = aws_iam_role.migration_replication.name
-  policy_arn = aws_iam_policy.migration_replication.arn
+  role       = aws_iam_role.migration_batch_copy.name
+  policy_arn = aws_iam_policy.migration_batch_copy.arn
 }
