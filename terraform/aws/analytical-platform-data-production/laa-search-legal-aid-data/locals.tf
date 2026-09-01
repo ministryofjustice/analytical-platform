@@ -108,7 +108,7 @@ locals {
   splink_source_input_bucket_test_name  = local.app.splink_source_input_test_bucket_name
   splink_source_output_bucket_test_name = local.app.splink_source_output_test_bucket_name
   splink_audit_bucket_test_name         = local.app.splink_audit_test_bucket_name
-#Logging, SNS, Bucket event rule variables
+  #Logging, SNS, Bucket event rule variables
   logging_bucket_name         = local.app.logging_bucket_name
   splink_bucket_name          = local.app.splink_bucket_name
   splink_test_bucket_name     = local.app.splink_test_bucket_name
