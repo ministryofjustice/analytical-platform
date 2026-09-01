@@ -112,3 +112,49 @@ module "s3_bucket_source_output_test" {
   }]
   tags = merge(local.tags, { Name = local.splink_source_output_bucket_test_name })
 }
+
+resource "aws_s3_bucket_ownership_controls" "source_output_test" {
+  bucket = module.s3_bucket_source_output_test.s3_bucket_id
+
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_cloudwatch_event_rule" "s3_bucket_source_output_event_rule_test" {
+  name        = "splink-source-output-bucket-event-rule-test"
+  description = "Event rule to trigger on test S3 Object Created events"
+
+  event_pattern = jsonencode({
+    source = [
+      "aws.s3"
+    ]
+
+    detail-type = [
+      "Object Created"
+    ]
+
+    detail = {
+      bucket = {
+        name = [
+          module.s3_bucket_source_output_test.s3_bucket_id
+        ]
+      }
+    }
+  })
+
+  tags = merge(local.test_tags, {
+    name = "splink-source-output-bucket-event-rule-test"
+  })
+}
+
+resource "aws_s3_bucket_notification" "source_output_bucket_notification_test" {
+  bucket      = module.s3_bucket_source_output_test.s3_bucket_id
+  eventbridge = true
+}
+
+resource "aws_cloudwatch_event_target" "source_output_bucket_event_target_test" {
+  rule      = aws_cloudwatch_event_rule.s3_bucket_source_output_event_rule_test.name
+  target_id = "s3-event-target-test-source-output"
+  arn       = aws_sns_topic.splink_test_bucket_alerting_topic.arn
+}
