@@ -1,6 +1,5 @@
 import logging
 import os
-from typing import Optional
 import uuid
 
 import boto3
@@ -75,7 +74,7 @@ def handler(_event=None, _context=None):
     logger.info(
         f"Started S3 Batch Copy job: {job_id}: source={source_bucket_arn} "
         f"destination={destination_bucket_arn}, manifest_bucket={manifest_bucket_arn}"
-        )
+    )
 
     return {
         "job_id": job_id,
