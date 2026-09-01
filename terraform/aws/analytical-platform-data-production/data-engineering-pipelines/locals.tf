@@ -335,7 +335,7 @@ locals {
             },
             {
               Action = [
-                "s3:s3:ListBucket",
+                "s3:ListBucket",
               ]
               Effect = "Allow"
               Principal = {
@@ -706,7 +706,7 @@ locals {
             },
             {
               Action = [
-                "s3:s3:ListBucket",
+                "s3:ListBucket",
               ]
               Effect = "Allow"
               Principal = {
@@ -1044,7 +1044,7 @@ locals {
             },
             {
               Action = [
-                "s3:s3:ListBucket",
+                "s3:ListBucket",
               ]
               Effect = "Allow"
               Principal = {
