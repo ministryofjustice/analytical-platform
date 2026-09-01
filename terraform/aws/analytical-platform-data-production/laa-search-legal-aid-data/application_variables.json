@@ -14,6 +14,7 @@
   "splink_source_output_test_bucket_name": "laa-splink-source-file-output-test",
   "splink_source_test_bucket_name": "laa-splink-source-s3-test",
   "splink_audit_bucket_name": "laa-search-audit",
+  "splink_audit_test_bucket_name": "laa-search-audit-test",
   "tags": {
     "Owner": "LAA Search",
     "Environment": "production"

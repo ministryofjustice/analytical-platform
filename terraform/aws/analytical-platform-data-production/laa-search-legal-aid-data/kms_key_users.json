@@ -17,16 +17,12 @@
   "splink_s3_source_read_bucket": {
     "key_users": [
       "airflow-production-laa-search-index-source",
-      "airflow-production-laa-si-access-test",
-      "airflow-production-laa-search-index-search",
       "alpha_user_jamess-moj"
     ]
   },
   "splink_s3_source_write_bucket": {
     "key_users": [
       "airflow-production-laa-search-index-source",
-      "airflow-production-laa-si-access-test",
-      "airflow-production-laa-search-index-search",
       "airflow-production-laa-s3-ops",
       "alpha_user_jamess-moj"
     ]
@@ -34,8 +30,6 @@
   "splink_s3_input_read_bucket": {
     "key_users": [
       "airflow-production-laa-search-index-source",
-      "airflow-production-laa-si-access-test",
-      "airflow-production-laa-search-index-search",
       "airflow-production-laa-s3-ops",
       "alpha_user_jamess-moj"
     ]
@@ -46,73 +40,43 @@
   "splink_s3_output_write_bucket": {
     "key_users": [
       "airflow-production-laa-search-index-source",
-      "airflow-production-laa-si-access-test",
-      "airflow-production-laa-search-index-search",
       "airflow-production-laa-s3-ops"
     ]
   },
   "splink_s3_output_read_bucket": {
     "key_users": ["alpha_user_jamess-moj"]
   },
+  "splink_s3_audit_read_bucket": {
+    "key_users": ["alpha_user_jamess-moj"]
+  },
   "splink_s3_audit_write_bucket": {
     "key_users": [
-      "airflow-production-laa-search-index-source",
-      "airflow-production-laa-si-access-test",
-      "airflow-production-laa-search-index-search",
       "airflow-production-laa-s3-ops",
       "alpha_user_jamess-moj"
     ]
   },
   "splink_s3_source_read_bucket_test": {
-    "key_users": [
-      "airflow-development-laa-search-index-source",
-      "airflow-development-laa-si-access-test",
-      "airflow-development-laa-search-index-search",
-      "alpha_user_jamess-moj"
-    ]
+    "key_users": ["alpha_user_jamess-moj"]
   },
   "splink_s3_source_write_bucket_test": {
-    "key_users": [
-      "airflow-development-laa-search-index-source",
-      "airflow-development-laa-si-access-test",
-      "airflow-development-laa-search-index-search",
-      "airflow-development-laa-s3-ops",
-      "alpha_user_jamess-moj"
-    ]
+    "key_users": ["alpha_user_jamess-moj"]
   },
   "splink_s3_input_read_bucket_test": {
-    "key_users": [
-      "airflow-development-laa-search-index-source",
-      "airflow-development-laa-si-access-test",
-      "airflow-development-laa-search-index-search",
-      "airflow-development-laa-s3-ops",
-      "alpha_user_jamess-moj"
-    ]
+    "key_users": ["alpha_user_jamess-moj"]
   },
   "splink_s3_input_write_bucket_test": {
     "key_users": ["alpha_user_jamess-moj"]
   },
   "splink_s3_output_write_bucket_test": {
-    "key_users": [
-      "airflow-development-laa-search-index-source",
-      "airflow-development-laa-si-access-test",
-      "airflow-development-laa-search-index-search",
-      "airflow-development-laa-s3-ops"
-    ]
+    "key_users": ["alpha_user_jamess-moj"]
   },
   "splink_s3_output_read_bucket_test": {
     "key_users": ["alpha_user_jamess-moj"]
   },
   "splink_s3_audit_write_bucket_test": {
-    "key_users": [
-      "airflow-development-laa-search-index-source",
-      "airflow-development-laa-si-access-test",
-      "airflow-development-laa-search-index-search",
-      "airflow-development-laa-s3-ops",
-      "alpha_user_jamess-moj"
-    ]
+    "key_users": ["alpha_user_jamess-moj"]
   },
-  "splink_s3_audit_read_bucket": {
+  "splink_s3_audit_read_bucket_test": {
     "key_users": ["alpha_user_jamess-moj"]
   }
 }
