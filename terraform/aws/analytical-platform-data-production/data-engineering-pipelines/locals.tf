@@ -320,6 +320,7 @@ locals {
             {
               Action = [
                 "s3:PutObject",
+                "s3:PutObjectAcl",
                 "s3:ListMultipartUploadParts",
               ]
               Effect = "Allow"
@@ -691,6 +692,7 @@ locals {
             {
               Action = [
                 "s3:PutObject",
+                "s3:PutObjectAcl",
                 "s3:ListMultipartUploadParts",
               ]
               Effect = "Allow"
@@ -1030,6 +1032,7 @@ locals {
             {
               Action = [
                 "s3:PutObject",
+                "s3:PutObjectAcl",
                 "s3:ListMultipartUploadParts",
               ]
               Effect = "Allow"
