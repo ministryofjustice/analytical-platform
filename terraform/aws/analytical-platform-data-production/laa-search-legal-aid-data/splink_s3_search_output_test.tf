@@ -92,14 +92,14 @@ module "s3_bucket_search_output_test" {
       bucket_key_enabled = true
     }
   }
-  object_lock_configuration = {
-    rule = {
-      default_retention = {
-        mode = "GOVERNANCE"
-        days = 5110
-      }
-    }
-  }
+  # object_lock_configuration = {
+  #   rule = {
+  #     default_retention = {
+  #       mode = "GOVERNANCE"
+  #       days = 5110
+  #     }
+  #   }
+  # }
   logging = {
     target_bucket = local.logging_bucket_name
     target_prefix = "s3access/${local.splink_search_output_bucket_test_name}/"

@@ -93,14 +93,14 @@ module "s3_bucket_audit_test" {
       bucket_key_enabled = true
     }
   }
-  object_lock_configuration = {
-    rule = {
-      default_retention = {
-        mode = "GOVERNANCE"
-        days = 5110
-      }
-    }
-  }
+  # object_lock_configuration = {
+  #   rule = {
+  #     default_retention = {
+  #       mode = "GOVERNANCE"
+  #       days = 5110
+  #     }
+  #   }
+  # }
   logging = {
     target_bucket = local.logging_bucket_name
     target_prefix = "s3access/${local.splink_audit_bucket_test_name}/"
@@ -112,4 +112,50 @@ module "s3_bucket_audit_test" {
     abort_incomplete_multipart_upload_days = 7
   }]
   tags = merge(local.tags, { Name = local.splink_audit_bucket_test_name })
+}
+
+resource "aws_s3_bucket_ownership_controls" "splink_s3_audit_test" {
+  bucket = module.s3_bucket_audit_test.s3_bucket_id
+
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_cloudwatch_event_rule" "splink_s3_audit_event_rule_test" {
+  name        = "splink-audit-bucket-event-rule-test"
+  description = "Event rule to trigger on test S3 Object Created events"
+
+  event_pattern = jsonencode({
+    source = [
+      "aws.s3"
+    ]
+
+    detail-type = [
+      "Object Created"
+    ]
+
+    detail = {
+      bucket = {
+        name = [
+          module.s3_bucket_audit_test.s3_bucket_id
+        ]
+      }
+    }
+  })
+
+  tags = merge(local.test_tags, {
+    name = "splink-audit-bucket-event-rule-test"
+  })
+}
+
+resource "aws_s3_bucket_notification" "audit_bucket_notification_test" {
+  bucket      = module.s3_bucket_audit_test.s3_bucket_id
+  eventbridge = true
+}
+
+resource "aws_cloudwatch_event_target" "audit_bucket_event_target_test" {
+  rule      = aws_cloudwatch_event_rule.splink_s3_audit_event_rule_test.name
+  target_id = "s3-event-target-test-audit"
+  arn       = aws_sns_topic.splink_test_bucket_alerting_topic.arn
 }

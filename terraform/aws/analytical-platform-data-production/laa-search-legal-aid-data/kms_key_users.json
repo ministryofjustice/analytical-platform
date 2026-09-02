@@ -102,12 +102,15 @@
     "key_users": [
       "alpha_user_jh-justice-dev",
       "alpha_user_nina-knowles-justice",
-      "alpha_user_jfjb-justice"
+      "alpha_user_jfjb-justice",
+      "airflow-test-laa-search-index-source"
     ]
   },
   "splink_s3_source_zip_read_bucket_test": {
     "key_users": [
-      "alpha_user_jamess-moj",
+      "alpha_user_jh-justice-dev",
+      "alpha_user_nina-knowles-justice",
+      "alpha_user_jfjb-justice",
       "airflow-test-laa-search-index-source"
     ]
   },

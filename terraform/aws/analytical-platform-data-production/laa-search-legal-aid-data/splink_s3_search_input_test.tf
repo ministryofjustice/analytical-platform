@@ -123,7 +123,7 @@ resource "aws_s3_bucket_ownership_controls" "search_input_test" {
 }
 
 resource "aws_cloudwatch_event_rule" "s3_bucket_search_input_event_rule_test" {
-  name        = local.splink_test_event_rule_name
+  name        = "splink-search-input-bucket-event-rule-test"
   description = "Event rule to trigger on test S3 Object Created events"
 
   event_pattern = jsonencode({
@@ -145,7 +145,7 @@ resource "aws_cloudwatch_event_rule" "s3_bucket_search_input_event_rule_test" {
   })
 
   tags = merge(local.test_tags, {
-    name = local.splink_test_event_rule_name
+    name = "splink-search-input-bucket-event-rule-test"
   })
 }
 
