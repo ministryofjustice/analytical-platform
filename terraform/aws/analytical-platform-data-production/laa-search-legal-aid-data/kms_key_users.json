@@ -82,7 +82,6 @@
   "splink_s3_search_input_read_bucket_test": {
     "key_users": [
       "airflow-test-laa-search-index-search",
-      "airflow-test-laa-search-index-source",
       "alpha_user_jh-justice-dev",
       "alpha_user_nina-knowles-justice",
       "alpha_user_jfjb-justice"
@@ -128,6 +127,21 @@
   },
   "splink_s3_audit_read_bucket_test": {
     "key_users": [
+      "alpha_user_jh-justice-dev",
+      "alpha_user_nina-knowles-justice",
+      "alpha_user_jfjb-justice"
+    ]
+  },
+  "splink_search_s3_write_bucket_test": {
+    "key_users": [
+      "alpha_user_jh-justice-dev",
+      "alpha_user_nina-knowles-justice",
+      "alpha_user_jfjb-justice"
+    ]
+  },
+  "splink_search_s3_read_bucket_test": {
+    "key_users": [
+      "airflow-test-laa-search-index-search",
       "alpha_user_jh-justice-dev",
       "alpha_user_nina-knowles-justice",
       "alpha_user_jfjb-justice"

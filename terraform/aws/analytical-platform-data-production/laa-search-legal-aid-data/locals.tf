@@ -125,6 +125,17 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
+  # The following users belongs to Search S3 Test Bucket
+  splink_search_s3_write_test_bucket_key_user_arns = [
+    for role in local.kms_key_users.splink_search_s3_write_bucket_test.key_users :
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+  ]
+  splink_search_s3_read_test_bucket_key_user_arns = [
+    for role in local.kms_key_users.splink_search_s3_read_bucket_test.key_users :
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+  ]
+
+
   #Production buckets variables
   application_name                 = local.app.application_name
   splink_source_bucket_name        = local.app.splink_source_bucket_name
@@ -141,6 +152,7 @@ locals {
   splink_source_output_bucket_test_name = local.app.splink_source_output_test_bucket_name
   splink_source_zip_bucket_test_name    = local.app.splink_source_zip_test_bucket_name
   splink_audit_bucket_test_name         = local.app.splink_audit_test_bucket_name
+  splink_search_s3_test_name            = local.app.splink_search_s3_test_bucket_name
   #Logging, SNS, Bucket event rule variables
   logging_bucket_name         = local.app.logging_bucket_name
   splink_bucket_name          = local.app.splink_bucket_name
