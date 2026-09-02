@@ -75,7 +75,6 @@ module "s3_bucket_splink" {
         Principal = "*"
 
         Action = [
-          "s3:DeleteBucket",
           "s3:PutBucketAcl",
           "s3:PutBucketPolicy",
           "s3:PutEncryptionConfiguration",
