@@ -65,7 +65,7 @@ module "s3_bucket_search_input_test" {
         Principal = "*"
         Action    = ["s3:GetObject", "s3:GetObjectVersion"]
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}/*"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_input_read_test_bucket_key_user_arns } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_search_input_read_test_bucket_key_user_arns } }
       },
       {
         Sid       = "DenyListingForUnauthorisedPrincipals"
@@ -73,7 +73,7 @@ module "s3_bucket_search_input_test" {
         Principal = "*"
         Action    = ["s3:ListBucket"]
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_input_read_test_bucket_key_user_arns } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_search_input_read_test_bucket_key_user_arns } }
       },
       {
         # PutObject is restricted to a placeholder until the LAA user role is created —
@@ -83,7 +83,7 @@ module "s3_bucket_search_input_test" {
         Principal = "*"
         Action    = ["s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion"]
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}/*"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_input_write_test_bucket_key_user_arns } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_search_input_write_test_bucket_key_user_arns } }
       }
     ])
   })

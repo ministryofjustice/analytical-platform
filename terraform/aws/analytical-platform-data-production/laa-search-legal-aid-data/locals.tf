@@ -75,6 +75,26 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
+  # The following users belongs to Search Input Test bucket
+  splink_s3_search_input_write_test_bucket_key_user_arns = [
+    for role in local.kms_key_users.splink_s3_search_input_write_bucket_test.key_users :
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+  ]
+  splink_s3_search_input_read_test_bucket_key_user_arns = [
+    for role in local.kms_key_users.splink_s3_search_input_read_bucket_test.key_users :
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+  ]
+
+  # The following users belongs to Search Output Test bucket
+  splink_s3_search_output_write_test_bucket_key_user_arns = [
+    for role in local.kms_key_users.splink_s3_search_output_write_bucket_test.key_users :
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+  ]
+  splink_s3_search_output_read_test_bucket_key_user_arns = [
+    for role in local.kms_key_users.splink_s3_search_output_read_bucket_test.key_users :
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+  ]
+
   # The following users belongs to Source Output Test bucket
   splink_s3_source_output_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_output_write_bucket_test.key_users :
