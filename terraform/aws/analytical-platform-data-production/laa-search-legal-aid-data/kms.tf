@@ -452,7 +452,8 @@ data "aws_iam_policy_document" "s3_kms_policy_test" {
           "arn:aws:s3:::${local.splink_source_bucket_test_name}",
           "arn:aws:s3:::${local.splink_source_input_bucket_test_name}",
           "arn:aws:s3:::${local.splink_source_output_bucket_test_name}",
-          "arn:aws:s3:::${local.splink_audit_bucket_test_name}"
+          "arn:aws:s3:::${local.splink_audit_bucket_test_name}",
+          "arn:aws:s3:::${local.splink_source_zip_bucket_test_name}"
         ]
       )
     }
@@ -468,8 +469,11 @@ data "aws_iam_policy_document" "s3_kms_policy_test" {
     sid = "AllowSplinkS3InputReadKeyUse"
 
     principals {
-      type        = "AWS"
-      identifiers = local.splink_s3_input_read_test_bucket_key_user_arns
+      type = "AWS"
+      identifiers = concat(
+        local.splink_s3_source_input_read_test_bucket_key_user_arns,
+        local.splink_s3_search_input_read_test_bucket_key_user_arns
+      )
     }
 
     actions = [
@@ -490,8 +494,11 @@ data "aws_iam_policy_document" "s3_kms_policy_test" {
     sid = "AllowSplinkS3InputWriteKeyUse"
 
     principals {
-      type        = "AWS"
-      identifiers = local.splink_s3_input_write_test_bucket_key_user_arns
+      type = "AWS"
+      identifiers = concat(
+        local.splink_s3_source_input_write_test_bucket_key_user_arns,
+        local.splink_s3_search_input_write_test_bucket_key_user_arns
+      )
     }
 
     actions = [
@@ -513,8 +520,11 @@ data "aws_iam_policy_document" "s3_kms_policy_test" {
     sid = "AllowSplinkS3OutputReadKeyUse"
 
     principals {
-      type        = "AWS"
-      identifiers = local.splink_s3_output_read_test_bucket_key_user_arns
+      type = "AWS"
+      identifiers = concat(
+        local.splink_s3_source_output_read_test_bucket_key_user_arns,
+        local.splink_s3_search_output_read_test_bucket_key_user_arns
+      )
     }
 
     actions = [
@@ -535,8 +545,11 @@ data "aws_iam_policy_document" "s3_kms_policy_test" {
     sid = "AllowSplinkS3OutputWriteKeyUse"
 
     principals {
-      type        = "AWS"
-      identifiers = local.splink_s3_output_write_test_bucket_key_user_arns
+      type = "AWS"
+      identifiers = concat(
+        local.splink_s3_source_output_write_test_bucket_key_user_arns,
+        local.splink_s3_search_output_write_test_bucket_key_user_arns
+      )
     }
 
     actions = [
