@@ -47,3 +47,38 @@ resource "aws_secretsmanager_secret" "github_token" {
     credential-expiration = "2027-01-06"
   }
 }
+
+# test secrets
+resource "aws_secretsmanager_secret" "test_1" {
+  provider = aws.analytical-platform-management-production-eu-west-1
+  name        = "test-1"
+  description = "Test secret with an expiry date"
+
+  tags = {
+    expiry-date = "2026-12-31"
+    source-location = "the location the key needs updating"
+  }
+}
+
+resource "aws_secretsmanager_secret" "test_2" {
+  provider = aws.analytical-platform-management-production-eu-west-1
+  name        = "test-2"
+  description = "Test secret with an expiry date"
+
+  tags = {
+    expiry-date = "2026-09-20"
+    source-location = "the location the key needs updating"
+  }
+}
+
+resource "aws_secretsmanager_secret" "test_3" {
+  provider = aws.analytical-platform-management-production-eu-west-1
+  name        = "test-3"
+  description = "Test secret with an expiry date"
+
+  tags = {
+    expiry-date = "2026-09-6"
+    source-location = "the location the key needs updating"
+  }
+}
+
