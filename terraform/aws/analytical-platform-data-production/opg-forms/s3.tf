@@ -51,8 +51,7 @@ module "opg_forms_s3" {
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = module.opg_forms_kms.key_arn
-        sse_algorithm     = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
