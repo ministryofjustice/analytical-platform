@@ -44,7 +44,7 @@ module "s3_bucket_search_input_test" {
         Principal = "*"
         Action    = "s3:PutObject"
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}/*"
-        Condition = { StringNotEquals = { "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_kms_key.arn } }
+        Condition = { StringNotEquals = { "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_kms_key_test.arn } }
       },
       {
         Sid       = "DenyBucketDeletion"
@@ -91,7 +91,7 @@ module "s3_bucket_search_input_test" {
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = aws_kms_key.s3_kms_key.arn
+        kms_master_key_id = aws_kms_key.s3_kms_key_test.arn
         sse_algorithm     = "aws:kms"
       }
       bucket_key_enabled = true
