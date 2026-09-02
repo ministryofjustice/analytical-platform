@@ -7,7 +7,7 @@ module "s3_bucket_source_output_test" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
-  object_lock_enabled     = true
+  object_lock_enabled     = false
   attach_policy           = true
   policy = jsonencode({
     Version = "2012-10-17"
@@ -63,7 +63,7 @@ module "s3_bucket_source_output_test" {
         Principal = "*"
         Action    = ["s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion"]
         Resource  = "arn:aws:s3:::${local.splink_source_output_bucket_test_name}/*"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_output_write_test_bucket_key_user_arns } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_source_output_write_test_bucket_key_user_arns } }
       },
       {
         Sid       = "DenyReadsForUnauthorisedPrincipals"
@@ -71,7 +71,7 @@ module "s3_bucket_source_output_test" {
         Principal = "*"
         Action    = ["s3:GetObject", "s3:GetObjectVersion"]
         Resource  = "arn:aws:s3:::${local.splink_source_output_bucket_test_name}/*"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_output_read_test_bucket_key_user_arns } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_source_output_read_test_bucket_key_user_arns } }
       },
       {
         Sid       = "DenyListingForUnauthorisedPrincipals"
@@ -79,7 +79,7 @@ module "s3_bucket_source_output_test" {
         Principal = "*"
         Action    = ["s3:ListBucket"]
         Resource  = "arn:aws:s3:::${local.splink_source_output_bucket_test_name}"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_output_read_test_bucket_key_user_arns } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_source_output_read_test_bucket_key_user_arns } }
       }
     ])
   })

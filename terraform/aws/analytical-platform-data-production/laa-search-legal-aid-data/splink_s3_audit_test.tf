@@ -8,7 +8,7 @@ module "s3_bucket_audit_test" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
-  object_lock_enabled     = true
+  object_lock_enabled     = false
   attach_policy           = true
   policy = jsonencode({
     Version = "2012-10-17"
