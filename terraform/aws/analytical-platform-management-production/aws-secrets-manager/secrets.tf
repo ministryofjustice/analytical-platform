@@ -51,6 +51,8 @@ resource "aws_secretsmanager_secret" "github_token" {
 # test secrets
 resource "aws_secretsmanager_secret" "test_1" {
   provider = aws.analytical-platform-management-production-eu-west-1
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   name        = "test-1"
   description = "Test secret with an expiry date"
 
@@ -62,6 +64,8 @@ resource "aws_secretsmanager_secret" "test_1" {
 
 resource "aws_secretsmanager_secret" "test_2" {
   provider = aws.analytical-platform-management-production-eu-west-1
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   name        = "test-2"
   description = "Test secret with an expiry date"
 
@@ -73,6 +77,8 @@ resource "aws_secretsmanager_secret" "test_2" {
 
 resource "aws_secretsmanager_secret" "test_3" {
   provider = aws.analytical-platform-management-production-eu-west-1
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   name        = "test-3"
   description = "Test secret with an expiry date"
 
