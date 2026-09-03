@@ -154,6 +154,11 @@ locals {
   splink_audit_bucket_test_name         = local.app.splink_audit_test_bucket_name
   splink_search_s3_test_name            = local.app.splink_search_s3_test_bucket_name
   #Logging, SNS, Bucket event rule variables
+  # S3 access logging requires the target bucket to be in the same region as the
+  # source bucket. `moj-analytics-s3-logs` (no suffix) is the eu-west-1 logging
+  # bucket; `-eu-west-2` is a separate, region-specific bucket provisioned for
+  # eu-west-2 workspaces like this one (all buckets here are eu-west-2, see
+  # terraform.tf), hence the region suffix in the name.
   logging_bucket_name         = local.app.logging_bucket_name
   splink_bucket_name          = local.app.splink_bucket_name
   splink_test_bucket_name     = local.app.splink_test_bucket_name
