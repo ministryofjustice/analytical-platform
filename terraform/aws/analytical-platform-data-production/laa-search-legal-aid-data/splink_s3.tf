@@ -74,9 +74,12 @@ module "s3_bucket_splink" {
         Effect    = "Deny"
         Principal = "*"
 
+        # s3:PutBucketPolicy is deliberately excluded: an unconditioned deny
+        # on it here would block every future policy update (including this
+        # one, applied via CI) with no way back short of AWS root-user
+        # intervention. This bucket was locked out by exactly that pattern.
         Action = [
           "s3:PutBucketAcl",
-          "s3:PutBucketPolicy",
           "s3:PutEncryptionConfiguration",
           "s3:PutBucketVersioning"
         ]
