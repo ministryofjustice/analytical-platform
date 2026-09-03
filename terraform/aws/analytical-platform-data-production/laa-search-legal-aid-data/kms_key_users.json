@@ -15,7 +15,7 @@
     "key_users": ["airflow-production-laa-search-index-source"]
   },
   "splink_s3_source_write_bucket": {
-    "key_users": ["airflow-production-laa-s3-ops"]
+    "key_users": ["airflow-production-laa-search-index-s3-ops"]
   },
   "splink_s3_input_read_bucket": {
     "key_users": ["airflow-production-laa-search-index-s3-ops"]
