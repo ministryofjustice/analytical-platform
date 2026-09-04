@@ -79,6 +79,7 @@ module "s3_bucket_splink" {
         # one, applied via CI) with no way back short of AWS root-user
         # intervention. This bucket was locked out by exactly that pattern.
         Action = [
+          "s3:DeleteBucket",
           "s3:PutBucketAcl",
           "s3:PutEncryptionConfiguration",
           "s3:PutBucketVersioning"
