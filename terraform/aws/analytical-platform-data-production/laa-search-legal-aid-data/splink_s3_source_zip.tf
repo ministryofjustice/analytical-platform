@@ -116,7 +116,7 @@ module "s3_bucket_source_zip" {
   tags = merge(local.tags, { Name = local.splink_source_zip_bucket_name })
 }
 
-resource "aws_s3_bucket_ownership_controls" "source_zip_input_test" {
+resource "aws_s3_bucket_ownership_controls" "source_zip_input" {
   bucket = module.s3_bucket_source_zip.s3_bucket_id
 
   rule {
@@ -124,6 +124,12 @@ resource "aws_s3_bucket_ownership_controls" "source_zip_input_test" {
   }
 }
 
+resource "aws_s3_bucket_notification" "source_zip_bucket_notification_prod" {
+  bucket      = module.s3_bucket_source_zip.s3_bucket_id
+  eventbridge = true
+}
+
+# The following resources S3 Bucket ownership control and notification
 resource "aws_cloudwatch_event_rule" "s3_bucket_source_zip_event_rule_prod" {
   name        = "splink-source-zip-bucket-event-rule-prod"
   description = "Event rule to trigger on test S3 Object Created events"
@@ -149,11 +155,6 @@ resource "aws_cloudwatch_event_rule" "s3_bucket_source_zip_event_rule_prod" {
   tags = merge(local.test_tags, {
     name = "splink-source-zip-bucket-event-rule-prod"
   })
-}
-
-resource "aws_s3_bucket_notification" "source_zip_bucket_notification_prod" {
-  bucket      = module.s3_bucket_source_zip.s3_bucket_id
-  eventbridge = true
 }
 
 resource "aws_cloudwatch_event_target" "source_zip_bucket_event_target_prod" {
