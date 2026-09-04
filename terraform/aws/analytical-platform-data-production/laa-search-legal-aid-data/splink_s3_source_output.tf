@@ -1,6 +1,6 @@
 # The following bucket is laa-splink-source-file-output.
 # This bucket should have object Lock
-module "s3_bucket_source_zip" {
+module "s3_bucket_source_output" {
   source                  = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=97bb13eff35489bd38993487c3d04c5b6d024cb6"
   bucket                  = local.splink_source_output_bucket_name
   force_destroy           = false
