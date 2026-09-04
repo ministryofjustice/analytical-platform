@@ -76,7 +76,7 @@ data "aws_iam_policy_document" "s3_kms_policy" {
   }
   # S3 Search Input-Read
   statement {
-    sid = "AllowSplinkS3InputReadKeyUse"
+    sid = "AllowSplinkS3SearchInputReadKeyUse"
 
     principals {
       type        = "AWS"
@@ -98,7 +98,7 @@ data "aws_iam_policy_document" "s3_kms_policy" {
   }
   # S3 Search Input-Write
   statement {
-    sid = "AllowSplinkS3InputWriteKeyUse"
+    sid = "AllowSplinkS3SearchInputWriteKeyUse"
 
     principals {
       type        = "AWS"
@@ -121,7 +121,7 @@ data "aws_iam_policy_document" "s3_kms_policy" {
   }
   # SPLINK S3 SEARCH OUTPUT - READ
   statement {
-    sid = "AllowSplinkS3OutputReadKeyUse"
+    sid = "AllowSplinkS3SearchOutputReadKeyUse"
 
     principals {
       type        = "AWS"
@@ -143,7 +143,7 @@ data "aws_iam_policy_document" "s3_kms_policy" {
   }
   # SPLINK S3 SEARCH OUTPUT - WRITE
   statement {
-    sid = "AllowSplinkS3OutputWriteKeyUse"
+    sid = "AllowSplinkS3SearchOutputWriteKeyUse"
 
     principals {
       type        = "AWS"
@@ -211,7 +211,7 @@ data "aws_iam_policy_document" "s3_kms_policy" {
   }
   # SPLINK S3 SOURCE INPUT - READ
   statement {
-    sid = "AllowSplinkS3SourceReadKeyUse"
+    sid = "AllowSplinkS3SourceInputReadKeyUse"
 
     principals {
       type        = "AWS"
@@ -233,7 +233,7 @@ data "aws_iam_policy_document" "s3_kms_policy" {
   }
   # SPLINK S3 SOURCE INPUT - WRITE
   statement {
-    sid = "AllowSplinkS3SourceWriteKeyUse"
+    sid = "AllowSplinkS3SourceInputWriteKeyUse"
 
     principals {
       type        = "AWS"
@@ -257,7 +257,7 @@ data "aws_iam_policy_document" "s3_kms_policy" {
 
   # SPLINK S3 SOURCE OUTPUT - READ
   statement {
-    sid = "AllowSplinkS3SourceReadKeyUse"
+    sid = "AllowSplinkS3SourceOutputReadKeyUse"
 
     principals {
       type        = "AWS"
@@ -279,7 +279,7 @@ data "aws_iam_policy_document" "s3_kms_policy" {
   }
   # SPLINK S3 SOURCE OUTPUT - WRITE
   statement {
-    sid = "AllowSplinkS3SourceWriteKeyUse"
+    sid = "AllowSplinkS3SourceOutputWriteKeyUse"
 
     principals {
       type        = "AWS"
@@ -303,7 +303,7 @@ data "aws_iam_policy_document" "s3_kms_policy" {
 
   # SPLINK S3 SOURCE ZIP - READ
   statement {
-    sid = "AllowSplinkS3SourceReadKeyUse"
+    sid = "AllowSplinkS3SourceZipReadKeyUse"
 
     principals {
       type        = "AWS"
@@ -325,7 +325,7 @@ data "aws_iam_policy_document" "s3_kms_policy" {
   }
   # SPLINK S3 SOURCE ZIP - WRITE
   statement {
-    sid = "AllowSplinkS3SourceWriteKeyUse"
+    sid = "AllowSplinkS3SourceZipWriteKeyUse"
 
     principals {
       type        = "AWS"
