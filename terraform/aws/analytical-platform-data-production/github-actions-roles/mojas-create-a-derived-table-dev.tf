@@ -24,6 +24,8 @@ data "aws_iam_policy_document" "create_a_derived_table_dev" {
     resources = [
       "arn:aws:s3:::mojap-derived-tables/dev/*",
       "arn:aws:s3:::mojap-derived-tables/dev",
+      "arn:aws:s3:::dbt-query-dump/*",
+      "arn:aws:s3:::dbt-query-dump"
     ]
   }
   statement {
