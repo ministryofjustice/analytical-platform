@@ -85,15 +85,23 @@ module "s3_bucket_source_input" {
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_source_input_write_bucket_key_user_arns } }
       },
       {
-        # Explicit Deny on DeleteObjectVersion
+        # Explicit Deny on DeleteObject
         Sid       = "DenyObjectDeletion"
         Effect    = "Deny"
         Principal = "*"
-        Action    = ["s3:DeleteObject", "s3:DeleteObjectVersion"]
+        Action    = ["s3:DeleteObject"]
         Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_name}/*"
         Condition = { ArnNotEquals = {
           "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-production-laa-search-index-source"
         } }
+      },
+      {
+        # Explicit Deny on DeleteObjectVersion for ALL
+        Sid       = "DenyObjectDeletion"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:DeleteObjectVersion"]
+        Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_name}/*"
       }
     ])
   })
