@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "create_a_derived_table_dev" {
       "s3:PutObject*"
     ]
     resources = [
-      "arn:aws:s3:::mojap-derived-tables/dev/models/domain=general/*"
+      "arn:aws:s3:::mojap-derived-tables/dev/models/domain_name=general/*"
     ]
   }
   statement {
