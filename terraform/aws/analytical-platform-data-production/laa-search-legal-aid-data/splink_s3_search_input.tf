@@ -94,6 +94,7 @@ module "s3_bucket_search_input" {
         Principal = "*"
         Action    = ["s3:DeleteObject", "s3:DeleteObjectVersion"]
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_name}/*"
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_search_input_read_bucket_key_user_arns } }
       },
     ])
   })
