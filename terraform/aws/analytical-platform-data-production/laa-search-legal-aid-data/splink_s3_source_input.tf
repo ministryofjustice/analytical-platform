@@ -97,7 +97,7 @@ module "s3_bucket_source_input" {
       },
       {
         # Explicit Deny on DeleteObjectVersion for ALL
-        Sid       = "DenyObjectDeletion"
+        Sid       = "DenyObjectVersion"
         Effect    = "Deny"
         Principal = "*"
         Action    = ["s3:DeleteObjectVersion"]
