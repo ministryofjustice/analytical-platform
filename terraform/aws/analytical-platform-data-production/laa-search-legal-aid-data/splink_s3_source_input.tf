@@ -91,7 +91,9 @@ module "s3_bucket_source_input" {
         Principal = "*"
         Action    = ["s3:DeleteObject", "s3:DeleteObjectVersion"]
         Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_name}/*"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_source_input_read_bucket_key_user_arns } }
+        Condition = { ArnNotEquals = {
+          "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-production-laa-search-index-source"
+        } }
       }
     ])
   })
