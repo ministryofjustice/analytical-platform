@@ -182,15 +182,12 @@ locals {
     "rejected",
     "validation"
   ]
-
   search_output_test_bucket_folder = ["outut"]
-
   source_file_input_test_bucket_folders = [
     "requests",
     "accepted",
     "rejected",
     "validation"
   ]
-
   source_zip_test_bucket_folder = ["outut"]
 }
