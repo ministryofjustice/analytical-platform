@@ -1,10 +1,10 @@
-#This file contains the Key User ARNs, Buckets name variables for Prod and test and other logging, SNS variables
+# This file contains the key user ARNs, bucket name variables for production and test, and other logging and SNS variables.
 locals {
   app           = jsondecode(file("${path.module}/application_variables.json"))
   kms_key_users = jsondecode(file("${path.module}/kms_key_users.json"))
 
   ##########################################
-  # The below section is To get User ARNs
+  # User ARNs
   #########################################
   splink_s3_key_user_arns = [
     for role in local.kms_key_users.splink_s3_bucket.key_users :
@@ -16,7 +16,7 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
-  # The below ARNs are used for Production Buckets
+  # ARNs used for production buckets
   splink_s3_source_read_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_read_bucket.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
@@ -57,8 +57,8 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
-  # The below ARNs are used for Test Buckets
-  # The below Key users belongs to source test bucket
+  # ARNs used for test buckets
+  # Key users for the source test bucket
   splink_s3_source_read_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_read_bucket_test.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
@@ -68,7 +68,7 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
-  # The below Key users belongs to source input test bucket
+  # Key users for the source input test bucket
   splink_s3_source_input_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_input_write_bucket_test.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
@@ -78,7 +78,7 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
-  # The following users belongs to Search Input Test bucket
+  # Key users for the search input test bucket
   splink_s3_search_input_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_search_input_write_bucket_test.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
@@ -88,7 +88,7 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
-  # The following users belongs to Search Output Test bucket
+  # Key users for the search output test bucket
   splink_s3_search_output_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_search_output_write_bucket_test.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
@@ -98,7 +98,7 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
-  # The following users belongs to Source Output Test bucket
+  # Key users for the source output test bucket
   splink_s3_source_output_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_output_write_bucket_test.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
@@ -108,7 +108,7 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
-  # The following users belongs to Audit Test bucket
+  # Key users for the audit test bucket
   splink_s3_audit_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_audit_write_bucket_test.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
@@ -118,7 +118,7 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
-  # The following users belongs to Source Zip Test Bucket
+  # Key users for the source ZIP test bucket
   splink_s3_source_zip_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_zip_write_bucket_test.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
@@ -128,17 +128,7 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
-  # The following users belongs to Search S3 Test Bucket
-  splink_search_s3_write_test_bucket_key_user_arns = [
-    for role in local.kms_key_users.splink_search_s3_write_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
-  ]
-  splink_search_s3_read_test_bucket_key_user_arns = [
-    for role in local.kms_key_users.splink_search_s3_read_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
-  ]
-
-  #Production buckets variables
+  # Production bucket variables
   application_name                 = local.app.application_name
   splink_source_bucket_name        = local.app.splink_source_bucket_name
   splink_search_input_bucket_name  = local.app.splink_search_input_bucket_name
@@ -147,7 +137,7 @@ locals {
   splink_source_output_bucket_name = local.app.splink_source_output_bucket_name
   splink_audit_bucket_name         = local.app.splink_audit_bucket_name
 
-  #Test buckets variables
+  # Test bucket variables
   splink_source_bucket_test_name        = local.app.splink_source_test_bucket_name
   splink_search_input_bucket_test_name  = local.app.splink_search_input_test_bucket_name
   splink_search_output_bucket_test_name = local.app.splink_search_output_test_bucket_name
@@ -155,7 +145,6 @@ locals {
   splink_source_output_bucket_test_name = local.app.splink_source_output_test_bucket_name
   splink_source_zip_bucket_test_name    = local.app.splink_source_zip_test_bucket_name
   splink_audit_bucket_test_name         = local.app.splink_audit_test_bucket_name
-  splink_search_s3_test_name            = local.app.splink_search_s3_test_bucket_name
 
   #Logging, SNS, Bucket event rule variables
   # S3 access logging requires the target bucket to be in the same region as the
@@ -174,7 +163,7 @@ locals {
   })
 
   ##########################################
-  # Bucket Directories List
+  # Bucket directory lists
   #########################################
   search_input_test_bucket_folders = [
     "input",
@@ -182,12 +171,12 @@ locals {
     "rejected",
     "validation"
   ]
-  search_output_test_bucket_folder = ["outut"]
+  search_output_test_bucket_folder = ["output"]
   source_file_input_test_bucket_folders = [
     "requests",
     "accepted",
     "rejected",
     "validation"
   ]
-  source_zip_test_bucket_folder = ["outut"]
+  source_zip_test_bucket_folder = ["output"]
 }
