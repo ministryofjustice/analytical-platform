@@ -136,9 +136,9 @@ module "s3_bucket_search_input_test" {
 
 # Loop through the list of local.tf and create folders in bucket
 resource "aws_s3_object" "search_input_test_folders" {
-  for_each     = toset(local.search_input_test_bucket_folders)
-  bucket       = module.s3_bucket_search_input_test.s3_bucket_id
-  key          = "${each.value}/"
+  for_each = toset(local.search_input_test_bucket_folders)
+  bucket   = module.s3_bucket_search_input_test.s3_bucket_id
+  key      = "${each.value}/"
 }
 
 resource "aws_s3_bucket_ownership_controls" "search_input_test" {
