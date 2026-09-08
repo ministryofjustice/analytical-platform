@@ -3,7 +3,67 @@ locals {
   app           = jsondecode(file("${path.module}/application_variables.json"))
   kms_key_users = jsondecode(file("${path.module}/kms_key_users.json"))
 
-  splink_s3_key_user_arns = [
+  #Production buckets variables
+  application_name                 = local.app.application_name
+  splink_source_bucket_name        = local.app.splink_source_bucket_name
+  splink_search_input_bucket_name  = local.app.splink_search_input_bucket_name
+  splink_search_output_bucket_name = local.app.splink_search_output_bucket_name
+  splink_source_input_bucket_name  = local.app.splink_source_input_bucket_name
+  splink_source_output_bucket_name = local.app.splink_source_output_bucket_name
+  splink_audit_bucket_name         = local.app.splink_audit_bucket_name
+
+  #Test buckets variables
+  splink_source_bucket_test_name        = local.app.splink_source_test_bucket_name
+  splink_search_input_bucket_test_name  = local.app.splink_search_input_test_bucket_name
+  splink_search_output_bucket_test_name = local.app.splink_search_output_test_bucket_name
+  splink_source_input_bucket_test_name  = local.app.splink_source_input_test_bucket_name
+  splink_source_output_bucket_test_name = local.app.splink_source_output_test_bucket_name
+  splink_source_zip_bucket_test_name    = local.app.splink_source_zip_test_bucket_name
+  splink_audit_bucket_test_name         = local.app.splink_audit_test_bucket_name
+  splink_search_s3_test_name            = local.app.splink_search_s3_test_bucket_name
+
+  #Logging, SNS, Bucket event rule variables
+  # S3 access logging requires the target bucket to be in the same region as the
+  # source bucket. `moj-analytics-s3-logs` (no suffix) is the eu-west-1 logging
+  # bucket; `-eu-west-2` is a separate, region-specific bucket provisioned for
+  # eu-west-2 workspaces like this one (all buckets here are eu-west-2, see
+  # terraform.tf), hence the region suffix in the name.
+  logging_bucket_name         = local.app.logging_bucket_name
+  splink_bucket_name          = local.app.splink_bucket_name
+  splink_test_bucket_name     = local.app.splink_test_bucket_name
+  splink_test_sns_topic_name  = "splink-s3-event-notification-topic-test"
+  splink_test_event_rule_name = "splink-bucket-event-rule-test"
+  tags                        = local.app.tags
+  test_tags = merge(local.tags, {
+    Environment = "test"
+  })
+
+  ##########################################
+  # Bucket Directories List
+  #########################################
+  search_input_test_bucket_folders = [
+    "input",
+    "accepted",
+    "rejected",
+    "validation"
+  ]
+
+  search_output_test_bucket_folder = ["outut"]
+
+  source_file_input_test_bucket_folders = [
+    "requests",
+    "accepted",
+    "rejected",
+    "validation"
+  ]
+
+  source_zip_test_bucket_folder = ["outut"]
+}
+
+##########################################
+# The below section is To get User ARNs
+#########################################
+splink_s3_key_user_arns = [
     for role in local.kms_key_users.splink_s3_bucket.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
@@ -134,38 +194,3 @@ locals {
     for role in local.kms_key_users.splink_search_s3_read_bucket_test.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
-
-
-  #Production buckets variables
-  application_name                 = local.app.application_name
-  splink_source_bucket_name        = local.app.splink_source_bucket_name
-  splink_search_input_bucket_name  = local.app.splink_search_input_bucket_name
-  splink_search_output_bucket_name = local.app.splink_search_output_bucket_name
-  splink_source_input_bucket_name  = local.app.splink_source_input_bucket_name
-  splink_source_output_bucket_name = local.app.splink_source_output_bucket_name
-  splink_audit_bucket_name         = local.app.splink_audit_bucket_name
-  #Test buckets variables
-  splink_source_bucket_test_name        = local.app.splink_source_test_bucket_name
-  splink_search_input_bucket_test_name  = local.app.splink_search_input_test_bucket_name
-  splink_search_output_bucket_test_name = local.app.splink_search_output_test_bucket_name
-  splink_source_input_bucket_test_name  = local.app.splink_source_input_test_bucket_name
-  splink_source_output_bucket_test_name = local.app.splink_source_output_test_bucket_name
-  splink_source_zip_bucket_test_name    = local.app.splink_source_zip_test_bucket_name
-  splink_audit_bucket_test_name         = local.app.splink_audit_test_bucket_name
-  splink_search_s3_test_name            = local.app.splink_search_s3_test_bucket_name
-  #Logging, SNS, Bucket event rule variables
-  # S3 access logging requires the target bucket to be in the same region as the
-  # source bucket. `moj-analytics-s3-logs` (no suffix) is the eu-west-1 logging
-  # bucket; `-eu-west-2` is a separate, region-specific bucket provisioned for
-  # eu-west-2 workspaces like this one (all buckets here are eu-west-2, see
-  # terraform.tf), hence the region suffix in the name.
-  logging_bucket_name         = local.app.logging_bucket_name
-  splink_bucket_name          = local.app.splink_bucket_name
-  splink_test_bucket_name     = local.app.splink_test_bucket_name
-  splink_test_sns_topic_name  = "splink-s3-event-notification-topic-test"
-  splink_test_event_rule_name = "splink-bucket-event-rule-test"
-  tags                        = local.app.tags
-  test_tags = merge(local.tags, {
-    Environment = "test"
-  })
-}
