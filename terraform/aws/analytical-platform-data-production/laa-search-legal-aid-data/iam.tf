@@ -18,9 +18,7 @@ data "aws_iam_policy_document" "splink_bucket_alerting_topic_policy" {
     condition {
       test     = "ArnEquals"
       variable = "aws:SourceArn"
-      values = [
-        aws_cloudwatch_event_rule.s3_bucket_splink_event_rule.arn
-      ]
+      values   = [aws_cloudwatch_event_rule.s3_bucket_splink_event_rule.arn]
     }
   }
 }

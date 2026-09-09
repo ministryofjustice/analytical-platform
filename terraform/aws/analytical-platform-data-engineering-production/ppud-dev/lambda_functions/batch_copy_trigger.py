@@ -10,16 +10,14 @@ logger.setLevel(os.getenv("LOG_LEVEL", "INFO"))
 s3control = boto3.client("s3control")
 
 
-def _manifest_filter():
+def _manifest_filter(env, cutoff_date=None):
 
-    env = os.environ["ENVIRONMENT"]
     manifest_filter = {
         "KeyNameConstraint": {
             "MatchAnyPrefix": [f"ppud_{env}/"],
         }
     }
 
-    cutoff_date = os.getenv("CUTOFF_DATE")
     if cutoff_date:
         # Optional filter for migration windows. Must be ISO8601 if set.
         manifest_filter["CreatedBefore"] = cutoff_date
@@ -34,6 +32,8 @@ def handler(_event=None, _context=None):
     source_bucket_arn = os.environ["SOURCE_BUCKET_ARN"]
     destination_bucket_arn = os.environ["DESTINATION_BUCKET_ARN"]
     manifest_bucket_arn = os.environ["MANIFEST_BUCKET_ARN"]
+    env = os.environ["ENVIRONMENT"]
+    cutoff_date = os.getenv("CUTOFF_DATE")
 
     response = s3control.create_job(
         AccountId=account_id,
@@ -58,30 +58,27 @@ def handler(_event=None, _context=None):
                     "ManifestFormat": "S3InventoryReport_CSV_20211130",
                     "ManifestEncryption": {"SSES3": {}},
                 },
-                "Filter": _manifest_filter(),
+                "Filter": _manifest_filter(env, cutoff_date),
             }
         },
         Priority=10,
         RoleArn=batch_copy_role_arn,
         ClientRequestToken=str(uuid.uuid4()),
         Description=(
-            "Batch copy from " f"{source_bucket_arn} to {destination_bucket_arn}"
+            f"Copy files created before: {cutoff_date} "
+            f"from {source_bucket_arn} to {destination_bucket_arn}."
         ),
     )
 
     job_id = response["JobId"]
-    logger.info("Started S3 Batch Copy job: %s", job_id)
+    logger.info(
+        f"Started S3 Batch Copy job: {job_id}: source={source_bucket_arn} "
+        f"destination={destination_bucket_arn}, manifest_bucket={manifest_bucket_arn}"
+    )
 
     return {
         "job_id": job_id,
         "source_bucket_arn": source_bucket_arn,
         "destination_bucket_arn": destination_bucket_arn,
         "manifest_bucket_arn": manifest_bucket_arn,
-        "manifest_prefix": "batch-copy/manifests",
-        "report_prefix": "batch-copy/reports",
     }
-
-
-if __name__ == "__main__":
-    logger.info("Let the Batch process Begin....")
-    handler()

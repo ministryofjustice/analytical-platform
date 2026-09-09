@@ -320,6 +320,7 @@ locals {
             {
               Action = [
                 "s3:PutObject",
+                "s3:PutObjectAcl",
                 "s3:ListMultipartUploadParts",
               ]
               Effect = "Allow"
@@ -332,6 +333,19 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-land/opg/sirius/*"
               Sid      = "WriteOnlyAccess-mojap-land-opg-sirius"
+            },
+            {
+              Action = [
+                "s3:ListBucket",
+              ]
+              Effect = "Allow"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::649098267436:role/dms-datasync-s3-role-production",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land"
+              Sid      = "ListBucketAccessForSync-mojap-land-opg-sirius"
             },
             {
               Action = "s3:PutObject"
@@ -678,6 +692,7 @@ locals {
             {
               Action = [
                 "s3:PutObject",
+                "s3:PutObjectAcl",
                 "s3:ListMultipartUploadParts",
               ]
               Effect = "Allow"
@@ -690,6 +705,19 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-land-dev/opg/sirius/*"
               Sid      = "WriteOnlyAccess-mojap-land-dev-opg-sirius"
+            },
+            {
+              Action = [
+                "s3:ListBucket",
+              ]
+              Effect = "Allow"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::288342028542:role/dms-datasync-s3-role-dev",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-dev"
+              Sid      = "ListBucketAccessForSync-mojap-land-dev-opg-sirius"
             },
             {
               Action = "s3:PutObject"
@@ -1004,6 +1032,7 @@ locals {
             {
               Action = [
                 "s3:PutObject",
+                "s3:PutObjectAcl",
                 "s3:ListMultipartUploadParts",
               ]
               Effect = "Allow"
@@ -1015,6 +1044,19 @@ locals {
               }
               Resource = "arn:aws:s3:::mojap-land-preprod/opg/sirius/*"
               Sid      = "WriteOnlyAccess-mojap-land-preprod-opg-sirius"
+            },
+            {
+              Action = [
+                "s3:ListBucket",
+              ]
+              Effect = "Allow"
+              Principal = {
+                AWS = [
+                  "arn:aws:iam::492687888235:role/dms-datasync-s3-role-preproduction",
+                ]
+              }
+              Resource = "arn:aws:s3:::mojap-land-preprod"
+              Sid      = "ListBucketAccessForSync-mojap-land-preprod-opg-sirius"
             },
             {
               Action = "s3:PutObject"
