@@ -23,7 +23,6 @@ from datetime import datetime, timezone
 
 import boto3
 
-
 REGIONS = ["eu-west-1", "eu-west-2"]
 
 WARNING_THRESHOLD_DAYS = 30
@@ -98,10 +97,7 @@ def get_tagged_secrets(session, region):
 
     for page in paginator.paginate():
         for secret in page.get("SecretList", []):
-            tags = {
-                tag["Key"]: tag["Value"]
-                for tag in secret.get("Tags", [])
-            }
+            tags = {tag["Key"]: tag["Value"] for tag in secret.get("Tags", [])}
 
             if "expiry-date" not in tags:
                 continue
@@ -152,10 +148,7 @@ def main():
         account_id = account_config["account_id"]
         role_arn = account_config["role_arn"]
 
-        print(
-            f"Scanning account {account_name} "
-            f"({account_id})"
-        )
+        print(f"Scanning account {account_name} " f"({account_id})")
 
         try:
             session = get_session(role_arn)
@@ -167,10 +160,7 @@ def main():
             continue
 
         for region in REGIONS:
-            print(
-                f"Scanning {account_name} "
-                f"({account_id}) in {region}"
-            )
+            print(f"Scanning {account_name} " f"({account_id}) in {region}")
 
             try:
                 secrets = get_tagged_secrets(session, region)
