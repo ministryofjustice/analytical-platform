@@ -11,7 +11,7 @@ module "github_actions_secret_check_iam_role" {
   name = "github-actions-secret-check"
 
   oidc_wildcard_subjects = [
-    "ministryofjustice/YOUR-GITHUB-REPOSITORY:*"
+    "ministryofjustice/analytical-platform:*"
   ]
 
   policies = {
