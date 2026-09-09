@@ -60,8 +60,10 @@ def get_status(days_remaining):
 
 def main():
     today = datetime.now(timezone.utc).date()
-    summary_rows = ["| Region | Secret name | Source-location | expiry-date | Status |",
-                     "|--------|-------------|------------------|-------------|--------|"]
+    summary_rows = [
+        "| Region | Secret name | Source-location | expiry-date | Status |",
+        "|--------|-------------|------------------|-------------|--------|",
+    ]
 
     for region in REGIONS:
         for name, expiry_date, source_location in get_tagged_secrets(region):
@@ -77,11 +79,17 @@ def main():
             status = get_status(days_remaining)
 
             if status == "EXPIRED":
-                print(f"::error::Secret {name} in {region} is EXPIRED (expiry-date: {expiry_date})")
+                print(
+                    f"::error::Secret {name} in {region} is EXPIRED (expiry-date: {expiry_date})"
+                )
             elif status in ("CRITICAL", "WARNING"):
-                print(f"::warning::Secret {name} in {region} is {status} (expiry-date: {expiry_date})")
+                print(
+                    f"::warning::Secret {name} in {region} is {status} (expiry-date: {expiry_date})"
+                )
 
-            summary_rows.append(f"| {region} | {name} | {source_location} | {expiry_date} | {status} |")
+            summary_rows.append(
+                f"| {region} | {name} | {source_location} | {expiry_date} | {status} |"
+            )
 
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary_path:
