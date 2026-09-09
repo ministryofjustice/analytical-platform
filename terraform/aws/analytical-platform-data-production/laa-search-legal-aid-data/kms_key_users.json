@@ -22,10 +22,7 @@
     ]
   },
   "splink_s3_source_output_read_bucket": {
-    "key_users": [
-      "alpha_user_adrian-m-j",
-      "alpha_user_blaine-moj"
-    ]
+    "key_users": ["alpha_user_adrian-m-j", "alpha_user_blaine-moj"]
   },
   "splink_s3_source_output_write_bucket": {
     "key_users": ["airflow-production-laa-search-index-source"]
