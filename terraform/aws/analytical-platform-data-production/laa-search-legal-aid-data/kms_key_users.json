@@ -15,10 +15,17 @@
     "key_users": ["airflow-production-laa-search-index-source"]
   },
   "splink_s3_source_input_write_bucket": {
-    "key_users": ["airflow-production-laa-search-index-source", "LAA User"]
+    "key_users": [
+      "airflow-production-laa-search-index-source",
+      "alpha_user_adrian-m-j",
+      "alpha_user_blaine-moj"
+    ]
   },
   "splink_s3_source_output_read_bucket": {
-    "key_users": ["LAA User"]
+    "key_users": [
+      "alpha_user_adrian-m-j",
+      "alpha_user_blaine-moj"
+    ]
   },
   "splink_s3_source_output_write_bucket": {
     "key_users": ["airflow-production-laa-search-index-source"]
@@ -27,13 +34,21 @@
     "key_users": ["airflow-production-laa-search-index-search"]
   },
   "splink_s3_search_input_write_bucket": {
-    "key_users": ["airflow-production-laa-search-index-search", "LAA User"]
+    "key_users": [
+      "airflow-production-laa-search-index-search",
+      "alpha_user_adrian-m-j",
+      "alpha_user_blaine-moj"
+    ]
   },
   "splink_s3_search_output_write_bucket": {
     "key_users": ["airflow-production-laa-search-index-search"]
   },
   "splink_s3_search_output_read_bucket": {
-    "key_users": ["airflow-production-laa-search-index-source", "LAA User"]
+    "key_users": [
+      "airflow-production-laa-search-index-source",
+      "alpha_user_adrian-m-j",
+      "alpha_user_blaine-moj"
+    ]
   },
   "splink_s3_audit_read_bucket": {
     "key_users": [
