@@ -158,16 +158,19 @@ data "aws_iam_policy_document" "bedrock" {
       "bedrock:GetFoundationModel",
       "bedrock:GetFoundationModelAvailability",
       "bedrock:GetModelCustomizationJob",
+      "bedrock:GetModelInvocationJob",
       "bedrock:GetModelInvocationLoggingConfiguration",
       "bedrock:InvokeModel",
       "bedrock:InvokeModelWithResponseStream",
       "bedrock:ListCustomModels",
       "bedrock:ListFoundationModels",
       "bedrock:ListModelCustomizationJobs",
+      "bedrock:ListModelInvocationJobs",
       "bedrock:ListProvisionedModelThroughputs",
       "bedrock:ListTagsForResource",
       "bedrock:PutModelInvocationLoggingConfiguration",
       "bedrock:StopModelCustomizationJob",
+      "bedrock:StopModelInvocationJob",
       "bedrock:TagResource",
       "bedrock:UntagResource"
     ]
@@ -185,6 +188,18 @@ data "aws_iam_policy_document" "bedrock" {
         "eu-west-3",    # Europe (Paris)
         "us-east-1",    # US East (N. Virginia)
       ]
+    }
+  }
+  statement {
+    # Allows Bedrock batch inference jobs to assume the service role that reads inputs and writes outputs
+    sid       = "BedrockPassRole"
+    effect    = "Allow"
+    actions   = ["iam:PassRole"]
+    resources = ["arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/bedrock-batch-inference-role"]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["bedrock.amazonaws.com"]
     }
   }
 }
