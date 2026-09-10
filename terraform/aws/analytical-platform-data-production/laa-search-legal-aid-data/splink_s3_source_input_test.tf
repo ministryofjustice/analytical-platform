@@ -73,14 +73,32 @@ module "s3_bucket_source_input_test" {
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_source_input_read_test_bucket_key_user_arns } }
       },
       {
-        # PutObject is restricted to a placeholder until the LAA user role is created —
-        # replace alpha_user_jamess-moj with the LAA user role ARN when available
+        # PutObject is restricted for all except role
         Sid       = "DenyWritesForUnauthorisedPrincipals"
         Effect    = "Deny"
         Principal = "*"
-        Action    = ["s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion"]
+        Action    = ["s3:PutObject"]
         Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_test_name}/*"
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_source_input_write_test_bucket_key_user_arns } }
+      },
+      {
+        # Delete Object and version for ALL except search role
+        Sid       = "DenyObjectforallexcept"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:DeleteObject"]
+        Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_test_name}/*"
+        Condition = { ArnNotEquals = {
+          "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-test-laa-search-index-source"
+        } }
+      },
+      {
+        # Delete Object and version for ALL except search role
+        Sid       = "DenyObejctVersionforAll"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:DeleteObjectVersion"]
+        Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_test_name}/*"
       }
     ])
   })
