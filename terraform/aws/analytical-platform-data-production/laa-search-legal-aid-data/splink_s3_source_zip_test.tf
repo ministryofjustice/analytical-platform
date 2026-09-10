@@ -106,13 +106,6 @@ module "s3_bucket_source_zip_test" {
   tags = merge(local.tags, { Name = local.splink_source_zip_bucket_test_name })
 }
 
-# Loop through the list of local.tf and create folders in bucket
-resource "aws_s3_object" "source_zip_test_folder" {
-  for_each = toset(local.source_zip_test_bucket_folder)
-  bucket   = module.s3_bucket_source_zip_test.s3_bucket_id
-  key      = "${each.value}/"
-}
-
 resource "aws_s3_bucket_ownership_controls" "source_zip_input_test" {
   bucket = module.s3_bucket_source_zip_test.s3_bucket_id
 

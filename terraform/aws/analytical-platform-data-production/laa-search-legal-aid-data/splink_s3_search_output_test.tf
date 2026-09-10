@@ -148,13 +148,6 @@ resource "aws_cloudwatch_event_rule" "s3_bucket_search_output_event_rule_test" {
   })
 }
 
-# Loop through the list of local.tf and create folders in bucket
-resource "aws_s3_object" "search_output_test_folder" {
-  for_each = toset(local.search_output_test_bucket_folder)
-  bucket   = module.s3_bucket_search_output_test.s3_bucket_id
-  key      = "${each.value}/"
-}
-
 resource "aws_s3_bucket_notification" "search_output_bucket_notification_test" {
   bucket      = module.s3_bucket_search_output_test.s3_bucket_id
   eventbridge = true

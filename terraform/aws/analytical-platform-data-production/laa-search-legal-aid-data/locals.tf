@@ -161,22 +161,4 @@ locals {
   test_tags = merge(local.tags, {
     Environment = "test"
   })
-
-  ##########################################
-  # Bucket directory lists
-  #########################################
-  search_input_test_bucket_folders = [
-    "input",
-    "accepted",
-    "rejected",
-    "validation"
-  ]
-  search_output_test_bucket_folder = ["output"]
-  source_file_input_test_bucket_folders = [
-    "requests",
-    "accepted",
-    "rejected",
-    "validation"
-  ]
-  source_zip_test_bucket_folder = ["output"]
 }
