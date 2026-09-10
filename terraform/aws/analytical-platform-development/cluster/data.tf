@@ -99,3 +99,20 @@ data "aws_route53_resolver_query_log_config" "core_logging_s3" {
     values = ["core-logging-rlq-s3-eu-west-1"]
   }
 }
+
+##################################################
+# Secret scan
+##################################################
+
+data "aws_iam_policy_document" "github_actions_secret_check" {
+  statement {
+    sid    = "AllowSecretsManagerList"
+    effect = "Allow"
+
+    actions = [
+      "secretsmanager:ListSecrets"
+    ]
+
+    resources = ["*"]
+  }
+}

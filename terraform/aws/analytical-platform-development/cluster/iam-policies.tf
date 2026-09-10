@@ -556,3 +556,21 @@ resource "aws_iam_policy" "control_panel_api" {
   description = "Control Panel policy for ${var.resource_prefix} EKS cluster"
   policy      = data.aws_iam_policy_document.control_panel_api.json
 }
+
+##################################################
+# Secret scan
+##################################################
+
+module "github_actions_secret_check_iam_policy" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.60.0"
+
+  name_prefix = "github-actions-secret-check"
+  description = "IAM policy for checking AWS Secrets Manager expiry tags"
+
+  policy = data.aws_iam_policy_document.github_actions_secret_check.json
+
+}
