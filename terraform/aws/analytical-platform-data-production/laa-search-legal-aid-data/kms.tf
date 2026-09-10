@@ -62,7 +62,8 @@ data "aws_iam_policy_document" "s3_kms_policy" {
           "arn:aws:s3:::${local.splink_source_bucket_name}",
           "arn:aws:s3:::${local.splink_source_input_bucket_name}",
           "arn:aws:s3:::${local.splink_source_output_bucket_name}",
-          "arn:aws:s3:::${local.splink_audit_bucket_name}"
+          "arn:aws:s3:::${local.splink_audit_bucket_name}",
+          "arn:aws:s3:::${local.splink_source_zip_bucket_name}",
         ]
       )
     }
@@ -73,13 +74,13 @@ data "aws_iam_policy_document" "s3_kms_policy" {
       values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
     }
   }
-  # S3 Input-Read
+  # S3 Search Input-Read
   statement {
-    sid = "AllowSplinkS3InputReadKeyUse"
+    sid = "AllowSplinkS3SearchInputReadKeyUse"
 
     principals {
       type        = "AWS"
-      identifiers = local.splink_s3_input_read_bucket_key_user_arns
+      identifiers = local.splink_s3_search_input_read_bucket_key_user_arns
     }
 
     actions = [
@@ -95,13 +96,13 @@ data "aws_iam_policy_document" "s3_kms_policy" {
       values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
     }
   }
-  # S3 Input-Write
+  # S3 Search Input-Write
   statement {
-    sid = "AllowSplinkS3InputWriteKeyUse"
+    sid = "AllowSplinkS3SearchInputWriteKeyUse"
 
     principals {
       type        = "AWS"
-      identifiers = local.splink_s3_input_write_bucket_key_user_arns
+      identifiers = local.splink_s3_search_input_write_bucket_key_user_arns
     }
 
     actions = [
@@ -118,13 +119,13 @@ data "aws_iam_policy_document" "s3_kms_policy" {
       values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
     }
   }
-  # SPLINK S3 OUTPUT - READ
+  # SPLINK S3 SEARCH OUTPUT - READ
   statement {
-    sid = "AllowSplinkS3OutputReadKeyUse"
+    sid = "AllowSplinkS3SearchOutputReadKeyUse"
 
     principals {
       type        = "AWS"
-      identifiers = local.splink_s3_output_read_bucket_key_user_arns
+      identifiers = local.splink_s3_search_output_read_bucket_key_user_arns
     }
 
     actions = [
@@ -140,13 +141,13 @@ data "aws_iam_policy_document" "s3_kms_policy" {
       values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
     }
   }
-  # SPLINK S3 OUTPUT - WRITE
+  # SPLINK S3 SEARCH OUTPUT - WRITE
   statement {
-    sid = "AllowSplinkS3OutputWriteKeyUse"
+    sid = "AllowSplinkS3SearchOutputWriteKeyUse"
 
     principals {
       type        = "AWS"
-      identifiers = local.splink_s3_output_write_bucket_key_user_arns
+      identifiers = local.splink_s3_search_output_write_bucket_key_user_arns
     }
 
     actions = [
@@ -208,13 +209,13 @@ data "aws_iam_policy_document" "s3_kms_policy" {
       values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
     }
   }
-  # SPLINK S3 SOURCE - READ
+  # SPLINK S3 SOURCE INPUT - READ
   statement {
-    sid = "AllowSplinkS3SourceReadKeyUse"
+    sid = "AllowSplinkS3SourceInputReadKeyUse"
 
     principals {
       type        = "AWS"
-      identifiers = local.splink_s3_source_read_bucket_key_user_arns
+      identifiers = local.splink_s3_source_input_read_bucket_key_user_arns
     }
 
     actions = [
@@ -230,13 +231,105 @@ data "aws_iam_policy_document" "s3_kms_policy" {
       values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
     }
   }
-  # SPLINK S3 SOURCE - WRITE
+  # SPLINK S3 SOURCE INPUT - WRITE
   statement {
-    sid = "AllowSplinkS3SourceWriteKeyUse"
+    sid = "AllowSplinkS3SourceInputWriteKeyUse"
 
     principals {
       type        = "AWS"
-      identifiers = local.splink_s3_source_write_bucket_key_user_arns
+      identifiers = local.splink_s3_source_input_write_bucket_key_user_arns
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
+    }
+  }
+
+  # SPLINK S3 SOURCE OUTPUT - READ
+  statement {
+    sid = "AllowSplinkS3SourceOutputReadKeyUse"
+
+    principals {
+      type        = "AWS"
+      identifiers = local.splink_s3_source_output_read_bucket_key_user_arns
+    }
+
+    actions = [
+      "kms:Decrypt",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
+    }
+  }
+  # SPLINK S3 SOURCE OUTPUT - WRITE
+  statement {
+    sid = "AllowSplinkS3SourceOutputWriteKeyUse"
+
+    principals {
+      type        = "AWS"
+      identifiers = local.splink_s3_source_output_write_bucket_key_user_arns
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
+    }
+  }
+
+  # SPLINK S3 SOURCE ZIP - READ
+  statement {
+    sid = "AllowSplinkS3SourceZipReadKeyUse"
+
+    principals {
+      type        = "AWS"
+      identifiers = local.splink_s3_source_zip_read_bucket_key_user_arns
+    }
+
+    actions = [
+      "kms:Decrypt",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
+    }
+  }
+  # SPLINK S3 SOURCE ZIP - WRITE
+  statement {
+    sid = "AllowSplinkS3SourceZipWriteKeyUse"
+
+    principals {
+      type        = "AWS"
+      identifiers = local.splink_s3_source_zip_write_bucket_key_user_arns
     }
 
     actions = [
