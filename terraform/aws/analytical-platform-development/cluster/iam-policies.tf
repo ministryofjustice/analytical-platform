@@ -566,7 +566,7 @@ module "github_actions_secret_check_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.6.1"
+  version = "5.60.0"
 
   name_prefix = "github-actions-secret-check"
   description = "IAM policy for checking AWS Secrets Manager expiry tags"
