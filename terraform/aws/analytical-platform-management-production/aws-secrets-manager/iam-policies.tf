@@ -34,8 +34,8 @@ data "aws_iam_policy_document" "github_actions_secret_check" {
     ]
 
     resources = [
-      "arn:aws:iam::312423030077:role/github-actions-secret-check",
-      "arn:aws:iam::525294151996:role/github-actions-secret-check"
+      "arn:aws:iam::${var.account_ids["analytical-platform-production"]}:role/github-actions-secret-check",
+      "arn:aws:iam::${var.account_ids["analytical-platform-development"]}:role/github-actions-secret-check"
     ]
   }
 }

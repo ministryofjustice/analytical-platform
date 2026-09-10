@@ -256,7 +256,7 @@ module "github_actions_secret_check_iam_role" {
   role_requires_mfa = false
 
   trusted_role_arns = [
-    "arn:aws:iam::042130406152:role/github-actions-secret-check"
+    "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/github-actions-secret-check"
   ]
 
   custom_role_policy_arns = [
