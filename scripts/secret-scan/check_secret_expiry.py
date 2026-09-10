@@ -31,7 +31,7 @@ CRITICAL_THRESHOLD_DAYS = 7
 
 # Accounts to scan.
 #
-# role_arn = None means:
+# role_name = None means:
 #   Use the AWS credentials already configured in the GitHub runner.
 #
 # For additional accounts, specify the role that should be assumed.
@@ -41,11 +41,11 @@ CRITICAL_THRESHOLD_DAYS = 7
 ACCOUNTS = {
     "analytical-platform-management-production": {
         "account_id": "042130406152",
-        "role_arn": None,
+        "role_name": None,
     },
     "analytical-platform-development": {
         "account_id": "525294151996",
-        "role_arn": "arn:aws:iam::525294151996:role/github-actions-secret-check",
+        "role_name": "github-actions-secret-check",
     },
 }
 
@@ -59,16 +59,17 @@ STATUS_PRIORITY = {
 }
 
 
-def get_session(role_arn=None):
+def get_session(account_id, role_name=None):
     """
     Returns a boto3 Session.
 
-    If role_arn is provided, assumes that role first.
+    If role_name is provided, assumes that role in the target account first.
     Otherwise, uses the credentials already available to the runner.
     """
-    if role_arn is None:
+    if role_name is None:
         return boto3.Session()
 
+    role_arn = f"arn:aws:iam::{account_id}:role/{role_name}"
     sts_client = boto3.client("sts")
 
     response = sts_client.assume_role(
@@ -150,12 +151,12 @@ def main():
 
     for account_name, account_config in ACCOUNTS.items():
         account_id = account_config["account_id"]
-        role_arn = account_config["role_arn"]
+        role_name = account_config["role_name"]
 
         print(f"Scanning account {account_name} " f"({account_id})")
 
         try:
-            session = get_session(role_arn)
+            session = get_session(account_id, role_name)
         except Exception as exc:
             print(
                 f"::warning::Unable to obtain credentials for "
