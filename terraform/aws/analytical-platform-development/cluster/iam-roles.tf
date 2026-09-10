@@ -239,3 +239,43 @@ module "iam_assumable_role_control_panel_api" {
     "system:serviceaccount:${var.control_panel_celery_beat_kubernetes_service_account}",
   ]
 }
+
+##################################################
+# Secret scan
+##################################################
+
+module "github_actions_secret_check_iam_role" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "6.6.1"
+
+  use_name_prefix = false
+
+  name = "github-actions-secret-check"
+
+  trust_policy_permissions = {
+    AllowManagementProductionSecretCheckRole = {
+      effect = "Allow"
+
+      principals = [{
+        type = "AWS"
+
+        identifiers = [
+          "arn:aws:iam::042130406152:role/github-actions-secret-check"
+        ]
+      }]
+
+      actions = [
+        "sts:AssumeRole"
+      ]
+    }
+  }
+
+  policies = {
+    github_actions_secret_check = module.github_actions_secret_check_iam_policy.arn
+  }
+
+}
+

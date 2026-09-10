@@ -42,7 +42,11 @@ ACCOUNTS = {
     "analytical-platform-management-production": {
         "account_id": "042130406152",
         "role_arn": None,
-    }
+    },
+    "analytical-platform-development": {
+        "account_id": "525294151996",
+        "role_arn": "arn:aws:iam::525294151996:role/github-actions-secret-check",
+    },
 }
 
 
