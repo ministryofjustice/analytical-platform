@@ -48,10 +48,10 @@ module "s3_bucket_search_output_test" {
         Sid       = "DenyBucketDeletion"
         Effect    = "Deny"
         Principal = "*"
+        # s3:PutEncryptionConfiguration excluded to avoid locking out the Terraform admin role (see splink_s3.tf)
         Action = [
           "s3:DeleteBucket",
           "s3:PutBucketAcl",
-          "s3:PutEncryptionConfiguration",
           "s3:PutBucketVersioning"
         ]
         Resource = "arn:aws:s3:::${local.splink_search_output_bucket_test_name}"
