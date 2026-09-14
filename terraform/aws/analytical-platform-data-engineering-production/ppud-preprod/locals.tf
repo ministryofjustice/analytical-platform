@@ -4,4 +4,8 @@ locals {
   name = "ppud"
 
   env = var.tags["environment"]
+
+  batch_destination_bucket_arn = "arn:aws:s3:::ppud-parquet-exports-preprod-${local.account_ids["digital-prison-reporting-development"]}-eu-west-2-an"
+
+  migration_replication_cutoff_date = "2026-09-14T00:00:00Z"
 }
