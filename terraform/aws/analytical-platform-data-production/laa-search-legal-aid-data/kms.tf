@@ -112,11 +112,11 @@ data "aws_iam_policy_document" "s3_kms_policy" {
 
     resources = ["*"]
 
-    condition {
-      test     = "StringEquals"
-      variable = "kms:ViaService"
-      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
-    }
+    # condition {
+    #   test     = "StringEquals"
+    #   variable = "kms:ViaService"
+    #   values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
+    # }
   }
   # SPLINK S3 OUTPUT - READ
   statement {
@@ -157,11 +157,11 @@ data "aws_iam_policy_document" "s3_kms_policy" {
 
     resources = ["*"]
 
-    condition {
-      test     = "StringEquals"
-      variable = "kms:ViaService"
-      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
-    }
+    # condition {
+    #   test     = "StringEquals"
+    #   variable = "kms:ViaService"
+    #   values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
+    # }
   }
   # SPLINK S3 AUDIT - READ
   statement {
@@ -202,11 +202,11 @@ data "aws_iam_policy_document" "s3_kms_policy" {
 
     resources = ["*"]
 
-    condition {
-      test     = "StringEquals"
-      variable = "kms:ViaService"
-      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
-    }
+    # condition {
+    #   test     = "StringEquals"
+    #   variable = "kms:ViaService"
+    #   values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
+    # }
   }
   # SPLINK S3 SOURCE - READ
   statement {
@@ -247,11 +247,11 @@ data "aws_iam_policy_document" "s3_kms_policy" {
 
     resources = ["*"]
 
-    condition {
-      test     = "StringEquals"
-      variable = "kms:ViaService"
-      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
-    }
+    # condition {
+    #   test     = "StringEquals"
+    #   variable = "kms:ViaService"
+    #   values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
+    # }
   }
 
   statement {
