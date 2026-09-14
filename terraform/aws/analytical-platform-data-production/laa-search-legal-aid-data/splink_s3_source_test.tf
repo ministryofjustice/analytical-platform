@@ -52,6 +52,18 @@ module "s3_bucket_source_test" {
           "s3:DeleteBucket"
         ]
         Resource = "arn:aws:s3:::${local.splink_source_bucket_test_name}"
+      },
+      {
+        Sid       = "DenyBucketConfigChangesForUnauthorisedPrincipals"
+        Effect    = "Deny"
+        Principal = "*"
+        Action = [
+          "s3:PutBucketAcl",
+          "s3:PutEncryptionConfiguration",
+          "s3:PutBucketVersioning"
+        ]
+        Resource  = "arn:aws:s3:::${local.splink_source_bucket_test_name}"
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = [local.github_actions_admin_role_arn] } }
       }
       ], [
       {
