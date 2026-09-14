@@ -1,6 +1,44 @@
-resource "aws_iam_role" "migration_replication" {
+# Bucket to store S3 generated manifest and completion report
+module "batch_manifest_bucket" {
+  source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=66bd5c6aa0d0396442f0d4a63642029ff38d2a8a"
 
-  name = "${local.name}-parquet-exports-replication-${local.env}-role"
+  bucket_prefix = "${local.name}-batch-manifest-${local.env}"
+
+  ownership_controls = "BucketOwnerEnforced"
+
+  versioning_enabled = true
+
+  lifecycle_rule = [
+    {
+      id      = "delete-old-manifests-and-reports"
+      enabled = "Enabled"
+      prefix  = ""
+
+      expiration = {
+        days = 30
+      }
+
+      noncurrent_version_expiration = {
+        days = 30
+      }
+
+      abort_incomplete_multipart_upload_days = 7
+    }
+  ]
+
+  sse_algorithm = "AES256"
+
+  tags = var.tags
+
+  providers = {
+    aws.bucket-replication = aws
+  }
+}
+
+# Role S3 Batch Operations assumes to perform the copy
+resource "aws_iam_role" "migration_batch_copy" {
+
+  name = "${local.name}-parquet-exports-batch-copy-${local.env}-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -22,53 +60,18 @@ resource "aws_iam_role" "migration_replication" {
   tags = var.tags
 }
 
-module "batch_manifest_bucket" {
-  source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=66bd5c6aa0d0396442f0d4a63642029ff38d2a8a"
-
-  bucket_prefix = "${local.name}-batch-manifest-${local.env}"
-
-  ownership_controls = "BucketOwnerEnforced"
-
-  versioning_enabled = true
-
-  lifecycle_rule = [
-    {
-      id      = "delete-old-manifests"
-      enabled = "Enabled"
-      prefix  = ""
-
-      expiration = {
-        days = 30
-      }
-
-      noncurrent_version_expiration = {
-        days = 30
-      }
-
-      abort_incomplete_multipart_upload_days = 7
-    }
-  ]
-
-  sse_algorithm  = "aws:kms"
-  custom_kms_key = module.rds_export_kms_dev.key_arn
-
-  tags = var.tags
-
-  providers = {
-    aws.bucket-replication = aws
-  }
-}
-
-resource "aws_iam_policy" "migration_replication" {
+# Permissions for assumed role
+resource "aws_iam_policy" "migration_batch_copy" {
 
   name = "${local.name}-parquet-exports-batch-copy-${local.env}"
 
   policy = jsonencode({
-
     Version = "2012-10-17"
 
     Statement = [
       {
+        // List or inspect source bucket
+        // Create S3 Inventory report to generate batch manifest
         Sid    = "SourceBucketPermissions"
         Effect = "Allow"
 
@@ -82,12 +85,15 @@ resource "aws_iam_policy" "migration_replication" {
         ]
       },
       {
+        // Read source objects
         Sid    = "SourceObjectPermissions"
         Effect = "Allow"
 
         Action = [
           "s3:GetObject",
-          "s3:GetObjectTagging"
+          "s3:GetObjectTagging",
+          "s3:GetObjectVersion",
+          "s3:GetObjectVersionTagging"
         ]
 
         Resource = [
@@ -95,6 +101,7 @@ resource "aws_iam_policy" "migration_replication" {
         ]
       },
       {
+        // Write copied objects to destination bucket
         Sid    = "DestinationObjectPermissions"
         Effect = "Allow"
 
@@ -108,6 +115,7 @@ resource "aws_iam_policy" "migration_replication" {
         ]
       },
       {
+        // Read and write manifest and report to manifest bucket
         Sid    = "ManifestAndReportPermissions"
         Effect = "Allow"
 
@@ -127,8 +135,8 @@ resource "aws_iam_policy" "migration_replication" {
   tags = var.tags
 }
 
-resource "aws_iam_role_policy_attachment" "migration_replication" {
+resource "aws_iam_role_policy_attachment" "migration_batch_copy" {
 
-  role       = aws_iam_role.migration_replication.name
-  policy_arn = aws_iam_policy.migration_replication.arn
+  role       = aws_iam_role.migration_batch_copy.name
+  policy_arn = aws_iam_policy.migration_batch_copy.arn
 }
