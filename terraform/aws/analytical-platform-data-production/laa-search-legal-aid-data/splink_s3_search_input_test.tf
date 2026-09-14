@@ -51,12 +51,21 @@ module "s3_bucket_search_input_test" {
         Effect    = "Deny"
         Principal = "*"
         Action = [
-          "s3:DeleteBucket",
+          "s3:DeleteBucket"
+        ]
+        Resource = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}"
+      },
+      {
+        Sid       = "DenyBucketConfigChangesForUnauthorisedPrincipals"
+        Effect    = "Deny"
+        Principal = "*"
+        Action = [
           "s3:PutBucketAcl",
           "s3:PutEncryptionConfiguration",
           "s3:PutBucketVersioning"
         ]
-        Resource = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}"
+        Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}"
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = [local.github_actions_admin_role_arn] } }
       }
       ], [
       {
@@ -73,7 +82,7 @@ module "s3_bucket_search_input_test" {
         Principal = "*"
         Action    = ["s3:ListBucket"]
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_search_input_read_test_bucket_key_user_arns } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = concat(local.splink_s3_search_input_read_test_bucket_key_user_arns, [local.github_actions_admin_role_arn]) } }
       },
       {
         # PutObject is restricted for all except role

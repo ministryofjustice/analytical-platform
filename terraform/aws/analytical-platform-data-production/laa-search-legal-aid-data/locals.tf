@@ -6,6 +6,10 @@ locals {
   ##########################################
   # User ARNs
   #########################################
+  # Pipeline role that manages these buckets; must be excluded from the bucket
+  # policy deny statements so Terraform can read and manage them.
+  github_actions_admin_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/GlobalGitHubActionAdmin"
+
   splink_s3_key_user_arns = [
     for role in local.kms_key_users.splink_s3_bucket.key_users :
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
