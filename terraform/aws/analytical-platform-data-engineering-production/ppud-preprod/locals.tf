@@ -7,5 +7,5 @@ locals {
 
   batch_destination_bucket_arn = "arn:aws:s3:::ppud-parquet-exports-preprod-${local.account_ids["digital-prison-reporting-preproduction"]}-eu-west-2-an"
 
-  migration_batch_copy_cutoff_date = "2026-09-14T00:00:00Z"
+  migration_batch_copy_cutoff_date = "2026-09-13T23:59:59Z"
 }
