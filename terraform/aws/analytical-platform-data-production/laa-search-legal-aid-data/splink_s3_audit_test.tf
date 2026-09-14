@@ -50,10 +50,7 @@ module "s3_bucket_audit_test" {
         Effect    = "Deny"
         Principal = "*"
         Action = [
-          "s3:DeleteBucket",
-          "s3:PutBucketAcl",
-          "s3:PutEncryptionConfiguration",
-          "s3:PutBucketVersioning"
+          "s3:DeleteBucket"
         ]
         Resource = "arn:aws:s3:::${local.splink_audit_bucket_test_name}"
       }
@@ -80,7 +77,7 @@ module "s3_bucket_audit_test" {
         Principal = "*"
         Action    = ["s3:ListBucket"]
         Resource  = "arn:aws:s3:::${local.splink_audit_bucket_test_name}"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_audit_read_test_bucket_key_user_arns } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = concat(local.splink_s3_audit_read_test_bucket_key_user_arns, [local.github_actions_admin_role_arn]) } }
       }
     ])
   })
