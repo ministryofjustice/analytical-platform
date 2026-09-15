@@ -159,7 +159,7 @@ def main():
             session = get_session(account_id, role_name)
         except Exception as exc:
             print(
-                f"::warning::Unable to obtain credentials for "  f"{account_name}: {exc}"
+                f"::warning::Unable to obtain credentials for " f"{account_name}: {exc}"
             )
             continue
 
