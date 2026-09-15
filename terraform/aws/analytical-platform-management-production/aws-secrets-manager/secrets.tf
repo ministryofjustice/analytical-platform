@@ -98,7 +98,7 @@ resource "aws_secretsmanager_secret" "secret_scan_webhook_url" {
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
   #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
   name        = "secret-scan-webhook-url"
-  description = "Slack webhook URL for secret scannotifications"
+  description = "Slack webhook URL for secret scan notifications"
   kms_key_id  = "alias/aws/secretsmanager"
 
   tags = {
