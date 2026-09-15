@@ -102,7 +102,7 @@ resource "aws_secretsmanager_secret" "secret_scan_webhook_url" {
   kms_key_id  = "alias/aws/secretsmanager"
 
   tags = {
-    expiry-date     = "2027-09-10"
+    expiry-date     = "none"
     source-location = "the location the key needs updating"
     rotation-policy = "none"
   }
