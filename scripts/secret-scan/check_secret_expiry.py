@@ -153,26 +153,25 @@ def main():
         account_id = account_config["account_id"]
         role_name = account_config["role_name"]
 
-        print(f"Scanning account {account_name} " f"({account_id})")
+        print(f"Scanning account {account_name}")
 
         try:
             session = get_session(account_id, role_name)
         except Exception as exc:
             print(
-                f"::warning::Unable to obtain credentials for "
-                f"{account_name} ({account_id}): {exc}"
+                f"::warning::Unable to obtain credentials for " f"{account_name}: {exc}"
             )
             continue
 
         for region in REGIONS:
-            print(f"Scanning {account_name} " f"({account_id}) in {region}")
+            print(f"Scanning {account_name} in {region}")
 
             try:
                 secrets = get_tagged_secrets(session, region)
             except Exception as exc:
                 print(
                     f"::warning::Unable to scan Secrets Manager in "
-                    f"{account_name} ({account_id}), {region}: {exc}"
+                    f"{account_name}, {region}: {exc}"
                 )
                 continue
 
@@ -192,7 +191,7 @@ def main():
 
                     print(
                         f"::warning::Secret {name} in "
-                        f"{account_name} ({account_id}), {region} "
+                        f"{account_name}, {region} "
                         f"has an unparsable expiry-date tag value: "
                         f"{expiry_date}"
                     )
@@ -200,7 +199,6 @@ def main():
                     results.append(
                         {
                             "account": account_name,
-                            "account_id": account_id,
                             "region": region,
                             "name": name,
                             "source_location": source_location,
@@ -218,7 +216,7 @@ def main():
                 if status == "EXPIRED":
                     print(
                         f"::error::Secret {name} in "
-                        f"{account_name} ({account_id}), {region} "
+                        f"{account_name}, {region} "
                         f"is EXPIRED "
                         f"(expiry-date: {expiry_date})"
                     )
@@ -226,7 +224,7 @@ def main():
                 elif status in ("CRITICAL", "WARNING"):
                     print(
                         f"::warning::Secret {name} in "
-                        f"{account_name} ({account_id}), {region} "
+                        f"{account_name}, {region} "
                         f"is {status} "
                         f"(expiry-date: {expiry_date}, "
                         f"{days_remaining} days remaining)"
@@ -235,7 +233,6 @@ def main():
                 results.append(
                     {
                         "account": account_name,
-                        "account_id": account_id,
                         "region": region,
                         "name": name,
                         "source_location": source_location,
@@ -273,11 +270,11 @@ def main():
         f"Check date: `{today}`",
         "",
         (
-            "| Account | Account ID | Region | Secret name | "
+            "| Account | Region | Secret name | "
             "Source location | Expiry date | Days remaining | Status |"
         ),
         (
-            "|---------|------------|--------|-------------|"
+            "|---------|--------|-------------|"
             "-----------------|-------------|----------------|--------|"
         ),
     ]
@@ -286,7 +283,6 @@ def main():
         summary_rows.append(
             "| "
             f"{escape_markdown(result['account'])} | "
-            f"{escape_markdown(result['account_id'])} | "
             f"{escape_markdown(result['region'])} | "
             f"{escape_markdown(result['name'])} | "
             f"{escape_markdown(result['source_location'])} | "
