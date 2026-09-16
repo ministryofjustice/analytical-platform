@@ -771,7 +771,7 @@ data "aws_iam_policy_document" "s3_kms_policy_test" {
 
     principals {
       type        = "AWS"
-      identifiers = local.splink_s3_test_key_user_arns
+      identifiers = local.splink_s3_key_user_arns
     }
 
     actions = [
