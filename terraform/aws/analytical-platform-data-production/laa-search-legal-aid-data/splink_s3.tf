@@ -175,6 +175,15 @@ module "s3_bucket_splink" {
     ]
   })
 
+  object_lock_configuration = {
+    rule = {
+      default_retention = {
+        mode = "GOVERNANCE"
+        days = 5110
+      }
+    }
+  }
+
   logging = {
     target_bucket = local.logging_bucket_name
     target_prefix = "s3access/${local.splink_bucket_name}/"
@@ -207,6 +216,11 @@ resource "aws_s3_bucket_ownership_controls" "splink" {
   }
 }
 
+resource "aws_s3_bucket_notification" "s3_bucket_notification" {
+  bucket      = module.s3_bucket_splink.s3_bucket_id
+  eventbridge = true
+}
+
 resource "aws_cloudwatch_event_rule" "s3_bucket_splink_event_rule" {
   name        = "splink-bucket-event-rule"
   description = "Event rule to trigger on S3 Object Created events"
@@ -234,14 +248,7 @@ resource "aws_cloudwatch_event_rule" "s3_bucket_splink_event_rule" {
   })
 }
 
-
-resource "aws_s3_bucket_notification" "bucket_notification" {
-  bucket      = module.s3_bucket_splink.s3_bucket_id
-  eventbridge = true
-}
-
-
-resource "aws_cloudwatch_event_target" "bucket_event_target" {
+resource "aws_cloudwatch_event_target" "s3_bucket_event_target" {
   rule      = aws_cloudwatch_event_rule.s3_bucket_splink_event_rule.name
   target_id = "s3-event-target"
   arn       = aws_sns_topic.splink_bucket_alerting_topic.arn
