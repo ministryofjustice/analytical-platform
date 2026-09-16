@@ -1,6 +1,7 @@
 module "s3_bucket_source" {
   source                  = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=97bb13eff35489bd38993487c3d04c5b6d024cb6"
   bucket                  = local.splink_source_bucket_name
+  object_lock_enabled     = true
   force_destroy           = false
   versioning              = { enabled = true }
   block_public_acls       = true
@@ -101,6 +102,15 @@ module "s3_bucket_source" {
     }
   }
 
+  object_lock_configuration = {
+    rule = {
+      default_retention = {
+        mode = "GOVERNANCE"
+        days = 5110
+      }
+    }
+  }
+
   logging = {
     target_bucket = local.logging_bucket_name
     target_prefix = "s3access/${local.splink_source_bucket_name}/"
@@ -114,4 +124,50 @@ module "s3_bucket_source" {
   }]
 
   tags = merge(local.tags, { Name = local.splink_source_bucket_name })
+}
+
+resource "aws_s3_bucket_ownership_controls" "splink_source" {
+  bucket = module.s3_bucket_source.s3_bucket_id
+
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_s3_bucket_notification" "bucket_notification" {
+  bucket      = module.s3_bucket_source.s3_bucket_id
+  eventbridge = true
+}
+
+resource "aws_cloudwatch_event_rule" "s3_source_bucket_splink_event_rule" {
+  name        = "splink-source-bucket-event-rule"
+  description = "Event rule to trigger on S3 Object Created events"
+
+  event_pattern = jsonencode({
+    source = [
+      "aws.s3"
+    ]
+
+    detail-type = [
+      "Object Created"
+    ]
+
+    detail = {
+      bucket = {
+        name = [
+          module.s3_bucket_source.s3_bucket_id
+        ]
+      }
+    }
+  })
+
+  tags = merge(local.tags, {
+    name = "splink-bucket-event-rule"
+  })
+}
+
+resource "aws_cloudwatch_event_target" "source_bucket_event_target" {
+  rule      = aws_cloudwatch_event_rule.s3_source_bucket_splink_event_rule.name
+  target_id = "s3-event-target"
+  arn       = aws_sns_topic.splink_bucket_alerting_topic.arn
 }
