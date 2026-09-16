@@ -63,7 +63,7 @@ module "s3_bucket_search_output_test" {
           "s3:PutBucketVersioning"
         ]
         Resource  = "arn:aws:s3:::${local.splink_search_output_bucket_test_name}"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = [local.github_actions_admin_role_arn] } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = [local.splink_s3_search_output_write_test_bucket_key_user_arns] } }
       }
       ], [
       {
@@ -88,7 +88,7 @@ module "s3_bucket_search_output_test" {
         Principal = "*"
         Action    = ["s3:ListBucket"]
         Resource  = "arn:aws:s3:::${local.splink_search_output_bucket_test_name}"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = concat(local.splink_s3_search_output_read_test_bucket_key_user_arns, [local.github_actions_admin_role_arn]) } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = concat(local.splink_s3_search_output_read_test_bucket_key_user_arns, [local.splink_s3_search_output_write_test_bucket_key_user_arns]) } }
       }
     ])
   })
