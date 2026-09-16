@@ -128,6 +128,49 @@ module "s3_bucket_splink" {
             "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_kms_key.arn
           }
         }
+      },
+      {
+        Sid       = "DenyReadsForUnauthorisedPrincipals"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:GetObject", "s3:GetObjectVersion"]
+        Resource  = "arn:aws:s3:::${local.splink_bucket_name}/*"
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_read_bucket_user_arns } }
+      },
+      {
+        Sid       = "DenyListingForUnauthorisedPrincipals"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:ListBucket"]
+        Resource  = "arn:aws:s3:::${local.splink_bucket_name}"
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_read_bucket_user_arns } }
+      },
+      {
+        Sid       = "DenyWritesForUnauthorisedPrincipals"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:PutObject"]
+        Resource  = "arn:aws:s3:::${local.splink_bucket_name}/*"
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_write_bucket_user_arns } }
+      },
+      {
+        # Explicit Deny on DeleteObject
+        Sid       = "DenyObjectDeletion"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:DeleteObject"]
+        Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_name}/*"
+        Condition = { ArnNotEquals = {
+          "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-production-laa-search-index-s3-ops"
+        } }
+      },
+      {
+        # Explicit Deny on DeleteObjectVersion for ALL
+        Sid       = "DenyObjectVersion"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:DeleteObjectVersion"]
+        Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_name}/*"
       }
     ]
   })

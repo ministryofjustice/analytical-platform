@@ -1,5 +1,20 @@
 {
-  "splink_s3_bucket": {
+  "splink_s3_read_bucket": {
+    "key_users": [
+      "airflow-production-laa-search-index-s3-ops",
+      "airflow-production-laa-search-index-search"
+    ]
+  },
+  "splink_s3_write_bucket": {
+    "key_users": ["airflow-production-laa-search-index-s3-ops"]
+  },
+  "splink_source_s3_read_bucket": {
+    "key_users": [
+      "airflow-production-laa-search-index-s3-ops",
+      "airflow-development-laa-search-index-source"
+    ]
+  },
+  "splink_source_s3_write_bucket": {
     "key_users": ["airflow-production-laa-search-index-s3-ops"]
   },
   "splink_s3_test_bucket": {
