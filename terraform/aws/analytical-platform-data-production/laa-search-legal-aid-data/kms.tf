@@ -348,23 +348,39 @@ data "aws_iam_policy_document" "s3_kms_policy" {
   }
 
   statement {
-    sid = "AllowAirflowKeyUse"
+    sid = "AllowAirflowKeyRead"
 
     principals {
       type        = "AWS"
-      identifiers = local.splink_s3_key_user_arns
+      identifiers = local.splink_s3_read_bucket_user_arns
     }
 
     actions = [
-      "kms:Encrypt",
       "kms:Decrypt",
-      "kms:ReEncrypt*",
-      "kms:GenerateDataKey*",
       "kms:DescribeKey"
     ]
 
     resources = ["*"]
   }
+
+  statement {
+    sid = "AllowAirflowKeyWrite"
+
+    principals {
+      type        = "AWS"
+      identifiers = local.splink_s3_write_bucket_user_arns
+    }
+
+    actions = [
+      "kms:Encrypt",
+      "kms:GenerateDataKey*",
+      "kms:ReEncrypt*",
+      "kms:DescribeKey"
+    ]
+
+    resources = ["*"]
+  }
+
 }
 
 # Cloudwatch, SNS, KMS policy for Production
@@ -755,7 +771,7 @@ data "aws_iam_policy_document" "s3_kms_policy_test" {
 
     principals {
       type        = "AWS"
-      identifiers = local.splink_s3_key_user_arns
+      identifiers = local.splink_s3_test_key_user_arns
     }
 
     actions = [
