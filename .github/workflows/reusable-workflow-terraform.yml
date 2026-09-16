@@ -211,7 +211,7 @@ jobs:
 
       - name: Retrieve AWS Secrets Manager Secrets
         id: retrieve_aws_secrets_manager_secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@3a411b6ec5cace3d626412dd917e7bfeac242cfa # v3.0.0
+        uses: aws-actions/aws-secretsmanager-get-secrets@2297f9a879480a9e3af9b293ed15c70caf8e1c88 # v3.0.2
         with:
           secret-ids: |
             GITHUB_ROBOT_TOKEN, github-token
