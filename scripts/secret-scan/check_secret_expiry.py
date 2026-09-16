@@ -148,6 +148,7 @@ def escape_markdown(value):
 def main():
     today = datetime.now(timezone.utc).date()
     results = []
+    alert_messages = {"EXPIRED": [], "CRITICAL": [], "WARNING": []}
 
     for account_name, account_config in ACCOUNTS.items():
         account_id = account_config["account_id"]
@@ -214,21 +215,23 @@ def main():
                 status = get_status(days_remaining)
 
                 if status == "EXPIRED":
-                    print(
-                        f"::error::Secret {name} in "
-                        f"{account_name}, {region} "
-                        f"is EXPIRED "
-                        f"(expiry-date: {expiry_date})"
+                    message = (
+                        f"Secret {name} in {account_name}, {region} "
+                        f"is EXPIRED (expiry-date: {expiry_date})"
                     )
 
+                    print(f"::error::{message}")
+                    alert_messages["EXPIRED"].append(message)
+
                 elif status in ("CRITICAL", "WARNING"):
-                    print(
-                        f"::warning::Secret {name} in "
-                        f"{account_name}, {region} "
-                        f"is {status} "
-                        f"(expiry-date: {expiry_date}, "
+                    message = (
+                        f"Secret {name} in {account_name}, {region} "
+                        f"is {status} (expiry-date: {expiry_date}, "
                         f"{days_remaining} days remaining)"
                     )
+
+                    print(f"::warning::{message}")
+                    alert_messages[status].append(message)
 
                 results.append(
                     {
@@ -310,6 +313,27 @@ def main():
             summary_file.write("\n".join(summary_rows) + "\n")
     else:
         print("\n".join(summary_rows))
+
+    # Expose one output per alert category so downstream workflow steps can
+    # send a Slack notification for each, even though this script always
+    # exits successfully.
+    #
+    # Messages are joined with a literal "\n" (rather than a real newline)
+    # so the value stays on a single line and can be embedded directly in a
+    # JSON payload without breaking it.
+    github_output = os.environ.get("GITHUB_OUTPUT")
+
+    if github_output:
+        with open(
+            github_output,
+            "a",
+            encoding="utf-8",
+        ) as output_file:
+            for status, messages in alert_messages.items():
+                key = status.lower()
+                joined_messages = "\\n".join(messages)
+                output_file.write(f"{key}-count={len(messages)}\n")
+                output_file.write(f"{key}-messages={joined_messages}\n")
 
 
 if __name__ == "__main__":
