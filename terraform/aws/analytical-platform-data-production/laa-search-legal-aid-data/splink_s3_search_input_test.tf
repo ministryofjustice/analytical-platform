@@ -65,7 +65,7 @@ module "s3_bucket_search_input_test" {
           "s3:PutBucketVersioning"
         ]
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = [local.splink_s3_search_input_write_test_bucket_key_user_arns] } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = [local.github_actions_admin_role_arn] } }
       }
       ], [
       {
@@ -82,7 +82,7 @@ module "s3_bucket_search_input_test" {
         Principal = "*"
         Action    = ["s3:ListBucket"]
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = concat(local.splink_s3_search_input_read_test_bucket_key_user_arns, [local.splink_s3_search_input_write_test_bucket_key_user_arns]) } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = concat(local.splink_s3_search_input_read_test_bucket_key_user_arns, [local.github_actions_admin_role_arn]) } }
       },
       {
         # PutObject is restricted for all except role
