@@ -3,6 +3,13 @@ locals {
   app           = jsondecode(file("${path.module}/application_variables.json"))
   kms_key_users = jsondecode(file("${path.module}/kms_key_users.json"))
 
+  ##########################################
+  # User ARNs
+  #########################################
+  # Pipeline role that manages these buckets; must be excluded from the bucket
+  # policy deny statements so Terraform can read and manage them.
+  github_actions_admin_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/GlobalGitHubActionAdmin"
+
   # The following ARN is used for Prod bucket
   splink_s3_read_bucket_user_arns = [
     for role in local.kms_key_users.splink_s3_read_bucket.key_users :
