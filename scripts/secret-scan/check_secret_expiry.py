@@ -35,9 +35,6 @@ CRITICAL_THRESHOLD_DAYS = 7
 #   Use the AWS credentials already configured in the GitHub runner.
 #
 # For additional accounts, specify the role that should be assumed.
-#
-# Rename the account names below as appropriate once the mapping between
-# account IDs and Analytical Platform environments is confirmed.
 ACCOUNTS = {
     "analytical-platform-management-production": {
         "account_id": "042130406152",
@@ -45,6 +42,22 @@ ACCOUNTS = {
     },
     "analytical-platform-development": {
         "account_id": "525294151996",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-production": {
+        "account_id": "312423030077",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-data-development": {
+        "account_id": "803963757240",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-data-production": {
+        "account_id": "593291632749",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-landing-production": {
+        "account_id": "335823981503",
         "role_name": "github-actions-secret-check",
     },
 }
