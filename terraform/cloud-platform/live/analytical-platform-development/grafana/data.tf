@@ -26,12 +26,6 @@ data "aws_secretsmanager_secret_version" "cloud_platform_live_analytical_platfor
   secret_id = "cloud-platform/live/analytical-platform-development/token"
 }
 
-data "aws_secretsmanager_secret_version" "github_token" {
-  provider = aws.analytical-platform-management-production-eu-west-1
-
-  secret_id = "analytical-platform-github-token"
-}
-
 data "github_team" "analytical_platform_engineers" {
   slug = "analytical-platform-engineers"
 }

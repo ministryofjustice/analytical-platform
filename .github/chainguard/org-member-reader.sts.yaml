@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/octo-sts/app/refs/heads/main/pkg/octosts/octosts.TrustPolicy.json
+issuer: https://token.actions.githubusercontent.com
+subject_pattern: repo:ministryofjustice/analytical-platform:.*
+claim_pattern:
+  job_workflow_ref: ministryofjustice/analytical-platform/\.github/workflows/reusable-workflow-terraform\.yml@.*
+
+permissions:
+  members: read
