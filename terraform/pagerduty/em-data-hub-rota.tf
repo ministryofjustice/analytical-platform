@@ -150,13 +150,13 @@ module "schedules_em" {
 moved {
   from = module.teams_em[
     "EM Data Hub Engineers"
-  ].pagerduty_team_membership.responders[
+    ].pagerduty_team_membership.responders[
     "matt.heery@justice.gov.uk"
   ]
 
   to = module.teams_em[
     "EM Data Hub Engineers"
-  ].pagerduty_team_membership.managers[
+    ].pagerduty_team_membership.managers[
     "matt.heery@justice.gov.uk"
   ]
 }
@@ -164,13 +164,13 @@ moved {
 moved {
   from = module.teams_em[
     "EM Data Hub Engineers"
-  ].pagerduty_team_membership.responders[
+    ].pagerduty_team_membership.responders[
     "khristiania.raihan@justice.gov.uk"
   ]
 
   to = module.teams_em[
     "EM Data Hub Engineers"
-  ].pagerduty_team_membership.managers[
+    ].pagerduty_team_membership.managers[
     "khristiania.raihan@justice.gov.uk"
   ]
 }
