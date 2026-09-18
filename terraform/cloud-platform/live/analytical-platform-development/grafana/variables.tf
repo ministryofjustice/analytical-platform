@@ -11,3 +11,9 @@ variable "tags" {
 variable "namespace" {
   type = string
 }
+
+variable "org_member_reader_github_token" {
+  type        = string
+  description = "Short-lived token from the Octo STS org-member-reader identity (.github/chainguard/org-member-reader.sts.yaml), used only for the github provider"
+  sensitive   = true
+}
