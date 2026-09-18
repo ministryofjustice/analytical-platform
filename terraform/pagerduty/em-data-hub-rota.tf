@@ -3,12 +3,12 @@ locals {
     {
       name  = "Matt Heery"
       email = "matt.heery@justice.gov.uk"
-      role  = "responder"
+      role  = "manager"
     },
     {
       name  = "Khristiania Raihan"
       email = "khristiania.raihan@justice.gov.uk"
-      role  = "responder"
+      role  = "manager"
     },
     {
       name  = "Lucy AstleyJones"
@@ -18,6 +18,16 @@ locals {
     {
       name  = "Matthew Rixson"
       email = "matthew.rixson@justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "Gwion Aprhobat"
+      email = "gwion.aprhobat@digital.justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "George Kelly"
+      email = "george.kelly@justice.gov.uk"
       role  = "responder"
     },
   ]
@@ -133,6 +143,39 @@ module "schedules_em" {
   depends_on = [module.teams_em]
 }
 
+# The existing team membership for this person was previously managed
+# as a responder. Preserve the same PagerDuty membership while moving
+# Terraform management to the managers resource.
+
+moved {
+  from = module.teams_em[
+    "EM Data Hub Engineers"
+  ].pagerduty_team_membership.responders[
+    "matt.heery@justice.gov.uk"
+  ]
+
+  to = module.teams_em[
+    "EM Data Hub Engineers"
+  ].pagerduty_team_membership.managers[
+    "matt.heery@justice.gov.uk"
+  ]
+}
+
+moved {
+  from = module.teams_em[
+    "EM Data Hub Engineers"
+  ].pagerduty_team_membership.responders[
+    "khristiania.raihan@justice.gov.uk"
+  ]
+
+  to = module.teams_em[
+    "EM Data Hub Engineers"
+  ].pagerduty_team_membership.managers[
+    "khristiania.raihan@justice.gov.uk"
+  ]
+}
+
+
 # Existing PagerDuty resources are imported so Terraform manages them
 # instead of creating duplicates.
 
@@ -166,6 +209,21 @@ import {
   ].pagerduty_user.this
 
   id = "PREPU2L"
+}
+import {
+  to = module.users_em[
+    "gwion.aprhobat@digital.justice.gov.uk"
+  ].pagerduty_user.this
+
+  id = "PSXFTII"
+}
+
+import {
+  to = module.users_em[
+    "george.kelly@justice.gov.uk"
+  ].pagerduty_user.this
+
+  id = "PO9DYMA"
 }
 
 import {
