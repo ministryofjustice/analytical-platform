@@ -89,6 +89,13 @@ data "aws_iam_policy_document" "s3_test_kms_policy" {
   }
 }
 
+
+resource "aws_kms_key" "cloudwatch_sns_test_alerts_key" {
+  description         = "Test EventBridge and SNS notification encryption key"
+  enable_key_rotation = true
+  policy              = data.aws_iam_policy_document.cloudwatch_sns_test_kms_policy.json
+}
+
 data "aws_iam_policy_document" "cloudwatch_sns_test_kms_policy" {
   #checkov:skip=CKV_AWS_111 KMS key administration permissions are required for the account root principal.
   #checkov:skip=CKV_AWS_109 KMS key policies require key administration actions.
@@ -185,7 +192,7 @@ data "aws_iam_policy_document" "cloudwatch_sns_test_kms_policy" {
 
 resource "aws_sns_topic" "splink_test_bucket_alerting_topic" {
   name              = local.splink_test_sns_topic_name
-  kms_master_key_id = aws_kms_key.s3_kms_key_test.id
+  kms_master_key_id = aws_kms_key.cloudwatch_sns_test_alerts_key.id
 }
 
 data "aws_iam_policy_document" "splink_test_bucket_alerting_topic_policy" {
