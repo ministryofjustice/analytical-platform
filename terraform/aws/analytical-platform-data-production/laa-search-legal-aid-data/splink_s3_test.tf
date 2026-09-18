@@ -2,98 +2,12 @@
 # S3 Bucket - Splink Test Output
 # ---------------------------------------------
 
-data "aws_iam_policy_document" "s3_test_kms_policy" {
-  #checkov:skip=CKV_AWS_111 KMS key administration permissions are required for the account root principal.
-  #checkov:skip=CKV_AWS_109 KMS key policies require key administration actions.
-  #checkov:skip=CKV_AWS_356 AWS KMS key policies require Resource="*" and cannot reference the key ARN.
-  statement {
-    sid = "AllowAccountRootAdmin"
 
-    principals {
-      type = "AWS"
-      identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-      ]
-    }
 
-    actions = [
-      "kms:Create*",
-      "kms:Describe*",
-      "kms:Enable*",
-      "kms:List*",
-      "kms:Put*",
-      "kms:Update*",
-      "kms:Revoke*",
-      "kms:Disable*",
-      "kms:Get*",
-      "kms:Delete*",
-      "kms:TagResource",
-      "kms:UntagResource",
-      "kms:ScheduleKeyDeletion",
-      "kms:CancelKeyDeletion"
-    ]
-
-    resources = ["*"]
-  }
-
-  statement {
-    sid = "AllowS3UseOfKey"
-
-    principals {
-      type        = "Service"
-      identifiers = ["s3.amazonaws.com"]
-    }
-
-    actions = [
-      "kms:Encrypt",
-      "kms:Decrypt",
-      "kms:GenerateDataKey*",
-      "kms:DescribeKey"
-    ]
-
-    resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "kms:EncryptionContext:aws:s3:arn"
-
-      values = [
-        "arn:aws:s3:::${local.splink_test_bucket_name}"
-      ]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "kms:ViaService"
-      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
-    }
-  }
-
-  statement {
-    sid = "AllowAirflowAndNamedUserKeyUse"
-
-    principals {
-      type        = "AWS"
-      identifiers = local.splink_s3_test_key_user_arns
-    }
-
-    actions = [
-      "kms:Encrypt",
-      "kms:Decrypt",
-      "kms:ReEncrypt*",
-      "kms:GenerateDataKey*",
-      "kms:DescribeKey"
-    ]
-
-    resources = ["*"]
-  }
-}
-
-resource "aws_kms_key" "s3_test_kms_key" {
-  description             = "S3 test bucket encryption key"
-  enable_key_rotation     = true
-  deletion_window_in_days = 30
-  policy                  = data.aws_iam_policy_document.s3_test_kms_policy.json
+resource "aws_kms_key" "cloudwatch_sns_test_alerts_key" {
+  description         = "Test EventBridge and SNS notification encryption key"
+  enable_key_rotation = true
+  policy              = data.aws_iam_policy_document.cloudwatch_sns_test_kms_policy.json
 }
 
 data "aws_iam_policy_document" "cloudwatch_sns_test_kms_policy" {
@@ -190,12 +104,6 @@ data "aws_iam_policy_document" "cloudwatch_sns_test_kms_policy" {
   }
 }
 
-resource "aws_kms_key" "cloudwatch_sns_test_alerts_key" {
-  description         = "Test EventBridge and SNS notification encryption key"
-  enable_key_rotation = true
-  policy              = data.aws_iam_policy_document.cloudwatch_sns_test_kms_policy.json
-}
-
 resource "aws_sns_topic" "splink_test_bucket_alerting_topic" {
   name              = local.splink_test_sns_topic_name
   kms_master_key_id = aws_kms_key.cloudwatch_sns_test_alerts_key.id
@@ -259,7 +167,7 @@ module "s3_bucket_splink_test" {
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = aws_kms_key.s3_test_kms_key.arn
+        kms_master_key_id = aws_kms_key.s3_kms_key_test.arn
         sse_algorithm     = "aws:kms"
       }
 
@@ -347,7 +255,7 @@ module "s3_bucket_splink_test" {
 
         Condition = {
           StringNotEquals = {
-            "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_test_kms_key.arn
+            "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_kms_key_test.arn
           }
         }
       }
