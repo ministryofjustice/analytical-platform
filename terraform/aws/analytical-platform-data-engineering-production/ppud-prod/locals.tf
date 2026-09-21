@@ -5,6 +5,10 @@ locals {
 
   env = var.tags["environment"]
 
+  batch_destination_bucket_arn = "arn:aws:s3:::ppud-parquet-exports-production-${local.account_ids["digital-prison-reporting-production"]}-eu-west-2-an"
+
+  migration_batch_copy_cutoff_date = "2026-09-17T23:59:59Z"
+
   lifecycle_config_backup_uploads = [{
     id      = "main"
     enabled = "Enabled"
