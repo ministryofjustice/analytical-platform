@@ -153,6 +153,23 @@ module "schedules_em" {
   depends_on = [module.teams_em]
 }
 
+# These memberships were previously tracked under the managers resource.
+# The EM-specific team module now manages all memberships through one
+# Terraform resource and sets the actual PagerDuty role from each.value.role.
+#
+# These moves change only the Terraform state addresses. They must not
+# remove the users from the PagerDuty team.
+
+moved {
+  from = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.managers["matt.heery@justice.gov.uk"]
+  to   = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.responders["matt.heery@justice.gov.uk"]
+}
+
+moved {
+  from = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.managers["khristiania.raihan@justice.gov.uk"]
+  to   = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.responders["khristiania.raihan@justice.gov.uk"]
+}
+
 # Existing PagerDuty resources are imported so Terraform manages them
 # instead of creating duplicates.
 
