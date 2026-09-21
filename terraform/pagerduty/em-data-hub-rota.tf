@@ -34,6 +34,15 @@ locals {
 
   teams_em = {
     "EM Data Hub Engineers" = {
+      managers = {
+        for user in local.users_em :
+        user.email => {
+          name = user.name
+          id   = module.users_em[user.email].id
+        }
+        if user.role == "manager"
+      }
+
       responders = {
         for user in local.users_em :
         user.email => {
@@ -120,9 +129,10 @@ module "users_em" {
 module "teams_em" {
   for_each = local.teams_em
 
-  source = "./modules/team"
+  source = "./modules/team_em"
 
   name       = each.key
+  managers   = each.value.managers
   responders = each.value.responders
 
   depends_on = [module.users_em]
@@ -142,39 +152,6 @@ module "schedules_em" {
 
   depends_on = [module.teams_em]
 }
-
-# The existing team membership for this person was previously managed
-# as a responder. Preserve the same PagerDuty membership while moving
-# Terraform management to the managers resource.
-
-moved {
-  from = module.teams_em[
-    "EM Data Hub Engineers"
-    ].pagerduty_team_membership.responders[
-    "matt.heery@justice.gov.uk"
-  ]
-
-  to = module.teams_em[
-    "EM Data Hub Engineers"
-    ].pagerduty_team_membership.managers[
-    "matt.heery@justice.gov.uk"
-  ]
-}
-
-moved {
-  from = module.teams_em[
-    "EM Data Hub Engineers"
-    ].pagerduty_team_membership.responders[
-    "khristiania.raihan@justice.gov.uk"
-  ]
-
-  to = module.teams_em[
-    "EM Data Hub Engineers"
-    ].pagerduty_team_membership.managers[
-    "khristiania.raihan@justice.gov.uk"
-  ]
-}
-
 
 # Existing PagerDuty resources are imported so Terraform manages them
 # instead of creating duplicates.
