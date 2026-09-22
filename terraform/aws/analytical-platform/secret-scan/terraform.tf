@@ -17,6 +17,21 @@ terraform {
 }
 
 ##################################################
+# Development
+##################################################
+
+provider "aws" {
+  alias  = "analytical-platform-development"
+  region = "eu-west-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-development"]}:role/GlobalGitHubActionAdmin"
+  }
+  default_tags {
+    tags = var.tags
+  }
+}
+
+##################################################
 # Data Development
 ##################################################
 
@@ -55,6 +70,21 @@ provider "aws" {
   region = "eu-west-1"
   assume_role {
     role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-landing-production"]}:role/GlobalGitHubActionAdmin"
+  }
+  default_tags {
+    tags = var.tags
+  }
+}
+
+##################################################
+# Management Production
+##################################################
+
+provider "aws" {
+  alias  = "analytical-platform-management-production"
+  region = "eu-west-2"
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
   }
   default_tags {
     tags = var.tags

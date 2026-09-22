@@ -1,44 +1,7 @@
-module "github_actions_secret_check_iam_policy" {
-  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
-  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+removed {
+  from = module.github_actions_secret_check_iam_policy
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.6.1"
-
-  name_prefix = "github-actions-secret-check"
-  description = "IAM policy for GitHub Actions to check AWS Secrets Manager expiry tags"
-
-  policy = data.aws_iam_policy_document.github_actions_secret_check.json
-
-}
-
-data "aws_iam_policy_document" "github_actions_secret_check" {
-
-  statement {
-    sid    = "AllowSecretsManagerList"
-    effect = "Allow"
-
-    actions = [
-      "secretsmanager:ListSecrets"
-    ]
-
-    resources = ["*"]
-  }
-
-  statement {
-    sid    = "AllowAssumeRole"
-    effect = "Allow"
-
-    actions = [
-      "sts:AssumeRole"
-    ]
-
-    resources = [
-      "arn:aws:iam::${var.account_ids["analytical-platform-production"]}:role/github-actions-secret-check",
-      "arn:aws:iam::${var.account_ids["analytical-platform-development"]}:role/github-actions-secret-check",
-      "arn:aws:iam::${var.account_ids["analytical-platform-data-development"]}:role/github-actions-secret-check",
-      "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/github-actions-secret-check",
-      "arn:aws:iam::${var.account_ids["analytical-platform-landing-production"]}:role/github-actions-secret-check"
-    ]
+  lifecycle {
+    destroy = false
   }
 }
