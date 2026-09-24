@@ -3,12 +3,12 @@ locals {
     {
       name  = "Matt Heery"
       email = "matt.heery@justice.gov.uk"
-      role  = "responder"
+      role  = "manager"
     },
     {
       name  = "Khristiania Raihan"
       email = "khristiania.raihan@justice.gov.uk"
-      role  = "responder"
+      role  = "manager"
     },
     {
       name  = "Lucy AstleyJones"
@@ -20,10 +20,29 @@ locals {
       email = "matthew.rixson@justice.gov.uk"
       role  = "responder"
     },
+    {
+      name  = "Gwion Aprhobat"
+      email = "gwion.aprhobat@digital.justice.gov.uk"
+      role  = "responder"
+    },
+    {
+      name  = "George Kelly"
+      email = "george.kelly@justice.gov.uk"
+      role  = "responder"
+    },
   ]
 
   teams_em = {
     "EM Data Hub Engineers" = {
+      managers = {
+        for user in local.users_em :
+        user.email => {
+          name = user.name
+          id   = module.users_em[user.email].id
+        }
+        if user.role == "manager"
+      }
+
       responders = {
         for user in local.users_em :
         user.email => {
@@ -110,9 +129,10 @@ module "users_em" {
 module "teams_em" {
   for_each = local.teams_em
 
-  source = "./modules/team"
+  source = "./modules/team_em"
 
   name       = each.key
+  managers   = each.value.managers
   responders = each.value.responders
 
   depends_on = [module.users_em]
@@ -131,6 +151,23 @@ module "schedules_em" {
   layers = each.value.layers
 
   depends_on = [module.teams_em]
+}
+
+# These memberships were previously tracked under the managers resource.
+# The EM-specific team module now manages all memberships through one
+# Terraform resource and sets the actual PagerDuty role from each.value.role.
+#
+# These moves change only the Terraform state addresses. They must not
+# remove the users from the PagerDuty team.
+
+moved {
+  from = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.managers["matt.heery@justice.gov.uk"]
+  to   = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.responders["matt.heery@justice.gov.uk"]
+}
+
+moved {
+  from = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.managers["khristiania.raihan@justice.gov.uk"]
+  to   = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.responders["khristiania.raihan@justice.gov.uk"]
 }
 
 # Existing PagerDuty resources are imported so Terraform manages them
@@ -166,6 +203,21 @@ import {
   ].pagerduty_user.this
 
   id = "PREPU2L"
+}
+import {
+  to = module.users_em[
+    "gwion.aprhobat@digital.justice.gov.uk"
+  ].pagerduty_user.this
+
+  id = "PSXFTII"
+}
+
+import {
+  to = module.users_em[
+    "george.kelly@justice.gov.uk"
+  ].pagerduty_user.this
+
+  id = "PO9DYMA"
 }
 
 import {
