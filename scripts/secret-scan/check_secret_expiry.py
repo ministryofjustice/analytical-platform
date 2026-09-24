@@ -68,8 +68,13 @@ STATUS_PRIORITY = {
     "CRITICAL": 1,
     "WARNING": 2,
     "INVALID": 3,
-    "OK": 4,
+    "NOT SET": 4,
+    "OK": 5,
 }
+
+# Values that indicate no expiry-date has actually been set, rather than an
+# invalid/unparsable one. These are not treated as errors.
+NOT_SET_VALUES = {"", "none", "null", "n/a", "na"}
 
 
 def get_session(account_id, role_name=None):
@@ -193,6 +198,25 @@ def main():
                 name = secret["name"]
                 expiry_date = secret["expiry_date"]
                 source_location = secret["source_location"]
+
+                normalised_expiry_date = str(expiry_date).strip().lower()
+
+                if expiry_date is None or normalised_expiry_date in NOT_SET_VALUES:
+                    results.append(
+                        {
+                            "account": account_name,
+                            "region": region,
+                            "name": name,
+                            "source_location": source_location,
+                            "expiry_date": (
+                                expiry_date if expiry_date is not None else "N/A"
+                            ),
+                            "days_remaining": "N/A",
+                            "status": "NOT SET",
+                        }
+                    )
+
+                    continue
 
                 try:
                     expiry = datetime.strptime(
