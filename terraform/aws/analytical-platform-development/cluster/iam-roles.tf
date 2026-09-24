@@ -239,6 +239,3 @@ module "iam_assumable_role_control_panel_api" {
     "system:serviceaccount:${var.control_panel_celery_beat_kubernetes_service_account}",
   ]
 }
-
-
-
