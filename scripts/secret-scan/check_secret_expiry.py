@@ -35,9 +35,6 @@ CRITICAL_THRESHOLD_DAYS = 7
 #   Use the AWS credentials already configured in the GitHub runner.
 #
 # For additional accounts, specify the role that should be assumed.
-#
-# Rename the account names below as appropriate once the mapping between
-# account IDs and Analytical Platform environments is confirmed.
 ACCOUNTS = {
     "analytical-platform-management-production": {
         "account_id": "042130406152",
@@ -45,6 +42,22 @@ ACCOUNTS = {
     },
     "analytical-platform-development": {
         "account_id": "525294151996",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-production": {
+        "account_id": "312423030077",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-data-development": {
+        "account_id": "803963757240",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-data-production": {
+        "account_id": "593291632749",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-landing-production": {
+        "account_id": "335823981503",
         "role_name": "github-actions-secret-check",
     },
 }
@@ -55,8 +68,13 @@ STATUS_PRIORITY = {
     "CRITICAL": 1,
     "WARNING": 2,
     "INVALID": 3,
-    "OK": 4,
+    "NOT SET": 4,
+    "OK": 5,
 }
+
+# Values that indicate no expiry-date has actually been set, rather than an
+# invalid/unparsable one. These are not treated as errors.
+NOT_SET_VALUES = {"", "none", "null", "n/a", "na"}
 
 
 def get_session(account_id, role_name=None):
@@ -180,6 +198,25 @@ def main():
                 name = secret["name"]
                 expiry_date = secret["expiry_date"]
                 source_location = secret["source_location"]
+
+                normalised_expiry_date = str(expiry_date).strip().lower()
+
+                if expiry_date is None or normalised_expiry_date in NOT_SET_VALUES:
+                    results.append(
+                        {
+                            "account": account_name,
+                            "region": region,
+                            "name": name,
+                            "source_location": source_location,
+                            "expiry_date": (
+                                expiry_date if expiry_date is not None else "N/A"
+                            ),
+                            "days_remaining": "N/A",
+                            "status": "NOT SET",
+                        }
+                    )
+
+                    continue
 
                 try:
                     expiry = datetime.strptime(
