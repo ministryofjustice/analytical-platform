@@ -8,7 +8,8 @@ variable "tags" {
   description = "Map of tags to apply to resources"
 }
 
-# tflint-ignore: terraform_unused_declarations -- only used by the commented-out helm_release.grafana in helm-releases.tf
+# only used by the commented-out helm_release.grafana in helm-releases.tf
+# tflint-ignore: terraform_unused_declarations
 variable "namespace" {
   type = string
 }
