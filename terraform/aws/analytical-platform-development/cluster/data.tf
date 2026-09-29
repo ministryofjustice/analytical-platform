@@ -20,7 +20,13 @@ data "aws_region" "sqs_region" {
 
 data "aws_caller_identity" "current" {}
 
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+  state = "available"
+  filter {
+    name   = "zone-id"
+    values = ["euw1-az1", "euw1-az2", "euw1-az3"]
+  }
+}
 
 data "aws_route53_zone" "main" {
   name         = var.route53_zone
@@ -97,22 +103,5 @@ data "aws_route53_resolver_query_log_config" "core_logging_s3" {
   filter {
     name   = "Name"
     values = ["core-logging-rlq-s3-eu-west-1"]
-  }
-}
-
-##################################################
-# Secret scan
-##################################################
-
-data "aws_iam_policy_document" "github_actions_secret_check" {
-  statement {
-    sid    = "AllowSecretsManagerList"
-    effect = "Allow"
-
-    actions = [
-      "secretsmanager:ListSecrets"
-    ]
-
-    resources = ["*"]
   }
 }
