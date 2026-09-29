@@ -20,7 +20,13 @@ data "aws_region" "sqs_region" {
 
 data "aws_caller_identity" "current" {}
 
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+  state = "available"
+  filter {
+    name   = "zone-id"
+    values = ["euw1-az1", "euw1-az2", "euw1-az3"]
+  }
+}
 
 data "aws_route53_zone" "main" {
   name         = var.route53_zone
