@@ -15,11 +15,6 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
-  splink_s3_test_key_user_arns = [
-    for role in local.kms_key_users.splink_s3_test_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
-  ]
-
   # ARNs used for production buckets
   splink_s3_source_read_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_read_bucket.key_users :

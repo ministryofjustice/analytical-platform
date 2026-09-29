@@ -1,4 +1,3 @@
-# retrigger terraform
 module "dev_dms_oasys" {
   source      = "github.com/ministryofjustice/terraform-dms-module?ref=update-dms-module"
   vpc_id      = module.vpc.vpc_id
@@ -51,6 +50,7 @@ module "dev_dms_oasys" {
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
 }
 
+# retrigger terraform sr33
 module "dev_dms_delius" {
   source      = "github.com/ministryofjustice/terraform-dms-module?ref=bea6fa8a0f431b616895423e515f5929c022b013"
   vpc_id      = module.vpc.vpc_id
