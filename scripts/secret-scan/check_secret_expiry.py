@@ -403,7 +403,9 @@ def main():
         ) as output_file:
             for status, secrets in alerts.items():
                 output_file.write(f"{status.lower()}-count={len(secrets)}\n")
-            output_file.write(f"slack-message={json.dumps(format_slack_message(alerts))}\n")
+            output_file.write(
+                f"slack-message={json.dumps(format_slack_message(alerts))}\n"
+            )
 
 
 if __name__ == "__main__":
