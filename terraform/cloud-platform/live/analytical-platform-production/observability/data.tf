@@ -69,3 +69,8 @@ data "aws_secretsmanager_secret_version" "analytical_platform_slack_token" {
 
   secret_id = "slack/analytical-platform"
 }
+
+# temp change for testing
+data "github_team" "data_platform_engineers" {
+  slug = "data-platform-engineers"
+}
