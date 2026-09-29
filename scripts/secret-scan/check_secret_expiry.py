@@ -16,8 +16,10 @@ Requirements:
 
 Environment variables:
     GITHUB_STEP_SUMMARY: path to a file to append a markdown summary table to.
+    GITHUB_OUTPUT: path to the GitHub Actions step output file.
 """
 
+import json
 import os
 from datetime import datetime, timezone
 
@@ -163,10 +165,47 @@ def escape_markdown(value):
     return str(value).replace("|", "\\|")
 
 
+def format_slack_message(alerts):
+    headings = {
+        "EXPIRED": ":red_circle: *Expired*",
+        "CRITICAL": ":large_orange_circle: *Critical — expires within 7 days*",
+        "WARNING": ":large_yellow_circle: *Warning — expires within 30 days*",
+    }
+    sections = []
+
+    for status, secrets in alerts.items():
+        if not secrets:
+            continue
+
+        entries = []
+        for secret in secrets:
+            expiry = datetime.strptime(secret["expiry_date"], "%Y-%m-%d").date()
+            formatted_date = f"{expiry.day} {expiry:%b %Y}"
+            name = (
+                str(secret["name"])
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+            )
+            date_label = "Expired" if status == "EXPIRED" else "Expires"
+            entry = (
+                f"• `{name}`\n"
+                f"  Account: `{secret['account']}`\n"
+                f"  Region: `{secret['region']}`\n"
+                f"  {date_label}: *{formatted_date}*"
+            )
+            if status != "EXPIRED":
+                entry += f"\n  Days remaining: *{secret['days_remaining']}*"
+            entries.append(entry)
+
+        sections.append(headings[status] + "\n\n" + "\n\n".join(entries))
+
+    return "\n\n".join(sections)
+
+
 def main():
     today = datetime.now(timezone.utc).date()
     results = []
-    alert_messages = {"EXPIRED": [], "CRITICAL": [], "WARNING": []}
 
     for account_name, account_config in ACCOUNTS.items():
         account_id = account_config["account_id"]
@@ -258,7 +297,6 @@ def main():
                     )
 
                     print(f"::error::{message}")
-                    alert_messages["EXPIRED"].append(message)
 
                 elif status in ("CRITICAL", "WARNING"):
                     message = (
@@ -268,7 +306,6 @@ def main():
                     )
 
                     print(f"::warning::{message}")
-                    alert_messages[status].append(message)
 
                 results.append(
                     {
@@ -351,13 +388,11 @@ def main():
     else:
         print("\n".join(summary_rows))
 
-    # Expose one output per alert category so downstream workflow steps can
-    # send a Slack notification for each, even though this script always
-    # exits successfully.
-    #
-    # Messages are joined with a literal "\n" (rather than a real newline)
-    # so the value stays on a single line and can be embedded directly in a
-    # JSON payload without breaking it.
+    alerts = {
+        status: [result for result in results if result["status"] == status]
+        for status in ("EXPIRED", "CRITICAL", "WARNING")
+    }
+
     github_output = os.environ.get("GITHUB_OUTPUT")
 
     if github_output:
@@ -366,11 +401,11 @@ def main():
             "a",
             encoding="utf-8",
         ) as output_file:
-            for status, messages in alert_messages.items():
-                key = status.lower()
-                joined_messages = "\\n".join(messages)
-                output_file.write(f"{key}-count={len(messages)}\n")
-                output_file.write(f"{key}-messages={joined_messages}\n")
+            for status, secrets in alerts.items():
+                output_file.write(f"{status.lower()}-count={len(secrets)}\n")
+            output_file.write(
+                f"slack-message={json.dumps(format_slack_message(alerts))}\n"
+            )
 
 
 if __name__ == "__main__":

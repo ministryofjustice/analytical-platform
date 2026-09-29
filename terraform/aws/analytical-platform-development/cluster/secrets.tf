@@ -21,7 +21,7 @@ resource "aws_secretsmanager_secret" "dev_test_2" {
   description = "Test secret with an expiry date"
 
   tags = {
-    expiry-date     = "2026-09-20"
+    expiry-date     = "2026-10-04"
     source-location = "the location the key needs updating"
   }
 }
@@ -33,7 +33,7 @@ resource "aws_secretsmanager_secret" "dev_test_3" {
   description = "Test secret with an expiry date"
 
   tags = {
-    expiry-date     = "2026-09-6"
+    expiry-date     = "2026-10-16"
     source-location = "the location the key needs updating"
   }
 }
