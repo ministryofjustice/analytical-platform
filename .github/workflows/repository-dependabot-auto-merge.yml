@@ -17,12 +17,20 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      id-token: write
     steps:
+      - name: Obtain Octo STS Token
+        id: octo_sts
+        uses: octo-sts/action@6177b4481c00308b3839969c3eca88c96a91775f # v1.0.0
+        with:
+          scope: ministryofjustice/analytical-platform
+          identity: dependabot-auto-merge
+
       - name: Merge eligible Dependabot pull requests
         id: merge_eligible_dependabot_pull_requests
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
-          github-token: ${{ env.GH_TOKEN }}
+          github-token: ${{ steps.octo_sts.outputs.token }}
           script: |
             const owner = context.repo.owner
             const repo = context.repo.repo
@@ -131,5 +139,3 @@ jobs:
                 throw error
               }
             }
-        env:
-          GH_TOKEN: ${{ secrets.AP_DEPENDABOT_COMMIT_TOKEN }} # zizmor: ignore[secrets-outside-env] -- Dedicated Dependabot bot token is required for authenticated merge API calls.
