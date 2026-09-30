@@ -71,7 +71,3 @@ data "aws_secretsmanager_secret_version" "analytical_platform_grafana_developmen
 
   secret_id = "analytical-platform-grafana/development/github/client-secret"
 }
-# temp
-data "github_team" "data_platform_engineering" {
-  slug = "data-platform-engineering"
-}
