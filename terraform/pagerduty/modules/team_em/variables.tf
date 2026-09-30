@@ -3,20 +3,21 @@ variable "name" {
   description = "Name of the team"
 }
 
-variable "managers" {
+variable "members" {
   type = map(object({
     name = string
     id   = string
+    role = string
   }))
-  description = "List of user IDs to be added as managers to the team"
-  default     = {}
-}
 
-variable "responders" {
-  type = map(object({
-    name = string
-    id   = string
-  }))
-  description = "List of user IDs to be added as responders to the team"
-  default     = {}
+  description = "Members to add to the team"
+
+  validation {
+    condition = alltrue([
+      for member in values(var.members) :
+      contains(["manager", "responder"], member.role)
+    ])
+
+    error_message = "Team member role must be manager or responder."
+  }
 }
