@@ -34,22 +34,13 @@ locals {
 
   teams_em = {
     "EM Data Hub Engineers" = {
-      managers = {
+      members = {
         for user in local.users_em :
         user.email => {
           name = user.name
           id   = module.users_em[user.email].id
+          role = user.role
         }
-        if user.role == "manager"
-      }
-
-      responders = {
-        for user in local.users_em :
-        user.email => {
-          name = user.name
-          id   = module.users_em[user.email].id
-        }
-        if user.role == "responder"
       }
     }
   }
@@ -131,9 +122,8 @@ module "teams_em" {
 
   source = "./modules/team_em"
 
-  name       = each.key
-  managers   = each.value.managers
-  responders = each.value.responders
+  name    = each.key
+  members = each.value.members
 
   depends_on = [module.users_em]
 }
