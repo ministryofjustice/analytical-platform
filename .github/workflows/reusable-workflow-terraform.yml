@@ -233,13 +233,15 @@ jobs:
       #     scope: ministryofjustice/analytical-platform
       #     identity: org-member-reader
 
-      # temp: use the robot token (valid, but no read:org scope) instead of a bogus one, to test whether org-member-read permission specifically is required
+      # temp: use the default GITHUB_TOKEN (valid, but repo-scoped and cannot be granted org member/team read access) to test whether that permission is genuinely required
       - name: Export GitHub Provider Token
         if: inputs.component == 'cloud-platform-live-analytical-platform-development-grafana'
         id: export_github_provider_token
         shell: bash
+        env:
+          DEFAULT_GITHUB_TOKEN: ${{ github.token }}
         run: |
-          echo "TF_VAR_org_member_reader_github_token=${GITHUB_ROBOT_TOKEN}" >> "${GITHUB_ENV}"
+          echo "TF_VAR_org_member_reader_github_token=${DEFAULT_GITHUB_TOKEN}" >> "${GITHUB_ENV}"
 
       - name: Set up Terraform
         id: setup_terraform
