@@ -22,8 +22,8 @@ locals {
     },
     {
       name  = "Gwion Aprhobat"
-      email = "gwion.aprhobat@digital.justice.gov.uk"
-      role  = "responder"
+      email = "gwion.aprhobat@justice.gov.uk"
+      role  = "manager"
     },
     {
       name  = "George Kelly"
@@ -206,12 +206,11 @@ import {
 }
 import {
   to = module.users_em[
-    "gwion.aprhobat@digital.justice.gov.uk"
+    "gwion.aprhobat@justice.gov.uk"
   ].pagerduty_user.this
 
-  id = "PSXFTII"
+  id = "PY6LVCP"
 }
-
 import {
   to = module.users_em[
     "george.kelly@justice.gov.uk"
