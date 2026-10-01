@@ -4,6 +4,10 @@ locals {
     member.key => member
   }
 
+  # ---------------------------------------------------------------------------
+  # Working patterns currently used by the team
+  # ---------------------------------------------------------------------------
+
   em_working_patterns = {
     full_time = toset([
       "monday_am",
@@ -28,42 +32,18 @@ locals {
       "thursday_am",
       "thursday_pm",
     ])
-
-    tue_fri = toset([
-      "tuesday_am",
-      "tuesday_pm",
-      "wednesday_am",
-      "wednesday_pm",
-      "thursday_am",
-      "thursday_pm",
-      "friday_am",
-      "friday_pm",
-    ])
-
-    no_wednesday = toset([
-      "monday_am",
-      "monday_pm",
-      "tuesday_am",
-      "tuesday_pm",
-      "thursday_am",
-      "thursday_pm",
-      "friday_am",
-      "friday_pm",
-    ])
-
-    friday_morning = toset([
-      "monday_am",
-      "monday_pm",
-      "tuesday_am",
-      "tuesday_pm",
-      "wednesday_am",
-      "wednesday_pm",
-      "thursday_am",
-      "thursday_pm",
-      "friday_am",
-    ])
   }
 
+  # ---------------------------------------------------------------------------
+  # Business-hour shift slots
+  # ---------------------------------------------------------------------------
+  #
+  # AM and PM are separate so half-day working patterns can be added later
+  # without changing the schedule module.
+  #
+  # alternate_start_time and alternate_end_time are used for the normal
+  # engineer Wednesday rotation when the G6 covers alternating Wednesdays.
+  #
   em_business_hour_slots = {
     monday_am = {
       name                 = "Monday AM"
@@ -176,6 +156,13 @@ locals {
     }
   }
 
+  # ---------------------------------------------------------------------------
+  # Primary rota phases
+  # ---------------------------------------------------------------------------
+  #
+  # A new phase is created whenever somebody starts or stops primary cover,
+  # returns from planned long-term leave, or begins an absence.
+  #
   em_primary_boundaries_raw = concat(
     [local.em_shift_schedule_start],
     flatten([
@@ -218,7 +205,7 @@ locals {
       active_keys = [
         for member in local.users_em :
         member.key
-        if(
+        if (
           member.rota.primary.enabled
           && timecmp(
             phase_start,
@@ -260,7 +247,7 @@ locals {
         standard_keys = [
           for member_key in phase.active_keys :
           member_key
-          if(
+          if (
             local.em_members_by_key[
               member_key
             ].rota.primary.cadence == "standard"
@@ -270,7 +257,7 @@ locals {
         fortnightly_keys = [
           for member_key in phase.active_keys :
           member_key
-          if(
+          if (
             local.em_members_by_key[
               member_key
             ].rota.primary.cadence == "fortnightly"
@@ -296,21 +283,28 @@ locals {
     )
   ]
 
+  # ---------------------------------------------------------------------------
+  # Standard primary rotation
+  # ---------------------------------------------------------------------------
+
   em_standard_event_inputs = flatten([
     for phase in local.em_primary_phase_details : [
       for slot_key, slot in local.em_business_hour_slots : {
-        phase_index          = phase.index
-        phase_from           = phase.from
-        phase_until          = phase.until
-        slot_key             = slot_key
-        slot_name            = slot.name
-        slot_day             = slot.day
-        rrule_day            = slot.rrule_day
-        start_time           = slot.start_time
-        end_time             = slot.end_time
+        phase_index = phase.index
+        phase_from  = phase.from
+        phase_until = phase.until
+
+        slot_key   = slot_key
+        slot_name  = slot.name
+        slot_day   = slot.day
+        rrule_day  = slot.rrule_day
+        start_time = slot.start_time
+        end_time   = slot.end_time
+
         alternate_start_time = slot.alternate_start_time
         alternate_end_time   = slot.alternate_end_time
-        rotation_offset      = slot.rotation_offset
+
+        rotation_offset = slot.rotation_offset
 
         fortnightly_active = (
           phase.fortnightly_day == slot.day
@@ -337,6 +331,18 @@ locals {
     merge(
       event,
       {
+        event_start_time = (
+          event.fortnightly_active
+          ? event.alternate_start_time
+          : event.start_time
+        )
+
+        event_end_time = (
+          event.fortnightly_active
+          ? event.alternate_end_time
+          : event.end_time
+        )
+
         rotated_keys = (
           length(event.eligible_keys) == 0
           ? []
@@ -371,17 +377,8 @@ locals {
         event.phase_index + 1
       )
 
-      start_time = (
-        event.fortnightly_active
-        ? event.alternate_start_time
-        : event.start_time
-      )
-
-      end_time = (
-        event.fortnightly_active
-        ? event.alternate_end_time
-        : event.end_time
-      )
+      start_time = event.event_start_time
+      end_time   = event.event_end_time
 
       effective_since = event.phase_from
       effective_until = event.phase_until
@@ -403,8 +400,22 @@ locals {
         ].id
       ]
     }
-    if length(event.rotated_keys) > 0
+    if (
+      length(event.rotated_keys) > 0
+      && (
+        event.phase_until == null
+        ? true
+        : timecmp(
+          event.event_start_time,
+          event.phase_until
+        ) < 0
+      )
+    )
   ]
+
+  # ---------------------------------------------------------------------------
+  # Fortnightly G6 primary rotation
+  # ---------------------------------------------------------------------------
 
   em_fortnightly_event_inputs = flatten([
     for phase in local.em_primary_phase_details :
@@ -413,16 +424,17 @@ locals {
         phase_index = phase.index
         phase_from  = phase.from
         phase_until = phase.until
-        slot_key    = slot_key
-        slot_name   = slot.name
-        slot_day    = slot.day
-        rrule_day   = slot.rrule_day
-        start_time  = slot.start_time
-        end_time    = slot.end_time
+
+        slot_key   = slot_key
+        slot_name  = slot.name
+        slot_day   = slot.day
+        rrule_day  = slot.rrule_day
+        start_time = slot.start_time
+        end_time   = slot.end_time
 
         member_key = phase.fortnightly_keys[0]
       }
-      if(
+      if (
         slot.day == phase.fortnightly_day
         && contains(
           local.em_working_patterns[
@@ -465,11 +477,19 @@ locals {
     }
   ]
 
+  # ---------------------------------------------------------------------------
+  # Shadow rotation
+  # ---------------------------------------------------------------------------
+  #
+  # Shadow shifts are separate from primary shifts so they do not affect
+  # primary rota fairness.
+  #
   em_shadow_event_inputs = flatten([
     for member in local.users_em :
     member.rota.shadow.enabled ? [
       for slot_key, slot in local.em_business_hour_slots : {
         member_key = member.key
+
         slot_key   = slot_key
         slot_name  = slot.name
         slot_day   = slot.day
@@ -480,7 +500,7 @@ locals {
         effective_since = member.rota.shadow.from
         effective_until = member.rota.shadow.until
       }
-      if(
+      if (
         contains(
           local.em_working_patterns[
             member.rota.working_pattern
@@ -527,6 +547,10 @@ locals {
     }
   ]
 
+  # ---------------------------------------------------------------------------
+  # Shift-based schedule rotations
+  # ---------------------------------------------------------------------------
+
   em_shift_rotations = [
     {
       key    = "primary"
@@ -542,6 +566,10 @@ locals {
     },
   ]
 }
+
+# -----------------------------------------------------------------------------
+# Validation
+# -----------------------------------------------------------------------------
 
 check "em_member_keys_are_unique" {
   assert {
@@ -725,6 +753,10 @@ check "em_primary_slots_have_cover" {
     error_message = "Every primary business-hours slot needs standard cover."
   }
 }
+
+# -----------------------------------------------------------------------------
+# Shift-based PagerDuty schedule
+# -----------------------------------------------------------------------------
 
 module "em_shift_schedule" {
   source = "./modules/schedule_em"
