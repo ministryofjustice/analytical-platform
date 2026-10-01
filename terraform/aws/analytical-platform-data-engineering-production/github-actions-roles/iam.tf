@@ -106,7 +106,7 @@ module "create_a_derived_table_dev_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.2.3"
+  version = "6.8.2"
 
   name_prefix = "probation-cadet-dev-"
   policy      = data.aws_iam_policy_document.create_a_derived_table_dev.json
@@ -124,7 +124,7 @@ module "create_a_derived_table_dev_iam_role" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  version = "6.2.3"
+  version = "6.8.2"
 
   name                 = "probation-cadet-dev"
   use_name_prefix      = false
@@ -249,7 +249,7 @@ module "create_a_derived_table_preprod_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.2.3"
+  version = "6.8.2"
 
   name_prefix = "probation-cadet-preprod-"
   policy      = data.aws_iam_policy_document.create_a_derived_table_preprod.json
@@ -267,7 +267,7 @@ module "create_a_derived_table_preprod_iam_role" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  version = "6.2.3"
+  version = "6.8.2"
 
   name                 = "probation-cadet-preprod"
   use_name_prefix      = false
@@ -391,7 +391,7 @@ module "create_a_derived_table_prod_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.2.3"
+  version = "6.8.2"
 
   name_prefix = "probation-cadet-prod-"
   policy      = data.aws_iam_policy_document.create_a_derived_table_prod.json
@@ -409,7 +409,7 @@ module "create_a_derived_table_prod_iam_role" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  version = "6.2.3"
+  version = "6.8.2"
 
   name                 = "probation-cadet-prod"
   use_name_prefix      = false
