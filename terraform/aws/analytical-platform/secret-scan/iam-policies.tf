@@ -7,7 +7,7 @@ module "github_actions_secret_check_iam_policy_development" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.6.1"
+  version = "6.8.2"
 
   providers = {
     aws = aws.analytical-platform-development
@@ -28,7 +28,7 @@ module "github_actions_secret_check_iam_policy_data_development" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.6.1"
+  version = "6.8.2"
 
   providers = {
     aws = aws.analytical-platform-data-development
@@ -49,7 +49,7 @@ module "github_actions_secret_check_iam_policy_data_production" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.6.1"
+  version = "6.8.2"
 
   providers = {
     aws = aws.analytical-platform-data-production
@@ -70,7 +70,7 @@ module "github_actions_secret_check_iam_policy_landing_production" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.6.1"
+  version = "6.8.2"
 
   providers = {
     aws = aws.analytical-platform-landing-production
@@ -91,7 +91,7 @@ module "github_actions_secret_check_iam_policy_management_production" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.6.1"
+  version = "6.8.2"
 
   providers = {
     aws = aws.analytical-platform-management-production
@@ -112,7 +112,7 @@ module "github_actions_secret_check_iam_policy_production" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.6.1"
+  version = "6.8.2"
 
   providers = {
     aws = aws.analytical-platform-production
