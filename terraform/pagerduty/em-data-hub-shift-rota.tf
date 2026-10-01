@@ -44,6 +44,7 @@ locals {
   # alternate_start_time and alternate_end_time are used for the normal
   # engineer Wednesday rotation when the G6 covers alternating Wednesdays.
   #
+
   em_business_hour_slots = {
     monday_am = {
       name                 = "Monday AM"
@@ -163,6 +164,7 @@ locals {
   # A new phase is created whenever somebody starts or stops primary cover,
   # returns from planned long-term leave, or begins an absence.
   #
+
   em_primary_boundaries_raw = concat(
     [local.em_shift_schedule_start],
     flatten([
@@ -371,6 +373,8 @@ locals {
 
   em_standard_primary_events = [
     for event in local.em_standard_event_details : {
+      rotation_key = "primary-${event.slot_key}"
+
       name = format(
         "Primary %s - phase %d",
         event.slot_name,
@@ -450,6 +454,8 @@ locals {
 
   em_fortnightly_primary_events = [
     for event in local.em_fortnightly_event_inputs : {
+      rotation_key = "fortnightly-primary-${event.slot_key}"
+
       name = format(
         "Fortnightly primary %s - phase %d",
         event.slot_name,
@@ -484,6 +490,7 @@ locals {
   # Shadow shifts are separate from primary shifts so they do not affect
   # primary rota fairness.
   #
+
   em_shadow_event_inputs = flatten([
     for member in local.users_em :
     member.rota.shadow.enabled ? [
@@ -520,6 +527,8 @@ locals {
 
   em_shadow_events = [
     for event in local.em_shadow_event_inputs : {
+      rotation_key = "shadow-${event.member_key}-${event.slot_key}"
+
       name = format(
         "Shadow %s - %s",
         event.member_key,
@@ -550,20 +559,57 @@ locals {
   # ---------------------------------------------------------------------------
   # Shift-based schedule rotations
   # ---------------------------------------------------------------------------
+  #
+  # PagerDuty does not allow overlapping event configurations within the same
+  # rotation.
+  #
+  # Each business-hours slot therefore gets its own rotation.
+  #
+  # Example:
+  #
+  #   primary-monday_am
+  #     phase 1
+  #     phase 2
+  #
+  # The phases are sequential within that rotation.
+  #
+  # Shadow and fortnightly coverage use separate rotations, allowing them to
+  # overlap primary coverage where required.
+  #
+
+  em_shift_events = concat(
+    local.em_standard_primary_events,
+    local.em_fortnightly_primary_events,
+    local.em_shadow_events
+  )
+
+  em_shift_events_by_rotation = {
+    for event in local.em_shift_events :
+    event.rotation_key => event...
+  }
+
+  em_shift_rotation_keys = sort(
+    keys(local.em_shift_events_by_rotation)
+  )
 
   em_shift_rotations = [
-    {
-      key    = "primary"
-      events = local.em_standard_primary_events
-    },
-    {
-      key    = "fortnightly-primary"
-      events = local.em_fortnightly_primary_events
-    },
-    {
-      key    = "shadow"
-      events = local.em_shadow_events
-    },
+    for rotation_key in local.em_shift_rotation_keys : {
+      key = rotation_key
+
+      events = [
+        for event in local.em_shift_events_by_rotation[rotation_key] : {
+          name              = event.name
+          start_time        = event.start_time
+          end_time          = event.end_time
+          effective_since   = event.effective_since
+          effective_until   = event.effective_until
+          recurrence        = event.recurrence
+          assignment_type   = event.assignment_type
+          shifts_per_member = event.shifts_per_member
+          member_ids        = event.member_ids
+        }
+      ]
+    }
   ]
 }
 
