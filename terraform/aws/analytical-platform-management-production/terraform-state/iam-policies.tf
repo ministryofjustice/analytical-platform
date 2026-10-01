@@ -38,7 +38,7 @@ module "data_engineering_state_access_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.1.0"
+  version = "6.8.2"
 
   name_prefix = "data-engineering-state-access"
   description = "IAM Policy"
