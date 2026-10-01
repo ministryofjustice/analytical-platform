@@ -3,14 +3,44 @@ locals {
   em_heo_shadow_until     = "2026-10-12T09:00:00+01:00"
 
   # Set this when the career-break return date is confirmed.
-  # A null value keeps the member out of the shift-based rota.
+  #
+  # Example:
+  # em_career_break_return_at = "2027-03-01T09:00:00+00:00"
+  #
+  # Leaving this as null keeps the SEO out of the new shift-based rota
+  # while keeping their PagerDuty account and team membership.
   em_career_break_return_at = null
 
+  # ---------------------------------------------------------------------------
+  # EM team members
+  # ---------------------------------------------------------------------------
+  #
+  # key
+  #   Stable internal Terraform identifier.
+  #
+  # grade
+  #   Organisational grade.
+  #
+  # role
+  #   PagerDuty team role.
+  #
+  # rota.working_pattern
+  #   Normal working availability.
+  #
+  # rota.primary
+  #   Primary rota participation.
+  #
+  # rota.shadow
+  #   Additional shadow coverage.
+  #
+  # rota.absences
+  #   Planned long-term absence from the primary rota.
+  #
   users_em = [
     {
       key   = "member_01"
-      name  = "Gwion Aprhobat"
-      email = "gwion.aprhobat@justice.gov.uk"
+      name  = "G6_NAME"
+      email = "G6_EMAIL"
       grade = "g6"
       role  = "manager"
 
@@ -37,8 +67,8 @@ locals {
     },
     {
       key   = "member_02"
-      name  = "Matt Heery"
-      email = "matt.heery@justice.gov.uk"
+      name  = "G7_1_NAME"
+      email = "G7_1_EMAIL"
       grade = "g7"
       role  = "manager"
 
@@ -65,8 +95,8 @@ locals {
     },
     {
       key   = "member_03"
-      name  = "Matthew Rixson"
-      email = "matthew.rixson@justice.gov.uk"
+      name  = "G7_2_NAME"
+      email = "G7_2_EMAIL"
       grade = "g7"
       role  = "manager"
 
@@ -93,8 +123,8 @@ locals {
     },
     {
       key   = "member_04"
-      name  = "Khristiania Raihan"
-      email = "khristiania.raihan@justice.gov.uk"
+      name  = "SEO_MANAGER_NAME"
+      email = "SEO_MANAGER_EMAIL"
       grade = "seo"
       role  = "manager"
 
@@ -121,8 +151,8 @@ locals {
     },
     {
       key   = "member_05"
-      name  = "Lucy AstleyJones"
-      email = "lucy.astleyjones@justice.gov.uk"
+      name  = "SEO_RESPONDER_NAME"
+      email = "SEO_RESPONDER_EMAIL"
       grade = "seo"
       role  = "responder"
 
@@ -154,8 +184,8 @@ locals {
     },
     {
       key   = "member_06"
-      name  = "George Kelly"
-      email = "george.kelly@justice.gov.uk"
+      name  = "HEO_NAME"
+      email = "HEO_EMAIL"
       grade = "heo"
       role  = "responder"
 
@@ -186,6 +216,7 @@ locals {
       }
     },
   ]
+
   # ---------------------------------------------------------------------------
   # Legacy schedule order
   # ---------------------------------------------------------------------------
@@ -205,12 +236,12 @@ locals {
   #   6. PO9DYMA
   #
   em_legacy_schedule_user_emails = [
-    "matt.heery@justice.gov.uk",
-    "khristiania.raihan@justice.gov.uk",
-    "lucy.astleyjones@justice.gov.uk",
-    "matthew.rixson@justice.gov.uk",
-    "gwion.aprhobat@justice.gov.uk",
-    "george.kelly@justice.gov.uk",
+    "EMAIL_FOR_PEYIF4Q",
+    "EMAIL_FOR_PSYDXO9",
+    "EMAIL_FOR_PLV2QS6",
+    "EMAIL_FOR_PREPU2L",
+    "G6_EMAIL",
+    "EMAIL_FOR_PO9DYMA",
   ]
 
   # ---------------------------------------------------------------------------
@@ -229,6 +260,7 @@ locals {
       }
     }
   }
+
   # ---------------------------------------------------------------------------
   # Legacy PagerDuty schedule
   # ---------------------------------------------------------------------------
@@ -236,7 +268,6 @@ locals {
   # Keep this schedule unchanged until the EM Lambda consumers have moved
   # from the PagerDuty V2 schedule API to the new shift-based schedule.
   #
-
   schedules_em = [
     {
       name = "EM Data Hub Rota"
@@ -255,8 +286,8 @@ locals {
           rotation_turn_length_seconds = 28800
 
           users = [
-            for user in local.users_em :
-            module.users_em[user.email].id
+            for email in local.em_legacy_schedule_user_emails :
+            module.users_em[email].id
           ]
 
           restrictions = [
@@ -297,6 +328,10 @@ locals {
   ]
 }
 
+# -----------------------------------------------------------------------------
+# PagerDuty users
+# -----------------------------------------------------------------------------
+
 module "users_em" {
   for_each = {
     for user in local.users_em :
@@ -309,6 +344,10 @@ module "users_em" {
   email = each.value.email
 }
 
+# -----------------------------------------------------------------------------
+# PagerDuty team
+# -----------------------------------------------------------------------------
+
 module "teams_em" {
   for_each = local.teams_em
 
@@ -319,6 +358,10 @@ module "teams_em" {
 
   depends_on = [module.users_em]
 }
+
+# -----------------------------------------------------------------------------
+# Legacy PagerDuty schedule
+# -----------------------------------------------------------------------------
 
 module "schedules_em" {
   for_each = {
@@ -335,22 +378,35 @@ module "schedules_em" {
   depends_on = [module.teams_em]
 }
 
+# -----------------------------------------------------------------------------
+# Historical Terraform state moves
+# -----------------------------------------------------------------------------
+#
+# Keep the existing real manager email addresses already present on the branch.
+# These historical moves allow older Terraform state addresses to reach the
+# current team_em membership resource without destroying memberships.
+#
+
 moved {
-  from = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.managers["matt.heery@justice.gov.uk"]
-  to   = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.responders["matt.heery@justice.gov.uk"]
+  from = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.managers["MANAGER_1_EMAIL"]
+  to   = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.responders["MANAGER_1_EMAIL"]
 }
 
 moved {
-  from = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.managers["khristiania.raihan@justice.gov.uk"]
-  to   = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.responders["khristiania.raihan@justice.gov.uk"]
+  from = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.managers["MANAGER_2_EMAIL"]
+  to   = module.teams_em["EM Data Hub Engineers"].pagerduty_team_membership.responders["MANAGER_2_EMAIL"]
 }
 
-# Keep the existing import blocks exactly as they are on the current branch.
-# The email address inside each address must continue to match its PagerDuty ID.
+# -----------------------------------------------------------------------------
+# Existing PagerDuty resources
+# -----------------------------------------------------------------------------
+#
+# Keep each email associated with the same PagerDuty user ID.
+#
 
 import {
   to = module.users_em[
-    "matt.heery@justice.gov.uk"
+    "EMAIL_FOR_PEYIF4Q"
   ].pagerduty_user.this
 
   id = "PEYIF4Q"
@@ -358,7 +414,7 @@ import {
 
 import {
   to = module.users_em[
-    "khristiania.raihan@justice.gov.uk"
+    "EMAIL_FOR_PSYDXO9"
   ].pagerduty_user.this
 
   id = "PSYDXO9"
@@ -366,7 +422,7 @@ import {
 
 import {
   to = module.users_em[
-    "lucy.astleyjones@justice.gov.uk"
+    "EMAIL_FOR_PLV2QS6"
   ].pagerduty_user.this
 
   id = "PLV2QS6"
@@ -374,21 +430,23 @@ import {
 
 import {
   to = module.users_em[
-    "matthew.rixson@justice.gov.uk"
+    "EMAIL_FOR_PREPU2L"
   ].pagerduty_user.this
 
   id = "PREPU2L"
 }
+
 import {
   to = module.users_em[
-    "gwion.aprhobat@justice.gov.uk"
+    "G6_EMAIL"
   ].pagerduty_user.this
 
   id = "PY6LVCP"
 }
+
 import {
   to = module.users_em[
-    "george.kelly@justice.gov.uk"
+    "EMAIL_FOR_PO9DYMA"
   ].pagerduty_user.this
 
   id = "PO9DYMA"
