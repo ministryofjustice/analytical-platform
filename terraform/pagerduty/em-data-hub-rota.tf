@@ -255,8 +255,8 @@ locals {
           rotation_turn_length_seconds = 28800
 
           users = [
-            for user in local.users_em :
-            module.users_em[user.email].id
+            for email in local.em_legacy_schedule_user_emails :
+            module.users_em[email].id
           ]
 
           restrictions = [
