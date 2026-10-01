@@ -205,7 +205,7 @@ locals {
       active_keys = [
         for member in local.users_em :
         member.key
-        if (
+        if(
           member.rota.primary.enabled
           && timecmp(
             phase_start,
@@ -247,7 +247,7 @@ locals {
         standard_keys = [
           for member_key in phase.active_keys :
           member_key
-          if (
+          if(
             local.em_members_by_key[
               member_key
             ].rota.primary.cadence == "standard"
@@ -257,7 +257,7 @@ locals {
         fortnightly_keys = [
           for member_key in phase.active_keys :
           member_key
-          if (
+          if(
             local.em_members_by_key[
               member_key
             ].rota.primary.cadence == "fortnightly"
@@ -400,7 +400,7 @@ locals {
         ].id
       ]
     }
-    if (
+    if(
       length(event.rotated_keys) > 0
       && (
         event.phase_until == null
@@ -434,7 +434,7 @@ locals {
 
         member_key = phase.fortnightly_keys[0]
       }
-      if (
+      if(
         slot.day == phase.fortnightly_day
         && contains(
           local.em_working_patterns[
@@ -500,7 +500,7 @@ locals {
         effective_since = member.rota.shadow.from
         effective_until = member.rota.shadow.until
       }
-      if (
+      if(
         contains(
           local.em_working_patterns[
             member.rota.working_pattern
