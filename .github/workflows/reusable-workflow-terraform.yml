@@ -224,6 +224,23 @@ jobs:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
 
+      - name: Obtain Octo STS Token for GitHub Provider
+        if: inputs.component == 'cloud-platform-live-analytical-platform-development-grafana'
+        id: octo_sts
+        uses: octo-sts/action@6177b4481c00308b3839969c3eca88c96a91775f # v1.0.0
+        with:
+          scope: ministryofjustice/analytical-platform
+          identity: org-member-reader
+
+      - name: Export GitHub Provider Token
+        if: inputs.component == 'cloud-platform-live-analytical-platform-development-grafana'
+        id: export_github_provider_token
+        shell: bash
+        env:
+          OCTO_STS_TOKEN: ${{ steps.octo_sts.outputs.token }}
+        run: |
+          echo "TF_VAR_org_member_reader_github_token=${OCTO_STS_TOKEN}" >> "${GITHUB_ENV}"
+
       - name: Set up Terraform
         id: setup_terraform
         uses: hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85 # v4.0.0

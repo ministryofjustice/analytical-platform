@@ -8,6 +8,14 @@ variable "tags" {
   description = "Map of tags to apply to resources"
 }
 
+# only used by the commented-out helm_release.grafana in helm-releases.tf
+# tflint-ignore: terraform_unused_declarations
 variable "namespace" {
   type = string
+}
+
+variable "org_member_reader_github_token" {
+  type        = string
+  description = "Short-lived token from the Octo STS org-member-reader identity (.github/chainguard/org-member-reader.sts.yaml), used only for the github provider"
+  sensitive   = true
 }

@@ -43,19 +43,8 @@ provider "aws" {
   }
 }
 
-provider "aws" {
-  alias  = "analytical-platform-management-production-eu-west-1"
-  region = "eu-west-1"
-  assume_role {
-    role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
-  }
-  default_tags {
-    tags = var.tags
-  }
-}
-
 provider "github" {
-  token = data.aws_secretsmanager_secret_version.github_token.secret_string
+  token = var.org_member_reader_github_token
   owner = "ministryofjustice"
 }
 
