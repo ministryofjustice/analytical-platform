@@ -62,6 +62,10 @@ ACCOUNTS = {
         "account_id": "335823981503",
         "role_name": "github-actions-secret-check",
     },
+    "analytical-platform-compute-test": {
+        "account_id": "767397661611",
+        "role_name": "github-actions-secret-check",
+    },
 }
 
 
