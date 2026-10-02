@@ -98,7 +98,7 @@ locals {
       end_time             = "2026-10-07T13:00:00+01:00"
       alternate_start_time = "2026-10-14T09:00:00+01:00"
       alternate_end_time   = "2026-10-14T13:00:00+01:00"
-      rotation_offset      = 2
+      rotation_offset      = 4
     }
 
     wednesday_pm = {
@@ -109,7 +109,7 @@ locals {
       end_time             = "2026-10-07T17:00:00+01:00"
       alternate_start_time = "2026-10-14T13:00:00+01:00"
       alternate_end_time   = "2026-10-14T17:00:00+01:00"
-      rotation_offset      = 2
+      rotation_offset      = 4
     }
 
     thursday_am = {
@@ -120,7 +120,7 @@ locals {
       end_time             = "2026-10-08T13:00:00+01:00"
       alternate_start_time = "2026-10-15T09:00:00+01:00"
       alternate_end_time   = "2026-10-15T13:00:00+01:00"
-      rotation_offset      = 3
+      rotation_offset      = 2
     }
 
     thursday_pm = {
@@ -131,7 +131,7 @@ locals {
       end_time             = "2026-10-08T17:00:00+01:00"
       alternate_start_time = "2026-10-15T13:00:00+01:00"
       alternate_end_time   = "2026-10-15T17:00:00+01:00"
-      rotation_offset      = 3
+      rotation_offset      = 2
     }
 
     friday_am = {
@@ -142,7 +142,7 @@ locals {
       end_time             = "2026-10-09T13:00:00+01:00"
       alternate_start_time = "2026-10-16T09:00:00+01:00"
       alternate_end_time   = "2026-10-16T13:00:00+01:00"
-      rotation_offset      = 4
+      rotation_offset      = 3
     }
 
     friday_pm = {
@@ -153,7 +153,7 @@ locals {
       end_time             = "2026-10-09T17:00:00+01:00"
       alternate_start_time = "2026-10-16T13:00:00+01:00"
       alternate_end_time   = "2026-10-16T17:00:00+01:00"
-      rotation_offset      = 4
+      rotation_offset      = 3
     }
   }
 
@@ -328,8 +328,34 @@ locals {
     ]
   ])
 
-  em_standard_event_details = [
+  # Prefer HEOs for support days beyond one base day per eligible member.
+  # If no HEO is available for that slot, use the full standard pool.
+
+  em_standard_event_assignment_details = [
     for event in local.em_standard_event_inputs :
+    merge(
+      event,
+      {
+        assignment_keys = (
+          event.rotation_offset >= length(event.eligible_keys)
+          && length([
+            for member_key in event.eligible_keys :
+            member_key
+            if local.em_members_by_key[member_key].grade == "heo"
+          ]) > 0
+          ? [
+            for member_key in event.eligible_keys :
+            member_key
+            if local.em_members_by_key[member_key].grade == "heo"
+          ]
+          : event.eligible_keys
+        )
+      }
+    )
+  ]
+
+  em_standard_event_details = [
+    for event in local.em_standard_event_assignment_details :
     merge(
       event,
       {
@@ -346,24 +372,24 @@ locals {
         )
 
         rotated_keys = (
-          length(event.eligible_keys) == 0
+          length(event.assignment_keys) == 0
           ? []
           : concat(
             slice(
-              event.eligible_keys,
+              event.assignment_keys,
               (
                 event.rotation_offset
                 + event.phase_index
-              ) % length(event.eligible_keys),
-              length(event.eligible_keys)
+              ) % length(event.assignment_keys),
+              length(event.assignment_keys)
             ),
             slice(
-              event.eligible_keys,
+              event.assignment_keys,
               0,
               (
                 event.rotation_offset
                 + event.phase_index
-              ) % length(event.eligible_keys)
+              ) % length(event.assignment_keys)
             )
           )
         )
