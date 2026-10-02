@@ -40,7 +40,8 @@ data "aws_iam_policy_document" "github_actions_secret_check_management_productio
       "arn:aws:iam::${var.account_ids["analytical-platform-production"]}:role/github-actions-secret-check",
       "arn:aws:iam::${var.account_ids["analytical-platform-data-development"]}:role/github-actions-secret-check",
       "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/github-actions-secret-check",
-      "arn:aws:iam::${var.account_ids["analytical-platform-landing-production"]}:role/github-actions-secret-check"
+      "arn:aws:iam::${var.account_ids["analytical-platform-landing-production"]}:role/github-actions-secret-check",
+      "arn:aws:iam::${var.account_ids["analytical-platform-compute-test"]}:role/github-actions-secret-check"
     ]
   }
 }
