@@ -3,7 +3,7 @@ module "mojap_national_security_data_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "4.2.0"
+  version = "4.2.2"
 
   aliases               = ["s3/mojap-data-production-national-security-data"]
   description           = "National Security Data KMS Key"
@@ -17,7 +17,7 @@ module "s3_server_access_logs_eu_west_2_kms" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/kms/aws"
-  version = "4.2.0"
+  version = "4.2.2"
 
   aliases               = ["s3/moj-analytics-s3-logs-eu-west-2"]
   description           = "S3 Server Access Logs KMS Key"
