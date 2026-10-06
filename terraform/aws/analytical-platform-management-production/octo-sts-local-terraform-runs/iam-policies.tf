@@ -19,6 +19,20 @@ data "aws_iam_policy_document" "octo_sts_local_terraform" {
       values   = ["60"]
     }
   }
+
+  statement {
+    # blocks arbitrary custom claims being embedded in the minted token
+    sid       = "DenyOctoSTSWebIdentityTokenTags"
+    effect    = "Deny"
+    actions   = ["sts:GetWebIdentityToken"]
+    resources = ["*"]
+
+    condition {
+      test     = "Null"
+      variable = "aws:TagKeys"
+      values   = ["false"]
+    }
+  }
 }
 
 module "octo_sts_local_terraform_iam_policy" {
