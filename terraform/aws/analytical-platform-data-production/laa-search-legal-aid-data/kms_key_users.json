@@ -73,7 +73,9 @@
     "key_users": [
       "alpha_user_jh-justice-dev",
       "alpha_user_nina-knowles-justice",
-      "alpha_user_jfjb-justice"
+      "alpha_user_jfjb-justice",
+      "alpha_user_adrian-m-j",
+      "alpha_user_blaine-moj"
     ]
   },
   "splink_s3_source_output_write_bucket_test": {
