@@ -22,3 +22,9 @@ variable "evaluation_interval" {
   description = "Default evaluation interval for rules (e.g. '1m', '5m')"
   default     = "1m"
 }
+
+variable "org_member_reader_github_token" {
+  type        = string
+  description = "Short-lived token from the Octo STS org-member-reader identity (.github/chainguard/org-member-reader.sts.yaml), used only for the github provider"
+  sensitive   = true
+}
