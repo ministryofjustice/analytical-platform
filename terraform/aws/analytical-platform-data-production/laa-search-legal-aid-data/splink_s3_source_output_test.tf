@@ -116,7 +116,8 @@ module "s3_bucket_source_output_test" {
   lifecycle_rule = [{
     id                                     = "expire-noncurrent-versions"
     enabled                                = true
-    noncurrent_version_expiration          = { days = 5110 }
+    expiration                             = { days = 1 }
+    noncurrent_version_expiration          = { days = 1 }
     abort_incomplete_multipart_upload_days = 7
   }]
   tags = merge(local.tags, { Name = local.splink_source_output_bucket_test_name })
