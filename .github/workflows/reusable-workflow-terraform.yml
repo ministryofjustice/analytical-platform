@@ -225,7 +225,7 @@ jobs:
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
 
       - name: Obtain Octo STS Token for GitHub Provider
-        if: inputs.component == 'cloud-platform-live-analytical-platform-development-grafana'
+        if: contains(fromJSON('["cloud-platform-live-analytical-platform-development-grafana", "cloud-platform-live-analytical-platform-production-observability"]'), inputs.component)
         id: octo_sts
         uses: octo-sts/action@6177b4481c00308b3839969c3eca88c96a91775f # v1.0.0
         with:
@@ -233,7 +233,7 @@ jobs:
           identity: org-member-reader
 
       - name: Export GitHub Provider Token
-        if: inputs.component == 'cloud-platform-live-analytical-platform-development-grafana'
+        if: contains(fromJSON('["cloud-platform-live-analytical-platform-development-grafana", "cloud-platform-live-analytical-platform-production-observability"]'), inputs.component)
         id: export_github_provider_token
         shell: bash
         env:
