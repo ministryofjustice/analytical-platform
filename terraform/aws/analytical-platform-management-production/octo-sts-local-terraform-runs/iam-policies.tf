@@ -8,7 +8,8 @@ data "aws_iam_policy_document" "octo_sts_local_terraform" {
     resources = ["*"]
 
     condition {
-      test     = "StringEquals"
+      # sts:IdentityTokenAudience is a multivalued key, so it requires a ForAnyValue/ForAllValues qualifier
+      test     = "ForAnyValue:StringEquals"
       variable = "sts:IdentityTokenAudience"
       values   = ["octo-sts.dev"]
     }
