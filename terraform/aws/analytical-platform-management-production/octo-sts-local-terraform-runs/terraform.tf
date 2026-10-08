@@ -3,36 +3,24 @@ terraform {
     acl          = "private"
     bucket       = "global-tf-state-aqsvzyd5u9"
     encrypt      = true
-    key          = "aws/analytical-platform-data-engineering-production/data-engineering-pipelines/terraform.tfstate"
+    key          = "aws/analytical-platform-management-production/octo-sts-local-terraform-runs/terraform.tfstate"
     region       = "eu-west-2"
     use_lockfile = true
   }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.67.0"
+      version = "6.46.0"
     }
   }
-  required_version = "~> 1.10"
+  required_version = "~> 1.11"
 }
 
 provider "aws" {
-  alias  = "session"
-  region = "eu-west-2"
+  alias = "session"
 }
 
 provider "aws" {
-  region = "eu-west-2"
-  assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/GlobalGitHubActionAdmin"
-  }
-  default_tags {
-    tags = var.tags
-  }
-}
-
-provider "aws" {
-  alias  = "analytical-platform-management-production"
   region = "eu-west-2"
   assume_role {
     role_arn = can(regex("AdministratorAccess", data.aws_iam_session_context.session.issuer_arn)) ? null : "arn:aws:iam::${var.account_ids["analytical-platform-management-production"]}:role/GlobalGitHubActionAdmin"
