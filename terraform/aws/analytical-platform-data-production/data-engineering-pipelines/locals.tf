@@ -85,7 +85,8 @@ locals {
         "restricted-admin",
         "create-a-derived-table",
         "create-a-derived-table-dev",
-        "airflow-production-analytical-platform-cadet-nomis-daily"
+        "airflow-production-analytical-platform-cadet-nomis-daily",
+        "airflow-production-analytical-platform-cadet-nomis-daily-dev"
       ]
     },
     {
