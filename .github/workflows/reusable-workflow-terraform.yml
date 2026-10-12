@@ -58,7 +58,7 @@ jobs:
       - name: Checkov
         if: github.ref != 'refs/heads/main'
         id: terraform_static_analysis_checkov
-        uses: bridgecrewio/checkov-action@444c9db6fa75e2d9c19ebf1fde7322089be9009e # v12.3125.0
+        uses: bridgecrewio/checkov-action@cc0e17d456ef1713bbfd963ebac19dc776775cb2 # v12.3128.0
         with:
           directory: ${{ env.working-directory }}
           framework: terraform
@@ -214,7 +214,6 @@ jobs:
         uses: aws-actions/aws-secretsmanager-get-secrets@2297f9a879480a9e3af9b293ed15c70caf8e1c88 # v3.0.2
         with:
           secret-ids: |
-            GITHUB_ROBOT_TOKEN, github-token
             SLACK_WEBHOOK_URL, slack-webhook-url/terraform-failure
 
       - name: Assume GlobalGitHubActionAccess Role
@@ -223,6 +222,23 @@ jobs:
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::042130406152:role/GlobalGitHubActionAccess
+
+      - name: Obtain Octo STS Token for GitHub Provider
+        if: contains(fromJSON('["cloud-platform-live-analytical-platform-development-grafana", "cloud-platform-live-analytical-platform-production-observability"]'), inputs.component)
+        id: octo_sts
+        uses: octo-sts/action@6177b4481c00308b3839969c3eca88c96a91775f # v1.0.0
+        with:
+          scope: ministryofjustice/analytical-platform
+          identity: org-member-reader
+
+      - name: Export GitHub Provider Token
+        if: contains(fromJSON('["cloud-platform-live-analytical-platform-development-grafana", "cloud-platform-live-analytical-platform-production-observability"]'), inputs.component)
+        id: export_github_provider_token
+        shell: bash
+        env:
+          OCTO_STS_TOKEN: ${{ steps.octo_sts.outputs.token }}
+        run: |
+          echo "TF_VAR_org_member_reader_github_token=${OCTO_STS_TOKEN}" >> "${GITHUB_ENV}"
 
       - name: Set up Terraform
         id: setup_terraform
@@ -398,7 +414,7 @@ jobs:
         id: automatic_approval
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
-          github-token: ${{ env.GITHUB_ROBOT_TOKEN }}
+          github-token: ${{ secrets.ANALYTICAL_PLATFORM_DEPENDABOT_AUTO_APPROVE }}
           script: |
             await github.rest.pulls.createReview({
               owner: context.repo.owner,
