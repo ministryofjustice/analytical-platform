@@ -80,7 +80,7 @@ module "prod_dms_delius" {
     sid                     = "prdndas2"
 
     extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=3;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=delius-db-3.probation.service.justice.gov.uk/+ASM;asm_user=delius_analytics_platform;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N;"
-    cdc_start_time              = "2025-06-24T12:00:00Z"
+    cdc_start_time              = "2026-10-10T11:28:17Z"
   }
   replication_task_id = {
     full_load = "delius-prod-full-load"
