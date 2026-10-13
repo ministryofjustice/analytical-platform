@@ -1,16 +1,16 @@
 moved {
   from = module.rds_export.module.s3-bucket-backup-uploads
-  to   = module.s3-bucket-backup-uploads
+  to   = module.s3_bucket_backup_uploads
 }
 
 moved {
   from = module.rds_export.module.s3-bucket-parquet-exports
-  to   = module.s3-bucket-parquet-exports
+  to   = module.s3_bucket_parquet_exports
 }
 
 # Backup .bak uploads bucket with sensible defaults
 #trivy:ignore:AVD-AWS-0089 Bucket logging not required.
-module "s3-bucket-backup-uploads" {
+module "s3_bucket_backup_uploads" {
   source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=4f72896323ec7f06e293f1f75732549b3248f841" #v11.1.1
 
   bucket_prefix      = "${local.name}-backup-uploads-${local.env}-"
@@ -30,7 +30,7 @@ module "s3-bucket-backup-uploads" {
   tags           = var.tags
 }
 
-module "s3-bucket-parquet-exports" {
+module "s3_bucket_parquet_exports" {
   source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=4f72896323ec7f06e293f1f75732549b3248f841"
 
   bucket_prefix      = "${local.name}-parquet-exports-${local.env}-"
