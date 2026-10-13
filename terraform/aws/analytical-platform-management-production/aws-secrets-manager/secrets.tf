@@ -38,6 +38,21 @@ resource "aws_secretsmanager_secret" "github_token" {
   }
 }
 
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
+resource "aws_secretsmanager_secret" "analytical_platform_dependabot_auto_approve" {
+  provider = aws.analytical-platform-management-production-eu-west-1
+  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
+  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
+  name        = "analytical-platform-dependabot-auto-approve"
+  description = "Fine grained PAT used to auto-approve eligible Dependabot pull requests in the Terraform workflow"
+  kms_key_id  = "alias/aws/secretsmanager"
+  tags = {
+    expiry-date     = "2027-01-07"
+    source-location = "https://github.com/settings/personal-access-tokens"
+    rotation-policy = "none"
+  }
+}
+
 ##################################################
 # slack webhook secret scan
 ##################################################
