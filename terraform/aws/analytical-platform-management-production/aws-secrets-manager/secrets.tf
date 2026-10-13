@@ -1,14 +1,4 @@
 #tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
-resource "aws_secretsmanager_secret" "analytical_platform_github_token" {
-  provider = aws.analytical-platform-management-production-eu-west-1
-  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
-  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
-  name        = "analytical-platform-github-token"
-  description = "Fine grained PAT for use in Analytical Platform"
-  kms_key_id  = "alias/aws/secretsmanager"
-}
-
-#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
 resource "aws_secretsmanager_secret" "moj_analytical_services_github_token" {
   provider = aws.analytical-platform-management-production-eu-west-1
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
@@ -48,43 +38,18 @@ resource "aws_secretsmanager_secret" "github_token" {
   }
 }
 
-# test secrets
-resource "aws_secretsmanager_secret" "test_1" {
+#tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
+resource "aws_secretsmanager_secret" "analytical_platform_dependabot_auto_approve" {
   provider = aws.analytical-platform-management-production-eu-west-1
   #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
   #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
-  name        = "test-1"
-  description = "Test secret with an expiry date"
-
+  name        = "analytical-platform-dependabot-auto-approve"
+  description = "Fine grained PAT used to auto-approve eligible Dependabot pull requests in the Terraform workflow"
+  kms_key_id  = "alias/aws/secretsmanager"
   tags = {
-    expiry-date     = "2026-12-31"
-    source-location = "the location the key needs updating"
-  }
-}
-
-resource "aws_secretsmanager_secret" "test_2" {
-  provider = aws.analytical-platform-management-production-eu-west-1
-  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
-  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
-  name        = "test-2"
-  description = "Test secret with an expiry date"
-
-  tags = {
-    expiry-date     = "2026-09-20"
-    source-location = "the location the key needs updating"
-  }
-}
-
-resource "aws_secretsmanager_secret" "test_3" {
-  provider = aws.analytical-platform-management-production-eu-west-1
-  #checkov:skip=CKV2_AWS_57:Automatic rotation is not required for this secret
-  #checkov:skip=CKV_AWS_149:CMK encryption is not required for this secret
-  name        = "test-3"
-  description = "Test secret with an expiry date"
-
-  tags = {
-    expiry-date     = "2026-09-6"
-    source-location = "the location the key needs updating"
+    expiry-date     = "2027-01-07"
+    source-location = "https://github.com/settings/personal-access-tokens"
+    rotation-policy = "none"
   }
 }
 
