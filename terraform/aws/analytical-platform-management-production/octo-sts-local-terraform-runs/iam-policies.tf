@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "octo_sts_local_terraform" {
     resources = ["*"]
 
     condition {
-      test     = "StringEquals"
+      test     = "ForAnyValue:StringEquals"
       variable = "sts:IdentityTokenAudience"
       values   = ["octo-sts.dev"]
     }
