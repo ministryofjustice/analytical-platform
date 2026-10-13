@@ -215,6 +215,7 @@ jobs:
         with:
           secret-ids: |
             SLACK_WEBHOOK_URL, slack-webhook-url/terraform-failure
+            ANALYTICAL_PLATFORM_DEPENDABOT_AUTO_APPROVE, analytical-platform-dependabot-auto-approve
 
       - name: Assume GlobalGitHubActionAccess Role
         id: assume_global_github_action_access_role
@@ -414,7 +415,8 @@ jobs:
         id: automatic_approval
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
-          github-token: ${{ secrets.ANALYTICAL_PLATFORM_DEPENDABOT_AUTO_APPROVE }}
+          # Dependabot-authored pull_request runs block secrets.*, so this is fetched from AWS Secrets Manager instead.
+          github-token: ${{ env.ANALYTICAL_PLATFORM_DEPENDABOT_AUTO_APPROVE }}
           script: |
             await github.rest.pulls.createReview({
               owner: context.repo.owner,
