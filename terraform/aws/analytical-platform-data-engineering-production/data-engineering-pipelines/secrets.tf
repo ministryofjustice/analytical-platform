@@ -3,7 +3,7 @@ module "ae_download_athena_csv_secret" {
   #checkov:skip=CKV_TF_2: Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/secrets-manager/aws"
-  version = "2.1.1"
+  version = "2.2.0"
 
   name_prefix = "ae_download_athena_csv_slack_webhook_"
 
