@@ -18,8 +18,8 @@ resource "aws_secretsmanager_secret" "github_token" {
   kms_key_id  = "alias/aws/secretsmanager"
   tags = {
     credential-expiration = "2027-01-06"
-    expiry-date = "2027-01-06"
-    source-location = "moj-data-platform-robot account data-platform-github-access PAT"
+    expiry-date           = "2027-01-06"
+    source-location       = "moj-data-platform-robot account data-platform-github-access PAT"
   }
 }
 
