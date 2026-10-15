@@ -64,7 +64,7 @@ resource "aws_secretsmanager_secret" "secret_scan_webhook_url" {
 
 import {
   to = aws_secretsmanager_secret.chainguard_image_pull_token
-id = "arn:aws:secretsmanager:eu-west-1:042130406152:secret:chainguard-image-pull-token-thUDcP"
+  id = "arn:aws:secretsmanager:eu-west-1:042130406152:secret:chainguard-image-pull-token-thUDcP"
 }
 
 #tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
@@ -78,7 +78,7 @@ resource "aws_secretsmanager_secret" "chainguard_image_pull_token" {
 
   tags = {
     expiry-date     = "2027-03-17"
-source-location = "chainguard - chainguard_image_pull_token"
+    source-location = "chainguard - analytical-platform-automate-me"
     rotation-policy = "none"
   }
 }
