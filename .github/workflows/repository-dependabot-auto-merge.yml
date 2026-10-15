@@ -13,6 +13,9 @@ on: # yamllint disable-line rule:truthy
       - Pull request labeler
     types:
       - completed
+  check_suite: # check_suite events are not raised for GitHub Actions suites, so this only fires for other apps
+    types:
+      - completed
 
 permissions: {}
 
@@ -45,6 +48,12 @@ jobs:
 
             if (context.eventName === 'pull_request_target') {
               pullRequestNumbers.push(context.payload.pull_request.number)
+            }
+
+            if (context.eventName === 'check_suite') {
+              for (const pr of context.payload.check_suite.pull_requests ?? []) {
+                pullRequestNumbers.push(pr.number)
+              }
             }
 
             if (context.eventName === 'workflow_run') {
@@ -178,6 +187,36 @@ jobs:
 
               if (pendingRuns.length > 0) {
                 console.log(`Skipping #${pullNumber}: workflows still running: ${pendingRuns.map(run => run.name).join(', ')}`)
+                continue
+              }
+
+              // Checks from other GitHub Apps (e.g. Octo STS) are not workflow runs; Actions checks are covered above
+              const externalCheckRuns = (await github.paginate(github.rest.checks.listForRef, {
+                owner,
+                repo,
+                ref: pullRequest.head.sha,
+                filter: 'latest',
+                per_page: 100,
+              })).filter(checkRun => checkRun.app?.slug !== 'github-actions')
+
+              const unsuccessfulCheckRuns = externalCheckRuns.filter(checkRun =>
+                checkRun.status !== 'completed' || !['success', 'skipped', 'neutral'].includes(checkRun.conclusion)
+              )
+
+              if (unsuccessfulCheckRuns.length > 0) {
+                console.log(`Skipping #${pullNumber}: checks pending or failed: ${unsuccessfulCheckRuns.map(checkRun => `${checkRun.name} (${checkRun.conclusion ?? checkRun.status})`).join(', ')}`)
+                continue
+              }
+
+              const { data: combinedStatus } = await github.rest.repos.getCombinedStatusForRef({
+                owner,
+                repo,
+                ref: pullRequest.head.sha,
+              })
+
+              // With no statuses reported the combined state is 'pending', so only enforce it when statuses exist
+              if (combinedStatus.total_count > 0 && combinedStatus.state !== 'success') {
+                console.log(`Skipping #${pullNumber}: commit statuses are ${combinedStatus.state}`)
                 continue
               }
 
