@@ -80,7 +80,7 @@ resource "aws_secretsmanager_secret" "chainguard_image_pull_token" {
 
   tags = {
     expiry-date     = "2027-03-17"
-    source-location = "chaninguard - chainguard_image_pull_token"
+source-location = "chainguard - chainguard_image_pull_token"
     rotation-policy = "none"
   }
 }
