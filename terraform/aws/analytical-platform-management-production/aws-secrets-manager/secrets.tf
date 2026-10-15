@@ -64,9 +64,7 @@ resource "aws_secretsmanager_secret" "secret_scan_webhook_url" {
 
 import {
   to = aws_secretsmanager_secret.chainguard_image_pull_token
-  identity = {
-    "arn" = "arn:aws:secretsmanager:eu-west-1:042130406152:secret:chainguard-image-pull-token-thUDcP"
-  }
+id = "arn:aws:secretsmanager:eu-west-1:042130406152:secret:chainguard-image-pull-token-thUDcP"
 }
 
 #tfsec:ignore:AVD-AWS-0098 CMK encryption is not required for this secret
