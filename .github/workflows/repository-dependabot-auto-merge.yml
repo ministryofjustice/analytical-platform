@@ -104,27 +104,65 @@ jobs:
                 continue
               }
 
-              // main has no required status checks, so verify every check run on the head commit ourselves
-              const checkRuns = await github.paginate(github.rest.checks.listForRef, {
+              // main has no required status checks, so enforce them here; keep in sync with each workflow's path filters
+              const changedFiles = (await github.paginate(github.rest.pulls.listFiles, {
                 owner,
                 repo,
-                ref: pullRequest.head.sha,
+                pull_number: pullNumber,
+                per_page: 100,
+              })).map(file => file.filename)
+
+              const requiredWorkflows = [
+                '🦝 Super Linter',
+                '✍️ Check Commit Signatures',
+                'Dependency review',
+                'Dependabot Configuration Generator',
+              ]
+
+              if (changedFiles.some(file => file.startsWith('terraform/') || file === '.github/workflows/terraform.yml')) {
+                requiredWorkflows.push('Terraform')
+              }
+
+              if (changedFiles.some(file => file.startsWith('source/') || file.startsWith('config/'))) {
+                requiredWorkflows.push('🧪 Test Documentation')
+              }
+
+              const workflowRuns = await github.paginate(github.rest.actions.listWorkflowRunsForRepo, {
+                owner,
+                repo,
+                head_sha: pullRequest.head.sha,
+                event: 'pull_request',
                 per_page: 100,
               })
 
-              const otherCheckRuns = checkRuns.filter(checkRun => checkRun.name !== 'Dependabot Auto-merge')
-              const pendingCheckRuns = otherCheckRuns.filter(checkRun => checkRun.status !== 'completed')
-              const failedCheckRuns = otherCheckRuns.filter(checkRun =>
-                checkRun.status === 'completed' && !['success', 'skipped', 'neutral'].includes(checkRun.conclusion)
+              // A workflow can run more than once per commit (e.g. on edited), so only the latest run counts
+              const latestRunByWorkflow = new Map()
+              for (const run of workflowRuns) {
+                const existing = latestRunByWorkflow.get(run.workflow_id)
+                if (!existing || new Date(run.created_at) > new Date(existing.created_at)) {
+                  latestRunByWorkflow.set(run.workflow_id, run)
+                }
+              }
+              const latestRuns = [...latestRunByWorkflow.values()]
+
+              const missingWorkflows = requiredWorkflows.filter(name => !latestRuns.some(run => run.name === name))
+              const pendingRuns = latestRuns.filter(run => run.status !== 'completed')
+              const failedRuns = latestRuns.filter(run =>
+                run.status === 'completed' && !['success', 'skipped', 'neutral'].includes(run.conclusion)
               )
 
-              if (failedCheckRuns.length > 0) {
-                console.log(`Skipping #${pullNumber}: failed checks: ${failedCheckRuns.map(checkRun => checkRun.name).join(', ')}`)
+              if (failedRuns.length > 0) {
+                console.log(`Skipping #${pullNumber}: failed workflows: ${failedRuns.map(run => run.name).join(', ')}`)
                 continue
               }
 
-              if (pendingCheckRuns.length > 0) {
-                console.log(`Skipping #${pullNumber}: checks still running: ${pendingCheckRuns.map(checkRun => checkRun.name).join(', ')}`)
+              if (missingWorkflows.length > 0) {
+                console.log(`Skipping #${pullNumber}: workflows not yet started: ${missingWorkflows.join(', ')}`)
+                continue
+              }
+
+              if (pendingRuns.length > 0) {
+                console.log(`Skipping #${pullNumber}: workflows still running: ${pendingRuns.map(run => run.name).join(', ')}`)
                 continue
               }
 
