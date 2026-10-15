@@ -18,32 +18,3 @@ resource "aws_security_group_rule" "db_ingress" {
   cidr_blocks       = [module.vpc.vpc_cidr_block]
   description       = "Allow access to the RDS instance from the VPC"
 }
-
-module "rds_export" {
-  source = "github.com/ministryofjustice/terraform-rds-export?ref=f689103b221b04aa2143198d6ffac4d8a971de7b"
-
-  providers = {
-    aws = aws
-  }
-
-  name                     = local.name
-  database_refresh_mode    = "incremental"
-  vpc_id                   = module.vpc.vpc_id
-  database_subnet_ids      = module.vpc.private_subnets
-  kms_key_arn              = module.rds_export_kms.key_arn
-  master_user_secret_id    = module.rds_export_secret.secret_arn
-  environment              = var.tags["environment"]
-  output_parquet_file_size = 200
-  db_name                  = "ppud_preprod"
-  get_views                = true
-
-  tags = var.tags
-}
-
-# Create a resource to subscribe to SNS topic
-# Slack notifications
-resource "aws_sns_topic_subscription" "sfn_events" {
-  topic_arn = module.rds_export.sns_topic_arn
-  protocol  = "https"
-  endpoint  = data.aws_secretsmanager_secret_version.slack_webhook.secret_string
-}
