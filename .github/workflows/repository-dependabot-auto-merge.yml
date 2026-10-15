@@ -10,6 +10,7 @@ on: # yamllint disable-line rule:truthy
       - Dependency review
       - Dependabot Configuration Generator
       - 🧪 Test Documentation
+      - Pull request labeler
     types:
       - completed
 
@@ -47,7 +48,7 @@ jobs:
             }
 
             if (context.eventName === 'workflow_run') {
-              if (context.payload.workflow_run.event !== 'pull_request') {
+              if (!['pull_request', 'pull_request_target'].includes(context.payload.workflow_run.event)) {
                 console.log('Skipping workflow_run event because it was not triggered by a pull request')
                 return
               }
@@ -57,14 +58,25 @@ jobs:
                 return
               }
 
-              const workflowRunPullRequest = context.payload.workflow_run.pull_requests?.[0]
+              let workflowRunPullRequestNumber = context.payload.workflow_run.pull_requests?.[0]?.number
 
-              if (!workflowRunPullRequest) {
+              // pull_requests can be empty (e.g. pull_request_target runs on Dependabot branches), so fall back to the head branch
+              if (!workflowRunPullRequestNumber) {
+                const { data: openPullRequests } = await github.rest.pulls.list({
+                  owner,
+                  repo,
+                  state: 'open',
+                  head: `${owner}:${context.payload.workflow_run.head_branch}`,
+                })
+                workflowRunPullRequestNumber = openPullRequests.find(pr => pr.head.sha === context.payload.workflow_run.head_sha)?.number
+              }
+
+              if (!workflowRunPullRequestNumber) {
                 console.log(`No pull request linked to this ${context.payload.workflow_run.name} workflow run`)
                 return
               }
 
-              pullRequestNumbers.push(workflowRunPullRequest.number)
+              pullRequestNumbers.push(workflowRunPullRequestNumber)
             }
 
             const uniquePullRequestNumbers = [...new Set(pullRequestNumbers)]
@@ -117,6 +129,7 @@ jobs:
                 '✍️ Check Commit Signatures',
                 'Dependency review',
                 'Dependabot Configuration Generator',
+                'Pull request labeler',
               ]
 
               if (changedFiles.some(file => file.startsWith('terraform/') || file === '.github/workflows/terraform.yml')) {
@@ -127,13 +140,15 @@ jobs:
                 requiredWorkflows.push('🧪 Test Documentation')
               }
 
-              const workflowRuns = await github.paginate(github.rest.actions.listWorkflowRunsForRepo, {
+              const workflowRuns = (await github.paginate(github.rest.actions.listWorkflowRunsForRepo, {
                 owner,
                 repo,
                 head_sha: pullRequest.head.sha,
-                event: 'pull_request',
                 per_page: 100,
-              })
+              })).filter(run =>
+                ['pull_request', 'pull_request_target'].includes(run.event) &&
+                run.path !== '.github/workflows/repository-dependabot-auto-merge.yml'
+              )
 
               // A workflow can run more than once per commit (e.g. on edited), so only the latest run counts
               const latestRunByWorkflow = new Map()
