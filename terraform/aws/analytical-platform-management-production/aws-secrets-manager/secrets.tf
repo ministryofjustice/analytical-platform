@@ -94,8 +94,8 @@ resource "aws_secretsmanager_secret" "chainguard_image_pull_token" {
   kms_key_id  = "alias/aws/secretsmanager"
 
   tags = {
-    expiry-date     = "none"
-    source-location = "the location the key needs updating"
+    expiry-date     = "2027-03-17"
+    source-location = "chaninguard - chainguard_image_pull_token"
     rotation-policy = "none"
   }
 }
