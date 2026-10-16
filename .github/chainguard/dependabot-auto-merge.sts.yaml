@@ -5,6 +5,9 @@ claim_pattern:
   job_workflow_ref: ministryofjustice/analytical-platform/\.github/workflows/repository-dependabot-auto-merge\.yml@.*
 
 permissions:
+  actions: read
+  checks: read
   contents: write
+  statuses: read
   pull_requests: write
   issues: read
