@@ -1,13 +1,3 @@
-moved {
-  from = module.rds_export.module.s3-bucket-backup-uploads
-  to   = module.s3_bucket_backup_uploads
-}
-
-moved {
-  from = module.rds_export.module.s3-bucket-parquet-exports
-  to   = module.s3_bucket_parquet_exports
-}
-
 # Backup .bak uploads bucket with sensible defaults
 #trivy:ignore:AVD-AWS-0089 Bucket logging not required.
 module "s3_bucket_backup_uploads" {
