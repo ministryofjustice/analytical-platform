@@ -35,8 +35,8 @@ module "data_platform_airflow_external_secrets_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
   version = "6.8.2"
 
-  name            = "${each.key}-airflow-external-secrets"
-  policy_name     = "${each.key}-airflow-external-secrets"
+  name            = "${each.key}-external-secrets"
+  policy_name     = "${each.key}-external-secrets"
   use_name_prefix = false
 
   attach_external_secrets_policy = true
