@@ -26,7 +26,7 @@ module "s3_bucket_backup_uploads" {
 
   sse_algorithm = "AES256"
 
-  lifecycle_rule = local.export_bucket_lifecycle_rule
+  lifecycle_rule = local.lifecycle_config_backup_uploads
   tags           = var.tags
 }
 
@@ -45,44 +45,6 @@ module "s3_bucket_parquet_exports" {
   }
 
   sse_algorithm  = "AES256"
-  lifecycle_rule = local.export_bucket_lifecycle_rule
+  lifecycle_rule = local.lifecycle_config_parquet_exports
   tags           = var.tags
-}
-
-locals {
-  export_bucket_lifecycle_rule = [{
-    id      = "main"
-    enabled = "Enabled"
-    prefix  = ""
-    tags = {
-      rule      = "log"
-      autoclean = "true"
-    }
-    transition = [
-      {
-        days          = 90
-        storage_class = "STANDARD_IA"
-      },
-      {
-        days          = 365
-        storage_class = "GLACIER"
-      }
-    ]
-    expiration = {
-      days = 730
-    }
-    noncurrent_version_transition = [
-      {
-        days          = 90
-        storage_class = "STANDARD_IA"
-      },
-      {
-        days          = 365
-        storage_class = "GLACIER"
-      }
-    ]
-    noncurrent_version_expiration = {
-      days = 730
-    }
-  }]
 }
