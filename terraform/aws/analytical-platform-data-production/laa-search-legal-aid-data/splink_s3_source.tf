@@ -116,12 +116,12 @@ module "s3_bucket_source" {
     target_prefix = "s3access/${local.splink_source_bucket_name}/"
   }
 
-  lifecycle_rule = [{
-    id                                     = "expire-noncurrent-versions"
-    enabled                                = true
-    noncurrent_version_expiration          = { days = 90 }
-    abort_incomplete_multipart_upload_days = 7
-  }]
+  # lifecycle_rule = [{
+  #   id                                     = "expire-noncurrent-versions"
+  #   enabled                                = true
+  #   noncurrent_version_expiration          = { days = 90 }
+  #   abort_incomplete_multipart_upload_days = 7
+  # }]
 
   tags = merge(local.tags, { Name = local.splink_source_bucket_name })
 }

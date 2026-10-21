@@ -105,7 +105,7 @@ module "s3_bucket_audit" {
   object_lock_configuration = {
     rule = {
       default_retention = {
-        mode = "COMPLIANCE"
+        mode = "GOVERNANCE"
         days = 5110
       }
     }
@@ -114,12 +114,12 @@ module "s3_bucket_audit" {
     target_bucket = local.logging_bucket_name
     target_prefix = "s3access/${local.splink_audit_bucket_name}/"
   }
-  lifecycle_rule = [{
-    id                                     = "expire-noncurrent-versions"
-    enabled                                = true
-    noncurrent_version_expiration          = { days = 5110 }
-    abort_incomplete_multipart_upload_days = 7
-  }]
+  # lifecycle_rule = [{
+  #   id                                     = "expire-noncurrent-versions"
+  #   enabled                                = true
+  #   noncurrent_version_expiration          = { days = 5110 }
+  #   abort_incomplete_multipart_upload_days = 7
+  # }]
   tags = merge(local.tags, { Name = local.splink_audit_bucket_name })
 }
 
