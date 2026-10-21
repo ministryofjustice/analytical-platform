@@ -1,4 +1,4 @@
-#required for the hmpps_probation_data_tables cadet project
+# required for the hmpps_probation_data_tables cadet project
 # the schema in the profiles.yml becomes the default database
 # for the connection so if it doesn't exist schema changes
 # error
