@@ -20,19 +20,18 @@ locals {
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-  # ARNs used for production buckets
-  splink_s3_source_read_bucket_key_user_arns = [
-    for role in local.kms_key_users.splink_s3_source_read_bucket.key_users :
-=======
-=======
-  # The following ARN is used for Test bucket
->>>>>>> 6675b233 (updated the permission configuration for prod buckets)
-  splink_s3_test_key_user_arns = [
-    for role in local.kms_key_users.splink_s3_test_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
-  ]
+
+  # # ARNs used for production buckets
+  # splink_s3_source_read_bucket_key_user_arns = [
+  #   for role in local.kms_key_users.splink_s3_source_read_bucket.key_users :
+  #   "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+  # ]
+  #
+  # # The following ARN is used for Test bucket
+  # splink_s3_test_key_user_arns = [
+  #   for role in local.kms_key_users.splink_s3_test_bucket.key_users :
+  #   "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+  # ]
 
   # The below ARNs are used for Production Buckets
   # The following variables belongs to laa-splink-source-file-input
@@ -42,7 +41,6 @@ locals {
   ]
   splink_s3_source_input_write_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_input_write_bucket.key_users :
->>>>>>> 7f6ee19a (updated the configuration like read,write,objectlock and denyversion)
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
   ]
 
