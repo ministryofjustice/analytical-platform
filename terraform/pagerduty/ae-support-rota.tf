@@ -223,7 +223,12 @@ locals {
       name  = "Keeley Ann Kerr"
       email = "keeleyann.kerr@justice.gov.uk"
       role  = "responder"
-    }
+    },
+    {
+      name  = "Eliza Carey"
+      email = "eliza.carey@justice.gov.uk"
+      role  = "responder"
+    } 
   ]
 }
 
@@ -350,4 +355,9 @@ import {
 import {
   to = module.users_ae_g7["keeleyann.kerr@justice.gov.uk"].pagerduty_user.this
   id = "PKY1EDG"
+}
+
+import {
+  to = module.users_ae_g7["eliza.carey@justice.gov.uk"].pagerduty_user.this
+  id = "PP6NNQ1"
 }
