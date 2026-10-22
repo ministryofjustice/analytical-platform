@@ -1,4 +1,14 @@
 locals {
+  # Monday to Friday, 09:00 for 8 hours
+  weekday_restrictions_ae = [
+    for day in range(1, 6) : {
+      type              = "weekly_restriction"
+      start_day_of_week = day
+      start_time_of_day = "09:00:00"
+      duration_seconds  = 28800
+    }
+  ]
+
   schedules_ae_loc = [
     {
       name = "Analytics Engineering Support SEO_HEO"
@@ -18,38 +28,7 @@ locals {
             module.users_ae_seo["owen.buckley@justice.gov.uk"].id,
             module.users_ae_seo["rebecca.jukes@justice.gov.uk"].id
           ]
-          restrictions = [
-            {
-              type              = "weekly_restriction"
-              start_day_of_week = 1
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
-            },
-            {
-              type              = "weekly_restriction"
-              start_day_of_week = 2
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
-            },
-            {
-              type              = "weekly_restriction"
-              start_day_of_week = 3
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
-            },
-            {
-              type              = "weekly_restriction"
-              start_day_of_week = 4
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
-            },
-            {
-              type              = "weekly_restriction"
-              start_day_of_week = 5
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
-            }
-          ]
+          restrictions = local.weekday_restrictions_ae
         }
       ]
     },
@@ -74,38 +53,7 @@ locals {
             module.users_ae_g7["alex.pavlopoulos@justice.gov.uk"].id,
             module.users_ae_g7["neil.wilkins@justice.gov.uk"].id
           ]
-          restrictions = [
-            {
-              type              = "weekly_restriction"
-              start_day_of_week = 1
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
-            },
-            {
-              type              = "weekly_restriction"
-              start_day_of_week = 2
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
-            },
-            {
-              type              = "weekly_restriction"
-              start_day_of_week = 3
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
-            },
-            {
-              type              = "weekly_restriction"
-              start_day_of_week = 4
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
-            },
-            {
-              type              = "weekly_restriction"
-              start_day_of_week = 5
-              start_time_of_day = "09:00:00"
-              duration_seconds  = 28800
-            }
-          ]
+          restrictions = local.weekday_restrictions_ae
         }
       ]
     }
@@ -121,7 +69,7 @@ locals {
         }
         if user.role == "responder"
       }
-    },
+    }
     "Analytics Engineering Support G7" = {
       responders = {
         for user in local.users_ae_g7 :
@@ -170,7 +118,6 @@ locals {
       email = "rebecca.jukes@justice.gov.uk"
       role  = "responder"
     }
-
   ]
 
   users_ae_g7 = [
@@ -228,7 +175,7 @@ locals {
       name  = "Eliza Carey"
       email = "eliza.carey@justice.gov.uk"
       role  = "responder"
-    } 
+    }
   ]
 }
 
@@ -249,6 +196,7 @@ module "teams_ae" {
   source     = "./modules/team"
   name       = each.key
   responders = each.value.responders
+
   depends_on = [module.users_ae_seo, module.users_ae_g7]
 }
 
@@ -268,7 +216,7 @@ module "users_ae_g7" {
   email  = each.key
 }
 
-// SEO_HEO
+# SEO_HEO
 
 import {
   to = module.users_ae_seo["owen.buckley@justice.gov.uk"].pagerduty_user.this
@@ -305,7 +253,7 @@ import {
   id = "POZQIOR"
 }
 
-// G7
+# G7
 
 import {
   to = module.users_ae_g7["alex.pavlopoulos@justice.gov.uk"].pagerduty_user.this
