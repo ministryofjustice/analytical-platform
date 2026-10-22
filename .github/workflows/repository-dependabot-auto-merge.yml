@@ -5,6 +5,15 @@ on: # yamllint disable-line rule:truthy
   workflow_run: # zizmor: ignore[dangerous-triggers]
     workflows:
       - Terraform
+      - 🦝 Super Linter
+      - ✍️ Check Commit Signatures
+      - Dependency review
+      - Dependabot Configuration Generator
+      - 🧪 Test Documentation
+      - Pull request labeler
+    types:
+      - completed
+  check_suite: # check_suite events are not raised for GitHub Actions suites, so this only fires for other apps
     types:
       - completed
 
@@ -41,25 +50,42 @@ jobs:
               pullRequestNumbers.push(context.payload.pull_request.number)
             }
 
+            if (context.eventName === 'check_suite') {
+              for (const pr of context.payload.check_suite.pull_requests ?? []) {
+                pullRequestNumbers.push(pr.number)
+              }
+            }
+
             if (context.eventName === 'workflow_run') {
-              if (context.payload.workflow_run.event !== 'pull_request') {
+              if (!['pull_request', 'pull_request_target'].includes(context.payload.workflow_run.event)) {
                 console.log('Skipping workflow_run event because it was not triggered by a pull request')
                 return
               }
 
               if (context.payload.workflow_run.conclusion !== 'success') {
-                console.log('Skipping workflow_run event because the Terraform workflow did not succeed')
+                console.log(`Skipping workflow_run event because ${context.payload.workflow_run.name} did not succeed`)
                 return
               }
 
-              const workflowRunPullRequest = context.payload.workflow_run.pull_requests?.[0]
+              let workflowRunPullRequestNumber = context.payload.workflow_run.pull_requests?.[0]?.number
 
-              if (!workflowRunPullRequest) {
-                console.log('No pull request linked to this Terraform workflow run')
+              // pull_requests can be empty (e.g. pull_request_target runs on Dependabot branches), so fall back to the head branch
+              if (!workflowRunPullRequestNumber) {
+                const { data: openPullRequests } = await github.rest.pulls.list({
+                  owner,
+                  repo,
+                  state: 'open',
+                  head: `${owner}:${context.payload.workflow_run.head_branch}`,
+                })
+                workflowRunPullRequestNumber = openPullRequests.find(pr => pr.head.sha === context.payload.workflow_run.head_sha)?.number
+              }
+
+              if (!workflowRunPullRequestNumber) {
+                console.log(`No pull request linked to this ${context.payload.workflow_run.name} workflow run`)
                 return
               }
 
-              pullRequestNumbers.push(workflowRunPullRequest.number)
+              pullRequestNumbers.push(workflowRunPullRequestNumber)
             }
 
             const uniquePullRequestNumbers = [...new Set(pullRequestNumbers)]
@@ -96,6 +122,101 @@ jobs:
 
               if (!hasAutoMergeLabel) {
                 console.log(`Skipping #${pullNumber}: missing auto-merge-dependabot label`)
+                continue
+              }
+
+              // main has no required status checks, so enforce them here; keep in sync with each workflow's path filters
+              const changedFiles = (await github.paginate(github.rest.pulls.listFiles, {
+                owner,
+                repo,
+                pull_number: pullNumber,
+                per_page: 100,
+              })).map(file => file.filename)
+
+              const requiredWorkflows = [
+                '🦝 Super Linter',
+                '✍️ Check Commit Signatures',
+                'Dependency review',
+                'Dependabot Configuration Generator',
+                'Pull request labeler',
+              ]
+
+              if (changedFiles.some(file => file.startsWith('terraform/') || file === '.github/workflows/terraform.yml')) {
+                requiredWorkflows.push('Terraform')
+              }
+
+              if (changedFiles.some(file => file.startsWith('source/') || file.startsWith('config/'))) {
+                requiredWorkflows.push('🧪 Test Documentation')
+              }
+
+              const workflowRuns = (await github.paginate(github.rest.actions.listWorkflowRunsForRepo, {
+                owner,
+                repo,
+                head_sha: pullRequest.head.sha,
+                per_page: 100,
+              })).filter(run =>
+                ['pull_request', 'pull_request_target'].includes(run.event) &&
+                run.path !== '.github/workflows/repository-dependabot-auto-merge.yml'
+              )
+
+              // A workflow can run more than once per commit (e.g. on edited), so only the latest run counts
+              const latestRunByWorkflow = new Map()
+              for (const run of workflowRuns) {
+                const existing = latestRunByWorkflow.get(run.workflow_id)
+                if (!existing || new Date(run.created_at) > new Date(existing.created_at)) {
+                  latestRunByWorkflow.set(run.workflow_id, run)
+                }
+              }
+              const latestRuns = [...latestRunByWorkflow.values()]
+
+              const missingWorkflows = requiredWorkflows.filter(name => !latestRuns.some(run => run.name === name))
+              const pendingRuns = latestRuns.filter(run => run.status !== 'completed')
+              const failedRuns = latestRuns.filter(run =>
+                run.status === 'completed' && !['success', 'skipped', 'neutral'].includes(run.conclusion)
+              )
+
+              if (failedRuns.length > 0) {
+                console.log(`Skipping #${pullNumber}: failed workflows: ${failedRuns.map(run => run.name).join(', ')}`)
+                continue
+              }
+
+              if (missingWorkflows.length > 0) {
+                console.log(`Skipping #${pullNumber}: workflows not yet started: ${missingWorkflows.join(', ')}`)
+                continue
+              }
+
+              if (pendingRuns.length > 0) {
+                console.log(`Skipping #${pullNumber}: workflows still running: ${pendingRuns.map(run => run.name).join(', ')}`)
+                continue
+              }
+
+              // Checks from other GitHub Apps (e.g. Octo STS) are not workflow runs; Actions checks are covered above
+              const externalCheckRuns = (await github.paginate(github.rest.checks.listForRef, {
+                owner,
+                repo,
+                ref: pullRequest.head.sha,
+                filter: 'latest',
+                per_page: 100,
+              })).filter(checkRun => checkRun.app?.slug !== 'github-actions')
+
+              const unsuccessfulCheckRuns = externalCheckRuns.filter(checkRun =>
+                checkRun.status !== 'completed' || !['success', 'skipped', 'neutral'].includes(checkRun.conclusion)
+              )
+
+              if (unsuccessfulCheckRuns.length > 0) {
+                console.log(`Skipping #${pullNumber}: checks pending or failed: ${unsuccessfulCheckRuns.map(checkRun => `${checkRun.name} (${checkRun.conclusion ?? checkRun.status})`).join(', ')}`)
+                continue
+              }
+
+              const { data: combinedStatus } = await github.rest.repos.getCombinedStatusForRef({
+                owner,
+                repo,
+                ref: pullRequest.head.sha,
+              })
+
+              // With no statuses reported the combined state is 'pending', so only enforce it when statuses exist
+              if (combinedStatus.total_count > 0 && combinedStatus.state !== 'success') {
+                console.log(`Skipping #${pullNumber}: commit statuses are ${combinedStatus.state}`)
                 continue
               }
 
