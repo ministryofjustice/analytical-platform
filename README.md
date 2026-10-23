@@ -148,6 +148,38 @@ The template can be configured in [config/tech-docs.yml](config/tech-docs.yml)
 Further configuration options are described on the Tech Docs Template
 site: [Global Configuration](https://github.com/alphagov/tdt-documentation/blob/main/config/tech-docs.yml).
 
+## Terraform local run
+
+A small number of Terraform directories in this repository use the `github` provider authenticated
+against a short-lived token federated via Octo STS, rather than a long-lived
+PAT. Local runs in these directories need an extra step to mint that token
+before `terraform init`/`plan`/`apply`.
+
+This is currently required in:
+
+- [terraform/cloud-platform/live/analytical-platform-development/grafana](terraform/cloud-platform/live/analytical-platform-development/grafana)
+- [terraform/cloud-platform/live/analytical-platform-production/observability](terraform/cloud-platform/live/analytical-platform-production/observability)
+
+```bash
+aws-sso login
+
+aws-sso exec --profile analytical-platform-management-production:AdministratorAccess
+
+eval "$(cd ../../../../.. && scripts/terraform/local-github-token.sh)"
+
+terraform init
+
+terraform plan
+
+terraform apply
+```
+
+[`scripts/terraform/local-github-token.sh`](scripts/terraform/local-github-token.sh)
+federates a short-lived GitHub token for the `ministryofjustice` org via Octo
+STS, exporting it as `TF_VAR_org_member_reader_github_token`. It requires AWS
+SSO access to assume the `octo-sts-local-terraform` role in
+`analytical-platform-management-production`.
+
 ## Contributing
 
 Please read the [contributing guide](CONTRIBUTING.md) before sending pull
