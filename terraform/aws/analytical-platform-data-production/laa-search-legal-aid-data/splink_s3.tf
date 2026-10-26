@@ -159,7 +159,7 @@ module "s3_bucket_splink" {
         Effect    = "Deny"
         Principal = "*"
         Action    = ["s3:DeleteObject"]
-        Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_name}/*"
+        Resource  = "arn:aws:s3:::${local.splink_bucket_name}/*"
         Condition = { ArnNotEquals = {
           "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-production-laa-search-index-s3-ops"
         } }
@@ -170,7 +170,7 @@ module "s3_bucket_splink" {
         Effect    = "Deny"
         Principal = "*"
         Action    = ["s3:DeleteObjectVersion"]
-        Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_name}/*"
+        Resource  = "arn:aws:s3:::${local.splink_bucket_name}/*"
       }
     ]
   })
