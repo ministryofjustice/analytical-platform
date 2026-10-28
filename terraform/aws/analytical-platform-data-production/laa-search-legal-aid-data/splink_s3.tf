@@ -87,6 +87,10 @@ module "s3_bucket_splink" {
         Resource = [
           module.s3_bucket_splink.s3_bucket_arn
         ]
+        Condition = {
+          ArnNotEquals = {
+            "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/GlobalGitHubActionAdmin"
+          }
       },
 
       {
