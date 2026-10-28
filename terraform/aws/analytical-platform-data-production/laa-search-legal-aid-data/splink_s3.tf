@@ -84,7 +84,6 @@ module "s3_bucket_splink" {
           "s3:PutEncryptionConfiguration",
           "s3:PutBucketVersioning"
         ]
-
         Resource = [
           module.s3_bucket_splink.s3_bucket_arn
         ]
@@ -189,16 +188,16 @@ module "s3_bucket_splink" {
     target_prefix = "s3access/${local.splink_bucket_name}/"
   }
 
-  lifecycle_rule = [
-    {
-      id      = "delete-noncurrent-versions-asap"
-      enabled = true
-
-      noncurrent_version_expiration = {
-        days = 3
-      }
-    }
-  ]
+  # lifecycle_rule = [
+  #   {
+  #     id      = "delete-noncurrent-versions-asap"
+  #     enabled = true
+  #
+  #     noncurrent_version_expiration = {
+  #       days = 3
+  #     }
+  #   }
+  # ]
 
   tags = merge(
     local.tags,
