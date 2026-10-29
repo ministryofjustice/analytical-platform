@@ -85,14 +85,14 @@ module "s3_bucket_splink" {
           "s3:PutBucketVersioning"
         ]
         Resource = [
-          module.s3_bucket_splink.s3_bucket_arn
+          "${module.s3_bucket_splink.s3_bucket_arn}/*"
         ]
         Condition = {
           ArnNotEquals = {
             "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/GlobalGitHubActionAdmin"
           }
-      },
-
+        }
+      }
       {
         Sid       = "DenyUnencryptedObjectUploads"
         Effect    = "Deny"
@@ -163,9 +163,11 @@ module "s3_bucket_splink" {
         Principal = "*"
         Action    = ["s3:DeleteObject"]
         Resource  = "arn:aws:s3:::${local.splink_bucket_name}/*"
-        Condition = { ArnNotEquals = {
-          "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-production-laa-search-index-s3-ops"
-        } }
+        Condition = {
+          ArnNotEquals = {
+            "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/GlobalGitHubActionAdmin"
+          }
+        }
       },
       {
         # Explicit Deny on DeleteObjectVersion for ALL
