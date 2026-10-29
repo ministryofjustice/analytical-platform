@@ -92,7 +92,7 @@ module "s3_bucket_splink" {
             "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/GlobalGitHubActionAdmin"
           }
         }
-      }
+      },
       {
         Sid       = "DenyUnencryptedObjectUploads"
         Effect    = "Deny"
