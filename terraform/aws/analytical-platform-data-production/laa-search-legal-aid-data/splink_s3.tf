@@ -163,11 +163,6 @@ module "s3_bucket_splink" {
         Principal = "*"
         Action    = ["s3:DeleteObject"]
         Resource  = "arn:aws:s3:::${local.splink_bucket_name}/*"
-        Condition = {
-          ArnNotEquals = {
-            "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/GlobalGitHubActionAdmin"
-          }
-        }
       },
       {
         # Explicit Deny on DeleteObjectVersion for ALL
