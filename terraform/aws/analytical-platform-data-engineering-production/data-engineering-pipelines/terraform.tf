@@ -22,10 +22,10 @@ provider "aws" {
 }
 
 provider "aws" {
-  region = "eu-west-2"
-  assume_role {
-    role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/GlobalGitHubActionAdmin"
-  }
+ region = "eu-west-2"
+  #assume_role {
+  #  role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-engineering-production"]}:role/GlobalGitHubActionAdmin"
+  #}
   default_tags {
     tags = var.tags
   }
