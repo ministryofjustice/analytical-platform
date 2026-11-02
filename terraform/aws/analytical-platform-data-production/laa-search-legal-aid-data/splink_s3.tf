@@ -85,7 +85,7 @@ module "s3_bucket_splink" {
           "s3:PutBucketVersioning"
         ]
         Resource = [
-          "${module.s3_bucket_splink.s3_bucket_arn}/*"
+          module.s3_bucket_splink.s3_bucket_arn
         ]
         Condition = {
           ArnNotEquals = {
