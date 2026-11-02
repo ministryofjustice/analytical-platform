@@ -154,6 +154,7 @@ module "datalake_prod" {
       "is_production" = "true"
     }
   )
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "aws_athena_results_eu_west_2" {

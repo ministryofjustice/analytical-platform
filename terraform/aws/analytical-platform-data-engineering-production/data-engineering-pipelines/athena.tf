@@ -18,6 +18,7 @@ resource "aws_athena_workgroup" "create_a_derived_table_prod_dev" {
       "is_production" = "false"
     }
   )
+  force_destroy = true
 }
 
 resource "aws_athena_workgroup" "create_a_derived_table_prod" {
@@ -40,4 +41,5 @@ resource "aws_athena_workgroup" "create_a_derived_table_prod" {
       "is_production" = "true"
     }
   )
+  force_destroy = true
 }
