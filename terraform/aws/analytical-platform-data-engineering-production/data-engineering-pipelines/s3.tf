@@ -138,7 +138,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "aws_athena_results_eu_west_2" 
       days = 1
     }
   }
-  force_destroy = true
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "aws_athena_results_eu_west_1" {
@@ -152,5 +151,4 @@ resource "aws_s3_bucket_lifecycle_configuration" "aws_athena_results_eu_west_1" 
       days = 1
     }
   }
-  force_destroy = true
 }
