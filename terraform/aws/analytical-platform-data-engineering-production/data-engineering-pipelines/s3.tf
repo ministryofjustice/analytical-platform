@@ -28,6 +28,7 @@ module "datalake_dev" {
       "is_production" = "false"
     }
   )
+  force_destroy = true
 }
 
 module "datalake_preprod" {
@@ -60,6 +61,7 @@ module "datalake_preprod" {
       "is_production" = "false"
     }
   )
+  force_destroy = true
 }
 
 module "datalake_prod_dev" {
@@ -93,6 +95,7 @@ module "datalake_prod_dev" {
       "is_production" = "false"
     }
   )
+  force_destroy = true
 }
 
 module "datalake_prod" {
@@ -135,6 +138,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "aws_athena_results_eu_west_2" 
       days = 1
     }
   }
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "aws_athena_results_eu_west_1" {
@@ -148,4 +152,5 @@ resource "aws_s3_bucket_lifecycle_configuration" "aws_athena_results_eu_west_1" 
       days = 1
     }
   }
+  force_destroy = true
 }
