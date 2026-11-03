@@ -28,6 +28,7 @@ module "datalake_dev" {
       "is_production" = "false"
     }
   )
+  force_destroy = true
 }
 
 module "datalake_preprod" {
@@ -60,6 +61,7 @@ module "datalake_preprod" {
       "is_production" = "false"
     }
   )
+  force_destroy = true
 }
 
 module "datalake_prod_dev" {
@@ -93,6 +95,7 @@ module "datalake_prod_dev" {
       "is_production" = "false"
     }
   )
+  force_destroy = true
 }
 
 module "datalake_prod" {
