@@ -1,7 +1,7 @@
-# import {
-#   to = module.s3_bucket_splink.aws_s3_bucket.this[0]
-#   id = "laa-splink-search-s3"
-# }
+import {
+  to = module.s3_bucket_splink.aws_s3_bucket.this[0]
+  id = "laa-splink-search-s3"
+}
 
 import {
   to = module.s3_bucket_audit.aws_s3_bucket.this[0]
