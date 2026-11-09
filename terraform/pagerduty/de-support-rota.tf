@@ -15,10 +15,8 @@ locals {
             module.users_de_seo["anthony.cody@digital.justice.gov.uk"].id,
             module.users_de_seo["thomas.hirsch@justice.gov.uk"].id,
             module.users_de_seo["khristiania.raihan@justice.gov.uk"].id,
-            module.users_de_seo["mohammed.ahad1@justice.gov.uk"].id,
             module.users_de_seo["damilola.oyebade@justice.gov.uk"].id,
             module.users_de_seo["anthony.fitzroy@justice.gov.uk"].id,
-            module.users_de_seo["lucy.astleyjones@justice.gov.uk"].id,
             module.users_de_seo["daniel.johnstone@justice.gov.uk"].id,
           ]
           restrictions = [
@@ -74,7 +72,6 @@ locals {
             module.users_de_g7["stuart.james1@justice.gov.uk"].id,
             module.users_de_g7["matt.heery@justice.gov.uk"].id,
             module.users_de_g7["lalitha.nagarur3@justice.gov.uk"].id,
-            module.users_de_g7["andrew.craik@justice.gov.uk"].id,
             module.users_de_g7["antony.scott@justice.gov.uk"].id,
           ]
           restrictions = [
@@ -169,16 +166,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Lucy AstleyJones"
-      email = "lucy.astleyjones@justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Mohammed Ahad"
-      email = "mohammed.ahad1@justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Siva Bathina"
       email = "siva.bathina@digital.justice.gov.uk"
       role  = "responder"
@@ -194,11 +181,6 @@ locals {
     {
       name  = "Antony Scott"
       email = "antony.scott@justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Andrew Craik"
-      email = "andrew.craik@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -234,11 +216,6 @@ locals {
     {
       name  = "Stuart James"
       email = "stuart.james1@justice.gov.uk"
-      role  = "responder"
-    },
-    {
-      name  = "Supratik Chowdhury"
-      email = "supratik.chowdhury@justice.gov.uk"
       role  = "responder"
     },
     {
@@ -363,16 +340,6 @@ import {
 import {
   to = module.users_de_seo["khristiania.raihan@justice.gov.uk"].pagerduty_user.this
   id = "PSYDXO9"
-}
-
-import {
-  to = module.users_de_seo["lucy.astleyjones@justice.gov.uk"].pagerduty_user.this
-  id = "PLV2QS6"
-}
-
-import {
-  to = module.users_de_seo["mohammed.ahad1@justice.gov.uk"].pagerduty_user.this
-  id = "PWZTO1M"
 }
 
 import {
