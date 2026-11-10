@@ -9,7 +9,6 @@ module "s3_bucket_search_output" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
-  object_lock_enabled     = true
   attach_policy           = true
   policy = jsonencode({
     Version = "2012-10-17"
@@ -103,14 +102,6 @@ module "s3_bucket_search_output" {
         sse_algorithm     = "aws:kms"
       }
       bucket_key_enabled = true
-    }
-  }
-  object_lock_configuration = {
-    rule = {
-      default_retention = {
-        mode = "GOVERNANCE"
-        days = 5110
-      }
     }
   }
   logging = {

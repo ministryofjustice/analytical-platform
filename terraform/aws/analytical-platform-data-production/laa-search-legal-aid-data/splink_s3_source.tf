@@ -1,7 +1,6 @@
 module "s3_bucket_source" {
   source                  = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=97bb13eff35489bd38993487c3d04c5b6d024cb6"
   bucket                  = local.splink_source_bucket_name
-  object_lock_enabled     = true
   force_destroy           = false
   versioning              = { enabled = true }
   block_public_acls       = true
@@ -101,16 +100,6 @@ module "s3_bucket_source" {
       bucket_key_enabled = true
     }
   }
-
-  object_lock_configuration = {
-    rule = {
-      default_retention = {
-        mode = "GOVERNANCE"
-        days = 5110
-      }
-    }
-  }
-
   logging = {
     target_bucket = local.logging_bucket_name
     target_prefix = "s3access/${local.splink_source_bucket_name}/"
