@@ -16,10 +16,6 @@ updates:
     commit-message:
       prefix: ":dependabot: github-actions"
       include: "scope"
-    groups:
-      analytical-platform-github-actions:
-        patterns:
-          - "ministryofjustice/analytical-platform-github-actions*"
 
   - package-ecosystem: "devcontainers"
     directory: "/"
