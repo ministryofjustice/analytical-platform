@@ -84,7 +84,6 @@ module "preprod_dms_delius" {
   }
   replication_task_id = {
     full_load = "delius-preprod-full-load"
-    cdc       = "delius-preprod-cdc"
   }
   dms_mapping_rules = {
     bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
