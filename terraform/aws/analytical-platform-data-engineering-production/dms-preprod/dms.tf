@@ -83,8 +83,7 @@ module "preprod_dms_delius" {
     cdc_start_time              = "2025-06-24T12:00:00Z"
   }
   replication_task_id = {
-    full_load = "delius-preprod-full-load-old"
-    cdc       = "delius-preprod-cdc-old"
+    full_load = "delius-preprod-full-load"
   }
   dms_mapping_rules = {
     bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
