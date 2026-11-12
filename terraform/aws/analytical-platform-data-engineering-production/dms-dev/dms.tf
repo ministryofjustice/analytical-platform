@@ -106,6 +106,8 @@ module "dev_dms_delius" {
     }
   }
 
+  validation_sqs_kms_key_arn = module.dms_dev_kms.key_arn
+
   tags = merge(
     { "managed-by" = "Terraform" },
     var.tags
