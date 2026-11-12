@@ -94,6 +94,22 @@ module "s3_bucket_search_input_test" {
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_search_input_write_test_bucket_key_user_arns } }
       },
       {
+        # Airflow search role may only write to accepted/, rejected/, validation/
+        # (read/delete remain allowed bucket-wide, incl. input/, via the statements above/below)
+        Sid       = "DenyAirflowWriteOutsideAllowedFolders"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:PutObject"]
+        NotResource = [
+          "arn:aws:s3:::${local.splink_search_input_bucket_test_name}/accepted/*",
+          "arn:aws:s3:::${local.splink_search_input_bucket_test_name}/rejected/*",
+          "arn:aws:s3:::${local.splink_search_input_bucket_test_name}/validation/*"
+        ]
+        Condition = { ArnEquals = {
+          "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-test-laa-search-index-search"
+        } }
+      },
+      {
         # Delete Object and version for ALL except search role
         Sid       = "DenyObjectforallexcept"
         Effect    = "Deny"
