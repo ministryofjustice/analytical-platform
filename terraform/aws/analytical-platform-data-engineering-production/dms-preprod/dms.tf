@@ -97,7 +97,7 @@ module "preprod_dms_delius" {
 
       path = {
         bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
-        key    = "preprod/delius/delius_preprod_reload.json"
+        key    = "preprod/delius/table_mappings_reload.json"
       }
     }
   }
