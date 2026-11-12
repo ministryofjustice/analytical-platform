@@ -52,7 +52,7 @@ module "dev_dms_oasys" {
 
 # retrigger terraform sr33
 module "dev_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=bea6fa8a0f431b616895423e515f5929c022b013"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=temp-changes"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -91,6 +91,19 @@ module "dev_dms_delius" {
   dms_mapping_rules = {
     bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
     key    = "dev/delius/table_mappings.json"
+  }
+
+  independent_full_loads = {
+    delius_dev_full_reload_test = {
+      full_load_name = "delius-dev-full-reload-test"
+
+      path = {
+        bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
+        key    = "dev/delius/table_mappings_test_reload.json"
+      }
+
+      snapshot_timestamp = "2026-11-12 10:00:00.000000"
+    }
   }
 
   tags = merge(
