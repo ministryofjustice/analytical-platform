@@ -91,6 +91,17 @@ module "preprod_dms_delius" {
     key    = "preprod/delius/table_mappings.json"
   }
 
+  independent_full_loads = {
+    delius_preprod_full_reload = {
+      full_load_name = "delius-preprod-full-reload"
+
+      path = {
+        bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
+        key    = "preprod/delius/delius_preprod_reload.json"
+      }
+    }
+  }
+
   tags = merge(
     { "managed-by" = "Terraform" },
     var.tags
