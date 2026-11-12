@@ -18,7 +18,7 @@ locals {
   # eks_oidc_id: aws eks describe-cluster --name <key>-airflow --query cluster.identity.oidc.issuer
   data_platform_airflow_environments = {
     data-platform-test = {
-      eks_oidc_id = "525589099F444DB9628DC08D2FEFDAB0"
+      eks_oidc_id = "B1BF345F6CDFC88661B066C06E07F793"
     }
   }
 }
