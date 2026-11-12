@@ -98,7 +98,7 @@ module "dev_dms_delius" {
       full_load_name = "delius-dev-full-reload-test"
 
       path = {
-        bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
+        bucket = "mojap-data-engineering-prod-table-mappings-metadata-dev"
         key    = "dev/delius/table_mappings_test_reload.json"
       }
 
