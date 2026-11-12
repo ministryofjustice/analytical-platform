@@ -91,6 +91,37 @@ module "s3_bucket_source_input_test" {
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_source_input_write_test_bucket_key_user_arns } }
       },
       {
+        # Airflow role may only write to accepted/, rejected/, validation/
+        Sid       = "DenyAirflowWriteOutsideAllowedFolders"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:PutObject"]
+        NotResource = [
+          "arn:aws:s3:::${local.splink_source_input_bucket_test_name}/accepted/*",
+          "arn:aws:s3:::${local.splink_source_input_bucket_test_name}/rejected/*",
+          "arn:aws:s3:::${local.splink_source_input_bucket_test_name}/validation/*"
+        ]
+        Condition = { ArnEquals = {
+          "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-test-laa-search-index-source"
+        } }
+      },
+      {
+        # Airflow role and LAA users (read-only) may only read from the /input folder
+        Sid       = "DenyAirflowReadOutsideInputFolder"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:GetObject", "s3:GetObjectVersion"]
+        NotResource = [
+          "arn:aws:s3:::${local.splink_source_input_bucket_test_name}/input/*"
+        ]
+        Condition = { ArnEquals = {
+          "aws:PrincipalArn" = concat(
+            ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-test-laa-search-index-source"],
+            local.splink_s3_source_write_test_bucket_key_user_arns
+          )
+        } }
+      },
+      {
         # Delete Object and version for ALL except search role
         Sid       = "DenyObjectforallexcept"
         Effect    = "Deny"
