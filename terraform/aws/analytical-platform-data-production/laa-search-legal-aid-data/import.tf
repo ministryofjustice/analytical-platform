@@ -1,41 +1,41 @@
 #The following imports Test S3 Buckets to resolve Terraform apply error.
 
 import {
-  to = module.s3_bucket_audit_test.aws_s3_bucket.this[0]
-  id = "laa-search-audit-test"
+  to = module.s3_bucket_audit.aws_s3_bucket.this[0]
+  id = "laa-search-audit"
 }
 
 import {
-  to = module.s3_bucket_search_input_test.aws_s3_bucket.this[0]
-  id = "laa-splink-search-input-test"
+  to = module.s3_bucket_search_input.aws_s3_bucket.this[0]
+  id = "laa-splink-search-input"
 }
 
 import {
-  to = module.s3_bucket_search_output_test.aws_s3_bucket.this[0]
-  id = "laa-splink-search-output-test"
+  to = module.s3_bucket_search_output.aws_s3_bucket.this[0]
+  id = "laa-splink-search-output"
 }
 
 import {
-  to = module.s3_bucket_source_input_test.aws_s3_bucket.this[0]
-  id = "laa-splink-source-file-input-test"
+  to = module.s3_bucket_source.aws_s3_bucket.this[0]
+  id = "laa-splink-source-s3"
 }
 
 import {
-  to = module.s3_bucket_source_output_test.aws_s3_bucket.this[0]
-  id = "laa-splink-source-file-output-test"
+  to = module.s3_bucket_source_input.aws_s3_bucket.this[0]
+  id = "laa-splink-source-file-input"
 }
 
 import {
-  to = module.s3_bucket_source_test.aws_s3_bucket.this[0]
-  id = "laa-splink-source-s3-test"
+  to = module.s3_bucket_source_output.aws_s3_bucket.this[0]
+  id = "laa-splink-source-file-output"
 }
 
 import {
-  to = module.s3_bucket_source_zip_test.aws_s3_bucket.this[0]
-  id = "laa-splink-source-zip-test"
+  to = module.s3_bucket_source_zip.aws_s3_bucket.this[0]
+  id = "laa-splink-source-zip"
 }
 
 import {
-  to = module.s3_bucket_splink_test.aws_s3_bucket.this[0]
-  id = "laa-splink-search-s3-test"
+  to = module.s3_bucket_splink.aws_s3_bucket.this[0]
+  id = "laa-splink-search-s3"
 }
