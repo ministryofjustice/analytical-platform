@@ -6,11 +6,6 @@ locals {
       role  = "responder"
     },
     {
-      name  = "Gary Henderson"
-      email = "gary.henderson@digital.justice.gov.uk"
-      role  = "responder"
-    },
-    {
       name  = "Jacob Hamblin-Pyke"
       email = "jacob.hamblin-pyke@digital.justice.gov.uk"
       role  = "responder"
