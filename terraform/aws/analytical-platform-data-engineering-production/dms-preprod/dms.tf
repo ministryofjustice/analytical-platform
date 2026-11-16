@@ -1,13 +1,14 @@
 module "preprod_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=bea6fa8a0f431b616895423e515f5929c022b013"
+  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=e4b33adf21f6b26aae121db3150f3cdb6af98678"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
-  db                      = "oasys-preprod"
-  slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
-  output_key_prefix       = "hmpps/oasys"
-  output_key_suffix       = "-tf"
-  output_bucket           = "mojap-raw-hist-preprod"
+  db                         = "oasys-preprod"
+  slack_webhook_secret_id    = aws_secretsmanager_secret.slack_webhook.id
+  output_key_prefix          = "hmpps/oasys"
+  output_key_suffix          = "-tf"
+  output_bucket              = "mojap-raw-hist-preprod"
+  validation_sqs_kms_key_arn = module.dms_preprod_kms.key_arn
 
   dms_replication_instance = {
     replication_instance_id    = "oasys-preprod"
@@ -50,15 +51,16 @@ module "preprod_dms_oasys" {
 }
 
 module "preprod_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=bea6fa8a0f431b616895423e515f5929c022b013"
+  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=e4b33adf21f6b26aae121db3150f3cdb6af98678"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
-  db                      = "delius-preprod"
-  slack_webhook_secret_id = aws_secretsmanager_secret.preprod_slack_webhook.id
-  output_key_prefix       = "hmpps/delius"
-  output_key_suffix       = "-tf"
-  output_bucket           = "mojap-raw-hist-preprod"
+  db                         = "delius-preprod"
+  slack_webhook_secret_id    = aws_secretsmanager_secret.preprod_slack_webhook.id
+  output_key_prefix          = "hmpps/delius"
+  output_key_suffix          = "-tf"
+  output_bucket              = "mojap-raw-hist-preprod"
+  validation_sqs_kms_key_arn = module.dms_preprod_kms.key_arn
 
   dms_replication_instance = {
     replication_instance_id    = "delius-preprod"
