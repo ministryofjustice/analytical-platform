@@ -56,11 +56,11 @@ module "dev_dms_delius" {
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
-  db                      = "delius-dev"
-  slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
-  output_key_prefix       = "hmpps/delius"
-  output_key_suffix       = "-tf"
-  output_bucket           = "mojap-raw-hist-dev"
+  db                         = "delius-dev"
+  slack_webhook_secret_id    = aws_secretsmanager_secret.slack_webhook.id
+  output_key_prefix          = "hmpps/delius"
+  output_key_suffix          = "-tf"
+  output_bucket              = "mojap-raw-hist-dev"
   validation_sqs_kms_key_arn = module.dms_dev_kms.key_arn
 
   dms_replication_instance = {
