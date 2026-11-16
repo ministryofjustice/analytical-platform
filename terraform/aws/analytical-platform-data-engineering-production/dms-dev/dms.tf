@@ -1,5 +1,5 @@
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=main"
+  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=e4b33adf21f6b26aae121db3150f3cdb6af98678"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
