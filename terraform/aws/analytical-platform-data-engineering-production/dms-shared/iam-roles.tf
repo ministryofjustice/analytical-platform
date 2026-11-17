@@ -12,13 +12,13 @@ import {
 
 # Import existing DMS CloudWatch policy attachment
 import {
-  to = aws_iam_role_policy_attachment.dms-cloudwatch-logs-role-AmazonDMSCloudWatchLogsRole
+  to = aws_iam_role_policy_attachment.dms_cloudwatch_attachment
   id = "dms-cloudwatch-logs-role/arn:aws:iam::aws:policy/service-role/AmazonDMSCloudWatchLogsRole"
 }
 
 # Import existing DMS VPC policy attachment
 import {
-  to = aws_iam_role_policy_attachment.dms-vpc-role-AmazonDMSVPCManagementRole
+  to = aws_iam_role_policy_attachment.dms_vpc_role_attachment
   id = "dms-vpc-role/arn:aws:iam::aws:policy/service-role/AmazonDMSVPCManagementRole"
 }
 
@@ -46,7 +46,7 @@ resource "aws_iam_role" "dms" {
   )
 }
 
-resource "aws_iam_role_policy_attachment" "dms-vpc-role-AmazonDMSVPCManagementRole" {
+resource "aws_iam_role_policy_attachment" "dms_vpc_role_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonDMSVPCManagementRole"
   role       = aws_iam_role.dms.name
 
@@ -81,7 +81,7 @@ resource "aws_iam_role" "dms_cloudwatch" {
   )
 }
 
-resource "aws_iam_role_policy_attachment" "dms-cloudwatch-logs-role-AmazonDMSCloudWatchLogsRole" {
+resource "aws_iam_role_policy_attachment" "dms_cloudwatch_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonDMSCloudWatchLogsRole"
   role       = aws_iam_role.dms_cloudwatch.name
 }
