@@ -9,7 +9,7 @@ module "dev_dms_oasys" {
   output_key_suffix          = "-tf"
   output_bucket              = "mojap-raw-hist-dev"
   validation_sqs_kms_key_arn = module.dms_dev_kms.key_arn
-  manage_dms_service_roles = false
+  manage_dms_service_roles   = false
 
   dms_replication_instance = {
     replication_instance_id    = "oasys-dev"
@@ -63,7 +63,7 @@ module "dev_dms_delius" {
   output_key_suffix          = "-tf"
   output_bucket              = "mojap-raw-hist-dev"
   validation_sqs_kms_key_arn = module.dms_dev_kms.key_arn
-  manage_dms_service_roles = false
+  manage_dms_service_roles   = false
 
   dms_replication_instance = {
     replication_instance_id    = "delius-dev"
