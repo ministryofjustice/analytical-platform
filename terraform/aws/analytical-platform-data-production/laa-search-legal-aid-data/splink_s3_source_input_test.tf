@@ -117,7 +117,7 @@ module "s3_bucket_source_input_test" {
         Condition = { ArnEquals = {
           "aws:PrincipalArn" = concat(
             ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-test-laa-search-index-source"],
-            local.splink_s3_source_read_test_bucket_key_user_arns
+            local.splink_s3_source_input_read_test_bucket_key_user_arns
           )
         } }
       },
