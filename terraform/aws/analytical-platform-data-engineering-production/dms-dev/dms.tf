@@ -1,5 +1,5 @@
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=update-dms-module"
+  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=e4b33adf21f6b26aae121db3150f3cdb6af98678"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -9,6 +9,7 @@ module "dev_dms_oasys" {
   output_key_suffix          = "-tf"
   output_bucket              = "mojap-raw-hist-dev"
   validation_sqs_kms_key_arn = module.dms_dev_kms.key_arn
+  manage_dms_service_roles   = false
 
   dms_replication_instance = {
     replication_instance_id    = "oasys-dev"
@@ -41,6 +42,7 @@ module "dev_dms_oasys" {
     key    = "dev/oasys/table_mappings.json"
   }
 
+
   tags = merge(
     { "managed-by" = "Terraform" },
     var.tags
@@ -50,17 +52,18 @@ module "dev_dms_oasys" {
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
 }
 
-# retrigger terraform sr33
 module "dev_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=temp-changes"
+  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=full-reload-temp-changes"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
-  db                      = "delius-dev"
-  slack_webhook_secret_id = aws_secretsmanager_secret.slack_webhook.id
-  output_key_prefix       = "hmpps/delius"
-  output_key_suffix       = "-tf"
-  output_bucket           = "mojap-raw-hist-dev"
+  db                         = "delius-dev"
+  slack_webhook_secret_id    = aws_secretsmanager_secret.slack_webhook.id
+  output_key_prefix          = "hmpps/delius"
+  output_key_suffix          = "-tf"
+  output_bucket              = "mojap-raw-hist-dev"
+  validation_sqs_kms_key_arn = module.dms_dev_kms.key_arn
+  manage_dms_service_roles   = false
 
   dms_replication_instance = {
     replication_instance_id    = "delius-dev"
@@ -105,8 +108,6 @@ module "dev_dms_delius" {
       snapshot_timestamp = "2026-11-12 10:00:00.000000"
     }
   }
-
-  validation_sqs_kms_key_arn = module.dms_dev_kms.key_arn
 
   tags = merge(
     { "managed-by" = "Terraform" },
