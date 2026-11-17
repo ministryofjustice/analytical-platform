@@ -17,6 +17,7 @@ terraform {
   required_version = "~> 1.5"
 }
 
+# tflint-ignore: terraform_unused_declarations
 provider "aws" {
   alias = "session"
 }
@@ -33,6 +34,7 @@ provider "aws" {
 }
 
 # N.B. this provider isn't being used currently
+# tflint-ignore: terraform_unused_declarations
 provider "aws" {
   alias  = "analytical-platform-management-production"
   region = "eu-west-2"
