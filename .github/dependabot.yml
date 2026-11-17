@@ -47,6 +47,7 @@ updates:
       - "terraform/aws/analytical-platform-data-engineering-production/dms-dev"
       - "terraform/aws/analytical-platform-data-engineering-production/dms-preprod"
       - "terraform/aws/analytical-platform-data-engineering-production/dms-prod"
+      - "terraform/aws/analytical-platform-data-engineering-production/dms-shared"
       - "terraform/aws/analytical-platform-data-engineering-production/ppud-dev"
       - "terraform/aws/analytical-platform-data-engineering-production/ppud-preprod"
       - "terraform/aws/analytical-platform-data-engineering-production/ppud-prod"
