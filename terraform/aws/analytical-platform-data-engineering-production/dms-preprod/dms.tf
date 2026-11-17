@@ -103,12 +103,12 @@ module "preprod_dms_delius" {
         key    = "preprod/delius/table_mappings_reload.json"
       }
 
-    cdc = {
-      replication_task_id = "delius-cdc-reload-test"
-      start_time          = "2026-11-13T00:00:00Z"
+      cdc = {
+        replication_task_id = "delius-cdc-reload-test"
+        start_time          = "2026-11-13T00:00:00Z"
+      }
     }
   }
-}
 
   tags = merge(
     { "managed-by" = "Terraform" },
