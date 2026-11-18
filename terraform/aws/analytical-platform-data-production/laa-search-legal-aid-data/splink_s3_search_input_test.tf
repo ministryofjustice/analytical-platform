@@ -131,12 +131,7 @@ module "s3_bucket_search_input_test" {
         Principal = "*"
         Action    = ["s3:DeleteObjectVersion"]
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}/*"
-        Condition = { ArnNotEquals = {
-          "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-test-laa-search-index-search"
-        } }
       }
-
-
     ])
   })
 
