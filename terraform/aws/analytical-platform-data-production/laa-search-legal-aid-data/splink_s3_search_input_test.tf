@@ -73,7 +73,9 @@ module "s3_bucket_search_input_test" {
         Effect    = "Deny"
         Principal = "*"
         Action    = ["s3:GetObject", "s3:GetObjectVersion"]
-        Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}/*"
+        NotResource = [
+          "arn:aws:s3:::${local.splink_search_input_bucket_test_name}/input/*"
+        ]
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_search_input_read_test_bucket_key_user_arns } }
       },
       {
@@ -81,7 +83,9 @@ module "s3_bucket_search_input_test" {
         Effect    = "Deny"
         Principal = "*"
         Action    = ["s3:ListBucket"]
-        Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}"
+        NotResource = [
+          "arn:aws:s3:::${local.splink_search_input_bucket_test_name}/input/*"
+        ]
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = concat(local.splink_s3_search_input_read_test_bucket_key_user_arns, [local.github_actions_admin_role_arn]) } }
       },
       {
@@ -128,8 +132,6 @@ module "s3_bucket_search_input_test" {
         Action    = ["s3:DeleteObjectVersion"]
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_test_name}/*"
       }
-
-
     ])
   })
 
