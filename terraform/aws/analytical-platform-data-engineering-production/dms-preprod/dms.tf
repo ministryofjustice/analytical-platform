@@ -98,6 +98,7 @@ module "preprod_dms_delius" {
       path = {
         bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
         key    = "preprod/delius/table_mappings_reload.json"
+      }
       cdc = {
         replication_task_id = "delius-cdc-reload-test"
         start_time          = "2026-11-13T00:00:00Z"
