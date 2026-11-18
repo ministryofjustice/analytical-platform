@@ -22,7 +22,7 @@ module "dms_preprod_kms" {
       principals = [
         {
           type        = "Service"
-          identifiers = ["events.amazonaws.com"]
+          identifiers = ["events.amazonaws.com", "s3.amazonaws.com"]
         }
       ]
     }
