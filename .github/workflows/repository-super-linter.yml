@@ -29,7 +29,7 @@ jobs:
           "DEFAULT_BRANCH": "main",
           "ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT": false,
           "VALIDATE_ALL_CODEBASE": false,
-          "FILTER_REGEX_EXCLUDE": ".*archive/.*",
+          "FILTER_REGEX_EXCLUDE": "(.*archive/.*|.*\\.terraform\\.lock\\.hcl$)",
           "VALIDATE_BASH": false,
           "VALIDATE_BASH_EXEC": false,
           "VALIDATE_SHELL_SHFMT": false,
