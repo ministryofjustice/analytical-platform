@@ -18,7 +18,7 @@ module "preprod_dms_oasys" {
     engine_version             = "3.5.4"
     kms_key_arn                = module.dms_preprod_kms.key_arn
     multi_az                   = false
-    replication_instance_class = "dms.t3.medium"
+    replication_instance_class = "dms.t3.large"
     inbound_cidr               = "192.0.2.0/32" # test unassigned
     apply_immediately          = true
   }
@@ -49,7 +49,6 @@ module "preprod_dms_oasys" {
   glue_catalog_role_arn = "arn:aws:iam::${var.account_ids["analytical-platform-data-production"]}:role/data-engineering-probation-glue"
 }
 
-# retrigger
 module "preprod_dms_delius" {
   source      = "github.com/ministryofjustice/terraform-dms-module?ref=bea6fa8a0f431b616895423e515f5929c022b013"
   vpc_id      = module.vpc.vpc_id
@@ -81,7 +80,7 @@ module "preprod_dms_delius" {
     sid                     = "prendas2"
 
     extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=3;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=delius-db-3.pre-prod.delius.probation.hmpps.dsd.io/+ASM;asm_user=delius_analytics_platform;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N;"
-    cdc_start_time              = "2025-06-24T12:00:00Z"
+    cdc_start_time              = "2026-11-12T15:12:00Z"
   }
   replication_task_id = {
     full_load = "delius-preprod-full-load"
@@ -90,6 +89,17 @@ module "preprod_dms_delius" {
   dms_mapping_rules = {
     bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
     key    = "preprod/delius/table_mappings.json"
+  }
+
+  independent_full_loads = {
+    delius_preprod_full_reload = {
+      full_load_name = "reload"
+
+      path = {
+        bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
+        key    = "preprod/delius/table_mappings_reload.json"
+      }
+    }
   }
 
   tags = merge(

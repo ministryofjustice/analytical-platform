@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/octo-sts/app/refs/heads/main/pkg/octosts/octosts.TrustPolicy.json
+# Identity for local Terraform runs, exchanging an AWS outbound identity federation
+# token (see scripts/terraform/local-github-token.sh) for a GitHub token. The role
+# is provisioned by terraform/aws/analytical-platform-management-production/octo-sts-local-terraform-runs.
+issuer: https://a18476df-f6be-4c36-bc54-92acb6d53dfd.tokens.sts.global.api.aws
+subject: arn:aws:iam::042130406152:role/octo-sts-local-terraform
+
+permissions:
+  members: read

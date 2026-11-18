@@ -3,6 +3,7 @@
   "logging_bucket_name": "moj-analytics-s3-logs-eu-west-2",
   "splink_bucket_name": "laa-splink-search-s3",
   "splink_test_bucket_name": "laa-splink-search-s3-test",
+  "splink_source_zip_bucket_name": "laa-splink-source-zip",
   "splink_source_bucket_name": "laa-splink-source-s3",
   "splink_search_input_bucket_name": "laa-splink-search-input",
   "splink_search_output_bucket_name": "laa-splink-search-output",

@@ -16,8 +16,10 @@ Requirements:
 
 Environment variables:
     GITHUB_STEP_SUMMARY: path to a file to append a markdown summary table to.
+    GITHUB_OUTPUT: path to the GitHub Actions step output file.
 """
 
+import json
 import os
 from datetime import datetime, timezone
 
@@ -31,18 +33,39 @@ CRITICAL_THRESHOLD_DAYS = 7
 
 # Accounts to scan.
 #
-# role_arn = None means:
+# role_name = None means:
 #   Use the AWS credentials already configured in the GitHub runner.
 #
 # For additional accounts, specify the role that should be assumed.
-#
-# Rename the account names below as appropriate once the mapping between
-# account IDs and Analytical Platform environments is confirmed.
 ACCOUNTS = {
     "analytical-platform-management-production": {
         "account_id": "042130406152",
-        "role_arn": None,
-    }
+        "role_name": None,
+    },
+    "analytical-platform-development": {
+        "account_id": "525294151996",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-production": {
+        "account_id": "312423030077",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-data-development": {
+        "account_id": "803963757240",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-data-production": {
+        "account_id": "593291632749",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-landing-production": {
+        "account_id": "335823981503",
+        "role_name": "github-actions-secret-check",
+    },
+    "analytical-platform-compute-test": {
+        "account_id": "767397661611",
+        "role_name": "github-actions-secret-check",
+    },
 }
 
 
@@ -51,20 +74,26 @@ STATUS_PRIORITY = {
     "CRITICAL": 1,
     "WARNING": 2,
     "INVALID": 3,
-    "OK": 4,
+    "NOT SET": 4,
+    "OK": 5,
 }
 
+# Values that indicate no expiry-date has actually been set, rather than an
+# invalid/unparsable one. These are not treated as errors.
+NOT_SET_VALUES = {"", "none", "null", "n/a", "na"}
 
-def get_session(role_arn=None):
+
+def get_session(account_id, role_name=None):
     """
     Returns a boto3 Session.
 
-    If role_arn is provided, assumes that role first.
+    If role_name is provided, assumes that role in the target account first.
     Otherwise, uses the credentials already available to the runner.
     """
-    if role_arn is None:
+    if role_name is None:
         return boto3.Session()
 
+    role_arn = f"arn:aws:iam::{account_id}:role/{role_name}"
     sts_client = boto3.client("sts")
 
     response = sts_client.assume_role(
@@ -140,34 +169,71 @@ def escape_markdown(value):
     return str(value).replace("|", "\\|")
 
 
+def format_slack_message(alerts):
+    headings = {
+        "EXPIRED": ":red_circle: *Expired*",
+        "CRITICAL": ":large_orange_circle: *Critical — expires within 7 days*",
+        "WARNING": ":large_yellow_circle: *Warning — expires within 30 days*",
+    }
+    sections = []
+
+    for status, secrets in alerts.items():
+        if not secrets:
+            continue
+
+        entries = []
+        for secret in secrets:
+            expiry = datetime.strptime(secret["expiry_date"], "%Y-%m-%d").date()
+            formatted_date = f"{expiry.day} {expiry:%b %Y}"
+            name = (
+                str(secret["name"])
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+            )
+            date_label = "Expired" if status == "EXPIRED" else "Expires"
+            entry = (
+                f"• `{name}`\n"
+                f"  Account: `{secret['account']}`\n"
+                f"  Region: `{secret['region']}`\n"
+                f"  {date_label}: *{formatted_date}*"
+            )
+            if status != "EXPIRED":
+                entry += f"\n  Days remaining: *{secret['days_remaining']}*"
+            entries.append(entry)
+
+        sections.append(headings[status] + "\n\n" + "\n\n".join(entries))
+
+    return "\n\n".join(sections)
+
+
 def main():
     today = datetime.now(timezone.utc).date()
     results = []
 
     for account_name, account_config in ACCOUNTS.items():
         account_id = account_config["account_id"]
-        role_arn = account_config["role_arn"]
+        role_name = account_config["role_name"]
 
-        print(f"Scanning account {account_name} " f"({account_id})")
+        print(f"Scanning account {account_name}")
 
         try:
-            session = get_session(role_arn)
+            session = get_session(account_id, role_name)
         except Exception as exc:
             print(
-                f"::warning::Unable to obtain credentials for "
-                f"{account_name} ({account_id}): {exc}"
+                f"::warning::Unable to obtain credentials for " f"{account_name}: {exc}"
             )
             continue
 
         for region in REGIONS:
-            print(f"Scanning {account_name} " f"({account_id}) in {region}")
+            print(f"Scanning {account_name} in {region}")
 
             try:
                 secrets = get_tagged_secrets(session, region)
             except Exception as exc:
                 print(
                     f"::warning::Unable to scan Secrets Manager in "
-                    f"{account_name} ({account_id}), {region}: {exc}"
+                    f"{account_name}, {region}: {exc}"
                 )
                 continue
 
@@ -175,6 +241,25 @@ def main():
                 name = secret["name"]
                 expiry_date = secret["expiry_date"]
                 source_location = secret["source_location"]
+
+                normalised_expiry_date = str(expiry_date).strip().lower()
+
+                if expiry_date is None or normalised_expiry_date in NOT_SET_VALUES:
+                    results.append(
+                        {
+                            "account": account_name,
+                            "region": region,
+                            "name": name,
+                            "source_location": source_location,
+                            "expiry_date": (
+                                expiry_date if expiry_date is not None else "N/A"
+                            ),
+                            "days_remaining": "N/A",
+                            "status": "NOT SET",
+                        }
+                    )
+
+                    continue
 
                 try:
                     expiry = datetime.strptime(
@@ -187,7 +272,7 @@ def main():
 
                     print(
                         f"::warning::Secret {name} in "
-                        f"{account_name} ({account_id}), {region} "
+                        f"{account_name}, {region} "
                         f"has an unparsable expiry-date tag value: "
                         f"{expiry_date}"
                     )
@@ -195,7 +280,6 @@ def main():
                     results.append(
                         {
                             "account": account_name,
-                            "account_id": account_id,
                             "region": region,
                             "name": name,
                             "source_location": source_location,
@@ -211,26 +295,25 @@ def main():
                 status = get_status(days_remaining)
 
                 if status == "EXPIRED":
-                    print(
-                        f"::error::Secret {name} in "
-                        f"{account_name} ({account_id}), {region} "
-                        f"is EXPIRED "
-                        f"(expiry-date: {expiry_date})"
+                    message = (
+                        f"Secret {name} in {account_name}, {region} "
+                        f"is EXPIRED (expiry-date: {expiry_date})"
                     )
 
+                    print(f"::error::{message}")
+
                 elif status in ("CRITICAL", "WARNING"):
-                    print(
-                        f"::warning::Secret {name} in "
-                        f"{account_name} ({account_id}), {region} "
-                        f"is {status} "
-                        f"(expiry-date: {expiry_date}, "
+                    message = (
+                        f"Secret {name} in {account_name}, {region} "
+                        f"is {status} (expiry-date: {expiry_date}, "
                         f"{days_remaining} days remaining)"
                     )
+
+                    print(f"::warning::{message}")
 
                 results.append(
                     {
                         "account": account_name,
-                        "account_id": account_id,
                         "region": region,
                         "name": name,
                         "source_location": source_location,
@@ -268,11 +351,11 @@ def main():
         f"Check date: `{today}`",
         "",
         (
-            "| Account | Account ID | Region | Secret name | "
+            "| Account | Region | Secret name | "
             "Source location | Expiry date | Days remaining | Status |"
         ),
         (
-            "|---------|------------|--------|-------------|"
+            "|---------|--------|-------------|"
             "-----------------|-------------|----------------|--------|"
         ),
     ]
@@ -281,7 +364,6 @@ def main():
         summary_rows.append(
             "| "
             f"{escape_markdown(result['account'])} | "
-            f"{escape_markdown(result['account_id'])} | "
             f"{escape_markdown(result['region'])} | "
             f"{escape_markdown(result['name'])} | "
             f"{escape_markdown(result['source_location'])} | "
@@ -309,6 +391,25 @@ def main():
             summary_file.write("\n".join(summary_rows) + "\n")
     else:
         print("\n".join(summary_rows))
+
+    alerts = {
+        status: [result for result in results if result["status"] == status]
+        for status in ("EXPIRED", "CRITICAL", "WARNING")
+    }
+
+    github_output = os.environ.get("GITHUB_OUTPUT")
+
+    if github_output:
+        with open(
+            github_output,
+            "a",
+            encoding="utf-8",
+        ) as output_file:
+            for status, secrets in alerts.items():
+                output_file.write(f"{status.lower()}-count={len(secrets)}\n")
+            output_file.write(
+                f"slack-message={json.dumps(format_slack_message(alerts))}\n"
+            )
 
 
 if __name__ == "__main__":

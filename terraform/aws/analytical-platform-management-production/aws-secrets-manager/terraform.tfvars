@@ -1,5 +1,7 @@
 account_ids = {
   analytical-platform-management-production = "042130406152"
+  analytical-platform-development           = "525294151996"
+  analytical-platform-production            = "312423030077"
 }
 
 tags = {

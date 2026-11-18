@@ -56,7 +56,7 @@ module "development_replication_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.1.2"
+  version = "6.8.2"
 
   name_prefix = "mojap-data-production-bold-egress-development"
 
@@ -121,7 +121,7 @@ module "production_replication_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.1.2"
+  version = "6.8.2"
 
   name_prefix = "mojap-data-production-bold-egress-production"
 
@@ -186,7 +186,7 @@ module "shared_services_client_team_gov_29148_egress_iam_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.1.2"
+  version = "6.8.2"
 
   name = "mojap-data-production-ssct-gov-29148-egress"
 
