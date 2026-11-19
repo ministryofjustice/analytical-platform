@@ -1,6 +1,6 @@
 #refresh_tf_oasys_dev_t1
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=25dfcb73b954ec82c6f0ac354b4dfbf8f03b0fd6"
+  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=25dfcb73b954ec82c6f0ac354b4dfbf8f03b0fd6"  # dms-probation-dev-workaround branch
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -54,7 +54,7 @@ module "dev_dms_oasys" {
 }
 
 module "dev_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=25dfcb73b954ec82c6f0ac354b4dfbf8f03b0fd6"
+  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=25dfcb73b954ec82c6f0ac354b4dfbf8f03b0fd6"  # dms-probation-dev-workaround branch
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
