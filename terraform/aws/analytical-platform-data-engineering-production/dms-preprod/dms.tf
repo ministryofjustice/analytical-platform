@@ -50,7 +50,7 @@ module "preprod_dms_oasys" {
 }
 
 module "preprod_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-dms-module?ref=add-cdc-independent-task"
+  source      = "github.com/ministryofjustice/terraform-dms-module?ref=28856cbf3c1e0368cdd3f664acca84531a0ce3e5"
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -90,21 +90,6 @@ module "preprod_dms_delius" {
   dms_mapping_rules = {
     bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
     key    = "preprod/delius/table_mappings.json"
-  }
-
-  independent_full_loads = {
-    delius_preprod_full_reload = {
-      full_load_name = "reload"
-
-      path = {
-        bucket = "mojap-data-engineering-prod-table-mappings-metadata-preprod"
-        key    = "preprod/delius/table_mappings_reload.json"
-      }
-      cdc = {
-        replication_task_id = "delius-cdc-reload-test"
-        start_time          = "2026-11-13T00:00:00Z"
-      }
-    }
   }
 
   tags = merge(
