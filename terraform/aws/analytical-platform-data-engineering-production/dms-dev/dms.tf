@@ -1,6 +1,6 @@
 #refresh_tf_oasys_dev_t1
 module "dev_dms_oasys" {
-  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=25dfcb73b954ec82c6f0ac354b4dfbf8f03b0fd6"
+  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=25dfcb73b954ec82c6f0ac354b4dfbf8f03b0fd6" # dms-probation-dev-workaround branch
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -54,7 +54,7 @@ module "dev_dms_oasys" {
 }
 
 module "dev_dms_delius" {
-  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=full-reload-temp-changes"
+  source      = "github.com/ministryofjustice/terraform-aws-moj-data-factory-modules//modules/database-migration-service?ref=25dfcb73b954ec82c6f0ac354b4dfbf8f03b0fd6" # dms-probation-dev-workaround branch
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
@@ -95,19 +95,6 @@ module "dev_dms_delius" {
   dms_mapping_rules = {
     bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
     key    = "dev/delius/table_mappings.json"
-  }
-
-  independent_full_loads = {
-    delius_dev_full_reload_test = {
-      full_load_name = "delius-dev-full-reload-test"
-
-      path = {
-        bucket = "mojap-data-engineering-production-table-mappings-metadata-dev"
-        key    = "dev/delius/table_mappings_test_reload.json"
-      }
-
-      snapshot_timestamp = "2026-11-12 10:00:00.000000"
-    }
   }
 
   tags = merge(
