@@ -1723,8 +1723,7 @@ locals {
               Effect = "Allow"
               Principal = {
                 AWS = [
-                  "arn:aws:iam::189157455002:role/delius-preprod-validation",
-                  "arn:aws:iam::189157455002:role/delius-pp-reload-validation"
+                  "arn:aws:iam::189157455002:role/delius-preprod-validation"
                 ]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
@@ -1740,8 +1739,7 @@ locals {
               Effect = "Deny"
               Principal = {
                 AWS = [
-                  "arn:aws:iam::189157455002:role/delius-preprod-validation",
-                  "arn:aws:iam::189157455002:role/delius-pp-reload-validation"
+                  "arn:aws:iam::189157455002:role/delius-preprod-validation"
                 ]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
@@ -1757,8 +1755,7 @@ locals {
               Effect = "Deny"
               Principal = {
                 AWS = [
-                  "arn:aws:iam::189157455002:role/delius-preprod-validation",
-                  "arn:aws:iam::189157455002:role/delius-pp-reload-validation"
+                  "arn:aws:iam::189157455002:role/delius-preprod-validation"
                 ]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
@@ -1774,8 +1771,7 @@ locals {
               Effect = "Deny"
               Principal = {
                 AWS = [
-                  "arn:aws:iam::189157455002:role/delius-preprod-validation",
-                  "arn:aws:iam::189157455002:role/delius-pp-reload-validation"
+                  "arn:aws:iam::189157455002:role/delius-preprod-validation"
                 ]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
