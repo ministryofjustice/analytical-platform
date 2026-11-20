@@ -1722,7 +1722,10 @@ locals {
               ]
               Effect = "Allow"
               Principal = {
-                AWS = ["arn:aws:iam::189157455002:role/delius-preprod-validation"]
+                AWS = [
+                  "arn:aws:iam::189157455002:role/delius-preprod-validation",
+                  "arn:aws:iam::189157455002:role/delius-pp-reload-validation"
+                ]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
               Sid      = "WriteOnlyAccess-mojap-raw-hist-preprod-hmpps-delius"
@@ -1736,7 +1739,10 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = ["arn:aws:iam::189157455002:role/delius-preprod-validation"]
+                AWS = [
+                  "arn:aws:iam::189157455002:role/delius-preprod-validation",
+                  "arn:aws:iam::189157455002:role/delius-pp-reload-validation"
+                ]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
               Sid      = "112-mojap-raw-hist-preprod-hmpps-delius"
@@ -1750,7 +1756,10 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = ["arn:aws:iam::189157455002:role/delius-preprod-validation"]
+                AWS = [
+                  "arn:aws:iam::189157455002:role/delius-preprod-validation",
+                  "arn:aws:iam::189157455002:role/delius-pp-reload-validation"
+                ]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
               Sid      = "DenyIncorrectEncryptionHeader-mojap-raw-hist-preprod-hmpps-delius"
@@ -1764,7 +1773,10 @@ locals {
               }
               Effect = "Deny"
               Principal = {
-                AWS = ["arn:aws:iam::189157455002:role/delius-preprod-validation"]
+                AWS = [
+                  "arn:aws:iam::189157455002:role/delius-preprod-validation",
+                  "arn:aws:iam::189157455002:role/delius-pp-reload-validation"
+                ]
               }
               Resource = "arn:aws:s3:::mojap-raw-hist-preprod/hmpps/delius/*"
               Sid      = "DenyUnEncryptedObjectUploads-mojap-raw-hist-preprod-hmpps-delius"
