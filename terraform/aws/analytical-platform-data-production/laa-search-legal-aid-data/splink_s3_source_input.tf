@@ -100,7 +100,7 @@ module "s3_bucket_source_input" {
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_source_input_write_bucket_key_user_arns } }
       },
       {
-        # airflow-production-laa-search-index-source may only write to accepted/, rejected/, validation/
+        # airflow-production-laa-search-index-source may only write to accepted/, rejected/, validation/, input/
         # (read/delete remain allowed bucket-wide, incl. input/, via the statements above/below)
         Sid       = "DenyAirflowWriteOutsideAllowedFolders"
         Effect    = "Deny"
@@ -109,7 +109,8 @@ module "s3_bucket_source_input" {
         NotResource = [
           "arn:aws:s3:::${local.splink_source_input_bucket_name}/accepted/*",
           "arn:aws:s3:::${local.splink_source_input_bucket_name}/rejected/*",
-          "arn:aws:s3:::${local.splink_source_input_bucket_name}/validation/*"
+          "arn:aws:s3:::${local.splink_source_input_bucket_name}/validation/*",
+          "arn:aws:s3:::${local.splink_source_input_bucket_name}/input/*"
         ]
         Condition = { ArnEquals = {
           "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-production-laa-search-index-source"
@@ -149,6 +150,7 @@ module "s3_bucket_source_input" {
     target_bucket = local.logging_bucket_name
     target_prefix = "s3access/${local.splink_source_input_bucket_name}/"
   }
+  # Life cycle rules for 14 years
   lifecycle_rule = [{
     id                                     = "expire-noncurrent-versions"
     enabled                                = true

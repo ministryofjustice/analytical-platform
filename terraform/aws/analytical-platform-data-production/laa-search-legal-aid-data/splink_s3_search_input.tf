@@ -53,7 +53,15 @@ module "s3_bucket_search_input" {
         Effect    = "Deny"
         Principal = "*"
         Action = [
-          "s3:DeleteBucket",
+          "s3:DeleteBucket"
+        ]
+        Resource = "arn:aws:s3:::${local.splink_search_input_bucket_name}"
+      },
+      {
+        Sid       = "DenyBucketDeletion"
+        Effect    = "Deny"
+        Principal = "*"
+        Action = [
           "s3:PutBucketAcl",
           "s3:PutEncryptionConfiguration",
           "s3:PutBucketVersioning"
@@ -64,22 +72,26 @@ module "s3_bucket_search_input" {
             "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/GlobalGitHubActionAdmin"
           }
         }
-      }
+      },
       ], [
       {
-        Sid       = "DenyReadsForUnauthorisedPrincipals"
+        Sid       = "DenyGetObjectandVersion"
         Effect    = "Deny"
         Principal = "*"
         Action    = ["s3:GetObject", "s3:GetObjectVersion"]
-        Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_name}/*"
+        NotResource = [
+          "arn:aws:s3:::${local.splink_search_input_bucket_name}/input/*"
+        ]
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_search_input_read_bucket_key_user_arns } }
       },
       {
-        Sid       = "DenyListingForUnauthorisedPrincipals"
+        Sid       = "DenyListBuckets"
         Effect    = "Deny"
         Principal = "*"
         Action    = ["s3:ListBucket"]
-        Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_name}"
+        NotResource = [
+          "arn:aws:s3:::${local.splink_search_input_bucket_name}/input/*"
+        ]
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_search_input_read_bucket_key_user_arns } }
       },
       {
@@ -91,6 +103,23 @@ module "s3_bucket_search_input" {
         Action    = ["s3:PutObject"]
         Resource  = "arn:aws:s3:::${local.splink_search_input_bucket_name}/*"
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_search_input_write_bucket_key_user_arns } }
+      },
+      {
+        # airflow-production-laa-search-index-search may only write to accepted/, rejected/, validation/
+        # (read/delete remain allowed bucket-wide, incl. input/, via the statements above/below)
+        Sid       = "DenyAirflowWriteOutsideAllowedFolders"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:PutObject"]
+        NotResource = [
+          "arn:aws:s3:::${local.splink_search_input_bucket_name}/accepted/*",
+          "arn:aws:s3:::${local.splink_search_input_bucket_name}/rejected/*",
+          "arn:aws:s3:::${local.splink_search_input_bucket_name}/validation/*",
+          "arn:aws:s3:::${local.splink_search_input_bucket_name}/input/*"
+        ]
+        Condition = { ArnEquals = {
+          "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-production-laa-search-index-search"
+        } }
       },
       {
         # Explicit Deny on DeleteObject
@@ -128,13 +157,13 @@ module "s3_bucket_search_input" {
     target_bucket = local.logging_bucket_name
     target_prefix = "s3access/${local.splink_search_input_bucket_name}/"
   }
-
-  # lifecycle_rule = [{
-  #   id                                     = "expire-noncurrent-versions"
-  #   enabled                                = true
-  #   noncurrent_version_expiration          = { days = 5110 }
-  #   abort_incomplete_multipart_upload_days = 7
-  # }]
+  # Life cycle rules for 14 years
+  lifecycle_rule = [{
+    id                                     = "expire-noncurrent-versions"
+    enabled                                = true
+    noncurrent_version_expiration          = { days = 5110 }
+    abort_incomplete_multipart_upload_days = 7
+  }]
 
   tags = merge(local.tags, { Name = local.splink_search_input_bucket_name })
 }
