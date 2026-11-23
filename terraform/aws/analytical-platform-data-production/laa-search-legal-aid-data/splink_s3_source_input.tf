@@ -50,7 +50,15 @@ module "s3_bucket_source_input" {
         Effect    = "Deny"
         Principal = "*"
         Action = [
-          "s3:DeleteBucket",
+          "s3:DeleteBucket"
+        ]
+        Resource = "arn:aws:s3:::${local.splink_source_input_bucket_name}"
+      },
+      {
+        Sid       = "DenyBucketConfigChangesForUnauthorisedPrincipals"
+        Effect    = "Deny"
+        Principal = "*"
+        Action = [
           "s3:PutBucketAcl",
           "s3:PutEncryptionConfiguration",
           "s3:PutBucketVersioning"
@@ -59,23 +67,27 @@ module "s3_bucket_source_input" {
         Condition = { ArnNotEquals = {
           "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/GlobalGitHubActionAdmin"
         } }
-      },
+      }
       ], [
       {
-        Sid       = "DenyReadsForUnauthorisedPrincipals"
+        Sid       = "DenyGetObjectandVersion"
         Effect    = "Deny"
         Principal = "*"
         Action    = ["s3:GetObject", "s3:GetObjectVersion"]
-        Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_name}/*"
+        NotResource = [
+          "arn:aws:s3:::${local.splink_source_input_bucket_name}/input/*"
+        ]
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_source_input_read_bucket_key_user_arns } }
       },
       {
-        Sid       = "DenyListingForUnauthorisedPrincipals"
+        Sid       = "DenyListBuckets"
         Effect    = "Deny"
         Principal = "*"
         Action    = ["s3:ListBucket"]
-        Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_name}"
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_source_input_read_bucket_key_user_arns } }
+        NotResource = [
+          "arn:aws:s3:::${local.splink_source_input_bucket_name}/input/*"
+        ]
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = concat(local.splink_s3_source_input_read_bucket_key_user_arns, [local.github_actions_admin_role_arn]) } }
       },
       {
         # PutObject is restricted to a placeholder until the LAA user role is created —
@@ -86,6 +98,22 @@ module "s3_bucket_source_input" {
         Action    = ["s3:PutObject"]
         Resource  = "arn:aws:s3:::${local.splink_source_input_bucket_name}/*"
         Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_source_input_write_bucket_key_user_arns } }
+      },
+      {
+        # airflow-production-laa-search-index-source may only write to accepted/, rejected/, validation/
+        # (read/delete remain allowed bucket-wide, incl. input/, via the statements above/below)
+        Sid       = "DenyAirflowWriteOutsideAllowedFolders"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = ["s3:PutObject"]
+        NotResource = [
+          "arn:aws:s3:::${local.splink_source_input_bucket_name}/accepted/*",
+          "arn:aws:s3:::${local.splink_source_input_bucket_name}/rejected/*",
+          "arn:aws:s3:::${local.splink_source_input_bucket_name}/validation/*"
+        ]
+        Condition = { ArnEquals = {
+          "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-production-laa-search-index-source"
+        } }
       },
       {
         # Explicit Deny on DeleteObject
@@ -121,12 +149,12 @@ module "s3_bucket_source_input" {
     target_bucket = local.logging_bucket_name
     target_prefix = "s3access/${local.splink_source_input_bucket_name}/"
   }
-  # lifecycle_rule = [{
-  #   id                                     = "expire-noncurrent-versions"
-  #   enabled                                = true
-  #   noncurrent_version_expiration          = { days = 5110 }
-  #   abort_incomplete_multipart_upload_days = 7
-  # }]
+  lifecycle_rule = [{
+    id                                     = "expire-noncurrent-versions"
+    enabled                                = true
+    noncurrent_version_expiration          = { days = 5110 }
+    abort_incomplete_multipart_upload_days = 7
+  }]
   tags = merge(local.tags, { Name = local.splink_source_input_bucket_name })
 }
 
