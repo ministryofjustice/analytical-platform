@@ -129,7 +129,7 @@ module "prod_dms_delius_reload" {
   }
   dms_source = {
     engine_name             = "oracle"
-    secrets_manager_arn     = aws_secretsmanager_secret.delius_prod_secret.arn
+    secrets_manager_arn     = aws_secretsmanager_secret.delius_prod_reload_secret.arn
     secrets_manager_kms_arn = module.dms_prod_kms.key_arn
     sid                     = "prdndas2"
 
