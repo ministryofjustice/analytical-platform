@@ -21,3 +21,9 @@ resource "aws_secretsmanager_secret" "delius_prod_secret" {
   name       = "delius-prod-secret"
   kms_key_id = module.dms_prod_kms.key_arn
 }
+
+resource "aws_secretsmanager_secret" "delius_prod_reload_secret" {
+  # checkov:skip=CKV2_AWS_57: Skipping because automatic rotation not needed.
+  name       = "delius-prod-reload-secret"
+  kms_key_id = module.dms_prod_kms.key_arn
+}
