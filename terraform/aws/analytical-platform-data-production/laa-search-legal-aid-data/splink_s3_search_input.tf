@@ -58,7 +58,7 @@ module "s3_bucket_search_input" {
         Resource = "arn:aws:s3:::${local.splink_search_input_bucket_name}"
       },
       {
-        Sid       = "DenyBucketDeletion"
+        Sid       = "Denywriteconfig"
         Effect    = "Deny"
         Principal = "*"
         Action = [
