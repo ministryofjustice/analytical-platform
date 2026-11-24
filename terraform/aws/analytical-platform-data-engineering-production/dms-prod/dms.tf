@@ -54,11 +54,11 @@ module "prod_dms_delius" {
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
-  db                      = "delius-prod"
-  slack_webhook_secret_id = aws_secretsmanager_secret.prod_slack_webhook.id
-  output_key_prefix       = "hmpps/delius"
-  output_key_suffix       = "-tf"
-  output_bucket           = "mojap-raw-hist"
+  db                         = "delius-prod"
+  slack_webhook_secret_id    = aws_secretsmanager_secret.prod_slack_webhook.id
+  output_key_prefix          = "hmpps/delius"
+  output_key_suffix          = "-tf"
+  output_bucket              = "mojap-raw-hist"
   validation_sqs_kms_key_arn = module.dms_prod_kms.key_arn
 
   dms_replication_instance = {
@@ -107,11 +107,11 @@ module "prod_dms_delius_reload" {
   vpc_id      = module.vpc.vpc_id
   environment = var.tags.environment-name
 
-  db                      = "delius-prod-reload"
-  slack_webhook_secret_id = aws_secretsmanager_secret.prod_slack_webhook.id
-  output_key_prefix       = "hmpps/delius"
-  output_key_suffix       = "-reload-250726"
-  output_bucket           = "mojap-raw-hist"
+  db                         = "delius-prod-reload"
+  slack_webhook_secret_id    = aws_secretsmanager_secret.prod_slack_webhook.id
+  output_key_prefix          = "hmpps/delius"
+  output_key_suffix          = "-reload-250726"
+  output_bucket              = "mojap-raw-hist"
   validation_sqs_kms_key_arn = module.dms_prod_kms.key_arn
 
   dms_replication_instance = {
