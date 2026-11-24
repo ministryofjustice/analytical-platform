@@ -133,7 +133,7 @@ module "prod_dms_delius_reload" {
     secrets_manager_kms_arn = module.dms_prod_kms.key_arn
     sid                     = "prdndas2"
 
-    extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=3;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=delius-db-3.probation.service.justice.gov.uk/+ASM;asm_user=delius_analytics_platform;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N;"
+    extra_connection_attributes = "addSupplementalLogging=N;additionalArchivedLogDestId=3;allowSelectNestedTables=True;archivedLogDestId=1;asm_server=ip-10-160-30-90.eu-west-2.compute.internal/+ASM;asm_user=delius_analytics_platform;parallelASMReadThreads=8;readAheadBlocks=200000;useBfile=Y;useLogminerReader=N;"
     cdc_start_time              = "2026-07-25T00:00:00Z"
   }
   replication_task_id = {
