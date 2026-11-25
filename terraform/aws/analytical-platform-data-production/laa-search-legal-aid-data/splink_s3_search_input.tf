@@ -92,7 +92,7 @@ module "s3_bucket_search_input" {
         NotResource = [
           "arn:aws:s3:::${local.splink_search_input_bucket_name}/input/*"
         ]
-        Condition = { ArnNotEquals = { "aws:PrincipalArn" = concat(local.splink_s3_search_input_read_bucket_key_user_arns, [local.github_actions_admin_role_arn]) } }
+        Condition = { ArnNotEquals = { "aws:PrincipalArn" = local.splink_s3_search_input_read_bucket_key_user_arns } }
       },
       {
         # PutObject is restricted to a placeholder until the LAA user role is created —
