@@ -118,7 +118,7 @@ module "s3_bucket_search_input" {
           "arn:aws:s3:::${local.splink_search_input_bucket_name}/input/*"
         ]
         Condition = { ArnEquals = {
-          "aws:PrincipalArn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/airflow-production-laa-search-index-search"
+          "aws:PrincipalArn" = data.aws_iam_role.kms_key_user["airflow-production-laa-search-index-search"].arn
         } }
       },
       {
