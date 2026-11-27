@@ -13,11 +13,11 @@ locals {
   # The following ARN is used for Prod bucket
   splink_s3_read_bucket_user_arns = [
     for role in local.kms_key_users.splink_s3_read_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_write_bucket_user_arns = [
     for role in local.kms_key_users.splink_s3_write_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
 
@@ -37,142 +37,142 @@ locals {
   # The following variables belongs to laa-splink-source-file-input
   splink_s3_source_input_read_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_input_read_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_source_input_write_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_input_write_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The following variables belongs to laa-splink-source-file-output
   splink_s3_source_output_read_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_output_read_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_source_output_write_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_output_write_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The following variables belongs to laa-splink-search-input
   splink_s3_search_input_write_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_search_input_write_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_search_input_read_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_search_input_read_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The following variables belongs to laa-splink-search-output
   splink_s3_search_output_write_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_search_output_write_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_search_output_read_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_search_output_read_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The following variables belongs to laa-search-audit
   splink_s3_audit_write_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_audit_write_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_audit_read_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_audit_read_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The following variables belongs to laa-splink-source-zip
   splink_s3_source_zip_write_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_zip_write_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_source_zip_read_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_zip_read_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The following variables belongs to laa-splink-source-S3
   splink_source_s3_write_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_source_s3_write_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_source_s3_read_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_source_s3_read_bucket.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The below ARNs are used for Test Buckets
   # The below Key users belongs to source test bucket
   splink_s3_source_read_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_read_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_source_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_write_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The below Key users belongs to source input test bucket
   splink_s3_source_input_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_input_write_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_source_input_read_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_input_read_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The following users belongs to Search Input Test bucket
   splink_s3_search_input_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_search_input_write_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_search_input_read_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_search_input_read_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The following users belongs to Search Output Test bucket
   splink_s3_search_output_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_search_output_write_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_search_output_read_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_search_output_read_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The following users belongs to Source Output Test bucket
   splink_s3_source_output_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_output_write_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_source_output_read_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_output_read_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The following users belongs to Audit Test bucket
   splink_s3_audit_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_audit_write_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_audit_read_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_audit_read_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
   # The following users belongs to Source Zip Test Bucket
   splink_s3_source_zip_write_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_zip_write_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
   splink_s3_source_zip_read_test_bucket_key_user_arns = [
     for role in local.kms_key_users.splink_s3_source_zip_read_bucket_test.key_users :
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${role}"
+    data.aws_iam_role.kms_key_user[role].arn
   ]
 
 
@@ -203,4 +203,10 @@ locals {
   test_tags = merge(local.tags, {
     Environment = "test"
   })
+}
+
+# Look up each role so the real ARN (including any IAM path) is used
+data "aws_iam_role" "kms_key_user" {
+  for_each = toset(flatten([for k, v in local.kms_key_users : v.key_users]))
+  name     = each.value
 }
