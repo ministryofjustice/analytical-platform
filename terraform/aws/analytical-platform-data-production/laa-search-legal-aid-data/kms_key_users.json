@@ -65,7 +65,6 @@
   "splink_s3_audit_read_bucket": {
     "key_users": [
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_jfjb-justice",
       "alpha_user_sathyareddy-justice"
     ]
@@ -89,7 +88,6 @@
   "splink_s3_source_read_bucket_test": {
     "key_users": [
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice",
       "airflow-test-laa-search-index-source",
@@ -99,7 +97,6 @@
   "splink_s3_source_write_bucket_test": {
     "key_users": [
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice",
       "alpha_user_mo-justice"
@@ -108,7 +105,6 @@
   "splink_s3_source_input_read_bucket_test": {
     "key_users": [
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice",
       "airflow-test-laa-search-index-source"
@@ -118,7 +114,6 @@
     "key_users": [
       "airflow-test-laa-search-index-source",
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice"
     ]
@@ -126,7 +121,6 @@
   "splink_s3_source_output_read_bucket_test": {
     "key_users": [
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice",
       "alpha_user_adrian-m-j",
@@ -140,7 +134,6 @@
     "key_users": [
       "airflow-test-laa-search-index-search",
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice"
     ]
@@ -148,7 +141,6 @@
   "splink_s3_search_input_write_bucket_test": {
     "key_users": [
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice",
       "airflow-test-laa-search-index-search"
@@ -160,7 +152,6 @@
   "splink_s3_search_output_read_bucket_test": {
     "key_users": [
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice",
       "airflow-test-laa-search-index-source"
@@ -169,7 +160,6 @@
   "splink_s3_source_zip_read_bucket_test": {
     "key_users": [
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice",
       "airflow-test-laa-search-index-source"
@@ -179,7 +169,6 @@
     "key_users": [
       "airflow-test-laa-search-index-source",
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice"
     ]
@@ -193,7 +182,6 @@
   "splink_s3_audit_read_bucket_test": {
     "key_users": [
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice"
     ]
@@ -201,7 +189,6 @@
   "splink_search_s3_write_bucket_test": {
     "key_users": [
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice"
     ]
@@ -210,7 +197,6 @@
     "key_users": [
       "airflow-test-laa-search-index-search",
       "alpha_user_jh-justice-dev",
-      "alpha_user_nina-knowles-justice",
       "alpha_user_sathyareddy-justice",
       "alpha_user_jfjb-justice"
     ]
